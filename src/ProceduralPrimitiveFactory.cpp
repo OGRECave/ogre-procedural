@@ -118,7 +118,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createBox(const Ogre::String& name, fl
 	return mesh;
 }
 
-Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& name, float radius, float height, bool capped, int numSegHeight, int numSegBase)
+Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& name, float radius, float height, bool capped, int numSegHeight, int numSegBase, float uTile, float vTile)
 {
 	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
@@ -134,7 +134,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& nam
 			float z0 = radius * sinf(j*deltaAngle);
 			manual->position(x0, i*deltaHeight, z0);
 			manual->normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(float)numSegBase, i/(float)numSegHeight);
+			manual->textureCoord(j/(float)numSegBase*uTile, i/(float)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
@@ -152,7 +152,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& nam
 		int centerIndex = verticeIndex;
 		manual->position(0,0,0);
 		manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-		manual->textureCoord(0.0,1.0);
+		manual->textureCoord(0.0,vTile);
 		verticeIndex++;
 		for (int j=0;j<=numSegBase;j++)
 		{
@@ -183,7 +183,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& nam
 
 			manual->position(x0, height, z0);
 			manual->normal(Ogre::Vector3::UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase,1.0);
+			manual->textureCoord(j/(float)numSegBase*uTile,vTile);
 			if (j!=numSegBase)
 			{
 				manual->index(centerIndex);
@@ -209,7 +209,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& nam
 }
 
 
-Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, float radius, float height, int numSegHeight, int numSegBase)
+Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, float radius, float height, int numSegHeight, int numSegBase, float uTile, float vTile)
 {
 	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
@@ -226,7 +226,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, f
 			float z0 = r0 * sinf(j*deltaAngle);
 			manual->position(x0, i*deltaHeight, z0);
 			manual->normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(float)numSegBase, i/(float)numSegHeight);
+			manual->textureCoord(j/(float)numSegBase*uTile, i/(float)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
@@ -243,7 +243,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, f
 		int centerIndex = verticeIndex;
 		manual->position(0,0,0);
 		manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-		manual->textureCoord(0.0,1.0);
+		manual->textureCoord(0.0,vTile);
 		verticeIndex++;
 		for (int j=0;j<=numSegBase;j++)
 		{
@@ -252,7 +252,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, f
 
 			manual->position(x0, 0.0f, z0);
 			manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase,0.0);
+			manual->textureCoord(j/(float)numSegBase*uTile,0.0);
 			if (j!=numSegBase)
 			{
 				manual->index(centerIndex);
@@ -276,7 +276,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, f
 	return mesh;
 }
 
-Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, float innerRadius, float outerRadius, float height, int numSegHeight, int numSegBase)
+Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, float innerRadius, float outerRadius, float height, int numSegHeight, int numSegBase, float uTile, float vTile)
 {
 	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
@@ -292,7 +292,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, f
 			float z0 = outerRadius * sinf(j*deltaAngle);
 			manual->position(x0, i*deltaHeight, z0);
 			manual->normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(float)numSegBase, i/(float)numSegHeight);
+			manual->textureCoord(j/(float)numSegBase*uTile, i/(float)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
@@ -312,7 +312,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, f
 			float z0 = innerRadius * sinf(j*deltaAngle);
 			manual->position(x0, i*deltaHeight, z0);
 			manual->normal(-Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(float)numSegBase, i/(float)numSegHeight);
+			manual->textureCoord(j/(float)numSegBase*uTile, i/(float)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
@@ -334,14 +334,14 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, f
 
 			manual->position(x0, 0.0f, z0);
 			manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase,1.0);
+			manual->textureCoord(j/(float)numSegBase*uTile,vTile);
 
 			x0 = outerRadius * cosf(j*deltaAngle);
 			z0 = outerRadius * sinf(j*deltaAngle);
 
 			manual->position(x0, 0.0f, z0);			
 			manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase,0.0);
+			manual->textureCoord(j/(float)numSegBase*uTile,0.0);
 
 			if (j!=numSegBase)
 			{
@@ -364,14 +364,14 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, f
 
 			manual->position(x0, height, z0);
 			manual->normal(Ogre::Vector3::UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase,0.0);
+			manual->textureCoord(j/(float)numSegBase*uTile,0.0);
 
 			x0 = outerRadius * cosf(j*deltaAngle);
 			z0 = outerRadius * sinf(j*deltaAngle);
 
 			manual->position(x0, height, z0);			
 			manual->normal(Ogre::Vector3::UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase,1.0);
+			manual->textureCoord(j/(float)numSegBase*uTile,vTile);
 
 			if (j!=numSegBase)
 			{
