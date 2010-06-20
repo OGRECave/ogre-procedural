@@ -1,30 +1,30 @@
 #include "ProceduralPrimitiveFactory.h"
 
-Ogre::MeshPtr ProceduralPrimitiveFactory::createSphere(const Ogre::String& name, float r, int nRings, int nSegments, bool normals, int numTexCoordSet, float uTile, float vTile)
+Ogre::MeshPtr ProceduralPrimitiveFactory::createSphere(const Ogre::String& name, Ogre::Real r, int nRings, int nSegments, bool normals, int numTexCoordSet, Ogre::Real uTile, Ogre::Real vTile)
 {
 	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 		
-	float fDeltaRingAngle = (Ogre::Math::PI / nRings);
-	float fDeltaSegAngle = (Ogre::Math::TWO_PI / nSegments);
+	Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / nRings);
+	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / nSegments);
 	unsigned short wVerticeIndex = 0 ;
 
 	// Generate the group of rings for the sphere
 	for( int ring = 0; ring <= nRings; ring++ ) {
-		float r0 = r * sinf (ring * fDeltaRingAngle);
-		float y0 = r * cosf (ring * fDeltaRingAngle);
+		Ogre::Real r0 = r * sinf (ring * fDeltaRingAngle);
+		Ogre::Real y0 = r * cosf (ring * fDeltaRingAngle);
 
 		// Generate the group of segments for the current ring
 		for(int seg = 0; seg <= nSegments; seg++) {
-			float x0 = r0 * sinf(seg * fDeltaSegAngle);
-			float z0 = r0 * cosf(seg * fDeltaSegAngle);
+			Ogre::Real x0 = r0 * sinf(seg * fDeltaSegAngle);
+			Ogre::Real z0 = r0 * cosf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
 			manual->position( x0, y0, z0);
 			if (normals)
 				manual->normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
 			for (int tc=0;tc<numTexCoordSet;tc++)
-				manual->textureCoord((float) seg / (float) nSegments * uTile, (float) ring / (float) nRings * vTile);
+				manual->textureCoord((Ogre::Real) seg / (Ogre::Real) nSegments * uTile, (Ogre::Real) ring / (Ogre::Real) nRings * vTile);
 
 			if (ring != nRings) {
 				// each vertex (except the last) has six indices pointing to it
@@ -51,13 +51,13 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createSphere(const Ogre::String& name,
 	return mesh;
 }
 
-void ProceduralPrimitiveFactory::_internalPlane(Ogre::ManualObject* manual, int& offset, const Ogre::Vector3& normal, int numSeg1, int numSeg2, const Ogre::Vector3& orig, const Ogre::Vector3& delta1, const Ogre::Vector3& delta2, float uTile, float vTile)
+void ProceduralPrimitiveFactory::_internalPlane(Ogre::ManualObject* manual, int& offset, const Ogre::Vector3& normal, int numSeg1, int numSeg2, const Ogre::Vector3& orig, const Ogre::Vector3& delta1, const Ogre::Vector3& delta2, Ogre::Real uTile, Ogre::Real vTile)
 {
 for (int i1 = 0; i1<=numSeg1;i1++)
 		for (int i2 = 0; i2<=numSeg2;i2++)
 			{
 				manual->position(orig+i1*delta1+i2*delta2);
-				manual->textureCoord(i1/(float)numSeg1*uTile, i2/(float)numSeg2*vTile);
+				manual->textureCoord(i1/(Ogre::Real)numSeg1*uTile, i2/(Ogre::Real)numSeg2*vTile);
 				manual->normal(normal);
 			}
 
@@ -91,22 +91,22 @@ for (int i1 = 0; i1<=numSeg1;i1++)
 	offset+=numSeg2+1;
 }
 
-Ogre::MeshPtr ProceduralPrimitiveFactory::createBox(const Ogre::String& name, float sizeX, float sizeY, float sizeZ, int numSegX, int numSegY, int numSegZ, float uTile, float vTile)
+Ogre::MeshPtr ProceduralPrimitiveFactory::createBox(const Ogre::String& name, Ogre::Real sizeX, Ogre::Real sizeY, Ogre::Real sizeZ, int numSegX, int numSegY, int numSegZ, Ogre::Real uTile, Ogre::Real vTile)
 {
 	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 	
 	int offset=0;	
-	_internalPlane(manual, offset, Ogre::Vector3::NEGATIVE_UNIT_Z, numSegX, numSegY, Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ), sizeX/(float)numSegX*Ogre::Vector3::UNIT_X, sizeY/(float)numSegY*Ogre::Vector3::UNIT_Y, uTile, vTile); 
-	_internalPlane(manual, offset, Ogre::Vector3::UNIT_Z,          numSegX, numSegY, Ogre::Vector3(-.5*sizeX,-.5*sizeY, .5*sizeZ), sizeX/(float)numSegX*Ogre::Vector3::UNIT_X, sizeY/(float)numSegY*Ogre::Vector3::UNIT_Y, uTile, vTile); 
-	_internalPlane(manual, offset, Ogre::Vector3::NEGATIVE_UNIT_Y, numSegX, numSegZ, Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ), sizeX/(float)numSegX*Ogre::Vector3::UNIT_X, sizeZ/(float)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
-	_internalPlane(manual, offset, Ogre::Vector3::UNIT_Y,          numSegX, numSegZ, Ogre::Vector3(-.5*sizeX, .5*sizeY,-.5*sizeZ), sizeX/(float)numSegX*Ogre::Vector3::UNIT_X, sizeZ/(float)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
-	_internalPlane(manual, offset, Ogre::Vector3::NEGATIVE_UNIT_X, numSegY, numSegZ, Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ), sizeY/(float)numSegY*Ogre::Vector3::UNIT_Y, sizeZ/(float)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
-	_internalPlane(manual, offset, Ogre::Vector3::UNIT_X,          numSegY, numSegZ, Ogre::Vector3( .5*sizeX,-.5*sizeY,-.5*sizeZ), sizeY/(float)numSegY*Ogre::Vector3::UNIT_Y, sizeZ/(float)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
+	_internalPlane(manual, offset, Ogre::Vector3::NEGATIVE_UNIT_Z, numSegX, numSegY, Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ), sizeX/(Ogre::Real)numSegX*Ogre::Vector3::UNIT_X, sizeY/(Ogre::Real)numSegY*Ogre::Vector3::UNIT_Y, uTile, vTile); 
+	_internalPlane(manual, offset, Ogre::Vector3::UNIT_Z,          numSegX, numSegY, Ogre::Vector3(-.5*sizeX,-.5*sizeY, .5*sizeZ), sizeX/(Ogre::Real)numSegX*Ogre::Vector3::UNIT_X, sizeY/(Ogre::Real)numSegY*Ogre::Vector3::UNIT_Y, uTile, vTile); 
+	_internalPlane(manual, offset, Ogre::Vector3::NEGATIVE_UNIT_Y, numSegX, numSegZ, Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ), sizeX/(Ogre::Real)numSegX*Ogre::Vector3::UNIT_X, sizeZ/(Ogre::Real)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
+	_internalPlane(manual, offset, Ogre::Vector3::UNIT_Y,          numSegX, numSegZ, Ogre::Vector3(-.5*sizeX, .5*sizeY,-.5*sizeZ), sizeX/(Ogre::Real)numSegX*Ogre::Vector3::UNIT_X, sizeZ/(Ogre::Real)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
+	_internalPlane(manual, offset, Ogre::Vector3::NEGATIVE_UNIT_X, numSegY, numSegZ, Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ), sizeY/(Ogre::Real)numSegY*Ogre::Vector3::UNIT_Y, sizeZ/(Ogre::Real)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
+	_internalPlane(manual, offset, Ogre::Vector3::UNIT_X,          numSegY, numSegZ, Ogre::Vector3( .5*sizeX,-.5*sizeY,-.5*sizeZ), sizeY/(Ogre::Real)numSegY*Ogre::Vector3::UNIT_Y, sizeZ/(Ogre::Real)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
 
 	manual->end();
 	Ogre::MeshPtr mesh = manual->convertToMesh(name);
-	float r = sizeX;
+	Ogre::Real r = sizeX;
 	mesh->_setBounds( Ogre::AxisAlignedBox( Ogre::Vector3(-r, -r, -r), Ogre::Vector3(r, r, r) ), false );
 
 	mesh->_setBoundingSphereRadius(r);
@@ -118,23 +118,23 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createBox(const Ogre::String& name, fl
 	return mesh;
 }
 
-Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& name, float radius, float height, bool capped, int numSegHeight, int numSegBase, float uTile, float vTile)
+Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& name, Ogre::Real radius, Ogre::Real height, bool capped, int numSegHeight, int numSegBase, Ogre::Real uTile, Ogre::Real vTile)
 {
 	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-	float deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
-	float deltaHeight = height/(float)numSegHeight;
+	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
+	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 
 	int verticeIndex=0;
 	for (int i = 0; i <=numSegHeight; i++)
 		for (int j = 0; j<=numSegBase; j++)
 		{
-			float x0 = radius * cosf(j*deltaAngle);
-			float z0 = radius * sinf(j*deltaAngle);
+			Ogre::Real x0 = radius * cosf(j*deltaAngle);
+			Ogre::Real z0 = radius * sinf(j*deltaAngle);
 			manual->position(x0, i*deltaHeight, z0);
 			manual->normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(float)numSegBase*uTile, i/(float)numSegHeight*vTile);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
@@ -156,12 +156,12 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& nam
 		verticeIndex++;
 		for (int j=0;j<=numSegBase;j++)
 		{
-			float x0 = radius * cosf(j*deltaAngle);
-			float z0 = radius * sinf(j*deltaAngle);
+			Ogre::Real x0 = radius * cosf(j*deltaAngle);
+			Ogre::Real z0 = radius * sinf(j*deltaAngle);
 
 			manual->position(x0, 0.0f, z0);
 			manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase,0.0);
+			manual->textureCoord(j/(Ogre::Real)numSegBase,0.0);
 			if (j!=numSegBase)
 			{
 				manual->index(centerIndex);
@@ -178,12 +178,12 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& nam
 		verticeIndex++;
 		for (int j=0;j<=numSegBase;j++)
 		{
-			float x0 = radius * cosf(j*deltaAngle);
-			float z0 = radius * sinf(j*deltaAngle);
+			Ogre::Real x0 = radius * cosf(j*deltaAngle);
+			Ogre::Real z0 = radius * sinf(j*deltaAngle);
 
 			manual->position(x0, height, z0);
 			manual->normal(Ogre::Vector3::UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase*uTile,vTile);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,vTile);
 			if (j!=numSegBase)
 			{
 				manual->index(centerIndex);
@@ -196,7 +196,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& nam
 
 	manual->end();
 	Ogre::MeshPtr mesh = manual->convertToMesh(name);
-	float r = height;
+	Ogre::Real r = height;
 	mesh->_setBounds( Ogre::AxisAlignedBox( Ogre::Vector3(-r, -r, -r), Ogre::Vector3(r, r, r) ), false );
 
 	mesh->_setBoundingSphereRadius(r);
@@ -209,24 +209,24 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCylinder(const Ogre::String& nam
 }
 
 
-Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, float radius, float height, int numSegHeight, int numSegBase, float uTile, float vTile)
+Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, Ogre::Real radius, Ogre::Real height, int numSegHeight, int numSegBase, Ogre::Real uTile, Ogre::Real vTile)
 {
 	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-	float deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
-	float deltaHeight = height/(float)numSegHeight;
+	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
+	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 
 	int verticeIndex=0;
 	for (int i = 0; i <=numSegHeight; i++)
 		for (int j = 0; j<=numSegBase; j++)
 		{
-			float r0 = radius * (1 - i / (float)numSegHeight);
-			float x0 = r0 * cosf(j*deltaAngle);
-			float z0 = r0 * sinf(j*deltaAngle);
+			Ogre::Real r0 = radius * (1 - i / (Ogre::Real)numSegHeight);
+			Ogre::Real x0 = r0 * cosf(j*deltaAngle);
+			Ogre::Real z0 = r0 * sinf(j*deltaAngle);
 			manual->position(x0, i*deltaHeight, z0);
 			manual->normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(float)numSegBase*uTile, i/(float)numSegHeight*vTile);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
@@ -247,12 +247,12 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, f
 		verticeIndex++;
 		for (int j=0;j<=numSegBase;j++)
 		{
-			float x0 = radius * cosf(j*deltaAngle);
-			float z0 = radius * sinf(j*deltaAngle);
+			Ogre::Real x0 = radius * cosf(j*deltaAngle);
+			Ogre::Real z0 = radius * sinf(j*deltaAngle);
 
 			manual->position(x0, 0.0f, z0);
 			manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase*uTile,0.0);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,0.0);
 			if (j!=numSegBase)
 			{
 				manual->index(centerIndex);
@@ -264,7 +264,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, f
 
 	manual->end();
 	Ogre::MeshPtr mesh = manual->convertToMesh(name);
-	float r = height;
+	Ogre::Real r = height;
 	mesh->_setBounds( Ogre::AxisAlignedBox( Ogre::Vector3(-r, -r, -r), Ogre::Vector3(r, r, r) ), false );
 
 	mesh->_setBoundingSphereRadius(r);
@@ -276,23 +276,23 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, f
 	return mesh;
 }
 
-Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, float innerRadius, float outerRadius, float height, int numSegHeight, int numSegBase, float uTile, float vTile)
+Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, Ogre::Real innerRadius, Ogre::Real outerRadius, Ogre::Real height, int numSegHeight, int numSegBase, Ogre::Real uTile, Ogre::Real vTile)
 {
 	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-	float deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
-	float deltaHeight = height/(float)numSegHeight;
+	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
+	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 
 	int verticeIndex=0;
 	for (int i = 0; i <=numSegHeight; i++)
 		for (int j = 0; j<=numSegBase; j++)
 		{
-			float x0 = outerRadius * cosf(j*deltaAngle);
-			float z0 = outerRadius * sinf(j*deltaAngle);
+			Ogre::Real x0 = outerRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = outerRadius * sinf(j*deltaAngle);
 			manual->position(x0, i*deltaHeight, z0);
 			manual->normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(float)numSegBase*uTile, i/(float)numSegHeight*vTile);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
@@ -308,11 +308,11 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, f
 	for (int i = 0; i <=numSegHeight; i++)
 		for (int j = 0; j<=numSegBase; j++)
 		{
-			float x0 = innerRadius * cosf(j*deltaAngle);
-			float z0 = innerRadius * sinf(j*deltaAngle);
+			Ogre::Real x0 = innerRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = innerRadius * sinf(j*deltaAngle);
 			manual->position(x0, i*deltaHeight, z0);
 			manual->normal(-Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(float)numSegBase*uTile, i/(float)numSegHeight*vTile);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
@@ -329,19 +329,19 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, f
 		//low cap
 		for (int j=0;j<=numSegBase;j++)
 		{
-			float x0 = innerRadius * cosf(j*deltaAngle);
-			float z0 = innerRadius * sinf(j*deltaAngle);
+			Ogre::Real x0 = innerRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = innerRadius * sinf(j*deltaAngle);
 
 			manual->position(x0, 0.0f, z0);
 			manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase*uTile,vTile);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,vTile);
 
 			x0 = outerRadius * cosf(j*deltaAngle);
 			z0 = outerRadius * sinf(j*deltaAngle);
 
 			manual->position(x0, 0.0f, z0);			
 			manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase*uTile,0.0);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,0.0);
 
 			if (j!=numSegBase)
 			{
@@ -359,19 +359,19 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, f
 		//high cap
 		for (int j=0;j<=numSegBase;j++)
 		{
-			float x0 = innerRadius * cosf(j*deltaAngle);
-			float z0 = innerRadius * sinf(j*deltaAngle);
+			Ogre::Real x0 = innerRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = innerRadius * sinf(j*deltaAngle);
 
 			manual->position(x0, height, z0);
 			manual->normal(Ogre::Vector3::UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase*uTile,0.0);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,0.0);
 
 			x0 = outerRadius * cosf(j*deltaAngle);
 			z0 = outerRadius * sinf(j*deltaAngle);
 
 			manual->position(x0, height, z0);			
 			manual->normal(Ogre::Vector3::UNIT_Y);
-			manual->textureCoord(j/(float)numSegBase*uTile,vTile);
+			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,vTile);
 
 			if (j!=numSegBase)
 			{
@@ -388,7 +388,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, f
 
 	manual->end();
 	Ogre::MeshPtr mesh = manual->convertToMesh(name);
-	float r = height;
+	Ogre::Real r = height;
 	mesh->_setBounds( Ogre::AxisAlignedBox( Ogre::Vector3(-r, -r, -r), Ogre::Vector3(r, r, r) ), false );
 
 	mesh->_setBoundingSphereRadius(r);
@@ -400,13 +400,13 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, f
 	return mesh;
 }
 
-Ogre::MeshPtr ProceduralPrimitiveFactory::createTorus(const Ogre::String& name, float radius, float sectionRadius, int numSegCircle, int numSegSection, float uTile, float vTile)
+Ogre::MeshPtr ProceduralPrimitiveFactory::createTorus(const Ogre::String& name, Ogre::Real radius, Ogre::Real sectionRadius, int numSegCircle, int numSegSection, Ogre::Real uTile, Ogre::Real vTile)
 {
 	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-	float deltaSection = (Ogre::Math::TWO_PI / numSegSection);
-	float deltaCircle = (Ogre::Math::TWO_PI / numSegCircle);
+	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / numSegSection);
+	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / numSegCircle);
 
 	int verticeIndex=0;
 	for (int i = 0; i <=numSegCircle; i++)
@@ -420,7 +420,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTorus(const Ogre::String& name, 
 			Ogre::Vector3 c = q * c0;
 			manual->position(v);
 			manual->normal((v-c).normalisedCopy());
-			manual->textureCoord(i/(float)numSegCircle*uTile, j/(float)numSegSection*vTile);
+			manual->textureCoord(i/(Ogre::Real)numSegCircle*uTile, j/(Ogre::Real)numSegSection*vTile);
 
 			if (i != numSegCircle) 
 			{
@@ -436,7 +436,7 @@ Ogre::MeshPtr ProceduralPrimitiveFactory::createTorus(const Ogre::String& name, 
 
 	manual->end();
 	Ogre::MeshPtr mesh = manual->convertToMesh(name);
-	float r = radius;
+	Ogre::Real r = radius;
 	mesh->_setBounds( Ogre::AxisAlignedBox( Ogre::Vector3(-r, -r, -r), Ogre::Vector3(r, r, r) ), false );
 
 	mesh->_setBoundingSphereRadius(r);
