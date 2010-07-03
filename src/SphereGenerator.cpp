@@ -1,6 +1,6 @@
 #include "SphereGenerator.h"
 
-Ogre::MeshPtr SphereGenerator::realize()
+Ogre::MeshPtr SphereGenerator::realizeMesh()
 	{
 		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);

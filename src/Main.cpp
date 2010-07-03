@@ -3,11 +3,10 @@
 #include "OIS.h"
 #include "SphereGenerator.h"
 using namespace Ogre;
-using namespace OIS;
 
 bool Main::init()
 {	// 1 Initialiser la racine de Ogre
-	root = new Ogre::Root;
+	root = new Root;
 
     LOG("*** Initializing Ogre ***");
 
@@ -39,25 +38,25 @@ bool Main::init()
 
     // 4 Créer le SceneManager
     sceneMgr = root->createSceneManager(ST_GENERIC);
-	//context->sceneMgr->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);	
+	//context->sceneMgr->setShadowTechnique(ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);	
     sceneMgr->setShadowDirectionalLightExtrusionDistance(10000.0);
     sceneMgr->setShadowColour(ColourValue(.1,.1,.1));
-	sceneMgr->setAmbientLight(Ogre::ColourValue(.5,.5,.5,.5));
+	sceneMgr->setAmbientLight(ColourValue(.5,.5,.5,.5));
 	
     // 5 Créer la caméra et ajouter le viewport
 	camera = sceneMgr->createCamera("MainCamera");
-	camera->setPosition(Ogre::Vector3(50,10,0));
-	camera->setFOVy(Ogre::Radian(Ogre::Math::PI * 0.3));
-	camera->lookAt(Ogre::Vector3::ZERO);
+	camera->setPosition(Vector3(50,10,0));
+	camera->setFOVy(Radian(Math::PI * 0.3));
+	camera->lookAt(Vector3::ZERO);
 	camera->setNearClipDistance(5);
 
     mViewPort = mWindow->addViewport(camera);
 
 	mViewPort->setBackgroundColour(Ogre::ColourValue(0.5,0.5,0.8));
 
-	Ogre::Light* l = sceneMgr->createLight("myLight");
-	l->setType(Light::LightTypes::LT_DIRECTIONAL);
-	l->setDirection(Ogre::Vector3(0,-1,0.2).normalisedCopy());
+	Light* l = sceneMgr->createLight("myLight");
+	l->setType(Light::LT_DIRECTIONAL);
+	l->setDirection(Vector3(0,-1,0.2).normalisedCopy());
 	l->setCastShadows(true);
 	
 	//TODO init keys
@@ -66,44 +65,49 @@ bool Main::init()
 	timer = root->getTimer();
 
 	// overlay pour le debug
-	Ogre::Overlay* o = Ogre::OverlayManager::getSingleton().create("myOverlay");	
-	Ogre::OverlayContainer* cont = (Ogre::OverlayContainer*)OverlayManager::getSingleton().createOverlayElement("Panel","myCont");
+	Overlay* o = OverlayManager::getSingleton().create("myOverlay");	
+	OverlayContainer* cont = (OverlayContainer*)OverlayManager::getSingleton().createOverlayElement("Panel","myCont");
 	o->add2D(cont);
-	Ogre::OverlayElement* el = OverlayManager::getSingleton().createOverlayElement("TextArea","myText");
+	OverlayElement* el = OverlayManager::getSingleton().createOverlayElement("TextArea","myText");
 	cont->addChild(el);
 	el->setCaption("Ogre program");
 	el->setParameter("font_name","BlueHighway");
 	o->show();
 	debugText = el;
 
-	// setup scene
 
-	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
-	Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane, 1500,1500,20,20,true,1,5,5,Ogre::Vector3::UNIT_Z);	
-	
-	Ogre::Entity* ent = sceneMgr->createEntity("GroundEntity", "ground");
-	sceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(ent);
-	ent->setMaterialName("terrainMat");
-	ent->setCastShadows(false);	
-		
-	SphereGenerator(sceneMgr).setRadius(10.0).setNumRings(16).setNumSegments(4).realize();
-
-	Ogre::Entity* ent2 = sceneMgr->createEntity("sphere", "default");
-	Ogre::SceneNode* sn = sceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(0,10,0);
-	ent2->setMaterialName("terrainMat");
-
-	ParamList pl;
+	// setup OIS
+	OIS::ParamList pl;
 	size_t windowHnd = 0;
 	std::ostringstream windowHndStr;
 	mWindow->getCustomAttribute("WINDOW", &windowHnd);
 	windowHndStr << windowHnd;
 	pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
-	mInputSystem = InputManager::createInputSystem(pl);
-	mKeyboard = static_cast<Keyboard*>(mInputSystem->createInputObject( OISKeyboard, true ));
-	mMouse = static_cast<Mouse*>(mInputSystem->createInputObject( OISMouse, true ));
+	mInputSystem = OIS::InputManager::createInputSystem(pl);
+	mKeyboard = static_cast<OIS::Keyboard*>(mInputSystem->createInputObject( OIS::OISKeyboard, true ));
+	mMouse = static_cast<OIS::Mouse*>(mInputSystem->createInputObject( OIS::OISMouse, true ));
+	mMouse->getMouseState().width=1000;
+	mMouse->getMouseState().height=1000;
 
+	// setup scene
+	Plane plane(Vector3::UNIT_Y, 0);
+	MeshManager::getSingleton().createPlane("ground", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane, 1500,1500,20,20,true,1,5,5,Vector3::UNIT_Z);	
+	
+	Entity* ent = sceneMgr->createEntity("GroundEntity", "ground");
+	sceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(ent);
+	ent->setMaterialName("terrainMat");
+	ent->setCastShadows(false);	
+		
+	// Test primitive generation
+	SphereGenerator(sceneMgr).setRadius(10.0).setNumRings(16).setNumSegments(16).setUTile(2.0).realizeMesh();
+
+	Entity* ent2 = sceneMgr->createEntity("sphere", "default");
+	SceneNode* sn = sceneMgr->getRootSceneNode()->createChildSceneNode();
+	sn->attachObject(ent2);
+	sn->setPosition(0,10,0);
+	ent2->setMaterialName("terrainMat");
+
+	
     return true;
 }
 
@@ -136,16 +140,16 @@ void Main::run()
 	mKeyboard->capture();
 	mMouse->capture();
 
-	if (mKeyboard->isKeyDown(KeyCode::KC_ESCAPE))
+	if (mKeyboard->isKeyDown(OIS::KC_ESCAPE))
 		mustquit=true;
 
-		Ogre::Vector3 v(100,0,0);
-	Ogre::Quaternion q1;
-	q1.FromAngleAxis(Ogre::Radian(0.01*mMouse->getMouseState().X.abs),Ogre::Vector3::UNIT_Y);
-	Ogre::Quaternion q2;
-	q2.FromAngleAxis(Ogre::Radian(0.01*mMouse->getMouseState().Y.abs),Ogre::Vector3::UNIT_Z);
+		Vector3 v(100,0,0);
+	Quaternion q1;
+	q1.FromAngleAxis(Radian(0.01*mMouse->getMouseState().X.abs),Vector3::UNIT_Y);
+	Quaternion q2;
+	q2.FromAngleAxis(Radian(0.01*mMouse->getMouseState().Y.abs),Vector3::UNIT_Z);
 	camera->setPosition(q1*q2*v);
-	camera->lookAt(Ogre::Vector3::ZERO); 
+	camera->lookAt(Vector3::ZERO); 
 
 		root->renderOneFrame();
         WindowEventUtilities::messagePump();		
@@ -176,7 +180,7 @@ int main(int argc, char **argv)
 
     try {
         app.go();
-    } catch( Ogre::Exception& e ) {
+    } catch( Exception& e ) {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         MessageBoxA( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 #else

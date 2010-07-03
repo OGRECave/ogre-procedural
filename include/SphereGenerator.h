@@ -46,7 +46,29 @@ public:
 		return *this;
 	}
 
-	Ogre::MeshPtr realize();
+	inline SphereGenerator& setUTile(const float& uTile)
+	{
+		this->uTile = uTile;
+		return *this;
+	}
+
+	inline SphereGenerator& setVTile(const float& vTile)
+	{
+		this->vTile = vTile;
+		return *this;
+	}
+
+	inline SphereGenerator& setEnableNormals(const float& enableNormals)
+	{
+		this->enableNormals = enableNormals;
+		return *this;
+	}
+
+	Ogre::MeshPtr realizeMesh();
+
+	
+
+
 
 	Ogre::SceneManager* sceneMgr;
 
