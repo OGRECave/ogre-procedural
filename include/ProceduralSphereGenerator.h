@@ -66,10 +66,6 @@ public:
 
 	Ogre::MeshPtr realizeMesh();
 
-	
-
-
-
 	Ogre::SceneManager* sceneMgr;
 
 };
