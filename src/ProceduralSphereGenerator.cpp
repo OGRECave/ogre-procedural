@@ -1,10 +1,10 @@
-#include "SphereGenerator.h"
+#include "ProceduralSphereGenerator.h"
 
 Ogre::MeshPtr SphereGenerator::realizeMesh()
 	{
 		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-		
+
 	Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
 	unsigned short wVerticeIndex = 0 ;
@@ -29,7 +29,7 @@ Ogre::MeshPtr SphereGenerator::realizeMesh()
 			if (ring != numRings) {
 				// each vertex (except the last) has six indices pointing to it
 				manual->index(wVerticeIndex + numSegments + 1);
-				manual->index(wVerticeIndex);               
+				manual->index(wVerticeIndex);
 				manual->index(wVerticeIndex + numSegments);
 				manual->index(wVerticeIndex + numSegments + 1);
 				manual->index(wVerticeIndex + 1);

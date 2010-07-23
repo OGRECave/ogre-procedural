@@ -26,15 +26,26 @@ MACRO(ADD_MSVC_PRECOMPILED_HEADER PrecompiledHeader PrecompiledSource SourcesVar
 ENDMACRO(ADD_MSVC_PRECOMPILED_HEADER)
 
 set( HEADER_FILES
-	include/SphereGenerator.h
+	include/Procedural.h
+	include/ProceduralBoxGenerator.h
+	include/ProceduralConeGenerator.h
+	include/ProceduralCylinderGenerator.h
+	include/ProceduralSphereGenerator.h
+	include/ProceduralTorusGenerator.h
+	include/ProceduralTubeGenerator.h
 	include/Common.h
 	include/Main.h
 	include/Precompiled.h
 	)
 	
 set( SOURCE_FILES
-		src/Main.cpp
-		src/SphereGenerator.cpp
+		src/Main.cpp	
+		src/ProceduralBoxGenerator.cpp
+		src/ProceduralConeGenerator.cpp
+		src/ProceduralCylinderGenerator.cpp
+		src/ProceduralSphereGenerator.cpp
+		src/ProceduralTorusGenerator.cpp
+		src/ProceduralTubeGenerator.cpp
 	)
 	
 ADD_MSVC_PRECOMPILED_HEADER("Precompiled.h" "src/Precompiled.cpp" SOURCE_FILES)

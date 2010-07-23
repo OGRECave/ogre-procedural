@@ -1,7 +1,7 @@
 #include "Main.h"
 #include "Common.h"
 #include "OIS.h"
-#include "SphereGenerator.h"
+#include "Procedural.h"
 using namespace Ogre;
 
 bool Main::init()
@@ -28,21 +28,21 @@ bool Main::init()
             ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
             }
         }
-        
+
     // 3 Configurer l'application et créer la fenetre
     if (!root->restoreConfig())
         if (!root->showConfigDialog())
             return false;
     mWindow = root->initialise(true, "Animals");
-    ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
+    ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
     // 4 Créer le SceneManager
     sceneMgr = root->createSceneManager(ST_GENERIC);
-	//context->sceneMgr->setShadowTechnique(ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);	
+	//context->sceneMgr->setShadowTechnique(ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
     sceneMgr->setShadowDirectionalLightExtrusionDistance(10000.0);
     sceneMgr->setShadowColour(ColourValue(.1,.1,.1));
 	sceneMgr->setAmbientLight(ColourValue(.5,.5,.5,.5));
-	
+
     // 5 Créer la caméra et ajouter le viewport
 	camera = sceneMgr->createCamera("MainCamera");
 	camera->setPosition(Vector3(50,10,0));
@@ -58,14 +58,14 @@ bool Main::init()
 	l->setType(Light::LT_DIRECTIONAL);
 	l->setDirection(Vector3(0,-1,0.2).normalisedCopy());
 	l->setCastShadows(true);
-	
+
 	//TODO init keys
 
 
 	timer = root->getTimer();
 
 	// overlay pour le debug
-	Overlay* o = OverlayManager::getSingleton().create("myOverlay");	
+	Overlay* o = OverlayManager::getSingleton().create("myOverlay");
 	OverlayContainer* cont = (OverlayContainer*)OverlayManager::getSingleton().createOverlayElement("Panel","myCont");
 	o->add2D(cont);
 	OverlayElement* el = OverlayManager::getSingleton().createOverlayElement("TextArea","myText");
@@ -91,13 +91,13 @@ bool Main::init()
 
 	// setup scene
 	Plane plane(Vector3::UNIT_Y, 0);
-	MeshManager::getSingleton().createPlane("ground", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane, 1500,1500,20,20,true,1,5,5,Vector3::UNIT_Z);	
-	
+	MeshManager::getSingleton().createPlane("ground", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane, 1500,1500,20,20,true,1,5,5,Vector3::UNIT_Z);
+
 	Entity* ent = sceneMgr->createEntity("GroundEntity", "ground");
 	sceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(ent);
 	ent->setMaterialName("terrainMat");
-	ent->setCastShadows(false);	
-		
+	ent->setCastShadows(false);
+
 	// Test primitive generation
 	SphereGenerator(sceneMgr).setRadius(10.0).setNumRings(16).setNumSegments(16).setUTile(2.0).realizeMesh();
 
@@ -107,16 +107,16 @@ bool Main::init()
 	sn->setPosition(0,10,0);
 	ent2->setMaterialName("terrainMat");
 
-	
+
     return true;
 }
 
 void Main::cleanUp(void)
 {
-	delete root;	
+	delete root;
 }
 
-void Main::run() 
+void Main::run()
 {
 	lastFrameTime=timer->getMilliseconds();
 	frameDuration=0.01;
@@ -127,7 +127,7 @@ void Main::run()
 		unsigned long currentTime = timer->getMilliseconds();
 		frameDuration= 0.001*(currentTime-lastFrameTime);
 		lastFrameTime = currentTime;
-		
+
 		if (frameDuration>0)
 		{
 			float f= 1.0/(frameDuration);
@@ -136,7 +136,7 @@ void Main::run()
 			VISUALDEBUG(0.0f);
 		}
 
-		
+
 	mKeyboard->capture();
 	mMouse->capture();
 
@@ -149,10 +149,10 @@ void Main::run()
 	Quaternion q2;
 	q2.FromAngleAxis(Radian(0.01*mMouse->getMouseState().Y.abs),Vector3::UNIT_Z);
 	camera->setPosition(q1*q2*v);
-	camera->lookAt(Vector3::ZERO); 
+	camera->lookAt(Vector3::ZERO);
 
 		root->renderOneFrame();
-        WindowEventUtilities::messagePump();		
+        WindowEventUtilities::messagePump();
 	}
 }
 
