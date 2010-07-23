@@ -7,5 +7,6 @@
 #include "ProceduralSphereGenerator.h"
 #include "ProceduralTorusGenerator.h"
 #include "ProceduralTubeGenerator.h"
+#include "ProceduralPlaneGenerator.h"
 
 #endif

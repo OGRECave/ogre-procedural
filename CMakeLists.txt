@@ -30,6 +30,7 @@ set( HEADER_FILES
 	include/ProceduralBoxGenerator.h
 	include/ProceduralConeGenerator.h
 	include/ProceduralCylinderGenerator.h
+	include/ProceduralPlaneGenerator.h
 	include/ProceduralSphereGenerator.h
 	include/ProceduralTorusGenerator.h
 	include/ProceduralTubeGenerator.h
@@ -43,6 +44,7 @@ set( SOURCE_FILES
 		src/ProceduralBoxGenerator.cpp
 		src/ProceduralConeGenerator.cpp
 		src/ProceduralCylinderGenerator.cpp
+		src/ProceduralPlaneGenerator.cpp
 		src/ProceduralSphereGenerator.cpp
 		src/ProceduralTorusGenerator.cpp
 		src/ProceduralTubeGenerator.cpp

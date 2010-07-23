@@ -1,5 +1,7 @@
 #include "Ogre.h"
 
+namespace Procedural
+{
 class SphereGenerator
 {
 	float radius;
@@ -69,3 +71,4 @@ public:
 	Ogre::SceneManager* sceneMgr;
 
 };
+}

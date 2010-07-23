@@ -3,7 +3,7 @@
 namespace Procedural
 {
 
-class TubeGenerator
+class PlaneGenerator
 {
 public:
 	Ogre::MeshPtr realizeMesh();

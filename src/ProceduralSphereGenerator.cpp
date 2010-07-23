@@ -1,5 +1,7 @@
 #include "ProceduralSphereGenerator.h"
 
+namespace Procedural
+{
 Ogre::MeshPtr SphereGenerator::realizeMesh()
 	{
 		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
@@ -50,3 +52,4 @@ Ogre::MeshPtr SphereGenerator::realizeMesh()
    	}
 	return mesh;
 	}
+}
