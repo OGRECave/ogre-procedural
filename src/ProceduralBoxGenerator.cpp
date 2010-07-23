@@ -8,13 +8,17 @@ Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 	
 	int offset=0;	
+	PlaneGenerator pg;	
+	pg.setUTile(uTile).setVTile(vTile);
+	//pg.setNumSeg1(numSegX).setNumSeg2(numSegY).setNormal(Ogre::Vector3::NEGATIVE_UNIT_Z).setCenter(Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ)).setSize1().setSize2()
+	/*
 	_internalPlane(manual, offset, Ogre::Vector3::NEGATIVE_UNIT_Z, numSegX, numSegY, Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ), sizeX/(Ogre::Real)numSegX*Ogre::Vector3::UNIT_X, sizeY/(Ogre::Real)numSegY*Ogre::Vector3::UNIT_Y, uTile, vTile); 
 	_internalPlane(manual, offset, Ogre::Vector3::UNIT_Z,          numSegX, numSegY, Ogre::Vector3(-.5*sizeX,-.5*sizeY, .5*sizeZ), sizeX/(Ogre::Real)numSegX*Ogre::Vector3::UNIT_X, sizeY/(Ogre::Real)numSegY*Ogre::Vector3::UNIT_Y, uTile, vTile); 
 	_internalPlane(manual, offset, Ogre::Vector3::NEGATIVE_UNIT_Y, numSegX, numSegZ, Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ), sizeX/(Ogre::Real)numSegX*Ogre::Vector3::UNIT_X, sizeZ/(Ogre::Real)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
 	_internalPlane(manual, offset, Ogre::Vector3::UNIT_Y,          numSegX, numSegZ, Ogre::Vector3(-.5*sizeX, .5*sizeY,-.5*sizeZ), sizeX/(Ogre::Real)numSegX*Ogre::Vector3::UNIT_X, sizeZ/(Ogre::Real)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
 	_internalPlane(manual, offset, Ogre::Vector3::NEGATIVE_UNIT_X, numSegY, numSegZ, Ogre::Vector3(-.5*sizeX,-.5*sizeY,-.5*sizeZ), sizeY/(Ogre::Real)numSegY*Ogre::Vector3::UNIT_Y, sizeZ/(Ogre::Real)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
 	_internalPlane(manual, offset, Ogre::Vector3::UNIT_X,          numSegY, numSegZ, Ogre::Vector3( .5*sizeX,-.5*sizeY,-.5*sizeZ), sizeY/(Ogre::Real)numSegY*Ogre::Vector3::UNIT_Y, sizeZ/(Ogre::Real)numSegZ*Ogre::Vector3::UNIT_Z, uTile, vTile); 
-
+*/
 	manual->end();
 	Ogre::MeshPtr mesh = manual->convertToMesh(name);
 	Ogre::Real r = sizeX;

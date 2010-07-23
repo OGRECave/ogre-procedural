@@ -2,12 +2,9 @@
 
 namespace Procedural
 {
-Ogre::MeshPtr SphereGenerator::realizeMesh()
-	{
-		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
-	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-
-	Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
+void SphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
+{
+Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
 	unsigned short wVerticeIndex = 0 ;
 
@@ -40,16 +37,7 @@ Ogre::MeshPtr SphereGenerator::realizeMesh()
 				}
 		}; // end for seg
 	} // end for ring
-	manual->end();
-	Ogre::MeshPtr mesh = manual->convertToMesh(name);
-	mesh->_setBounds( Ogre::AxisAlignedBox( Ogre::Vector3(-radius, -radius, -radius), Ogre::Vector3(radius, radius, radius) ), false );
 
-	mesh->_setBoundingSphereRadius(radius);
-       unsigned short src, dest;
-	   if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
-   	{
-		mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
-   	}
-	return mesh;
-	}
+	// TODO : compute AABBB and boudingRadius
+	boudingRadius = radius;
 }

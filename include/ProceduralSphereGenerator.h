@@ -1,4 +1,7 @@
+#ifndef PROCEDURAL_SPHERE_GENERATOR_INCLUDED
+#define PROCEDURAL_SPHERE_GENERATOR_INCLUDED
 #include "Ogre.h"
+#include "ProceduralMeshGenerator.h"
 
 namespace Procedural
 {
@@ -72,3 +75,4 @@ public:
 
 };
 }
+#endif

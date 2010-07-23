@@ -2,8 +2,9 @@
 
 namespace Procedural
 {
-Ogre::MeshPtr PlaneGenerator::realizeMesh()
+void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 {
+//TODO : compute delta1, delta2
 for (int i1 = 0; i1<=numSeg1;i1++)
 		for (int i2 = 0; i2<=numSeg2;i2++)
 			{

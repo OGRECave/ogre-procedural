@@ -1,3 +1,4 @@
+//NOTE : DEPRECATED !!!
 #pragma once
 
 #include "Ogre.h"

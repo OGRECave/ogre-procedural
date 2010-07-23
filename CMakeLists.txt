@@ -27,6 +27,7 @@ ENDMACRO(ADD_MSVC_PRECOMPILED_HEADER)
 
 set( HEADER_FILES
 	include/Procedural.h
+	include/ProceduralMeshGenerator.h
 	include/ProceduralBoxGenerator.h
 	include/ProceduralConeGenerator.h
 	include/ProceduralCylinderGenerator.h
@@ -41,6 +42,7 @@ set( HEADER_FILES
 	
 set( SOURCE_FILES
 		src/Main.cpp	
+		src/ProceduralMeshGenerator.cpp
 		src/ProceduralBoxGenerator.cpp
 		src/ProceduralConeGenerator.cpp
 		src/ProceduralCylinderGenerator.cpp
