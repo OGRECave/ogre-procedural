@@ -9,7 +9,7 @@
 namespace Procedural
 {
 
-class PlaneGenerator : public ProceduralMeshGenerator
+class PlaneGenerator : public MeshGenerator
 {
 	int numSeg1;
 	int numSeg2;

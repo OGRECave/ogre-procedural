@@ -1,4 +1,5 @@
 #include "ProceduralSphereGenerator.h"
+#include "ProceduralUtils.h"
 
 namespace Procedural
 {
@@ -40,4 +41,5 @@ Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 
 	// TODO : compute AABBB and boudingRadius
 	boudingRadius = radius;
+	Utils::updateAABB(AABBmin, AABBmax, Ogre::Vector3(-radius, -radius, -radius), Ogre::Vector3(radius, radius, radius), Ogre::Vector3(,,), Ogre::Vector3(,,));
 }

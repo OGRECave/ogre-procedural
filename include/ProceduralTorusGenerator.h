@@ -6,10 +6,10 @@
 namespace Procedural
 {
 
-class TorusGenerator
+class TorusGenerator : public MeshGenerator
 {
 public:
-	Ogre::MeshPtr realizeMesh();
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 };
 }
 #endif

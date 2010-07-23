@@ -5,7 +5,7 @@
 
 namespace Procedural
 {
-class SphereGenerator
+class SphereGenerator : public MeshGenerator
 {
 	float radius;
 	std::string name;
@@ -69,9 +69,7 @@ public:
 		return *this;
 	}
 
-	Ogre::MeshPtr realizeMesh();
-
-	Ogre::SceneManager* sceneMgr;
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 
 };
 }

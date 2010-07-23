@@ -7,10 +7,10 @@
 namespace Procedural
 {
 
-class CylinderGenerator
+class CylinderGenerator : public MeshGenerator
 {
-public:
-	Ogre::MeshPtr realizeMesh();
+public:	
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 };
 }
 

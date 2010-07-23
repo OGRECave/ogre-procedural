@@ -5,7 +5,7 @@
 
 namespace Procedural
 {
-class BoxGenerator
+class BoxGenerator : public MeshGenerator
 {
 	float sizeX,sizeY,sizeZ;
 	int numSegX,numSegY,numSegZ;
@@ -52,9 +52,7 @@ public:
 		return this;
 	}
 
-	Ogre::MeshPtr realizeMesh();
-	
-	Ogre::SceneManager* sceneMgr;
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 
 };
 
