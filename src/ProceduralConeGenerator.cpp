@@ -2,10 +2,8 @@
 
 namespace Procedural
 {
-Ogre::MeshPtr ConeGenerator::realizeMesh()
+void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
 {
-	Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
-	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
@@ -23,11 +21,11 @@ Ogre::MeshPtr ConeGenerator::realizeMesh()
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
-				manual->index(verticeIndex);               
+				manual->index(verticeIndex);
 				manual->index(verticeIndex + numSegBase);
 				manual->index(verticeIndex + numSegBase + 1);
 				manual->index(verticeIndex + 1);
-				manual->index(verticeIndex);		
+				manual->index(verticeIndex);
 				}
 			verticeIndex ++;
 		}
@@ -54,19 +52,6 @@ Ogre::MeshPtr ConeGenerator::realizeMesh()
 			}
 			verticeIndex++;
 		}
-
-	manual->end();
-	Ogre::MeshPtr mesh = manual->convertToMesh(name);
-	Ogre::Real r = height;
-	mesh->_setBounds( Ogre::AxisAlignedBox( Ogre::Vector3(-r, -r, -r), Ogre::Vector3(r, r, r) ), false );
-
-	mesh->_setBoundingSphereRadius(r);
-       unsigned short src, dest;
-	   if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
-   	{
-		mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
-   	}
-	return mesh;
 }
 
 /*Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, Ogre::Real radius, Ogre::Real height, int numSegHeight, int numSegBase, Ogre::Real uTile, Ogre::Real vTile)

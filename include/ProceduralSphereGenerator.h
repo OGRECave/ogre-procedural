@@ -17,13 +17,12 @@ class SphereGenerator : public MeshGenerator
 	float vTile;
 
 public:
-	SphereGenerator(Ogre::SceneManager* sceneManager) : radius(1.0), 
-														name("default"), 
-														numRings(8), numSegments(8), 
-														enableNormals(true), 
-														numTexCoordSet(1), 
-														uTile(1.f), vTile(1.f), 
-														sceneMgr(sceneManager)
+	SphereGenerator(Ogre::SceneManager* sceneManager) : radius(1.0),
+														name("default"),
+														numRings(8), numSegments(8),
+														enableNormals(true),
+														numTexCoordSet(1),
+														uTile(1.f), vTile(1.f)
 	{}
 
 	inline SphereGenerator& setRadius(float radius)

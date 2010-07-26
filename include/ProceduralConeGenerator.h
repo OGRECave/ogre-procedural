@@ -9,6 +9,10 @@ namespace Procedural
 
 class ConeGenerator : public MeshGenerator
 {
+    int numSegBase;
+    int numSegHeight;
+    float radius;
+    float height;
 public:
 	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 };

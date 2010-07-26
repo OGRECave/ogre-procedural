@@ -2,11 +2,8 @@
 
 namespace Procedural
 {
-Ogre::MeshPtr TorusGenerator::realizeMesh()
+void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
 {
-Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
-	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-
 	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / numSegSection);
 	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / numSegCircle);
 
@@ -24,33 +21,20 @@ Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 			manual->normal((v-c).normalisedCopy());
 			manual->textureCoord(i/(Ogre::Real)numSegCircle*uTile, j/(Ogre::Real)numSegSection*vTile);
 
-			if (i != numSegCircle) 
+			if (i != numSegCircle)
 			{
 				manual->index(verticeIndex + numSegSection + 1);
-				manual->index(verticeIndex);               
+				manual->index(verticeIndex);
 				manual->index(verticeIndex + numSegSection);
 				manual->index(verticeIndex + numSegSection + 1);
 				manual->index(verticeIndex + 1);
-				manual->index(verticeIndex);		
+				manual->index(verticeIndex);
 			}
 			verticeIndex ++;
-		}	
-
-	manual->end();
-	Ogre::MeshPtr mesh = manual->convertToMesh(name);
-	Ogre::Real r = radius;
-	mesh->_setBounds( Ogre::AxisAlignedBox( Ogre::Vector3(-r, -r, -r), Ogre::Vector3(r, r, r) ), false );
-
-	mesh->_setBoundingSphereRadius(r);
-       unsigned short src, dest;
-	   if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
-   	{
-		mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
-   	}
-	return mesh;
+		}
 }
 /*Ogre::MeshPtr ProceduralPrimitiveFactory::createTorus(const Ogre::String& name, Ogre::Real radius, Ogre::Real sectionRadius, int numSegCircle, int numSegSection, Ogre::Real uTile, Ogre::Real vTile)
 {
-	
+
 }*/
 }

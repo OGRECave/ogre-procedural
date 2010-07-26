@@ -71,7 +71,7 @@ bool Main::init()
 	OverlayElement* el = OverlayManager::getSingleton().createOverlayElement("TextArea","myText");
 	cont->addChild(el);
 	el->setCaption("Ogre program");
-	el->setParameter("font_name","BlueHighway");
+	el->setParameter("font_name","StarWars");
 	o->show();
 	debugText = el;
 
@@ -95,11 +95,11 @@ bool Main::init()
 
 	Entity* ent = sceneMgr->createEntity("GroundEntity", "ground");
 	sceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(ent);
-	ent->setMaterialName("terrainMat");
+	ent->setMaterialName("Examples/BeachStones");
 	ent->setCastShadows(false);
 
 	// Test primitive generation
-	SphereGenerator(sceneMgr).setRadius(10.0).setNumRings(16).setNumSegments(16).setUTile(2.0).realizeMesh();
+	Procedural::SphereGenerator(sceneMgr).setRadius(10.0).setNumRings(16).setNumSegments(16).setUTile(2.0).realizeMesh();
 
 	Entity* ent2 = sceneMgr->createEntity("sphere", "default");
 	SceneNode* sn = sceneMgr->getRootSceneNode()->createChildSceneNode();

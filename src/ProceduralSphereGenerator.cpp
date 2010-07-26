@@ -40,6 +40,7 @@ Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	} // end for ring
 
 	// TODO : compute AABBB and boudingRadius
-	boudingRadius = radius;
-	Utils::updateAABB(AABBmin, AABBmax, Ogre::Vector3(-radius, -radius, -radius), Ogre::Vector3(radius, radius, radius), Ogre::Vector3(,,), Ogre::Vector3(,,));
+	boundingRadius = radius;
+	Utils::updateAABB(AABBmin, AABBmax, Ogre::Vector3(-radius, -radius, -radius), Ogre::Vector3(radius, radius, radius));
+}
 }

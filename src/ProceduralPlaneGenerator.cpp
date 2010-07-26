@@ -2,9 +2,10 @@
 
 namespace Procedural
 {
-void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
+void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
 {
 //TODO : compute delta1, delta2
+Ogre::Vector3 orig, delta1,delta2;
 for (int i1 = 0; i1<=numSeg1;i1++)
 		for (int i2 = 0; i2<=numSeg2;i2++)
 			{
@@ -19,22 +20,22 @@ for (int i1 = 0; i1<=numSeg1;i1++)
 	for (int n1 = 0; n1<numSeg1;n1++)
 	{
 		for (int n2 = 0; n2<numSeg2;n2++)
-		{	
+		{
 			if (reverse)
-			{	
+			{
 			manual->index(offset+0);
-			manual->index(offset+(numSeg2+1));		
+			manual->index(offset+(numSeg2+1));
 			manual->index(offset+1);
-			manual->index(offset+1);		
-			manual->index(offset+(numSeg2+1));					
+			manual->index(offset+1);
+			manual->index(offset+(numSeg2+1));
 			manual->index(offset+(numSeg2+1)+1);
-			} else {				
+			} else {
 			manual->index(offset+0);
 			manual->index(offset+1);
-			manual->index(offset+(numSeg2+1));		
-			manual->index(offset+1);		
+			manual->index(offset+(numSeg2+1));
+			manual->index(offset+1);
 			manual->index(offset+(numSeg2+1)+1);
-			manual->index(offset+(numSeg2+1));	
+			manual->index(offset+(numSeg2+1));
 			}
 			offset++;
 		}

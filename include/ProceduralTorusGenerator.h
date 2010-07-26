@@ -8,6 +8,9 @@ namespace Procedural
 
 class TorusGenerator : public MeshGenerator
 {
+    int numSegSection;
+    int numSegCircle;
+    float radius, sectionRadius;
 public:
 	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 };

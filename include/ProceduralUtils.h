@@ -4,22 +4,21 @@ namespace Procedural
 {
 class Utils
 {
-template <typename T> T min(const T& t1, const T& t2)
+
+template <typename T> static const T& min(const T& t1, const T& t2)
 {
-	if (t1<t2) return t1;
-	return t2;
+	return (t1<t2)?t1:t2;
 }
 
-template <typename T> T max(const T& t1, const T& t2)
+template <typename T> static const T& max(const T& t1, const T& t2)
 {
-	if (t1<t2) return t2;
-	return t1;
+	 return (t1<t2)?t2:t1;
 }
 
 
 static Ogre::Vector3 min(const Ogre::Vector3& v1, const Ogre::Vector3& v2)
 {
-	return Ogre::Vector3(min(v1.x, v2.x), min(v1.y, v2.y), min(v1.z, v2.z));
+	return Ogre::Vector3(Utils::min(v1.x, v2.x), min(v1.y, v2.y), min(v1.z, v2.z));
 }
 
 static Ogre::Vector3 max(const Ogre::Vector3& v1, const Ogre::Vector3& v2)

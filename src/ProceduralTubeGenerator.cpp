@@ -1,11 +1,8 @@
 #include "ProceduralTubeGenerator.h"
 
 namespace Procedural {
-Ogre::MeshPtr TubeGenerator::realizeMesh()
+void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
 {
-Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
-	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 
@@ -21,11 +18,11 @@ Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
-				manual->index(verticeIndex);               
+				manual->index(verticeIndex);
 				manual->index(verticeIndex + numSegBase);
 				manual->index(verticeIndex + numSegBase + 1);
 				manual->index(verticeIndex + 1);
-				manual->index(verticeIndex);		
+				manual->index(verticeIndex);
 				}
 					verticeIndex ++;
 		}
@@ -42,9 +39,9 @@ Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 			if (i != numSegHeight) {
 				manual->index(verticeIndex + numSegBase + 1);
 				manual->index(verticeIndex + numSegBase);
-				manual->index(verticeIndex);               
-				manual->index(verticeIndex + numSegBase + 1);				
-				manual->index(verticeIndex);		
+				manual->index(verticeIndex);
+				manual->index(verticeIndex + numSegBase + 1);
+				manual->index(verticeIndex);
 				manual->index(verticeIndex + 1);
 				}
 					verticeIndex ++;
@@ -64,7 +61,7 @@ Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 			x0 = outerRadius * cosf(j*deltaAngle);
 			z0 = outerRadius * sinf(j*deltaAngle);
 
-			manual->position(x0, 0.0f, z0);			
+			manual->position(x0, 0.0f, z0);
 			manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
 			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,0.0);
 
@@ -80,7 +77,7 @@ Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 			verticeIndex+=2;
 		}
 
-		
+
 		//high cap
 		for (int j=0;j<=numSegBase;j++)
 		{
@@ -94,14 +91,14 @@ Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 			x0 = outerRadius * cosf(j*deltaAngle);
 			z0 = outerRadius * sinf(j*deltaAngle);
 
-			manual->position(x0, height, z0);			
+			manual->position(x0, height, z0);
 			manual->normal(Ogre::Vector3::UNIT_Y);
 			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,vTile);
 
 			if (j!=numSegBase)
 			{
 				manual->index(verticeIndex+1);
-				manual->index(verticeIndex);				
+				manual->index(verticeIndex);
 				manual->index(verticeIndex+3);
 				manual->index(verticeIndex);
 				manual->index(verticeIndex+2);
@@ -109,23 +106,9 @@ Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 			}
 			verticeIndex+=2;
 		}
-		
-
-	manual->end();
-	Ogre::MeshPtr mesh = manual->convertToMesh(name);
-	Ogre::Real r = height;
-	mesh->_setBounds( Ogre::AxisAlignedBox( Ogre::Vector3(-r, -r, -r), Ogre::Vector3(r, r, r) ), false );
-
-	mesh->_setBoundingSphereRadius(r);
-       unsigned short src, dest;
-	   if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
-   	{
-		mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
-   	}
-	return mesh;
 }
 /*Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, Ogre::Real innerRadius, Ogre::Real outerRadius, Ogre::Real height, int numSegHeight, int numSegBase, Ogre::Real uTile, Ogre::Real vTile)
 {
-	
+
 }*/
 }

@@ -9,47 +9,47 @@ class BoxGenerator : public MeshGenerator
 {
 	float sizeX,sizeY,sizeZ;
 	int numSegX,numSegY,numSegZ;
-	float uTile,float vTile;	
+	float uTile, vTile;
 public:
-	BoxGenerator(Ogre::SceneManager* sceneManager) : sizeX(0.f), sizeY(0.f), sizeZ(0.f), 
-													numSegX(1), numSegY(1), numSegZ(1), 
+	BoxGenerator(Ogre::SceneManager* sceneManager) : sizeX(0.f), sizeY(0.f), sizeZ(0.f),
+													numSegX(1), numSegY(1), numSegZ(1),
 													uTile(1.f), vTile(1.f) {}
 
 
 	BoxGenerator& setSizeX(float sizeX)
 	{
 		this->sizeX = sizeX;
-		return this;
+		return *this;
 	}
-	
+
 	BoxGenerator& setSizeY(float sizeY)
 	{
 		this->sizeY = sizeY;
-		return this;
+		return *this;
 	}
 
 	BoxGenerator& setSizeZ(float sizeZ)
 	{
 		this->sizeZ = sizeZ;
-		return this;
+		return *this;
 	}
-	
+
 	BoxGenerator& setNumSegX(int numSegX)
 	{
 		this->numSegX = numSegX;
-		return this;
+		return *this;
 	}
-	
+
 	BoxGenerator& setNumSegY(int numSegY)
 	{
 		this->numSegY = numSegY;
-		return this;
+		return *this;
 	}
 
 	BoxGenerator& setNumSegZ(int numSegZ)
 	{
 		this->numSegZ = numSegZ;
-		return this;
+		return *this;
 	}
 
 	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
