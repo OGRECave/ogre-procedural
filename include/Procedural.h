@@ -8,5 +8,6 @@
 #include "ProceduralTorusGenerator.h"
 #include "ProceduralTubeGenerator.h"
 #include "ProceduralPlaneGenerator.h"
+#include "ProceduralRoot.h"
 
 #endif

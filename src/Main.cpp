@@ -98,15 +98,15 @@ bool Main::init()
 	ent->setMaterialName("Examples/BeachStones");
 	ent->setCastShadows(false);
 
+    Procedural::Root::getInstance()->sceneManager = sceneMgr;
 	// Test primitive generation
-	Procedural::SphereGenerator(sceneMgr).setRadius(10.0).setNumRings(16).setNumSegments(16).setUTile(2.0).realizeMesh();
+	Procedural::SphereGenerator(sceneMgr).setRadius(10.0).setNumRings(16).setNumSegments(16).setUTile(2.0).realizeMesh("sphereMesh");
 
-	Entity* ent2 = sceneMgr->createEntity("sphere", "default");
+	Entity* ent2 = sceneMgr->createEntity("sphere", "sphereMesh");
 	SceneNode* sn = sceneMgr->getRootSceneNode()->createChildSceneNode();
 	sn->attachObject(ent2);
 	sn->setPosition(0,10,0);
-	ent2->setMaterialName("terrainMat");
-
+	ent2->setMaterialName("Examples/BeachStones");
 
     return true;
 }
@@ -175,8 +175,10 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
 int main(int argc, char **argv)
 #endif
 {
+    //AllocConsole();
     // Create application object
     Main app;
+
 
     try {
         app.go();
@@ -187,6 +189,7 @@ int main(int argc, char **argv)
         std::cerr << "An exception has occured: " << e.getFullDescription();
 #endif
     }
+ //FreeConsole();
 
 
     return 0;

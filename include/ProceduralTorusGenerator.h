@@ -12,7 +12,7 @@ class TorusGenerator : public MeshGenerator
     int numSegCircle;
     float radius, sectionRadius;
 public:
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
+    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 };
 }
 #endif

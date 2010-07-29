@@ -48,6 +48,7 @@ set( HDRS
 	include/ProceduralCylinderGenerator.h
 	include/ProceduralPlaneGenerator.h
 	include/ProceduralSphereGenerator.h
+	include/ProceduralRoot.h
 	include/ProceduralTorusGenerator.h
 	include/ProceduralTubeGenerator.h
 	include/ProceduralUtils.h
@@ -62,7 +63,8 @@ set( SRCS
 		src/ProceduralBoxGenerator.cpp
 		src/ProceduralConeGenerator.cpp
 		src/ProceduralCylinderGenerator.cpp
-		src/ProceduralPlaneGenerator.cpp
+		src/ProceduralPlaneGenerator.cpp		
+		src/ProceduralRoot.cpp
 		src/ProceduralSphereGenerator.cpp
 		src/ProceduralTorusGenerator.cpp
 		src/ProceduralTubeGenerator.cpp
