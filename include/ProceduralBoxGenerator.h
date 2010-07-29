@@ -9,11 +9,9 @@ class BoxGenerator : public MeshGenerator
 {
     float sizeX,sizeY,sizeZ;
     int numSegX,numSegY,numSegZ;
-    float uTile, vTile;
 public:
     BoxGenerator(Ogre::SceneManager* sceneManager) : sizeX(0.f), sizeY(0.f), sizeZ(0.f),
-        numSegX(1), numSegY(1), numSegZ(1),
-        uTile(1.f), vTile(1.f) {}
+        numSegX(1), numSegY(1), numSegZ(1) {}
 
 
     BoxGenerator& setSizeX(float sizeX)

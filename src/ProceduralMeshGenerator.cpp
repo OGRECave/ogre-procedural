@@ -1,12 +1,11 @@
 #include "ProceduralMeshGenerator.h"
 
-#include "ProceduralRoot.h"
 
 namespace Procedural
 {
     int MeshGenerator::counter=0;
 
-	Ogre::MeshPtr MeshGenerator::realizeMesh(std::string name)
+	Ogre::MeshPtr MeshGenerator::realizeMesh(const std::string& name)
 	{
 		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
@@ -30,16 +29,17 @@ namespace Procedural
 		}
 
 		return mesh;
-
 	}
 
-	MeshGenerator::MeshGenerator()
+	Ogre::Entity* MeshGenerator::realizeEntity()
 	{
-	    sceneMgr = Root::getInstance()->sceneManager;
-        assert(sceneMgr);
         counter++;
-       // name = "defaultmesh_" + counter;
-    }
-
-
+        std::string meshName = "mesh_" + counter;
+        realizeMesh(meshName);
+        std::string entityName = "entity_" + counter;
+	    Ogre::Entity* ent = sceneMgr->createEntity(entityName, meshName);
+        Ogre::SceneNode* sn = sceneMgr->getRootSceneNode()->createChildSceneNode();
+        sn->attachObject(ent);
+        return ent;
+	}
 }

@@ -59,9 +59,6 @@ bool Main::init()
 	l->setDirection(Vector3(0,-1,0.2).normalisedCopy());
 	l->setCastShadows(true);
 
-	//TODO init keys
-
-
 	timer = root->getTimer();
 
 	// overlay pour le debug
@@ -100,15 +97,21 @@ bool Main::init()
 
     Procedural::Root::getInstance()->sceneManager = sceneMgr;
 	// Test primitive generation
-	Procedural::SphereGenerator(sceneMgr).setRadius(10.0).setNumRings(16).setNumSegments(16).setUTile(2.0).realizeMesh("sphereMesh");
-
-	Entity* ent2 = sceneMgr->createEntity("sphere", "sphereMesh");
-	SceneNode* sn = sceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(0,10,0);
-	ent2->setMaterialName("Examples/BeachStones");
+	Procedural::SphereGenerator().setRadius(10.0).setNumRings(16).setNumSegments(16).setUTile(2.0).realizeMesh("sphereMesh");
+    putMesh("sphere", "sphereMesh", Vector3(0,10,0));
+    Procedural::CylinderGenerator();
+    putMesh("sphere2", "sphereMesh", Vector3(50,10,0));
 
     return true;
+}
+
+void Main::putMesh(const std::string& entityName, const std::string& meshName, const Vector3& position)
+{
+	Entity* ent2 = sceneMgr->createEntity(entityName, meshName);
+	SceneNode* sn = sceneMgr->getRootSceneNode()->createChildSceneNode();
+	sn->attachObject(ent2);
+	sn->setPosition(position);
+	ent2->setMaterialName("Examples/BeachStones");
 }
 
 void Main::cleanUp(void)
@@ -143,7 +146,7 @@ void Main::run()
 	if (mKeyboard->isKeyDown(OIS::KC_ESCAPE))
 		mustquit=true;
 
-		Vector3 v(100,0,0);
+		Vector3 v(500,0,0);
 	Quaternion q1;
 	q1.FromAngleAxis(Radian(0.01*mMouse->getMouseState().X.abs),Vector3::UNIT_Y);
 	Quaternion q2;

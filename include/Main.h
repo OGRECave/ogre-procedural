@@ -19,6 +19,8 @@ private:
 
     Ogre::OverlayElement* debugText;
 
+    void putMesh(const std::string& entityName, const std::string& meshName, const Ogre::Vector3& position);
+
 public:
     void go(void);
     bool init(void);
