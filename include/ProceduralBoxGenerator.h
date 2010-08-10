@@ -5,12 +5,12 @@
 
 namespace Procedural
 {
-class BoxGenerator : public MeshGenerator
+class BoxGenerator : public MeshGenerator<BoxGenerator>
 {
     float sizeX,sizeY,sizeZ;
     int numSegX,numSegY,numSegZ;
 public:
-    BoxGenerator(Ogre::SceneManager* sceneManager) : sizeX(0.f), sizeY(0.f), sizeZ(0.f),
+    BoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
         numSegX(1), numSegY(1), numSegZ(1) {}
 
 

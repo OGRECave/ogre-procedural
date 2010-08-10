@@ -6,13 +6,19 @@
 namespace Procedural
 {
 
-class TorusGenerator : public MeshGenerator
+class TorusGenerator : public MeshGenerator<TorusGenerator>
 {
     int numSegSection;
     int numSegCircle;
     float radius;
     float sectionRadius;
 public:
+    TorusGenerator() : numSegSection(8),
+                        numSegCircle(8),
+                        radius(5.f),
+                        sectionRadius(1.f) {}
+
+
     void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 	inline TorusGenerator & setNumSegSection(int numSegSection)
 	{

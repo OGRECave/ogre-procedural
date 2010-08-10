@@ -9,25 +9,53 @@
 namespace Procedural
 {
 
-class PlaneGenerator : public MeshGenerator
+class PlaneGenerator : public MeshGenerator<PlaneGenerator>
 {
-    int numSeg1;
-    int numSeg2;
+    int numSegX;
+    int numSegY;
     Ogre::Vector3 normal;
+    float sizeX;
+    float sizeY;
 public:
+
+    PlaneGenerator(): numSegX(1), numSegY(1),
+        normal(Ogre::Vector3::UNIT_Y),
+        sizeX(1), sizeY(1)
+    {}
+
+
     void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 
-    PlaneGenerator& setNumSeg1(int numSeg1)
+    inline PlaneGenerator & setNumSegX(int numSegX)
     {
-        this->numSeg1 = numSeg1;
+        this->numSegX = numSegX;
         return *this;
     }
 
-    PlaneGenerator& setNumSeg2(int numSeg2)
+    inline PlaneGenerator & setNumSegY(int numSegY)
     {
-        this->numSeg2 = numSeg2;
+        this->numSegY = numSegY;
         return *this;
     }
+
+    inline PlaneGenerator & setNormal(Ogre::Vector3 normal)
+    {
+        this->normal = normal;
+        return *this;
+    }
+
+    inline PlaneGenerator & setSizeX(float sizeX)
+    {
+        this->sizeX = sizeX;
+        return *this;
+    }
+
+    inline PlaneGenerator & setSizeY(float sizeY)
+    {
+        this->sizeY = sizeY;
+        return *this;
+    }
+
 };
 }
 #endif

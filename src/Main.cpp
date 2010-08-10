@@ -97,10 +97,18 @@ bool Main::init()
 
     Procedural::Root::getInstance()->sceneManager = sceneMgr;
 	// Test primitive generation
-	Procedural::SphereGenerator().setRadius(10.0).setNumRings(16).setNumSegments(16).setUTile(2.0).realizeMesh("sphereMesh");
+	/*Procedural::SphereGenerator().realizeMesh("sphereMesh");
     putMesh("sphere", "sphereMesh", Vector3(0,10,0));
-    Procedural::CylinderGenerator();
-    putMesh("sphere2", "sphereMesh", Vector3(50,10,0));
+    Procedural::CylinderGenerator().setHeight(5.f).setRadius(3.f).realizeMesh("cylinderMesh");
+    putMesh("cylinder", "cylinderMesh", Vector3(10,10,0));
+    Procedural::TorusGenerator().setNumSegCircle(16).realizeMesh("torusMesh");
+    putMesh("torus", "torusMesh", Vector3(-10,10,0));
+    Procedural::ConeGenerator().setRadius(5.f).setHeight(5.f).setNumSegBase(36).setNumSegHeight(2).realizeMesh("coneMesh");
+    putMesh("cone", "coneMesh", Vector3(0,10,-10));
+    Procedural::TubeGenerator().realizeMesh("tubeMesh");
+    putMesh("tube", "tubeMesh", Vector3(0,10,10));*/
+    Procedural::BoxGenerator().realizeMesh("boxMesh");
+    putMesh("box", "boxMesh", Vector3(10,10,10));
 
     return true;
 }
@@ -146,7 +154,7 @@ void Main::run()
 	if (mKeyboard->isKeyDown(OIS::KC_ESCAPE))
 		mustquit=true;
 
-		Vector3 v(500,0,0);
+		Vector3 v(30,0,0);
 	Quaternion q1;
 	q1.FromAngleAxis(Radian(0.01*mMouse->getMouseState().X.abs),Vector3::UNIT_Y);
 	Quaternion q2;

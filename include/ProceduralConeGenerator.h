@@ -7,13 +7,20 @@
 namespace Procedural
 {
 
-class ConeGenerator : public MeshGenerator
+class ConeGenerator : public MeshGenerator<ConeGenerator>
 {
     int numSegBase;
     int numSegHeight;
     float radius;
     float height;
 public:
+    ConeGenerator() : numSegBase(8),
+        numSegHeight(1),
+        radius(1.f),
+        height(1.f)
+    {}
+
+
     void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax);
 
     inline ConeGenerator & setNumSegBase(int numSegBase)

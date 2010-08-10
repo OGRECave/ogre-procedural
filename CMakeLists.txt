@@ -59,11 +59,10 @@ set( HDRS
 
 set( SRCS
 		src/Main.cpp
-		src/ProceduralMeshGenerator.cpp
 		src/ProceduralBoxGenerator.cpp
 		src/ProceduralConeGenerator.cpp
 		src/ProceduralCylinderGenerator.cpp
-		src/ProceduralPlaneGenerator.cpp		
+		src/ProceduralPlaneGenerator.cpp
 		src/ProceduralRoot.cpp
 		src/ProceduralSphereGenerator.cpp
 		src/ProceduralTorusGenerator.cpp

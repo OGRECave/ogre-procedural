@@ -5,32 +5,21 @@
 
 namespace Procedural
 {
-class SphereGenerator : public MeshGenerator
+class SphereGenerator : public MeshGenerator<SphereGenerator>
 {
     float radius;
-    std::string name;
     unsigned int numRings;
     unsigned int numSegments;
-    bool enableNormals;
-    unsigned int numTexCoordSet;
 
 public:
     SphereGenerator() : radius(1.0),
-        name("default"),
-        numRings(8), numSegments(8),
-        enableNormals(true),
-        numTexCoordSet(1)
+        numRings(8), numSegments(8)
+
     {}
 
 	inline SphereGenerator & setRadius(float radius)
 	{
 		this->radius = radius;
-		return *this;
-	}
-
-	inline SphereGenerator & setName(std::string name)
-	{
-		this->name = name;
 		return *this;
 	}
 
@@ -43,18 +32,6 @@ public:
 	inline SphereGenerator & setNumSegments(unsigned int numSegments)
 	{
 		this->numSegments = numSegments;
-		return *this;
-	}
-
-	inline SphereGenerator & setEnableNormals(bool enableNormals)
-	{
-		this->enableNormals = enableNormals;
-		return *this;
-	}
-
-	inline SphereGenerator & setNumTexCoordSet(unsigned int numTexCoordSet)
-	{
-		this->numTexCoordSet = numTexCoordSet;
 		return *this;
 	}
 
