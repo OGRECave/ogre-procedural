@@ -5,7 +5,8 @@ project(OgreProcedural)
 if(WIN32)
 	set(CMAKE_MODULE_PATH "$ENV{OGRE_HOME}/CMake/;${CMAKE_MODULE_PATH}")
 	set(OGRE_SAMPLES_INCLUDEPATH
-		$ENV{OGRE_HOME}/Samples/include
+		$ENV{OGRE_HOME}/Samples/common/include/
+		$ENV{OGRE_HOME}/Samples/browser/include/
 	)
 endif(WIN32)
 
@@ -69,6 +70,18 @@ set( SRCS
 		src/ProceduralTubeGenerator.cpp
 	)
 
+if (WIN32)
+  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_WIN32.cpp)
+elseif (OGRE_BUILD_PLATFORM_IPHONE)
+  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_iPhone.mm)
+elseif (APPLE)
+  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_OSX.cpp)
+elseif (UNIX)
+  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_Unix.cpp)
+else ()
+  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_Default.cpp)
+endif ()
+
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	${OGRE_SAMPLES_INCLUDEPATH}
@@ -104,20 +117,20 @@ if(WIN32)
 		DESTINATION ../
 	)
 
-	install(FILES $ENV{OGRE_HOME}/bin/release/OgreMain.dll
-		$ENV{OGRE_HOME}/bin/release/RenderSystem_Direct3D9.dll
-		$ENV{OGRE_HOME}/bin/release/RenderSystem_GL.dll
-		$ENV{OGRE_HOME}/bin/release/Plugin_OctreeSceneManager.dll
-		$ENV{OGRE_HOME}/bin/release/cg.dll
-		$ENV{OGRE_HOME}/bin/release/OIS.dll
-		$ENV{OGRE_HOME}/bin/release/Plugin_CgProgramManager.dll
-		$ENV{OGRE_HOME}/bin/release/Plugin_ParticleFX.dll
-		$ENV{OGRE_HOME}/bin/release/Plugin_BSPSceneManager.dll
-		$ENV{OGRE_HOME}/bin/release/Plugin_CgProgramManager.dll
-		$ENV{OGRE_HOME}/bin/release/Plugin_PCZSceneManager.dll
-		$ENV{OGRE_HOME}/bin/release/Plugin_OctreeZone.dll
-		$ENV{OGRE_HOME}/bin/release/resources.cfg
-		$ENV{OGRE_HOME}/bin/release/plugins.cfg
+	install(FILES $ENV{OGRE_HOME}/bin/RelWithDebInfo/OgreMain.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/RenderSystem_Direct3D9.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/RenderSystem_GL.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_OctreeSceneManager.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/cg.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/OIS.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_CgProgramManager.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_ParticleFX.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_BSPSceneManager.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_CgProgramManager.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_PCZSceneManager.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_OctreeZone.dll
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/resources.cfg
+		$ENV{OGRE_HOME}/bin/RelWithDebInfo/plugins.cfg
 		DESTINATION bin
 		CONFIGURATIONS Release RelWithDebInfo
 	)
