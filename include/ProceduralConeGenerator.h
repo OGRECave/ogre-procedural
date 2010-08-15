@@ -14,7 +14,7 @@ class ConeGenerator : public MeshGenerator<ConeGenerator>
     float radius;
     float height;
 public:
-    ConeGenerator() : numSegBase(8),
+    ConeGenerator() : numSegBase(16),
         numSegHeight(1),
         radius(1.f),
         height(1.f)

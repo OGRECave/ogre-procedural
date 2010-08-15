@@ -13,10 +13,10 @@ class TorusGenerator : public MeshGenerator<TorusGenerator>
     float radius;
     float sectionRadius;
 public:
-    TorusGenerator() : numSegSection(8),
-                        numSegCircle(8),
-                        radius(5.f),
-                        sectionRadius(1.f) {}
+    TorusGenerator() : numSegSection(16),
+                        numSegCircle(16),
+                        radius(1.f),
+                        sectionRadius(0.2f) {}
 
 
     void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);

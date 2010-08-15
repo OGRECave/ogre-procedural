@@ -16,7 +16,7 @@ class CylinderGenerator : public MeshGenerator<CylinderGenerator>
     float height;
 
 public:
-    CylinderGenerator() : numSegBase(8),
+    CylinderGenerator() : numSegBase(16),
         numSegHeight(1),
         capped(true),
         radius(1.f),

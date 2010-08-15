@@ -15,7 +15,7 @@ class TubeGenerator : public MeshGenerator<TubeGenerator>
     float height;
 
 public:
-    TubeGenerator() : numSegBase(8),
+    TubeGenerator() : numSegBase(16),
         numSegHeight(1),
         outerRadius(2.f),
         innerRadius(1.f),

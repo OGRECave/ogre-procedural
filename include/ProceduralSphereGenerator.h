@@ -13,7 +13,7 @@ class SphereGenerator : public MeshGenerator<SphereGenerator>
 
 public:
     SphereGenerator() : radius(1.0),
-        numRings(8), numSegments(8)
+        numRings(16), numSegments(16)
 
     {}
 
