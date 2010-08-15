@@ -1,8 +1,9 @@
 #include "ProceduralPlaneGenerator.h"
+#include "ProceduralUtils.h"
 
 namespace Procedural
 {
-void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
+void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
     Ogre::Vector3 vX = normal.perpendicular();
     Ogre::Vector3 vY = normal.crossProduct(vX);
@@ -49,5 +50,7 @@ void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
         offset++;
     }
     offset+=numSegY+1;
+
+    ///TODO : Bounding volumes
 }
 }

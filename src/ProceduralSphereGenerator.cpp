@@ -3,7 +3,7 @@
 
 namespace Procedural
 {
-void SphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
+void SphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
@@ -40,6 +40,6 @@ Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	} // end for ring
 
 	boundingRadius = radius;
-	Utils::updateAABB(AABBmin, AABBmax, Ogre::Vector3(-radius, -radius, -radius), Ogre::Vector3(radius, radius, radius));
+	Utils::updateAABB(aabb, Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
 }
 }

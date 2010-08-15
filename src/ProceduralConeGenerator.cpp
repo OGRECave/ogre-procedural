@@ -1,8 +1,9 @@
 #include "ProceduralConeGenerator.h"
+#include "ProceduralUtils.h"
 
 namespace Procedural
 {
-void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
+void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 
     Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
@@ -63,10 +64,8 @@ void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
         }
         verticeIndex++;
     }
+
+/*    boundingRadius = Utils::max(radius, height);
+    aabb = Ogre::AxisAlignedBox(-radius,0,-radius,radius, height, radius);*/
 }
-
-/*Ogre::MeshPtr ProceduralPrimitiveFactory::createCone(const Ogre::String& name, Ogre::Real radius, Ogre::Real height, int numSegHeight, int numSegBase, Ogre::Real uTile, Ogre::Real vTile)
-{
-
-}*/
 }

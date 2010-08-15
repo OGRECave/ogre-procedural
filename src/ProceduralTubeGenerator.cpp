@@ -1,7 +1,8 @@
 #include "ProceduralTubeGenerator.h"
+#include "ProceduralUtils.h"
 
 namespace Procedural {
-void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
+void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
@@ -106,9 +107,9 @@ void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
 			}
 			verticeIndex+=2;
 		}
-}
-/*Ogre::MeshPtr ProceduralPrimitiveFactory::createTube(const Ogre::String& name, Ogre::Real innerRadius, Ogre::Real outerRadius, Ogre::Real height, int numSegHeight, int numSegBase, Ogre::Real uTile, Ogre::Real vTile)
-{
 
-}*/
+
+    boundingRadius = Utils::max(outerRadius, height);
+    aabb = Ogre::AxisAlignedBox(-outerRadius,0,-outerRadius,outerRadius, height, outerRadius);
+}
 }

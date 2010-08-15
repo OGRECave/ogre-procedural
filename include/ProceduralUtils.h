@@ -8,7 +8,7 @@ class Utils
 {
 
     static int counter;
-
+public:
     template <typename T> static const T& min(const T& t1, const T& t2)
     {
         return (t1<t2)?t1:t2;
@@ -31,11 +31,11 @@ class Utils
     }
 
 
-public:
-    static void updateAABB(Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax, const Ogre::Vector3& AABBnewMin, const Ogre::Vector3& AABBnewMax)
+
+    static void updateAABB(Ogre::AxisAlignedBox& aabb, const Ogre::AxisAlignedBox& newAABB)
     {
-        AABBmin = min(AABBmin, AABBnewMin);
-        AABBmax = max(AABBmax, AABBnewMax);
+        aabb.setMinimum(min(aabb.getMinimum(), newAABB.getMinimum()));
+        aabb.setMaximum(max(aabb.getMaximum(), newAABB.getMaximum()));
     }
 
     static std::string getName(const std::string& prefix= "default")

@@ -1,8 +1,9 @@
 #include "ProceduralTorusGenerator.h"
+#include "ProceduralUtils.h"
 
 namespace Procedural
 {
-void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::Vector3& AABBmin, Ogre::Vector3& AABBmax)
+void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / numSegSection);
 	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / numSegCircle);
@@ -32,9 +33,7 @@ void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
 			}
 			verticeIndex ++;
 		}
+    boundingRadius = radius + sectionRadius;
+    aabb = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
 }
-/*Ogre::MeshPtr ProceduralPrimitiveFactory::createTorus(const Ogre::String& name, Ogre::Real radius, Ogre::Real sectionRadius, int numSegCircle, int numSegSection, Ogre::Real uTile, Ogre::Real vTile)
-{
-
-}*/
 }
