@@ -2,8 +2,11 @@
 #define PROCEDURAL_H_INCLUDED
 
 #include "ProceduralBoxGenerator.h"
+#include "ProceduralCapsuleGenerator.h"
 #include "ProceduralConeGenerator.h"
 #include "ProceduralCylinderGenerator.h"
+#include "ProceduralIcoSphereGenerator.h"
+#include "ProceduralRoundedBoxGenerator.h"
 #include "ProceduralSphereGenerator.h"
 #include "ProceduralTorusGenerator.h"
 #include "ProceduralTubeGenerator.h"

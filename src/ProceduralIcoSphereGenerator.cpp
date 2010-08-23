@@ -1,11 +1,11 @@
-#include "ProceduralSphereGenerator.h"
+#include "ProceduralIcoSphereGenerator.h"
 #include "ProceduralUtils.h"
 
 namespace Procedural
 {
-void SphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
-Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
+/*Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
 
 	// Generate the group of rings for the sphere
@@ -39,6 +39,6 @@ Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	} // end for ring
 
 	boundingRadius = radius;
-	Utils::updateAABB(aabb, Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
+	Utils::updateAABB(aabb, Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));*/
 }
 }

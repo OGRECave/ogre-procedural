@@ -45,12 +45,16 @@ set( HDRS
 	include/Procedural.h
 	include/ProceduralMeshGenerator.h
 	include/ProceduralBoxGenerator.h
+	include/ProceduralCapsuleGenerator.h
 	include/ProceduralConeGenerator.h
 	include/ProceduralCylinderGenerator.h
+	include/ProceduralIcoSphereGenerator.h
 	include/ProceduralPlaneGenerator.h
 	include/ProceduralSphereGenerator.h
 	include/ProceduralRoot.h
-	include/ProceduralTorusGenerator.h
+	include/ProceduralRoundedBoxGenerator.h
+	include/ProceduralTorusGenerator.h	
+	include/ProceduralTorusKnotGenerator.h
 	include/ProceduralTubeGenerator.h
 	include/ProceduralUtils.h
 	include/Common.h
@@ -60,13 +64,17 @@ set( HDRS
 
 set( SRCS
 		src/Main.cpp
-		src/ProceduralBoxGenerator.cpp
+		src/ProceduralBoxGenerator.cpp		
+		src/ProceduralCapsuleGenerator.cpp
 		src/ProceduralConeGenerator.cpp
-		src/ProceduralCylinderGenerator.cpp
+		src/ProceduralCylinderGenerator.cpp		
+		src/ProceduralIcoSphereGenerator.cpp
 		src/ProceduralPlaneGenerator.cpp
 		src/ProceduralRoot.cpp
+		src/ProceduralRoundedBoxGenerator.cpp
 		src/ProceduralSphereGenerator.cpp
 		src/ProceduralTorusGenerator.cpp
+		src/ProceduralTorusKnotGenerator.cpp
 		src/ProceduralTubeGenerator.cpp
 	)
 

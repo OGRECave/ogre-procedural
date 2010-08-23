@@ -41,18 +41,20 @@ public:
         // Test primitive generation
         Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
         putMesh2("plane", "planeMesh");
-        Procedural::SphereGenerator().realizeMesh("sphereMesh");
+        Procedural::SphereGenerator().setRadius(2.f).realizeMesh("sphereMesh");
         putMesh("sphere", "sphereMesh", Vector3(0,10,0));
-        Procedural::CylinderGenerator().setHeight(5.f).setRadius(3.f).realizeMesh("cylinderMesh");
+        Procedural::CylinderGenerator().setHeight(3.f).setRadius(1.f).realizeMesh("cylinderMesh");
         putMesh("cylinder", "cylinderMesh", Vector3(10,10,0));
-        Procedural::TorusGenerator().setNumSegCircle(16).realizeMesh("torusMesh");
+        Procedural::TorusGenerator().setRadius(3.f).setSectionRadius(1.f).realizeMesh("torusMesh");
         putMesh("torus", "torusMesh", Vector3(-10,10,0));
-        Procedural::ConeGenerator().setRadius(5.f).setHeight(5.f).setNumSegBase(36).setNumSegHeight(2).realizeMesh("coneMesh");
+        Procedural::ConeGenerator().setRadius(2.f).setHeight(3.f).setNumSegBase(36).setNumSegHeight(2).realizeMesh("coneMesh");
         putMesh("cone", "coneMesh", Vector3(0,10,-10));
-        Procedural::TubeGenerator().realizeMesh("tubeMesh");
-        putMesh("tube", "tubeMesh", Vector3(0,10,10));
-        Procedural::BoxGenerator().setSizeX(2.0).setSizeY(4.0).setSizeZ(6.0).realizeMesh("boxMesh");
-        putMesh("box", "boxMesh", Vector3(10,10,10));
+        Procedural::TubeGenerator().setHeight(3.f).realizeMesh("tubeMesh");
+        putMesh("tube", "tubeMesh", Vector3(-10,10,-10));
+        Procedural::BoxGenerator().setSizeX(2.0).setSizeY(4.f).setSizeZ(6.f).realizeMesh("boxMesh");
+        putMesh("box", "boxMesh", Vector3(10,10,-10));
+        Procedural::CapsuleGenerator().setHeight(2.f).realizeMesh("capsuleMesh");
+        putMesh("capsule", "capsuleMesh", Vector3(0,10,10));
     }
 
     void putMesh2(const std::string& entityName, const std::string& meshName, const Vector3& position = Vector3::ZERO)
