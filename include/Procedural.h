@@ -9,6 +9,7 @@
 #include "ProceduralRoundedBoxGenerator.h"
 #include "ProceduralSphereGenerator.h"
 #include "ProceduralTorusGenerator.h"
+#include "ProceduralTorusKnotGenerator.h"
 #include "ProceduralTubeGenerator.h"
 #include "ProceduralPlaneGenerator.h"
 #include "ProceduralRoot.h"

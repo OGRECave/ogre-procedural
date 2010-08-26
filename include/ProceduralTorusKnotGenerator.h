@@ -12,11 +12,13 @@ class TorusKnotGenerator : public MeshGenerator<TorusKnotGenerator>
     int numSegCircle;
     float radius;
     float sectionRadius;
+    int p;
+    int q;
 public:
     TorusKnotGenerator() : numSegSection(16),
-                        numSegCircle(16),
-                        radius(1.f),
-                        sectionRadius(0.2f) {}
+                        numSegCircle(64),
+                        radius(5.f),
+                        sectionRadius(1.f), p(2),q(3) {}
 
 
     void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);

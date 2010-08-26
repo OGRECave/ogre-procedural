@@ -55,6 +55,8 @@ public:
         putMesh("box", "boxMesh", Vector3(10,10,-10));
         Procedural::CapsuleGenerator().setHeight(2.f).realizeMesh("capsuleMesh");
         putMesh("capsule", "capsuleMesh", Vector3(0,10,10));
+        Procedural::TorusKnotGenerator().realizeMesh("torusKnotMesh");
+        putMesh("torusKnot", "torusKnotMesh", Vector3(-10,10,10));
     }
 
     void putMesh2(const std::string& entityName, const std::string& meshName, const Vector3& position = Vector3::ZERO)

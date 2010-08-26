@@ -1,7 +1,6 @@
 #include "Main.h"
 #include "Common.h"
 #include "OIS.h"
-#include "Procedural.h"
 using namespace Ogre;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
