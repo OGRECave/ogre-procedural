@@ -12,7 +12,7 @@ class IcoSphereGenerator : public MeshGenerator<IcoSphereGenerator>
 
 public:
     IcoSphereGenerator() : radius(1.0),
-        numIterations(1)
+        numIterations(4)
     {}
 
     void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
