@@ -12,7 +12,6 @@ protected:
     Ogre::SceneManager* sceneMgr;
     float uTile;
     float vTile;
-    Ogre::Vector3 position;
 
     bool enableNormals;
     unsigned int numTexCoordSet;
@@ -48,8 +47,7 @@ public:
     MeshGenerator() : uTile(1.f),
                       vTile(1.f),
                       enableNormals(true),
-                      numTexCoordSet(1),
-                      position(Ogre::Vector3::ZERO)
+                      numTexCoordSet(1)
 	{
 	    sceneMgr = Root::getInstance()->sceneManager;
         assert(sceneMgr);
@@ -76,12 +74,6 @@ public:
 	inline T & setNumTexCoordSet(unsigned int numTexCoordSet)
 	{
 		this->numTexCoordSet = numTexCoordSet;
-		return static_cast<T&>(*this);
-	}
-
-    inline T & setPosition(Ogre::Vector3 position)
-	{
-		this->position = position;
 		return static_cast<T&>(*this);
 	}
 

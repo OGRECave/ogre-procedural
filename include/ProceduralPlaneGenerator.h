@@ -16,11 +16,12 @@ class PlaneGenerator : public MeshGenerator<PlaneGenerator>
     Ogre::Vector3 normal;
     float sizeX;
     float sizeY;
+    Ogre::Vector3 position;
 public:
 
     PlaneGenerator(): numSegX(1), numSegY(1),
         normal(Ogre::Vector3::UNIT_Y),
-        sizeX(1), sizeY(1)
+        sizeX(1), sizeY(1),position(Ogre::Vector3::ZERO)
     {}
 
 
@@ -55,6 +56,12 @@ public:
         this->sizeY = sizeY;
         return *this;
     }
+
+    inline PlaneGenerator & setPosition(Ogre::Vector3 position)
+	{
+		this->position = position;
+		return *this;
+	}
 
 };
 }
