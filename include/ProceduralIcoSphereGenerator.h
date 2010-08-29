@@ -11,11 +11,23 @@ class IcoSphereGenerator : public MeshGenerator<IcoSphereGenerator>
     unsigned int numIterations;
 
 public:
-    IcoSphereGenerator() : radius(1.0),
-        numIterations(4)
+    IcoSphereGenerator() : radius(1.),
+        numIterations(2)
     {}
 
     void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+
+	inline IcoSphereGenerator & setRadius(float radius)
+	{
+		this->radius = radius;
+		return *this;
+	}
+
+	inline IcoSphereGenerator & setNumIterations(unsigned int numIterations)
+	{
+		this->numIterations = numIterations;
+		return *this;
+	}
 
 };
 }
