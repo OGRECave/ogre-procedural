@@ -25,3 +25,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+#include "ProceduralRoundedBoxGenerator.h"
+#include "ProceduralPlaneGenerator.h"
+#include "ProceduralUtils.h"
+
+namespace Procedural
+{
+void RoundedBoxGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+{
+	PlaneGenerator pg;
+	pg.setUTile(uTile).setVTile(vTile);
+	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
+	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Z)
+	  .setPosition((.5*sizeZ+chamferSize)*Ogre::Vector3::NEGATIVE_UNIT_Z)
+	  .addToManualObject(manual, offset, boundingRadius, aabb);
+    pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
+	  .setNormal(Ogre::Vector3::UNIT_Z)
+	  .setPosition((.5*sizeZ+chamferSize)*Ogre::Vector3::UNIT_Z)
+	  .addToManualObject(manual, offset, boundingRadius, aabb);
+    pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
+	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Y)
+	  .setPosition((.5*sizeY+chamferSize)*Ogre::Vector3::NEGATIVE_UNIT_Y)
+	  .addToManualObject(manual, offset, boundingRadius, aabb);
+    pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
+	  .setNormal(Ogre::Vector3::UNIT_Y)
+	  .setPosition((.5*sizeY+chamferSize)*Ogre::Vector3::UNIT_Y)
+	  .addToManualObject(manual, offset, boundingRadius, aabb);
+    pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
+	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_X)
+	  .setPosition((.5*sizeX+chamferSize)*Ogre::Vector3::NEGATIVE_UNIT_X)
+	  .addToManualObject(manual, offset, boundingRadius, aabb);
+    pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
+	  .setNormal(Ogre::Vector3::UNIT_X)
+	  .setPosition((.5*sizeX+chamferSize)*Ogre::Vector3::UNIT_X)
+	  .addToManualObject(manual, offset, boundingRadius, aabb);
+
+    aabb.setExtents(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ);
+    boundingRadius = Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ);
+}
+}
