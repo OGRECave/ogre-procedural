@@ -38,14 +38,14 @@ target_link_libraries(SamplePrimitives ${OGRE_LIBRARIES} ${OIS_LIBRARIES} OgrePr
 # post-build copy for win32
 if(WIN32 AND NOT MINGW)
 	add_custom_command( TARGET SamplePrimitives PRE_BUILD
-		COMMAND if not exist .\\dist\\bin mkdir .\\dist\\bin )
+		COMMAND if not exist .\\bin mkdir .\\bin )
 	add_custom_command( TARGET SamplePrimitives POST_BUILD
-		COMMAND copy \"$(TargetPath)\" .\\dist\\bin )
+		COMMAND copy \"$(TargetPath)\" .\\bin )
 endif(WIN32 AND NOT MINGW)
 
 # set the executable output path for Unix and MinGW instead of post-build copy
 if(MINGW OR UNIX)
-	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/dist/bin)
+	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 endif(MINGW OR UNIX)
 
 # if win32, copy the Ogre DLLs and the media over

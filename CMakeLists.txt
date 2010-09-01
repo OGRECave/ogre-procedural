@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
+project(PROCEDURAL)
 
 if(WIN32)
 	set(CMAKE_MODULE_PATH "$ENV{OGRE_HOME}/CMake/;${CMAKE_MODULE_PATH}")
@@ -24,7 +25,7 @@ endif ()
 
 set(CMAKE_DEBUG_POSTFIX "_d")
 
-set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/dist")
+set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}")
 
 find_package(OGRE REQUIRED)
 
@@ -37,6 +38,11 @@ find_package(OIS REQUIRED)
 if(NOT OIS_FOUND)
     message(SEND_ERROR "Failed to find OIS.")
 endif()
+
+# Specify build paths
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/lib")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/bin")
 
 add_subdirectory(library)
 
