@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(SamplePrimitives)
+project(Sample_Primitives)
 
 set( HDRS
 	include/Main.h
@@ -29,17 +29,17 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-add_executable(SamplePrimitives WIN32 ${HDRS} ${SRCS})
+add_executable(Sample_Primitives WIN32 ${HDRS} ${SRCS})
 
-set_target_properties(SamplePrimitives PROPERTIES DEBUG_POSTFIX _d)
+set_target_properties(Sample_Primitives PROPERTIES DEBUG_POSTFIX _d)
 
-target_link_libraries(SamplePrimitives ${OGRE_LIBRARIES} ${OIS_LIBRARIES} OgreProcedural)
+target_link_libraries(Sample_Primitives ${OGRE_LIBRARIES} ${OIS_LIBRARIES} OgreProcedural)
 
 # post-build copy for win32
 if(WIN32 AND NOT MINGW)
-	add_custom_command( TARGET SamplePrimitives PRE_BUILD
+	add_custom_command( TARGET Sample_Primitives PRE_BUILD
 		COMMAND if not exist .\\bin mkdir .\\bin )
-	add_custom_command( TARGET SamplePrimitives POST_BUILD
+	add_custom_command( TARGET Sample_Primitives POST_BUILD
 		COMMAND copy \"$(TargetPath)\" .\\bin )
 endif(WIN32 AND NOT MINGW)
 
@@ -50,7 +50,7 @@ endif(MINGW OR UNIX)
 
 # if win32, copy the Ogre DLLs and the media over
 if(WIN32)
-	install(TARGETS SamplePrimitives
+	install(TARGETS Sample_Primitives
 		RUNTIME DESTINATION bin
 		CONFIGURATIONS All)
 
