@@ -29,11 +29,12 @@ THE SOFTWARE.
 #define PROCEDURAL_TORUS_KNOT_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
 
-class TorusKnotGenerator : public MeshGenerator<TorusKnotGenerator>
+class _ProceduralExport TorusKnotGenerator : public MeshGenerator<TorusKnotGenerator>
 {
     int numSegSection;
     int numSegCircle;

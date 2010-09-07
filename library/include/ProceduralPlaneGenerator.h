@@ -29,14 +29,12 @@ THE SOFTWARE.
 #define PROCEDURAL_PLANE_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
-
-
-// TODO : either use a "transform" and baisc parameters, or more complex parameters...
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
 
-class PlaneGenerator : public MeshGenerator<PlaneGenerator>
+class _ProceduralExport PlaneGenerator : public MeshGenerator<PlaneGenerator>
 {
     int numSegX;
     int numSegY;

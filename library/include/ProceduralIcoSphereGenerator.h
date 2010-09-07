@@ -29,10 +29,11 @@ THE SOFTWARE.
 #define PROCEDURAL_ICOSPHERE_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
-class IcoSphereGenerator : public MeshGenerator<IcoSphereGenerator>
+class _ProceduralExport IcoSphereGenerator : public MeshGenerator<IcoSphereGenerator>
 {
     float radius;
     unsigned int numIterations;

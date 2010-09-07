@@ -29,10 +29,11 @@ THE SOFTWARE.
 #define PROCEDURAL_BOX_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
-class BoxGenerator : public MeshGenerator<BoxGenerator>
+class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
 {
     float sizeX,sizeY,sizeZ;
     int numSegX,numSegY,numSegZ;

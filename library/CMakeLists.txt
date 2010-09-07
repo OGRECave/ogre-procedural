@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 project(OgreProcedural)
 
 set( HDRS
+	include/ProceduralPlatform.h
 	include/Procedural.h
 	include/ProceduralMeshGenerator.h
 	include/ProceduralBoxGenerator.h
@@ -40,6 +41,7 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_SAMPLES_INCLUDEPATH}
 	./include
 )
+add_definitions(-DPROCEDURAL_NONCLIENT_BUILD)
 
 add_library(OgreProcedural SHARED ${HDRS} ${SRCS})
 
@@ -50,7 +52,8 @@ set_target_properties(OgreProcedural PROPERTIES PREFIX "")
 target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
 set_target_properties(OgreProcedural PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/bin
+	ARCHIVE_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/lib
+    LIBRARY_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/lib
     RUNTIME_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/bin
   )
 install(TARGETS OgreProcedural

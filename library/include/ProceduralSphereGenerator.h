@@ -29,10 +29,11 @@ THE SOFTWARE.
 #define PROCEDURAL_SPHERE_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
-class SphereGenerator : public MeshGenerator<SphereGenerator>
+class _ProceduralExport SphereGenerator : public MeshGenerator<SphereGenerator>
 {
     float radius;
     unsigned int numRings;

@@ -29,11 +29,12 @@ THE SOFTWARE.
 #define PROCEDURAL_TUBE_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
 
-class TubeGenerator : public MeshGenerator<TubeGenerator>
+class _ProceduralExport TubeGenerator : public MeshGenerator<TubeGenerator>
 {
     int numSegBase;
     int numSegHeight;

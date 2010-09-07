@@ -11,15 +11,15 @@ set( SRCS
 	)
 
 if (WIN32)
-  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_WIN32.cpp)
+  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_WIN32.cpp)
 elseif (OGRE_BUILD_PLATFORM_IPHONE)
-  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_iPhone.mm)
+  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_iPhone.mm)
 elseif (APPLE)
-  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_OSX.cpp)
+  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_OSX.cpp)
 elseif (UNIX)
-  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_Unix.cpp)
+  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_Unix.cpp)
 else ()
-  list(APPEND SRCS $ENV{OGRE_HOME}/Samples/browser/src/FileSystemLayerImpl_Default.cpp)
+  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_Default.cpp)
 endif ()
 
 include_directories( ${OIS_INCLUDE_DIRS}
@@ -54,42 +54,42 @@ if(WIN32)
 		RUNTIME DESTINATION bin
 		CONFIGURATIONS All)
 
-	install(DIRECTORY $ENV{OGRE_HOME}/media
+	install(DIRECTORY ${OGRE_DIR}/media
 		DESTINATION ../
 	)
 
-	install(FILES $ENV{OGRE_HOME}/bin/RelWithDebInfo/OgreMain.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/RenderSystem_Direct3D9.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/RenderSystem_GL.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_OctreeSceneManager.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/cg.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/OIS.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_CgProgramManager.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_ParticleFX.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_BSPSceneManager.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_CgProgramManager.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_PCZSceneManager.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/Plugin_OctreeZone.dll
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/resources.cfg
-		$ENV{OGRE_HOME}/bin/RelWithDebInfo/plugins.cfg
+	install(FILES ${OGRE_DIR}/bin/RelWithDebInfo/OgreMain.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/RenderSystem_Direct3D9.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/RenderSystem_GL.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/Plugin_OctreeSceneManager.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/cg.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/OIS.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/Plugin_CgProgramManager.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/Plugin_ParticleFX.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/Plugin_BSPSceneManager.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/Plugin_CgProgramManager.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/Plugin_PCZSceneManager.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/Plugin_OctreeZone.dll
+		${OGRE_DIR}/bin/RelWithDebInfo/resources.cfg
+		${OGRE_DIR}/bin/RelWithDebInfo/plugins.cfg
 		DESTINATION bin
 		CONFIGURATIONS Release RelWithDebInfo
 	)
 
-	install(FILES $ENV{OGRE_HOME}/bin/debug/OgreMain_d.dll
-		$ENV{OGRE_HOME}/bin/debug/RenderSystem_Direct3D9_d.dll
-		$ENV{OGRE_HOME}/bin/debug/RenderSystem_GL_d.dll
-		$ENV{OGRE_HOME}/bin/debug/Plugin_OctreeSceneManager_d.dll
-		$ENV{OGRE_HOME}/bin/debug/cg.dll
-		$ENV{OGRE_HOME}/bin/debug/OIS_d.dll
-		$ENV{OGRE_HOME}/bin/debug/Plugin_CgProgramManager_d.dll
-		$ENV{OGRE_HOME}/bin/debug/Plugin_ParticleFX_d.dll
-		$ENV{OGRE_HOME}/bin/debug/Plugin_BSPSceneManager_d.dll
-		$ENV{OGRE_HOME}/bin/debug/Plugin_CgProgramManager_d.dll
-		$ENV{OGRE_HOME}/bin/debug/Plugin_PCZSceneManager_d.dll
-		$ENV{OGRE_HOME}/bin/debug/Plugin_OctreeZone_d.dll
-		$ENV{OGRE_HOME}/bin/debug/resources_d.cfg
-		$ENV{OGRE_HOME}/bin/debug/plugins_d.cfg
+	install(FILES ${OGRE_DIR}/bin/debug/OgreMain_d.dll
+		${OGRE_DIR}/bin/debug/RenderSystem_Direct3D9_d.dll
+		${OGRE_DIR}/bin/debug/RenderSystem_GL_d.dll
+		${OGRE_DIR}/bin/debug/Plugin_OctreeSceneManager_d.dll
+		${OGRE_DIR}/bin/debug/cg.dll
+		${OGRE_DIR}/bin/debug/OIS_d.dll
+		${OGRE_DIR}/bin/debug/Plugin_CgProgramManager_d.dll
+		${OGRE_DIR}/bin/debug/Plugin_ParticleFX_d.dll
+		${OGRE_DIR}/bin/debug/Plugin_BSPSceneManager_d.dll
+		${OGRE_DIR}/bin/debug/Plugin_CgProgramManager_d.dll
+		${OGRE_DIR}/bin/debug/Plugin_PCZSceneManager_d.dll
+		${OGRE_DIR}/bin/debug/Plugin_OctreeZone_d.dll
+		${OGRE_DIR}/bin/debug/resources_d.cfg
+		${OGRE_DIR}/bin/debug/plugins_d.cfg
 		DESTINATION bin
 		CONFIGURATIONS Debug
 	)

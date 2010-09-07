@@ -29,10 +29,11 @@ THE SOFTWARE.
 #define PROCEDURAL_CAPSULE_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
-class CapsuleGenerator : public MeshGenerator<CapsuleGenerator>
+class _ProceduralExport CapsuleGenerator : public MeshGenerator<CapsuleGenerator>
 {
     float radius;
     unsigned int numRings;

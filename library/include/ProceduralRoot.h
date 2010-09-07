@@ -29,10 +29,11 @@ THE SOFTWARE.
 #define PROCEDURALROOT_H_INCLUDED
 
 #include "Ogre.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
-class Root
+class _ProceduralExport Root
 {
     static Root* instance;
     Root(): sceneManager(0)

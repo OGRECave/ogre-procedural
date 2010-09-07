@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define PROCEDURAL_MESH_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralRoot.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {

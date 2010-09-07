@@ -30,11 +30,12 @@ THE SOFTWARE.
 
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
 
-class CylinderGenerator : public MeshGenerator<CylinderGenerator>
+class _ProceduralExport CylinderGenerator : public MeshGenerator<CylinderGenerator>
 {
     int numSegBase;
     int numSegHeight;

@@ -35,7 +35,7 @@ void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
     std::vector<Ogre::Vector3> vertices;
 
     /// Step 1 : Generate icosahedron
-    float phi = .5*(1.+sqrt(5));
+    float phi = .5*(1.+sqrt(5.f));
     float invnorm = 1/sqrt(phi*phi+1);
 
     vertices.push_back(invnorm*Ogre::Vector3(-1,  phi, 0));//0

@@ -29,10 +29,11 @@ THE SOFTWARE.
 #define PROCEDURAL_BOX_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
-class RoundedBoxGenerator : public MeshGenerator<RoundedBoxGenerator>
+class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGenerator>
 {
     float sizeX,sizeY,sizeZ;
     int numSegX,numSegY,numSegZ;
