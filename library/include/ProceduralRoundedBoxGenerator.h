@@ -38,6 +38,8 @@ class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGen
     float sizeX,sizeY,sizeZ;
     int numSegX,numSegY,numSegZ;
     float chamferSize;
+	int chamferNumSeg;
+	
 public:
     RoundedBoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
         numSegX(1), numSegY(1), numSegZ(1), chamferSize(.1f) {}
@@ -86,6 +88,11 @@ public:
     }
 
     void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	
+	
+	void _addEdge(Ogre::ManualObject* manual, int& offset, short xPos, short yPos, short zPos);
+	
+	void _addCorner(Ogre::ManualObject* manual, int& offset, bool isXPositive, bool isYPositive, bool isZPositive);
 
 };
 

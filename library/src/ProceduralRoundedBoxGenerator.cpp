@@ -31,8 +31,92 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+
+void RoundedBoxGenerator::_addCorner(Ogre::ManualObject* manual, int& offset, bool isXPositive, bool isYPositive, bool isZPositive)
+{
+	Ogre::Vector3 offsetPosition((isXPositive?1:-1)*sizeX, (isYPositive?1:-1)*sizeY, (isZPositive?1:-1)*sizeZ);
+	Ogre::Real deltaRingAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
+	Ogre::Real deltaSegAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
+	Ogre::Real offsetRingAngle = isYPositive?0:-Ogre::Math::HALF_PI;
+	Ogre::Real offsetSegAngle = isXPositive?0:Ogre::Math::PI + isZPositive?0:Ogre::Math::HALF_PI;
+
+	// Generate the group of rings for the sphere
+	for(unsigned int ring = 0; ring <= chamferNumSeg; ring++ ) {
+		Ogre::Real r0 = radius * sinf (ring * deltaRingAngle + offsetRingAngle);
+		Ogre::Real y0 = radius * cosf (ring * deltaRingAngle + offsetRingAngle);
+
+		// Generate the group of segments for the current ring
+		for(unsigned int seg = 0; seg <= chamferNumSeg; seg++) {
+			Ogre::Real x0 = r0 * sinf(seg * deltaSegAngle + offsetSegAngle);
+			Ogre::Real z0 = r0 * cosf(seg * deltaSegAngle + offsetSegAngle);
+
+			// Add one vertex to the strip which makes up the sphere
+			manual->position( x0 + offsetPosition.x, y0 + offsetPosition.y, z0 + offsetPosition.z);
+			if (enableNormals)
+				manual->normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
+			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
+				manual->textureCoord((Ogre::Real) seg / (Ogre::Real) chamferNumSeg * uTile, (Ogre::Real) ring / (Ogre::Real) chamferNumSeg * vTile);
+
+			if (ring != chamferNumSeg) {
+				// each vertex (except the last) has six indices pointing to it
+				manual->index(offset + chamferNumSeg + 1);
+				manual->index(offset);
+				manual->index(offset + chamferNumSeg);
+				manual->index(offset + chamferNumSeg + 1);
+				manual->index(offset + 1);
+				manual->index(offset);
+				offset ++;
+				}
+		}; // end for seg
+	} // end for ring
+}
+
+/**
+ * xPos,yPos,zPos : 1 => positive
+                    -1 => negative
+					0 => undefined
+ */
+void RoundedBoxGenerator::_addEdge(Ogre::ManualObject* manual, int& offset, short xPos, short yPos, short zPos)
+{
+	Ogre::Vector3 offsetPosition = xPos * sizeX * Ogre::Vector3::UNIT_X + yPos * sizeY * Ogre::Vector3::UNIT_Y + zPos * sizeZ * Ogre::Vector3::UNIT_Z;
+	Ogre::Vector3 vy0 = (1-abs(xPos)) * Ogre::Vector3::UNIT_X + (1-abs(yPos)) * Ogre::Vector3::UNIT_Y + (1-abs(zPos)) * Ogre::Vector3::UNIT_Z;//extrusion direction
+	Ogre::Vector3 vx0 = vy0.perpendicular();
+	Ogre::Vector3 vz0 = vx0.crossProduct(vy0);
+	
+	Ogre::Real deltaAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
+	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
+	int numSegHeight;
+	if (xPos==0)
+		numSegHeight = numSegX;
+	else if (yPos==0)
+		numSegHeight = numSegY;
+	else if (zPos==0)
+		numSegHeight = numSegZ;
+	
+	for (int i = 0; i <=numSegHeight; i++)
+		for (int j = 0; j<=chamferNumSeg; j++)
+		{
+			Ogre::Real x0 = radius * cosf(j*deltaAngle);
+			Ogre::Real z0 = radius * sinf(j*deltaAngle);
+			manual->position(x0 * vx0 + i*deltaHeight * vy0 + z0 * vz0);
+			manual->normal((x0*vx0+z0*vz0).normalisedCopy());
+			manual->textureCoord(j/(Ogre::Real)chamferNumSeg*uTile, i/(Ogre::Real)numSegHeight*vTile);
+
+			if (i != numSegHeight) {
+				manual->index(verticeIndex + chamferNumSeg + 1);
+				manual->index(verticeIndex);
+				manual->index(verticeIndex + chamferNumSeg);
+				manual->index(verticeIndex + chamferNumSeg + 1);
+				manual->index(verticeIndex + 1);
+				manual->index(verticeIndex);
+				}
+					verticeIndex ++;
+		}
+}
+
 void RoundedBoxGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
+	// Generate the pseudo-box shape
 	PlaneGenerator pg;
 	pg.setUTile(uTile).setVTile(vTile);
 	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
@@ -59,6 +143,20 @@ void RoundedBoxGenerator::addToManualObject(Ogre::ManualObject* manual, int& off
 	  .setNormal(Ogre::Vector3::UNIT_X)
 	  .setPosition((.5*sizeX+chamferSize)*Ogre::Vector3::UNIT_X)
 	  .addToManualObject(manual, offset, boundingRadius, aabb);
+	  
+	// Generate the corners
+	_addCorner(manual, offset, true,  true,  true);
+	_addCorner(manual, offset, true,  true,  false);
+	_addCorner(manual, offset, true,  false, true);
+	_addCorner(manual, offset, true,  false, false);
+	_addCorner(manual, offset, false, true,  true);
+	_addCorner(manual, offset, false, true,  false);
+	_addCorner(manual, offset, false, false, true);
+	_addCorner(manual, offset, false, false, false);
+			
+	// Generate the edges
+	
+	
 
     aabb.setExtents(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ);
     boundingRadius = Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ);
