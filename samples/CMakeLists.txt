@@ -1,10 +1,34 @@
+function(procedural_create_vcproj_userfile TARGETNAME)
+  if (MSVC)
+	if (${MSVC_VERSION} EQUAL 1600)
+	   configure_file(
+	  ${PROCEDURAL_TEMPLATES_DIR}/VisualStudioUserFile.vcxproj.user.in
+	  ${CMAKE_CURRENT_BINARY_DIR}/${TARGETNAME}.vcxproj.user
+	  @ONLY
+	)
+	else()
+	  configure_file(
+	  ${PROCEDURAL_TEMPLATES_DIR}/VisualStudioUserFile.vcproj.user.in
+	  ${CMAKE_CURRENT_BINARY_DIR}/${TARGETNAME}.vcproj.user
+	  @ONLY
+	)
+	endif()
+  endif ()
+ endfunction(procedural_create_vcproj_userfile)
+  
 # if win32, copy the Ogre DLLs and the media over
 if(WIN32)
 
-	install(DIRECTORY ${OGRE_MEDIA_DIR}
-		DESTINATION ../
-	)
-
+	if (MSVC)	
+		install(DIRECTORY ${OGRE_MEDIA_DIR}
+			DESTINATION .
+		)
+	else()
+		install(DIRECTORY ${OGRE_MEDIA_DIR}
+			DESTINATION ../
+		)
+	endif()
+	
 	install(FILES ${OGRE_BINARY_REL}
 		${OGRE_PLUGIN_DIR_REL}/RenderSystem_Direct3D9.dll
 		${OGRE_PLUGIN_DIR_REL}/RenderSystem_GL.dll
@@ -19,7 +43,7 @@ if(WIN32)
 		${OGRE_PLUGIN_DIR_REL}/Plugin_OctreeZone.dll
 		${OGRE_PLUGIN_DIR_REL}/resources.cfg
 		${OGRE_PLUGIN_DIR_REL}/plugins.cfg
-		DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+		DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release
 		CONFIGURATIONS Release RelWithDebInfo
 	)
 
@@ -37,7 +61,7 @@ if(WIN32)
 		${OGRE_PLUGIN_DIR_DBG}/Plugin_OctreeZone_d.dll
 		${OGRE_PLUGIN_DIR_DBG}/resources_d.cfg
 		${OGRE_PLUGIN_DIR_DBG}/plugins_d.cfg
-		DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+		DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug
 		CONFIGURATIONS Debug
 	)
 endif(WIN32)
