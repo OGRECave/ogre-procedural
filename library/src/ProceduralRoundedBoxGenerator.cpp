@@ -42,8 +42,8 @@ void RoundedBoxGenerator::_addCorner(Ogre::ManualObject* manual, int& offset, bo
 
 	// Generate the group of rings for the sphere
 	for(unsigned int ring = 0; ring <= chamferNumSeg; ring++ ) {
-		Ogre::Real r0 = radius * sinf (ring * deltaRingAngle + offsetRingAngle);
-		Ogre::Real y0 = radius * cosf (ring * deltaRingAngle + offsetRingAngle);
+		Ogre::Real r0 = chamferSize * sinf (ring * deltaRingAngle + offsetRingAngle);
+		Ogre::Real y0 = chamferSize * cosf (ring * deltaRingAngle + offsetRingAngle);
 
 		// Generate the group of segments for the current ring
 		for(unsigned int seg = 0; seg <= chamferNumSeg; seg++) {
@@ -82,10 +82,13 @@ void RoundedBoxGenerator::_addEdge(Ogre::ManualObject* manual, int& offset, shor
 	Ogre::Vector3 vy0 = (1-abs(xPos)) * Ogre::Vector3::UNIT_X + (1-abs(yPos)) * Ogre::Vector3::UNIT_Y + (1-abs(zPos)) * Ogre::Vector3::UNIT_Z;//extrusion direction
 	Ogre::Vector3 vx0 = vy0.perpendicular();
 	Ogre::Vector3 vz0 = vx0.crossProduct(vy0);
-	
+
+	float height=1.0;//TODO
+	int numSegHeight=1;//TODO
+
 	Ogre::Real deltaAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
-	int numSegHeight;
+
 	if (xPos==0)
 		numSegHeight = numSegX;
 	else if (yPos==0)
@@ -96,21 +99,21 @@ void RoundedBoxGenerator::_addEdge(Ogre::ManualObject* manual, int& offset, shor
 	for (int i = 0; i <=numSegHeight; i++)
 		for (int j = 0; j<=chamferNumSeg; j++)
 		{
-			Ogre::Real x0 = radius * cosf(j*deltaAngle);
-			Ogre::Real z0 = radius * sinf(j*deltaAngle);
+			Ogre::Real x0 = chamferSize * cosf(j*deltaAngle);
+			Ogre::Real z0 = chamferSize * sinf(j*deltaAngle);
 			manual->position(x0 * vx0 + i*deltaHeight * vy0 + z0 * vz0);
 			manual->normal((x0*vx0+z0*vz0).normalisedCopy());
 			manual->textureCoord(j/(Ogre::Real)chamferNumSeg*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
-				manual->index(verticeIndex + chamferNumSeg + 1);
-				manual->index(verticeIndex);
-				manual->index(verticeIndex + chamferNumSeg);
-				manual->index(verticeIndex + chamferNumSeg + 1);
-				manual->index(verticeIndex + 1);
-				manual->index(verticeIndex);
+				manual->index(offset + chamferNumSeg + 1);
+				manual->index(offset);
+				manual->index(offset + chamferNumSeg);
+				manual->index(offset + chamferNumSeg + 1);
+				manual->index(offset + 1);
+				manual->index(offset);
 				}
-					verticeIndex ++;
+					offset ++;
 		}
 }
 

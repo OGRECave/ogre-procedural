@@ -39,7 +39,6 @@ void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
     Ogre::Vector3 refNormal = Ogre::Vector3(radius, height, 0.f).normalisedCopy();
     Ogre::Quaternion q;
 
-    int verticeIndex=0;
     for (int i = 0; i <=numSegHeight; i++)
     {
         Ogre::Real r0 = radius * (1 - i / (Ogre::Real)numSegHeight);
@@ -57,24 +56,24 @@ void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
 
             if (i != numSegHeight&& j != numSegBase)
             {
-                manual->index(verticeIndex + numSegBase + 2);
-                manual->index(verticeIndex);
-                manual->index(verticeIndex + numSegBase+1);
-                manual->index(verticeIndex + numSegBase + +2);
-                manual->index(verticeIndex + 1);
-                manual->index(verticeIndex);
+                manual->index(offset + numSegBase + 2);
+                manual->index(offset);
+                manual->index(offset + numSegBase+1);
+                manual->index(offset + numSegBase + +2);
+                manual->index(offset + 1);
+                manual->index(offset);
             }
 
-            verticeIndex ++;
+            offset ++;
         }
     }
 
     //low cap
-    int centerIndex = verticeIndex;
+    int centerIndex = offset;
     manual->position(0,0,0);
     manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
     manual->textureCoord(0.0,vTile);
-    verticeIndex++;
+    offset++;
     for (int j=0; j<=numSegBase; j++)
     {
         Ogre::Real x0 = radius * cosf(j*deltaAngle);
@@ -85,11 +84,11 @@ void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
         manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,0.0);
         if (j!=numSegBase)
         {
-            manual->index(centerIndex);
-            manual->index(verticeIndex);
-            manual->index(verticeIndex+1);
+            manual->index(offset);
+            manual->index(offset);
+            manual->index(offset+1);
         }
-        verticeIndex++;
+        offset++;
     }
 
 /*    boundingRadius = Utils::max(radius, height);
