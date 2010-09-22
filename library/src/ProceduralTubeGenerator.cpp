@@ -34,7 +34,6 @@ void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 
-	int verticeIndex=0;
 	for (int i = 0; i <=numSegHeight; i++)
 		for (int j = 0; j<=numSegBase; j++)
 		{
@@ -45,14 +44,14 @@ void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
 			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
-				manual->index(verticeIndex + numSegBase + 1);
-				manual->index(verticeIndex);
-				manual->index(verticeIndex + numSegBase);
-				manual->index(verticeIndex + numSegBase + 1);
-				manual->index(verticeIndex + 1);
-				manual->index(verticeIndex);
+				manual->index(offset + numSegBase + 1);
+				manual->index(offset);
+				manual->index(offset + numSegBase);
+				manual->index(offset + numSegBase + 1);
+				manual->index(offset + 1);
+				manual->index(offset);
 				}
-					verticeIndex ++;
+					offset ++;
 		}
 
 	for (int i = 0; i <=numSegHeight; i++)
@@ -65,14 +64,14 @@ void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
 			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
-				manual->index(verticeIndex + numSegBase + 1);
-				manual->index(verticeIndex + numSegBase);
-				manual->index(verticeIndex);
-				manual->index(verticeIndex + numSegBase + 1);
-				manual->index(verticeIndex);
-				manual->index(verticeIndex + 1);
+				manual->index(offset + numSegBase + 1);
+				manual->index(offset + numSegBase);
+				manual->index(offset);
+				manual->index(offset + numSegBase + 1);
+				manual->index(offset);
+				manual->index(offset + 1);
 				}
-					verticeIndex ++;
+					offset ++;
 		}
 
 
@@ -95,14 +94,14 @@ void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
 
 			if (j!=numSegBase)
 			{
-				manual->index(verticeIndex);
-				manual->index(verticeIndex+1);
-				manual->index(verticeIndex+3);
-				manual->index(verticeIndex+2);
-				manual->index(verticeIndex);
-				manual->index(verticeIndex+3);
+				manual->index(offset);
+				manual->index(offset+1);
+				manual->index(offset+3);
+				manual->index(offset+2);
+				manual->index(offset);
+				manual->index(offset+3);
 			}
-			verticeIndex+=2;
+			offset+=2;
 		}
 
 
@@ -125,14 +124,14 @@ void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
 
 			if (j!=numSegBase)
 			{
-				manual->index(verticeIndex+1);
-				manual->index(verticeIndex);
-				manual->index(verticeIndex+3);
-				manual->index(verticeIndex);
-				manual->index(verticeIndex+2);
-				manual->index(verticeIndex+3);
+				manual->index(offset+1);
+				manual->index(offset);
+				manual->index(offset+3);
+				manual->index(offset);
+				manual->index(offset+2);
+				manual->index(offset+3);
 			}
-			verticeIndex+=2;
+			offset+=2;
 		}
 
 

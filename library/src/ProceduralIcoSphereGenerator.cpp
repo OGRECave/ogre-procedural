@@ -133,8 +133,9 @@ void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
     }
     for (int i=0; i<size; i++)
     {
-        manual->index(faces[i]);
+        manual->index(offset+faces[i]);
     }
+	offset+=vertices.size();
     boundingRadius = radius;
     Utils::updateAABB(aabb, Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
 }

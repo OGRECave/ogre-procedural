@@ -35,7 +35,6 @@ void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
 	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / numSegSection);
 	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / numSegCircle);
 
-	int verticeIndex=0;
 	for (int i = 0; i <=numSegCircle; i++)
 		for (int j = 0; j<=numSegSection; j++)
 		{
@@ -51,14 +50,14 @@ void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
 
 			if (i != numSegCircle)
 			{
-				manual->index(verticeIndex + numSegSection + 1);
-				manual->index(verticeIndex);
-				manual->index(verticeIndex + numSegSection);
-				manual->index(verticeIndex + numSegSection + 1);
-				manual->index(verticeIndex + 1);
-				manual->index(verticeIndex);
+				manual->index(offset + numSegSection + 1);
+				manual->index(offset);
+				manual->index(offset + numSegSection);
+				manual->index(offset + numSegSection + 1);
+				manual->index(offset + 1);
+				manual->index(offset);
 			}
-			verticeIndex ++;
+			offset ++;
 		}
     boundingRadius = radius + sectionRadius;
     aabb = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
