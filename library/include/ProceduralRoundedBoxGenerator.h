@@ -35,59 +35,59 @@ namespace Procedural
 {
 class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGenerator>
 {
-    float sizeX,sizeY,sizeZ;
-    int numSegX,numSegY,numSegZ;
-    float chamferSize;
+	float sizeX,sizeY,sizeZ;
+	int numSegX,numSegY,numSegZ;
+	float chamferSize;
 	int chamferNumSeg;
 	
 public:
-    RoundedBoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
-        numSegX(1), numSegY(1), numSegZ(1), chamferSize(.1f), chamferNumSeg(8) {}
+	RoundedBoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
+		numSegX(1), numSegY(1), numSegZ(1), chamferSize(.1f), chamferNumSeg(8) {}
 
 
-    RoundedBoxGenerator& setSizeX(float sizeX)
-    {
-        this->sizeX = sizeX;
-        return *this;
-    }
+	RoundedBoxGenerator& setSizeX(float sizeX)
+	{
+		this->sizeX = sizeX;
+		return *this;
+	}
 
-    RoundedBoxGenerator& setSizeY(float sizeY)
-    {
-        this->sizeY = sizeY;
-        return *this;
-    }
+	RoundedBoxGenerator& setSizeY(float sizeY)
+	{
+		this->sizeY = sizeY;
+		return *this;
+	}
 
-    RoundedBoxGenerator& setSizeZ(float sizeZ)
-    {
-        this->sizeZ = sizeZ;
-        return *this;
-    }
+	RoundedBoxGenerator& setSizeZ(float sizeZ)
+	{
+		this->sizeZ = sizeZ;
+		return *this;
+	}
 
-    RoundedBoxGenerator& setNumSegX(int numSegX)
-    {
-        this->numSegX = numSegX;
-        return *this;
-    }
+	RoundedBoxGenerator& setNumSegX(int numSegX)
+	{
+		this->numSegX = numSegX;
+		return *this;
+	}
 
-    RoundedBoxGenerator& setNumSegY(int numSegY)
-    {
-        this->numSegY = numSegY;
-        return *this;
-    }
+	RoundedBoxGenerator& setNumSegY(int numSegY)
+	{
+		this->numSegY = numSegY;
+		return *this;
+	}
 
-    RoundedBoxGenerator& setNumSegZ(int numSegZ)
-    {
-        this->numSegZ = numSegZ;
-        return *this;
-    }
+	RoundedBoxGenerator& setNumSegZ(int numSegZ)
+	{
+		this->numSegZ = numSegZ;
+		return *this;
+	}
 
-     RoundedBoxGenerator& setChamferSize(float chamferSize)
-    {
-        this->chamferSize = chamferSize;
-        return *this;
-    }
+	 RoundedBoxGenerator& setChamferSize(float chamferSize)
+	{
+		this->chamferSize = chamferSize;
+		return *this;
+	}
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
 	
 	
 	void _addEdge(Ogre::ManualObject* manual, int& offset, short xPos, short yPos, short zPos);

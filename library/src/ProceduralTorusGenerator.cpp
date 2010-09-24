@@ -59,7 +59,7 @@ void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
 			}
 			offset ++;
 		}
-    boundingRadius = radius + sectionRadius;
-    aabb = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
+	boundingRadius = radius + sectionRadius;
+	aabb = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
 }
 }

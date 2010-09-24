@@ -32,11 +32,11 @@ namespace Procedural
 {
 void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
-    Ogre::Real fDeltaRingAngle = (Ogre::Math::HALF_PI / numRings);
+	Ogre::Real fDeltaRingAngle = (Ogre::Math::HALF_PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
 
-    float sphereRatio = radius / (2 * radius + height);
-    float cylinderRatio = height / (2 * radius + height);
+	float sphereRatio = radius / (2 * radius + height);
+	float cylinderRatio = height / (2 * radius + height);
 	// Top half sphere
 
 	// Generate the group of rings for the sphere
@@ -69,8 +69,8 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 		}; // end for seg
 	} // end for ring
 
-    // Cylinder part
-    Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegments);
+	// Cylinder part
+	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegments);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 
 	for (int i = 1; i <=numSegHeight-1; i++)
@@ -90,7 +90,7 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 				manual->index(offset);
 				manual->index(offset + 1);
 				//}
-                offset ++;
+				offset ++;
 		}
 
 	// Bottom half sphere

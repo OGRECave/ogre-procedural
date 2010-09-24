@@ -35,22 +35,22 @@ namespace Procedural
 {
 class _ProceduralExport CapsuleGenerator : public MeshGenerator<CapsuleGenerator>
 {
-    float radius;
-    unsigned int numRings;
-    unsigned int numSegments;
-    unsigned int numSegHeight;
-    float height;
+	float radius;
+	unsigned int numRings;
+	unsigned int numSegments;
+	unsigned int numSegHeight;
+	float height;
 
 public:
-    CapsuleGenerator() : radius(1.0),
-        numRings(8), numSegments(16), height(1.0), numSegHeight(1)
+	CapsuleGenerator() : radius(1.0),
+		numRings(8), numSegments(16), height(1.0), numSegHeight(1)
 
-    {}
+	{}
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
 
-    inline CapsuleGenerator & setRadius(float radius)
+	inline CapsuleGenerator & setRadius(float radius)
 	{
 		this->radius = radius;
 		return *this;

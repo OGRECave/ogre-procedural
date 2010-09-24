@@ -36,53 +36,53 @@ namespace Procedural
 
 class _ProceduralExport PlaneGenerator : public MeshGenerator<PlaneGenerator>
 {
-    int numSegX;
-    int numSegY;
-    Ogre::Vector3 normal;
-    float sizeX;
-    float sizeY;
-    Ogre::Vector3 position;
+	int numSegX;
+	int numSegY;
+	Ogre::Vector3 normal;
+	float sizeX;
+	float sizeY;
+	Ogre::Vector3 position;
 public:
 
-    PlaneGenerator(): numSegX(1), numSegY(1),
-        normal(Ogre::Vector3::UNIT_Y),
-        sizeX(1), sizeY(1),position(Ogre::Vector3::ZERO)
-    {}
+	PlaneGenerator(): numSegX(1), numSegY(1),
+		normal(Ogre::Vector3::UNIT_Y),
+		sizeX(1), sizeY(1),position(Ogre::Vector3::ZERO)
+	{}
 
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
-    inline PlaneGenerator & setNumSegX(int numSegX)
-    {
-        this->numSegX = numSegX;
-        return *this;
-    }
+	inline PlaneGenerator & setNumSegX(int numSegX)
+	{
+		this->numSegX = numSegX;
+		return *this;
+	}
 
-    inline PlaneGenerator & setNumSegY(int numSegY)
-    {
-        this->numSegY = numSegY;
-        return *this;
-    }
+	inline PlaneGenerator & setNumSegY(int numSegY)
+	{
+		this->numSegY = numSegY;
+		return *this;
+	}
 
-    inline PlaneGenerator & setNormal(Ogre::Vector3 normal)
-    {
-        this->normal = normal;
-        return *this;
-    }
+	inline PlaneGenerator & setNormal(Ogre::Vector3 normal)
+	{
+		this->normal = normal;
+		return *this;
+	}
 
-    inline PlaneGenerator & setSizeX(float sizeX)
-    {
-        this->sizeX = sizeX;
-        return *this;
-    }
+	inline PlaneGenerator & setSizeX(float sizeX)
+	{
+		this->sizeX = sizeX;
+		return *this;
+	}
 
-    inline PlaneGenerator & setSizeY(float sizeY)
-    {
-        this->sizeY = sizeY;
-        return *this;
-    }
+	inline PlaneGenerator & setSizeY(float sizeY)
+	{
+		this->sizeY = sizeY;
+		return *this;
+	}
 
-    inline PlaneGenerator & setPosition(Ogre::Vector3 position)
+	inline PlaneGenerator & setPosition(Ogre::Vector3 position)
 	{
 		this->position = position;
 		return *this;

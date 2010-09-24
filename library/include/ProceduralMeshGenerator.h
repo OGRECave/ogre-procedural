@@ -37,16 +37,16 @@ template <typename T>
 class MeshGenerator
 {
 protected:
-    Ogre::SceneManager* sceneMgr;
-    float uTile;
-    float vTile;
+	Ogre::SceneManager* sceneMgr;
+	float uTile;
+	float vTile;
 
-    bool enableNormals;
-    unsigned int numTexCoordSet;
+	bool enableNormals;
+	unsigned int numTexCoordSet;
 public:
 
-    Ogre::MeshPtr realizeMesh(const std::string& name)
-    {
+	Ogre::MeshPtr realizeMesh(const std::string& name)
+	{
 		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
@@ -61,8 +61,8 @@ public:
 		mesh->_setBounds( aabb, false );
 		mesh->_setBoundingSphereRadius(radius);
 
-        unsigned short src, dest;
-	    if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
+		unsigned short src, dest;
+		if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
 		{
 			mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
 		}
@@ -70,18 +70,18 @@ public:
 		return mesh;
 	}
 
-    virtual void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)=0;
+	virtual void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)=0;
 
-    MeshGenerator() : uTile(1.f),
-                      vTile(1.f),
-                      enableNormals(true),
-                      numTexCoordSet(1)
+	MeshGenerator() : uTile(1.f),
+					  vTile(1.f),
+					  enableNormals(true),
+					  numTexCoordSet(1)
 	{
-	    sceneMgr = Root::getInstance()->sceneManager;
-        assert(sceneMgr);
-    }
+		sceneMgr = Root::getInstance()->sceneManager;
+		assert(sceneMgr);
+	}
 
-    inline T& setUTile(float uTile)
+	inline T& setUTile(float uTile)
 	{
 		this->uTile = uTile;
 		return static_cast<T&>(*this);
@@ -93,7 +93,7 @@ public:
 		return static_cast<T&>(*this);
 	}
 
-    inline T & setEnableNormals(bool enableNormals)
+	inline T & setEnableNormals(bool enableNormals)
 	{
 		this->enableNormals = enableNormals;
 		return static_cast<T&>(*this);

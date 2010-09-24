@@ -37,21 +37,21 @@ namespace Procedural
 
 class _ProceduralExport ConeGenerator : public MeshGenerator<ConeGenerator>
 {
-    int numSegBase;
-    int numSegHeight;
-    float radius;
-    float height;
+	int numSegBase;
+	int numSegHeight;
+	float radius;
+	float height;
 public:
-    ConeGenerator() : numSegBase(16),
-        numSegHeight(1),
-        radius(1.f),
-        height(1.f)
-    {}
+	ConeGenerator() : numSegBase(16),
+		numSegHeight(1),
+		radius(1.f),
+		height(1.f)
+	{}
 
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
-    inline ConeGenerator & setNumSegBase(int numSegBase)
+	inline ConeGenerator & setNumSegBase(int numSegBase)
 	{
 		this->numSegBase = numSegBase;
 		return *this;

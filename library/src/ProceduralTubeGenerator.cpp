@@ -135,7 +135,7 @@ void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
 		}
 
 
-    boundingRadius = Utils::max(outerRadius, height);
-    aabb = Ogre::AxisAlignedBox(-outerRadius,0,-outerRadius,outerRadius, height, outerRadius);
+	boundingRadius = Utils::max(outerRadius, height);
+	aabb = Ogre::AxisAlignedBox(-outerRadius,0,-outerRadius,outerRadius, height, outerRadius);
 }
 }

@@ -103,7 +103,7 @@ void CylinderGenerator::addToManualObject(Ogre::ManualObject* manual, int& offse
 		}
 	}
 
-    boundingRadius = Utils::max(radius, height);
-    aabb = Ogre::AxisAlignedBox(-radius,0,-radius,radius, height, radius);
+	boundingRadius = Utils::max(radius, height);
+	aabb = Ogre::AxisAlignedBox(-radius,0,-radius,radius, height, radius);
 }
 }

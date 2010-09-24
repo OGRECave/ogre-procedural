@@ -36,18 +36,18 @@ namespace Procedural
 
 class _ProceduralExport TorusGenerator : public MeshGenerator<TorusGenerator>
 {
-    int numSegSection;
-    int numSegCircle;
-    float radius;
-    float sectionRadius;
+	int numSegSection;
+	int numSegCircle;
+	float radius;
+	float sectionRadius;
 public:
-    TorusGenerator() : numSegSection(16),
-                        numSegCircle(16),
-                        radius(1.f),
-                        sectionRadius(0.2f) {}
+	TorusGenerator() : numSegSection(16),
+						numSegCircle(16),
+						radius(1.f),
+						sectionRadius(0.2f) {}
 
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
 	inline TorusGenerator & setNumSegSection(int numSegSection)
 	{
 		this->numSegSection = numSegSection;
