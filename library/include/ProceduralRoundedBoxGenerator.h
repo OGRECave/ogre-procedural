@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_BOX_GENERATOR_INCLUDED
-#define PROCEDURAL_BOX_GENERATOR_INCLUDED
+#ifndef PROCEDURAL_ROUNDED_BOX_GENERATOR_INCLUDED
+#define PROCEDURAL_ROUNDED_BOX_GENERATOR_INCLUDED
 #include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
 #include "ProceduralPlatform.h"
@@ -42,7 +42,7 @@ class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGen
 	
 public:
     RoundedBoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
-        numSegX(1), numSegY(1), numSegZ(1), chamferSize(.1f) {}
+        numSegX(1), numSegY(1), numSegZ(1), chamferSize(.1f), chamferNumSeg(8) {}
 
 
     RoundedBoxGenerator& setSizeX(float sizeX)

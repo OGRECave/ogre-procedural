@@ -34,11 +34,15 @@ namespace Procedural
 
 void RoundedBoxGenerator::_addCorner(Ogre::ManualObject* manual, int& offset, bool isXPositive, bool isYPositive, bool isZPositive)
 {
-	Ogre::Vector3 offsetPosition((isXPositive?1:-1)*sizeX, (isYPositive?1:-1)*sizeY, (isZPositive?1:-1)*sizeZ);
+	Ogre::Vector3 offsetPosition((isXPositive?1:-1)*.5*sizeX, (isYPositive?1:-1)*.5*sizeY, (isZPositive?1:-1)*.5*sizeZ);
 	Ogre::Real deltaRingAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
 	Ogre::Real deltaSegAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
-	Ogre::Real offsetRingAngle = isYPositive?0:-Ogre::Math::HALF_PI;
-	Ogre::Real offsetSegAngle = isXPositive?0:Ogre::Math::PI + isZPositive?0:Ogre::Math::HALF_PI;
+	Ogre::Real offsetRingAngle = isYPositive?0:Ogre::Math::HALF_PI;
+	Ogre::Real offsetSegAngle;
+	if (isXPositive&&isZPositive) offsetSegAngle = 0;
+	if ((!isXPositive)&&isZPositive) offsetSegAngle = 1.5*Ogre::Math::PI;
+	if (isXPositive&&(!isZPositive)) offsetSegAngle = Ogre::Math::HALF_PI;
+	if ((!isXPositive)&&(!isZPositive)) offsetSegAngle = Ogre::Math::PI;
 
 	// Generate the group of rings for the sphere
 	for(unsigned int ring = 0; ring <= chamferNumSeg; ring++ ) {
@@ -57,17 +61,19 @@ void RoundedBoxGenerator::_addCorner(Ogre::ManualObject* manual, int& offset, bo
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
 				manual->textureCoord((Ogre::Real) seg / (Ogre::Real) chamferNumSeg * uTile, (Ogre::Real) ring / (Ogre::Real) chamferNumSeg * vTile);
 
-			if (ring != chamferNumSeg) {
+			if ((ring != chamferNumSeg) && (seg != chamferNumSeg)) {
+			//if (ring != chamferNumSeg) {
 				// each vertex (except the last) has six indices pointing to it
-				manual->index(offset + chamferNumSeg + 1);
+				manual->index(offset + chamferNumSeg + 2);
 				manual->index(offset);
-				manual->index(offset + chamferNumSeg);
-				manual->index(offset + chamferNumSeg + 1);
+				manual->index(offset + chamferNumSeg +1);
+				manual->index(offset + chamferNumSeg + 2);
 				manual->index(offset + 1);
 				manual->index(offset);
-				offset ++;
 				}
-		}; // end for seg
+			
+				offset ++;
+		} // end for seg
 	} // end for ring
 }
 
@@ -78,12 +84,17 @@ void RoundedBoxGenerator::_addCorner(Ogre::ManualObject* manual, int& offset, bo
  */
 void RoundedBoxGenerator::_addEdge(Ogre::ManualObject* manual, int& offset, short xPos, short yPos, short zPos)
 {
-	Ogre::Vector3 offsetPosition = xPos * sizeX * Ogre::Vector3::UNIT_X + yPos * sizeY * Ogre::Vector3::UNIT_Y + zPos * sizeZ * Ogre::Vector3::UNIT_Z;
-	Ogre::Vector3 vy0 = (1-abs(xPos)) * Ogre::Vector3::UNIT_X + (1-abs(yPos)) * Ogre::Vector3::UNIT_Y + (1-abs(zPos)) * Ogre::Vector3::UNIT_Z;//extrusion direction
-	Ogre::Vector3 vx0 = vy0.perpendicular();
-	Ogre::Vector3 vz0 = vx0.crossProduct(vy0);
+	Ogre::Vector3 centerPosition = .5*xPos * sizeX * Ogre::Vector3::UNIT_X + .5*yPos * sizeY * Ogre::Vector3::UNIT_Y + .5*zPos * sizeZ * Ogre::Vector3::UNIT_Z;
+	Ogre::Vector3 vy0 = (1-abs(xPos)) * Ogre::Vector3::UNIT_X + (1-abs(yPos)) * Ogre::Vector3::UNIT_Y + (1-abs(zPos)) * Ogre::Vector3::UNIT_Z;//extrusion direction	
 
-	float height=1.0;//TODO
+	Ogre::Vector3 vx0 = Utils::vectorAntiPermute(vy0);
+	Ogre::Vector3 vz0 = Utils::vectorPermute(vy0);
+	if (vx0.dotProduct(centerPosition)<0.0) vx0=-vx0;
+	if (vz0.dotProduct(centerPosition)<0.0) vz0=-vz0;
+	if (vx0.crossProduct(vy0).dotProduct(vz0)<0.0) vy0=-vy0;
+
+	float height= (1-abs(xPos)) * sizeX+(1-abs(yPos)) * sizeY+(1-abs(zPos)) * sizeZ;//TODO
+	Ogre::Vector3 offsetPosition= centerPosition -.5*height*vy0;
 	int numSegHeight=1;//TODO
 
 	Ogre::Real deltaAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
@@ -101,15 +112,15 @@ void RoundedBoxGenerator::_addEdge(Ogre::ManualObject* manual, int& offset, shor
 		{
 			Ogre::Real x0 = chamferSize * cosf(j*deltaAngle);
 			Ogre::Real z0 = chamferSize * sinf(j*deltaAngle);
-			manual->position(x0 * vx0 + i*deltaHeight * vy0 + z0 * vz0);
+			manual->position(x0 * vx0 + i*deltaHeight * vy0 + z0 * vz0 + offsetPosition);
 			manual->normal((x0*vx0+z0*vz0).normalisedCopy());
 			manual->textureCoord(j/(Ogre::Real)chamferNumSeg*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
-			if (i != numSegHeight) {
-				manual->index(offset + chamferNumSeg + 1);
+			if (i != numSegHeight && j!=chamferNumSeg) {
+				manual->index(offset + chamferNumSeg + 2);
 				manual->index(offset);
-				manual->index(offset + chamferNumSeg);
-				manual->index(offset + chamferNumSeg + 1);
+				manual->index(offset + chamferNumSeg+1);
+				manual->index(offset + chamferNumSeg + 2);
 				manual->index(offset + 1);
 				manual->index(offset);
 				}
@@ -158,7 +169,19 @@ void RoundedBoxGenerator::addToManualObject(Ogre::ManualObject* manual, int& off
 	_addCorner(manual, offset, false, false, false);
 			
 	// Generate the edges
-	
+	_addEdge(manual, offset, -1,-1, 0);
+	_addEdge(manual, offset, -1, 1, 0);
+	_addEdge(manual, offset,  1,-1, 0);
+	_addEdge(manual, offset,  1, 1, 0);
+	_addEdge(manual, offset, -1, 0,-1);
+	_addEdge(manual, offset, -1, 0, 1);
+	_addEdge(manual, offset,  1, 0,-1);
+	_addEdge(manual, offset,  1, 0, 1);	
+	_addEdge(manual, offset,  0,-1,-1);
+	_addEdge(manual, offset,  0,-1, 1);
+	_addEdge(manual, offset,  0, 1,-1);
+	_addEdge(manual, offset,  0, 1, 1);
+
 	
 
     aabb.setExtents(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ);

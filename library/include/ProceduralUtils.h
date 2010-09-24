@@ -70,6 +70,16 @@ public:
         counter++;
         return prefix;
     }
+
+	static Ogre::Vector3 vectorPermute(const Ogre::Vector3 in)
+	{
+		return Ogre::Vector3(in.z, in.x, in.y);
+	}
+
+	static Ogre::Vector3 vectorAntiPermute(const Ogre::Vector3 in)
+	{
+		return Ogre::Vector3(in.y, in.z, in.x);
+	}
 };
 }
 #endif
