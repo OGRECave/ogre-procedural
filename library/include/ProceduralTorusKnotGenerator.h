@@ -36,22 +36,58 @@ namespace Procedural
 
 class _ProceduralExport TorusKnotGenerator : public MeshGenerator<TorusKnotGenerator>
 {
-    int numSegSection;
-    int numSegCircle;
-    float radius;
-    float sectionRadius;
-    int p;
-    int q;
+	int numSegSection;
+	int numSegCircle;
+	float radius;
+	float sectionRadius;
+	int p;
+	int q;
 public:
-    TorusKnotGenerator() : numSegSection(8),
-                        numSegCircle(16),
-                        radius(1.f),
-                        sectionRadius(.2f), p(2),q(3) {}
+	TorusKnotGenerator() : numSegSection(8),
+						numSegCircle(16),
+						radius(1.f),
+						sectionRadius(.2f), p(2),q(3) {}
 
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
 
+	inline TorusKnotGenerator & setNumSegSection(int numSegSection)
+	{
+		this->numSegSection = numSegSection;
+		return *this;
+	}
+
+	inline TorusKnotGenerator & setNumSegCircle(int numSegCircle)
+	{
+		this->numSegCircle = numSegCircle;
+		return *this;
+	}
+
+	inline TorusKnotGenerator & setRadius(float radius)
+	{
+		this->radius = radius;
+		return *this;
+	}
+
+	inline TorusKnotGenerator & setSectionRadius(float sectionRadius)
+	{
+		this->sectionRadius = sectionRadius;
+		return *this;
+	}
+
+	inline TorusKnotGenerator & setP(int p)
+	{
+		this->p = p;
+		return *this;
+	}
+
+	inline TorusKnotGenerator & setQ(int q)
+	{
+		this->q = q;
+		return *this;
+	}
+	
 };
 }
 #endif
