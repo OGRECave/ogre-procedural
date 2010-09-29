@@ -46,13 +46,20 @@ void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 
 		Ogre::Vector3 v0(x0,y0,z0);
 		Ogre::Vector3 v1(x1,y1,z1);
-
-		Ogre::Quaternion quat = Ogre::Vector3::UNIT_Z.getRotationTo(v1-v0);
+		Ogre::Vector3 direction((v1-v0).normalisedCopy());
+				
+		// First, compute an approximate quaternion (everything is ok except Roll angle)
+		Ogre::Quaternion quat = Ogre::Vector3::UNIT_Z.getRotationTo(direction);
+		// Then, compute a correction quaternion : we want the "up" direction to be always the same
+		Ogre::Vector3 projectedY = Ogre::Vector3::UNIT_Y - Ogre::Vector3::UNIT_Y.dotProduct(direction) * direction;		
+		Ogre::Vector3 tY = quat * Ogre::Vector3::UNIT_Y;
+		Ogre::Quaternion quat2 = tY.getRotationTo(projectedY);
+		Ogre::Quaternion q = quat2 * quat;
 
 		for (int j =0;j<=numSegSection;j++)
 		{
 			float alpha = Ogre::Math::TWO_PI *j/numSegSection;
-			Ogre::Vector3 vp = sectionRadius*(quat * Ogre::Vector3(cos(alpha), sin(alpha),0));
+			Ogre::Vector3 vp = sectionRadius*(q * Ogre::Vector3(cos(alpha), sin(alpha),0));
 
 			manual->position(v0+vp);
 			manual->normal(vp.normalisedCopy());
