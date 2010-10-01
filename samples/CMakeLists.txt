@@ -71,7 +71,7 @@ if(WIN32)
 		CONFIGURATIONS RelWithDebInfo
 	)
 
-	install(FILES ${OGRE_BINARY_REL}
+	install(FILES ${OGRE_BINARY_DBG}
 		${OGRE_PLUGIN_DIR_DBG}/RenderSystem_Direct3D9_d.dll
 		${OGRE_PLUGIN_DIR_DBG}/RenderSystem_GL_d.dll
 		${OGRE_PLUGIN_DIR_DBG}/Plugin_OctreeSceneManager_d.dll
