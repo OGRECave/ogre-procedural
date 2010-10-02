@@ -25,30 +25,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#include "Main.h"
-#include "OIS.h"
+#ifndef __Sample_Primitives_h_
+#define __Sample_Primitives_h_
+
+#include "BaseApplication.h"
 using namespace Ogre;
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-
-
-INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
-#else
-int main(int argc, char **argv)
-#endif
+class Sample_Primitives : public BaseApplication
 {
-    try {
-        SampleContext context;
-        Main app;
-        context.go(&app);
-    } catch( Exception& e ) {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        MessageBoxA( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
-#else
-        std::cerr << "An exception has occured: " << e.getFullDescription();
-#endif
-    }
-    return 0;
-}
+protected:
+	virtual void createScene(void);
+	void putMesh(const std::string& entityName, const std::string& meshName, const Vector3& position = Vector3::ZERO);
+	void putMesh2(const std::string& entityName, const std::string& meshName, const Vector3& position = Vector3::ZERO);
+
+	virtual void createCamera(void);
+};
+
+#endif // #ifndef __TutorialApplication_h_

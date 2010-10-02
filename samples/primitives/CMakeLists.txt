@@ -3,29 +3,20 @@ cmake_minimum_required(VERSION 2.6)
 project(Sample_Primitives)
 
 set( HDRS
-	include/Main.h
+		../common/include/BaseApplication.h
+		include/Primitives.h
 	)
 
 set( SRCS
-		src/Main.cpp
+		../common/src/BaseApplication.cpp
+		src/Primitives.cpp
 	)
-
-if (WIN32)
-  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_WIN32.cpp)
-elseif (OGRE_BUILD_PLATFORM_IPHONE)
-  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_iPhone.mm)
-elseif (APPLE)
-  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_OSX.cpp)
-elseif (UNIX)
-  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_Unix.cpp)
-else ()
-  list(APPEND SRCS ${OGRE_DIR}/Samples/browser/src/FileSystemLayerImpl_Default.cpp)
-endif ()
 
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	${OGRE_SAMPLES_INCLUDEPATH}
 	../../library/include
+	../common/include
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 

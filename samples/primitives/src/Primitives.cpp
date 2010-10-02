@@ -25,45 +25,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef MAIN_H_INCLUDED
-#define MAIN_H_INCLUDED
-#include "Ogre.h"
-#include "OIS.h"
-
-#include "SdkSample.h"
-#include "SampleContext.h"
+#include "Primitives.h"
 #include "Procedural.h"
 
-using namespace Ogre;
-using namespace OgreBites;
-
-class Main : public SdkSample
+//-------------------------------------------------------------------------------------
+void Sample_Primitives::createScene(void)
 {
-public:
-	Main()
-	{
-		mInfo["Title"] = "Ogre procedural sample";
-		mInfo["Description"] = "Shows ogre-procedural primitives";
-	}
-	void setupContent()
-	{
-		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
-		mSceneMgr->setShadowFarDistance(100.0);
-		mSceneMgr->setShadowTextureSize(1024);
-		// Setup camera and light
-		mCamera->setPosition(0,50,-50);
-		mCamera->lookAt(0,0,0);
-		Light* l = mSceneMgr->createLight("myLight");
-		l->setType(Light::LT_DIRECTIONAL);
-		l->setDirection(Vector3(0,-1,1).normalisedCopy());
-		l->setDiffuseColour(ColourValue(1.0,0.7,0.7));
 
-		l = mSceneMgr->createLight("myLight2");
-		l->setType(Light::LT_DIRECTIONAL);
-		l->setDirection(Vector3(1,-1,-1).normalisedCopy());
-		l->setDiffuseColour(ColourValue(0.7,1.0,1.0));
-
-		// Setup Procedural root (crappy init method, have to find another one)
+		
+// Setup Procedural root (crappy init method, have to find another one)
 		Procedural::Root::getInstance()->sceneManager = mSceneMgr;
 		// Test primitive generation
 		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
@@ -89,25 +59,81 @@ public:
 		//Procedural::RoundedBoxGenerator().setSizeX(5.f).setSizeY(5.f).setSizeZ(5.f).setChamferSize(1.f).realizeMesh("roundedBoxMesh");
 		//putMesh("roundedBox", "roundedBoxMesh", Vector3(20,10,10));
 		//putMesh("icosphere", "geosphere8000.mesh", Vector3(10,10,10));
+}
+
+void Sample_Primitives::createCamera(void)
+{
+	BaseApplication::createCamera();
+	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
+	mSceneMgr->setShadowFarDistance(100.0);
+	mSceneMgr->setShadowTextureSize(1024);
+	// Setup camera and light
+	mCamera->setPosition(0,50,-50);
+	mCamera->lookAt(0,0,0);
+
+	Light* l = mSceneMgr->createLight("myLight");
+	l->setType(Light::LT_DIRECTIONAL);
+	l->setDirection(Vector3(0,-1,1).normalisedCopy());
+	l->setDiffuseColour(ColourValue(1.0,0.7,0.7));
+
+	l = mSceneMgr->createLight("myLight2");
+	l->setType(Light::LT_DIRECTIONAL);
+	l->setDirection(Vector3(1,-1,-1).normalisedCopy());
+	l->setDiffuseColour(ColourValue(0.7,1.0,1.0));
+}
+
+
+void Sample_Primitives::putMesh2(const std::string& entityName, const std::string& meshName, const Vector3& position)
+{
+	Entity* ent2 = mSceneMgr->createEntity(entityName, meshName);
+	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	sn->attachObject(ent2);
+	sn->setPosition(position);
+	ent2->setMaterialName("Examples/Rockwall");
+	ent2->setCastShadows(false);
+}
+
+void Sample_Primitives::putMesh(const std::string& entityName, const std::string& meshName, const Vector3& position)
+{
+	Entity* ent2 = mSceneMgr->createEntity(entityName, meshName);
+	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	sn->attachObject(ent2);
+	sn->setPosition(position);
+	ent2->setMaterialName("Examples/BeachStones");
+}
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#define WIN32_LEAN_AND_MEAN
+#include "windows.h"
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
+#else
+	int main(int argc, char *argv[])
+#endif
+	{
+		// Create application object
+		Sample_Primitives app;
+
+		try {
+			app.go();
+		} catch( Ogre::Exception& e ) {
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+			MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
+#else
+			std::cerr << "An exception has occured: " <<
+				e.getFullDescription().c_str() << std::endl;
+#endif
+		}
+
+		return 0;
 	}
 
-	void putMesh2(const std::string& entityName, const std::string& meshName, const Vector3& position = Vector3::ZERO)
-	{
-		Entity* ent2 = mSceneMgr->createEntity(entityName, meshName);
-		SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-		sn->attachObject(ent2);
-		sn->setPosition(position);
-		ent2->setMaterialName("Examples/Rockwall");
-		ent2->setCastShadows(false);
-	}
-
-	void putMesh(const std::string& entityName, const std::string& meshName, const Vector3& position = Vector3::ZERO)
-	{
-		Entity* ent2 = mSceneMgr->createEntity(entityName, meshName);
-		SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-		sn->attachObject(ent2);
-		sn->setPosition(position);
-		ent2->setMaterialName("Examples/BeachStones");
-	}
-};
+#ifdef __cplusplus
+}
 #endif
