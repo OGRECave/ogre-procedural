@@ -38,7 +38,7 @@ void Sample_Primitives::createScene(void)
 		// Test primitive generation
 		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 		putMesh2("plane", "planeMesh");
-	   /* Procedural::SphereGenerator().setRadius(2.f).realizeMesh("sphereMesh");
+	    Procedural::SphereGenerator().setRadius(2.f).realizeMesh("sphereMesh");
 		putMesh("sphere", "sphereMesh", Vector3(0,10,0));
 		Procedural::CylinderGenerator().setHeight(3.f).setRadius(1.f).realizeMesh("cylinderMesh");
 		putMesh("cylinder", "cylinderMesh", Vector3(10,10,0));
@@ -51,14 +51,13 @@ void Sample_Primitives::createScene(void)
 		Procedural::BoxGenerator().setSizeX(2.0).setSizeY(4.f).setSizeZ(6.f).realizeMesh("boxMesh");
 		putMesh("box", "boxMesh", Vector3(10,10,-10));
 		Procedural::CapsuleGenerator().setHeight(2.f).realizeMesh("capsuleMesh");
-		putMesh("capsule", "capsuleMesh", Vector3(0,10,10));*/
-		Procedural::TorusKnotGenerator().setRadius(5.f).setSectionRadius(1.f).setUTile(3.f).setNumSegCircle(64).setNumSegSection(16).realizeMesh("torusKnotMesh");
+		putMesh("capsule", "capsuleMesh", Vector3(0,10,10));
+		Procedural::TorusKnotGenerator().setRadius(2.f).setSectionRadius(.5f).setUTile(3.f).setNumSegCircle(64).setNumSegSection(16).realizeMesh("torusKnotMesh");
 		putMesh("torusKnot", "torusKnotMesh", Vector3(-10,10,10));
-		/*Procedural::IcoSphereGenerator().setRadius(5.).setNumIterations(3).realizeMesh("icoSphereMesh");
-		putMesh("icosphere", "icoSphereMesh", Vector3(10,10,10));*/
-		//Procedural::RoundedBoxGenerator().setSizeX(5.f).setSizeY(5.f).setSizeZ(5.f).setChamferSize(1.f).realizeMesh("roundedBoxMesh");
-		//putMesh("roundedBox", "roundedBoxMesh", Vector3(20,10,10));
-		//putMesh("icosphere", "geosphere8000.mesh", Vector3(10,10,10));
+		Procedural::IcoSphereGenerator().setRadius(5.).setNumIterations(3).realizeMesh("icoSphereMesh");
+		putMesh("icosphere", "icoSphereMesh", Vector3(10,10,10));
+		Procedural::RoundedBoxGenerator().setSizeX(5.f).setSizeY(5.f).setSizeZ(5.f).setChamferSize(1.f).realizeMesh("roundedBoxMesh");
+		putMesh("roundedBox", "roundedBoxMesh", Vector3(20,10,10));		
 }
 
 void Sample_Primitives::createCamera(void)
