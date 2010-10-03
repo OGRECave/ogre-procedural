@@ -47,12 +47,12 @@ void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
             Ogre::Real x0 = r0* cosf(j*deltaAngle);
             Ogre::Real z0 = r0 * sinf(j*deltaAngle);
             manual->position(x0, i*deltaHeight, z0);
-            q.FromAngleAxis(Ogre::Radian(deltaAngle), Ogre::Vector3::UNIT_Y);
+            q.FromAngleAxis(Ogre::Radian(-j*deltaAngle), Ogre::Vector3::UNIT_Y);
             manual->normal(q*refNormal);
-            if (i != numSegHeight)
+            //if (i != numSegHeight)
             manual->textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
-            else
-            manual->textureCoord(0.f, i/(Ogre::Real)numSegHeight*vTile);
+            /*else
+            manual->textureCoord(0.f, i/(Ogre::Real)numSegHeight*vTile);*/
 
             if (i != numSegHeight&& j != numSegBase)
             {
@@ -84,7 +84,7 @@ void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, f
         manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,0.0);
         if (j!=numSegBase)
         {
-            manual->index(offset);
+            manual->index(centerIndex);
             manual->index(offset);
             manual->index(offset+1);
         }
