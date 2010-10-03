@@ -66,6 +66,7 @@ void Sample_Primitives::createCamera(void)
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
 	mSceneMgr->setShadowFarDistance(100.0);
 	mSceneMgr->setShadowTextureSize(1024);
+	mSceneMgr->setAmbientLight(ColourValue::Black);
 	// Setup camera and light
 	mCamera->setPosition(0,50,-50);
 	mCamera->lookAt(0,0,0);
@@ -76,6 +77,7 @@ void Sample_Primitives::createCamera(void)
 	l->setType(Light::LT_DIRECTIONAL);
 	l->setDirection(Vector3(0,-1,1).normalisedCopy());
 	l->setDiffuseColour(ColourValue(.7,.5,.5));
+	l->setSpecularColour(ColourValue::White);
 
 	/*l = mSceneMgr->createLight("myLight2");
 	l->setType(Light::LT_DIRECTIONAL);
@@ -85,13 +87,14 @@ void Sample_Primitives::createCamera(void)
 	movingLight = mSceneMgr->createLight("movingLight");
 	movingLight->setType(Light::LT_POINT);
 	movingLight->setDiffuseColour(ColourValue(.5,.5,.7));
-	movingLight->setPosition(mCamera->getPosition()+1.*Vector3::UNIT_Y);
+	movingLight->setSpecularColour(ColourValue::White);
+	movingLight->setPosition(mCamera->getPosition());
 	movingLight->setCastShadows(false);
 }
 
 bool Sample_Primitives::frameStarted(const FrameEvent& evt)
 {
-	movingLight->setPosition(mCamera->getPosition()+1.*Vector3::UNIT_Y);
+	movingLight->setPosition(mCamera->getPosition());
 	return true;
 }
 
