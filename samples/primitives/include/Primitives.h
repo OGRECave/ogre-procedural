@@ -33,6 +33,8 @@ using namespace Ogre;
 
 class Sample_Primitives : public BaseApplication
 {
+	Light* movingLight;
+	virtual bool frameStarted(const FrameEvent& evt);
 protected:
 	virtual void createScene(void);
 	void putMesh(const std::string& entityName, const std::string& meshName, const Vector3& position = Vector3::ZERO);
