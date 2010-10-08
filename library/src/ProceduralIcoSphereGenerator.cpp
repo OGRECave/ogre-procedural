@@ -115,12 +115,10 @@ void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 		faces.swap(newFaces);
 	}
 
-	/// Step 3 : realize
-	for (int i=0; i<vertices.size(); i++)
+	/// Step 3 : generate texcoords
+	std::vector<Ogre::Vector2> texCoords;
+	for (int i=0;i<vertices.size();i++)
 	{
-		manual->position(radius*vertices[i]);
-		if (enableNormals)
-			manual->normal(vertices[i]);//note : vertices are already normalised
 		const Ogre::Vector3& vec = vertices[i];
 		float u, v;
 		float r0 = sqrtf(vec.x*vec.x+vec.z*vec.z);
@@ -128,8 +126,72 @@ void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 		alpha = atan2f(vec.z,vec.x);
 		u = alpha/Ogre::Math::TWO_PI+.5;
 		v = atan2f(vec.y, r0)/Ogre::Math::PI + .5;
+		texCoords.push_back(Ogre::Vector2(u,v));
+	}
+
+	/// Step 4 : fix texcoords
+	// find vertices to split
+	std::vector<int> indexToSplit;
+	for (int i=0;i<faces.size()/3;i++)
+	{
+		Ogre::Vector2& t0 = texCoords[faces[i*3+0]];
+		Ogre::Vector2& t1 = texCoords[faces[i*3+1]];
+		Ogre::Vector2& t2 = texCoords[faces[i*3+2]];
+		if (abs(t2.x-t0.x)>0.5)
+		{
+			if (t0.x<0.5)
+				indexToSplit.push_back(faces[i*3]);
+			else
+				indexToSplit.push_back(faces[i*3+2]);
+		}
+		if (abs(t1.x-t0.x)>0.5)
+		{
+			if (t0.x<0.5)
+				indexToSplit.push_back(faces[i*3]);
+			else
+				indexToSplit.push_back(faces[i*3+1]);
+		}
+		if (abs(t2.x-t1.x)>0.5)
+		{
+			if (t1.x<0.5)
+				indexToSplit.push_back(faces[i*3+1]);
+			else
+				indexToSplit.push_back(faces[i*3+2]);
+		}
+	}
+	//split vertices
+	for (int i=0;i<indexToSplit.size();i++)
+	{
+		int index = indexToSplit[i];
+		//duplicate vertex
+		Ogre::Vector3 v = vertices[index];
+		Ogre::Vector2 t = texCoords[index] + Ogre::Vector2::UNIT_X;
+		vertices.push_back(v);
+		texCoords.push_back(t);
+		int newIndex = vertices.size()-1;
+		//reassign indices
+		for (int j=0;j<faces.size();j++)
+		{
+			if (faces[j]==index)
+			{
+				int index1 = faces[(j+1)%3+(j/3)*3];
+				int index2 = faces[(j+2)%3+(j/3)*3];
+				if ((texCoords[index1].x>0.5) || (texCoords[index2].x>0.5))
+				{
+					faces[j] = newIndex;
+				}
+			}
+		}
+	}
+	
+	/// Step 5 : realize
+	for (int i=0; i<vertices.size(); i++)
+	{
+		manual->position(radius*vertices[i]);
+		if (enableNormals)
+			manual->normal(vertices[i]);//note : vertices are already normalised
 		for (unsigned int tc=0; tc<numTexCoordSet; tc++)
-			manual->textureCoord(u,v);
+			manual->textureCoord(texCoords[i].x*uTile,texCoords[i].y*vTile);
 	}
 	for (int i=0; i<size; i++)
 	{
