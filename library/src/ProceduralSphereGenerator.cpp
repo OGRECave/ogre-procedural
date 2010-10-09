@@ -32,7 +32,10 @@ namespace Procedural
 {
 void SphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
-Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
+	assert(numRings>0 && numSegments>0 && "Num seg must be positive");
+	assert(radius>0 && "Radius must be positive");
+
+	Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
 
 	// Generate the group of rings for the sphere

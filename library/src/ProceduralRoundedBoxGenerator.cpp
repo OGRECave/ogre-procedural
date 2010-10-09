@@ -34,6 +34,9 @@ namespace Procedural
 
 void RoundedBoxGenerator::_addCorner(Ogre::ManualObject* manual, int& offset, bool isXPositive, bool isYPositive, bool isZPositive)
 {
+	assert(numSegX>0 && numSegY>0 && numSegZ>0 && chamferNumSeg>0 && "Num seg must be positive integers");
+	assert(sizeX>0. && sizeY>0. && sizeZ>0. && chamferSize>0. && "Sizes must be positive");
+
 	Ogre::Vector3 offsetPosition((isXPositive?1:-1)*.5*sizeX, (isYPositive?1:-1)*.5*sizeY, (isZPositive?1:-1)*.5*sizeZ);
 	Ogre::Real deltaRingAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
 	Ogre::Real deltaSegAngle = (Ogre::Math::HALF_PI / chamferNumSeg);

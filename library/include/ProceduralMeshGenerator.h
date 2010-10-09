@@ -78,7 +78,7 @@ public:
 					  numTexCoordSet(1)
 	{
 		sceneMgr = Root::getInstance()->sceneManager;
-		assert(sceneMgr);
+		assert(sceneMgr && "Scene Manager must be set in Root");
 	}
 
 	inline T& setUTile(float uTile)

@@ -32,6 +32,9 @@ namespace Procedural
 {
 void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
+	assert(radius>0. && "Radius must me positive");
+	assert(numIterations>0 && "numIterations must be positive");
+
 	std::vector<Ogre::Vector3> vertices;
 
 	/// Step 1 : Generate icosahedron

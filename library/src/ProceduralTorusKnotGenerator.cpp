@@ -32,6 +32,10 @@ namespace Procedural
 {
 void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
+	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
+	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
+	assert(p>0 && q>0 && "p and q must be positive");
+
 	for (int i = 0; i <= numSegCircle * p;i++)
 	{
 		float phi = Ogre::Math::TWO_PI * i/(float)numSegCircle;

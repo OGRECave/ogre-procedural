@@ -32,6 +32,9 @@ namespace Procedural
 {
 void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
+	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
+	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
+
 	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / numSegSection);
 	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / numSegCircle);
 

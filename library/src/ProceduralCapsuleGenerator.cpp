@@ -32,6 +32,9 @@ namespace Procedural
 {
 void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
+	assert(numRings>0 && numSegments>0 && numSegHeight>0 && "Num seg must be positive integers");
+	assert(height>0. && radius>0. && "Height and radius must be positive");
+
 	Ogre::Real fDeltaRingAngle = (Ogre::Math::HALF_PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
 
