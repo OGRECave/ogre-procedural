@@ -37,8 +37,8 @@ class Sample_Primitives : public BaseApplication
 	virtual bool frameStarted(const FrameEvent& evt);
 protected:
 	virtual void createScene(void);
-	void putMesh(const std::string& entityName, const std::string& meshName, const Vector3& position = Vector3::ZERO);
-	void putMesh2(const std::string& entityName, const std::string& meshName, const Vector3& position = Vector3::ZERO);
+	void putMesh(const std::string& meshName, const Vector3& position = Vector3::ZERO);
+	void putMesh2(const std::string& meshName, const Vector3& position = Vector3::ZERO);
 
 	virtual void createCamera(void);
 };
