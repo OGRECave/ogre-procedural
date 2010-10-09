@@ -45,7 +45,7 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 	// Generate the group of rings for the sphere
 	for(unsigned int ring = 0; ring <= numRings; ring++ ) {
 		Ogre::Real r0 = radius * sinf ( ring * fDeltaRingAngle);
-		Ogre::Real y0 = 0.5*height + radius * cosf (ring * fDeltaRingAngle);
+		Ogre::Real y0 = radius * cosf (ring * fDeltaRingAngle);
 
 		// Generate the group of segments for the current ring
 		for(unsigned int seg = 0; seg <= numSegments; seg++) {
@@ -53,7 +53,7 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 			Ogre::Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			manual->position( x0, y0, z0);
+			manual->position( x0, 0.5*height + y0, z0);
 			if (enableNormals)
 				manual->normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
@@ -101,7 +101,7 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 	// Generate the group of rings for the sphere
 	for(unsigned int ring = 0; ring <= numRings; ring++ ) {
 		Ogre::Real r0 = radius * sinf (Ogre::Math::HALF_PI + ring * fDeltaRingAngle);
-		Ogre::Real y0 = -0.5*height + radius * cosf (Ogre::Math::HALF_PI + ring * fDeltaRingAngle);
+		Ogre::Real y0 =  radius * cosf (Ogre::Math::HALF_PI + ring * fDeltaRingAngle);
 
 		// Generate the group of segments for the current ring
 		for(unsigned int seg = 0; seg <= numSegments; seg++) {
@@ -109,7 +109,7 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 			Ogre::Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			manual->position( x0, y0, z0);
+			manual->position( x0, -0.5*height + y0, z0);
 			if (enableNormals)
 				manual->normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
