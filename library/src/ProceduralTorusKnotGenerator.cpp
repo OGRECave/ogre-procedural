@@ -39,14 +39,14 @@ void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 	for (int i = 0; i <= numSegCircle * p;i++)
 	{
 		float phi = Ogre::Math::TWO_PI * i/(float)numSegCircle;
-		float x0 = radius*(2 + cos(q*phi/(float)p)) * cos(phi);
-		float y0 = radius*sin(q*phi/(float)p);
-		float z0 = radius*(2 + cos(q*phi/(float)p)) * sin(phi);
+		float x0 = radius*(2 + cos(q*phi/(float)p)) * cos(phi) / 3.f;
+		float y0 = radius*sin(q*phi/(float)p) / 3.f;
+		float z0 = radius*(2 + cos(q*phi/(float)p)) * sin(phi) / 3.f;
 
 		float phi1 = Ogre::Math::TWO_PI * (i+1)/(float)numSegCircle;
-		float x1 = radius*(2 + cos(q*phi1/p)) * cos(phi1);
-		float y1 = radius*sin(q*phi1/p);
-		float z1 = radius*(2 + cos(q*phi1/p)) * sin(phi1);
+		float x1 = radius*(2 + cos(q*phi1/p)) * cos(phi1) / 3.f;
+		float y1 = radius*sin(q*phi1/p) / 3.f;
+		float z1 = radius*(2 + cos(q*phi1/p)) * sin(phi1) / 3.f;
 
 		Ogre::Vector3 v0(x0,y0,z0);
 		Ogre::Vector3 v1(x1,y1,z1);
@@ -82,7 +82,7 @@ void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 		}
 	}
 
-	boundingRadius = radius + sectionRadius;
+	boundingRadius = Ogre::Math::Sqrt(2*Ogre::Math::Sqr(radius + sectionRadius)+Ogre::Math::Sqr(sectionRadius));
 	aabb = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
 }
 }
