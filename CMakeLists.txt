@@ -28,7 +28,13 @@ endif ()
 
 set(CMAKE_DEBUG_POSTFIX "_d")
 
-set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}")
+if (WIN32 OR APPLE)
+  if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX
+	  "${PROCEDURAL_BINARY_DIR}/sdk" CACHE PATH "PROCEDURAL install prefix" FORCE
+    )
+  endif (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+endif(WIN32 OR APPLE)
 
 find_package(OGRE REQUIRED)
 
@@ -36,11 +42,7 @@ if(NOT "${OGRE_VERSION_NAME}" STREQUAL "Cthugha")
   message(SEND_ERROR "You need Ogre 1.7 Cthugha to build this.")
 endif()
 
-find_package(OIS REQUIRED)
-
-if(NOT OIS_FOUND)
-    message(SEND_ERROR "Failed to find OIS.")
-endif()
+option(PROCEDURAL_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 
 # Specify build paths
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/lib")
@@ -52,4 +54,6 @@ set(PROCEDURAL_WORK_DIR ${PROCEDURAL_BINARY_DIR})
 
 add_subdirectory(library)
 
-add_subdirectory(samples)
+if (PROCEDURAL_BUILD_SAMPLES)	
+	add_subdirectory(samples)
+endif()

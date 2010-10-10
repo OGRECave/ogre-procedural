@@ -51,6 +51,17 @@ set_target_properties(OgreProcedural PROPERTIES PREFIX "")
 
 target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
+install(TARGETS OgreProcedural 
+		BUNDLE DESTINATION "bin"
+		RUNTIME DESTINATION "bin"
+		LIBRARY DESTINATION "lib"		
+		ARCHIVE DESTINATION "lib"		
+		FRAMEWORK DESTINATION "lib")
+		
+install(FILES ${HDRS} DESTINATION include)
+
+
+
 #set_target_properties(OgreProcedural PROPERTIES
 # 	ARCHIVE_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/lib
 #    LIBRARY_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/lib

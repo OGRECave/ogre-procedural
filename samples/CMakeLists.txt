@@ -45,6 +45,14 @@ endmacro()
 macro(copy_debug INPUT)
 	copy_debug_dir(${INPUT} ${OGRE_PLUGIN_DIR_DBG})
 endmacro()
+
+
+find_package(OIS REQUIRED)
+
+if(NOT OIS_FOUND)
+	message(SEND_ERROR "Failed to find OIS.")
+endif()
+
   
 # if win32, copy the Ogre DLLs and media over
 if(WIN32)
