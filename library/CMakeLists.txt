@@ -19,6 +19,9 @@ set( HDRS
 	include/ProceduralTorusKnotGenerator.h
 	include/ProceduralTubeGenerator.h
 	include/ProceduralUtils.h
+	include/ProceduralExtruder.h
+	include/ProceduralShape.h
+	include/ProceduralPath.h
 	)
 
 set( SRCS
@@ -34,6 +37,7 @@ set( SRCS
 		src/ProceduralTorusGenerator.cpp
 		src/ProceduralTorusKnotGenerator.cpp
 		src/ProceduralTubeGenerator.cpp
+		src/ProceduralExtruder.cpp
 	)
 
 include_directories( ${OIS_INCLUDE_DIRS}

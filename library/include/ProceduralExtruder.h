@@ -25,23 +25,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_H_INCLUDED
-#define PROCEDURAL_H_INCLUDED
+#ifndef PROCEDURAL_EXTRUDER_INCLUDED
+#define PROCEDURAL_EXTRUDER_INCLUDED
 
-#include "ProceduralBoxGenerator.h"
-#include "ProceduralCapsuleGenerator.h"
-#include "ProceduralConeGenerator.h"
-#include "ProceduralCylinderGenerator.h"
-#include "ProceduralIcoSphereGenerator.h"
-#include "ProceduralRoundedBoxGenerator.h"
-#include "ProceduralSphereGenerator.h"
-#include "ProceduralTorusGenerator.h"
-#include "ProceduralTorusKnotGenerator.h"
-#include "ProceduralTubeGenerator.h"
-#include "ProceduralPlaneGenerator.h"
-#include "ProceduralRoot.h"
-#include "ProceduralExtruder.h"
 #include "ProceduralShape.h"
 #include "ProceduralPath.h"
+#include "ProceduralPlatform.h"
+#include "ProceduralMeshGenerator.h"
+
+namespace Procedural
+{
+class _ProceduralExport Extruder : public MeshGenerator<Extruder>
+{
+	Shape* shapeToExtrude;
+	Path* extrusionPath;
+public:
+	Extruder() : shapeToExtrude(0), extrusionPath(0)
+	{}
+
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+};
+}
 
 #endif

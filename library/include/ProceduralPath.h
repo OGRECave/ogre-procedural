@@ -25,23 +25,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_H_INCLUDED
-#define PROCEDURAL_H_INCLUDED
+#ifndef PROCEDURAL_PATH_INCLUDED
+#define PROCEDURAL_PATH_INCLUDED
+#include "OgreVector3.h"
 
-#include "ProceduralBoxGenerator.h"
-#include "ProceduralCapsuleGenerator.h"
-#include "ProceduralConeGenerator.h"
-#include "ProceduralCylinderGenerator.h"
-#include "ProceduralIcoSphereGenerator.h"
-#include "ProceduralRoundedBoxGenerator.h"
-#include "ProceduralSphereGenerator.h"
-#include "ProceduralTorusGenerator.h"
-#include "ProceduralTorusKnotGenerator.h"
-#include "ProceduralTubeGenerator.h"
-#include "ProceduralPlaneGenerator.h"
-#include "ProceduralRoot.h"
-#include "ProceduralExtruder.h"
-#include "ProceduralShape.h"
-#include "ProceduralPath.h"
+namespace Procedural
+{
+class _ProceduralExport Path
+{
+	std::vector<Ogre::Vector3> pointVec;
+
+public:
+	Path& addPoint(const Ogre::Vector3& pt)
+	{
+		pointVec.push_back(pt);
+		return *this;
+	}
+
+	Path& reset()
+	{
+		//pointVec.erase();
+		return *this;
+	}
+
+	std::vector<Ogre::Vector3> getPoints()
+	{
+		return pointVec;
+	}
+};
+}
 
 #endif

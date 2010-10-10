@@ -25,23 +25,58 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_H_INCLUDED
-#define PROCEDURAL_H_INCLUDED
+#ifndef PROCEDURAL_SHAPE_INCLUDED
+#define PROCEDURAL_SHAPE_INCLUDED
+#include "OgreVector2.h"
+#include "ProceduralPlatform.h"
 
-#include "ProceduralBoxGenerator.h"
-#include "ProceduralCapsuleGenerator.h"
-#include "ProceduralConeGenerator.h"
-#include "ProceduralCylinderGenerator.h"
-#include "ProceduralIcoSphereGenerator.h"
-#include "ProceduralRoundedBoxGenerator.h"
-#include "ProceduralSphereGenerator.h"
-#include "ProceduralTorusGenerator.h"
-#include "ProceduralTorusKnotGenerator.h"
-#include "ProceduralTubeGenerator.h"
-#include "ProceduralPlaneGenerator.h"
-#include "ProceduralRoot.h"
-#include "ProceduralExtruder.h"
-#include "ProceduralShape.h"
-#include "ProceduralPath.h"
+namespace Procedural
+{
+class _ProceduralExport Shape
+{
+	std::vector<Ogre::Vector2> points;
+
+public:
+	Shape& addPoint(const Ogre::Vector2& pt)
+	{
+		points.push_back(pt);
+		return *this;
+	}
+
+	Shape& reset()
+	{
+		//points.erase();
+		return *this;
+	}
+
+	std::vector<Ogre::Vector2> getPoints()
+	{
+		return points;
+	}
+};
+
+class _ProceduralExport BezierShape
+{
+	std::vector<Ogre::Vector2> bezierPoints;
+public:
+	BezierShape& addPoint(const Ogre::Vector2& pt)
+	{
+		bezierPoints.push_back(pt);
+		return *this;
+	}
+
+	BezierShape& reset()
+	{
+		//bezierPoints.erase();
+		return *this;
+	}
+
+	Shape* realizeShape()
+	{
+		//TODO
+		return 0;
+	}
+};
+}
 
 #endif
