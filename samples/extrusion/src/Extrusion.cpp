@@ -25,42 +25,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#include "Primitives.h"
+#include "Extrusion.h"
 #include "Procedural.h"
 
 //-------------------------------------------------------------------------------------
-void Sample_Primitives::createScene(void)
-{
-
-		
-// Setup Procedural root (crappy init method, have to find another one)
+void Sample_Extrusion::createScene(void)
+{		
+		// Setup Procedural root (crappy init method, have to find another one)
 		Procedural::Root::getInstance()->sceneManager = mSceneMgr;
 		// Test primitive generation
 		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 		putMesh2("planeMesh");
-	    Procedural::SphereGenerator().setRadius(2.f).setUTile(5.).setVTile(5.).realizeMesh("sphereMesh");
-		putMesh("sphereMesh", Vector3(0,10,0));
-		Procedural::CylinderGenerator().setHeight(3.f).setRadius(1.f).setUTile(3.).realizeMesh("cylinderMesh");
-		putMesh("cylinderMesh", Vector3(10,10,0));
-		Procedural::TorusGenerator().setRadius(3.f).setSectionRadius(1.f).setUTile(10.).setVTile(5.).realizeMesh("torusMesh");
-		putMesh("torusMesh", Vector3(-10,10,0));
-		Procedural::ConeGenerator().setRadius(2.f).setHeight(3.f).setNumSegBase(36).setNumSegHeight(2).setUTile(3.).realizeMesh("coneMesh");
-		putMesh("coneMesh", Vector3(0,10,-10));
-		Procedural::TubeGenerator().setHeight(3.f).setUTile(3.).realizeMesh("tubeMesh");
-		putMesh("tubeMesh", Vector3(-10,10,-10));
-		Procedural::BoxGenerator().setSizeX(2.0).setSizeY(4.f).setSizeZ(6.f).realizeMesh("boxMesh");
-		putMesh("boxMesh", Vector3(10,10,-10));
-		Procedural::CapsuleGenerator().setHeight(2.f).realizeMesh("capsuleMesh");
-		putMesh("capsuleMesh", Vector3(0,10,10));
-		Procedural::TorusKnotGenerator().setRadius(2.f).setSectionRadius(.5f).setUTile(3.f).setNumSegCircle(64).setNumSegSection(16).realizeMesh("torusKnotMesh");
-		putMesh("torusKnotMesh", Vector3(-10,10,10));
-		Procedural::IcoSphereGenerator().setRadius(2.).setNumIterations(3).setUTile(5.).setVTile(5.).realizeMesh("icoSphereMesh");
-		putMesh("icoSphereMesh", Vector3(10,10,10));
-		Procedural::RoundedBoxGenerator().setSizeX(1.f).setSizeY(5.f).setSizeZ(5.f).setChamferSize(1.f).realizeMesh("roundedBoxMesh");
-		putMesh("roundedBoxMesh", Vector3(20,10,10));		
+		Procedural::Path p = Procedural::Path().addPoint(0,0,0).addPoint(0,0,10).addPoint(10,0,10).addPoint(20,0,0);
+		Procedural::Shape s = Procedural::Shape().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close();
+		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("extrudedMesh");
+		putMesh("extrudedMesh");
 }
 
-void Sample_Primitives::createCamera(void)
+void Sample_Extrusion::createCamera(void)
 {
 	BaseApplication::createCamera();
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
@@ -87,14 +69,14 @@ void Sample_Primitives::createCamera(void)
 	movingLight->setCastShadows(false);
 }
 
-bool Sample_Primitives::frameStarted(const FrameEvent& evt)
+bool Sample_Extrusion::frameStarted(const FrameEvent& evt)
 {
 	movingLight->setPosition(mCamera->getPosition());
 	return true;
 }
 
 
-void Sample_Primitives::putMesh2(const std::string& meshName, const Vector3& position)
+void Sample_Extrusion::putMesh2(const std::string& meshName, const Vector3& position)
 {
 	Entity* ent2 = mSceneMgr->createEntity(meshName);
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
@@ -104,7 +86,7 @@ void Sample_Primitives::putMesh2(const std::string& meshName, const Vector3& pos
 	ent2->setCastShadows(false);
 }
 
-void Sample_Primitives::putMesh(const std::string& meshName, const Vector3& position)
+void Sample_Extrusion::putMesh(const std::string& meshName, const Vector3& position)
 {
 	Entity* ent2 = mSceneMgr->createEntity(meshName);
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
@@ -129,7 +111,7 @@ extern "C" {
 #endif
 	{
 		// Create application object
-		Sample_Primitives app;
+		Sample_Extrusion app;
 
 		try {
 			app.go();

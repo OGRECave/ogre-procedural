@@ -86,10 +86,6 @@ if(WIN32)
 	copy_release_dir(Examples.material ${PROCEDURAL_SOURCE_DIR}/samples/media)
 	copy_debug_dir(Examples.material ${PROCEDURAL_SOURCE_DIR}/samples/media)
 	
-	
-	#configure_file(${PROCEDURAL_TEMPLATES_DIR}/plugins.cfg.in ${CMAKE_CURRENT_BINARY_DIR}/plugins.cfg COPYONLY)
-	#configure_file(${PROCEDURAL_TEMPLATES_DIR}/plugins_d.cfg.in ${CMAKE_CURRENT_BINARY_DIR}/plugins_d.cfg COPYONLY)
-	
 endif(WIN32)
 
 # if Linux, copy the Ogre configuration files over
@@ -100,3 +96,5 @@ endif(UNIX AND NOT APPLE)
 
 
 add_subdirectory(primitives)
+
+add_subdirectory(extrusion)
