@@ -31,14 +31,16 @@ namespace Procedural
 {
 	void Extruder::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)	
 	{
-		int numSegCircle = extrusionPath->getPoints().size();
-		int numSegSection = shapeToExtrude->getPoints().size();
+		assert(extrusionPath && shapeToExtrude && "Shape and Path must not be null!");
+		int numSegPath = extrusionPath->getPoints().size();
+		int numSegShape = shapeToExtrude->getPoints().size();
+		assert(numSegPath>1 && numSegShape>1 && "Shape and path must contain at least two points");		
 
-	for (int i = 0; i <= numSegCircle;i++)
+	for (int i = 0; i < numSegPath;i++)
 	{
 		Ogre::Vector3 v0(extrusionPath->getPoints()[i]);
-		Ogre::Vector3 v1(extrusionPath->getPoints()[i]);
-		Ogre::Vector3 direction((v1-v0).normalisedCopy());
+
+		Ogre::Vector3 direction((extrusionPath->getPoints()[std::min(i+1, numSegPath-1)]-extrusionPath->getPoints()[std::min(i, numSegPath-2)]).normalisedCopy());
 				
 		// First, compute an approximate quaternion (everything is ok except Roll angle)
 		Ogre::Quaternion quat = Ogre::Vector3::UNIT_Z.getRotationTo(direction);
@@ -48,23 +50,27 @@ namespace Procedural
 		Ogre::Quaternion quat2 = tY.getRotationTo(projectedY);
 		Ogre::Quaternion q = quat2 * quat;
 
-		for (int j =0;j<=shapeToExtrude->getPoints().size();j++)
+		for (int j =0;j<numSegShape;j++)
 		{
 			Ogre::Vector2 vp2 = shapeToExtrude->getPoints()[j];
+			Ogre::Vector2 vp2direction = shapeToExtrude->getPoints()[std::min(j+1, numSegShape-1)]-shapeToExtrude->getPoints()[std::min(j, numSegShape-2)];
+			Ogre::Vector2 vp2normal = vp2direction.perpendicular();
 			Ogre::Vector3 vp(vp2.x, vp2.y, 0);
+			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);
+			normal.normalise();
 
-			manual->position(v0+vp);
-			manual->normal(vp.normalisedCopy());
-			manual->textureCoord(i/(Ogre::Real)numSegCircle*uTile, j/(Ogre::Real)numSegSection*vTile);
+			manual->position(v0+q*vp);
+			manual->normal(q*normal);
+			manual->textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
 
-			if (i != numSegCircle)
+			if (j <numSegShape-1 && i <numSegPath-1)
 			{
-				manual->index(offset + numSegSection + 1);
-				manual->index(offset + numSegSection);
+				manual->index(offset + numSegShape + 1);				
 				manual->index(offset);
-				manual->index(offset + numSegSection + 1);
-				manual->index(offset);
+				manual->index(offset + numSegShape);
+				manual->index(offset + numSegShape + 1);				
 				manual->index(offset + 1);
+				manual->index(offset);
 			}
 			offset ++;
 		}

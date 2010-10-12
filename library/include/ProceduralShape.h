@@ -43,15 +43,28 @@ public:
 		return *this;
 	}
 
+	Shape& addPoint(float x, float y)
+	{
+		points.push_back(Ogre::Vector2(x, y));
+		return *this;
+	}
+	
 	Shape& reset()
 	{
-		//points.erase();
+		points.clear();
 		return *this;
 	}
 
 	std::vector<Ogre::Vector2> getPoints()
 	{
 		return points;
+	}
+
+	Shape& close()
+	{
+		assert(points.size()>0 && "Cannot close an empty shape");
+		points.push_back(points[0]);
+		return *this;
 	}
 };
 

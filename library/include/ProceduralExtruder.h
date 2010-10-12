@@ -44,6 +44,18 @@ public:
 	{}
 
 	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+
+	inline Extruder & setShapeToExtrude(Shape* shapeToExtrude)
+	{
+		this->shapeToExtrude = shapeToExtrude;
+		return *this;
+	}
+
+	inline Extruder & setExtrusionPath(Path* extrusionPath)
+	{
+		this->extrusionPath = extrusionPath;
+		return *this;
+	}
 };
 }
 

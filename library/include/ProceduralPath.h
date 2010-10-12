@@ -42,9 +42,22 @@ public:
 		return *this;
 	}
 
+	Path& addPoint(float x, float y, float z)
+	{
+		pointVec.push_back(Ogre::Vector3(x,y,z));
+		return *this;
+	}
+
 	Path& reset()
 	{
-		//pointVec.erase();
+		pointVec.clear();
+		return *this;
+	}
+
+	Path& close()
+	{
+		assert(pointVec.size()>0 && "Cannot close an empty path");
+		pointVec.push_back(pointVec[0]);
 		return *this;
 	}
 
