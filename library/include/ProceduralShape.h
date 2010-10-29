@@ -36,7 +36,7 @@ namespace Procedural
 class _ProceduralExport Shape
 {
 	std::vector<Ogre::Vector2> points;
-	boolean isClosed;
+	bool isClosed;
 
 public:
 	Shape() : isClosed(false) {}
@@ -52,10 +52,10 @@ public:
 		points.push_back(Ogre::Vector2(x, y));
 		return *this;
 	}
-	
+
 	Shape& reset()
 	{
-		points.clear();		
+		points.clear();
 		return *this;
 	}
 
@@ -63,12 +63,12 @@ public:
 	{
 		return points;
 	}
-	
+
 	const Ogre::Vector2& getPoint(int i)
 	{
 		return points[i];
 	}
-	
+
 	const Ogre::Vector2& safeGetPoint(int i)
 	{
 		if (isClosed)
@@ -82,12 +82,12 @@ public:
 		isClosed = true;
 		return *this;
 	}
-	
+
 	int getSegCount()
-	{	
+	{
 		return (points.size()-1) + isClosed?1:0;
 	}
-	
+
 	/**
 	 * Returns local direction, being point[i+1]-point[i]
 	 */
@@ -98,7 +98,7 @@ public:
 		if (!isClosed && i == points.size()-1 && i>0)
 			return points[i] - points[i-1];
 		else
-			return safeGetPoint(i+1) - safeGetPoint(i);		
+			return safeGetPoint(i+1) - safeGetPoint(i);
 	}
 };
 
@@ -109,9 +109,9 @@ public:
 class _ProceduralExport BezierShape
 {
 	std::vector<Ogre::Vector2> points;
-	
+
 	int numSeg;
-	boolean isClosed;
+	bool isClosed;
 public:
 	BezierShape() : numSeg(4), isClosed(false) {}
 
@@ -126,51 +126,51 @@ public:
 		points.clear();
 		return *this;
 	}
-	
+
 	BezierShape& close()
 	{
-		isClosed = true;		
+		isClosed = true;
 		return *this;
 	}
-	
+
 	BezierShape& setNumSeg(int numSeg)
 	{
 		assert(numSeg>=1);
 		this->numSeg = numSeg;
 		return *this;
 	}
-	
+
 	const Ogre::Vector2& getPoint(int i)
 	{
 		return points[i];
 	}
-	
+
 	const Ogre::Vector2& safeGetPoint(int i)
 	{
 		if (isClosed)
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
 	}
-	
+
 	/**
 	 * Build a shape from bezier shape
 	 */
 	Shape realizeShape()
 	{
 		Shape shape;
-		
+
 		for (int i=0;i<points.size();i++)
 		{
 			const Ogre::Vector2& P0 = points[i];
-			const Ogre::Vector2& P3 = safeGetPoint(i+1);			
-			
+			const Ogre::Vector2& P3 = safeGetPoint(i+1);
+
 			Ogre::Vector2 P1 = P0 + 0.5 * (safeGetPoint(i+1)-safeGetPoint(i-1));
 			Ogre::Vector2 P2 = P3 + 0.5 * (safeGetPoint(i+2)-P0);
-			
+
 			for (int j=0;j<numSeg;j++)
 			{
 				float t = (float)j/(float)numSeg;
-				Ogre::Vector2 P = pow(1-t,3)*P0 + 3*sqr(1-t)*t*P1 + 3*(1-t)*sqr(t)*P2 + pow(t,3)*P3;
+				Ogre::Vector2 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;
 				shape.addPoint(P);
 			}
 			if (i==points.size()-1 && !isClosed)
@@ -180,7 +180,7 @@ public:
 		}
 		if (isClosed)
 			shape.close();
-		
+
 		return shape;
 	}
 };

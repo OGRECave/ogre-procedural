@@ -36,7 +36,7 @@ namespace Procedural
 class _ProceduralExport Path
 {
 	std::vector<Ogre::Vector3> points;
-	boolean isClosed;
+	bool isClosed;
 public:
 	Path& addPoint(const Ogre::Vector3& pt)
 	{
@@ -67,7 +67,7 @@ public:
 	{
 		return points;
 	}
-	
+
 	const Ogre::Vector3& getPoint(int i)
 	{
 		return points[i];
@@ -79,12 +79,12 @@ public:
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
 	}
-	
+
 	int getSegCount()
-	{	
+	{
 		return (points.size()-1) + isClosed?1:0;
 	}
-	
+
 	/**
 	 * Returns local direction, being point[i+1]-point[i]
 	 */
@@ -95,7 +95,7 @@ public:
 		if (!isClosed && i == points.size()-1 && i>0)
 			return points[i] - points[i-1];
 		else
-			return safeGetPoint(i+1) - safeGetPoint(i);		
+			return safeGetPoint(i+1) - safeGetPoint(i);
 	}
 };
 }

@@ -35,7 +35,7 @@ void CylinderGenerator::addToManualObject(Ogre::ManualObject* manual, int& offse
 {
 	assert(height>0. && radius>0. && "Height and radius must be positive");
 	assert(numSegBase>0 && numSegHeight>0 && "Num seg must be positive integers");
-	
+
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 
@@ -106,7 +106,7 @@ void CylinderGenerator::addToManualObject(Ogre::ManualObject* manual, int& offse
 		}
 	}
 
-	boundingRadius = Utils::max(radius, height);
+	boundingRadius = std::max(radius, height);
 	aabb = Ogre::AxisAlignedBox(-radius,0,-radius,radius, height, radius);
 }
 }
