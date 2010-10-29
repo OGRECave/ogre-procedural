@@ -31,33 +31,24 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Holds a bunch of static utility functions
+ */
 class Utils
 {
 
 	static int counter;
 public:
-	template <typename T> static const T& min(const T& t1, const T& t2)
-	{
-		return (t1<t2)?t1:t2;
-	}
-
-	template <typename T> static const T& max(const T& t1, const T& t2)
-	{
-		return (t1<t2)?t2:t1;
-	}
-
 
 	static Ogre::Vector3 min(const Ogre::Vector3& v1, const Ogre::Vector3& v2)
 	{
-		return Ogre::Vector3(Utils::min(v1.x, v2.x), min(v1.y, v2.y), min(v1.z, v2.z));
+		return Ogre::Vector3(std::min(v1.x, v2.x), std::min(v1.y, v2.y), std::min(v1.z, v2.z));
 	}
 
 	static Ogre::Vector3 max(const Ogre::Vector3& v1, const Ogre::Vector3& v2)
 	{
-		return Ogre::Vector3(max(v1.x, v2.x), max(v1.y, v2.y), max(v1.z, v2.z));
+		return Ogre::Vector3(std::max(v1.x, v2.x), std::max(v1.y, v2.y), std::max(v1.z, v2.z));
 	}
-
-
 
 	static void updateAABB(Ogre::AxisAlignedBox& aabb, const Ogre::AxisAlignedBox& newAABB)
 	{
@@ -71,14 +62,31 @@ public:
 		return prefix;
 	}
 
-	static Ogre::Vector3 vectorPermute(const Ogre::Vector3 in)
+	static Ogre::Vector3 vectorPermute(const Ogre::Vector3& in)
 	{
 		return Ogre::Vector3(in.z, in.x, in.y);
 	}
 
-	static Ogre::Vector3 vectorAntiPermute(const Ogre::Vector3 in)
+	static Ogre::Vector3 vectorAntiPermute(const Ogre::Vector3& in)
 	{
 		return Ogre::Vector3(in.y, in.z, in.x);
+	}
+	
+	static int cap(int n, int min, int max)
+	{
+		return std::max(std::min(n,max),min);
+	}
+	
+	/**
+	 * An extend version of the standard modulo, in that int values are "wrapped" 
+	 * in both directions, whereas with standard modulo, (-1)%2 == -1
+	 * Always return an int between 0 and cap-1
+	 */
+	static int modulo(int n, int cap)
+	{
+		if (n>=0)
+			return n%cap;
+		return (cap-1)-((1-n)%cap);
 	}
 };
 }

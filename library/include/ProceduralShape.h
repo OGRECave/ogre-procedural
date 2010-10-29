@@ -29,14 +29,18 @@ THE SOFTWARE.
 #define PROCEDURAL_SHAPE_INCLUDED
 #include "OgreVector2.h"
 #include "ProceduralPlatform.h"
+#include "ProceduralUtils.h"
 
 namespace Procedural
 {
 class _ProceduralExport Shape
 {
 	std::vector<Ogre::Vector2> points;
+	boolean isClosed;
 
 public:
+	Shape() : isClosed(false) {}
+
 	Shape& addPoint(const Ogre::Vector2& pt)
 	{
 		points.push_back(pt);
@@ -51,7 +55,7 @@ public:
 	
 	Shape& reset()
 	{
-		points.clear();
+		points.clear();		
 		return *this;
 	}
 
@@ -59,11 +63,23 @@ public:
 	{
 		return points;
 	}
+	
+	const Ogre::Vector2& getPoint(int i)
+	{
+		return points[i];
+	}
+	
+	const Ogre::Vector2& safeGetPoint(int i)
+	{
+		if (isClosed)
+			return points[Utils::modulo(i,points.size())];
+		return points[Utils::cap(i,0,points.size()-1)];
+	}
 
 	Shape& close()
 	{
 		assert(points.size()>0 && "Cannot close an empty shape");
-		points.push_back(points[0]);
+		isClosed = true;
 		return *this;
 	}
 };
@@ -71,7 +87,12 @@ public:
 class _ProceduralExport BezierShape
 {
 	std::vector<Ogre::Vector2> bezierPoints;
+	
+	int numSeg;
+	boolean isClosed;
 public:
+	BezierShape() : numSeg(4), isClosed(false) {}
+
 	BezierShape& addPoint(const Ogre::Vector2& pt)
 	{
 		bezierPoints.push_back(pt);
@@ -80,14 +101,56 @@ public:
 
 	BezierShape& reset()
 	{
-		//bezierPoints.erase();
+		bezierPoints.clear();
 		return *this;
 	}
-
-	Shape* realizeShape()
+	
+	BezierShape& close()
 	{
-		//TODO
-		return 0;
+		isClosed = true;		
+		return *this;
+	}
+	
+	BezierShape& setNumSeg(int numSeg)
+	{
+		assert(numSeg>=1);
+		this->numSeg = numSeg;
+		return *this;
+	}
+	
+	const Ogre::Vector2& getPoint(int i)
+	{
+		return bezierPoints[i];
+	}
+	
+	const Ogre::Vector2& safeGetPoint(int i)
+	{
+		if (isClosed)
+			return bezierPoints[Utils::modulo(i,bezierPoints.size())];
+		return bezierPoints[Utils::cap(i,0,bezierPoints.size()-1)];
+	}
+	
+	Shape realizeShape()
+	{
+		Shape shape;
+		
+		for (int i=0;i<bezierPoints.size();i++)
+		{
+			const Ogre::Vector2& P0 = bezierPoints[i];
+			const Ogre::Vector2& P3 = safeGetPoint(i+1);			
+			
+			Ogre::Vector2 P1 = 2 * P0 - safeGetPoint(i-1);
+			Ogre::Vector2 P2 = 2 * P3 - safeGetPoint(i+1);
+			
+			for (int j=0;j<=numSeg;j++)
+			{
+				float t = (float)j/(float)numSeg;
+				Ogre::Vector2 P = pow(1-t,3)*P0 + 3*sqr(1-t)*t*P1 + 3*(1-t)*sqr(t)*P2 + pow(t,3)*P3;
+				shape.addPoint(P);
+			}
+		}
+		
+		return shape;
 	}
 };
 }

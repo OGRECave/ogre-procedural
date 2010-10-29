@@ -28,13 +28,15 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_PATH_INCLUDED
 #define PROCEDURAL_PATH_INCLUDED
 #include "OgreVector3.h"
+#include "ProceduralUtils.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
 class _ProceduralExport Path
 {
 	std::vector<Ogre::Vector3> pointVec;
-
+	boolean isClosed;
 public:
 	Path& addPoint(const Ogre::Vector3& pt)
 	{
@@ -57,13 +59,30 @@ public:
 	Path& close()
 	{
 		assert(pointVec.size()>0 && "Cannot close an empty path");
-		pointVec.push_back(pointVec[0]);
+		isClosed = true;
 		return *this;
 	}
 
 	std::vector<Ogre::Vector3> getPoints()
 	{
 		return pointVec;
+	}
+	
+	const Ogre::Vector3& getPoint(int i)
+	{
+		return pointVec[i];
+	}
+
+	const Ogre::Vector3& safeGetPoint(int i)
+	{
+		if (isClosed)
+			return pointVec[Utils::modulo(i,pointVec.size())];
+		return pointVec[Utils::cap(i,0,pointVec.size()-1)];
+	}
+	
+	int getPointCount()
+	{	
+		return pointVec.size() + isClosed?1:0;
 	}
 };
 }
