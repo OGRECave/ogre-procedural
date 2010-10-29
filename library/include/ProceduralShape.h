@@ -82,11 +82,33 @@ public:
 		isClosed = true;
 		return *this;
 	}
+	
+	int getSegCount()
+	{	
+		return (points.size()-1) + isClosed?1:0;
+	}
+	
+	/**
+	 * Returns local direction, being point[i+1]-point[i]
+	 */
+	Ogre::Vector2 getDirection(int i)
+	{
+		// If the shape isn't closed, we get a different calculation at the end, because
+		// the tangent shall not be null
+		if (!isClosed && i == points.size()-1 && i>0)
+			return points[i] - points[i-1];
+		else
+			return safeGetPoint(i+1) - safeGetPoint(i);		
+	}
 };
 
+/**
+ * Enables to build a shape from Bezier control points.
+ * Tangents are automatically calculated from control points, so the curve will "touch" every point you define
+ */
 class _ProceduralExport BezierShape
 {
-	std::vector<Ogre::Vector2> bezierPoints;
+	std::vector<Ogre::Vector2> points;
 	
 	int numSeg;
 	boolean isClosed;
@@ -95,13 +117,13 @@ public:
 
 	BezierShape& addPoint(const Ogre::Vector2& pt)
 	{
-		bezierPoints.push_back(pt);
+		points.push_back(pt);
 		return *this;
 	}
 
 	BezierShape& reset()
 	{
-		bezierPoints.clear();
+		points.clear();
 		return *this;
 	}
 	
@@ -120,35 +142,44 @@ public:
 	
 	const Ogre::Vector2& getPoint(int i)
 	{
-		return bezierPoints[i];
+		return points[i];
 	}
 	
 	const Ogre::Vector2& safeGetPoint(int i)
 	{
 		if (isClosed)
-			return bezierPoints[Utils::modulo(i,bezierPoints.size())];
-		return bezierPoints[Utils::cap(i,0,bezierPoints.size()-1)];
+			return points[Utils::modulo(i,points.size())];
+		return points[Utils::cap(i,0,points.size()-1)];
 	}
 	
+	/**
+	 * Build a shape from bezier shape
+	 */
 	Shape realizeShape()
 	{
 		Shape shape;
 		
-		for (int i=0;i<bezierPoints.size();i++)
+		for (int i=0;i<points.size();i++)
 		{
-			const Ogre::Vector2& P0 = bezierPoints[i];
+			const Ogre::Vector2& P0 = points[i];
 			const Ogre::Vector2& P3 = safeGetPoint(i+1);			
 			
-			Ogre::Vector2 P1 = 2 * P0 - safeGetPoint(i-1);
-			Ogre::Vector2 P2 = 2 * P3 - safeGetPoint(i+1);
+			Ogre::Vector2 P1 = P0 + 0.5 * (safeGetPoint(i+1)-safeGetPoint(i-1));
+			Ogre::Vector2 P2 = P3 + 0.5 * (safeGetPoint(i+2)-P0);
 			
-			for (int j=0;j<=numSeg;j++)
+			for (int j=0;j<numSeg;j++)
 			{
 				float t = (float)j/(float)numSeg;
 				Ogre::Vector2 P = pow(1-t,3)*P0 + 3*sqr(1-t)*t*P1 + 3*(1-t)*sqr(t)*P2 + pow(t,3)*P3;
 				shape.addPoint(P);
 			}
+			if (i==points.size()-1 && !isClosed)
+			{
+				shape.addPoint(P3);
+			}
 		}
+		if (isClosed)
+			shape.close();
 		
 		return shape;
 	}

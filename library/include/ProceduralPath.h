@@ -35,54 +35,67 @@ namespace Procedural
 {
 class _ProceduralExport Path
 {
-	std::vector<Ogre::Vector3> pointVec;
+	std::vector<Ogre::Vector3> points;
 	boolean isClosed;
 public:
 	Path& addPoint(const Ogre::Vector3& pt)
 	{
-		pointVec.push_back(pt);
+		points.push_back(pt);
 		return *this;
 	}
 
 	Path& addPoint(float x, float y, float z)
 	{
-		pointVec.push_back(Ogre::Vector3(x,y,z));
+		points.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
 
 	Path& reset()
 	{
-		pointVec.clear();
+		points.clear();
 		return *this;
 	}
 
 	Path& close()
 	{
-		assert(pointVec.size()>0 && "Cannot close an empty path");
+		assert(points.size()>0 && "Cannot close an empty path");
 		isClosed = true;
 		return *this;
 	}
 
 	std::vector<Ogre::Vector3> getPoints()
 	{
-		return pointVec;
+		return points;
 	}
 	
 	const Ogre::Vector3& getPoint(int i)
 	{
-		return pointVec[i];
+		return points[i];
 	}
 
 	const Ogre::Vector3& safeGetPoint(int i)
 	{
 		if (isClosed)
-			return pointVec[Utils::modulo(i,pointVec.size())];
-		return pointVec[Utils::cap(i,0,pointVec.size()-1)];
+			return points[Utils::modulo(i,points.size())];
+		return points[Utils::cap(i,0,points.size()-1)];
 	}
 	
-	int getPointCount()
+	int getSegCount()
 	{	
-		return pointVec.size() + isClosed?1:0;
+		return (points.size()-1) + isClosed?1:0;
+	}
+	
+	/**
+	 * Returns local direction, being point[i+1]-point[i]
+	 */
+	Ogre::Vector3 getDirection(int i)
+	{
+		// If the path isn't closed, we get a different calculation at the end, because
+		// the tangent shall not be null
+		if (!isClosed && i == points.size()-1 && i>0)
+			return points[i] - points[i-1];
+		else
+			return safeGetPoint(i+1) - safeGetPoint(i);		
 	}
 };
 }

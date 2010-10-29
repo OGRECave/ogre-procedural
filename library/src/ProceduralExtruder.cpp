@@ -32,15 +32,15 @@ namespace Procedural
 	void Extruder::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)	
 	{
 		assert(extrusionPath && shapeToExtrude && "Shape and Path must not be null!");
-		int numSegPath = extrusionPath->getPoints().size();
-		int numSegShape = shapeToExtrude->getPoints().size();
+		int numSegPath = extrusionPath->getSegCount();
+		int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegPath>1 && numSegShape>1 && "Shape and path must contain at least two points");		
 
 	for (int i = 0; i < numSegPath;i++)
 	{
-		Ogre::Vector3 v0(extrusionPath->getPoints()[i]);
-
-		Ogre::Vector3 direction((extrusionPath->getPoints()[std::min(i+1, numSegPath-1)]-extrusionPath->getPoints()[std::min(i, numSegPath-2)]).normalisedCopy());
+		const Ogre::Vector3& v0 = extrusionPath->getPoint(i);
+		
+		Ogre::Vector3 direction = extrusionPath->getDirection(i);
 				
 		// First, compute an approximate quaternion (everything is ok except Roll angle)
 		Ogre::Quaternion quat = Ogre::Vector3::UNIT_Z.getRotationTo(direction);
@@ -53,7 +53,7 @@ namespace Procedural
 		for (int j =0;j<numSegShape;j++)
 		{
 			Ogre::Vector2 vp2 = shapeToExtrude->getPoints()[j];
-			Ogre::Vector2 vp2direction = shapeToExtrude->getPoints()[std::min(j+1, numSegShape-1)]-shapeToExtrude->getPoints()[std::min(j, numSegShape-2)];
+			Ogre::Vector2 vp2direction = shapeToExtrude->getDirection(j);
 			Ogre::Vector2 vp2normal = vp2direction.perpendicular();
 			Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);
