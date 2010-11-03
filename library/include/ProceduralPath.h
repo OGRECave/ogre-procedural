@@ -82,7 +82,7 @@ public:
 
 	int getSegCount()
 	{
-		return (points.size()-1) + isClosed?1:0;
+		return (points.size()-1) + (isClosed?1:0);
 	}
 
 	/**
