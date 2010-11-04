@@ -71,14 +71,14 @@ public:
 	{
 		return Ogre::Vector3(in.y, in.z, in.x);
 	}
-	
+
 	static int cap(int n, int min, int max)
 	{
 		return std::max(std::min(n,max),min);
 	}
-	
+
 	/**
-	 * An extend version of the standard modulo, in that int values are "wrapped" 
+	 * An extend version of the standard modulo, in that int values are "wrapped"
 	 * in both directions, whereas with standard modulo, (-1)%2 == -1
 	 * Always return an int between 0 and cap-1
 	 */
@@ -86,7 +86,7 @@ public:
 	{
 		if (n>=0)
 			return n%cap;
-		return (cap-1)-((1-n)%cap);
+		return (cap-1)-((1+n)%cap);
 	}
 };
 }

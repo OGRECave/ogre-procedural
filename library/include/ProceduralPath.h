@@ -70,11 +70,6 @@ public:
 
 	const Ogre::Vector3& getPoint(int i)
 	{
-		return points[i];
-	}
-
-	const Ogre::Vector3& safeGetPoint(int i)
-	{
 		if (isClosed)
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
@@ -86,17 +81,37 @@ public:
 	}
 
 	/**
-	 * Returns local direction, being point[i+1]-point[i]
+	 * Returns local direction after the current point
 	 */
-	Ogre::Vector3 getDirection(int i)
+	Ogre::Vector3 getDirectionAfter(int i)
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
 		if (!isClosed && i == points.size()-1 && i>0)
-			return points[i] - points[i-1];
+			return (points[i] - points[i-1]).normalisedCopy();
 		else
-			return safeGetPoint(i+1) - safeGetPoint(i);
+			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
 	}
+
+	/**
+	 * Returns local direction after the current point
+	 */
+	Ogre::Vector3 getDirectionBefore(int i)
+	{
+		// If the path isn't closed, we get a different calculation at the end, because
+		// the tangent shall not be null
+		if (!isClosed && i == 1)
+			return (points[1] - points[0]).normalisedCopy();
+		else
+			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
+	}
+
+	Ogre::Vector3 getAvgDirection(int i)
+	{
+	    return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
+
+	}
+
 };
 }
 

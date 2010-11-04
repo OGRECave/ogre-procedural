@@ -30,13 +30,13 @@ THE SOFTWARE.
 
 //-------------------------------------------------------------------------------------
 void Sample_Extrusion::createScene(void)
-{		
+{
 		// Setup Procedural root (crappy init method, have to find another one)
 		Procedural::Root::getInstance()->sceneManager = mSceneMgr;
 		// Test primitive generation
 		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 		putMesh2("planeMesh");
-		Procedural::Path p = Procedural::Path().addPoint(0,0,0).addPoint(0,0,10).addPoint(10,0,10).addPoint(20,0,0);
+		Procedural::Path p = Procedural::Path().addPoint(0,5,0).addPoint(0,4,10).addPoint(10,5,10).addPoint(20,3,0).close();
 		Procedural::Shape s = Procedural::Shape().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close();
 		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("extrudedMesh");
 		putMesh("extrudedMesh");
@@ -60,7 +60,7 @@ void Sample_Extrusion::createCamera(void)
 	l->setDirection(Vector3(0,-1,1).normalisedCopy());
 	l->setDiffuseColour(ColourValue(.7,.5,.5));
 	l->setSpecularColour(ColourValue::White);
-		
+
 	movingLight = mSceneMgr->createLight("movingLight");
 	movingLight->setType(Light::LT_POINT);
 	movingLight->setDiffuseColour(ColourValue(.5,.5,.7));

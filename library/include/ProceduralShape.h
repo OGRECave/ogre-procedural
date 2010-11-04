@@ -66,11 +66,6 @@ public:
 
 	const Ogre::Vector2& getPoint(int i)
 	{
-		return points[i];
-	}
-
-	const Ogre::Vector2& safeGetPoint(int i)
-	{
 		if (isClosed)
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
@@ -98,7 +93,7 @@ public:
 		if (!isClosed && i == points.size()-1 && i>0)
 			return points[i] - points[i-1];
 		else
-			return safeGetPoint(i+1) - safeGetPoint(i);
+			return getPoint(i+1) - getPoint(i);
 	}
 };
 
