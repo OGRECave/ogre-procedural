@@ -113,6 +113,90 @@ public:
 	}
 
 };
+
+/**
+ * Enables to build a Path from Bezier control points.
+ * Tangents are automatically calculated from control points, so the curve will "touch" every point you define
+ */
+class _ProceduralExport BezierPath
+{
+	std::vector<Ogre::Vector3> points;
+
+	int numSeg;
+	bool isClosed;
+public:
+	BezierPath() : numSeg(4), isClosed(false) {}
+
+	BezierPath& addPoint(const Ogre::Vector3& pt)
+	{
+		points.push_back(pt);
+		return *this;
+	}
+
+	BezierPath& addPoint(float x, float y, float z)
+	{
+	    points.push_back(Ogre::Vector3(x,y,z));
+	    return *this;
+	}
+
+	BezierPath& reset()
+	{
+		points.clear();
+		return *this;
+	}
+
+	BezierPath& close()
+	{
+		isClosed = true;
+		return *this;
+	}
+
+	BezierPath& setNumSeg(int numSeg)
+	{
+		assert(numSeg>=1);
+		this->numSeg = numSeg;
+		return *this;
+	}
+
+	const Ogre::Vector3& getPoint(int i)
+	{
+		if (isClosed)
+			return points[Utils::modulo(i,points.size())];
+		return points[Utils::cap(i,0,points.size()-1)];
+	}
+
+	/**
+	 * Build a shape from bezier shape
+	 */
+	Path realizePath()
+	{
+		Path path;
+
+		for (int i=0;i<points.size();i++)
+		{
+			const Ogre::Vector3& P0 = points[i];
+			const Ogre::Vector3& P3 = getPoint(i+1);
+
+			Ogre::Vector3 P1 = P0 + 0.5 * (getPoint(i+1)-getPoint(i-1));
+			Ogre::Vector3 P2 = P3 - 0.5 * (getPoint(i+2)-P0);
+
+			for (int j=0;j<numSeg;j++)
+			{
+				float t = (float)j/(float)numSeg;
+				Ogre::Vector3 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;
+				path.addPoint(P);
+			}
+			if (i==points.size()-1 && !isClosed)
+			{
+				path.addPoint(P3);
+			}
+		}
+		if (isClosed)
+			path.close();
+
+		return path;
+	}
+};
 }
 
 #endif

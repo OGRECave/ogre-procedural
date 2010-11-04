@@ -83,18 +83,39 @@ public:
 		return (points.size()-1) + (isClosed?1:0);
 	}
 
+
 	/**
-	 * Returns local direction, being point[i+1]-point[i]
+	 * Returns local direction after the current point
 	 */
-	Ogre::Vector2 getDirection(int i)
+	Ogre::Vector2 getDirectionAfter(int i)
 	{
-		// If the shape isn't closed, we get a different calculation at the end, because
+		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
 		if (!isClosed && i == points.size()-1 && i>0)
-			return points[i] - points[i-1];
+			return (points[i] - points[i-1]).normalisedCopy();
 		else
-			return getPoint(i+1) - getPoint(i);
+			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
 	}
+
+	/**
+	 * Returns local direction after the current point
+	 */
+	Ogre::Vector2 getDirectionBefore(int i)
+	{
+		// If the path isn't closed, we get a different calculation at the end, because
+		// the tangent shall not be null
+		if (!isClosed && i == 1)
+			return (points[1] - points[0]).normalisedCopy();
+		else
+			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
+	}
+
+	Ogre::Vector2 getAvgDirection(int i)
+	{
+	    return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
+
+	}
+
 };
 
 /**
@@ -114,6 +135,12 @@ public:
 	{
 		points.push_back(pt);
 		return *this;
+	}
+
+	BezierShape& addPoint(float x, float y)
+	{
+	    points.push_back(Ogre::Vector2(x,y));
+	    return *this;
 	}
 
 	BezierShape& reset()
@@ -160,7 +187,7 @@ public:
 			const Ogre::Vector2& P3 = safeGetPoint(i+1);
 
 			Ogre::Vector2 P1 = P0 + 0.5 * (safeGetPoint(i+1)-safeGetPoint(i-1));
-			Ogre::Vector2 P2 = P3 + 0.5 * (safeGetPoint(i+2)-P0);
+			Ogre::Vector2 P2 = P3 - 0.5 * (safeGetPoint(i+2)-P0);
 
 			for (int j=0;j<numSeg;j++)
 			{

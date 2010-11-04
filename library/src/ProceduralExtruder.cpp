@@ -53,7 +53,7 @@ namespace Procedural
 		for (int j =0;j<=numSegShape;j++)
 		{
 			Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
-			Ogre::Vector2 vp2direction = shapeToExtrude->getDirection(j);
+			Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
 			Ogre::Vector2 vp2normal = vp2direction.perpendicular();
 			Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);
