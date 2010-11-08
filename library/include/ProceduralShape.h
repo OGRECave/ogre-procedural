@@ -206,6 +206,70 @@ public:
 		return shape;
 	}
 };
+
+class _ProceduralExport RectangleShape
+{
+	float width,height;
+	
+	public:
+	RectangleShape() : width(1.0), height(1.0) {}
+	
+	RectangleShape& setWidth(float width)
+	{
+		this->width = width;
+		return *this;
+	}
+	
+	RectangleShape& setHeight(float height)
+	{
+		this->height = height;
+		return *this;
+	}
+	
+	Shape realizeShape()
+	{
+		Shape s;
+		s.addPoint(-.5*width,-.5*height)
+		 .addPoint(.5*width,-.5*height)
+		 .addPoint(.5*width,.5*height)
+		 .addPoint(-.5*width,.5*height)
+		 .close();		
+		return shape;
+	}
+};
+
+class _ProceduralExport CircleShape
+{
+	float radius;
+	int numSeg;
+	
+	public:
+	CircleShape() : radius(1.0), numSeg(8) {}
+	
+	CircleShape& setRadius(float radius)
+	{
+		this->radius = radius;
+		return *this;
+	}
+	
+	CircleShape& setNumSeg(int numSeg)
+	{
+		this->numSeg = numSeg;
+		return *this;
+	}
+	
+	Shape realizeShape()
+	{
+		Shape s;
+		float deltaAngle = Ogre::Math::TWO_PI/(float)numSeg;
+		for (int i=0;i<numSeg;i++)
+		{
+			s.addPoint(radius*cosf(i*deltaAngle), radius*sinf(i*deltaAngle));
+		}
+		s.close();
+		return s;
+	}
+};
 }
 
 #endif
