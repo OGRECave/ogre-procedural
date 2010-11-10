@@ -2,10 +2,9 @@ cmake_minimum_required(VERSION 2.6)
 
 project(PROCEDURAL)
 
-set(OGRE_DIR $ENV{OGRE_HOME})
-STRING(REGEX REPLACE "\\\\" "/" OGRE_DIR ${OGRE_DIR}) 
-
 if(WIN32)
+	set(OGRE_DIR $ENV{OGRE_HOME})
+	STRING(REGEX REPLACE "\\\\" "/" OGRE_DIR ${OGRE_DIR}) 
 	set(CMAKE_MODULE_PATH "${OGRE_DIR}/CMake/;${CMAKE_MODULE_PATH}")
 	set(OGRE_SAMPLES_INCLUDEPATH
 		$ENV{OGRE_HOME}/Samples/common/include/
@@ -37,10 +36,6 @@ if (WIN32 OR APPLE)
 endif(WIN32 OR APPLE)
 
 find_package(OGRE REQUIRED)
-
-if(NOT "${OGRE_VERSION_NAME}" STREQUAL "Cthugha")
-  message(SEND_ERROR "You need Ogre 1.7 Cthugha to build this.")
-endif()
 
 option(PROCEDURAL_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 
