@@ -27,7 +27,8 @@ THE SOFTWARE.
 */
 #ifndef PROCEDURAL_UTILS_INCLUDED
 #define PROCEDURAL_UTILS_INCLUDED
-#include "Ogre.h"
+#include "OgreVector3.h"
+#include "OgreAxisAlignedBox.h"
 
 namespace Procedural
 {

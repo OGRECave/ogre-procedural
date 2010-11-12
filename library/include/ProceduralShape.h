@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 #ifndef PROCEDURAL_SHAPE_INCLUDED
 #define PROCEDURAL_SHAPE_INCLUDED
+
 #include "OgreVector2.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralUtils.h"

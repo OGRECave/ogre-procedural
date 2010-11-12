@@ -28,7 +28,6 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_CYLINDER_GENERATOR_INCLUDED
 #define PROCEDURAL_CYLINDER_GENERATOR_INCLUDED
 
-#include "Ogre.h"
 #include "ProceduralMeshGenerator.h"
 #include "ProceduralPlatform.h"
 

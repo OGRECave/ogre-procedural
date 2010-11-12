@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 #ifndef PROCEDURAL_ICOSPHERE_GENERATOR_INCLUDED
 #define PROCEDURAL_ICOSPHERE_GENERATOR_INCLUDED
-#include "Ogre.h"
+
 #include "ProceduralMeshGenerator.h"
 #include "ProceduralPlatform.h"
 

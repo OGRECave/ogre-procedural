@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 #ifndef PROCEDURAL_PATH_INCLUDED
 #define PROCEDURAL_PATH_INCLUDED
+
 #include "OgreVector3.h"
 #include "ProceduralUtils.h"
 #include "ProceduralPlatform.h"
