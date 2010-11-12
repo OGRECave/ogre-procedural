@@ -25,24 +25,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_H_INCLUDED
-#define PROCEDURAL_H_INCLUDED
+#ifndef PROCEDURAL_LATHE_INCLUDED
+#define PROCEDURAL_LATHE_INCLUDED
 
-#include "ProceduralBoxGenerator.h"
-#include "ProceduralCapsuleGenerator.h"
-#include "ProceduralConeGenerator.h"
-#include "ProceduralCylinderGenerator.h"
-#include "ProceduralIcoSphereGenerator.h"
-#include "ProceduralRoundedBoxGenerator.h"
-#include "ProceduralSphereGenerator.h"
-#include "ProceduralTorusGenerator.h"
-#include "ProceduralTorusKnotGenerator.h"
-#include "ProceduralTubeGenerator.h"
-#include "ProceduralPlaneGenerator.h"
-#include "ProceduralRoot.h"
-#include "ProceduralExtruder.h"
-#include "ProceduralLathe.h"
 #include "ProceduralShape.h"
-#include "ProceduralPath.h"
+#include "ProceduralPlatform.h"
+#include "ProceduralMeshGenerator.h"
+
+namespace Procedural
+{
+class _ProceduralExport Lathe : public MeshGenerator<Lathe>
+{
+	Shape* shapeToExtrude;
+	int numSeg;
+
+public:
+	Lathe() : shapeToExtrude(0), numSeg(16)
+	{}
+
+	inline Lathe& setNumSeg(int numSeg)
+	{
+		this->numSeg = numSeg;
+		return *this;
+	}
+
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+
+	inline Lathe & setShapeToExtrude(Shape* shapeToExtrude)
+	{
+		this->shapeToExtrude = shapeToExtrude;
+		return *this;
+	}
+};
+}
 
 #endif

@@ -25,24 +25,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_H_INCLUDED
-#define PROCEDURAL_H_INCLUDED
-
-#include "ProceduralBoxGenerator.h"
-#include "ProceduralCapsuleGenerator.h"
-#include "ProceduralConeGenerator.h"
-#include "ProceduralCylinderGenerator.h"
-#include "ProceduralIcoSphereGenerator.h"
-#include "ProceduralRoundedBoxGenerator.h"
-#include "ProceduralSphereGenerator.h"
-#include "ProceduralTorusGenerator.h"
-#include "ProceduralTorusKnotGenerator.h"
-#include "ProceduralTubeGenerator.h"
-#include "ProceduralPlaneGenerator.h"
-#include "ProceduralRoot.h"
-#include "ProceduralExtruder.h"
 #include "ProceduralLathe.h"
-#include "ProceduralShape.h"
-#include "ProceduralPath.h"
 
-#endif
+namespace Procedural
+{
+	void Lathe::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+	{
+		assert( shapeToExtrude && "Shape must not be null!");
+		int numSegShape = shapeToExtrude->getSegCount();
+		assert(numSegShape>1 && "Shape must contain at least two points");
+
+		for (int i=0;i<=numSeg;i++)
+		{
+			float angle = i/(float)numSeg*Ogre::Math::TWO_PI;
+			Ogre::Quaternion q;
+			q.FromAngleAxis((Ogre::Radian)angle,Ogre::Vector3::UNIT_Y);
+
+			for (int j=0;j<=numSegShape;j++)
+			{
+				Ogre::Vector2 v0 = shapeToExtrude->getPoint(j);				
+				Ogre::Vector3 vp(v0.x,v0.y,0);				
+				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+				Ogre::Vector2 vp2normal = -vp2direction.perpendicular();		
+				Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);
+				normal.normalise();
+
+				manual->position(q*vp);
+				manual->normal(q*normal);
+				manual->textureCoord(i/(Ogre::Real)numSeg*uTile, j/(Ogre::Real)numSegShape*vTile);
+
+				if (j <numSegShape && i <numSeg)
+				{
+					manual->index(offset + numSegShape + 2);
+					manual->index(offset);
+					manual->index(offset + numSegShape + 1);
+					manual->index(offset + numSegShape + 2);
+					manual->index(offset + 1);
+					manual->index(offset);
+				}
+				offset ++;				
+			}
+		}
+	}
+}
