@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 #ifndef PROCEDURAL_CAPSULE_GENERATOR_INCLUDED
 #define PROCEDURAL_CAPSULE_GENERATOR_INCLUDED
-#include "Ogre.h"
+
 #include "ProceduralMeshGenerator.h"
 #include "ProceduralPlatform.h"
 

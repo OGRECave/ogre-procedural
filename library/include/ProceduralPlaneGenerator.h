@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 #ifndef PROCEDURAL_PLANE_GENERATOR_INCLUDED
 #define PROCEDURAL_PLANE_GENERATOR_INCLUDED
-#include "Ogre.h"
+
 #include "ProceduralMeshGenerator.h"
 #include "ProceduralPlatform.h"
 
