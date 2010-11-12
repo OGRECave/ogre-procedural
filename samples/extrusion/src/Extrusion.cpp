@@ -42,6 +42,12 @@ void Sample_Extrusion::createScene(void)
 		Procedural::Shape s = Procedural::BezierShape().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close().realizeShape();
 		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("extrudedMesh");
 		putMesh("extrudedMesh");
+
+		//Procedural::Shape s2 = Procedural::Shape().addPoint(0,0).addPoint(5,5).addPoint(1,10);
+		Procedural::Shape s2 = Procedural::BezierShape().addPoint(0,0).addPoint(5,5).addPoint(1,10).setNumSeg(8).realizeShape();
+		Procedural::Lathe().setShapeToExtrude(&s2).realizeMesh("lathedMesh");
+		putMesh("lathedMesh");
+		
 }
 
 void Sample_Extrusion::createCamera(void)
