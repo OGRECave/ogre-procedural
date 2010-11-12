@@ -2,22 +2,11 @@ cmake_minimum_required(VERSION 2.6)
 
 project(PROCEDURAL)
 
-if(WIN32)
-	set(OGRE_DIR $ENV{OGRE_HOME})
-	STRING(REGEX REPLACE "\\\\" "/" OGRE_DIR ${OGRE_DIR}) 
-	set(CMAKE_MODULE_PATH "${OGRE_DIR}/CMake/;${CMAKE_MODULE_PATH}")
-	set(OGRE_SAMPLES_INCLUDEPATH
-		$ENV{OGRE_HOME}/Samples/common/include/
-		$ENV{OGRE_HOME}/Samples/browser/include/
-	)
-endif(WIN32)
-
-if(UNIX)
-	set(CMAKE_MODULE_PATH "/usr/local/lib/OGRE/cmake/;${CMAKE_MODULE_PATH}")
-	set(OGRE_SAMPLES_INCLUDEPATH
-		/usr/local/share/OGRE/samples/Common/include/
-	)
-endif(UNIX)
+set(CMAKE_MODULE_PATH 
+  "${PROCEDURAL_SOURCE_DIR}/CMake"
+  "${PROCEDURAL_SOURCE_DIR}/CMake/Utils"
+  "${PROCEDURAL_SOURCE_DIR}/CMake/Packages"
+)
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
