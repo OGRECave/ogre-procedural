@@ -34,13 +34,16 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+enum _ProceduralExport Side {LEFT, RIGHT};
+
 class _ProceduralExport Shape
 {
 	std::vector<Ogre::Vector2> points;
 	bool isClosed;
+	Side outSide;
 
 public:
-	Shape() : isClosed(false) {}
+	Shape() : isClosed(false), outSide(RIGHT) {}
 
 	Shape& addPoint(const Ogre::Vector2& pt)
 	{
@@ -77,6 +80,22 @@ public:
 		assert(points.size()>0 && "Cannot close an empty shape");
 		isClosed = true;
 		return *this;
+	}
+
+	/**
+	 * Sets which side (left or right) is on the outside of the shape.
+	 * It is used for such things as normal generation
+	 * Default is right, which corresponds to placing points anti-clockwise.
+	 */
+	Shape& setOutSide(Side side)
+	{
+		outSide = side;
+		return *this;
+	}
+
+	Side getOutSide()
+	{
+		return outSide;
 	}
 
 	int getSegCount()
@@ -129,8 +148,9 @@ class _ProceduralExport BezierShape
 
 	int numSeg;
 	bool isClosed;
+	Side outSide;
 public:
-	BezierShape() : numSeg(4), isClosed(false) {}
+	BezierShape() : numSeg(4), isClosed(false), outSide(RIGHT) {}
 
 	BezierShape& addPoint(const Ogre::Vector2& pt)
 	{
@@ -154,6 +174,17 @@ public:
 	{
 		isClosed = true;
 		return *this;
+	}
+
+	BezierShape& setOutSide(Side side)
+	{
+		outSide = side;
+		return *this;
+	}
+
+	Side getOutSide()
+	{
+		return outSide;
 	}
 
 	BezierShape& setNumSeg(int numSeg)
@@ -203,6 +234,7 @@ public:
 		}
 		if (isClosed)
 			shape.close();
+		shape.setOutSide(outSide);
 
 		return shape;
 	}
