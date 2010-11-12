@@ -46,9 +46,13 @@ namespace Procedural
 				Ogre::Vector2 v0 = shapeToExtrude->getPoint(j);				
 				Ogre::Vector3 vp(v0.x,v0.y,0);				
 				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
-				Ogre::Vector2 vp2normal = -vp2direction.perpendicular();		
+				Ogre::Vector2 vp2normal = vp2direction.perpendicular();		
 				Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);
 				normal.normalise();
+				if (shapeToExtrude->getOutSide() == Side::LEFT)
+				{
+					normal = -normal;
+				}
 
 				manual->position(q*vp);
 				manual->normal(q*normal);

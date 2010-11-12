@@ -59,6 +59,11 @@ namespace Procedural
 			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);
 			normal.normalise();
 
+			if (shapeToExtrude->getOutSide() == LEFT)
+			{
+				normal = -normal;
+			}
+
 			manual->position(v0+q*vp);
 			manual->normal(q*normal);
 			manual->textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
