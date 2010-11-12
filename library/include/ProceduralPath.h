@@ -198,6 +198,53 @@ public:
 		return path;
 	}
 };
+
+class _ProceduralExport LinePath
+{
+	Ogre::Vector3 point1, point2;
+
+	int numSeg;
+
+public:
+	LinePath() : point1(Ogre::Vector3::ZERO), point2(Ogre::Vector3::UNIT_Y), numSeg(1) {}
+
+	LinePath& setPoint1(Ogre::Vector3 point1)
+	{
+		this->point1 = point1;
+		return *this;
+	}
+
+	LinePath& setPoint2(Ogre::Vector3 point2)
+	{
+		this->point2 = point2;
+		return *this;
+	}
+	
+	LinePath& setNumSeg(int numSeg)
+	{
+		this->numSeg = numSeg;
+		return *this;
+	}
+
+	LinePath& betweenPoints(Ogre::Vector3 point1, Ogre::Vector3 point2)
+	{
+		this->point1 = point1;
+		this->point2 = point2;
+		return *this;
+	}
+
+	Path realizePath()
+	{
+		assert(numSeg>1);
+		Path p;
+		for (int i=0;i<=numSeg;i++)
+		{
+			p.addPoint(i/(float)numSeg * point1 + i/(float)numSeg * point2);
+		}
+		return p;
+	}
+
+};
 }
 
 #endif
