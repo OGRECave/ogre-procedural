@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-enum _ProceduralExport Side {LEFT, RIGHT};
+enum Side {SIDE_LEFT, SIDE_RIGHT};
 
 class _ProceduralExport Shape
 {
@@ -43,7 +43,7 @@ class _ProceduralExport Shape
 	Side outSide;
 
 public:
-	Shape() : isClosed(false), outSide(RIGHT) {}
+	Shape() : isClosed(false), outSide(SIDE_RIGHT) {}
 
 	Shape& addPoint(const Ogre::Vector2& pt)
 	{
@@ -150,7 +150,7 @@ class _ProceduralExport BezierShape
 	bool isClosed;
 	Side outSide;
 public:
-	BezierShape() : numSeg(4), isClosed(false), outSide(RIGHT) {}
+	BezierShape() : numSeg(4), isClosed(false), outSide(SIDE_RIGHT) {}
 
 	BezierShape& addPoint(const Ogre::Vector2& pt)
 	{

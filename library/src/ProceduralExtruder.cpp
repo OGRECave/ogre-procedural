@@ -59,7 +59,7 @@ namespace Procedural
 			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);
 			normal.normalise();
 
-			if (shapeToExtrude->getOutSide() == LEFT)
+			if (shapeToExtrude->getOutSide() == SIDE_LEFT)
 			{
 				normal = -normal;
 			}
