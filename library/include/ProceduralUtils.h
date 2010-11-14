@@ -91,7 +91,7 @@ public:
         radius = std::max(radius, point.length());
     }
 
-	static float boudingRadiusFromPoints(std::vector<Ogre::Vector3> points)
+	static float boundingRadiusFromPoints(std::vector<Ogre::Vector3> points)
 	{
 	    float radius = 0.f;
 	    for (std::vector<Ogre::Vector3>::iterator it = points.begin(); it!=points.end();it++)
@@ -99,6 +99,7 @@ public:
 	        if (it->length()>radius)
                 radius = it->length();
 	    }
+		return radius;
 	}
 
 	static std::string getName(const std::string& prefix= "default")

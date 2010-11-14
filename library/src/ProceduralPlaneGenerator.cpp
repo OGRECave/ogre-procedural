@@ -88,7 +88,7 @@ void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
     extremePoints.push_back(position+orig+sizeY*vY);
     extremePoints.push_back(position+orig+sizeX*vX+sizeY*vY);
     aabb = Utils::AABBfromPoints(extremePoints);
-	boundingRadius = Utils::boudingRadiusFromPoints(extremePoints);
+	boundingRadius = Utils::boundingRadiusFromPoints(extremePoints);
 
 
 }
