@@ -64,7 +64,10 @@ namespace Procedural
 				normal = -normal;
 			}
 
-			manual->position(v0+q*vp);
+            Ogre::Vector3 newPoint = v0+q*vp;
+			manual->position(newPoint);
+			Utils::updateAABB(aabb, newPoint);
+			Utils::updateBoundingRadius(boundingRadius, newPoint);
 			manual->normal(q*normal);
 			manual->textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
 
