@@ -57,6 +57,50 @@ public:
 		aabb.setMaximum(max(aabb.getMaximum(), newAABB.getMaximum()));
 	}
 
+	static void updateAABB(Ogre::AxisAlignedBox& aabb, const Ogre::Vector3& point)
+	{
+		aabb.setMinimum(min(aabb.getMinimum(), point));
+		aabb.setMaximum(max(aabb.getMaximum(), point));
+	}
+
+	static Ogre::AxisAlignedBox AABBfromPoint(Ogre::Vector3 point)
+	{
+	    Ogre::AxisAlignedBox aabb;
+        aabb.setMaximum(point);
+	    aabb.setMinimum(point);
+	    return aabb;
+	}
+
+	static Ogre::AxisAlignedBox AABBfromPoints(std::vector<Ogre::Vector3> points)
+	{
+	    Ogre::AxisAlignedBox aabb;
+	    if (points.size() == 0)
+            return aabb;
+	    aabb = AABBfromPoint(points[0]);
+	    for (std::vector<Ogre::Vector3>::iterator it = points.begin(); it!=points.end();it++)
+	    {
+	        aabb.setMinimum(min(aabb.getMinimum(), *it));
+	        aabb.setMaximum(max(aabb.getMaximum(), *it));
+	    }
+
+	    return aabb;
+	}
+
+    static void updateBoundingRadius(float& radius, Ogre::Vector3 point)
+    {
+        radius = std::max(radius, point.length());
+    }
+
+	static float boudingRadiusFromPoints(std::vector<Ogre::Vector3> points)
+	{
+	    float radius = 0.f;
+	    for (std::vector<Ogre::Vector3>::iterator it = points.begin(); it!=points.end();it++)
+	    {
+	        if (it->length()>radius)
+                radius = it->length();
+	    }
+	}
+
 	static std::string getName(const std::string& prefix= "default")
 	{
 		counter++;

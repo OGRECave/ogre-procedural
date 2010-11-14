@@ -82,6 +82,14 @@ void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
 	}
 	offset+=numSegY+1;
 
-	///TODO : Bounding volumes
+    std::vector<Ogre::Vector3> extremePoints;
+    extremePoints.push_back(position+orig);
+    extremePoints.push_back(position+orig+sizeX*vX);
+    extremePoints.push_back(position+orig+sizeY*vY);
+    extremePoints.push_back(position+orig+sizeX*vX+sizeY*vY);
+    aabb = Utils::AABBfromPoints(extremePoints);
+	boundingRadius = Utils::boudingRadiusFromPoints(extremePoints);
+
+
 }
 }
