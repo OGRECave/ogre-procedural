@@ -63,12 +63,12 @@ public:
 		return *this;
 	}
 
-	std::vector<Ogre::Vector2> getPoints()
+	std::vector<Ogre::Vector2> getPoints() 
 	{
 		return points;
 	}
 
-	const Ogre::Vector2& getPoint(int i)
+	const Ogre::Vector2& getPoint(int i) const
 	{
 		if (isClosed)
 			return points[Utils::modulo(i,points.size())];
@@ -93,12 +93,12 @@ public:
 		return *this;
 	}
 
-	Side getOutSide()
+	Side getOutSide() const
 	{
 		return outSide;
 	}
 
-	int getSegCount()
+	int getSegCount() const
 	{
 		return (points.size()-1) + (isClosed?1:0);
 	}
@@ -107,7 +107,7 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	Ogre::Vector2 getDirectionAfter(int i)
+	Ogre::Vector2 getDirectionAfter(int i) const
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
@@ -120,7 +120,7 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	Ogre::Vector2 getDirectionBefore(int i)
+	Ogre::Vector2 getDirectionBefore(int i) const
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
@@ -130,7 +130,7 @@ public:
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
 	}
 
-	Ogre::Vector2 getAvgDirection(int i)
+	Ogre::Vector2 getAvgDirection(int i) const
 	{
 	    return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 
