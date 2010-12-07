@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	assert(radius>0. && "Radius must me positive");
 	assert(numIterations>0 && "numIterations must be positive");
@@ -38,8 +38,8 @@ void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 	std::vector<Ogre::Vector3> vertices;
 
 	/// Step 1 : Generate icosahedron
-	float phi = .5*(1.+sqrt(5.f));
-	float invnorm = 1/sqrt(phi*phi+1);
+	Ogre::Real phi = .5*(1.+sqrt(5.f));
+	Ogre::Real invnorm = 1/sqrt(phi*phi+1);
 
 	vertices.push_back(invnorm*Ogre::Vector3(-1,  phi, 0));//0
 	vertices.push_back(invnorm*Ogre::Vector3( 1,  phi, 0));//1
@@ -123,9 +123,9 @@ void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 	for (int i=0;i<vertices.size();i++)
 	{
 		const Ogre::Vector3& vec = vertices[i];
-		float u, v;
-		float r0 = sqrtf(vec.x*vec.x+vec.z*vec.z);
-		float alpha;
+		Ogre::Real u, v;
+		Ogre::Real r0 = sqrtf(vec.x*vec.x+vec.z*vec.z);
+		Ogre::Real alpha;
 		alpha = atan2f(vec.z,vec.x);
 		u = alpha/Ogre::Math::TWO_PI+.5;
 		v = atan2f(vec.y, r0)/Ogre::Math::PI + .5;

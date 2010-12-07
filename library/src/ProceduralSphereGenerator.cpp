@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void SphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void SphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	assert(numRings>0 && numSegments>0 && "Num seg must be positive");
 	assert(radius>0 && "Radius must be positive");

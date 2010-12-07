@@ -41,8 +41,8 @@ class MeshGenerator
 {
 protected:
 	Ogre::SceneManager* sceneMgr;
-	float uTile;
-	float vTile;
+	Ogre::Real uTile;
+	Ogre::Real vTile;
 
 	bool enableNormals;
 	unsigned int numTexCoordSet;
@@ -55,7 +55,7 @@ public:
 
 		int offset=0;
 		Ogre::AxisAlignedBox aabb;
-		float radius(0.f);
+		Ogre::Real radius(0.f);
 		addToManualObject(manual, offset, radius, aabb);
 
 		manual->end();
@@ -73,7 +73,7 @@ public:
 		return mesh;
 	}
 
-	virtual void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)=0;
+	virtual void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)=0;
 
 	MeshGenerator() : uTile(1.f),
 					  vTile(1.f),
@@ -84,13 +84,13 @@ public:
 		assert(sceneMgr && "Scene Manager must be set in Root");
 	}
 
-	inline T& setUTile(float uTile)
+	inline T& setUTile(Ogre::Real uTile)
 	{
 		this->uTile = uTile;
 		return static_cast<T&>(*this);
 	}
 
-	inline T & setVTile(float vTile)
+	inline T & setVTile(Ogre::Real vTile)
 	{
 		this->vTile = vTile;
 		return static_cast<T&>(*this);

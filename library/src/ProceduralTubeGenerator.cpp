@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "ProceduralUtils.h"
 
 namespace Procedural {
-void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void TubeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	assert(height>0. && outerRadius>0. && innerRadius>0. && "Height and radius must be positive");
 	assert(innerRadius<outerRadius && "Outer radius must be bigger than inner radius");

@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void ConeGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	assert(height>0. && radius>0. && "Height and radius must be positive");
 	assert(numSegBase>0 && numSegHeight>0 && "Num seg must be positive integers");

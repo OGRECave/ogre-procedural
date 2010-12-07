@@ -86,14 +86,14 @@ public:
 	    return aabb;
 	}
 
-    static void updateBoundingRadius(float& radius, Ogre::Vector3 point)
+    static void updateBoundingRadius(Ogre::Real& radius, Ogre::Vector3 point)
     {
         radius = std::max(radius, point.length());
     }
 
-	static float boundingRadiusFromPoints(std::vector<Ogre::Vector3> points)
+	static Ogre::Real boundingRadiusFromPoints(std::vector<Ogre::Vector3> points)
 	{
-	    float radius = 0.f;
+	    Ogre::Real radius = 0.f;
 	    for (std::vector<Ogre::Vector3>::iterator it = points.begin(); it!=points.end();it++)
 	    {
 	        if (it->length()>radius)

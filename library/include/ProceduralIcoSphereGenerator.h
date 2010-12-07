@@ -35,7 +35,7 @@ namespace Procedural
 {
 class _ProceduralExport IcoSphereGenerator : public MeshGenerator<IcoSphereGenerator>
 {
-	float radius;
+	Ogre::Real radius;
 	unsigned int numIterations;
 
 public:
@@ -43,9 +43,9 @@ public:
 		numIterations(2)
 	{}
 
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
-	inline IcoSphereGenerator & setRadius(float radius)
+	inline IcoSphereGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;

@@ -96,7 +96,7 @@ void RoundedBoxGenerator::_addEdge(Ogre::ManualObject* manual, int& offset, shor
 	if (vz0.dotProduct(centerPosition)<0.0) vz0=-vz0;
 	if (vx0.crossProduct(vy0).dotProduct(vz0)<0.0) vy0=-vy0;
 
-	float height= (1-abs(xPos)) * sizeX+(1-abs(yPos)) * sizeY+(1-abs(zPos)) * sizeZ;//TODO
+	Ogre::Real height= (1-abs(xPos)) * sizeX+(1-abs(yPos)) * sizeY+(1-abs(zPos)) * sizeZ;//TODO
 	Ogre::Vector3 offsetPosition= centerPosition -.5*height*vy0;
 	int numSegHeight=1;//TODO
 
@@ -131,7 +131,7 @@ void RoundedBoxGenerator::_addEdge(Ogre::ManualObject* manual, int& offset, shor
 		}
 }
 
-void RoundedBoxGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void RoundedBoxGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	// Generate the pseudo-box shape
 	PlaneGenerator pg;

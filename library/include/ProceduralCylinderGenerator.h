@@ -39,8 +39,8 @@ class _ProceduralExport CylinderGenerator : public MeshGenerator<CylinderGenerat
     int numSegBase;
     int numSegHeight;
     bool capped;
-    float radius;
-    float height;
+    Ogre::Real radius;
+    Ogre::Real height;
 
 public:
     CylinderGenerator() : numSegBase(16),
@@ -50,7 +50,7 @@ public:
         height(1.f)
     {}
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+    void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
     inline CylinderGenerator & setNumSegBase(int numSegBase)
     {
@@ -70,13 +70,13 @@ public:
         return *this;
     }
 
-    inline CylinderGenerator & setRadius(float radius)
+    inline CylinderGenerator & setRadius(Ogre::Real radius)
     {
         this->radius = radius;
         return *this;
     }
 
-    inline CylinderGenerator & setHeight(float height)
+    inline CylinderGenerator & setHeight(Ogre::Real height)
     {
         this->height = height;
         return *this;
