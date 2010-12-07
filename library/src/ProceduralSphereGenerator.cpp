@@ -30,13 +30,14 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void SphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
 {
 	assert(numRings>0 && numSegments>0 && "Num seg must be positive");
 	assert(radius>0 && "Radius must be positive");
 
 	Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
+	int offset = 0;
 
 	// Generate the group of rings for the sphere
 	for(unsigned int ring = 0; ring <= numRings; ring++ ) {
@@ -49,26 +50,26 @@ void SphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset,
 			Ogre::Real z0 = r0 * cosf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			manual->position( x0, y0, z0);
+			buffer.position( x0, y0, z0);
 			if (enableNormals)
-				manual->normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
+				buffer.normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				manual->textureCoord((Ogre::Real) seg / (Ogre::Real) numSegments * uTile, (Ogre::Real) ring / (Ogre::Real) numRings * vTile);
+				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) numSegments * uTile, (Ogre::Real) ring / (Ogre::Real) numRings * vTile);
 
 			if (ring != numRings) {
 				// each vertex (except the last) has six indices pointing to it
-				manual->index(offset + numSegments + 1);
-				manual->index(offset);
-				manual->index(offset + numSegments);
-				manual->index(offset + numSegments + 1);
-				manual->index(offset + 1);
-				manual->index(offset);
+				buffer.index(offset + numSegments + 1);
+				buffer.index(offset);
+				buffer.index(offset + numSegments);
+				buffer.index(offset + numSegments + 1);
+				buffer.index(offset + 1);
+				buffer.index(offset);
 				offset ++;
 				}
 		}; // end for seg
 	} // end for ring
 
-	boundingRadius = radius;
-	Utils::updateAABB(aabb, Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
+	buffer.sphereBoundingRadius = radius;
+	Utils::updateAABB(buffer.boundingBox, Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
 }
 }

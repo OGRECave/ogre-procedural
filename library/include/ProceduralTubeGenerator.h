@@ -49,7 +49,7 @@ public:
         innerRadius(1.f),
         height(1.f) {}
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
+    void addToTriangleBuffer(TriangleBuffer& buffer);
 
     inline TubeGenerator & setNumSegBase(int numSegBase)
     {

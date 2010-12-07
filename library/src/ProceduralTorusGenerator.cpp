@@ -30,13 +30,14 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
 {
 	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
 	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
 
 	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / numSegSection);
 	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / numSegCircle);
+	int offset = 0;
 
 	for (int i = 0; i <=numSegCircle; i++)
 		for (int j = 0; j<=numSegSection; j++)
@@ -47,22 +48,22 @@ void TorusGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
 			q.FromAngleAxis(Ogre::Radian(i*deltaCircle),Ogre::Vector3::UNIT_Y);
 			Ogre::Vector3 v = q * v0;
 			Ogre::Vector3 c = q * c0;
-			manual->position(v);
-			manual->normal((v-c).normalisedCopy());
-			manual->textureCoord(i/(Ogre::Real)numSegCircle*uTile, j/(Ogre::Real)numSegSection*vTile);
+			buffer.position(v);
+			buffer.normal((v-c).normalisedCopy());
+			buffer.textureCoord(i/(Ogre::Real)numSegCircle*uTile, j/(Ogre::Real)numSegSection*vTile);
 
 			if (i != numSegCircle)
 			{
-				manual->index(offset + numSegSection + 1);
-				manual->index(offset);
-				manual->index(offset + numSegSection);
-				manual->index(offset + numSegSection + 1);
-				manual->index(offset + 1);
-				manual->index(offset);
+				buffer.index(offset + numSegSection + 1);
+				buffer.index(offset);
+				buffer.index(offset + numSegSection);
+				buffer.index(offset + numSegSection + 1);
+				buffer.index(offset + 1);
+				buffer.index(offset);
 			}
 			offset ++;
 		}
-	boundingRadius = radius + sectionRadius;
-	aabb = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
+	buffer.sphereBoundingRadius = radius + sectionRadius;
+	buffer.boundingBox = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
 }
 }

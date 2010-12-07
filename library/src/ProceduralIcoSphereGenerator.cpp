@@ -30,12 +30,13 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
 {
 	assert(radius>0. && "Radius must me positive");
 	assert(numIterations>0 && "numIterations must be positive");
 
 	std::vector<Ogre::Vector3> vertices;
+	int offset = 0;
 
 	/// Step 1 : Generate icosahedron
 	Ogre::Real phi = .5*(1.+sqrt(5.f));
@@ -190,18 +191,18 @@ void IcoSphereGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 	/// Step 5 : realize
 	for (int i=0; i<vertices.size(); i++)
 	{
-		manual->position(radius*vertices[i]);
+		buffer.position(radius*vertices[i]);
 		if (enableNormals)
-			manual->normal(vertices[i]);//note : vertices are already normalised
+			buffer.normal(vertices[i]);//note : vertices are already normalised
 		for (unsigned int tc=0; tc<numTexCoordSet; tc++)
-			manual->textureCoord(texCoords[i].x*uTile,texCoords[i].y*vTile);
+			buffer.textureCoord(texCoords[i].x*uTile,texCoords[i].y*vTile);
 	}
 	for (int i=0; i<size; i++)
 	{
-		manual->index(offset+faces[i]);
+		buffer.index(offset+faces[i]);
 	}
 	offset+=vertices.size();
-	boundingRadius = radius;
-	Utils::updateAABB(aabb, Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
+	buffer.sphereBoundingRadius = radius;
+	Utils::updateAABB(buffer.boundingBox, Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
 }
 }

@@ -87,12 +87,11 @@ public:
 		return *this;
 	}
 
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToTriangleBuffer(TriangleBuffer& buffer);
 	
+	void _addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos);
 	
-	void _addEdge(Ogre::ManualObject* manual, int& offset, short xPos, short yPos, short zPos);
-	
-	void _addCorner(Ogre::ManualObject* manual, int& offset, bool isXPositive, bool isYPositive, bool isZPositive);
+	void _addCorner(TriangleBuffer& buffer, bool isXPositive, bool isYPositive, bool isZPositive);
 
 };
 

@@ -50,7 +50,7 @@ public:
         height(1.f)
     {}
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToTriangleBuffer(TriangleBuffer& buffer);
 
     inline CylinderGenerator & setNumSegBase(int numSegBase)
     {

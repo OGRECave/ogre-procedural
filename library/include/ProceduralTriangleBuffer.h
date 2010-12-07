@@ -25,99 +25,92 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_MESH_GENERATOR_INCLUDED
-#define PROCEDURAL_MESH_GENERATOR_INCLUDED
+#ifndef PROCEDURAL_TRIANGLEBUFFER_INCLUDED
+#define PROCEDURAL_TRIANGLEBUFFER_INCLUDED
 
-#include "OgreSceneManager.h"
 #include "OgreMesh.h"
-#include "OgreManualObject.h"
-#include "ProceduralRoot.h"
-#include "ProceduralPlatform.h"
-#include "ProceduralTriangleBuffer.h"
 
-namespace Procedural
+/**
+ * This is ogre-procedural's temporary mesh buffer. 
+ * It stores all the info needed to build an Ogre Mesh, yet is intented to be more flexible, since
+ * there is no link towards hardware.
+ */
+class TriangleBuffer
 {
-template <typename T>
-class MeshGenerator
-{
-protected:
-	Ogre::SceneManager* sceneMgr;
-	Ogre::Real uTile;
-	Ogre::Real vTile;
+	std::vector<int> indices;
+	std::vector<Ogre::Vector3> vertices;
+	
+	Ogre::AxisAlignedBox boundingBox;
+	Ogre::Real boundingSphereRadius;
+	
+	int globalOffset;
 
-	bool enableNormals;
-	unsigned int numTexCoordSet;
-public:
-
-	/*Ogre::MeshPtr realizeMesh(const std::string& name)
+	//TODO : add UV, normals, tangents, colors?
+	
+	public:
+	TriangleBuffer() : globalOffset(0)
+	{}
+	
+	void rebaseOffset()
+	{
+		globalOffset = vertices.size();
+	}
+	
+	void updateBoundingSphere(Ogre::Real radius)
+	{
+		boundingSphereRadius = max(boundingSphereRadius, radius);
+	}
+	
+	void updateBoundingbox(const Ogre::AxisAlignedBoundingBox& aabb)
+	{
+		Utils::updateAABB(boundingBox, aabb);
+	}
+	
+	/**
+	 * Builds an Ogre Mesh from this buffer.
+	 */
+	Ogre::MeshPtr transformToMesh(Ogre::SceneManager* sceneMgr, const std::string& name)
 	{
 		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-
-		int offset=0;
-		Ogre::AxisAlignedBox aabb;
-		Ogre::Real radius(0.f);
-		addToManualObject(manual, offset, radius, aabb);
+		
+		for (std::vector<Ogre::Vector3>::iterator it = vertices.begin(); it != vertices.end();it++)
+		{
+			manual->position(it);
+		}
+		for (std::vector<int>::iterator it = indices.begin(); it != indices.end();it++)
+		{
+			manual->index(it);
+		}
 
 		manual->end();
 		Ogre::MeshPtr mesh = manual->convertToMesh(name);
 
-		mesh->_setBounds( aabb, false );
-		mesh->_setBoundingSphereRadius(radius);
+		mesh->_setBounds( boundingBox, false );
+		mesh->_setBoundingSphereRadius(boundingSphereRadius);
 
 		unsigned short src, dest;
 		if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
 		{
 			mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
 		}
+		
+		//TODO :  destroy manualobject???
 
 		return mesh;
-	}*/
+	}
 	
-	Ogre::MeshPtr realizeMesh(const std::string& name)
+	inline TriangleBuffer& position(const Ogre::Vector3& pos)
 	{
-		TriangleBuffer tbuffer;
-		addToTriangleBuffer(tbuffer);
-		Ogre::MeshPtr mesh = tbuffer.transformToMesh(sceneMgr, name);
-		return mesh;
+		vertices.push_back(pos);
+		return *this;
 	}
-
-	virtual void addToTriangleBuffer(TriangleBuffer& buffer) const=0;
-
-	MeshGenerator() : uTile(1.f),
-					  vTile(1.f),
-					  enableNormals(true),
-					  numTexCoordSet(1)
+	
+	inline TriangleBuffer& index(int i)
 	{
-		sceneMgr = Root::getInstance()->sceneManager;
-		assert(sceneMgr && "Scene Manager must be set in Root");
+		indices.push_back(globalOffset+i);
+		return *this;
 	}
-
-	inline T& setUTile(Ogre::Real uTile)
-	{
-		this->uTile = uTile;
-		return static_cast<T&>(*this);
-	}
-
-	inline T & setVTile(Ogre::Real vTile)
-	{
-		this->vTile = vTile;
-		return static_cast<T&>(*this);
-	}
-
-	inline T & setEnableNormals(bool enableNormals)
-	{
-		this->enableNormals = enableNormals;
-		return static_cast<T&>(*this);
-	}
-
-	inline T & setNumTexCoordSet(unsigned int numTexCoordSet)
-	{
-		this->numTexCoordSet = numTexCoordSet;
-		return static_cast<T&>(*this);
-	}
-
 };
-//
-}
+
 #endif

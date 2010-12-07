@@ -45,5 +45,6 @@ THE SOFTWARE.
 #include "ProceduralShape.h"
 #include "ProceduralPath.h"
 #include "ProceduralTriangulator.h"
+#include "ProceduralTriangleBuffer.h"
 
 #endif

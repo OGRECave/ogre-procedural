@@ -32,7 +32,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 
-void RoundedBoxGenerator::_addCorner(Ogre::ManualObject* manual, int& offset, bool isXPositive, bool isYPositive, bool isZPositive)
+void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, bool isYPositive, bool isZPositive)
 {
 	assert(numSegX>0 && numSegY>0 && numSegZ>0 && chamferNumSeg>0 && "Num seg must be positive integers");
 	assert(sizeX>0. && sizeY>0. && sizeZ>0. && chamferSize>0. && "Sizes must be positive");
@@ -58,21 +58,21 @@ void RoundedBoxGenerator::_addCorner(Ogre::ManualObject* manual, int& offset, bo
 			Ogre::Real z0 = r0 * cosf(seg * deltaSegAngle + offsetSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			manual->position( x0 + offsetPosition.x, y0 + offsetPosition.y, z0 + offsetPosition.z);
+			buffer.position( x0 + offsetPosition.x, y0 + offsetPosition.y, z0 + offsetPosition.z);
 			if (enableNormals)
-				manual->normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
+				buffer.normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				manual->textureCoord((Ogre::Real) seg / (Ogre::Real) chamferNumSeg * uTile, (Ogre::Real) ring / (Ogre::Real) chamferNumSeg * vTile);
+				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) chamferNumSeg * uTile, (Ogre::Real) ring / (Ogre::Real) chamferNumSeg * vTile);
 
 			if ((ring != chamferNumSeg) && (seg != chamferNumSeg)) {
 			//if (ring != chamferNumSeg) {
 				// each vertex (except the last) has six indices pointing to it
-				manual->index(offset + chamferNumSeg + 2);
-				manual->index(offset);
-				manual->index(offset + chamferNumSeg +1);
-				manual->index(offset + chamferNumSeg + 2);
-				manual->index(offset + 1);
-				manual->index(offset);
+				buffer.index(offset + chamferNumSeg + 2);
+				buffer.index(offset);
+				buffer.index(offset + chamferNumSeg +1);
+				buffer.index(offset + chamferNumSeg + 2);
+				buffer.index(offset + 1);
+				buffer.index(offset);
 				}
 			
 				offset ++;
@@ -85,7 +85,7 @@ void RoundedBoxGenerator::_addCorner(Ogre::ManualObject* manual, int& offset, bo
 					-1 => negative
 					0 => undefined
  */
-void RoundedBoxGenerator::_addEdge(Ogre::ManualObject* manual, int& offset, short xPos, short yPos, short zPos)
+void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos)
 {
 	Ogre::Vector3 centerPosition = .5*xPos * sizeX * Ogre::Vector3::UNIT_X + .5*yPos * sizeY * Ogre::Vector3::UNIT_Y + .5*zPos * sizeZ * Ogre::Vector3::UNIT_Z;
 	Ogre::Vector3 vy0 = (1-abs(xPos)) * Ogre::Vector3::UNIT_X + (1-abs(yPos)) * Ogre::Vector3::UNIT_Y + (1-abs(zPos)) * Ogre::Vector3::UNIT_Z;//extrusion direction	
@@ -115,23 +115,23 @@ void RoundedBoxGenerator::_addEdge(Ogre::ManualObject* manual, int& offset, shor
 		{
 			Ogre::Real x0 = chamferSize * cosf(j*deltaAngle);
 			Ogre::Real z0 = chamferSize * sinf(j*deltaAngle);
-			manual->position(x0 * vx0 + i*deltaHeight * vy0 + z0 * vz0 + offsetPosition);
-			manual->normal((x0*vx0+z0*vz0).normalisedCopy());
-			manual->textureCoord(j/(Ogre::Real)chamferNumSeg*uTile, i/(Ogre::Real)numSegHeight*vTile);
+			buffer.position(x0 * vx0 + i*deltaHeight * vy0 + z0 * vz0 + offsetPosition);
+			buffer.normal((x0*vx0+z0*vz0).normalisedCopy());
+			buffer.textureCoord(j/(Ogre::Real)chamferNumSeg*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
 			if (i != numSegHeight && j!=chamferNumSeg) {
-				manual->index(offset + chamferNumSeg + 2);
-				manual->index(offset);
-				manual->index(offset + chamferNumSeg+1);
-				manual->index(offset + chamferNumSeg + 2);
-				manual->index(offset + 1);
-				manual->index(offset);
+				buffer.index(offset + chamferNumSeg + 2);
+				buffer.index(offset);
+				buffer.index(offset + chamferNumSeg+1);
+				buffer.index(offset + chamferNumSeg + 2);
+				buffer.index(offset + 1);
+				buffer.index(offset);
 				}
 					offset ++;
 		}
 }
 
-void RoundedBoxGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
 {
 	// Generate the pseudo-box shape
 	PlaneGenerator pg;
@@ -185,9 +185,7 @@ void RoundedBoxGenerator::addToManualObject(Ogre::ManualObject* manual, int& off
 	_addEdge(manual, offset,  0, 1,-1);
 	_addEdge(manual, offset,  0, 1, 1);
 
-	
-
-	aabb.setExtents(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ);
-	boundingRadius = Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ);
+	buffer.boundingBox.setExtents(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ);
+	buffer.sphereBoundingRadius = Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ);
 }
 }

@@ -46,9 +46,8 @@ public:
 		numRings(8), numSegments(16), height(1.0), numSegHeight(1)
 
 	{}
-
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
-
+	
+	void addToTriangleBuffer(TriangleBuffer& buffer);
 
 	inline CapsuleGenerator & setRadius(Ogre::Real radius)
 	{
