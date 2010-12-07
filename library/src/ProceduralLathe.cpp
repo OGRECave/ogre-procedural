@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	void Lathe::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+	void Lathe::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
 	{
 		assert( shapeToExtrude && "Shape must not be null!");
 		int numSegShape = shapeToExtrude->getSegCount();
@@ -37,7 +37,7 @@ namespace Procedural
 
 		for (int i=0;i<=numSeg;i++)
 		{
-			float angle = i/(float)numSeg*Ogre::Math::TWO_PI;
+			Ogre::Real angle = i/(Ogre::Real)numSeg*Ogre::Math::TWO_PI;
 			Ogre::Quaternion q;
 			q.FromAngleAxis((Ogre::Radian)angle,Ogre::Vector3::UNIT_Y);
 

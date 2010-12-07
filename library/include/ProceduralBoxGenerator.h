@@ -35,26 +35,26 @@ namespace Procedural
 {
 class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
 {
-    float sizeX,sizeY,sizeZ;
+    Ogre::Real sizeX,sizeY,sizeZ;
     int numSegX,numSegY,numSegZ;
 public:
     BoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
         numSegX(1), numSegY(1), numSegZ(1) {}
 
 
-    BoxGenerator& setSizeX(float sizeX)
+    BoxGenerator& setSizeX(Ogre::Real sizeX)
     {
         this->sizeX = sizeX;
         return *this;
     }
 
-    BoxGenerator& setSizeY(float sizeY)
+    BoxGenerator& setSizeY(Ogre::Real sizeY)
     {
         this->sizeY = sizeY;
         return *this;
     }
 
-    BoxGenerator& setSizeZ(float sizeZ)
+    BoxGenerator& setSizeZ(Ogre::Real sizeZ)
     {
         this->sizeZ = sizeZ;
         return *this;
@@ -78,7 +78,7 @@ public:
         return *this;
     }
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+    void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
 };
 

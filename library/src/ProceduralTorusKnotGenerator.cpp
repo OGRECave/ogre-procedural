@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
 	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
@@ -38,15 +38,15 @@ void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 
 	for (int i = 0; i <= numSegCircle * p;i++)
 	{
-		float phi = Ogre::Math::TWO_PI * i/(float)numSegCircle;
-		float x0 = radius*(2 + cos(q*phi/(float)p)) * cos(phi) / 3.f;
-		float y0 = radius*sin(q*phi/(float)p) / 3.f;
-		float z0 = radius*(2 + cos(q*phi/(float)p)) * sin(phi) / 3.f;
+		Ogre::Real phi = Ogre::Math::TWO_PI * i/(Ogre::Real)numSegCircle;
+		Ogre::Real x0 = radius*(2 + cos(q*phi/(Ogre::Real)p)) * cos(phi) / 3.f;
+		Ogre::Real y0 = radius*sin(q*phi/(Ogre::Real)p) / 3.f;
+		Ogre::Real z0 = radius*(2 + cos(q*phi/(Ogre::Real)p)) * sin(phi) / 3.f;
 
-		float phi1 = Ogre::Math::TWO_PI * (i+1)/(float)numSegCircle;
-		float x1 = radius*(2 + cos(q*phi1/p)) * cos(phi1) / 3.f;
-		float y1 = radius*sin(q*phi1/p) / 3.f;
-		float z1 = radius*(2 + cos(q*phi1/p)) * sin(phi1) / 3.f;
+		Ogre::Real phi1 = Ogre::Math::TWO_PI * (i+1)/(Ogre::Real)numSegCircle;
+		Ogre::Real x1 = radius*(2 + cos(q*phi1/p)) * cos(phi1) / 3.f;
+		Ogre::Real y1 = radius*sin(q*phi1/p) / 3.f;
+		Ogre::Real z1 = radius*(2 + cos(q*phi1/p)) * sin(phi1) / 3.f;
 
 		Ogre::Vector3 v0(x0,y0,z0);
 		Ogre::Vector3 v1(x1,y1,z1);
@@ -62,7 +62,7 @@ void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 
 		for (int j =0;j<=numSegSection;j++)
 		{
-			float alpha = Ogre::Math::TWO_PI *j/numSegSection;
+			Ogre::Real alpha = Ogre::Math::TWO_PI *j/numSegSection;
 			Ogre::Vector3 vp = sectionRadius*(q * Ogre::Vector3(cos(alpha), sin(alpha),0));
 
 			manual->position(v0+vp);

@@ -35,7 +35,7 @@ namespace Procedural
 {
 class _ProceduralExport SphereGenerator : public MeshGenerator<SphereGenerator>
 {
-	float radius;
+	Ogre::Real radius;
 	unsigned int numRings;
 	unsigned int numSegments;
 
@@ -45,7 +45,7 @@ public:
 
 	{}
 
-	inline SphereGenerator & setRadius(float radius)
+	inline SphereGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
@@ -63,7 +63,7 @@ public:
 		return *this;
 	}
 
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
 };
 }

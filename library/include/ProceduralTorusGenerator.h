@@ -38,8 +38,8 @@ class _ProceduralExport TorusGenerator : public MeshGenerator<TorusGenerator>
 {
 	int numSegSection;
 	int numSegCircle;
-	float radius;
-	float sectionRadius;
+	Ogre::Real radius;
+	Ogre::Real sectionRadius;
 public:
 	TorusGenerator() : numSegSection(16),
 						numSegCircle(16),
@@ -47,7 +47,7 @@ public:
 						sectionRadius(0.2f) {}
 
 
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
 	inline TorusGenerator & setNumSegSection(int numSegSection)
 	{
 		this->numSegSection = numSegSection;
@@ -60,13 +60,13 @@ public:
 		return *this;
 	}
 
-	inline TorusGenerator & setRadius(float radius)
+	inline TorusGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
 	}
 
-	inline TorusGenerator & setSectionRadius(float sectionRadius)
+	inline TorusGenerator & setSectionRadius(Ogre::Real sectionRadius)
 	{
 		this->sectionRadius = sectionRadius;
 		return *this;

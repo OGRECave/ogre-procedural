@@ -39,8 +39,8 @@ class _ProceduralExport PlaneGenerator : public MeshGenerator<PlaneGenerator>
 	int numSegX;
 	int numSegY;
 	Ogre::Vector3 normal;
-	float sizeX;
-	float sizeY;
+	Ogre::Real sizeX;
+	Ogre::Real sizeY;
 	Ogre::Vector3 position;
 public:
 
@@ -50,7 +50,7 @@ public:
 	{}
 
 
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
 	inline PlaneGenerator & setNumSegX(int numSegX)
 	{
@@ -70,13 +70,13 @@ public:
 		return *this;
 	}
 
-	inline PlaneGenerator & setSizeX(float sizeX)
+	inline PlaneGenerator & setSizeX(Ogre::Real sizeX)
 	{
 		this->sizeX = sizeX;
 		return *this;
 	}
 
-	inline PlaneGenerator & setSizeY(float sizeY)
+	inline PlaneGenerator & setSizeY(Ogre::Real sizeY)
 	{
 		this->sizeY = sizeY;
 		return *this;

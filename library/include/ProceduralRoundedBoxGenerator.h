@@ -35,9 +35,9 @@ namespace Procedural
 {
 class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGenerator>
 {
-	float sizeX,sizeY,sizeZ;
+	Ogre::Real sizeX,sizeY,sizeZ;
 	int numSegX,numSegY,numSegZ;
-	float chamferSize;
+	Ogre::Real chamferSize;
 	int chamferNumSeg;
 	
 public:
@@ -45,19 +45,19 @@ public:
 		numSegX(1), numSegY(1), numSegZ(1), chamferSize(.1f), chamferNumSeg(8) {}
 
 
-	RoundedBoxGenerator& setSizeX(float sizeX)
+	RoundedBoxGenerator& setSizeX(Ogre::Real sizeX)
 	{
 		this->sizeX = sizeX;
 		return *this;
 	}
 
-	RoundedBoxGenerator& setSizeY(float sizeY)
+	RoundedBoxGenerator& setSizeY(Ogre::Real sizeY)
 	{
 		this->sizeY = sizeY;
 		return *this;
 	}
 
-	RoundedBoxGenerator& setSizeZ(float sizeZ)
+	RoundedBoxGenerator& setSizeZ(Ogre::Real sizeZ)
 	{
 		this->sizeZ = sizeZ;
 		return *this;
@@ -81,13 +81,13 @@ public:
 		return *this;
 	}
 
-	 RoundedBoxGenerator& setChamferSize(float chamferSize)
+	 RoundedBoxGenerator& setChamferSize(Ogre::Real chamferSize)
 	{
 		this->chamferSize = chamferSize;
 		return *this;
 	}
 
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
 	
 	
 	void _addEdge(Ogre::ManualObject* manual, int& offset, short xPos, short yPos, short zPos);

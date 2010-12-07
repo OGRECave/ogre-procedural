@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	assert(numSegX>0 && numSegY>0 && "Num seg must be positive");
 	assert(!normal.isZeroLength() && "Normal must not be null");

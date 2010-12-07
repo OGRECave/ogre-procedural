@@ -38,8 +38,8 @@ class _ProceduralExport ConeGenerator : public MeshGenerator<ConeGenerator>
 {
 	int numSegBase;
 	int numSegHeight;
-	float radius;
-	float height;
+	Ogre::Real radius;
+	Ogre::Real height;
 public:
 	ConeGenerator() : numSegBase(16),
 		numSegHeight(1),
@@ -48,7 +48,7 @@ public:
 	{}
 
 
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
 	inline ConeGenerator & setNumSegBase(int numSegBase)
 	{
@@ -62,13 +62,13 @@ public:
 		return *this;
 	}
 
-	inline ConeGenerator & setRadius(float radius)
+	inline ConeGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
 	}
 
-	inline ConeGenerator & setHeight(float height)
+	inline ConeGenerator & setHeight(Ogre::Real height)
 	{
 		this->height = height;
 		return *this;

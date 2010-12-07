@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
 {
 	assert(numRings>0 && numSegments>0 && numSegHeight>0 && "Num seg must be positive integers");
 	assert(height>0. && radius>0. && "Height and radius must be positive");
@@ -38,8 +38,8 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 	Ogre::Real fDeltaRingAngle = (Ogre::Math::HALF_PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
 
-	float sphereRatio = radius / (2 * radius + height);
-	float cylinderRatio = height / (2 * radius + height);
+	Ogre::Real sphereRatio = radius / (2 * radius + height);
+	Ogre::Real cylinderRatio = height / (2 * radius + height);
 	// Top half sphere
 
 	// Generate the group of rings for the sphere

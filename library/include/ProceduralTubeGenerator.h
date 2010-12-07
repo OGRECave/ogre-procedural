@@ -38,9 +38,9 @@ class _ProceduralExport TubeGenerator : public MeshGenerator<TubeGenerator>
 {
     int numSegBase;
     int numSegHeight;
-    float outerRadius;
-    float innerRadius;
-    float height;
+    Ogre::Real outerRadius;
+    Ogre::Real innerRadius;
+    Ogre::Real height;
 
 public:
     TubeGenerator() : numSegBase(16),
@@ -49,7 +49,7 @@ public:
         innerRadius(1.f),
         height(1.f) {}
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+    void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
 
     inline TubeGenerator & setNumSegBase(int numSegBase)
     {
@@ -63,19 +63,19 @@ public:
         return *this;
     }
 
-    inline TubeGenerator & setOuterRadius(float outerRadius)
+    inline TubeGenerator & setOuterRadius(Ogre::Real outerRadius)
     {
         this->outerRadius = outerRadius;
         return *this;
     }
 
-    inline TubeGenerator & setInnerRadius(float innerRadius)
+    inline TubeGenerator & setInnerRadius(Ogre::Real innerRadius)
     {
         this->innerRadius = innerRadius;
         return *this;
     }
 
-    inline TubeGenerator & setHeight(float height)
+    inline TubeGenerator & setHeight(Ogre::Real height)
     {
         this->height = height;
         return *this;
