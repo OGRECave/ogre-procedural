@@ -31,30 +31,31 @@ THE SOFTWARE.
 namespace Procedural
 {
 
-void CylinderGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
 {
 	assert(height>0. && radius>0. && "Height and radius must be positive");
 	assert(numSegBase>0 && numSegHeight>0 && "Num seg must be positive integers");
 
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
+	int offset = 0;
 
 	for (int i = 0; i <=numSegHeight; i++)
 		for (int j = 0; j<=numSegBase; j++)
 		{
 			Ogre::Real x0 = radius * cosf(j*deltaAngle);
 			Ogre::Real z0 = radius * sinf(j*deltaAngle);
-			manual->position(x0, i*deltaHeight, z0);
-			manual->normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
+			buffer.position(x0, i*deltaHeight, z0);
+			buffer.normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
+			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
 			if (i != numSegHeight) {
-				manual->index(offset + numSegBase + 1);
-				manual->index(offset);
-				manual->index(offset + numSegBase);
-				manual->index(offset + numSegBase + 1);
-				manual->index(offset + 1);
-				manual->index(offset);
+				buffer.index(offset + numSegBase + 1);
+				buffer.index(offset);
+				buffer.index(offset + numSegBase);
+				buffer.index(offset + numSegBase + 1);
+				buffer.index(offset + 1);
+				buffer.index(offset);
 				}
 					offset ++;
 		}
@@ -62,51 +63,51 @@ void CylinderGenerator::addToManualObject(Ogre::ManualObject* manual, int& offse
 	{
 		//low cap
 		int centerIndex = offset;
-		manual->position(0,0,0);
-		manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-		manual->textureCoord(0.0,vTile);
+		buffer.position(0,0,0);
+		buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
+		buffer.textureCoord(0.0,vTile);
 		offset++;
 		for (int j=0;j<=numSegBase;j++)
 		{
 			Ogre::Real x0 = radius * cosf(j*deltaAngle);
 			Ogre::Real z0 = radius * sinf(j*deltaAngle);
 
-			manual->position(x0, 0.0f, z0);
-			manual->normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			manual->textureCoord(j/(Ogre::Real)numSegBase,0.0);
+			buffer.position(x0, 0.0f, z0);
+			buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
+			buffer.textureCoord(j/(Ogre::Real)numSegBase,0.0);
 			if (j!=numSegBase)
 			{
-				manual->index(centerIndex);
-				manual->index(offset);
-				manual->index(offset+1);
+				buffer.index(centerIndex);
+				buffer.index(offset);
+				buffer.index(offset+1);
 			}
 			offset++;
 		}
 		// high cap
 		centerIndex = offset;
-		manual->position(0,height,0);
-		manual->normal(Ogre::Vector3::UNIT_Y);
-		manual->textureCoord(0.0,0.0);
+		buffer.position(0,height,0);
+		buffer.normal(Ogre::Vector3::UNIT_Y);
+		buffer.textureCoord(0.0,0.0);
 		offset++;
 		for (int j=0;j<=numSegBase;j++)
 		{
 			Ogre::Real x0 = radius * cosf(j*deltaAngle);
 			Ogre::Real z0 = radius * sinf(j*deltaAngle);
 
-			manual->position(x0, height, z0);
-			manual->normal(Ogre::Vector3::UNIT_Y);
-			manual->textureCoord(j/(Ogre::Real)numSegBase*uTile,vTile);
+			buffer.position(x0, height, z0);
+			buffer.normal(Ogre::Vector3::UNIT_Y);
+			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile,vTile);
 			if (j!=numSegBase)
 			{
-				manual->index(centerIndex);
-				manual->index(offset+1);
-				manual->index(offset);
+				buffer.index(centerIndex);
+				buffer.index(offset+1);
+				buffer.index(offset);
 			}
 			offset++;
 		}
 	}
 
-	boundingRadius = std::max(radius, height);
-	aabb = Ogre::AxisAlignedBox(-radius,0,-radius,radius, height, radius);
+	buffer.boundingSphereRadius = std::max(radius, height);
+	buffer.boundingBox = Ogre::AxisAlignedBox(-radius,0,-radius,radius, height, radius);
 }
 }

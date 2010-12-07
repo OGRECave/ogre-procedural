@@ -45,7 +45,7 @@ public:
 		return *this;
 	}
 
-	Path& addPoint(float x, float y, float z)
+	Path& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
 		points.push_back(Ogre::Vector3(x,y,z));
 		return *this;
@@ -62,6 +62,11 @@ public:
 		assert(points.size()>0 && "Cannot close an empty path");
 		isClosed = true;
 		return *this;
+	}
+	
+	bool isClosed()
+	{
+		return isClosed;
 	}
 
 	std::vector<Ogre::Vector3> getPoints()
@@ -134,7 +139,7 @@ public:
 		return *this;
 	}
 
-	BezierPath& addPoint(float x, float y, float z)
+	BezierPath& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
 	    points.push_back(Ogre::Vector3(x,y,z));
 	    return *this;
@@ -183,7 +188,7 @@ public:
 
 			for (int j=0;j<numSeg;j++)
 			{
-				float t = (float)j/(float)numSeg;
+				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
 				Ogre::Vector3 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;
 				path.addPoint(P);
 			}
@@ -239,7 +244,7 @@ public:
 		Path p;
 		for (int i=0;i<=numSeg;i++)
 		{
-			p.addPoint(i/(float)numSeg * point1 + i/(float)numSeg * point2);
+			p.addPoint(i/(Ogre::Real)numSeg * point1 + i/(Ogre::Real)numSeg * point2);
 		}
 		return p;
 	}

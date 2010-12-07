@@ -30,11 +30,13 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
 {
 	assert(numSegX>0 && numSegY>0 && "Num seg must be positive");
 	assert(!normal.isZeroLength() && "Normal must not be null");
 	assert(sizeX>0. && sizeY>0. && "Size must be positive");
+	
+	int offset = 0;
 
 	Ogre::Vector3 vX = normal.perpendicular();
 	Ogre::Vector3 vY = normal.crossProduct(vX);
@@ -46,9 +48,9 @@ void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
 	for (int i1 = 0; i1<=numSegX; i1++)
 		for (int i2 = 0; i2<=numSegY; i2++)
 		{
-			manual->position(orig+i1*delta1+i2*delta2+position);
-			manual->textureCoord(i1/(Ogre::Real)numSegX*uTile, i2/(Ogre::Real)numSegY*vTile);
-			manual->normal(normal);
+			buffer.position(orig+i1*delta1+i2*delta2+position);
+			buffer.textureCoord(i1/(Ogre::Real)numSegX*uTile, i2/(Ogre::Real)numSegY*vTile);
+			buffer.normal(normal);
 		}
 
 	bool reverse = false;
@@ -60,21 +62,21 @@ void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
 		{
 			if (reverse)
 			{
-				manual->index(offset+0);
-				manual->index(offset+(numSegY+1));
-				manual->index(offset+1);
-				manual->index(offset+1);
-				manual->index(offset+(numSegY+1));
-				manual->index(offset+(numSegY+1)+1);
+				buffer.index(offset+0);
+				buffer.index(offset+(numSegY+1));
+				buffer.index(offset+1);
+				buffer.index(offset+1);
+				buffer.index(offset+(numSegY+1));
+				buffer.index(offset+(numSegY+1)+1);
 			}
 			else
 			{
-				manual->index(offset+0);
-				manual->index(offset+1);
-				manual->index(offset+(numSegY+1));
-				manual->index(offset+1);
-				manual->index(offset+(numSegY+1)+1);
-				manual->index(offset+(numSegY+1));
+				buffer.index(offset+0);
+				buffer.index(offset+1);
+				buffer.index(offset+(numSegY+1));
+				buffer.index(offset+1);
+				buffer.index(offset+(numSegY+1)+1);
+				buffer.index(offset+(numSegY+1));
 			}
 			offset++;
 		}
@@ -87,9 +89,7 @@ void PlaneGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, 
     extremePoints.push_back(position+orig+sizeX*vX);
     extremePoints.push_back(position+orig+sizeY*vY);
     extremePoints.push_back(position+orig+sizeX*vX+sizeY*vY);
-    aabb = Utils::AABBfromPoints(extremePoints);
-	boundingRadius = Utils::boundingRadiusFromPoints(extremePoints);
-
-
+    buffer.boundingBox = Utils::AABBfromPoints(extremePoints);
+	buffer.sphereBoundingRadius = Utils::boundingRadiusFromPoints(extremePoints);
 }
 }

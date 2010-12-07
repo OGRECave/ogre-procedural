@@ -29,11 +29,12 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	void Lathe::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void Lathe::addToTriangleBuffer(TriangleBuffer& buffer)
 	{
 		assert( shapeToExtrude && "Shape must not be null!");
 		int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegShape>1 && "Shape must contain at least two points");
+		int offset =0;
 
 		for (int i=0;i<=numSeg;i++)
 		{
@@ -54,18 +55,18 @@ namespace Procedural
 					normal = -normal;
 				}
 
-				manual->position(q*vp);
-				manual->normal(q*normal);
-				manual->textureCoord(i/(Ogre::Real)numSeg*uTile, j/(Ogre::Real)numSegShape*vTile);
+				buffer.position(q*vp);
+				buffer.normal(q*normal);
+				buffer.textureCoord(i/(Ogre::Real)numSeg*uTile, j/(Ogre::Real)numSegShape*vTile);
 
 				if (j <numSegShape && i <numSeg)
 				{
-					manual->index(offset + numSegShape + 2);
-					manual->index(offset);
-					manual->index(offset + numSegShape + 1);
-					manual->index(offset + numSegShape + 2);
-					manual->index(offset + 1);
-					manual->index(offset);
+					buffer.index(offset + numSegShape + 2);
+					buffer.index(offset);
+					buffer.index(offset + numSegShape + 1);
+					buffer.index(offset + numSegShape + 2);
+					buffer.index(offset + 1);
+					buffer.index(offset);
 				}
 				offset ++;
 			}

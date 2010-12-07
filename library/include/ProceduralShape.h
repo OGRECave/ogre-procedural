@@ -51,7 +51,7 @@ public:
 		return *this;
 	}
 
-	Shape& addPoint(float x, float y)
+	Shape& addPoint(Ogre::Real x, Ogre::Real y)
 	{
 		points.push_back(Ogre::Vector2(x, y));
 		return *this;
@@ -158,7 +158,7 @@ public:
 		return *this;
 	}
 
-	BezierShape& addPoint(float x, float y)
+	BezierShape& addPoint(Ogre::Real x, Ogre::Real y)
 	{
 	    points.push_back(Ogre::Vector2(x,y));
 	    return *this;
@@ -223,7 +223,7 @@ public:
 
 			for (int j=0;j<numSeg;j++)
 			{
-				float t = (float)j/(float)numSeg;
+				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
 				Ogre::Vector2 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;
 				shape.addPoint(P);
 			}
@@ -242,18 +242,18 @@ public:
 
 class _ProceduralExport RectangleShape
 {
-	float width,height;
+	Ogre::Real width,height;
 
 	public:
 	RectangleShape() : width(1.0), height(1.0) {}
 
-	RectangleShape& setWidth(float width)
+	RectangleShape& setWidth(Ogre::Real width)
 	{
 		this->width = width;
 		return *this;
 	}
 
-	RectangleShape& setHeight(float height)
+	RectangleShape& setHeight(Ogre::Real height)
 	{
 		this->height = height;
 		return *this;
@@ -273,13 +273,13 @@ class _ProceduralExport RectangleShape
 
 class _ProceduralExport CircleShape
 {
-	float radius;
+	Ogre::Real radius;
 	int numSeg;
 
 	public:
 	CircleShape() : radius(1.0), numSeg(8) {}
 
-	CircleShape& setRadius(float radius)
+	CircleShape& setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
@@ -294,7 +294,7 @@ class _ProceduralExport CircleShape
 	Shape realizeShape()
 	{
 		Shape s;
-		float deltaAngle = Ogre::Math::TWO_PI/(float)numSeg;
+		Ogre::Real deltaAngle = Ogre::Math::TWO_PI/(Ogre::Real)numSeg;
 		for (int i=0;i<numSeg;i++)
 		{
 			s.addPoint(radius*cosf(i*deltaAngle), radius*sinf(i*deltaAngle));

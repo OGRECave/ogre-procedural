@@ -42,8 +42,8 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 public:
 	Extruder() : shapeToExtrude(0), extrusionPath(0)
 	{}
-
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	
+	void addToTriangleBuffer(TriangleBuffer& buffer);
 
 	inline Extruder & setShapeToExtrude(Shape* shapeToExtrude)
 	{

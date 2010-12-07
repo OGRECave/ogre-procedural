@@ -47,7 +47,8 @@ public:
 						sectionRadius(0.2f) {}
 
 
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToTriangleBuffer(TriangleBuffer& buffer);
+	
 	inline TorusGenerator & setNumSegSection(int numSegSection)
 	{
 		this->numSegSection = numSegSection;

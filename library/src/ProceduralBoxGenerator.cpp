@@ -31,39 +31,45 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void BoxGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
 {
 	assert(numSegX>0 && numSegY>0 && numSegZ>0 && "Num seg must be positive integers");
 	assert(sizeX>0. && sizeY>0. && sizeZ>0. && "Sizes must be positive");
 
 	PlaneGenerator pg;
 	pg.setUTile(uTile).setVTile(vTile);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Z)
 	  .setPosition(.5*sizeZ*Ogre::Vector3::NEGATIVE_UNIT_Z)
-	  .addToManualObject(manual, offset, boundingRadius, aabb);
+	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Z)
 	  .setPosition(.5*sizeZ*Ogre::Vector3::UNIT_Z)
-	  .addToManualObject(manual, offset, boundingRadius, aabb);
+	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Y)
 	  .setPosition(.5*sizeY*Ogre::Vector3::NEGATIVE_UNIT_Y)
-	  .addToManualObject(manual, offset, boundingRadius, aabb);
+	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Y)
 	  .setPosition(.5*sizeY*Ogre::Vector3::UNIT_Y)
-	  .addToManualObject(manual, offset, boundingRadius, aabb);
+	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_X)
 	  .setPosition(.5*sizeX*Ogre::Vector3::NEGATIVE_UNIT_X)
-	  .addToManualObject(manual, offset, boundingRadius, aabb);
+	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
 	  .setNormal(Ogre::Vector3::UNIT_X)
 	  .setPosition(.5*sizeX*Ogre::Vector3::UNIT_X)
-	  .addToManualObject(manual, offset, boundingRadius, aabb);
+	  .addToTriangleBuffer(buffer);
 
-	aabb.setExtents(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ);
-	boundingRadius = Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ);
+	buffer.updateBoundingBox(Ogre::AxisAlignedBoundingBox(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ));
+	buffer.sphereBoundingRadius = Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ);
 }
 }

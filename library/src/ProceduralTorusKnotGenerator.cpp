@@ -30,11 +30,12 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void TorusKnotGenerator::aaddToTriangleBuffer(TriangleBuffer& buffer)
 {
 	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
 	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
 	assert(p>0 && q>0 && "p and q must be positive");
+	int offset = 0;
 
 	for (int i = 0; i <= numSegCircle * p;i++)
 	{
@@ -65,24 +66,24 @@ void TorusKnotGenerator::addToManualObject(Ogre::ManualObject* manual, int& offs
 			Ogre::Real alpha = Ogre::Math::TWO_PI *j/numSegSection;
 			Ogre::Vector3 vp = sectionRadius*(q * Ogre::Vector3(cos(alpha), sin(alpha),0));
 
-			manual->position(v0+vp);
-			manual->normal(vp.normalisedCopy());
-			manual->textureCoord(i/(Ogre::Real)numSegCircle*uTile, j/(Ogre::Real)numSegSection*vTile);
+			buffer.position(v0+vp);
+			buffer.normal(vp.normalisedCopy());
+			buffer.textureCoord(i/(Ogre::Real)numSegCircle*uTile, j/(Ogre::Real)numSegSection*vTile);
 
 			if (i != numSegCircle * p)
 			{
-				manual->index(offset + numSegSection + 1);
-				manual->index(offset + numSegSection);
-				manual->index(offset);
-				manual->index(offset + numSegSection + 1);
-				manual->index(offset);
-				manual->index(offset + 1);
+				buffer.index(offset + numSegSection + 1);
+				buffer.index(offset + numSegSection);
+				buffer.index(offset);
+				buffer.index(offset + numSegSection + 1);
+				buffer.index(offset);
+				buffer.index(offset + 1);
 			}
 			offset ++;
 		}
 	}
 
-	boundingRadius = Ogre::Math::Sqrt(2*Ogre::Math::Sqr(radius + sectionRadius)+Ogre::Math::Sqr(sectionRadius));
-	aabb = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
+	buffer.sphereBoundingRadius = Ogre::Math::Sqrt(2*Ogre::Math::Sqr(radius + sectionRadius)+Ogre::Math::Sqr(sectionRadius));
+	buffer.boundingBox = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
 }
 }

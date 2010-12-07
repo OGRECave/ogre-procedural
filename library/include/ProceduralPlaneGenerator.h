@@ -49,8 +49,7 @@ public:
 		sizeX(1), sizeY(1),position(Ogre::Vector3::ZERO)
 	{}
 
-
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	void addToTriangleBuffer(TriangleBuffer& buffer);
 
 	inline PlaneGenerator & setNumSegX(int numSegX)
 	{

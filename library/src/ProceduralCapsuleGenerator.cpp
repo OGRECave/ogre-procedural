@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb)
+void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
 {
 	assert(numRings>0 && numSegments>0 && numSegHeight>0 && "Num seg must be positive integers");
 	assert(height>0. && radius>0. && "Height and radius must be positive");
@@ -53,20 +53,20 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 			Ogre::Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			manual->position( x0, 0.5*height + y0, z0);
+			buffer.position( x0, 0.5*height + y0, z0);
 			if (enableNormals)
-				manual->normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
+				buffer.normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				manual->textureCoord((Ogre::Real) seg / (Ogre::Real) numSegments * uTile, (Ogre::Real) ring / (Ogre::Real) numRings * vTile * sphereRatio);
+				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) numSegments * uTile, (Ogre::Real) ring / (Ogre::Real) numRings * vTile * sphereRatio);
 
 			//if (ring != numRings) {
 				// each vertex (except the last) has six indices pointing to it
-				manual->index(offset + numSegments + 1);
-				manual->index(offset + numSegments);
-				manual->index(offset);
-				manual->index(offset + numSegments + 1);
-				manual->index(offset);
-				manual->index(offset + 1);
+				buffer.index(offset + numSegments + 1);
+				buffer.index(offset + numSegments);
+				buffer.index(offset);
+				buffer.index(offset + numSegments + 1);
+				buffer.index(offset);
+				buffer.index(offset + 1);
 				//}
 				offset ++;
 		}; // end for seg
@@ -81,17 +81,17 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 		{
 			Ogre::Real x0 = radius * cosf(j*deltaAngle);
 			Ogre::Real z0 = radius * sinf(j*deltaAngle);
-			manual->position(x0, 0.5*height-i*deltaHeight, z0);
-			manual->normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			manual->textureCoord(j/(Ogre::Real)numSegments*uTile, i/(Ogre::Real)numSegHeight*vTile * cylinderRatio + sphereRatio);
+			buffer.position(x0, 0.5*height-i*deltaHeight, z0);
+			buffer.normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
+			buffer.textureCoord(j/(Ogre::Real)numSegments*uTile, i/(Ogre::Real)numSegHeight*vTile * cylinderRatio + sphereRatio);
 
 			//if (i != numSegHeight) {
-				manual->index(offset + numSegments + 1);
-				manual->index(offset + numSegments);
-				manual->index(offset);
-				manual->index(offset + numSegments + 1);
-				manual->index(offset);
-				manual->index(offset + 1);
+				buffer.index(offset + numSegments + 1);
+				buffer.index(offset + numSegments);
+				buffer.index(offset);
+				buffer.index(offset + numSegments + 1);
+				buffer.index(offset);
+				buffer.index(offset + 1);
 				//}
 				offset ++;
 		}
@@ -109,26 +109,26 @@ void CapsuleGenerator::addToManualObject(Ogre::ManualObject* manual, int& offset
 			Ogre::Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			manual->position( x0, -0.5*height + y0, z0);
+			buffer.position( x0, -0.5*height + y0, z0);
 			if (enableNormals)
-				manual->normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
+				buffer.normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				manual->textureCoord((Ogre::Real) seg / (Ogre::Real) numSegments * uTile, (Ogre::Real) ring / (Ogre::Real) numRings * vTile*sphereRatio + cylinderRatio + sphereRatio);
+				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) numSegments * uTile, (Ogre::Real) ring / (Ogre::Real) numRings * vTile*sphereRatio + cylinderRatio + sphereRatio);
 
 			if (ring != numRings) {
 				// each vertex (except the last) has six indices pointing to it
-				manual->index(offset + numSegments + 1);
-				manual->index(offset + numSegments);
-				manual->index(offset);
-				manual->index(offset + numSegments + 1);
-				manual->index(offset);
-				manual->index(offset + 1);
+				buffer.index(offset + numSegments + 1);
+				buffer.index(offset + numSegments);
+				buffer.index(offset);
+				buffer.index(offset + numSegments + 1);
+				buffer.index(offset);
+				buffer.index(offset + 1);
 				}
 				offset ++;
 		}; // end for seg
 	} // end for ring
 
-	boundingRadius = height + radius;
-	Utils::updateAABB(aabb, Ogre::AxisAlignedBox(-radius, -radius-height, -radius, radius, radius+height, radius));
+	buffer.sphereBoundingRadius = height + radius;
+	Utils::updateAABB(buffer.boundingBox, Ogre::AxisAlignedBox(-radius, -radius-height, -radius, radius, radius+height, radius));
 }
 }

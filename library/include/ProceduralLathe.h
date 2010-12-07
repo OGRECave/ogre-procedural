@@ -48,8 +48,8 @@ public:
 		this->numSeg = numSeg;
 		return *this;
 	}
-
-	void addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb);
+	
+	void addToTriangleBuffer(TriangleBuffer& buffer);
 
 	inline Lathe & setShapeToExtrude(Shape* shapeToExtrude)
 	{

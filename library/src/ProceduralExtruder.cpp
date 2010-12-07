@@ -29,12 +29,13 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	void Extruder::addToManualObject(Ogre::ManualObject* manual, int& offset, float& boundingRadius, Ogre::AxisAlignedBox& aabb)
+	void addToTriangleBuffer(TriangleBuffer& buffer);
 	{
 		assert(extrusionPath && shapeToExtrude && "Shape and Path must not be null!");
 		int numSegPath = extrusionPath->getSegCount();
 		int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegPath>1 && numSegShape>1 && "Shape and path must contain at least two points");
+		int offset = 0;
 
 	for (int i = 0; i <= numSegPath;i++)
 	{
@@ -65,24 +66,30 @@ namespace Procedural
 			}
 
             Ogre::Vector3 newPoint = v0+q*vp;
-			manual->position(newPoint);
-			Utils::updateAABB(aabb, newPoint);
-			Utils::updateBoundingRadius(boundingRadius, newPoint);
-			manual->normal(q*normal);
-			manual->textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
+			buffer.position(newPoint);
+			Utils::updateAABB(buffer.boundingBox, newPoint);
+			Utils::updateBoundingRadius(buffer.sphereBoundingRadius, newPoint);
+			buffer.normal(q*normal);
+			buffer.textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
 
 			if (j <numSegShape && i <numSegPath)
 			{
-				manual->index(offset + numSegShape + 2);
-				manual->index(offset);
-				manual->index(offset + numSegShape + 1);
-				manual->index(offset + numSegShape + 2);
-				manual->index(offset + 1);
-				manual->index(offset);
+				buffer.index(offset + numSegShape + 2);
+				buffer.index(offset);
+				buffer.index(offset + numSegShape + 1);
+				buffer.index(offset + numSegShape + 2);
+				buffer.index(offset + 1);
+				buffer.index(offset);
 			}
 			offset ++;
 		}
 	}
-
+	
+	// If the path isn't closed, put caps on both sides
+	if (!extrusionPath->isClosed())
+	{
+		Triangulator tri;
+		TrianguleBuffer tbuffer = tri.setShape(shapeToExtrude).triangulate();
+		tbuffer.addToManual(manual);
 	}
 }

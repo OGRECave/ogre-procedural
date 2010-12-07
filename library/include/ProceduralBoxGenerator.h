@@ -78,7 +78,7 @@ public:
         return *this;
     }
 
-    void addToManualObject(Ogre::ManualObject* manual, int& offset, Ogre::Real& boundingRadius, Ogre::AxisAlignedBox& aabb);
+    void addToTriangleBuffer(TriangleBuffer& buffer);
 
 };
 
