@@ -48,6 +48,8 @@ void Sample_Extrusion::createScene(void)
 		Procedural::Lathe().setShapeToExtrude(&s2).realizeMesh("lathedMesh");
 		putMesh("lathedMesh");
 
+		Procedural::Triangulator::triangulate(s2);
+
 }
 
 void Sample_Extrusion::createCamera(void)

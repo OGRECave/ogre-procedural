@@ -44,5 +44,6 @@ THE SOFTWARE.
 #include "ProceduralLathe.h"
 #include "ProceduralShape.h"
 #include "ProceduralPath.h"
+#include "ProceduralTriangulator.h"
 
 #endif

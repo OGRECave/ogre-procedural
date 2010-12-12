@@ -63,7 +63,7 @@ public:
 		return *this;
 	}
 
-	std::vector<Ogre::Vector2> getPoints() 
+	std::vector<Ogre::Vector2> getPoints() const
 	{
 		return points;
 	}
