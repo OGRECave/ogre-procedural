@@ -134,6 +134,23 @@ public:
 			return n%cap;
 		return (cap-1)-((1+n)%cap);
 	}
+
+	/**
+	 * Equivalent of Ogre::Vector3::angleBetween, applied to Ogre::Vector2
+	 */
+	static Ogre::Radian angleBetween(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
+	{
+		// TODO : also compute angle greater than PI
+		Ogre::Real lenProduct = v1.length() * v2.length();
+		// Divide by zero check
+		if(lenProduct < 1e-6f)
+			lenProduct = 1e-6f;
+		
+		Ogre::Real f = v1.dotProduct(v2) / lenProduct;
+	
+		f = Ogre::Math::Clamp(f, (Ogre::Real)-1.0, (Ogre::Real)1.0);
+		return Ogre::Math::ACos(f);
+	}
 };
 }
 #endif

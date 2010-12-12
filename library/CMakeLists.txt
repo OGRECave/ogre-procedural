@@ -23,6 +23,7 @@ set( HDRS
 	include/ProceduralLathe.h
 	include/ProceduralShape.h
 	include/ProceduralPath.h
+	include/ProceduralTriangulator.h
 	)
 
 set( SRCS
@@ -40,6 +41,7 @@ set( SRCS
 		src/ProceduralTubeGenerator.cpp
 		src/ProceduralExtruder.cpp
 		src/ProceduralLathe.cpp
+		src/ProceduralTriangulator.cpp
 	)
 
 include_directories( ${OIS_INCLUDE_DIRS}
