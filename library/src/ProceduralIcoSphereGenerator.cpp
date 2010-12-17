@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
+void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	assert(radius>0. && "Radius must me positive");
 	assert(numIterations>0 && "numIterations must be positive");
@@ -202,7 +202,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
 		buffer.index(offset+faces[i]);
 	}
 	offset+=vertices.size();
-	buffer.sphereBoundingRadius = radius;
-	Utils::updateAABB(buffer.boundingBox, Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
+	buffer.updateBoundingSphere(radius);
+	buffer.updateBoundingBox(Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
 }
 }

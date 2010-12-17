@@ -29,7 +29,10 @@ THE SOFTWARE.
 #define PROCEDURAL_TRIANGLEBUFFER_INCLUDED
 
 #include "OgreMesh.h"
+#include "ProceduralUtils.h"
 
+namespace Procedural
+{
 /**
  * This is ogre-procedural's temporary mesh buffer. 
  * It stores all the info needed to build an Ogre Mesh, yet is intented to be more flexible, since
@@ -58,13 +61,25 @@ class TriangleBuffer
 	
 	void updateBoundingSphere(Ogre::Real radius)
 	{
-		boundingSphereRadius = max(boundingSphereRadius, radius);
+		boundingSphereRadius = std::max(boundingSphereRadius, radius);
 	}
 	
-	void updateBoundingbox(const Ogre::AxisAlignedBoundingBox& aabb)
+	void updateBoundingBox(const Ogre::AxisAlignedBox& aabb)
 	{
 		Utils::updateAABB(boundingBox, aabb);
 	}
+
+	void updateBoundingBox(Ogre::Real minX, Ogre::Real minY, Ogre::Real minZ, Ogre::Real maxX, Ogre::Real maxY, Ogre::Real maxZ)
+	{
+		Utils::updateAABB(boundingBox, Ogre::AxisAlignedBox(minX,minY,minZ,maxX,maxY,maxZ));
+	}
+
+	void updateBoundingVolumes(Ogre::Vector3 vec)
+	{
+		Utils::updateAABB(boundingBox, vec);
+		Utils::updateBoundingRadius(boundingSphereRadius, vec);
+	}
+	
 	
 	/**
 	 * Builds an Ogre Mesh from this buffer.
@@ -76,11 +91,11 @@ class TriangleBuffer
 		
 		for (std::vector<Ogre::Vector3>::iterator it = vertices.begin(); it != vertices.end();it++)
 		{
-			manual->position(it);
+			manual->position(*it);
 		}
 		for (std::vector<int>::iterator it = indices.begin(); it != indices.end();it++)
 		{
-			manual->index(it);
+			manual->index(*it);
 		}
 
 		manual->end();
@@ -105,6 +120,23 @@ class TriangleBuffer
 		vertices.push_back(pos);
 		return *this;
 	}
+
+	inline TriangleBuffer& position(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		vertices.push_back(Ogre::Vector3(x,y,z));
+		return *this;
+	}
+
+
+	inline TriangleBuffer& normal(const Ogre::Vector3& norm)
+	{	//TODO
+		return *this;
+	}
+
+	inline TriangleBuffer& textureCoord(float u, float v)
+	{	//TODO
+		return *this;
+	}
 	
 	inline TriangleBuffer& index(int i)
 	{
@@ -112,5 +144,5 @@ class TriangleBuffer
 		return *this;
 	}
 };
-
+}
 #endif

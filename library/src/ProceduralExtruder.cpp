@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
 		assert(extrusionPath && shapeToExtrude && "Shape and Path must not be null!");
 		int numSegPath = extrusionPath->getSegCount();
@@ -67,8 +67,7 @@ namespace Procedural
 
             Ogre::Vector3 newPoint = v0+q*vp;
 			buffer.position(newPoint);
-			Utils::updateAABB(buffer.boundingBox, newPoint);
-			Utils::updateBoundingRadius(buffer.sphereBoundingRadius, newPoint);
+			buffer.updateBoundingVolumes(newPoint);
 			buffer.normal(q*normal);
 			buffer.textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
 
@@ -88,8 +87,9 @@ namespace Procedural
 	// If the path isn't closed, put caps on both sides
 	if (!extrusionPath->isClosed())
 	{
-		Triangulator tri;
+		/*Triangulator tri;
 		TrianguleBuffer tbuffer = tri.setShape(shapeToExtrude).triangulate();
-		tbuffer.addToManual(manual);
+		tbuffer.addToManual(manual);*/
 	}
+}
 }

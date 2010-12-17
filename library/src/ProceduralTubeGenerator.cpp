@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "ProceduralUtils.h"
 
 namespace Procedural {
-void addToTriangleBuffer(TriangleBuffer& buffer)
+void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	assert(height>0. && outerRadius>0. && innerRadius>0. && "Height and radius must be positive");
 	assert(innerRadius<outerRadius && "Outer radius must be bigger than inner radius");
@@ -38,6 +38,7 @@ void addToTriangleBuffer(TriangleBuffer& buffer)
 
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
+	int offset = 0;
 
 	for (int i = 0; i <=numSegHeight; i++)
 		for (int j = 0; j<=numSegBase; j++)
@@ -140,7 +141,7 @@ void addToTriangleBuffer(TriangleBuffer& buffer)
 		}
 
 
-	buffer.sphereBoundingRadius = std::max(outerRadius, height);
-	buffer.boundingBox = Ogre::AxisAlignedBox(-outerRadius,0,-outerRadius,outerRadius, height, outerRadius);
+	buffer.updateBoundingSphere(std::max(outerRadius, height));
+	buffer.updateBoundingBox(Ogre::AxisAlignedBox(-outerRadius,0,-outerRadius,outerRadius, height, outerRadius));
 }
 }

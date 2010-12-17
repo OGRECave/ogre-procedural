@@ -49,7 +49,7 @@ public:
 						sectionRadius(.2f), p(2),q(3) {}
 
 
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 
 	inline TorusKnotGenerator & setNumSegSection(int numSegSection)

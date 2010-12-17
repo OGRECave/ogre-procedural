@@ -37,7 +37,7 @@ namespace Procedural
 class _ProceduralExport Path
 {
 	std::vector<Ogre::Vector3> points;
-	bool isClosed;
+	bool closed;
 public:
 	Path& addPoint(const Ogre::Vector3& pt)
 	{
@@ -60,13 +60,13 @@ public:
 	Path& close()
 	{
 		assert(points.size()>0 && "Cannot close an empty path");
-		isClosed = true;
+		closed = true;
 		return *this;
 	}
 	
 	bool isClosed()
 	{
-		return isClosed;
+		return closed;
 	}
 
 	std::vector<Ogre::Vector3> getPoints()
@@ -76,14 +76,14 @@ public:
 
 	const Ogre::Vector3& getPoint(int i)
 	{
-		if (isClosed)
+		if (closed)
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
 	}
 
 	int getSegCount()
 	{
-		return (points.size()-1) + (isClosed?1:0);
+		return (points.size()-1) + (closed?1:0);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public:
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!isClosed && i == points.size()-1 && i>0)
+		if (!closed && i == points.size()-1 && i>0)
 			return (points[i] - points[i-1]).normalisedCopy();
 		else
 			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
@@ -106,7 +106,7 @@ public:
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!isClosed && i == 1)
+		if (!closed && i == 1)
 			return (points[1] - points[0]).normalisedCopy();
 		else
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();

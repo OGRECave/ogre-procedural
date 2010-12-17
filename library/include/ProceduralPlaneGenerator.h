@@ -48,8 +48,8 @@ public:
 		normal(Ogre::Vector3::UNIT_Y),
 		sizeX(1), sizeY(1),position(Ogre::Vector3::ZERO)
 	{}
-
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	inline PlaneGenerator & setNumSegX(int numSegX)
 	{

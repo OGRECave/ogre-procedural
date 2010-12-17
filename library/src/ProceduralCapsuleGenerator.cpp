@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
+void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	assert(numRings>0 && numSegments>0 && numSegHeight>0 && "Num seg must be positive integers");
 	assert(height>0. && radius>0. && "Height and radius must be positive");
@@ -40,6 +40,7 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
 
 	Ogre::Real sphereRatio = radius / (2 * radius + height);
 	Ogre::Real cylinderRatio = height / (2 * radius + height);
+	int offset = 0;
 	// Top half sphere
 
 	// Generate the group of rings for the sphere
@@ -128,7 +129,7 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
 		}; // end for seg
 	} // end for ring
 
-	buffer.sphereBoundingRadius = height + radius;
-	Utils::updateAABB(buffer.boundingBox, Ogre::AxisAlignedBox(-radius, -radius-height, -radius, radius, radius+height, radius));
+	buffer.updateBoundingSphere( height + radius);
+	buffer.updateBoundingBox( Ogre::AxisAlignedBox(-radius, -radius-height, -radius, radius, radius+height, radius));
 }
 }

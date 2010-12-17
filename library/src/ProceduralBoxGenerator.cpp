@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
+void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	assert(numSegX>0 && numSegY>0 && numSegZ>0 && "Num seg must be positive integers");
 	assert(sizeX>0. && sizeY>0. && sizeZ>0. && "Sizes must be positive");
@@ -69,7 +69,7 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer);
 	  .setPosition(.5*sizeX*Ogre::Vector3::UNIT_X)
 	  .addToTriangleBuffer(buffer);
 
-	buffer.updateBoundingBox(Ogre::AxisAlignedBoundingBox(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ));
-	buffer.sphereBoundingRadius = Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ);
+	buffer.updateBoundingBox(Ogre::AxisAlignedBox(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ));
+	buffer.updateBoundingSphere(Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ));
 }
 }

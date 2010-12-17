@@ -36,15 +36,15 @@ namespace Procedural
 {
 struct Triangle;	
 typedef std::vector<Ogre::Vector2> PointList;
-typedef std::list<Triangle> TriangleBuffer;
+typedef std::list<Triangle> DelaunayTriangleBuffer;
 
 struct _ProceduralExport Triangle
 {
 	PointList* pl;
 	int i[3];
-	TriangleBuffer::iterator adj[3];
-	TriangleBuffer::iterator emptyIterator;
-	Triangle(PointList* pl, TriangleBuffer::iterator zeroIterator) : emptyIterator(zeroIterator)
+	DelaunayTriangleBuffer::iterator adj[3];
+	DelaunayTriangleBuffer::iterator emptyIterator;
+	Triangle(PointList* pl, DelaunayTriangleBuffer::iterator zeroIterator) : emptyIterator(zeroIterator)
 	{
 		adj[0]=emptyIterator;adj[1]=emptyIterator;adj[2]=emptyIterator;
 		this->pl = pl;
@@ -63,7 +63,7 @@ struct _ProceduralExport Triangle
 	void detach();
 
 	void setVertices(int i0, int i1, int i2);
-	void setAdj(TriangleBuffer::iterator t0, TriangleBuffer::iterator t1,TriangleBuffer::iterator t2,TriangleBuffer::iterator myIterator);
+	void setAdj(DelaunayTriangleBuffer::iterator t0, DelaunayTriangleBuffer::iterator t1,DelaunayTriangleBuffer::iterator t2,DelaunayTriangleBuffer::iterator myIterator);
 
 	int findSegNumber(int i0, int i1) const;
 
@@ -74,9 +74,9 @@ class _ProceduralExport Triangulator
 {
 public:
 	
-	static TriangleBuffer triangulate(const Shape& shape);
+	static DelaunayTriangleBuffer triangulate(const Shape& shape);
 	
-	static TriangleBuffer delaunay2(PointList pointList);
+	static DelaunayTriangleBuffer delaunay2(PointList pointList);
 
 	
 struct Circle

@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
+void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	assert(numSegX>0 && numSegY>0 && "Num seg must be positive");
 	assert(!normal.isZeroLength() && "Normal must not be null");
@@ -89,7 +89,7 @@ void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
     extremePoints.push_back(position+orig+sizeX*vX);
     extremePoints.push_back(position+orig+sizeY*vY);
     extremePoints.push_back(position+orig+sizeX*vX+sizeY*vY);
-    buffer.boundingBox = Utils::AABBfromPoints(extremePoints);
-	buffer.sphereBoundingRadius = Utils::boundingRadiusFromPoints(extremePoints);
+    buffer.updateBoundingBox( Utils::AABBfromPoints(extremePoints));
+	buffer.updateBoundingSphere( Utils::boundingRadiusFromPoints(extremePoints));
 }
 }

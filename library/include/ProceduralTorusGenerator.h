@@ -47,7 +47,7 @@ public:
 						sectionRadius(0.2f) {}
 
 
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 	
 	inline TorusGenerator & setNumSegSection(int numSegSection)
 	{

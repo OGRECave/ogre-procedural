@@ -39,6 +39,8 @@ class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGen
 	int numSegX,numSegY,numSegZ;
 	Ogre::Real chamferSize;
 	int chamferNumSeg;
+
+	int offset;
 	
 public:
 	RoundedBoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
@@ -87,11 +89,11 @@ public:
 		return *this;
 	}
 
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 	
-	void _addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos);
+	void _addEdge(TriangleBuffer& buffer, int& offset, short xPos, short yPos, short zPos) const;
 	
-	void _addCorner(TriangleBuffer& buffer, bool isXPositive, bool isYPositive, bool isZPositive);
+	void _addCorner(TriangleBuffer& buffer, int& offset, bool isXPositive, bool isYPositive, bool isZPositive) const;
 
 };
 

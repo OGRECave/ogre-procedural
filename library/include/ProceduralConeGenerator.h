@@ -48,7 +48,7 @@ public:
 	{}
 
 
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	inline ConeGenerator & setNumSegBase(int numSegBase)
 	{
