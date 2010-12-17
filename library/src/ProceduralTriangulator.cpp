@@ -215,7 +215,7 @@ void Triangle::setVertices(int i0, int i1, int i2)
 	i[2] = i2;
 }
 
-void Triangle::setAdj(TriangleBuffer::iterator t0, TriangleBuffer::iterator t1,TriangleBuffer::iterator t2,TriangleBuffer::iterator myIterator)
+void Triangle::setAdj(DelaunayTriangleBuffer::iterator t0, DelaunayTriangleBuffer::iterator t1,DelaunayTriangleBuffer::iterator t2,DelaunayTriangleBuffer::iterator myIterator)
 {
 	adj[0] = t0;
 	adj[1] = t1;
@@ -279,9 +279,9 @@ struct TouchSuperTriangle
 
 
 // Triangulation by insertion
-TriangleBuffer Triangulator::delaunay2(PointList pointList)
+DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 {	
-	TriangleBuffer tbuffer;
+	DelaunayTriangleBuffer tbuffer;
 	// Compute super triangle
 	float maxTriangleSize = 0.f;
 	for (PointList::iterator it = pointList.begin(); it!=pointList.end();it++)
@@ -304,15 +304,15 @@ TriangleBuffer Triangulator::delaunay2(PointList pointList)
 	{		
 		// Insert 1 point, find triangle containing it
 		Vector2& p = pointList[i];
-		TriangleBuffer::iterator triangle;
-		for (TriangleBuffer::iterator it = tbuffer.begin();it!=tbuffer.end();it++)
+		DelaunayTriangleBuffer::iterator triangle;
+		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin();it!=tbuffer.end();it++)
 		{
 			if (it->isPointInside(p))
 				triangle = it;
 		}		
 		// Build 3 triangles and suppress old triangle	
 		//Triangle* subTri[3];
-		TriangleBuffer::iterator subTri[3];
+		DelaunayTriangleBuffer::iterator subTri[3];
 		tbuffer.push_back(Triangle(&pointList, tbuffer.end()));
 		subTri[0] = --tbuffer.end();
 		tbuffer.push_back(Triangle(&pointList, tbuffer.end()));
@@ -330,7 +330,7 @@ TriangleBuffer Triangulator::delaunay2(PointList pointList)
 		
 		for (int k=0;k<3;k++)
 		{
-			TriangleBuffer::iterator tri0 = subTri[k];
+			DelaunayTriangleBuffer::iterator tri0 = subTri[k];
 			//Check if new triangle is Delaunay
 			Circle c = Circle::from3Points(tri0->p(0), tri0->p(1), tri0->p(2));		
 			bool isDelaunay = true;
@@ -346,11 +346,11 @@ TriangleBuffer Triangulator::delaunay2(PointList pointList)
 			// Flip edges where needed
 			if (!isDelaunay && tri0->adj[2]!=tbuffer.end())
 			{			
-				TriangleBuffer::iterator tri1 = tri0->adj[2];
+				DelaunayTriangleBuffer::iterator tri1 = tri0->adj[2];
 				tbuffer.push_back(Triangle(&pointList, tbuffer.end()));
-				TriangleBuffer::iterator newt0 = --tbuffer.end();
+				DelaunayTriangleBuffer::iterator newt0 = --tbuffer.end();
 				tbuffer.push_back(Triangle(&pointList, tbuffer.end()));				
-				TriangleBuffer::iterator newt1 = --tbuffer.end();
+				DelaunayTriangleBuffer::iterator newt1 = --tbuffer.end();
 				int x = tri1->findSegNumber(tri0->i[0],tri0->i[1]);//opposite of common side for t1
 				newt0->setVertices(tri0->i[2],tri1->i[x],tri0->i[1]);
 				newt1->setVertices(tri0->i[2],tri0->i[0],tri1->i[x]);
@@ -371,7 +371,7 @@ TriangleBuffer Triangulator::delaunay2(PointList pointList)
 	return tbuffer;
 }
 
-TriangleBuffer Triangulator::triangulate(const Shape& shape)
+DelaunayTriangleBuffer Triangulator::triangulate(const Shape& shape)
 {
 	return delaunay2(shape.getPoints());	
 }

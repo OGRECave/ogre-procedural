@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void TorusKnotGenerator::aaddToTriangleBuffer(TriangleBuffer& buffer)
+void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
 	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
@@ -83,7 +83,7 @@ void TorusKnotGenerator::aaddToTriangleBuffer(TriangleBuffer& buffer)
 		}
 	}
 
-	buffer.sphereBoundingRadius = Ogre::Math::Sqrt(2*Ogre::Math::Sqr(radius + sectionRadius)+Ogre::Math::Sqr(sectionRadius));
-	buffer.boundingBox = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
+	buffer.updateBoundingSphere(Ogre::Math::Sqrt(2*Ogre::Math::Sqr(radius + sectionRadius)+Ogre::Math::Sqr(sectionRadius)));
+	buffer.updateBoundingBox(Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius));
 }
 }

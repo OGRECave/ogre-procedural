@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
+void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
 	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
@@ -63,7 +63,7 @@ void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
 			}
 			offset ++;
 		}
-	buffer.sphereBoundingRadius = radius + sectionRadius;
-	buffer.boundingBox = Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius);
+	buffer.updateBoundingSphere( radius + sectionRadius);
+	buffer.updateBoundingBox( Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius));
 }
 }

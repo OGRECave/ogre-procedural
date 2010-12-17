@@ -50,7 +50,7 @@ public:
         height(1.f)
     {}
 
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
     inline CylinderGenerator & setNumSegBase(int numSegBase)
     {

@@ -43,7 +43,7 @@ public:
 		numIterations(2)
 	{}
 
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	inline IcoSphereGenerator & setRadius(Ogre::Real radius)
 	{

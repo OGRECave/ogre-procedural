@@ -31,7 +31,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 
-void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
+void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	assert(height>0. && radius>0. && "Height and radius must be positive");
 	assert(numSegBase>0 && numSegHeight>0 && "Num seg must be positive integers");
@@ -107,7 +107,7 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer)
 		}
 	}
 
-	buffer.boundingSphereRadius = std::max(radius, height);
-	buffer.boundingBox = Ogre::AxisAlignedBox(-radius,0,-radius,radius, height, radius);
+	buffer.updateBoundingSphere( std::max(radius, height));
+	buffer.updateBoundingBox( Ogre::AxisAlignedBox(-radius,0,-radius,radius, height, radius));
 }
 }

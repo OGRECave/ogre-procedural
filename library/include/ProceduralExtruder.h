@@ -43,7 +43,7 @@ public:
 	Extruder() : shapeToExtrude(0), extrusionPath(0)
 	{}
 	
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	inline Extruder & setShapeToExtrude(Shape* shapeToExtrude)
 	{

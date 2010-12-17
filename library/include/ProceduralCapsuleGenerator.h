@@ -47,7 +47,7 @@ public:
 
 	{}
 	
-	void addToTriangleBuffer(TriangleBuffer& buffer);
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	inline CapsuleGenerator & setRadius(Ogre::Real radius)
 	{

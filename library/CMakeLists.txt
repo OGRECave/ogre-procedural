@@ -24,6 +24,7 @@ set( HDRS
 	include/ProceduralShape.h
 	include/ProceduralPath.h
 	include/ProceduralTriangulator.h
+	include/ProceduralTriangleBuffer.h
 	)
 
 set( SRCS

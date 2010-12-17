@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-void Lathe::addToTriangleBuffer(TriangleBuffer& buffer)
+void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
 		assert( shapeToExtrude && "Shape must not be null!");
 		int numSegShape = shapeToExtrude->getSegCount();

@@ -78,7 +78,7 @@ public:
         return *this;
     }
 
-    void addToTriangleBuffer(TriangleBuffer& buffer);
+    void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 };
 

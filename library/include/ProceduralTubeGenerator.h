@@ -49,7 +49,7 @@ public:
         innerRadius(1.f),
         height(1.f) {}
 
-    void addToTriangleBuffer(TriangleBuffer& buffer);
+    void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
     inline TubeGenerator & setNumSegBase(int numSegBase)
     {
