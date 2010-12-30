@@ -34,7 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
- * This is ogre-procedural's temporary mesh buffer. 
+ * This is ogre-procedural's temporary mesh buffer.
  * It stores all the info needed to build an Ogre Mesh, yet is intented to be more flexible, since
  * there is no link towards hardware.
  */
@@ -42,28 +42,30 @@ class TriangleBuffer
 {
 	std::vector<int> indices;
 	std::vector<Ogre::Vector3> vertices;
-	
+	std::vector<Ogre::Vector3> normals;
+	std::vector<Ogre::Vector2> uvs;
+
 	Ogre::AxisAlignedBox boundingBox;
 	Ogre::Real boundingSphereRadius;
-	
+
 	int globalOffset;
 
 	//TODO : add UV, normals, tangents, colors?
-	
+
 	public:
 	TriangleBuffer() : globalOffset(0)
 	{}
-	
+
 	void rebaseOffset()
 	{
 		globalOffset = vertices.size();
 	}
-	
+
 	void updateBoundingSphere(Ogre::Real radius)
 	{
 		boundingSphereRadius = std::max(boundingSphereRadius, radius);
 	}
-	
+
 	void updateBoundingBox(const Ogre::AxisAlignedBox& aabb)
 	{
 		Utils::updateAABB(boundingBox, aabb);
@@ -79,8 +81,8 @@ class TriangleBuffer
 		Utils::updateAABB(boundingBox, vec);
 		Utils::updateBoundingRadius(boundingSphereRadius, vec);
 	}
-	
-	
+
+
 	/**
 	 * Builds an Ogre Mesh from this buffer.
 	 */
@@ -88,16 +90,21 @@ class TriangleBuffer
 	{
 		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-		
-		for (std::vector<Ogre::Vector3>::iterator it = vertices.begin(); it != vertices.end();it++)
-		{
-			manual->position(*it);
-		}
-		for (std::vector<int>::iterator it = indices.begin(); it != indices.end();it++)
-		{
-			manual->index(*it);
-		}
 
+        std::vector<Ogre::Vector3>::iterator itPos = vertices.begin();
+        std::vector<Ogre::Vector2>::iterator itUvs = uvs.begin();
+        std::vector<Ogre::Vector3>::iterator itNormals = normals.begin();
+
+		for (; itPos != vertices.end();itPos++,itUvs++,itNormals++)
+		{
+			manual->position(*itPos);
+			manual->textureCoord(*itUvs);
+			manual->normal(*itNormals);
+		}
+		for (std::vector<int>::iterator it = indices.begin(); it!=indices.end();it++)
+		{
+		    manual->index(*it);
+		}
 		manual->end();
 		Ogre::MeshPtr mesh = manual->convertToMesh(name);
 
@@ -109,12 +116,12 @@ class TriangleBuffer
 		{
 			mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
 		}
-		
+
 		//TODO :  destroy manualobject???
 
 		return mesh;
 	}
-	
+
 	inline TriangleBuffer& position(const Ogre::Vector3& pos)
 	{
 		vertices.push_back(pos);
@@ -129,15 +136,17 @@ class TriangleBuffer
 
 
 	inline TriangleBuffer& normal(const Ogre::Vector3& norm)
-	{	//TODO
+	{
+	    normals.push_back(norm);
 		return *this;
 	}
 
 	inline TriangleBuffer& textureCoord(float u, float v)
-	{	//TODO
+	{
+	    uvs.push_back(Ogre::Vector2(u,v));
 		return *this;
 	}
-	
+
 	inline TriangleBuffer& index(int i)
 	{
 		indices.push_back(globalOffset+i);
