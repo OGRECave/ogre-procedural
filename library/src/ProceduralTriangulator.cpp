@@ -31,183 +31,6 @@ using namespace Ogre;
 
 namespace Procedural
 {
-/*Triangulator::SegmentBuffer Triangulator::delaunayMerge(const SegmentBuffer& leftSegmentBuffer, const SegmentBuffer& rightSegmentBuffer)
-{
-	// TODO Find the lowest segment beteween left and right that doesn't intersect another segment	
-	std::vector<int> pl1 = leftSegmentBuffer.getPointList();
-//	std::sort(pl1.begin(), pl1.end(), lowestPointSorter);
-	std::vector<int> pl2 = rightSegmentBuffer.getPointList();
-	//std::sort(pl2.begin(), pl2.end(), lowestPointSorter);
-
-	Segment LR(leftSegmentBuffer.points);	
-	// List of new segments
-	SegmentBuffer newSegmentBuffer(leftSegmentBuffer.points);
-	const PointList& points = *rightSegmentBuffer.points;
-	
-	bool finished = false;
-	while (!finished)
-	{
-	// ---Find right candidate
-	bool foundRightCandidate = false;
-	int rightCandidateIndex = -1;
-	{
-	AngleSorterRight as(points, LR);
-	std::vector<int> rightPointIndices = rightSegmentBuffer.getPointList();
-	std::sort(rightPointIndices.begin(), rightPointIndices.end(), as);
-	int i=0;
-	while (!foundRightCandidate && i<rightPointIndices.size())
-	{
-		// check angle is less than 180 degrees
-		Radian angle = as.getAngle(i);		
-		if (angle > (Radian)Math::PI)
-		{
-			
-			continue;
-		}
-		
-		// Check that the next point is not inside the circumcircle
-		Circle c = Circle::from3Points(LR.p1(), LR.p2(), points[rightPointIndices[i]]);
-		if (!c.isPointInside(points[rightPointIndices[i+1]]))
-		{
-			foundRightCandidate = true;
-			rightCandidateIndex = rightPointIndices[i];
-		}
-	}
-	}
-
-	// ---Find left candidate
-	bool foundLeftCandidate = false;
-	int leftCandidateIndex = -1;
-	{
-	AngleSorterLeft as(points, LR);
-	std::vector<int> leftPointIndices = leftSegmentBuffer.getPointList();
-	std::sort(leftPointIndices.begin(), leftPointIndices.end(), as);
-	int i=0;
-	while (!foundLeftCandidate && i<leftPointIndices.size())
-	{
-		// check angle is less than 180 degrees
-		Radian angle = as.getAngle(i);		
-		if (angle > (Radian)Math::PI)
-			continue;
-		
-		// Check that the next point is not inside the circumcircle
-		Circle c = Circle::from3Points(LR.p1(), LR.p2(), points[leftPointIndices[i]]);
-		if (!c.isPointInside(points[leftPointIndices[i+1]]))
-		{
-			foundLeftCandidate = true;
-			leftCandidateIndex = leftPointIndices[i];
-		}
-	}
-	}
-	
-	// ---Set the new LR from the candidate points found
-	if (!foundLeftCandidate && !foundRightCandidate)
-	{
-		finished = true;
-	}
-	else if (foundLeftCandidate && foundRightCandidate)
-	{
-		Circle c = Circle::from3Points(points[leftCandidateIndex], LR.p1(), LR.p2());
-		if (!c.isPointInside(points[rightCandidateIndex]))
-		{
-			// Right point must not be inside left point's circumcircle, so it's ok
-			LR.i2 = leftCandidateIndex;
-			newSegmentBuffer.addSegment(LR);
-		}
-		else
-		{
-			LR.i1 = leftCandidateIndex;
-			newSegmentBuffer.addSegment(LR);
-		}
-		
-	}
-	else if (foundLeftCandidate)
-	{
-		LR.i1 = leftCandidateIndex;
-		newSegmentBuffer.addSegment(LR);
-	}
-	else if (foundRightCandidate)
-	{
-		LR.i2 = leftCandidateIndex;
-		newSegmentBuffer.addSegment(LR);	
-	}
-	}
-
-	// --- Finally copy buffers
-	newSegmentBuffer.append(leftSegmentBuffer);
-	newSegmentBuffer.append(rightSegmentBuffer);
-	
-	return newSegmentBuffer;
-}
-
-
-bool sortFunction(Vector2 p1, Vector2 p2) 
-{ 
-	if (p1.x!=p2.x)
-		return p1.x<p2.x;
-	return p1.y<p2.y;
-}
-
-void Triangulator::delaunay(PointList pointList)
-{
-	assert(pointList.size()>=3);
-	// sort by X and Y
-	std::sort(pointList.begin(), pointList.end(), sortFunction);
-	
-	// split into groups of 2 or 3
-	SegmentBufferList segmentGroups;
-	{
-	int i=0;
-	while (i<pointList.size())
-	{		
-		SegmentBuffer segmentBuffer(&pointList);
-		int remaining = pointList.size() - i;
-		if (remaining >=5 || remaining == 3)
-		{	
-			int A = i++;
-			int B = i++;
-			int C = i++;
-			segmentBuffer.addSegment(A,B);			
-			segmentBuffer.addSegment(B,C);
-			segmentBuffer.addSegment(A,C);
-		}
-		else // (remaining == 2 || remaining == 4)
-		{
-			int A = i++;
-			int B = i++;
-			segmentBuffer.addSegment(A,B);			
-		}
-		segmentGroups.push_back(segmentBuffer);
-	}
-	}
-	
-	// Merge segment lists
-	while (segmentGroups.size()>1)
-	{
-		SegmentBufferList nextSegmentGroups;
-		
-		int i=0;
-		
-		while (i<segmentGroups.size())
-		{
-			int remaining = segmentGroups.size() - i;
-			if (remaining>=2)
-			{
-				SegmentBuffer newList = delaunayMerge(segmentGroups[i++], segmentGroups[i++]);
-				nextSegmentGroups.push_back(newList);
-			}
-			else // remaining == 1
-			{
-				nextSegmentGroups.push_back(segmentGroups[i++]);
-			}
-		}		
-		segmentGroups = nextSegmentGroups;
-	}
-	
-	// TODO Apply constraints
-}*/
-
-
 void Triangle::setVertices(int i0, int i1, int i2)
 {
 	i[0] = i0;
@@ -245,7 +68,7 @@ int Triangle::findSegNumber(int i0, int i1) const
 
 bool Triangle::isPointInside(Ogre::Vector2 point)
 	{
-		// Compute vectors        
+		// Compute vectors
 		Ogre::Vector2 v0 = p(2) - p(0);
 		Ogre::Vector2 v1 = p(1) - p(0);
 		Ogre::Vector2 v2 = point - p(0);
@@ -264,7 +87,7 @@ bool Triangle::isPointInside(Ogre::Vector2 point)
 
 		// Check if point is in triangle
 		return (u > 0) && (v > 0) && (u + v < 1);
-	}	
+	}
 
 struct TouchSuperTriangle
 {
@@ -280,14 +103,14 @@ struct TouchSuperTriangle
 
 // Triangulation by insertion
 DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
-{	
+{
 	DelaunayTriangleBuffer tbuffer;
 	// Compute super triangle
 	float maxTriangleSize = 0.f;
 	for (PointList::iterator it = pointList.begin(); it!=pointList.end();it++)
 	{
-		maxTriangleSize = std::max(maxTriangleSize,abs(it->x));
-		maxTriangleSize = std::max(maxTriangleSize,abs(it->y));
+		maxTriangleSize = std::max<float>(maxTriangleSize,fabs(it->x));
+		maxTriangleSize = std::max<float>(maxTriangleSize,fabs(it->y));
 	}
 	int maxTriangleIndex=pointList.size();
 	pointList.push_back(Ogre::Vector2(-2*maxTriangleSize,-2*maxTriangleSize));
@@ -301,7 +124,7 @@ DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 
 	// Point insertion loop
 	for (int i=0;i<pointList.size()-3;i++)
-	{		
+	{
 		// Insert 1 point, find triangle containing it
 		Vector2& p = pointList[i];
 		DelaunayTriangleBuffer::iterator triangle;
@@ -309,8 +132,8 @@ DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 		{
 			if (it->isPointInside(p))
 				triangle = it;
-		}		
-		// Build 3 triangles and suppress old triangle	
+		}
+		// Build 3 triangles and suppress old triangle
 		//Triangle* subTri[3];
 		DelaunayTriangleBuffer::iterator subTri[3];
 		tbuffer.push_back(Triangle(&pointList, tbuffer.end()));
@@ -319,7 +142,7 @@ DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 		subTri[1] = --tbuffer.end();
 		tbuffer.push_back(Triangle(&pointList, tbuffer.end()));
 		subTri[2] = --tbuffer.end();
-		
+
 		subTri[0]->setVertices(triangle->i[0],triangle->i[1],i);
 		subTri[1]->setVertices(triangle->i[1],triangle->i[2],i);
 		subTri[2]->setVertices(triangle->i[2],triangle->i[0],i);
@@ -327,12 +150,12 @@ DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 		subTri[1]->setAdj(subTri[2],subTri[0],triangle->adj[0], subTri[1]);
 		subTri[2]->setAdj(subTri[0],subTri[1],triangle->adj[1], subTri[2]);
 		triangle = tbuffer.erase(triangle);
-		
+
 		for (int k=0;k<3;k++)
 		{
 			DelaunayTriangleBuffer::iterator tri0 = subTri[k];
 			//Check if new triangle is Delaunay
-			Circle c = Circle::from3Points(tri0->p(0), tri0->p(1), tri0->p(2));		
+			Circle c = Circle::from3Points(tri0->p(0), tri0->p(1), tri0->p(2));
 			bool isDelaunay = true;
 			for (int j = 0;j<i+1;j++)
 			{
@@ -345,11 +168,11 @@ DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 			}
 			// Flip edges where needed
 			if (!isDelaunay && tri0->adj[2]!=tbuffer.end())
-			{			
+			{
 				DelaunayTriangleBuffer::iterator tri1 = tri0->adj[2];
 				tbuffer.push_back(Triangle(&pointList, tbuffer.end()));
 				DelaunayTriangleBuffer::iterator newt0 = --tbuffer.end();
-				tbuffer.push_back(Triangle(&pointList, tbuffer.end()));				
+				tbuffer.push_back(Triangle(&pointList, tbuffer.end()));
 				DelaunayTriangleBuffer::iterator newt1 = --tbuffer.end();
 				int x = tri1->findSegNumber(tri0->i[0],tri0->i[1]);//opposite of common side for t1
 				newt0->setVertices(tri0->i[2],tri1->i[x],tri0->i[1]);
@@ -360,8 +183,8 @@ DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 				tbuffer.erase(tri1);
 			}
 		}
-	}			
-		
+	}
+
 	//Remove super triangle
 	TouchSuperTriangle touchSuperTriangle(maxTriangleIndex, maxTriangleIndex+1,maxTriangleIndex+2);
 	tbuffer.remove_if(touchSuperTriangle);
@@ -373,7 +196,7 @@ DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 
 DelaunayTriangleBuffer Triangulator::triangulate(const Shape& shape)
 {
-	return delaunay2(shape.getPoints());	
+	return delaunay2(shape.getPoints());
 }
 
 }
