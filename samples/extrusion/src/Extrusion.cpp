@@ -41,14 +41,15 @@ void Sample_Extrusion::createScene(void)
 		//Procedural::Shape s = Procedural::Shape().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close();
 		Procedural::Shape s = Procedural::BezierShape().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close().realizeShape();
 		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("extrudedMesh");
-		putMesh("extrudedMesh");
+		//putMesh("extrudedMesh");
 
 		//Procedural::Shape s2 = Procedural::Shape().addPoint(0,0).addPoint(5,5).addPoint(1,10);
 		Procedural::Shape s2 = Procedural::BezierShape().addPoint(0,0).addPoint(5,5).addPoint(1,10).setNumSeg(8).setOutSide(Procedural::SIDE_LEFT).realizeShape();
 		Procedural::Lathe().setShapeToExtrude(&s2).realizeMesh("lathedMesh");
-		putMesh("lathedMesh");
+		//putMesh("lathedMesh");
 
-		Procedural::Triangulator::triangulate(s2);
+		Procedural::Triangulator::triangulate(s2).transformToMesh(mSceneMgr,"toto");
+		putMesh("toto");
 
 }
 

@@ -28,7 +28,9 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_TRIANGLEBUFFER_INCLUDED
 #define PROCEDURAL_TRIANGLEBUFFER_INCLUDED
 
+#include "OgreManualObject.h"
 #include "OgreMesh.h"
+#include "OgreSceneManager.h"
 #include "ProceduralUtils.h"
 
 namespace Procedural
@@ -144,6 +146,12 @@ class TriangleBuffer
 	inline TriangleBuffer& textureCoord(float u, float v)
 	{
 	    uvs.push_back(Ogre::Vector2(u,v));
+		return *this;
+	}
+
+	inline TriangleBuffer& textureCoord(const Ogre::Vector2& vec)
+	{
+	    uvs.push_back(vec);
 		return *this;
 	}
 

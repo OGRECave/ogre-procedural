@@ -48,32 +48,6 @@ protected:
 	bool enableNormals;
 	unsigned int numTexCoordSet;
 public:
-
-	/*Ogre::MeshPtr realizeMesh(const std::string& name)
-	{
-		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
-		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-
-		int offset=0;
-		Ogre::AxisAlignedBox aabb;
-		Ogre::Real radius(0.f);
-		addToManualObject(manual, offset, radius, aabb);
-
-		manual->end();
-		Ogre::MeshPtr mesh = manual->convertToMesh(name);
-
-		mesh->_setBounds( aabb, false );
-		mesh->_setBoundingSphereRadius(radius);
-
-		unsigned short src, dest;
-		if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
-		{
-			mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
-		}
-
-		return mesh;
-	}*/
-	
 	Ogre::MeshPtr realizeMesh(const std::string& name)
 	{
 		TriangleBuffer tbuffer;

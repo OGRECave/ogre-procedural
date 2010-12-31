@@ -194,9 +194,24 @@ DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 	return tbuffer;
 }
 
-DelaunayTriangleBuffer Triangulator::triangulate(const Shape& shape)
+TriangleBuffer Triangulator::triangulate(const Shape& shape)
 {
-	return delaunay2(shape.getPoints());
+    DelaunayTriangleBuffer dtb = delaunay2(shape.getPoints());
+    TriangleBuffer tb;
+    PointList& pl = *(dtb.begin()->pl);
+    for (PointList::iterator it = pl.begin(); it!=pl.end();it++)
+    {
+        tb.position(Ogre::Vector3(it->x,it->y,0.));
+        tb.normal(Ogre::Vector3::UNIT_Z);
+        tb.textureCoord(Ogre::Vector2(it->x,it->y));
+    }
+    for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
+    {
+        tb.index(it->i[0]);
+        tb.index(it->i[1]);
+        tb.index(it->i[2]);
+    }
+    return tb;
 }
 
 }
