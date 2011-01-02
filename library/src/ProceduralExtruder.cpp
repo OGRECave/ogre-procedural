@@ -65,7 +65,7 @@ namespace Procedural
 				normal = -normal;
 			}
 
-            Ogre::Vector3 newPoint = v0+q*vp;
+			Ogre::Vector3 newPoint = v0+q*vp;
 			buffer.position(newPoint);
 			buffer.updateBoundingVolumes(newPoint);
 			buffer.normal(q*normal);

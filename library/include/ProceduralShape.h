@@ -207,13 +207,14 @@ public:
 	}
 
 	/**
-	 * Build a shape from bezier shape
+	 * Build a shape from bezier control points
 	 */
 	Shape realizeShape()
 	{
 		Shape shape;
 
-		for (int i=0;i<points.size();i++)
+		int numPoints = isClosed?points.size():points.size()-1;
+		for (int i=0;i<numPoints;i++)
 		{
 			const Ogre::Vector2& P0 = points[i];
 			const Ogre::Vector2& P3 = safeGetPoint(i+1);
@@ -227,7 +228,7 @@ public:
 				Ogre::Vector2 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;
 				shape.addPoint(P);
 			}
-			if (i==points.size()-1 && !isClosed)
+			if (i==points.size()-2 && !isClosed)
 			{
 				shape.addPoint(P3);
 			}

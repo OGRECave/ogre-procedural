@@ -35,49 +35,19 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-struct Triangle;
+
 typedef std::vector<Ogre::Vector2> PointList;
-typedef std::list<Triangle> DelaunayTriangleBuffer;
 
-struct _ProceduralExport Triangle
-{
-	PointList* pl;
-	int i[3];
-	DelaunayTriangleBuffer::iterator adj[3];
-	DelaunayTriangleBuffer::iterator emptyIterator;
-	Triangle(PointList* pl, DelaunayTriangleBuffer::iterator zeroIterator) : emptyIterator(zeroIterator)
-	{
-		adj[0]=emptyIterator;adj[1]=emptyIterator;adj[2]=emptyIterator;
-		this->pl = pl;
-	}
-
-	Ogre::Vector2 p(int k) const
-	{
-		return (*pl)[i[k]];
-	}
-
-	bool operator==(const Triangle& other) const
-	{
-		return i[0]==other.i[0] && i[1]==other.i[1] && i[2]==other.i[2];
-	}
-
-	void detach();
-
-	void setVertices(int i0, int i1, int i2);
-	void setAdj(DelaunayTriangleBuffer::iterator t0, DelaunayTriangleBuffer::iterator t1,DelaunayTriangleBuffer::iterator t2,DelaunayTriangleBuffer::iterator myIterator);
-
-	int findSegNumber(int i0, int i1) const;
-
-	bool isPointInside(Ogre::Vector2 point);
-};
 
 class _ProceduralExport Triangulator
-{
+{	
+	struct Triangle;
+	typedef std::list<Triangle> DelaunayTriangleBuffer;
+
+	static void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer);
 public:
-
+	
 	static TriangleBuffer triangulate(const Shape& shape);
-
-	static DelaunayTriangleBuffer delaunay2(PointList pointList);
 
 
 struct Circle
@@ -111,6 +81,38 @@ struct Circle
 	{
 		return (p-center).length()<radius;
 	}
+};
+
+struct Triangle
+{
+	PointList* pl;
+	int i[3];
+	DelaunayTriangleBuffer::iterator adj[3];
+	DelaunayTriangleBuffer::iterator emptyIterator;
+	Triangle(PointList* pl, DelaunayTriangleBuffer::iterator zeroIterator) : emptyIterator(zeroIterator)
+	{
+		adj[0]=emptyIterator;adj[1]=emptyIterator;adj[2]=emptyIterator;
+		this->pl = pl;
+	}
+
+	Ogre::Vector2 p(int k) const
+	{
+		return (*pl)[i[k]];
+	}
+
+	bool operator==(const Triangle& other) const
+	{
+		return i[0]==other.i[0] && i[1]==other.i[1] && i[2]==other.i[2];
+	}
+
+	void detach();
+
+	void setVertices(int i0, int i1, int i2);
+	void setAdj(DelaunayTriangleBuffer::iterator t0, DelaunayTriangleBuffer::iterator t1,DelaunayTriangleBuffer::iterator t2,DelaunayTriangleBuffer::iterator myIterator);
+
+	int findSegNumber(int i0, int i1) const;
+
+	bool isPointInside(Ogre::Vector2 point);
 };
 };
 

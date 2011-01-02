@@ -84,12 +84,12 @@ void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	}
 	offset+=numSegY+1;
 
-    std::vector<Ogre::Vector3> extremePoints;
-    extremePoints.push_back(position+orig);
-    extremePoints.push_back(position+orig+sizeX*vX);
-    extremePoints.push_back(position+orig+sizeY*vY);
-    extremePoints.push_back(position+orig+sizeX*vX+sizeY*vY);
-    buffer.updateBoundingBox( Utils::AABBfromPoints(extremePoints));
+	std::vector<Ogre::Vector3> extremePoints;
+	extremePoints.push_back(position+orig);
+	extremePoints.push_back(position+orig+sizeX*vX);
+	extremePoints.push_back(position+orig+sizeY*vY);
+	extremePoints.push_back(position+orig+sizeX*vX+sizeY*vY);
+	buffer.updateBoundingBox( Utils::AABBfromPoints(extremePoints));
 	buffer.updateBoundingSphere( Utils::boundingRadiusFromPoints(extremePoints));
 }
 }

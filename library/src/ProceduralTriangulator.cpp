@@ -31,14 +31,14 @@ using namespace Ogre;
 
 namespace Procedural
 {
-void Triangle::setVertices(int i0, int i1, int i2)
+void Triangulator::Triangle::setVertices(int i0, int i1, int i2)
 {
 	i[0] = i0;
 	i[1] = i1;
 	i[2] = i2;
 }
 
-void Triangle::setAdj(DelaunayTriangleBuffer::iterator t0, DelaunayTriangleBuffer::iterator t1,DelaunayTriangleBuffer::iterator t2,DelaunayTriangleBuffer::iterator myIterator)
+void Triangulator::Triangle::setAdj(DelaunayTriangleBuffer::iterator t0, DelaunayTriangleBuffer::iterator t1,DelaunayTriangleBuffer::iterator t2,DelaunayTriangleBuffer::iterator myIterator)
 {
 	adj[0] = t0;
 	adj[1] = t1;
@@ -49,14 +49,14 @@ void Triangle::setAdj(DelaunayTriangleBuffer::iterator t0, DelaunayTriangleBuffe
 	if (t2 != emptyIterator) t2->adj[t2->findSegNumber(i[0],i[1])] = myIterator;
 }
 
-void Triangle::detach()
+void Triangulator::Triangle::detach()
 	{
 		if (adj[0] != emptyIterator) adj[0]->adj[adj[0]->findSegNumber(i[1],i[2])] = emptyIterator;
 		if (adj[1] != emptyIterator) adj[1]->adj[adj[1]->findSegNumber(i[2],i[0])] = emptyIterator;
 		if (adj[2] != emptyIterator) adj[2]->adj[adj[2]->findSegNumber(i[0],i[1])] = emptyIterator;
 	}
 
-int Triangle::findSegNumber(int i0, int i1) const
+int Triangulator::Triangle::findSegNumber(int i0, int i1) const
 	{
 		if ((i0==i[0] && i1==i[1])||(i0==i[1] && i1==i[0]))
 			return 2;
@@ -66,7 +66,7 @@ int Triangle::findSegNumber(int i0, int i1) const
 			return 1;
 	}
 
-bool Triangle::isPointInside(Ogre::Vector2 point)
+bool Triangulator::Triangle::isPointInside(Ogre::Vector2 point)
 	{
 		// Compute vectors
 		Ogre::Vector2 v0 = p(2) - p(0);
@@ -86,14 +86,14 @@ bool Triangle::isPointInside(Ogre::Vector2 point)
 		float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
 
 		// Check if point is in triangle
-		return (u > 0) && (v > 0) && (u + v < 1);
+		return (u >= 0) && (v >= 0) && (u + v <= 1);
 	}
 
 struct TouchSuperTriangle
 {
 	int i0,i1,i2;
 	TouchSuperTriangle(int i, int j, int k) : i0(i), i1(j), i2(k) {}
-	bool operator()(const Triangle& tri)
+	bool operator()(const Triangulator::Triangle& tri)
 	{
 		for (int k=0;k<3;k++) if (tri.i[k]==i0 || tri.i[k]==i1 ||tri.i[k]==i2) return true;
 		return false;
@@ -102,9 +102,8 @@ struct TouchSuperTriangle
 
 
 // Triangulation by insertion
-DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
+void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer)
 {
-	DelaunayTriangleBuffer tbuffer;
 	// Compute super triangle
 	float maxTriangleSize = 0.f;
 	for (PointList::iterator it = pointList.begin(); it!=pointList.end();it++)
@@ -191,27 +190,27 @@ DelaunayTriangleBuffer Triangulator::delaunay2(PointList pointList)
 	pointList.pop_back();
 	pointList.pop_back();
 	pointList.pop_back();
-	return tbuffer;
 }
 
 TriangleBuffer Triangulator::triangulate(const Shape& shape)
 {
-    DelaunayTriangleBuffer dtb = delaunay2(shape.getPoints());
-    TriangleBuffer tb;
-    PointList& pl = *(dtb.begin()->pl);
-    for (PointList::iterator it = pl.begin(); it!=pl.end();it++)
-    {
-        tb.position(Ogre::Vector3(it->x,it->y,0.));
-        tb.normal(Ogre::Vector3::UNIT_Z);
-        tb.textureCoord(Ogre::Vector2(it->x,it->y));
-    }
-    for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
-    {
-        tb.index(it->i[0]);
-        tb.index(it->i[1]);
-        tb.index(it->i[2]);
-    }
-    return tb;
+	PointList pl = shape.getPoints();
+	DelaunayTriangleBuffer dtb;
+	delaunay(pl, dtb);
+	TriangleBuffer tb;
+	for (PointList::const_iterator it = pl.begin(); it!=pl.end();it++)
+	{
+		tb.position(Ogre::Vector3(it->x,it->y,0.));
+		tb.normal(Ogre::Vector3::UNIT_Z);
+		tb.textureCoord(Ogre::Vector2(it->x,it->y));
+	}
+	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
+	{
+		tb.index(it->i[0]);
+		tb.index(it->i[1]);
+		tb.index(it->i[2]);
+	}
+	return tb;
 }
 
 }
