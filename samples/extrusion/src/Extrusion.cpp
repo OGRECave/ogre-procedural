@@ -44,7 +44,7 @@ void Sample_Extrusion::createScene(void)
 		//putMesh("extrudedMesh");
 
 		//Procedural::Shape s2 = Procedural::Shape().addPoint(0,0).addPoint(5,5).addPoint(1,10);
-		Procedural::Shape s2 = Procedural::BezierShape().addPoint(0,0).addPoint(5,5).addPoint(1,10).setNumSeg(8).setOutSide(Procedural::SIDE_LEFT).realizeShape();
+		Procedural::Shape s2 = Procedural::BezierShape().addPoint(0,0).addPoint(5,5).addPoint(0,10).setNumSeg(4).setOutSide(Procedural::SIDE_LEFT).realizeShape();
 		Procedural::Lathe().setShapeToExtrude(&s2).realizeMesh("lathedMesh");
 		//putMesh("lathedMesh");
 
@@ -103,7 +103,7 @@ void Sample_Extrusion::putMesh(const std::string& meshName, const Vector3& posit
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	sn->attachObject(ent2);
 	sn->setPosition(position);
-	ent2->setMaterialName("Examples/BeachStones");
+	//ent2->setMaterialName("Examples/BeachStones");
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
