@@ -70,13 +70,13 @@ struct Circle
 		float g2 = d3.x*c3.y-d3.y*c3.x;
 		
 		Ogre::Vector2 intersect;
-		float intersectx = (-b1*g2+b2*g1)/(b1*a2-b2*a1);
-		float intersecty = (-a1*g2+a2*g1)/(a1*b2-a2*b1);		
+		float intersectx = (b2*g1-b1*g2)/(b1*a2-b2*a1);
+		float intersecty = (a2*g1-a1*g2)/(a1*b2-a2*b1);		
 
 		intersect = Ogre::Vector2(intersectx, intersecty);
 
 		c.center = intersect;
-		c.radius = (intersect-c1).length();
+		c.radius = (intersect-p1).length();
 		return c;
 	}
 
