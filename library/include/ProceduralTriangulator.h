@@ -59,16 +59,19 @@ struct Circle
 		Circle c;
 		Ogre::Vector2 c1 = .5*(p1+p2);
 		Ogre::Vector2 d1 = (p2-p1).perpendicular();
-		Ogre::Vector2 c2 = c1+d1;
+		float a1 = d1.y;
+		float b1 = -d1.x;
+		float g1 = d1.x*c1.y-d1.y*c1.x;
 
 		Ogre::Vector2 c3 = .5*(p2+p3);
 		Ogre::Vector2 d3 = (p3-p2).perpendicular();
-		Ogre::Vector2 c4 = c3+d3;
-
+		float a2 = d3.y;
+		float b2 = -d3.x;
+		float g2 = d3.x*c3.y-d3.y*c3.x;
+		
 		Ogre::Vector2 intersect;
-		float denom = (c1.x-c2.x)*(c3.y-c4.y)-(c1.y-c2.y)*(c3.x-c4.x);
-		float intersectx = ((c1.x*c2.y-c1.y*c2.x)*(c3.x-c4.x)-(c3.x*c4.y-c4.y*c3.x)*(c1.y-c2.y))/denom;
-		float intersecty = ((c1.x*c2.y-c1.y*c2.x)*(c3.y-c4.y)-(c3.x*c4.y-c4.y*c3.x)*(c1.y-c2.y))/denom;
+		float intersectx = (-b1*g2+b2*g1)/(b1*a2-b2*a1);
+		float intersecty = (-a1*g2+a2*g1)/(a1*b2-a2*b1);		
 
 		intersect = Ogre::Vector2(intersectx, intersecty);
 
