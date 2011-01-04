@@ -74,16 +74,16 @@ bool Triangulator::Triangle::isPointInside(Ogre::Vector2 point)
 		Ogre::Vector2 v2 = point - p(0);
 
 		// Compute dot products
-		float dot00 = v0.squaredLength();
-		float dot01 = v0.dotProduct(v1);
-		float dot02 = v0.dotProduct(v2);
-		float dot11 = v1.squaredLength();
-		float dot12 = v1.dotProduct(v2);
+		Ogre::Real dot00 = v0.squaredLength();
+		Ogre::Real dot01 = v0.dotProduct(v1);
+		Ogre::Real dot02 = v0.dotProduct(v2);
+		Ogre::Real dot11 = v1.squaredLength();
+		Ogre::Real dot12 = v1.dotProduct(v2);
 
 		// Compute barycentric coordinates
-		float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
-		float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-		float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+		Ogre::Real invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+		Ogre::Real u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+		Ogre::Real v = (dot00 * dot12 - dot01 * dot02) * invDenom;
 
 		// Check if point is in triangle
 		return (u >= 0) && (v >= 0) && (u + v <= 1);
@@ -112,9 +112,9 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 		maxTriangleSize = std::max<float>(maxTriangleSize,fabs(it->y));
 	}
 	int maxTriangleIndex=pointList.size();
-	pointList.push_back(Ogre::Vector2(-2*maxTriangleSize,-2*maxTriangleSize));
-	pointList.push_back(Ogre::Vector2(2*maxTriangleSize,-2*maxTriangleSize));
-	pointList.push_back(Ogre::Vector2(0.,2*maxTriangleSize));
+	pointList.push_back(Ogre::Vector2(-3*maxTriangleSize,-3*maxTriangleSize));
+	pointList.push_back(Ogre::Vector2(3*maxTriangleSize,-3*maxTriangleSize));
+	pointList.push_back(Ogre::Vector2(0.,3*maxTriangleSize));
 	Triangle superTriangle(&pointList, tbuffer.end());
 	superTriangle.i[0]= maxTriangleIndex;
 	superTriangle.i[1]= maxTriangleIndex+1;
