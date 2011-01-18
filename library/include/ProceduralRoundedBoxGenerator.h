@@ -91,9 +91,9 @@ public:
 
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 	
-	void _addEdge(TriangleBuffer& buffer, int& offset, short xPos, short yPos, short zPos) const;
+	void _addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos) const;
 	
-	void _addCorner(TriangleBuffer& buffer, int& offset, bool isXPositive, bool isYPositive, bool isZPositive) const;
+	void _addCorner(TriangleBuffer& buffer, bool isXPositive, bool isYPositive, bool isZPositive) const;
 
 };
 

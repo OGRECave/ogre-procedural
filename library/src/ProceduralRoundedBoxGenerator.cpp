@@ -32,10 +32,12 @@ THE SOFTWARE.
 namespace Procedural
 {
 
-void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, int& offset, bool isXPositive, bool isYPositive, bool isZPositive) const
+void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, bool isYPositive, bool isZPositive) const
 {
 	assert(numSegX>0 && numSegY>0 && numSegZ>0 && chamferNumSeg>0 && "Num seg must be positive integers");
 	assert(sizeX>0. && sizeY>0. && sizeZ>0. && chamferSize>0. && "Sizes must be positive");
+	buffer.rebaseOffset();
+	int offset = 0;
 
 	Ogre::Vector3 offsetPosition((isXPositive?1:-1)*.5*sizeX, (isYPositive?1:-1)*.5*sizeY, (isZPositive?1:-1)*.5*sizeZ);
 	Ogre::Real deltaRingAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
@@ -85,8 +87,10 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, int& offset, bool i
 					-1 => negative
 					0 => undefined
  */
-void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, int& offset, short xPos, short yPos, short zPos) const
+void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos) const
 {
+	int offset = 0;
+	buffer.rebaseOffset();
 	Ogre::Vector3 centerPosition = .5*xPos * sizeX * Ogre::Vector3::UNIT_X + .5*yPos * sizeY * Ogre::Vector3::UNIT_Y + .5*zPos * sizeZ * Ogre::Vector3::UNIT_Z;
 	Ogre::Vector3 vy0 = (1-abs(xPos)) * Ogre::Vector3::UNIT_X + (1-abs(yPos)) * Ogre::Vector3::UNIT_Y + (1-abs(zPos)) * Ogre::Vector3::UNIT_Z;//extrusion direction	
 
@@ -141,50 +145,55 @@ void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Z)
 	  .setPosition((.5*sizeZ+chamferSize)*Ogre::Vector3::NEGATIVE_UNIT_Z)
 	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Z)
 	  .setPosition((.5*sizeZ+chamferSize)*Ogre::Vector3::UNIT_Z)
 	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Y)
 	  .setPosition((.5*sizeY+chamferSize)*Ogre::Vector3::NEGATIVE_UNIT_Y)
 	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Y)
 	  .setPosition((.5*sizeY+chamferSize)*Ogre::Vector3::UNIT_Y)
 	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_X)
 	  .setPosition((.5*sizeX+chamferSize)*Ogre::Vector3::NEGATIVE_UNIT_X)
 	  .addToTriangleBuffer(buffer);
+	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
 	  .setNormal(Ogre::Vector3::UNIT_X)
 	  .setPosition((.5*sizeX+chamferSize)*Ogre::Vector3::UNIT_X)
 	  .addToTriangleBuffer(buffer);
 	  
 	// Generate the corners
-	_addCorner(buffer, offset, true,  true,  true);
-	_addCorner(buffer, offset, true,  true,  false);
-	_addCorner(buffer, offset, true,  false, true);
-	_addCorner(buffer, offset, true,  false, false);
-	_addCorner(buffer, offset, false, true,  true);
-	_addCorner(buffer, offset, false, true,  false);
-	_addCorner(buffer, offset, false, false, true);
-	_addCorner(buffer, offset, false, false, false);
+	_addCorner(buffer, true,  true,  true);
+	_addCorner(buffer, true,  true,  false);
+	_addCorner(buffer, true,  false, true);
+	_addCorner(buffer, true,  false, false);
+	_addCorner(buffer, false, true,  true);
+	_addCorner(buffer, false, true,  false);
+	_addCorner(buffer, false, false, true);
+	_addCorner(buffer, false, false, false);
 			
 	// Generate the edges
-	_addEdge(buffer, offset, -1,-1, 0);
-	_addEdge(buffer, offset, -1, 1, 0);
-	_addEdge(buffer, offset,  1,-1, 0);
-	_addEdge(buffer, offset,  1, 1, 0);
-	_addEdge(buffer, offset, -1, 0,-1);
-	_addEdge(buffer, offset, -1, 0, 1);
-	_addEdge(buffer, offset,  1, 0,-1);
-	_addEdge(buffer, offset,  1, 0, 1);	
-	_addEdge(buffer, offset,  0,-1,-1);
-	_addEdge(buffer, offset,  0,-1, 1);
-	_addEdge(buffer, offset,  0, 1,-1);
-	_addEdge(buffer, offset,  0, 1, 1);
+	_addEdge(buffer, -1,-1, 0);
+	_addEdge(buffer, -1, 1, 0);
+	_addEdge(buffer,  1,-1, 0);
+	_addEdge(buffer,  1, 1, 0);
+	_addEdge(buffer, -1, 0,-1);
+	_addEdge(buffer, -1, 0, 1);
+	_addEdge(buffer,  1, 0,-1);
+	_addEdge(buffer,  1, 0, 1);	
+	_addEdge(buffer,  0,-1,-1);
+	_addEdge(buffer,  0,-1, 1);
+	_addEdge(buffer,  0, 1,-1);
+	_addEdge(buffer,  0, 1, 1);
 
 	buffer.updateBoundingBox(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ);
 	buffer.updateBoundingSphere(Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ));
