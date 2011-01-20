@@ -39,12 +39,13 @@ void Sample_Extrusion::createScene(void)
 		//Procedural::Path p = Procedural::Path().addPoint(0,5,0).addPoint(0,4,10).addPoint(10,5,10).addPoint(20,3,0).close();
 		Procedural::Path p = Procedural::BezierPath().setNumSeg(8).addPoint(0,5,0).addPoint(0,4,10).addPoint(10,5,10).addPoint(20,3,0).close().realizePath();
 		//Procedural::Shape s = Procedural::Shape().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close();
-		Procedural::Shape s = Procedural::BezierShape().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close().realizeShape();
+		Procedural::Shape s = Procedural::CatmullRomSpline().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close().realizeShape();
 		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("extrudedMesh");
 		//putMesh("extrudedMesh");
 
 		//Procedural::Shape s2 = Procedural::Shape().addPoint(0,0).addPoint(5,5).addPoint(1,10);
-		Procedural::Shape s2 = Procedural::BezierShape().addPoint(0,0).addPoint(5,5).addPoint(0,10).setNumSeg(4).setOutSide(Procedural::SIDE_LEFT).realizeShape();
+		Procedural::Shape s2 = Procedural::CatmullRomSpline().addPoint(0,0).addPoint(5,5).addPoint(0,10).setNumSeg(4).setOutSide(Procedural::SIDE_LEFT).realizeShape();
+		//Procedural::Shape s2 = Procedural::CatmullRomSpline().addPoint(0,0).addPoint(5,5).addPoint(0,10).setNumSeg(4).realizeShape();
 		Procedural::Lathe().setShapeToExtrude(&s2).realizeMesh("lathedMesh");
 		//putMesh("lathedMesh");
 
