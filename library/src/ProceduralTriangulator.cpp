@@ -89,18 +89,6 @@ bool Triangulator::Triangle::isPointInside(Ogre::Vector2 point)
 		return (u >= 0) && (v >= 0) && (u + v <= 1);
 	}
 
-struct TouchSuperTriangle
-{
-	int i0,i1,i2;
-	TouchSuperTriangle(int i, int j, int k) : i0(i), i1(j), i2(k) {}
-	bool operator()(const Triangulator::Triangle& tri)
-	{
-		for (int k=0;k<3;k++) if (tri.i[k]==i0 || tri.i[k]==i1 ||tri.i[k]==i2) return true;
-		return false;
-	}
-};
-
-
 // Triangulation by insertion
 void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer)
 {
@@ -192,11 +180,76 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	pointList.pop_back();
 }
 
+void Triangulator::addConstraints(PointList& pointList, DelaunayTriangleBuffer& tbuffer)
+{
+	std::vector<DelaunaySegment> segList;
+	// Determine which segments should be added
+	for (int i = 0; i<pointList.size()-1; i++)
+	{		
+		bool isAlreadyIn = false;
+		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
+		{
+			if (it->containsSegment(i,i+1))
+				isAlreadyIn = true;
+		}
+		if (!isAlreadyIn)
+		{
+			segList.push_back(DelaunaySegment(i, i+1));
+		}
+	}
+	for (std::vector<DelaunaySegment>::iterator it=segList.begin();it!=segList.end();it++)
+	{
+		// TODO remove all edges intersecting *it
+		// TODO build two polygons
+		// TODO Triangulate each polygon (directly into DelaunayTriangleBuffer)
+	}
+}
+
+// note : input must not contain cutting segment
+void Triangulator::triangulatePolygon(const std::vector<int>& input, const DelaunaySegment& seg, DelaunayTriangleBuffer& tbuffer, const PointList& pointList)
+{	
+	// Find a point which, when associated with seg.i1 and seg.i2, builds a Delaunay triangle
+	std::vector<int>::const_iterator currentPoint = input.begin();
+	bool found = true;
+	while (!found)
+	{
+		Circle c = Circle::from3Points(pointList[*currentPoint], pointList[seg.i1], pointList[seg.i2]);		
+		for (std::vector<int>::const_iterator it = input.begin();it!=input.end();it++)
+		{
+			if (c.isPointInside(pointList[*it]) )
+			{			
+				currentPoint = it;
+				break;
+			}
+		}
+		found = true;
+	}
+	
+	// Insert current triangle
+	Triangle t(&pointList, tbuffer.end());
+	t.setVertices(*currentPoint, seg.i1, seg.i2);
+	tbuffer.push_back(t);
+	
+	// Recurse	
+	std::vector<int> part1(input.begin(), currentPoint-1);		
+	if (!part1.empty())
+		triangulatePolygon(part1, seg, tbuffer, pointList);
+	
+	std::vector<int> part2(currentPoint+1, input.end());
+	if (!part2.empty())
+		triangulatePolygon(part2, seg, tbuffer, pointList);	
+}
+
 TriangleBuffer Triangulator::triangulate(const Shape& shape)
 {
+	// Do the Delaunay triangulation
 	PointList pl = shape.getPoints();
 	DelaunayTriangleBuffer dtb;
 	delaunay(pl, dtb);
+	
+	addConstraints(pl, dtb);
+	
+	//Converts the Delaunay Triangle Buffer to standard Triangle Buffer
 	TriangleBuffer tb;
 	for (PointList::const_iterator it = pl.begin(); it!=pl.end();it++)
 	{

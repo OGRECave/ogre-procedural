@@ -42,13 +42,19 @@ typedef std::vector<Ogre::Vector2> PointList;
 class _ProceduralExport Triangulator
 {	
 	struct Triangle;
+	struct DelaunaySegment;
 	typedef std::list<Triangle> DelaunayTriangleBuffer;
 
 	static void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer);
-public:
+	static void addConstraints(PointList& pointList, DelaunayTriangleBuffer& tbuffer);
+	static void triangulatePolygon(const std::vector<int>& input, const DelaunaySegment& seg, DelaunayTriangleBuffer& tbuffer, const PointList& pointList);	
 	
-	static TriangleBuffer triangulate(const Shape& shape);
+	struct DelaunaySegment
+	{
+		int i1, i2;
 
+		DelaunaySegment(int _i1, int _i2) : i1(_i1), i2(_i2) {}
+	};
 
 struct Circle
 {
@@ -80,7 +86,7 @@ struct Circle
 		return c;
 	}
 
-	bool isPointInside(Ogre::Vector2 p)
+	bool isPointInside(Ogre::Vector2 p) const
 	{
 		return (p-center).length()<radius;
 	}
@@ -88,11 +94,11 @@ struct Circle
 
 struct Triangle
 {
-	PointList* pl;
+	const PointList* pl;
 	int i[3];
 	DelaunayTriangleBuffer::iterator adj[3];
 	DelaunayTriangleBuffer::iterator emptyIterator;
-	Triangle(PointList* pl, DelaunayTriangleBuffer::iterator zeroIterator) : emptyIterator(zeroIterator)
+	Triangle(const PointList* pl, DelaunayTriangleBuffer::iterator zeroIterator) : emptyIterator(zeroIterator)
 	{
 		adj[0]=emptyIterator;adj[1]=emptyIterator;adj[2]=emptyIterator;
 		this->pl = pl;
@@ -116,7 +122,26 @@ struct Triangle
 	int findSegNumber(int i0, int i1) const;
 
 	bool isPointInside(Ogre::Vector2 point);
+	
+	bool containsSegment(int i0, int i1) const
+	{		
+		return ((i0==i[0] || i0==i[1] || i0==i[2])&&(i1==i[0] || i1==i[1] || i1==i[2]));
+	}
 };
+
+struct TouchSuperTriangle
+{
+	int i0,i1,i2;
+	TouchSuperTriangle(int i, int j, int k) : i0(i), i1(j), i2(k) {}
+	bool operator()(const Triangulator::Triangle& tri)
+	{
+		for (int k=0;k<3;k++) if (tri.i[k]==i0 || tri.i[k]==i1 ||tri.i[k]==i2) return true;
+		return false;
+	}
+};
+
+public:	
+	static TriangleBuffer triangulate(const Shape& shape);
 };
 
 }
