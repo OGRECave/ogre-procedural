@@ -36,6 +36,10 @@ namespace Procedural
 {
 enum Side {SIDE_LEFT, SIDE_RIGHT};
 
+/**
+ * Describes a succession of interconnected 2D points.
+ * It can be closed or not, and there's always an outside and an inside
+ */
 class _ProceduralExport Shape
 {
 	std::vector<Ogre::Vector2> points;
@@ -138,68 +142,64 @@ public:
 
 };
 
-/**
- * Enables to build a shape from Bezier control points.
- * Tangents are automatically calculated from control points, so the curve will "touch" every point you define
- */
-class _ProceduralExport BezierShape
+template<class T>
+class BaseSpline
 {
-	std::vector<Ogre::Vector2> points;
-
+protected:
 	int numSeg;
 	bool isClosed;
 	Side outSide;
 public:
-	BezierShape() : numSeg(4), isClosed(false), outSide(SIDE_RIGHT) {}
-
-	BezierShape& addPoint(const Ogre::Vector2& pt)
-	{
-		points.push_back(pt);
-		return *this;
-	}
-
-	BezierShape& addPoint(Ogre::Real x, Ogre::Real y)
-	{
-	    points.push_back(Ogre::Vector2(x,y));
-	    return *this;
-	}
-
-	BezierShape& reset()
-	{
-		points.clear();
-		return *this;
-	}
-
-	BezierShape& close()
-	{
-		isClosed = true;
-		return *this;
-	}
-
-	BezierShape& setOutSide(Side side)
+	BaseSpline() : numSeg(4), isClosed(false), outSide(SIDE_RIGHT) {}
+	
+	T& setOutSide(Side side)
 	{
 		outSide = side;
-		return *this;
+		return (T&)*this;
 	}
 
-	Side getOutSide()
+	Side getOutSide() const
 	{
 		return outSide;
 	}
 
-	BezierShape& setNumSeg(int numSeg)
+	T& setNumSeg(int numSeg)
 	{
 		assert(numSeg>=1);
 		this->numSeg = numSeg;
-		return *this;
+		return (T&)*this;
 	}
-
-	const Ogre::Vector2& getPoint(int i)
+		
+	T& close()
 	{
-		return points[i];
+		isClosed = true;
+		return (T&)*this;
 	}
+};
 
-	const Ogre::Vector2& safeGetPoint(int i)
+/**
+ * Produces a shape from Cubic Hermite control points
+ */
+class _ProceduralExport CubicHermiteSpline : public BaseSpline<CubicHermiteSpline>
+{	
+	struct ControlPoint
+	{
+		Ogre::Vector2 position;
+		Ogre::Vector2 tangentBefore;
+		Ogre::Vector2 tangentAfter;	
+		
+		ControlPoint(Ogre::Vector2 p, Ogre::Vector2 before, Ogre::Vector2 after) : position(p), tangentBefore(before), tangentAfter(after) {}
+	};
+
+	std::vector<ControlPoint> points;	
+	
+public:
+	void addPoint(Ogre::Vector2 p, Ogre::Vector2 before, Ogre::Vector2 after)
+	{
+		points.push_back(ControlPoint(p, before, after));
+	}
+	
+	const ControlPoint& safeGetPoint(int i) const
 	{
 		if (isClosed)
 			return points[Utils::modulo(i,points.size())];
@@ -207,13 +207,75 @@ public:
 	}
 
 	/**
+	 * Build a shape from control points
+	 */
+	Shape realizeShape()
+	{
+	Shape shape;
+
+		int numPoints = isClosed?points.size():points.size()-1;		
+		for (int i=0;i<numPoints;i++)
+		{
+			const Ogre::Vector2& p0 = points[i].position;
+			const Ogre::Vector2& m0 = points[i].tangentAfter;
+			const Ogre::Vector2& p1 = safeGetPoint(i+1).position;
+			const Ogre::Vector2& m1 = safeGetPoint(i+1).tangentBefore;
+
+			for (int j=0;j<numSeg;j++)
+			{
+				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
+				Ogre::Real t2 = t*t;
+				Ogre::Real t3 = t2*t;
+				Ogre::Vector2 P = (2*t3-3*t2+1)*p0+(t3-2*t2+t)*m0+(-2*t3+3*t2)*p1+(t3-t2)*m1;
+				shape.addPoint(P);
+			}
+			if (i==points.size()-2 && !isClosed)
+			{
+				shape.addPoint(p1);
+			}
+		}
+		if (isClosed)
+			shape.close();
+		shape.setOutSide(outSide);
+
+		return shape;
+	}
+};
+
+/**
+ * Builds a shape from a Catmull-Rom Spline.
+ */
+class _ProceduralExport CatmullRomSpline : public BaseSpline<CatmullRomSpline>
+{	
+	std::vector<Ogre::Vector2> points;
+	public:	
+	CatmullRomSpline& addPoint(const Ogre::Vector2& pt)
+	{
+		points.push_back(pt);
+		return *this;
+	}
+
+	CatmullRomSpline& addPoint(Ogre::Real x, Ogre::Real y)
+	{
+	    points.push_back(Ogre::Vector2(x,y));
+	    return *this;
+	}
+	
+	const Ogre::Vector2& safeGetPoint(int i) const
+	{
+		if (isClosed)
+			return points[Utils::modulo(i,points.size())];
+		return points[Utils::cap(i,0,points.size()-1)];
+	}
+	
+	/**
 	 * Build a shape from bezier control points
 	 */
 	Shape realizeShape()
 	{
 		Shape shape;
 
-		int numPoints = isClosed?points.size():points.size()-1;
+		int numPoints = isClosed?points.size():points.size()-1;		
 		for (int i=0;i<numPoints;i++)
 		{
 			const Ogre::Vector2& P0 = points[i];
@@ -241,6 +303,72 @@ public:
 	}
 };
 
+/**
+ * Builds a shape from a Kochanek Bartels spline.
+ *
+ * More details here : http://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
+ */
+class _ProceduralExport KochanekBartelsSpline : public BaseSpline<KochanekBartelsSpline>
+{	
+	struct ControlPoint
+	{
+		Ogre::Vector2 position;
+		Ogre::Real tension;
+		Ogre::Real bias;
+		Ogre::Real continuity;
+		
+		ControlPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c) : position(p), tension(t), bias(b), continuity(c) {}
+	};
+
+	std::vector<ControlPoint> points;
+	
+public:
+	/**
+	 * Adds a control point to the spline
+	 * @arg p Point position
+	 * @arg t Tension    +1 = Tight            -1 = Round
+	 * @arg b Bias       +1 = Post-shoot       -1 = Pre-shoot
+	 * @arg c Continuity +1 = Inverted Corners -1 = Box Corners
+	 */
+	void addPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c)
+	{
+		points.push_back(ControlPoint(p,t,b,c));
+	}
+
+	/**
+	 * Build a shape from control points
+	 */
+	Shape realizeShape()
+	{
+		Shape shape;
+		
+		int numPoints = isClosed?points.size():points.size()-1;		
+		for (int i=0;i<numPoints;i++)
+		{
+			const ControlPoint& pm1 = points[i-1];
+			const ControlPoint& p0 = points[i];
+			const ControlPoint& p1 = points[i+1];
+			const ControlPoint& p2 = points[i+2];
+			
+			Ogre::Vector2 m0 = (1-p0.tension)*(1+p0.bias)*(1+p0.continuity)/2.*(p0.position-pm1.position)+(1-p0.tension)*(1-p0.bias)*(1-p0.continuity)/2.*(p1.position-p0.position);
+			Ogre::Vector2 m1 = (1-p1.tension)*(1+p1.bias)*(1-p1.continuity)/2.*(p1.position-p0.position)+(1-p1.tension)*(1-p1.bias)*(1+p1.continuity)/2.*(p2.position-p1.position);
+			
+			for (int j=0;j<numSeg;j++)
+			{
+				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
+				Ogre::Real t2 = t*t;
+				Ogre::Real t3 = t2*t;
+				Ogre::Vector2 P = (2*t3-3*t2+1)*p0.position+(t3-2*t2+t)*m0+(-2*t3+3*t2)*p1.position+(t3-t2)*m1;
+				shape.addPoint(P);
+			}
+		}
+		return shape;
+	}
+};
+
+/**
+ * Builds a rectangular shape
+ */
 class _ProceduralExport RectangleShape
 {
 	Ogre::Real width,height;
@@ -272,6 +400,9 @@ class _ProceduralExport RectangleShape
 	}
 };
 
+/**
+ * Builds a circular shape
+ */
 class _ProceduralExport CircleShape
 {
 	Ogre::Real radius;
