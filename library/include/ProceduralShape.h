@@ -168,14 +168,14 @@ public:
 };
 
 template<class T>
-class BaseSpline
+class BaseSpline2
 {
 protected:
 	int numSeg;
 	bool closed;
 	Side outSide;
 public:
-	BaseSpline() : numSeg(4), closed(false), outSide(SIDE_RIGHT) {}
+	BaseSpline2() : numSeg(4), closed(false), outSide(SIDE_RIGHT) {}
 	
 	T& setOutSide(Side side)
 	{
@@ -205,7 +205,7 @@ public:
 /**
  * Produces a shape from Cubic Hermite control points
  */
-class _ProceduralExport CubicHermiteSpline : public BaseSpline<CubicHermiteSpline>
+class _ProceduralExport CubicHermiteSpline2 : public BaseSpline2<CubicHermiteSpline2>
 {	
 	struct ControlPoint
 	{
@@ -232,7 +232,7 @@ public:
 	}
 
 	/**
-	 * Build a shape from control points
+	 * Builds a shape from control points
 	 */
 	Shape realizeShape()
 	{
@@ -270,17 +270,17 @@ public:
 /**
  * Builds a shape from a Catmull-Rom Spline.
  */
-class _ProceduralExport CatmullRomSpline : public BaseSpline<CatmullRomSpline>
+class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2>
 {	
 	std::vector<Ogre::Vector2> points;
 	public:	
-	CatmullRomSpline& addPoint(const Ogre::Vector2& pt)
+	CatmullRomSpline2& addPoint(const Ogre::Vector2& pt)
 	{
 		points.push_back(pt);
 		return *this;
 	}
 
-	CatmullRomSpline& addPoint(Ogre::Real x, Ogre::Real y)
+	CatmullRomSpline2& addPoint(Ogre::Real x, Ogre::Real y)
 	{
 		points.push_back(Ogre::Vector2(x,y));
 		return *this;
@@ -302,23 +302,25 @@ class _ProceduralExport CatmullRomSpline : public BaseSpline<CatmullRomSpline>
 
 		int numPoints = closed?points.size():points.size()-1;		
 		for (int i=0;i<numPoints;i++)
-		{
-			const Ogre::Vector2& P0 = points[i];
+		{			
+			const Ogre::Vector2& P1 = safeGetPoint(i-1);
+			const Ogre::Vector2& P2 = safeGetPoint(i);
 			const Ogre::Vector2& P3 = safeGetPoint(i+1);
-
-			Ogre::Vector2 P1 = P0 + 0.5 * (safeGetPoint(i+1)-safeGetPoint(i-1));
-			Ogre::Vector2 P2 = P3 - 0.5 * (safeGetPoint(i+2)-P0);
+			const Ogre::Vector2& P4 = safeGetPoint(i+2);
 
 			for (int j=0;j<numSeg;j++)
-			{
+			{				
 				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
-				Ogre::Vector2 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;
+				Ogre::Real t2 = t*t;
+				Ogre::Real t3 = t*t2;
+	 			Ogre::Vector2 P = 0.5*((-t3+2*t2-t)*P1 + (3*t3-5*t2+2.)*P2 + (-3*t3+4*t2+t)*P3 + (t3-t2)*P4);
 				shape.addPoint(P);
 			}
 			if (i==points.size()-2 && !closed)
 			{
 				shape.addPoint(P3);
 			}
+
 		}
 		if (closed)
 			shape.close();
@@ -333,7 +335,7 @@ class _ProceduralExport CatmullRomSpline : public BaseSpline<CatmullRomSpline>
  *
  * More details here : http://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
  */
-class _ProceduralExport KochanekBartelsSpline : public BaseSpline<KochanekBartelsSpline>
+class _ProceduralExport KochanekBartelsSpline2 : public BaseSpline2<KochanekBartelsSpline2>
 {	
 	struct ControlPoint
 	{
@@ -343,11 +345,31 @@ class _ProceduralExport KochanekBartelsSpline : public BaseSpline<KochanekBartel
 		Ogre::Real continuity;
 		
 		ControlPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c) : position(p), tension(t), bias(b), continuity(c) {}
+		ControlPoint(Ogre::Vector2 p) : position(p), tension(0.), bias(0.), continuity(0.) {}
 	};
 
 	std::vector<ControlPoint> points;
 	
 public:
+	KochanekBartelsSpline2& addPoint(Ogre::Real x, Ogre::Real y)
+	{
+		points.push_back(ControlPoint(Ogre::Vector2(x,y)));
+		return *this;
+	}
+
+	KochanekBartelsSpline2& addPoint(Ogre::Vector2 p)
+	{
+		points.push_back(ControlPoint(p));
+		return *this;
+	}
+
+	const ControlPoint& safeGetPoint(int i) const
+	{
+		if (closed)
+			return points[Utils::modulo(i,points.size())];
+		return points[Utils::cap(i,0,points.size()-1)];
+	}
+
 	/**
 	 * Adds a control point to the spline
 	 * @arg p Point position
@@ -355,13 +377,14 @@ public:
 	 * @arg b Bias       +1 = Post-shoot       -1 = Pre-shoot
 	 * @arg c Continuity +1 = Inverted Corners -1 = Box Corners
 	 */
-	void addPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c)
+	KochanekBartelsSpline2& addPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c)
 	{
 		points.push_back(ControlPoint(p,t,b,c));
+		return *this;
 	}
 
 	/**
-	 * Build a shape from control points
+	 * Builds a shape from control points
 	 */
 	Shape realizeShape()
 	{
@@ -370,10 +393,10 @@ public:
 		int numPoints = closed?points.size():points.size()-1;		
 		for (int i=0;i<numPoints;i++)
 		{
-			const ControlPoint& pm1 = points[i-1];
-			const ControlPoint& p0 = points[i];
-			const ControlPoint& p1 = points[i+1];
-			const ControlPoint& p2 = points[i+2];
+			const ControlPoint& pm1 = safeGetPoint(i-1);
+			const ControlPoint& p0 = safeGetPoint(i);
+			const ControlPoint& p1 = safeGetPoint(i+1);
+			const ControlPoint& p2 = safeGetPoint(i+2);
 			
 			Ogre::Vector2 m0 = (1-p0.tension)*(1+p0.bias)*(1+p0.continuity)/2.*(p0.position-pm1.position)+(1-p0.tension)*(1-p0.bias)*(1-p0.continuity)/2.*(p1.position-p0.position);
 			Ogre::Vector2 m1 = (1-p1.tension)*(1+p1.bias)*(1-p1.continuity)/2.*(p1.position-p0.position)+(1-p1.tension)*(1-p1.bias)*(1+p1.continuity)/2.*(p2.position-p1.position);
@@ -385,6 +408,10 @@ public:
 				Ogre::Real t3 = t2*t;
 				Ogre::Vector2 P = (2*t3-3*t2+1)*p0.position+(t3-2*t2+t)*m0+(-2*t3+3*t2)*p1.position+(t3-t2)*m1;
 				shape.addPoint(P);
+			}
+			if (i==points.size()-2 && !closed)
+			{
+				shape.addPoint(p1.position);
 			}
 		}
 		return shape;
