@@ -118,6 +118,29 @@ public:
 
 	}
 
+	/**
+	 * Outputs a mesh representing the path.
+	 * Mostly for debugging purposes
+	 */
+	Ogre::MeshPtr realizeMesh(const std::string& name)
+	{
+		Ogre::ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
+		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
+			   
+		
+		for (std::vector<Ogre::Vector3>::iterator itPos = points.begin(); itPos != points.end();itPos++)		
+			manual->position(*itPos);		
+		if (closed)
+			manual->position(*(points.begin()));
+		manual->end();
+		Ogre::MeshPtr mesh = manual->convertToMesh(name);
+
+		//mesh->_setBounds( boundingBox, false );
+		//mesh->_setBoundingSphereRadius(boundingSphereRadius);
+
+		return mesh;
+	}
+
 };
 
 /**

@@ -31,6 +31,9 @@ THE SOFTWARE.
 #include "OgreVector2.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralUtils.h"
+#include "OgreMesh.h"
+#include "OgreManualObject.h"
+#include "ProceduralRoot.h"
 
 namespace Procedural
 {
@@ -43,11 +46,11 @@ enum Side {SIDE_LEFT, SIDE_RIGHT};
 class _ProceduralExport Shape
 {
 	std::vector<Ogre::Vector2> points;
-	bool isClosed;
+	bool closed;
 	Side outSide;
 
 public:
-	Shape() : isClosed(false), outSide(SIDE_RIGHT) {}
+	Shape() : closed(false), outSide(SIDE_RIGHT) {}
 
 	Shape& addPoint(const Ogre::Vector2& pt)
 	{
@@ -74,7 +77,7 @@ public:
 
 	const Ogre::Vector2& getPoint(int i) const
 	{
-		if (isClosed)
+		if (closed)
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
 	}
@@ -82,7 +85,7 @@ public:
 	Shape& close()
 	{
 		assert(points.size()>0 && "Cannot close an empty shape");
-		isClosed = true;
+		closed = true;
 		return *this;
 	}
 
@@ -104,7 +107,7 @@ public:
 
 	int getSegCount() const
 	{
-		return (points.size()-1) + (isClosed?1:0);
+		return (points.size()-1) + (closed?1:0);
 	}
 
 
@@ -115,7 +118,7 @@ public:
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!isClosed && i == points.size()-1 && i>0)
+		if (!closed && i == points.size()-1 && i>0)
 			return (points[i] - points[i-1]).normalisedCopy();
 		else
 			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
@@ -128,7 +131,7 @@ public:
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!isClosed && i == 1)
+		if (!closed && i == 1)
 			return (points[1] - points[0]).normalisedCopy();
 		else
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
@@ -136,10 +139,32 @@ public:
 
 	Ogre::Vector2 getAvgDirection(int i) const
 	{
-	    return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
+		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 
 	}
 
+	/**
+	 * Outputs a mesh representing the shape.
+	 * Mostly for debugging purposes
+	 */
+	Ogre::MeshPtr realizeMesh(const std::string& name)
+	{
+		Ogre::ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
+		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
+			   
+		
+		for (std::vector<Ogre::Vector2>::iterator itPos = points.begin(); itPos != points.end();itPos++)		
+			manual->position(Ogre::Vector3(itPos->x, itPos->y, 0.f));		
+		if (closed)
+			manual->position(Ogre::Vector3(points.begin()->x, points.begin()->y, 0.f));
+		manual->end();
+		Ogre::MeshPtr mesh = manual->convertToMesh(name);
+
+		//mesh->_setBounds( boundingBox, false );
+		//mesh->_setBoundingSphereRadius(boundingSphereRadius);
+
+		return mesh;
+	}
 };
 
 template<class T>
@@ -147,10 +172,10 @@ class BaseSpline
 {
 protected:
 	int numSeg;
-	bool isClosed;
+	bool closed;
 	Side outSide;
 public:
-	BaseSpline() : numSeg(4), isClosed(false), outSide(SIDE_RIGHT) {}
+	BaseSpline() : numSeg(4), closed(false), outSide(SIDE_RIGHT) {}
 	
 	T& setOutSide(Side side)
 	{
@@ -172,7 +197,7 @@ public:
 		
 	T& close()
 	{
-		isClosed = true;
+		closed = true;
 		return (T&)*this;
 	}
 };
@@ -201,7 +226,7 @@ public:
 	
 	const ControlPoint& safeGetPoint(int i) const
 	{
-		if (isClosed)
+		if (closed)
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
 	}
@@ -213,7 +238,7 @@ public:
 	{
 	Shape shape;
 
-		int numPoints = isClosed?points.size():points.size()-1;		
+		int numPoints = closed?points.size():points.size()-1;		
 		for (int i=0;i<numPoints;i++)
 		{
 			const Ogre::Vector2& p0 = points[i].position;
@@ -229,12 +254,12 @@ public:
 				Ogre::Vector2 P = (2*t3-3*t2+1)*p0+(t3-2*t2+t)*m0+(-2*t3+3*t2)*p1+(t3-t2)*m1;
 				shape.addPoint(P);
 			}
-			if (i==points.size()-2 && !isClosed)
+			if (i==points.size()-2 && !closed)
 			{
 				shape.addPoint(p1);
 			}
 		}
-		if (isClosed)
+		if (closed)
 			shape.close();
 		shape.setOutSide(outSide);
 
@@ -257,13 +282,13 @@ class _ProceduralExport CatmullRomSpline : public BaseSpline<CatmullRomSpline>
 
 	CatmullRomSpline& addPoint(Ogre::Real x, Ogre::Real y)
 	{
-	    points.push_back(Ogre::Vector2(x,y));
-	    return *this;
+		points.push_back(Ogre::Vector2(x,y));
+		return *this;
 	}
 	
 	const Ogre::Vector2& safeGetPoint(int i) const
 	{
-		if (isClosed)
+		if (closed)
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
 	}
@@ -275,7 +300,7 @@ class _ProceduralExport CatmullRomSpline : public BaseSpline<CatmullRomSpline>
 	{
 		Shape shape;
 
-		int numPoints = isClosed?points.size():points.size()-1;		
+		int numPoints = closed?points.size():points.size()-1;		
 		for (int i=0;i<numPoints;i++)
 		{
 			const Ogre::Vector2& P0 = points[i];
@@ -290,12 +315,12 @@ class _ProceduralExport CatmullRomSpline : public BaseSpline<CatmullRomSpline>
 				Ogre::Vector2 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;
 				shape.addPoint(P);
 			}
-			if (i==points.size()-2 && !isClosed)
+			if (i==points.size()-2 && !closed)
 			{
 				shape.addPoint(P3);
 			}
 		}
-		if (isClosed)
+		if (closed)
 			shape.close();
 		shape.setOutSide(outSide);
 
@@ -342,7 +367,7 @@ public:
 	{
 		Shape shape;
 		
-		int numPoints = isClosed?points.size():points.size()-1;		
+		int numPoints = closed?points.size():points.size()-1;		
 		for (int i=0;i<numPoints;i++)
 		{
 			const ControlPoint& pm1 = points[i-1];
