@@ -51,32 +51,13 @@ public:
 		return Ogre::Vector3(std::max(v1.x, v2.x), std::max(v1.y, v2.y), std::max(v1.z, v2.z));
 	}
 
-	static void updateAABB(Ogre::AxisAlignedBox& aabb, const Ogre::AxisAlignedBox& newAABB)
-	{
-		aabb.setMinimum(min(aabb.getMinimum(), newAABB.getMinimum()));
-		aabb.setMaximum(max(aabb.getMaximum(), newAABB.getMaximum()));
-	}
-
-	static void updateAABB(Ogre::AxisAlignedBox& aabb, const Ogre::Vector3& point)
-	{
-		aabb.setMinimum(min(aabb.getMinimum(), point));
-		aabb.setMaximum(max(aabb.getMaximum(), point));
-	}
-
-	static Ogre::AxisAlignedBox AABBfromPoint(Ogre::Vector3 point)
-	{
-	    Ogre::AxisAlignedBox aabb;
-        aabb.setMaximum(point);
-	    aabb.setMinimum(point);
-	    return aabb;
-	}
-
 	static Ogre::AxisAlignedBox AABBfromPoints(std::vector<Ogre::Vector3> points)
 	{
 	    Ogre::AxisAlignedBox aabb;
 	    if (points.size() == 0)
             return aabb;
-	    aabb = AABBfromPoint(points[0]);
+		aabb.setMinimum(points[0]);
+		aabb.setMaximum(points[0]);
 	    for (std::vector<Ogre::Vector3>::iterator it = points.begin(); it!=points.end();it++)
 	    {
 	        aabb.setMinimum(min(aabb.getMinimum(), *it));

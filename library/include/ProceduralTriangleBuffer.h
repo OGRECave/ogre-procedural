@@ -70,20 +70,19 @@ class TriangleBuffer
 
 	void updateBoundingBox(const Ogre::AxisAlignedBox& aabb)
 	{
-		Utils::updateAABB(boundingBox, aabb);
+		boundingBox.merge(boundingBox);
 	}
 
 	void updateBoundingBox(Ogre::Real minX, Ogre::Real minY, Ogre::Real minZ, Ogre::Real maxX, Ogre::Real maxY, Ogre::Real maxZ)
 	{
-		Utils::updateAABB(boundingBox, Ogre::AxisAlignedBox(minX,minY,minZ,maxX,maxY,maxZ));
+		boundingBox.merge(Ogre::AxisAlignedBox(minX,minY,minZ,maxX,maxY,maxZ));
 	}
 
 	void updateBoundingVolumes(Ogre::Vector3 vec)
 	{
-		Utils::updateAABB(boundingBox, vec);
+		boundingBox.merge(vec);
 		Utils::updateBoundingRadius(boundingSphereRadius, vec);
 	}
-
 
 	/**
 	 * Builds an Ogre Mesh from this buffer.
