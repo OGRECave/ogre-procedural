@@ -33,54 +33,65 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-
+/**
+ * Generates a cylinder mesh along Y-axis
+ */
 class _ProceduralExport CylinderGenerator : public MeshGenerator<CylinderGenerator>
 {
-    int numSegBase;
-    int numSegHeight;
-    bool capped;
-    Ogre::Real radius;
-    Ogre::Real height;
+	int numSegBase;
+	int numSegHeight;
+	bool capped;
+	Ogre::Real radius;
+	Ogre::Real height;
 
 public:
-    CylinderGenerator() : numSegBase(16),
-        numSegHeight(1),
-        capped(true),
-        radius(1.f),
-        height(1.f)
-    {}
+	CylinderGenerator() : numSegBase(16),
+		numSegHeight(1),
+		capped(true),
+		radius(1.f),
+		height(1.f)
+	{}
 
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
-    inline CylinderGenerator & setNumSegBase(int numSegBase)
-    {
-        this->numSegBase = numSegBase;
-        return *this;
-    }
+	/** Sets the number of segments when rotating around the cylinder's axis (default=16) */
+	inline CylinderGenerator & setNumSegBase(int numSegBase)
+	{
+		this->numSegBase = numSegBase;
+		return *this;
+	}
 
-    inline CylinderGenerator & setNumSegHeight(int numSegHeight)
-    {
-        this->numSegHeight = numSegHeight;
-        return *this;
-    }
+	/** Sets the number of segments along the height of the cylinder (default=1) */
+	inline CylinderGenerator & setNumSegHeight(int numSegHeight)
+	{
+		this->numSegHeight = numSegHeight;
+		return *this;
+	}
 
-    inline CylinderGenerator & setCapped(bool capped)
-    {
-        this->capped = capped;
-        return *this;
-    }
+	/** Sets whether the cylinder has endings or not (default=true) */
+	inline CylinderGenerator & setCapped(bool capped)
+	{
+		this->capped = capped;
+		return *this;
+	}
 
-    inline CylinderGenerator & setRadius(Ogre::Real radius)
-    {
-        this->radius = radius;
-        return *this;
-    }
+	/** Sets the radius of the cylinder (default=1) */
+	inline CylinderGenerator & setRadius(Ogre::Real radius)
+	{
+		this->radius = radius;
+		return *this;
+	}
 
-    inline CylinderGenerator & setHeight(Ogre::Real height)
-    {
-        this->height = height;
-        return *this;
-    }
+	/** Sets the height of the cylinder (default=1) */
+	inline CylinderGenerator & setHeight(Ogre::Real height)
+	{
+		this->height = height;
+		return *this;
+	}
 
 };
 }

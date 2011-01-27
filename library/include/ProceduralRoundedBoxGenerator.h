@@ -33,6 +33,10 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Builds a rounded box.
+ * You can choose the size of the rounded borders to get a sharper or smoother look.
+ */
 class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGenerator>
 {
 	Ogre::Real sizeX,sizeY,sizeZ;
@@ -46,49 +50,59 @@ public:
 	RoundedBoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
 		numSegX(1), numSegY(1), numSegZ(1), chamferSize(.1f), chamferNumSeg(8) {}
 
-
+	/** Sets the size of the box along X axis */
 	RoundedBoxGenerator& setSizeX(Ogre::Real sizeX)
 	{
 		this->sizeX = sizeX;
 		return *this;
 	}
 
+	/** Sets the size of the box along Y axis */
 	RoundedBoxGenerator& setSizeY(Ogre::Real sizeY)
 	{
 		this->sizeY = sizeY;
 		return *this;
 	}
 
+	/** Sets the size of the box along Z axis */
 	RoundedBoxGenerator& setSizeZ(Ogre::Real sizeZ)
 	{
 		this->sizeZ = sizeZ;
 		return *this;
 	}
 
+	/** Sets the number of segments along X axis */
 	RoundedBoxGenerator& setNumSegX(int numSegX)
 	{
 		this->numSegX = numSegX;
 		return *this;
 	}
 
+	/** Sets the number of segments along Y axis */
 	RoundedBoxGenerator& setNumSegY(int numSegY)
 	{
 		this->numSegY = numSegY;
 		return *this;
 	}
 
+	/** Sets the number of segments along Z axis */
 	RoundedBoxGenerator& setNumSegZ(int numSegZ)
 	{
 		this->numSegZ = numSegZ;
 		return *this;
 	}
 
-	 RoundedBoxGenerator& setChamferSize(Ogre::Real chamferSize)
+	/** Sets the size of the chamfer, ie the radius of the rounded part */
+	RoundedBoxGenerator& setChamferSize(Ogre::Real chamferSize)
 	{
 		this->chamferSize = chamferSize;
 		return *this;
 	}
 
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 	
 	void _addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos) const;

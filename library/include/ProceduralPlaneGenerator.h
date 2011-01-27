@@ -33,7 +33,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-
+/**
+ * Builds a plane mesh
+ */
 class _ProceduralExport PlaneGenerator : public MeshGenerator<PlaneGenerator>
 {
 	int numSegX;
@@ -49,38 +51,48 @@ public:
 		sizeX(1), sizeY(1),position(Ogre::Vector3::ZERO)
 	{}
 	
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
+	/** Sets the number of segements along local X axis */
 	inline PlaneGenerator & setNumSegX(int numSegX)
 	{
 		this->numSegX = numSegX;
 		return *this;
 	}
 
+	/** Sets the number of segments along local Y axis */
 	inline PlaneGenerator & setNumSegY(int numSegY)
 	{
 		this->numSegY = numSegY;
 		return *this;
 	}
 
+	/** Sets the normal of the plane */
 	inline PlaneGenerator & setNormal(Ogre::Vector3 normal)
 	{
 		this->normal = normal;
 		return *this;
 	}
 
+	/** Sets the size of the plane along local X axis */
 	inline PlaneGenerator & setSizeX(Ogre::Real sizeX)
 	{
 		this->sizeX = sizeX;
 		return *this;
 	}
 
+	/** Sets the size of the plane along local Y axis */
 	inline PlaneGenerator & setSizeY(Ogre::Real sizeY)
 	{
 		this->sizeY = sizeY;
 		return *this;
 	}
 
+	/** Set a point that is located on the plane, in order to compute offset */
 	inline PlaneGenerator & setPosition(Ogre::Vector3 position)
 	{
 		this->position = position;

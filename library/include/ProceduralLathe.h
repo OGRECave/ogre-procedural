@@ -34,6 +34,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Builds a mesh by rotating a shape 360° around Y-axis.
+ */
 class _ProceduralExport Lathe : public MeshGenerator<Lathe>
 {
 	Shape* shapeToExtrude;
@@ -43,19 +46,25 @@ public:
 	Lathe() : shapeToExtrude(0), numSeg(16)
 	{}
 
+	/** Sets the number of segments when rotating around the axis (default=16)*/
 	inline Lathe& setNumSeg(int numSeg)
 	{
 		this->numSeg = numSeg;
 		return *this;
 	}
 	
-	void addToTriangleBuffer(TriangleBuffer& buffer) const;
-
+	/** Sets the shape to extrude */
 	inline Lathe & setShapeToExtrude(Shape* shapeToExtrude)
 	{
 		this->shapeToExtrude = shapeToExtrude;
 		return *this;
 	}
+
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 };
 }
 

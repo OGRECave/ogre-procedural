@@ -33,7 +33,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-
+/**
+ * Builds a torus knot mesh
+ */
 class _ProceduralExport TorusKnotGenerator : public MeshGenerator<TorusKnotGenerator>
 {
 	int numSegSection;
@@ -48,40 +50,48 @@ public:
 						radius(1.f),
 						sectionRadius(.2f), p(2),q(3) {}
 
-
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
-
+	/** Sets the number of segments along the section (default=8) */
 	inline TorusKnotGenerator & setNumSegSection(int numSegSection)
 	{
 		this->numSegSection = numSegSection;
 		return *this;
 	}
 
+	/** Sets the number of segments along the circle (default=16) */
 	inline TorusKnotGenerator & setNumSegCircle(int numSegCircle)
 	{
 		this->numSegCircle = numSegCircle;
 		return *this;
 	}
 
+	/** Sets the main radius of the knot (default=1) */
 	inline TorusKnotGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
 	}
 
+	/** Sets the section radius (default=0.2) */
 	inline TorusKnotGenerator & setSectionRadius(Ogre::Real sectionRadius)
 	{
 		this->sectionRadius = sectionRadius;
 		return *this;
 	}
 
+	/** Sets the p parameter of the knot (default=2) */
 	inline TorusKnotGenerator & setP(int p)
 	{
 		this->p = p;
 		return *this;
 	}
 
+	/** Sets the q parameter of the knot (default=3) */
 	inline TorusKnotGenerator & setQ(int q)
 	{
 		this->q = q;
