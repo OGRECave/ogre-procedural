@@ -37,6 +37,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Superclass of everything that builds meshes
+ */
 template <typename T>
 class MeshGenerator
 {
@@ -48,16 +51,6 @@ protected:
 	bool enableNormals;
 	unsigned int numTexCoordSet;
 public:
-	Ogre::MeshPtr realizeMesh(const std::string& name)
-	{
-		TriangleBuffer tbuffer;
-		addToTriangleBuffer(tbuffer);
-		Ogre::MeshPtr mesh = tbuffer.transformToMesh(sceneMgr, name);
-		return mesh;
-	}
-
-	virtual void addToTriangleBuffer(TriangleBuffer& buffer) const=0;
-
 	MeshGenerator() : uTile(1.f),
 					  vTile(1.f),
 					  enableNormals(true),
@@ -67,24 +60,53 @@ public:
 		assert(sceneMgr && "Scene Manager must be set in Root");
 	}
 
+	/**
+	 * Builds a mesh.
+	 * @param name of the mesh for the MeshManager
+	 */
+	Ogre::MeshPtr realizeMesh(const std::string& name)
+	{
+		TriangleBuffer tbuffer;
+		addToTriangleBuffer(tbuffer);
+		Ogre::MeshPtr mesh = tbuffer.transformToMesh(sceneMgr, name);
+		return mesh;
+	}
+
+	/**
+	 * Overloaded by each generator to implement the specifics
+	 */
+	virtual void addToTriangleBuffer(TriangleBuffer& buffer) const=0;
+
+	/**
+	 * Sets U Tile, ie the number by which u texture coordinates are multiplied (default=1)
+	 */
 	inline T& setUTile(Ogre::Real uTile)
 	{
 		this->uTile = uTile;
 		return static_cast<T&>(*this);
 	}
 
+	/**
+	 * Sets V Tile, ie the number by which v texture coordinates are multiplied (default=1)
+	 */	
 	inline T & setVTile(Ogre::Real vTile)
 	{
 		this->vTile = vTile;
 		return static_cast<T&>(*this);
 	}
 
+	/**
+	 * Sets whether normals are enabled or not (default=true)
+	 */	
 	inline T & setEnableNormals(bool enableNormals)
 	{
 		this->enableNormals = enableNormals;
 		return static_cast<T&>(*this);
 	}
 
+	/**
+	 * Sets the number of texture coordintate sets (default=1)
+	 */
 	inline T & setNumTexCoordSet(unsigned int numTexCoordSet)
 	{
 		this->numTexCoordSet = numTexCoordSet;

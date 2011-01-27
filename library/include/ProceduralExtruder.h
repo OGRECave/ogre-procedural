@@ -35,6 +35,10 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Extrudes a 2D shape along a path to build an extruded mesh.
+ * Can be used to build things such as pipelines, roads...
+ */
 class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 {
 	Shape* shapeToExtrude;
@@ -43,14 +47,20 @@ public:
 	Extruder() : shapeToExtrude(0), extrusionPath(0)
 	{}
 	
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
+	/** Sets the shape to extrude */
 	inline Extruder & setShapeToExtrude(Shape* shapeToExtrude)
 	{
 		this->shapeToExtrude = shapeToExtrude;
 		return *this;
 	}
 
+	/** Sets the extrusion path */
 	inline Extruder & setExtrusionPath(Path* extrusionPath)
 	{
 		this->extrusionPath = extrusionPath;

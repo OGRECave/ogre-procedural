@@ -51,33 +51,47 @@ class TriangleBuffer
 	Ogre::Real boundingSphereRadius;
 
 	int globalOffset;
-
-	//TODO : add UV, normals, tangents, colors?
-
+	
 	public:
 	TriangleBuffer() : globalOffset(0)
 	{}
 
+	/**
+	 * Rebase index offset : call that function before you add a new mesh to the triangle buffer
+	 */
 	void rebaseOffset()
 	{
 		globalOffset = vertices.size();
 	}
 
+	/**
+	 * Merge current bounding sphere with another bounding sphere
+	 */
 	void updateBoundingSphere(Ogre::Real radius)
 	{
 		boundingSphereRadius = std::max(boundingSphereRadius, radius);
 	}
 
+	/**
+	 * Merge current bounding box with another bounding box
+	 */
 	void updateBoundingBox(const Ogre::AxisAlignedBox& aabb)
 	{
 		boundingBox.merge(boundingBox);
 	}
 
+	/**
+	 * Merge current bounding box with another bounding box
+	 */
 	void updateBoundingBox(Ogre::Real minX, Ogre::Real minY, Ogre::Real minZ, Ogre::Real maxX, Ogre::Real maxY, Ogre::Real maxZ)
 	{
 		boundingBox.merge(Ogre::AxisAlignedBox(minX,minY,minZ,maxX,maxY,maxZ));
 	}
 
+	/**
+	 * Updates the bounding volumes with a vertex.
+	 * @param the vertex to add
+	 */
 	void updateBoundingVolumes(Ogre::Vector3 vec)
 	{
 		boundingBox.merge(vec);
@@ -92,9 +106,9 @@ class TriangleBuffer
 		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-        std::vector<Ogre::Vector3>::iterator itPos = vertices.begin();
-        std::vector<Ogre::Vector2>::iterator itUvs = uvs.begin();
-        std::vector<Ogre::Vector3>::iterator itNormals = normals.begin();
+		std::vector<Ogre::Vector3>::iterator itPos = vertices.begin();
+		std::vector<Ogre::Vector2>::iterator itUvs = uvs.begin();
+		std::vector<Ogre::Vector3>::iterator itNormals = normals.begin();
 
 		for (; itPos != vertices.end();itPos++,itUvs++,itNormals++)
 		{
@@ -104,7 +118,7 @@ class TriangleBuffer
 		}
 		for (std::vector<int>::iterator it = indices.begin(); it!=indices.end();it++)
 		{
-		    manual->index(*it);
+			manual->index(*it);
 		}
 		manual->end();
 		Ogre::MeshPtr mesh = manual->convertToMesh(name);
@@ -123,37 +137,45 @@ class TriangleBuffer
 		return mesh;
 	}
 
+	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& position(const Ogre::Vector3& pos)
 	{
 		vertices.push_back(pos);
 		return *this;
 	}
 
+	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& position(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
 		vertices.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
-
-
+	
+	/** Sets the normal of the current vertex */
 	inline TriangleBuffer& normal(const Ogre::Vector3& norm)
 	{
-	    normals.push_back(norm);
+		normals.push_back(norm);
 		return *this;
 	}
 
+	/** Sets the texture coordinates of the current vertex */
 	inline TriangleBuffer& textureCoord(float u, float v)
 	{
-	    uvs.push_back(Ogre::Vector2(u,v));
+		uvs.push_back(Ogre::Vector2(u,v));
 		return *this;
 	}
 
+	/** Sets the texture coordinates of the current vertex */
 	inline TriangleBuffer& textureCoord(const Ogre::Vector2& vec)
 	{
-	    uvs.push_back(vec);
+		uvs.push_back(vec);
 		return *this;
 	}
 
+	/** 
+	 * Adds an index to the index buffer.
+	 * Index is relative to the latest rebaseOffset().
+	 */
 	inline TriangleBuffer& index(int i)
 	{
 		indices.push_back(globalOffset+i);

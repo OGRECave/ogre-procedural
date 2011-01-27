@@ -33,7 +33,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-
+/**
+ * Generates a cone mesh along Y-axis
+ */
 class _ProceduralExport ConeGenerator : public MeshGenerator<ConeGenerator>
 {
 	int numSegBase;
@@ -47,27 +49,34 @@ public:
 		height(1.f)
 	{}
 
-
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
+	/** Sets the number of segments on the side of the base (default=16)*/
 	inline ConeGenerator & setNumSegBase(int numSegBase)
 	{
 		this->numSegBase = numSegBase;
 		return *this;
 	}
 
+	/** Sets the number of segments on the height (default=1) */
 	inline ConeGenerator & setNumSegHeight(int numSegHeight)
 	{
 		this->numSegHeight = numSegHeight;
 		return *this;
 	}
 
+	/** Sets the base radius (default=1)*/
 	inline ConeGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
 	}
 
+	/** Sets the height of the cone (default=1)*/
 	inline ConeGenerator & setHeight(Ogre::Real height)
 	{
 		this->height = height;

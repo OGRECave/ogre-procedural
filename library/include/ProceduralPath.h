@@ -34,29 +34,37 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Succession of points in 3D space.
+ * Can be closed or not.
+ */
 class _ProceduralExport Path
 {
 	std::vector<Ogre::Vector3> points;
 	bool closed;
 public:
+	/** Adds a point to the path, as a Vector3 */
 	Path& addPoint(const Ogre::Vector3& pt)
 	{
 		points.push_back(pt);
 		return *this;
 	}
 
+	/** Adds a point to the path, using its 3 coordinates */
 	Path& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
 		points.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
 
+	/** Clears the content of the Path */
 	Path& reset()
 	{
 		points.clear();
 		return *this;
 	}
 
+	/** Define the path as being closed. Almost the same as adding a last point on the first point position */
 	Path& close()
 	{
 		assert(points.size()>0 && "Cannot close an empty path");
@@ -64,16 +72,23 @@ public:
 		return *this;
 	}
 	
+	/** Tells if the path is closed or not */
 	bool isClosed()
 	{
 		return closed;
 	}
 
+	/** Gets the list of points as a vector of Vector3 */
 	std::vector<Ogre::Vector3> getPoints()
 	{
 		return points;
 	}
 
+	/** Safely gets a given point.
+	 * Takes into account whether the path is closed or not.
+	 * @param i the index of the point.
+	 *          if it is <0 or >maxPoint, cycle through the list of points
+	 */
 	const Ogre::Vector3& getPoint(int i)
 	{
 		if (closed)
@@ -81,6 +96,9 @@ public:
 		return points[Utils::cap(i,0,points.size()-1)];
 	}
 
+	/** Gets the number of segments in the path
+	 * Takes into accound whether path is closed or not
+	 */
 	int getSegCount()
 	{
 		return (points.size()-1) + (closed?1:0);
@@ -112,6 +130,10 @@ public:
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
 	}
 
+	/**
+	 * Returns the local direction at the current point.
+	 * @param i index of the point
+	 */
 	Ogre::Vector3 getAvgDirection(int i)
 	{
 	    return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();

@@ -33,6 +33,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Generates a capsule mesh, i.e. a sphere-terminated cylinder
+ */
 class _ProceduralExport CapsuleGenerator : public MeshGenerator<CapsuleGenerator>
 {
 	Ogre::Real radius;
@@ -44,35 +47,43 @@ class _ProceduralExport CapsuleGenerator : public MeshGenerator<CapsuleGenerator
 public:
 	CapsuleGenerator() : radius(1.0),
 		numRings(8), numSegments(16), height(1.0), numSegHeight(1)
-
 	{}
 	
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
+	/** Sets the radius of the cylinder part (default=1)*/
 	inline CapsuleGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
 	}
 
+	/** Sets the number of segments of the sphere part (default=8)*/
 	inline CapsuleGenerator & setNumRings(unsigned int numRings)
 	{
 		this->numRings = numRings;
 		return *this;
 	}
 
+	/** Sets the number of segments when rotating around the cylinder (default=16)*/
 	inline CapsuleGenerator & setNumSegments(unsigned int numSegments)
 	{
 		this->numSegments = numSegments;
 		return *this;
 	}
 
+	/** Sets the number of segments along the axis of the cylinder (default=1)*/
 	inline CapsuleGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
 		this->numSegHeight = numSegHeight;
 		return *this;
 	}
 
+	/** Sets the height of the cylinder part of the capsule (default=1)*/
 	inline CapsuleGenerator & setHeight(Ogre::Real height)
 	{
 		this->height = height;

@@ -33,52 +33,66 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Generates a box mesh
+ * Default size is 1.0 with 1 quad per face.
+ *
+ */
 class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
 {
-    Ogre::Real sizeX,sizeY,sizeZ;
-    int numSegX,numSegY,numSegZ;
+	Ogre::Real sizeX,sizeY,sizeZ;
+	int numSegX,numSegY,numSegZ;
 public:
-    BoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
-        numSegX(1), numSegY(1), numSegZ(1) {}
+	BoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
+		numSegX(1), numSegY(1), numSegZ(1) {}
 
+	/** Sets size along X axis (default=1) */
+	BoxGenerator& setSizeX(Ogre::Real sizeX)
+	{
+		this->sizeX = sizeX;
+		return *this;
+	}
 
-    BoxGenerator& setSizeX(Ogre::Real sizeX)
-    {
-        this->sizeX = sizeX;
-        return *this;
-    }
+	/** Sets size along Y axis (default=1) */
+	BoxGenerator& setSizeY(Ogre::Real sizeY)
+	{
+		this->sizeY = sizeY;
+		return *this;
+	}
 
-    BoxGenerator& setSizeY(Ogre::Real sizeY)
-    {
-        this->sizeY = sizeY;
-        return *this;
-    }
+	/** Sets size along Z axis (default=1) */
+	BoxGenerator& setSizeZ(Ogre::Real sizeZ)
+	{
+		this->sizeZ = sizeZ;
+		return *this;
+	}
 
-    BoxGenerator& setSizeZ(Ogre::Real sizeZ)
-    {
-        this->sizeZ = sizeZ;
-        return *this;
-    }
+	/** Sets the number of segments along X axis (default=1) */
+	BoxGenerator& setNumSegX(int numSegX)
+	{
+		this->numSegX = numSegX;
+		return *this;
+	}
 
-    BoxGenerator& setNumSegX(int numSegX)
-    {
-        this->numSegX = numSegX;
-        return *this;
-    }
+	/** Sets the number of segments along Y axis (default=1) */
+	BoxGenerator& setNumSegY(int numSegY)
+	{
+		this->numSegY = numSegY;
+		return *this;
+	}
 
-    BoxGenerator& setNumSegY(int numSegY)
-    {
-        this->numSegY = numSegY;
-        return *this;
-    }
+	/** Sets the number of segments along Z axis (default=1) */
+	BoxGenerator& setNumSegZ(int numSegZ)
+	{
+		this->numSegZ = numSegZ;
+		return *this;
+	}
 
-    BoxGenerator& setNumSegZ(int numSegZ)
-    {
-        this->numSegZ = numSegZ;
-        return *this;
-    }
-
-    void addToTriangleBuffer(TriangleBuffer& buffer) const;
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 };
 

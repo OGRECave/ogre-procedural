@@ -33,6 +33,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Builds an UV sphere mesh
+ */
 class _ProceduralExport SphereGenerator : public MeshGenerator<SphereGenerator>
 {
 	Ogre::Real radius;
@@ -45,24 +48,31 @@ public:
 
 	{}
 
+	/** Sets the radius of the sphere (default=1) */
 	inline SphereGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
 	}
 
+	/** Sets the number of rings (default=16) */
 	inline SphereGenerator & setNumRings(unsigned int numRings)
 	{
 		this->numRings = numRings;
 		return *this;
 	}
 
+	/** Sets the number of segments (default=16) */
 	inline SphereGenerator & setNumSegments(unsigned int numSegments)
 	{
 		this->numSegments = numSegments;
 		return *this;
 	}
 	
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 };

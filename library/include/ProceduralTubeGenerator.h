@@ -33,53 +33,64 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-
+/**
+ * Builds an Y-axis tube mesh, i.e. an emptied cylinder
+ */
 class _ProceduralExport TubeGenerator : public MeshGenerator<TubeGenerator>
 {
-    int numSegBase;
-    int numSegHeight;
-    Ogre::Real outerRadius;
-    Ogre::Real innerRadius;
-    Ogre::Real height;
+	int numSegBase;
+	int numSegHeight;
+	Ogre::Real outerRadius;
+	Ogre::Real innerRadius;
+	Ogre::Real height;
 
 public:
-    TubeGenerator() : numSegBase(16),
-        numSegHeight(1),
-        outerRadius(2.f),
-        innerRadius(1.f),
-        height(1.f) {}
+	TubeGenerator() : numSegBase(16),
+		numSegHeight(1),
+		outerRadius(2.f),
+		innerRadius(1.f),
+		height(1.f) {}
 
-    void addToTriangleBuffer(TriangleBuffer& buffer) const;
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
-    inline TubeGenerator & setNumSegBase(int numSegBase)
-    {
-        this->numSegBase = numSegBase;
-        return *this;
-    }
+	/** Sets the number of segments when rotating around the tube's axis (default=16) */	
+	inline TubeGenerator & setNumSegBase(int numSegBase)
+	{
+		this->numSegBase = numSegBase;
+		return *this;
+	}
 
-    inline TubeGenerator & setNumSegHeight(int numSegHeight)
-    {
-        this->numSegHeight = numSegHeight;
-        return *this;
-    }
+	/** Sets the number of segments along the height of the cylinder (default=1) */
+	inline TubeGenerator & setNumSegHeight(int numSegHeight)
+	{
+		this->numSegHeight = numSegHeight;
+		return *this;
+	}
 
-    inline TubeGenerator & setOuterRadius(Ogre::Real outerRadius)
-    {
-        this->outerRadius = outerRadius;
-        return *this;
-    }
+	/** Sets the outer radius of the tube */
+	inline TubeGenerator & setOuterRadius(Ogre::Real outerRadius)
+	{
+		this->outerRadius = outerRadius;
+		return *this;
+	}
 
-    inline TubeGenerator & setInnerRadius(Ogre::Real innerRadius)
-    {
-        this->innerRadius = innerRadius;
-        return *this;
-    }
+	/** Sets the inner radius of the tube */
+	inline TubeGenerator & setInnerRadius(Ogre::Real innerRadius)
+	{
+		this->innerRadius = innerRadius;
+		return *this;
+	}
 
-    inline TubeGenerator & setHeight(Ogre::Real height)
-    {
-        this->height = height;
-        return *this;
-    }
+	/** Sets the height of the tube */
+	inline TubeGenerator & setHeight(Ogre::Real height)
+	{
+		this->height = height;
+		return *this;
+	}
 };
 }
 #endif

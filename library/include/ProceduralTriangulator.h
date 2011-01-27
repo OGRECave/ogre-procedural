@@ -38,7 +38,10 @@ namespace Procedural
 
 typedef std::vector<Ogre::Vector2> PointList;
 
-
+/**
+ * Implements a Delaunay Triangulation algorithm.
+ * It works on Shapes to build Triangle Buffers
+ */
 class _ProceduralExport Triangulator
 {	
 	struct Triangle;

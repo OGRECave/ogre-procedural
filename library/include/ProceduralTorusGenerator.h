@@ -33,7 +33,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-
+/**
+ * Builds a torus mesh whose axis is Y
+ */
 class _ProceduralExport TorusGenerator : public MeshGenerator<TorusGenerator>
 {
 	int numSegSection;
@@ -46,27 +48,34 @@ public:
 						radius(1.f),
 						sectionRadius(0.2f) {}
 
-
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 	
+	/** Sets the number of segments on the section circle */
 	inline TorusGenerator & setNumSegSection(int numSegSection)
 	{
 		this->numSegSection = numSegSection;
 		return *this;
 	}
 
+	/** Sets the number of segments along the guiding circle */
 	inline TorusGenerator & setNumSegCircle(int numSegCircle)
 	{
 		this->numSegCircle = numSegCircle;
 		return *this;
 	}
 
+	/** Sets the radius of the guiding circle */
 	inline TorusGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
 	}
 
+	/** Sets the radius of the section circle */
 	inline TorusGenerator & setSectionRadius(Ogre::Real sectionRadius)
 	{
 		this->sectionRadius = sectionRadius;

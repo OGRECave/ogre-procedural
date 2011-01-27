@@ -33,6 +33,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * Builds an icosphere mesh, ie a sphere built with equally sized triangles
+ */
 class _ProceduralExport IcoSphereGenerator : public MeshGenerator<IcoSphereGenerator>
 {
 	Ogre::Real radius;
@@ -43,14 +46,24 @@ public:
 		numIterations(2)
 	{}
 
+	/**
+	 * Builds the mesh into the given TriangleBuffer
+	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
+	/** Sets the radius of the sphere (default=1) */
 	inline IcoSphereGenerator & setRadius(Ogre::Real radius)
 	{
 		this->radius = radius;
 		return *this;
 	}
 
+	/** Sets the number of iterations needed to build the sphere mesh.
+		First iteration corresponds to a 20 face sphere.
+		Each iteration has 3 more faces than the previous.
+		(default=2)
+	*/
 	inline IcoSphereGenerator & setNumIterations(unsigned int numIterations)
 	{
 		this->numIterations = numIterations;
