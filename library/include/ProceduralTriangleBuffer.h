@@ -101,9 +101,10 @@ class TriangleBuffer
 	/**
 	 * Builds an Ogre Mesh from this buffer.
 	 */
-	Ogre::MeshPtr transformToMesh(Ogre::SceneManager* sceneMgr, const std::string& name)
+	Ogre::MeshPtr transformToMesh(Ogre::SceneManager* sceneMgr, const std::string& name,
+        const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
 	{
-		Ogre::ManualObject * manual = sceneMgr->createManualObject(name);
+		Ogre::ManualObject * manual = sceneMgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
 		std::vector<Ogre::Vector3>::iterator itPos = vertices.begin();
@@ -121,7 +122,7 @@ class TriangleBuffer
 			manual->index(*it);
 		}
 		manual->end();
-		Ogre::MeshPtr mesh = manual->convertToMesh(name);
+		Ogre::MeshPtr mesh = manual->convertToMesh(name, group);
 
 		mesh->_setBounds( boundingBox, false );
 		mesh->_setBoundingSphereRadius(boundingSphereRadius);
@@ -132,7 +133,7 @@ class TriangleBuffer
 			mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
 		}
 
-		//TODO :  destroy manualobject???
+		sceneMgr->destroyManualObject(manual);
 
 		return mesh;
 	}

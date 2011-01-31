@@ -64,11 +64,12 @@ public:
 	 * Builds a mesh.
 	 * @param name of the mesh for the MeshManager
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name)
+	Ogre::MeshPtr realizeMesh(const std::string& name, 
+        const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
 	{
 		TriangleBuffer tbuffer;
 		addToTriangleBuffer(tbuffer);
-		Ogre::MeshPtr mesh = tbuffer.transformToMesh(sceneMgr, name);
+		Ogre::MeshPtr mesh = tbuffer.transformToMesh(sceneMgr, name, group);
 		return mesh;
 	}
 
