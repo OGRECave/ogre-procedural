@@ -77,7 +77,7 @@ class TriangleBuffer
 	 */
 	void updateBoundingBox(const Ogre::AxisAlignedBox& aabb)
 	{
-		boundingBox.merge(boundingBox);
+		boundingBox.merge(aabb);		
 	}
 
 	/**
