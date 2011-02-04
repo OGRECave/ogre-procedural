@@ -56,6 +56,7 @@ void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 				}
 
 				buffer.position(q*vp);
+				buffer.updateBoundingVolumes(q*vp);
 				buffer.normal(q*normal);
 				buffer.textureCoord(i/(Ogre::Real)numSeg*uTile, j/(Ogre::Real)numSegShape*vTile);
 
