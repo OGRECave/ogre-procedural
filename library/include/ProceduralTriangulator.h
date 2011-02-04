@@ -62,7 +62,7 @@ class _ProceduralExport Triangulator
 struct Circle
 {
 	Ogre::Vector2 center;
-	float radius;
+	Ogre::Real radius;
 	static Circle from3Points(Ogre::Vector2 p1, Ogre::Vector2 p2, Ogre::Vector2 p3)
 	{
 		Circle c;
@@ -89,7 +89,7 @@ struct Circle
 		return c;
 	}
 
-	bool isPointInside(Ogre::Vector2 p) const
+	bool isPointInside(const Ogre::Vector2& p) const
 	{
 		return (p-center).length()<radius;
 	}
@@ -144,7 +144,7 @@ struct TouchSuperTriangle
 };
 
 public:	
-	static TriangleBuffer triangulate(const Shape& shape);
+	static void triangulate(const Shape& shape, TriangleBuffer& tbuffer);
 };
 
 }
