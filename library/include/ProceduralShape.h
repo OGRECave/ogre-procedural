@@ -110,6 +110,10 @@ public:
 		return (points.size()-1) + (closed?1:0);
 	}
 
+	bool isClosed() const
+	{
+	  return closed;
+	}	
 
 	/**
 	 * Returns local direction after the current point
@@ -141,6 +145,27 @@ public:
 	{
 		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 
+	}
+
+	Ogre::Vector2 getNormalAfter(int i) const
+	{
+		if (outSide==SIDE_RIGHT)
+		return -getDirectionAfter(i).perpendicular();
+		return getDirectionAfter(i).perpendicular();
+	}
+
+	Ogre::Vector2 getNormalBefore(int i) const
+	{
+		if (outSide==SIDE_RIGHT)
+		return -getDirectionBefore(i).perpendicular();
+		return getDirectionBefore(i).perpendicular();
+	}
+
+	Ogre::Vector2 getAvgNormal(int i) const
+	{
+		if (outSide==SIDE_RIGHT)
+		return -getAvgDirection(i).perpendicular();
+		return getAvgDirection(i).perpendicular();
 	}
 
 	/**
@@ -309,7 +334,7 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
 				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
 				Ogre::Real t2 = t*t;
 				Ogre::Real t3 = t*t2;
-	 			Ogre::Vector2 P = 0.5*((-t3+2*t2-t)*P1 + (3*t3-5*t2+2.)*P2 + (-3*t3+4*t2+t)*P3 + (t3-t2)*P4);
+				Ogre::Vector2 P = 0.5*((-t3+2*t2-t)*P1 + (3*t3-5*t2+2.)*P2 + (-3*t3+4*t2+t)*P3 + (t3-t2)*P4);
 				shape.addPoint(P);
 			}
 			if (i==points.size()-2 && !closed)
