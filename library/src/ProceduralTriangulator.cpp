@@ -180,29 +180,78 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	pointList.pop_back();
 }
 
-void Triangulator::addConstraints(PointList& pointList, DelaunayTriangleBuffer& tbuffer)
-{
+void Triangulator::addConstraints(const Shape& shape, DelaunayTriangleBuffer& tbuffer)
+{	
 	std::vector<DelaunaySegment> segList;
 	// Determine which segments should be added
-	for (int i = 0; i<pointList.size()-1; i++)
+	for (int i = 0; i<shape.getPoints().size()-1; i++)
 	{		
 		bool isAlreadyIn = false;
 		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
 		{
-			if (it->containsSegment(i,i+1))
-				isAlreadyIn = true;
+			if (it->containsSegment(i,i+1)) 
+			{
+					isAlreadyIn = true;
+					break;
+			}			
 		}
+		// only do something for segments not already in DT
 		if (!isAlreadyIn)
 		{
 			segList.push_back(DelaunaySegment(i, i+1));
 		}
 	}
+	// Re-Triangulate according to the new segments
 	for (std::vector<DelaunaySegment>::iterator it=segList.begin();it!=segList.end();it++)
 	{
 		// TODO remove all edges intersecting *it
 		// TODO build two polygons
 		// TODO Triangulate each polygon (directly into DelaunayTriangleBuffer)
 	}
+	// Clean up segments outside of shape
+	if (shape.isClosed())
+	{
+		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
+		{
+			bool isTriangleOut = false;
+			for (int i=0;i<3;i++)
+			{
+				int ind1 = it->i[i];
+				int ind2 = it->i[(1+i)%3];					
+				// if side of triangle==segment, it won't tell us if outside or inside => skip
+				if (abs(ind1-ind2)!=1)
+				{
+					Ogre::Vector2 v = shape.getPoint(ind2)-shape.getPoint(ind1);
+					Ogre::Real d1 = v.dotProduct(shape.getNormalBefore(ind1));
+					Ogre::Real d2 = v.dotProduct(shape.getNormalAfter(ind1));
+					Ogre::Vector2 t1 = shape.getDirectionBefore(ind1);
+					Ogre::Vector2 n1 = shape.getNormalAfter(ind1);
+					if (t1.dotProduct(n1)>0.)
+					{
+						if (d1>0. || d2>0.)
+						{
+							isTriangleOut = true;
+							break;
+						}
+					}
+					else
+					{
+						if (d1>0. && d2>0.)
+						{
+							isTriangleOut = true;
+							break;
+						}
+					}					
+				}
+			}
+			if (isTriangleOut)
+			{
+				it = tbuffer.erase(it);
+				it--;
+			}
+		}			
+	}
+
 }
 
 // note : input must not contain cutting segment
@@ -247,13 +296,15 @@ void Triangulator::triangulate(const Shape& shape, TriangleBuffer& tbuffer)
 	DelaunayTriangleBuffer dtb;
 	delaunay(pl, dtb);
 	
-	addConstraints(pl, dtb);
+	addConstraints(shape, dtb);
 	
 	tbuffer.rebaseOffset();
 	//Converts the Delaunay Triangle Buffer to standard Triangle Buffer
 	for (PointList::const_iterator it = pl.begin(); it!=pl.end();it++)
 	{
-		tbuffer.position(Ogre::Vector3(it->x,it->y,0.));
+		Ogre::Vector3 p(it->x,it->y,0.);
+		tbuffer.position(p);
+		tbuffer.updateBoundingVolumes(p);
 		tbuffer.normal(Ogre::Vector3::UNIT_Z);
 		tbuffer.textureCoord(Ogre::Vector2(it->x,it->y));
 	}

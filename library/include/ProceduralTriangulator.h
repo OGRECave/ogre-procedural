@@ -49,7 +49,7 @@ class _ProceduralExport Triangulator
 	typedef std::list<Triangle> DelaunayTriangleBuffer;
 
 	static void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer);
-	static void addConstraints(PointList& pointList, DelaunayTriangleBuffer& tbuffer);
+	static void addConstraints(const Shape& shape, DelaunayTriangleBuffer& tbuffer);
 	static void triangulatePolygon(const std::vector<int>& input, const DelaunaySegment& seg, DelaunayTriangleBuffer& tbuffer, const PointList& pointList);	
 	
 	struct DelaunaySegment
@@ -57,7 +57,7 @@ class _ProceduralExport Triangulator
 		int i1, i2;
 
 		DelaunaySegment(int _i1, int _i2) : i1(_i1), i2(_i2) {}
-	};
+	};	
 
 struct Circle
 {
