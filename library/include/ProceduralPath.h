@@ -43,6 +43,8 @@ class _ProceduralExport Path
 	std::vector<Ogre::Vector3> points;
 	bool closed;
 public:
+	Path() : closed(false)	{}
+
 	/** Adds a point to the path, as a Vector3 */
 	Path& addPoint(const Ogre::Vector3& pt)
 	{
