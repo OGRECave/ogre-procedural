@@ -67,7 +67,6 @@ namespace Procedural
 
 			Ogre::Vector3 newPoint = v0+q*vp;
 			buffer.position(newPoint);
-			buffer.updateBoundingVolumes(newPoint);
 			buffer.normal(q*normal);
 			buffer.textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
 

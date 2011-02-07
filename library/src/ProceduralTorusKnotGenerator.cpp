@@ -82,8 +82,5 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			offset ++;
 		}
 	}
-
-	buffer.updateBoundingSphere(Ogre::Math::Sqrt(2*Ogre::Math::Sqr(radius + sectionRadius)+Ogre::Math::Sqr(sectionRadius)));
-	buffer.updateBoundingBox(Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius));
 }
 }

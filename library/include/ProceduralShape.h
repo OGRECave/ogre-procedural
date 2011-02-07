@@ -151,7 +151,6 @@ public:
 	{
 		Ogre::ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
-			   
 		
 		for (std::vector<Ogre::Vector2>::iterator itPos = points.begin(); itPos != points.end();itPos++)		
 			manual->position(Ogre::Vector3(itPos->x, itPos->y, 0.f));		
@@ -159,9 +158,6 @@ public:
 			manual->position(Ogre::Vector3(points.begin()->x, points.begin()->y, 0.f));
 		manual->end();
 		Ogre::MeshPtr mesh = manual->convertToMesh(name);
-
-		//mesh->_setBounds( boundingBox, false );
-		//mesh->_setBoundingSphereRadius(boundingSphereRadius);
 
 		return mesh;
 	}

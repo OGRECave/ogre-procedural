@@ -128,8 +128,5 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 				offset ++;
 		}; // end for seg
 	} // end for ring
-
-	buffer.updateBoundingSphere( height + radius);
-	buffer.updateBoundingBox( Ogre::AxisAlignedBox(-radius, -radius-height, -radius, radius, radius+height, radius));
 }
 }

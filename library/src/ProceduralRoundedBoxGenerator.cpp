@@ -194,8 +194,5 @@ void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	_addEdge(buffer,  0,-1, 1);
 	_addEdge(buffer,  0, 1,-1);
 	_addEdge(buffer,  0, 1, 1);
-
-	buffer.updateBoundingBox(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ);
-	buffer.updateBoundingSphere(Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ));
 }
 }

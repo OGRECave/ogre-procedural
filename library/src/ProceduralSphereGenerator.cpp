@@ -68,8 +68,5 @@ void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 				}
 		}; // end for seg
 	} // end for ring
-
-	buffer.updateBoundingSphere(radius);
-	buffer.updateBoundingBox(Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
 }
 }
