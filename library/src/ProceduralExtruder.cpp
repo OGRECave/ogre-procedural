@@ -98,7 +98,6 @@ namespace Procedural
 
 				Ogre::Vector3 newPoint = extrusionPath->getPoint(0)+qBegin*vp;				
 				buffer.position(newPoint);				
-				buffer.updateBoundingVolumes(newPoint);
 				buffer.normal(qBegin*normal);
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
@@ -121,7 +120,6 @@ namespace Procedural
 
 				Ogre::Vector3 newPoint = extrusionPath->getPoint(numSegPath)+qEnd*vp;				
 				buffer.position(newPoint);				
-				buffer.updateBoundingVolumes(newPoint);
 				buffer.normal(qEnd*normal);
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
