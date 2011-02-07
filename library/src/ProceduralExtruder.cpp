@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "ProceduralExtruder.h"
+#include "ProceduralTriangulator.h"
 
 namespace Procedural
 {
@@ -34,8 +35,14 @@ namespace Procedural
 		assert(extrusionPath && shapeToExtrude && "Shape and Path must not be null!");
 		int numSegPath = extrusionPath->getSegCount();
 		int numSegShape = shapeToExtrude->getSegCount();
-		assert(numSegPath>1 && numSegShape>1 && "Shape and path must contain at least two points");
-		int offset = 0;
+		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
+		
+		// Triangulate the begin and end caps
+		std::vector<int> indexBuffer;
+		if (!extrusionPath->isClosed() && capped)
+			Triangulator::triangulate(*shapeToExtrude, indexBuffer);
+
+		Ogre::Quaternion qBegin, qEnd;
 
 	for (int i = 0; i <= numSegPath;i++)
 	{
@@ -50,6 +57,8 @@ namespace Procedural
 		Ogre::Vector3 tY = quat * Ogre::Vector3::UNIT_Y;
 		Ogre::Quaternion quat2 = tY.getRotationTo(projectedY);
 		Ogre::Quaternion q = quat2 * quat;
+		if (i == 0) qBegin = q;
+		if (i == numSegPath) qEnd = q;
 
 		for (int j =0;j<=numSegShape;j++)
 		{
@@ -57,32 +66,72 @@ namespace Procedural
 			Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
 			Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
 			Ogre::Vector3 vp(vp2.x, vp2.y, 0);
-			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);									
-
+			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);							
+			buffer.rebaseOffset();
 			Ogre::Vector3 newPoint = v0+q*vp;
 			buffer.position(newPoint);
 			buffer.normal(q*normal);
 			buffer.textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
 
 			if (j <numSegShape && i <numSegPath)
-			{
-				buffer.index(offset + numSegShape + 2);
-				buffer.index(offset);
-				buffer.index(offset + numSegShape + 1);
-				buffer.index(offset + numSegShape + 2);
-				buffer.index(offset + 1);
-				buffer.index(offset);
-			}
-			offset ++;
+			{				
+				buffer.index(numSegShape + 2);
+				buffer.index(numSegShape + 1);
+				buffer.index(0);
+				buffer.index(numSegShape + 2);				
+				buffer.index(0);
+				buffer.index(1);
+			}			
 		}
 	}
-	
-	// If the path isn't closed, put caps on both sides
-	if (!extrusionPath->isClosed())
+	if (capped)
 	{
-		/*Triangulator tri;
-		TrianguleBuffer tbuffer = tri.setShape(shapeToExtrude).triangulate();
-		tbuffer.addToManual(manual);*/
-	}
+		//begin cap
+			buffer.rebaseOffset();
+			for (int j =0;j<=numSegShape;j++)
+			{
+				Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
+				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+				Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
+				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
+				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
+
+				Ogre::Vector3 newPoint = extrusionPath->getPoint(0)+qBegin*vp;				
+				buffer.position(newPoint);				
+				buffer.updateBoundingVolumes(newPoint);
+				buffer.normal(qBegin*normal);
+				buffer.textureCoord(vp2.x, vp2.y);
+			}
+			
+			for (int i=0;i<indexBuffer.size()/3;i++)
+			{				
+				buffer.index(indexBuffer[i*3]);
+				buffer.index(indexBuffer[i*3+2]);
+				buffer.index(indexBuffer[i*3+1]);
+			}
+		// end cap
+			buffer.rebaseOffset();
+			for (int j =0;j<=numSegShape;j++)
+			{
+				Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
+				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+				Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
+				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
+				Ogre::Vector3 normal = Ogre::Vector3::UNIT_Z;				
+
+				Ogre::Vector3 newPoint = extrusionPath->getPoint(numSegPath)+qEnd*vp;				
+				buffer.position(newPoint);				
+				buffer.updateBoundingVolumes(newPoint);
+				buffer.normal(qEnd*normal);
+				buffer.textureCoord(vp2.x, vp2.y);
+			}
+			
+			for (int i=0;i<indexBuffer.size()/3;i++)
+			{				
+				buffer.index(indexBuffer[i*3]);
+				buffer.index(indexBuffer[i*3+1]);
+				buffer.index(indexBuffer[i*3+2]);
+			}
+	}	
 }
 }
