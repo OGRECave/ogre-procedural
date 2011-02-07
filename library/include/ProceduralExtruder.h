@@ -43,8 +43,9 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 {
 	Shape* shapeToExtrude;
 	Path* extrusionPath;
+	bool capped;
 public:
-	Extruder() : shapeToExtrude(0), extrusionPath(0)
+	Extruder() : shapeToExtrude(0), extrusionPath(0), capped(true)
 	{}
 	
 	/**
@@ -64,6 +65,13 @@ public:
 	inline Extruder & setExtrusionPath(Path* extrusionPath)
 	{
 		this->extrusionPath = extrusionPath;
+		return *this;
+	}
+
+	/** Sets whether caps are added to the extremities or not (not closed paths only) */
+	inline Extruder & setCapped(bool capped)
+	{
+		this->capped = capped;
 		return *this;
 	}
 };

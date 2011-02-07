@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "ProceduralTriangleBuffer.h"
 #include "ProceduralShape.h"
 #include "OgreVector3.h"
+#include "OgreMatrix4.h"
 #include "ProceduralUtils.h"
 
 namespace Procedural
@@ -144,7 +145,7 @@ struct TouchSuperTriangle
 };
 
 public:	
-	static void triangulate(const Shape& shape, TriangleBuffer& tbuffer);
+	static void triangulate(const Shape& shape, std::vector<int>& output);
 };
 
 }

@@ -289,7 +289,7 @@ void Triangulator::triangulatePolygon(const std::vector<int>& input, const Delau
 		triangulatePolygon(part2, seg, tbuffer, pointList);	
 }
 
-void Triangulator::triangulate(const Shape& shape, TriangleBuffer& tbuffer)
+void Triangulator::triangulate(const Shape& shape, std::vector<int>& output)
 {
 	// Do the Delaunay triangulation
 	PointList pl = shape.getPoints();
@@ -298,21 +298,12 @@ void Triangulator::triangulate(const Shape& shape, TriangleBuffer& tbuffer)
 	
 	addConstraints(shape, dtb);
 	
-	tbuffer.rebaseOffset();
-	//Converts the Delaunay Triangle Buffer to standard Triangle Buffer
-	for (PointList::const_iterator it = pl.begin(); it!=pl.end();it++)
-	{
-		Ogre::Vector3 p(it->x,it->y,0.);
-		tbuffer.position(p);
-		tbuffer.updateBoundingVolumes(p);
-		tbuffer.normal(Ogre::Vector3::UNIT_Z);
-		tbuffer.textureCoord(Ogre::Vector2(it->x,it->y));
-	}
+	//Outputs index buffer	
 	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
 	{
-		tbuffer.index(it->i[0]);
-		tbuffer.index(it->i[1]);
-		tbuffer.index(it->i[2]);
+		output.push_back(it->i[0]);
+		output.push_back(it->i[1]);
+		output.push_back(it->i[2]);
 	}
 }
 
