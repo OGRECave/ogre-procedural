@@ -202,7 +202,5 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		buffer.index(offset+faces[i]);
 	}
 	offset+=vertices.size();
-	buffer.updateBoundingSphere(radius);
-	buffer.updateBoundingBox(Ogre::AxisAlignedBox(-radius, -radius, -radius, radius, radius, radius));
 }
 }

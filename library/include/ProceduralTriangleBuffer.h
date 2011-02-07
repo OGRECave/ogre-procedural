@@ -46,10 +46,7 @@ class TriangleBuffer
 	std::vector<Ogre::Vector3> vertices;
 	std::vector<Ogre::Vector3> normals;
 	std::vector<Ogre::Vector2> uvs;
-
-	Ogre::AxisAlignedBox boundingBox;
-	Ogre::Real boundingSphereRadius;
-
+	
 	int globalOffset;
 	
 	public:
@@ -62,40 +59,6 @@ class TriangleBuffer
 	void rebaseOffset()
 	{
 		globalOffset = vertices.size();
-	}
-
-	/**
-	 * Merge current bounding sphere with another bounding sphere
-	 */
-	void updateBoundingSphere(Ogre::Real radius)
-	{
-		boundingSphereRadius = std::max(boundingSphereRadius, radius);
-	}
-
-	/**
-	 * Merge current bounding box with another bounding box
-	 */
-	void updateBoundingBox(const Ogre::AxisAlignedBox& aabb)
-	{
-		boundingBox.merge(aabb);		
-	}
-
-	/**
-	 * Merge current bounding box with another bounding box
-	 */
-	void updateBoundingBox(Ogre::Real minX, Ogre::Real minY, Ogre::Real minZ, Ogre::Real maxX, Ogre::Real maxY, Ogre::Real maxZ)
-	{
-		boundingBox.merge(Ogre::AxisAlignedBox(minX,minY,minZ,maxX,maxY,maxZ));
-	}
-
-	/**
-	 * Updates the bounding volumes with a vertex.
-	 * @param the vertex to add
-	 */
-	void updateBoundingVolumes(Ogre::Vector3 vec)
-	{
-		boundingBox.merge(vec);
-		Utils::updateBoundingRadius(boundingSphereRadius, vec);
 	}
 
 	/**
@@ -123,9 +86,6 @@ class TriangleBuffer
 		}
 		manual->end();
 		Ogre::MeshPtr mesh = manual->convertToMesh(name, group);
-
-		mesh->_setBounds( boundingBox, false );
-		mesh->_setBoundingSphereRadius(boundingSphereRadius);
 
 		unsigned short src, dest;
 		if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))

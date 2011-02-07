@@ -68,8 +68,5 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	  .setNormal(Ogre::Vector3::UNIT_X)
 	  .setPosition(.5*sizeX*Ogre::Vector3::UNIT_X)
 	  .addToTriangleBuffer(buffer);
-
-	buffer.updateBoundingBox(Ogre::AxisAlignedBox(-.5*sizeX, -.5*sizeY, -.5*sizeZ,.5*sizeX, .5*sizeY, .5*sizeZ));
-	buffer.updateBoundingSphere(Ogre::Math::Sqrt(sizeX*sizeX + sizeY*sizeY + sizeZ*sizeZ));
 }
 }

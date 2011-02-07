@@ -63,7 +63,5 @@ void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			}
 			offset ++;
 		}
-	buffer.updateBoundingSphere( radius + sectionRadius);
-	buffer.updateBoundingBox( Ogre::AxisAlignedBox(-radius-sectionRadius,-sectionRadius,-radius-sectionRadius, radius+sectionRadius, sectionRadius, radius+sectionRadius));
 }
 }

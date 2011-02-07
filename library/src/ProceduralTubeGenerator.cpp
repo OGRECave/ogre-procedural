@@ -139,9 +139,5 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			}
 			offset+=2;
 		}
-
-
-	buffer.updateBoundingSphere(std::max(outerRadius, height));
-	buffer.updateBoundingBox(Ogre::AxisAlignedBox(-outerRadius,0,-outerRadius,outerRadius, height, outerRadius));
 }
 }

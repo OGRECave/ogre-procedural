@@ -157,9 +157,6 @@ public:
 		manual->end();
 		Ogre::MeshPtr mesh = manual->convertToMesh(name);
 
-		//mesh->_setBounds( boundingBox, false );
-		//mesh->_setBoundingSphereRadius(boundingSphereRadius);
-
 		return mesh;
 	}
 

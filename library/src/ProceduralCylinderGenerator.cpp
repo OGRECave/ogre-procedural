@@ -106,8 +106,5 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			offset++;
 		}
 	}
-
-	buffer.updateBoundingSphere( std::max(radius, height));
-	buffer.updateBoundingBox( Ogre::AxisAlignedBox(-radius,0,-radius,radius, height, radius));
 }
 }
