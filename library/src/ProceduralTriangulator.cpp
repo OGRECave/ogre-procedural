@@ -31,13 +31,40 @@ using namespace Ogre;
 
 namespace Procedural
 {
+//-----------------------------------------------------------------------
+Triangulator::Circle Triangulator::Circle::from3Points(Ogre::Vector2 p1, Ogre::Vector2 p2, Ogre::Vector2 p3)
+{
+	Circle c;
+	Ogre::Vector2 c1 = .5*(p1+p2);
+	Ogre::Vector2 d1 = (p2-p1).perpendicular();
+	float a1 = d1.y;
+	float b1 = -d1.x;
+	float g1 = d1.x*c1.y-d1.y*c1.x;
+
+	Ogre::Vector2 c3 = .5*(p2+p3);
+	Ogre::Vector2 d3 = (p3-p2).perpendicular();
+	float a2 = d3.y;
+	float b2 = -d3.x;
+	float g2 = d3.x*c3.y-d3.y*c3.x;
+	
+	Ogre::Vector2 intersect;
+	float intersectx = (b2*g1-b1*g2)/(b1*a2-b2*a1);
+	float intersecty = (a2*g1-a1*g2)/(a1*b2-a2*b1);		
+
+	intersect = Ogre::Vector2(intersectx, intersecty);
+
+	c.center = intersect;
+	c.radius = (intersect-p1).length();
+	return c;
+}
+//-----------------------------------------------------------------------
 void Triangulator::Triangle::setVertices(int i0, int i1, int i2)
 {
 	i[0] = i0;
 	i[1] = i1;
 	i[2] = i2;
 }
-
+//-----------------------------------------------------------------------
 void Triangulator::Triangle::setAdj(DelaunayTriangleBuffer::iterator t0, DelaunayTriangleBuffer::iterator t1,DelaunayTriangleBuffer::iterator t2,DelaunayTriangleBuffer::iterator myIterator)
 {
 	adj[0] = t0;
@@ -48,14 +75,14 @@ void Triangulator::Triangle::setAdj(DelaunayTriangleBuffer::iterator t0, Delauna
 	if (t1 != emptyIterator) t1->adj[t1->findSegNumber(i[2],i[0])] = myIterator;
 	if (t2 != emptyIterator) t2->adj[t2->findSegNumber(i[0],i[1])] = myIterator;
 }
-
+//-----------------------------------------------------------------------
 void Triangulator::Triangle::detach()
-	{
-		if (adj[0] != emptyIterator) adj[0]->adj[adj[0]->findSegNumber(i[1],i[2])] = emptyIterator;
-		if (adj[1] != emptyIterator) adj[1]->adj[adj[1]->findSegNumber(i[2],i[0])] = emptyIterator;
-		if (adj[2] != emptyIterator) adj[2]->adj[adj[2]->findSegNumber(i[0],i[1])] = emptyIterator;
-	}
-
+{
+	if (adj[0] != emptyIterator) adj[0]->adj[adj[0]->findSegNumber(i[1],i[2])] = emptyIterator;
+	if (adj[1] != emptyIterator) adj[1]->adj[adj[1]->findSegNumber(i[2],i[0])] = emptyIterator;
+	if (adj[2] != emptyIterator) adj[2]->adj[adj[2]->findSegNumber(i[0],i[1])] = emptyIterator;
+}
+//-----------------------------------------------------------------------
 int Triangulator::Triangle::findSegNumber(int i0, int i1) const
 	{
 		if ((i0==i[0] && i1==i[1])||(i0==i[1] && i1==i[0]))
@@ -65,7 +92,7 @@ int Triangulator::Triangle::findSegNumber(int i0, int i1) const
 		if ((i0==i[2] && i1==i[0])||(i0==i[0] && i1==i[2]))
 			return 1;
 	}
-
+//-----------------------------------------------------------------------
 bool Triangulator::Triangle::isPointInside(Ogre::Vector2 point)
 	{
 		// Compute vectors
@@ -89,6 +116,7 @@ bool Triangulator::Triangle::isPointInside(Ogre::Vector2 point)
 		return (u >= 0) && (v >= 0) && (u + v <= 1);
 	}
 
+//-----------------------------------------------------------------------
 // Triangulation by insertion
 void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer)
 {
@@ -179,7 +207,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	pointList.pop_back();
 	pointList.pop_back();
 }
-
+//-----------------------------------------------------------------------
 void Triangulator::addConstraints(const Shape& shape, DelaunayTriangleBuffer& tbuffer)
 {	
 	std::vector<DelaunaySegment> segList;
@@ -253,7 +281,7 @@ void Triangulator::addConstraints(const Shape& shape, DelaunayTriangleBuffer& tb
 	}
 
 }
-
+//-----------------------------------------------------------------------
 // note : input must not contain cutting segment
 void Triangulator::triangulatePolygon(const std::vector<int>& input, const DelaunaySegment& seg, DelaunayTriangleBuffer& tbuffer, const PointList& pointList)
 {	
@@ -288,7 +316,7 @@ void Triangulator::triangulatePolygon(const std::vector<int>& input, const Delau
 	if (!part2.empty())
 		triangulatePolygon(part2, seg, tbuffer, pointList);	
 }
-
+//-----------------------------------------------------------------------
 void Triangulator::triangulate(const Shape& shape, std::vector<int>& output)
 {
 	// Do the Delaunay triangulation
