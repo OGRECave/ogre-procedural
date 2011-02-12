@@ -40,6 +40,7 @@ namespace Procedural
 typedef std::vector<Ogre::Vector2> PointList;
 
 /**
+ * WIP
  * Implements a Delaunay Triangulation algorithm.
  * It works on Shapes to build Triangle Buffers
  */
@@ -48,54 +49,31 @@ class _ProceduralExport Triangulator
 	struct Triangle;
 	struct DelaunaySegment;
 	typedef std::list<Triangle> DelaunayTriangleBuffer;
-
+		
 	static void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer);
 	static void addConstraints(const Shape& shape, DelaunayTriangleBuffer& tbuffer);
 	static void triangulatePolygon(const std::vector<int>& input, const DelaunaySegment& seg, DelaunayTriangleBuffer& tbuffer, const PointList& pointList);	
 	
-	struct DelaunaySegment
-	{
-		int i1, i2;
-
-		DelaunaySegment(int _i1, int _i2) : i1(_i1), i2(_i2) {}
-	};	
-
+	
+//-----------------------------------------------------------------------
+struct DelaunaySegment
+{
+	int i1, i2;
+	DelaunaySegment(int _i1, int _i2) : i1(_i1), i2(_i2) {}
+};	
+//-----------------------------------------------------------------------
 struct Circle
 {
 	Ogre::Vector2 center;
 	Ogre::Real radius;
-	static Circle from3Points(Ogre::Vector2 p1, Ogre::Vector2 p2, Ogre::Vector2 p3)
-	{
-		Circle c;
-		Ogre::Vector2 c1 = .5*(p1+p2);
-		Ogre::Vector2 d1 = (p2-p1).perpendicular();
-		float a1 = d1.y;
-		float b1 = -d1.x;
-		float g1 = d1.x*c1.y-d1.y*c1.x;
-
-		Ogre::Vector2 c3 = .5*(p2+p3);
-		Ogre::Vector2 d3 = (p3-p2).perpendicular();
-		float a2 = d3.y;
-		float b2 = -d3.x;
-		float g2 = d3.x*c3.y-d3.y*c3.x;
-		
-		Ogre::Vector2 intersect;
-		float intersectx = (b2*g1-b1*g2)/(b1*a2-b2*a1);
-		float intersecty = (a2*g1-a1*g2)/(a1*b2-a2*b1);		
-
-		intersect = Ogre::Vector2(intersectx, intersecty);
-
-		c.center = intersect;
-		c.radius = (intersect-p1).length();
-		return c;
-	}
-
+	static Circle from3Points(Ogre::Vector2 p1, Ogre::Vector2 p2, Ogre::Vector2 p3);	
+	
 	bool isPointInside(const Ogre::Vector2& p) const
 	{
 		return (p-center).length()<radius;
 	}
 };
-
+	//-----------------------------------------------------------------------
 struct Triangle
 {
 	const PointList* pl;
@@ -132,7 +110,7 @@ struct Triangle
 		return ((i0==i[0] || i0==i[1] || i0==i[2])&&(i1==i[0] || i1==i[1] || i1==i[2]));
 	}
 };
-
+//-----------------------------------------------------------------------
 struct TouchSuperTriangle
 {
 	int i0,i1,i2;
@@ -145,6 +123,12 @@ struct TouchSuperTriangle
 };
 
 public:	
+	/**
+	 * WIP
+	 * Executes the Constrained Delaunay Triangulation algorithm
+	 * @arg shape The input Shape to triangulate
+	 * @arg ouput A vector of index where is outputed the resulting triangle indexes
+	 */
 	static void triangulate(const Shape& shape, std::vector<int>& output);
 };
 
