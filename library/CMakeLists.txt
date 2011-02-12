@@ -40,6 +40,7 @@ set( SRCS
 		src/ProceduralTorusGenerator.cpp
 		src/ProceduralTorusKnotGenerator.cpp
 		src/ProceduralTubeGenerator.cpp
+		src/ProceduralShape.cpp
 		src/ProceduralExtruder.cpp
 		src/ProceduralLathe.cpp
 		src/ProceduralTriangulator.cpp
