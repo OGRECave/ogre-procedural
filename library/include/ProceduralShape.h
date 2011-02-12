@@ -52,37 +52,37 @@ class _ProceduralExport Shape
 public:
 	Shape() : closed(false), outSide(SIDE_RIGHT) {}
 
-	Shape& addPoint(const Ogre::Vector2& pt)
+	inline Shape& addPoint(const Ogre::Vector2& pt)
 	{
 		points.push_back(pt);
 		return *this;
 	}
 
-	Shape& addPoint(Ogre::Real x, Ogre::Real y)
+	inline Shape& addPoint(Ogre::Real x, Ogre::Real y)
 	{
 		points.push_back(Ogre::Vector2(x, y));
 		return *this;
 	}
 
-	Shape& reset()
+	inline Shape& reset()
 	{
 		points.clear();
 		return *this;
 	}
 
-	std::vector<Ogre::Vector2> getPoints() const
+	inline std::vector<Ogre::Vector2> getPoints() const
 	{
 		return points;
 	}
 
-	const Ogre::Vector2& getPoint(int i) const
+	inline const Ogre::Vector2& getPoint(int i) const
 	{
 		if (closed)
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
 	}
 
-	Shape& close()
+	inline Shape& close()
 	{
 		assert(points.size()>0 && "Cannot close an empty shape");
 		closed = true;
@@ -94,23 +94,23 @@ public:
 	 * It is used for such things as normal generation
 	 * Default is right, which corresponds to placing points anti-clockwise.
 	 */
-	Shape& setOutSide(Side side)
+	inline Shape& setOutSide(Side side)
 	{
 		outSide = side;
 		return *this;
 	}
 
-	Side getOutSide() const
+	inline Side getOutSide() const
 	{
 		return outSide;
 	}
 
-	int getSegCount() const
+	inline int getSegCount() const
 	{
 		return (points.size()-1) + (closed?1:0);
 	}
 
-	bool isClosed() const
+	inline bool isClosed() const
 	{
 	  return closed;
 	}	
@@ -118,7 +118,7 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	Ogre::Vector2 getDirectionAfter(int i) const
+	inline Ogre::Vector2 getDirectionAfter(int i) const
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
@@ -131,7 +131,7 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	Ogre::Vector2 getDirectionBefore(int i) const
+	inline Ogre::Vector2 getDirectionBefore(int i) const
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
@@ -141,27 +141,27 @@ public:
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
 	}
 
-	Ogre::Vector2 getAvgDirection(int i) const
+	inline Ogre::Vector2 getAvgDirection(int i) const
 	{
 		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 
 	}
 
-	Ogre::Vector2 getNormalAfter(int i) const
+	inline Ogre::Vector2 getNormalAfter(int i) const
 	{
 		if (outSide==SIDE_RIGHT)
 		return -getDirectionAfter(i).perpendicular();
 		return getDirectionAfter(i).perpendicular();
 	}
 
-	Ogre::Vector2 getNormalBefore(int i) const
+	inline Ogre::Vector2 getNormalBefore(int i) const
 	{
 		if (outSide==SIDE_RIGHT)
 		return -getDirectionBefore(i).perpendicular();
 		return getDirectionBefore(i).perpendicular();
 	}
 
-	Ogre::Vector2 getAvgNormal(int i) const
+	inline Ogre::Vector2 getAvgNormal(int i) const
 	{
 		if (outSide==SIDE_RIGHT)
 		return -getAvgDirection(i).perpendicular();
@@ -172,20 +172,51 @@ public:
 	 * Outputs a mesh representing the shape.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name)
-	{
-		Ogre::ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
-		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
-		
-		for (std::vector<Ogre::Vector2>::iterator itPos = points.begin(); itPos != points.end();itPos++)		
-			manual->position(Ogre::Vector3(itPos->x, itPos->y, 0.f));		
-		if (closed)
-			manual->position(Ogre::Vector3(points.begin()->x, points.begin()->y, 0.f));
-		manual->end();
-		Ogre::MeshPtr mesh = manual->convertToMesh(name);
+	Ogre::MeshPtr realizeMesh(const std::string& name);
 
-		return mesh;
-	}
+	/**
+	 * Tells whether a point is inside a shape or not
+	 * @arg point The point to check
+	 * @return true if the point is inside this shape, false otherwise
+	 */
+	bool isPointInside(const Ogre::Vector2& point) const;
+	
+	/**
+	 * Computes the intersection between this shape and another one.
+	 * Both shapes must be closed.
+	 * @arg other The shape against which the intersection is computed
+	 * @return The intersection of two shapes, as a new shape
+	 */
+	Shape booleanIntersect(const Shape& other) const;
+	
+	/**
+	 * WIP
+	 * Computes the union between this shape and another one.
+	 * Both shapes must be closed.
+	 */
+	Shape booleanUnion(const Shape& other) const;
+	
+	/**
+	 * WIP
+	 * Computes the difference between this shape and another one.
+	 * Both shapes must be closed.
+	 */
+	Shape booleanDifference(const Shape& other) const;
+
+	private:
+
+	struct IntersectionInShape
+	{
+		int index[2];
+		Ogre::Vector2 position;
+		IntersectionInShape(int i, int j, Ogre::Vector2 intersect) : position(intersect)
+		{
+			index[0] = i;
+			index[1] = j;
+		}
+	};
+
+	void _findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const;
 };
 
 template<class T>
