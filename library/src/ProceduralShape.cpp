@@ -80,6 +80,7 @@ Shape Shape::booleanIntersect(const Shape& other) const
 	{
 		Shape outputShape;		
 		char shapeSelector = 0; // 0 : first shape, 1 : second shape
+		//FIXME
 		char isIncreasing = 1;// +1 if increasing, -1 if decreasing
 		int currentSegment = -1;
 		const Shape* inputShapes[2];
@@ -160,6 +161,115 @@ Shape Shape::booleanIntersect(const Shape& other) const
 
 					outputShape.addPoint(currentPosition);
 					currentSegment+=isIncreasing;
+				}
+			}	
+		//TODO handle multi-shape
+		return outputShape;
+	}
+}
+//-----------------------------------------------------------------------
+Shape Shape::booleanUnion(const Shape& other) const
+{
+	assert(closed && other.closed);
+	assert(points.size()>1 && other.points.size()>1);
+	
+	// Compute the intersection between the 2 shapes
+	std::vector<IntersectionInShape> intersections;
+	_findAllIntersections(other, intersections);
+	
+	// Build the resulting shape
+	if (intersections.empty())
+	{
+		return *this; //TODO handle multi-shape
+	}
+	else
+	{
+		Shape outputShape;		
+		char shapeSelector = 0; // 0 : first shape, 1 : second shape
+		const Shape* inputShapes[2];
+		inputShapes[0]=this;
+		inputShapes[1]=&other;		
+		
+		Ogre::Vector2 currentPosition = intersections.begin()->position;
+		IntersectionInShape firstIntersection = *intersections.begin();
+		int currentSegment =  firstIntersection.index[shapeSelector];
+		intersections.erase(intersections.begin());
+		outputShape.addPoint(currentPosition);
+
+		char isIncreasing = 1;// +1 if increasing, -1 if decreasing				
+		if (inputShapes[shapeSelector]->getDirectionAfter(currentSegment).dotProduct(inputShapes[(shapeSelector+1)%2]->getNormalAfter(firstIntersection.index[(shapeSelector+1)%2]))<0)		
+			isIncreasing = -1;
+				
+		while (true)
+		{
+			// find the closest intersection on the same segment, in the correct direction			
+				std::vector<IntersectionInShape>::iterator found_next_intersection = intersections.end();
+				Ogre::Real distanceToNextIntersection = std::numeric_limits<Ogre::Real>::max();
+				
+				int nextPoint = currentSegment+ (isIncreasing==1?1:0);
+				
+				for (std::vector<IntersectionInShape>::iterator it = intersections.begin(); it != intersections.end(); it++)
+				{					
+					if (currentSegment == it->index[shapeSelector])
+					{
+						if ((it->position-currentPosition).dotProduct(it->position-inputShapes[shapeSelector]->getPoint(nextPoint)) < 0)
+						{ // found an intersection between the current one and the next segment point
+							float d = (it->position-currentPosition).length();
+							if (d < distanceToNextIntersection)
+							{ // check if we have the nearest intersection
+								found_next_intersection = it;
+								distanceToNextIntersection = d;
+							}
+						}
+					}
+				}
+
+				// stop condition
+				if (currentSegment == firstIntersection.index[shapeSelector]) {
+					// we found ourselves on the same segment as the first intersection and no other
+						if ((firstIntersection.position-currentPosition).dotProduct(firstIntersection.position-inputShapes[shapeSelector]->getPoint(nextPoint)) < 0)
+						{
+							float d = (firstIntersection.position-currentPosition).length();
+							if (d>0. && d < distanceToNextIntersection)
+							{
+								outputShape.close();
+								break;
+							}
+						}							
+				}
+				
+				// We actually found the next intersection => change direction and add current intersection to the list
+				if (found_next_intersection != intersections.end())
+				{ 
+					IntersectionInShape currentIntersection = *found_next_intersection;
+					intersections.erase(found_next_intersection);
+					outputShape.addPoint(currentIntersection.position);
+					currentPosition = currentIntersection.position;
+	
+					// determine which way to go
+					Ogre::Vector2 currentNormal = inputShapes[shapeSelector]->getNormalAfter(currentSegment);
+					shapeSelector = (shapeSelector+1)%2;					
+					
+					if (inputShapes[shapeSelector]->getDirectionAfter(currentIntersection.index[shapeSelector]).dotProduct(currentNormal)>0)
+					{//keep natural direction (going outside)
+						isIncreasing = 1;
+					}
+					else
+					{//wrong direction => switch
+						isIncreasing = -1;
+					}
+
+					currentSegment = currentIntersection.index[shapeSelector];
+				}
+				else
+				{ // no intersection found for the moment => just continue on the current segment					
+					if (isIncreasing ==1)
+						currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment+1);
+					else 
+						currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment);
+
+					outputShape.addPoint(currentPosition);
+					currentSegment=Utils::modulo(currentSegment+isIncreasing,inputShapes[shapeSelector]->getSegCount());
 				}
 			}	
 		return outputShape;
