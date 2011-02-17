@@ -190,20 +190,25 @@ public:
 	Shape booleanIntersect(const Shape& other) const;
 	
 	/**
-	 * WIP
 	 * Computes the union between this shape and another one.
 	 * Both shapes must be closed.
 	 */
 	Shape booleanUnion(const Shape& other) const;
 	
 	/**
-	 * WIP
 	 * Computes the difference between this shape and another one.
 	 * Both shapes must be closed.
 	 */
 	Shape booleanDifference(const Shape& other) const;
 
 	private:
+
+	enum BooleanOperationType { BOT_UNION, BOT_INTERSECTION, BOT_DIFFERENCE};
+
+	Shape _booleanOperation(const Shape& other, BooleanOperationType opType) const;
+
+	char _isIncreasing(Ogre::Real d, BooleanOperationType opType, char shapeSelector) const;
+	
 
 	struct IntersectionInShape
 	{
