@@ -51,7 +51,36 @@ void Shape::_findAllIntersections(const Shape& other, std::vector<IntersectionIn
 	}
 }
 //-----------------------------------------------------------------------
+Shape Shape::booleanUnion(const Shape& other) const
+{
+	return _booleanOperation(other, BOT_UNION);
+}
+//-----------------------------------------------------------------------
 Shape Shape::booleanIntersect(const Shape& other) const
+{
+	return _booleanOperation(other, BOT_INTERSECTION);
+}
+//-----------------------------------------------------------------------
+Shape Shape::booleanDifference(const Shape& other) const
+{
+	return _booleanOperation(other, BOT_DIFFERENCE);
+}
+//-----------------------------------------------------------------------
+char Shape::_isIncreasing(Ogre::Real d, BooleanOperationType opType, char shapeSelector) const
+{
+	if (d<0 && opType == BOT_UNION)
+		return -1;
+	if (d>0 && opType == BOT_INTERSECTION)
+		return -1;
+	if (opType == BOT_DIFFERENCE)
+	{
+		if ((d<0 && shapeSelector == 0)||(d>0 && shapeSelector == 1))
+			return -1;
+	}
+	return 1;
+}
+//-----------------------------------------------------------------------
+Shape Shape::_booleanOperation(const Shape& other, BooleanOperationType opType) const
 {
 	assert(closed && other.closed);
 	assert(points.size()>1 && other.points.size()>1);
@@ -65,122 +94,31 @@ Shape Shape::booleanIntersect(const Shape& other) const
 	{
 		if (isPointInside(other.getPoint(0)))
 		{// Shape B is completely inside shape A
-			return other;
+			if (opType == BOT_UNION)
+				return *this;
+			else if (opType == BOT_INTERSECTION)
+				return other;
+			else if (opType == BOT_DIFFERENCE)
+				return *this;//TODO : multi-shape with other normals inverted
 		}
 		else if (other.isPointInside(getPoint(0)))
 		{// Shape A is completely inside shape B
-			return *this;
+			if (opType == BOT_UNION)
+				return other;
+			else if (opType == BOT_INTERSECTION)
+				return *this;
+			else if (opType == BOT_DIFFERENCE)
+				return *this;//TODO : multi-shape with this normals inverted
 		}
 		else
 		{
-			return Shape();
-		}
-	}
-	else
-	{
-		Shape outputShape;		
-		char shapeSelector = 0; // 0 : first shape, 1 : second shape
-		//FIXME
-		char isIncreasing = 1;// +1 if increasing, -1 if decreasing
-		int currentSegment = -1;
-		const Shape* inputShapes[2];
-		inputShapes[0]=this;
-		inputShapes[1]=&other;
-		
-		Ogre::Vector2 currentPosition = intersections.begin()->position;
-		IntersectionInShape firstIntersection = *intersections.begin();
-		currentSegment =  intersections.begin()->index[shapeSelector];
-		intersections.erase(intersections.begin());
-		outputShape.addPoint(currentPosition);
-		
-		while (true)
-		{
-			// find the closest intersection on the same segment, in the correct direction			
-				std::vector<IntersectionInShape>::iterator found_next_intersection = intersections.end();
-				Ogre::Real distanceToNextIntersection = std::numeric_limits<Ogre::Real>::max();
-				
-				for (std::vector<IntersectionInShape>::iterator it = intersections.begin(); it != intersections.end(); it++)
-				{
-					if (currentSegment == it->index[shapeSelector])
-					{
-						if ((it->position-currentPosition).dotProduct(it->position-inputShapes[shapeSelector]->getPoint(currentSegment+isIncreasing)) < 0)
-						{ // found an intersection between the current one and the next segment point
-							float d = (it->position-currentPosition).length();
-							if (d < distanceToNextIntersection)
-							{ // check if we have the nearest intersection
-								found_next_intersection = it;
-								distanceToNextIntersection = d;
-							}
-						}
-					}
-				}
-
-				// stop condition
-				if (currentSegment == firstIntersection.index[shapeSelector]) {
-					// we found ourselves on the same segment as the first intersection and no other
-						if ((firstIntersection.position-currentPosition).dotProduct(firstIntersection.position-inputShapes[shapeSelector]->getPoint(currentSegment+isIncreasing)) < 0)
-						{
-							float d = (firstIntersection.position-currentPosition).length();
-							if (d>0. && d < distanceToNextIntersection)
-							{
-								outputShape.close();
-								break;
-							}
-						}							
-				}
-				
-				// We actually found the next intersection => change direction and add current intersection to the list
-				if (found_next_intersection != intersections.end())
-				{ 
-					IntersectionInShape currentIntersection = *found_next_intersection;
-					intersections.erase(found_next_intersection);
-					outputShape.addPoint(currentIntersection.position);
-					currentPosition = currentIntersection.position;
-	
-					// determine which way to go
-					Ogre::Vector2 currentNormal = inputShapes[shapeSelector]->getNormalAfter(currentSegment);
-					shapeSelector = (shapeSelector+1)%2;					
-					
-					if (inputShapes[shapeSelector]->getDirectionAfter(currentIntersection.index[shapeSelector]).dotProduct(currentNormal)>0)
-					{//natural direction is towards the outside => revert
-						isIncreasing = -1;
-					}
-					else
-					{//keep natural direction (going towards the inside)
-						isIncreasing = 1;
-					}
-
-					currentSegment = currentIntersection.index[shapeSelector];
-				}
-				else
-				{ // no intersection found for the moment => just continue on the current segment					
-					if (isIncreasing ==1)
-						currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment+1);
-					else 
-						currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment);
-
-					outputShape.addPoint(currentPosition);
-					currentSegment+=isIncreasing;
-				}
-			}	
-		//TODO handle multi-shape
-		return outputShape;
-	}
-}
-//-----------------------------------------------------------------------
-Shape Shape::booleanUnion(const Shape& other) const
-{
-	assert(closed && other.closed);
-	assert(points.size()>1 && other.points.size()>1);
-	
-	// Compute the intersection between the 2 shapes
-	std::vector<IntersectionInShape> intersections;
-	_findAllIntersections(other, intersections);
-	
-	// Build the resulting shape
-	if (intersections.empty())
-	{
-		return *this; //TODO handle multi-shape
+			if (opType == BOT_UNION)
+				return *this;//TODO: multi-shape
+			else if (opType == BOT_INTERSECTION)
+				return Shape();//empty result
+			else if (opType == BOT_DIFFERENCE)
+				return Shape();//empty result
+		}		
 	}
 	else
 	{
@@ -196,9 +134,9 @@ Shape Shape::booleanUnion(const Shape& other) const
 		intersections.erase(intersections.begin());
 		outputShape.addPoint(currentPosition);
 
-		char isIncreasing = 1;// +1 if increasing, -1 if decreasing				
-		if (inputShapes[shapeSelector]->getDirectionAfter(currentSegment).dotProduct(inputShapes[(shapeSelector+1)%2]->getNormalAfter(firstIntersection.index[(shapeSelector+1)%2]))<0)		
-			isIncreasing = -1;
+		
+		Ogre::Real d = inputShapes[shapeSelector]->getDirectionAfter(currentSegment).dotProduct(inputShapes[(shapeSelector+1)%2]->getNormalAfter(firstIntersection.index[(shapeSelector+1)%2]));
+		char isIncreasing = _isIncreasing(d, opType, shapeSelector);// +1 if increasing, -1 if decreasing	
 				
 		while (true)
 		{
@@ -250,14 +188,8 @@ Shape Shape::booleanUnion(const Shape& other) const
 					Ogre::Vector2 currentNormal = inputShapes[shapeSelector]->getNormalAfter(currentSegment);
 					shapeSelector = (shapeSelector+1)%2;					
 					
-					if (inputShapes[shapeSelector]->getDirectionAfter(currentIntersection.index[shapeSelector]).dotProduct(currentNormal)>0)
-					{//keep natural direction (going outside)
-						isIncreasing = 1;
-					}
-					else
-					{//wrong direction => switch
-						isIncreasing = -1;
-					}
+					Ogre::Real d = inputShapes[shapeSelector]->getDirectionAfter(currentIntersection.index[shapeSelector]).dotProduct(currentNormal);
+					isIncreasing = _isIncreasing(d, opType, shapeSelector);
 
 					currentSegment = currentIntersection.index[shapeSelector];
 				}
