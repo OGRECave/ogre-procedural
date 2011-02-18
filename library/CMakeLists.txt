@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.6)
 
 project(OgreProcedural)
 
+include(PrecompiledHeader)
+
 set( HDRS
 	include/ProceduralPlatform.h
 	include/Procedural.h
@@ -25,6 +27,7 @@ set( HDRS
 	include/ProceduralPath.h
 	include/ProceduralTriangulator.h
 	include/ProceduralTriangleBuffer.h
+	include/ProceduralStableHeaders.h
 	)
 
 set( SRCS
@@ -44,6 +47,7 @@ set( SRCS
 		src/ProceduralExtruder.cpp
 		src/ProceduralLathe.cpp
 		src/ProceduralTriangulator.cpp
+		src/ProceduralPrecompiledHeaders.cpp
 	)
 
 include_directories( ${OIS_INCLUDE_DIRS}
@@ -70,7 +74,11 @@ install(TARGETS OgreProcedural
 		
 install(FILES ${HDRS} DESTINATION include)
 
-
+# specify a precompiled header to use
+use_precompiled_header(OgreProcedural 
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/ProceduralStableHeaders.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/ProceduralPrecompiledHeaders.cpp"
+)
 
 #set_target_properties(OgreProcedural PROPERTIES
 # 	ARCHIVE_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/lib
