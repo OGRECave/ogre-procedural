@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreMesh.h"
 #include "OgreManualObject.h"
 #include "ProceduralRoot.h"
+#include "ProceduralMultiShape.h"
 
 namespace Procedural
 {
@@ -105,6 +106,13 @@ public:
 		return outSide;
 	}
 
+	/// Switches the inside and the outside
+	inline Shape& switchSide()
+	{
+		outSide = (outSide == SIDE_LEFT)? SIDE_RIGHT: SIDE_LEFT;
+		return *this;
+	}
+
 	inline int getSegCount() const
 	{
 		return (points.size()-1) + (closed?1:0);
@@ -173,6 +181,8 @@ public:
 	 * Mostly for debugging purposes
 	 */
 	Ogre::MeshPtr realizeMesh(const std::string& name);
+	
+	void _appendToManualObject(Ogre::ManualObject* manual);
 
 	/**
 	 * Tells whether a point is inside a shape or not
@@ -187,25 +197,25 @@ public:
 	 * @arg other The shape against which the intersection is computed
 	 * @return The intersection of two shapes, as a new shape
 	 */
-	Shape booleanIntersect(const Shape& other) const;
+	MultiShape booleanIntersect(const Shape& other) const;
 	
 	/**
 	 * Computes the union between this shape and another one.
 	 * Both shapes must be closed.
 	 */
-	Shape booleanUnion(const Shape& other) const;
+	MultiShape booleanUnion(const Shape& other) const;
 	
 	/**
 	 * Computes the difference between this shape and another one.
 	 * Both shapes must be closed.
 	 */
-	Shape booleanDifference(const Shape& other) const;
+	MultiShape booleanDifference(const Shape& other) const;
 
 	private:
 
 	enum BooleanOperationType { BOT_UNION, BOT_INTERSECTION, BOT_DIFFERENCE};
 
-	Shape _booleanOperation(const Shape& other, BooleanOperationType opType) const;
+	MultiShape _booleanOperation(const Shape& other, BooleanOperationType opType) const;
 
 	char _isIncreasing(Ogre::Real d, BooleanOperationType opType, char shapeSelector) const;
 	
