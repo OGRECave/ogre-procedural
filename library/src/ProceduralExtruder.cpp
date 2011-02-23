@@ -28,28 +28,31 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralExtruder.h"
 #include "ProceduralTriangulator.h"
+#include "ProceduralGeometryHelpers.h"
 
 namespace Procedural
 {
 	void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
-		assert(extrusionPath && shapeToExtrude && "Shape and Path must not be null!");
-		int numSegPath = extrusionPath->getSegCount();
-		int numSegShape = shapeToExtrude->getSegCount();
+		assert(mExtrusionPath && mShapeToExtrude && "Shape and Path must not be null!");
+		int numSegPath = mExtrusionPath->getSegCount();
+		int numSegShape = mShapeToExtrude->getSegCount();
 		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
 		
 		// Triangulate the begin and end caps
 		std::vector<int> indexBuffer;
-		if (!extrusionPath->isClosed() && capped)
-			Triangulator::triangulate(*shapeToExtrude, indexBuffer);
+		if (!mExtrusionPath->isClosed() && mCapped)
+			Triangulator::triangulate(*mShapeToExtrude, indexBuffer);
 
-		Ogre::Quaternion qBegin, qEnd;
+		Ogre::Quaternion qBegin, qEnd, lastQ;		
+		Ogre::Vector3 lastV0;
 
 	for (int i = 0; i <= numSegPath;i++)
 	{
-		const Ogre::Vector3& v0 = extrusionPath->getPoint(i);
+		
+		Ogre::Vector3 v0 = mExtrusionPath->getPoint(i);
 
-		Ogre::Vector3 direction = extrusionPath->getAvgDirection(i);
+		Ogre::Vector3 direction = mExtrusionPath->getAvgDirection(i);
 
 		// First, compute an approximate quaternion (everything is ok except Roll angle)
 		Ogre::Quaternion quat = Ogre::Vector3::UNIT_Z.getRotationTo(direction);
@@ -61,11 +64,28 @@ namespace Procedural
 		if (i == 0) qBegin = q;
 		if (i == numSegPath) qEnd = q;
 
+		if (mFixSharpAngles && i>0)
+		{
+			Plane plane1(lastQ * Ogre::Vector3::UNIT_Z, lastV0);
+			Plane plane2(q * Ogre::Vector3::UNIT_Z, v0);
+			Line inter;
+			if (plane1.intersect(plane2, inter))
+			{
+				Ogre::Vector3 v = inter.shortestPathToPoint(v0);
+				if (v.length() < 2.0) // TODO : shape.boundingCircle
+				{
+					v0 = v0 + (2.0-v.length()) * v.normalisedCopy();
+				}
+			}
+		}
+		lastQ = q;
+		lastV0 = v0;
+
 		for (int j =0;j<=numSegShape;j++)
 		{
-			Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
-			Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
-			Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
+			Ogre::Vector2 vp2 = mShapeToExtrude->getPoint(j);
+			Ogre::Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
+			Ogre::Vector2 vp2normal = mShapeToExtrude->getAvgNormal(j);
 			Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);							
 			buffer.rebaseOffset();
@@ -85,19 +105,19 @@ namespace Procedural
 			}			
 		}
 	}
-	if (capped)
+	if (mCapped)
 	{
 		//begin cap
 			buffer.rebaseOffset();
 			for (int j =0;j<=numSegShape;j++)
 			{
-				Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
-				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
-				Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
+				Ogre::Vector2 vp2 = mShapeToExtrude->getPoint(j);
+				Ogre::Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
+				Ogre::Vector2 vp2normal = mShapeToExtrude->getAvgNormal(j);
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
 
-				Ogre::Vector3 newPoint = extrusionPath->getPoint(0)+qBegin*vp;				
+				Ogre::Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*vp;				
 				buffer.position(newPoint);				
 				buffer.normal(qBegin*normal);
 				buffer.textureCoord(vp2.x, vp2.y);
@@ -113,13 +133,13 @@ namespace Procedural
 			buffer.rebaseOffset();
 			for (int j =0;j<=numSegShape;j++)
 			{
-				Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
-				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
-				Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
+				Ogre::Vector2 vp2 = mShapeToExtrude->getPoint(j);
+				Ogre::Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
+				Ogre::Vector2 vp2normal = mShapeToExtrude->getAvgNormal(j);
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 				Ogre::Vector3 normal = Ogre::Vector3::UNIT_Z;				
 
-				Ogre::Vector3 newPoint = extrusionPath->getPoint(numSegPath)+qEnd*vp;				
+				Ogre::Vector3 newPoint = mExtrusionPath->getPoint(numSegPath)+qEnd*vp;				
 				buffer.position(newPoint);				
 				buffer.normal(qEnd*normal);
 				buffer.textureCoord(vp2.x, vp2.y);

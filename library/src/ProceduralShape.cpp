@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 #include "ProceduralStableHeaders.h"
 #include "ProceduralShape.h"
+#include "ProceduralGeometryHelpers.h"
 
 namespace Procedural
 {
@@ -34,17 +35,15 @@ namespace Procedural
 void Shape::_findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const
 {
 	for (int i=0; i<getSegCount(); i++)
-	{
-		Ogre::Vector2 a1 = getPoint(i);
-		Ogre::Vector2 a2 = getPoint(i+1);
+	{		
+		Segment2D seg1(getPoint(i), getPoint(i+1));
 		
 		for (int j=0; j<other.getSegCount(); j++)
 		{
-			Ogre::Vector2 b1 = other.getPoint(j);
-			Ogre::Vector2 b2 = other.getPoint(j+1);
+			Segment2D seg2(other.getPoint(j), other.getPoint(j+1));
 			
 			Ogre::Vector2 intersect;
-			if (Utils::segmentIntersection(a1,a2,b1,b2, intersect))
+			if (seg1.intersect(seg2, intersect))
 			{
 				intersections.push_back(IntersectionInShape(i, j, intersect));
 			}

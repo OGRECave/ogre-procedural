@@ -116,45 +116,6 @@ public:
 		f = Ogre::Math::Clamp(f, (Ogre::Real)-1.0, (Ogre::Real)1.0);
 		return Ogre::Math::ACos(f);
 	}
-
-	/**
-	 * Computes the interesction between two segments [p1p2] and [p3p4]
-	 * @arg p1 Point p1
-	 * @arg p2 Point p2
-	 * @arg p3 Point p3
-	 * @arg p4 Point p4
-	 * @arg intersection the point of intersection if outputed there if it exists
-	 * @return true if segments intersect, false otherwise
-	 */
-	static bool segmentIntersection(const Ogre::Vector2& p1, const Ogre::Vector2& p2, const Ogre::Vector2& p3, const Ogre::Vector2& p4, Ogre::Vector2& intersection)
-	{		
-		Ogre::Vector2 d1 = p2-p1;
-		float a1 = d1.y;
-		float b1 = -d1.x;
-		float g1 = d1.x*p1.y-d1.y*p1.x;
-				
-		Ogre::Vector2 d3 = p4-p3;
-		float a2 = d3.y;
-		float b2 = -d3.x;
-		float g2 = d3.x*p3.y-d3.y*p3.x;
-
-		// if both segments are parallel, early out
-		if (d1.crossProduct(d3) == 0.)
-			return false;
-	
-		Ogre::Vector2 intersect;
-		float intersectx = (b2*g1-b1*g2)/(b1*a2-b2*a1);
-		float intersecty = (a2*g1-a1*g2)/(a1*b2-a2*b1);		
-	
-		intersect = Ogre::Vector2(intersectx, intersecty);
-
-		if ((intersect-p1).dotProduct(intersect-p2)<0 && (intersect-p3).dotProduct(intersect-p4)<0)
-		{
-			intersection = intersect;
-			return true;
-		}
-		return false;
-	}
 };
 }
 #endif

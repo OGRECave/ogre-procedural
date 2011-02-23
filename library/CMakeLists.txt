@@ -28,7 +28,8 @@ set( HDRS
 	include/ProceduralTriangulator.h
 	include/ProceduralTriangleBuffer.h
 	include/ProceduralStableHeaders.h
-	include/ProceduralMultiShape.h
+	include/ProceduralMultiShape.h	
+	include/ProceduralGeometryHelpers.h
 	)
 
 set( SRCS
@@ -50,6 +51,7 @@ set( SRCS
 		src/ProceduralTriangulator.cpp
 		src/ProceduralPrecompiledHeaders.cpp
 		src/ProceduralMultiShape.cpp
+		src/ProceduralGeometryHelpers.cpp
 	)
 
 include_directories( ${OIS_INCLUDE_DIRS}

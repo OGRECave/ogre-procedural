@@ -27,37 +27,12 @@ THE SOFTWARE.
 */
 #include "ProceduralStableHeaders.h"
 #include "ProceduralTriangulator.h"
+#include "ProceduralGeometryHelpers.h"
 
 using namespace Ogre;
 
 namespace Procedural
 {
-//-----------------------------------------------------------------------
-Triangulator::Circle Triangulator::Circle::from3Points(Ogre::Vector2 p1, Ogre::Vector2 p2, Ogre::Vector2 p3)
-{
-	Circle c;
-	Ogre::Vector2 c1 = .5*(p1+p2);
-	Ogre::Vector2 d1 = (p2-p1).perpendicular();
-	float a1 = d1.y;
-	float b1 = -d1.x;
-	float g1 = d1.x*c1.y-d1.y*c1.x;
-
-	Ogre::Vector2 c3 = .5*(p2+p3);
-	Ogre::Vector2 d3 = (p3-p2).perpendicular();
-	float a2 = d3.y;
-	float b2 = -d3.x;
-	float g2 = d3.x*c3.y-d3.y*c3.x;
-	
-	Ogre::Vector2 intersect;
-	float intersectx = (b2*g1-b1*g2)/(b1*a2-b2*a1);
-	float intersecty = (a2*g1-a1*g2)/(a1*b2-a2*b1);		
-
-	intersect = Ogre::Vector2(intersectx, intersecty);
-
-	c.center = intersect;
-	c.radius = (intersect-p1).length();
-	return c;
-}
 //-----------------------------------------------------------------------
 void Triangulator::Triangle::setVertices(int i0, int i1, int i2)
 {
@@ -171,7 +146,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 		{
 			DelaunayTriangleBuffer::iterator tri0 = subTri[k];
 			//Check if new triangle is Delaunay
-			Circle c = Circle::from3Points(tri0->p(0), tri0->p(1), tri0->p(2));
+			Circle c(tri0->p(0), tri0->p(1), tri0->p(2));
 			bool isDelaunay = true;
 			for (int j = 0;j<i+1;j++)
 			{
@@ -291,7 +266,7 @@ void Triangulator::triangulatePolygon(const std::vector<int>& input, const Delau
 	bool found = true;
 	while (!found)
 	{
-		Circle c = Circle::from3Points(pointList[*currentPoint], pointList[seg.i1], pointList[seg.i2]);		
+		Circle c(pointList[*currentPoint], pointList[seg.i1], pointList[seg.i2]);		
 		for (std::vector<int>::const_iterator it = input.begin();it!=input.end();it++)
 		{
 			if (c.isPointInside(pointList[*it]) )
