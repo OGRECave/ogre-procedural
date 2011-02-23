@@ -41,11 +41,12 @@ namespace Procedural
  */
 class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 {
-	Shape* shapeToExtrude;
-	Path* extrusionPath;
-	bool capped;
+	Shape* mShapeToExtrude;
+	Path* mExtrusionPath;
+	bool mCapped;
+	bool mFixSharpAngles;
 public:
-	Extruder() : shapeToExtrude(0), extrusionPath(0), capped(true)
+	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mFixSharpAngles(false)
 	{}
 	
 	/**
@@ -57,21 +58,27 @@ public:
 	/** Sets the shape to extrude */
 	inline Extruder & setShapeToExtrude(Shape* shapeToExtrude)
 	{
-		this->shapeToExtrude = shapeToExtrude;
+		mShapeToExtrude = shapeToExtrude;
 		return *this;
 	}
 
 	/** Sets the extrusion path */
 	inline Extruder & setExtrusionPath(Path* extrusionPath)
 	{
-		this->extrusionPath = extrusionPath;
+		mExtrusionPath = extrusionPath;
 		return *this;
 	}
 
 	/** Sets whether caps are added to the extremities or not (not closed paths only) */
 	inline Extruder & setCapped(bool capped)
 	{
-		this->capped = capped;
+		mCapped = capped;
+		return *this;
+	}
+
+	inline Extruder & setFixSharpAngles(bool fixSharpAngles)
+	{
+		mFixSharpAngles = fixSharpAngles;
 		return *this;
 	}
 };

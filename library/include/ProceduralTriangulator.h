@@ -61,18 +61,7 @@ struct DelaunaySegment
 	int i1, i2;
 	DelaunaySegment(int _i1, int _i2) : i1(_i1), i2(_i2) {}
 };	
-//-----------------------------------------------------------------------
-struct Circle
-{
-	Ogre::Vector2 center;
-	Ogre::Real radius;
-	static Circle from3Points(Ogre::Vector2 p1, Ogre::Vector2 p2, Ogre::Vector2 p3);	
-	
-	bool isPointInside(const Ogre::Vector2& p) const
-	{
-		return (p-center).length()<radius;
-	}
-};
+
 	//-----------------------------------------------------------------------
 struct Triangle
 {
