@@ -36,6 +36,10 @@ void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
 	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
 
+	buffer.rebaseOffset();
+	buffer.estimateVertexCount((numSegCircle+1)*(numSegSection+1));
+	buffer.estimateIndexCount((numSegCircle)*(numSegSection+1)*6);
+
 	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / numSegSection);
 	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / numSegCircle);
 	int offset = 0;

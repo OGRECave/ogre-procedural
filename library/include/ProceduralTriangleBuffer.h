@@ -42,15 +42,17 @@ namespace Procedural
  */
 class TriangleBuffer
 {
-	std::vector<int> indices;
-	std::vector<Ogre::Vector3> vertices;
-	std::vector<Ogre::Vector3> normals;
-	std::vector<Ogre::Vector2> uvs;
+	std::vector<int> mIndices;
+	std::vector<Ogre::Vector3> mVertices;
+	std::vector<Ogre::Vector3> mNormals;
+	std::vector<Ogre::Vector2> mUvs;
+	int mEstimatedVertexCount;
+	int mEstimatedIndexCount;
 	
 	int globalOffset;
 	
 	public:
-	TriangleBuffer() : globalOffset(0)
+	TriangleBuffer() : globalOffset(0), mEstimatedVertexCount(0), mEstimatedIndexCount(0)
 	{}
 
 	/**
@@ -58,29 +60,29 @@ class TriangleBuffer
 	 */
 	void rebaseOffset()
 	{
-		globalOffset = vertices.size();
+		globalOffset = mVertices.size();
 	}
 
 	/**
 	 * Builds an Ogre Mesh from this buffer.
 	 */
 	Ogre::MeshPtr transformToMesh(Ogre::SceneManager* sceneMgr, const std::string& name,
-        const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
+		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
 	{
 		Ogre::ManualObject * manual = sceneMgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-		std::vector<Ogre::Vector3>::iterator itPos = vertices.begin();
-		std::vector<Ogre::Vector2>::iterator itUvs = uvs.begin();
-		std::vector<Ogre::Vector3>::iterator itNormals = normals.begin();
+		std::vector<Ogre::Vector3>::iterator itPos = mVertices.begin();
+		std::vector<Ogre::Vector2>::iterator itUvs = mUvs.begin();
+		std::vector<Ogre::Vector3>::iterator itNormals = mNormals.begin();
 
-		for (; itPos != vertices.end();itPos++,itUvs++,itNormals++)
+		for (; itPos != mVertices.end();itPos++,itUvs++,itNormals++)
 		{
 			manual->position(*itPos);
 			manual->textureCoord(*itUvs);
 			manual->normal(*itNormals);
 		}
-		for (std::vector<int>::iterator it = indices.begin(); it!=indices.end();it++)
+		for (std::vector<int>::iterator it = mIndices.begin(); it!=mIndices.end();it++)
 		{
 			manual->index(*it);
 		}
@@ -101,35 +103,35 @@ class TriangleBuffer
 	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& position(const Ogre::Vector3& pos)
 	{
-		vertices.push_back(pos);
+		mVertices.push_back(pos);
 		return *this;
 	}
 
 	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& position(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
-		vertices.push_back(Ogre::Vector3(x,y,z));
+		mVertices.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
 	
 	/** Sets the normal of the current vertex */
 	inline TriangleBuffer& normal(const Ogre::Vector3& norm)
 	{
-		normals.push_back(norm);
+		mNormals.push_back(norm);
 		return *this;
 	}
 
 	/** Sets the texture coordinates of the current vertex */
 	inline TriangleBuffer& textureCoord(float u, float v)
 	{
-		uvs.push_back(Ogre::Vector2(u,v));
+		mUvs.push_back(Ogre::Vector2(u,v));
 		return *this;
 	}
 
 	/** Sets the texture coordinates of the current vertex */
 	inline TriangleBuffer& textureCoord(const Ogre::Vector2& vec)
 	{
-		uvs.push_back(vec);
+		mUvs.push_back(vec);
 		return *this;
 	}
 
@@ -139,8 +141,25 @@ class TriangleBuffer
 	 */
 	inline TriangleBuffer& index(int i)
 	{
-		indices.push_back(globalOffset+i);
+		mIndices.push_back(globalOffset+i);
 		return *this;
+	}
+
+	void estimateVertexCount(unsigned int vertexCount)
+	{
+		mEstimatedVertexCount += vertexCount;
+		mVertices.reserve(mEstimatedVertexCount);
+	}
+
+	void estimateIndexCount(unsigned int indexCount)
+	{
+		mEstimatedIndexCount += indexCount;
+		mIndices.reserve(mEstimatedIndexCount);
+	}
+
+	void debugOutput()
+	{
+		Utils::log("final num vertex : " + Ogre::StringConverter::toString(mVertices.size()) + " - final index size : " + Ogre::StringConverter::toString(mIndices.size()));
 	}
 };
 }

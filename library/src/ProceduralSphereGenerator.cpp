@@ -36,6 +36,10 @@ void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	assert(numRings>0 && numSegments>0 && "Num seg must be positive");
 	assert(radius>0 && "Radius must be positive");
 
+	buffer.rebaseOffset();
+	buffer.estimateVertexCount((numRings+1)*(numSegments+1));
+	buffer.estimateIndexCount(numRings*(numSegments+1)*6);
+
 	Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
 	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
 	int offset = 0;

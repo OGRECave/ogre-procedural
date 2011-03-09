@@ -39,32 +39,26 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	PlaneGenerator pg;
 	pg.setUTile(uTile).setVTile(vTile);
-	buffer.rebaseOffset();
 	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Z)
 	  .setPosition(.5*sizeZ*Ogre::Vector3::NEGATIVE_UNIT_Z)
 	  .addToTriangleBuffer(buffer);
-	buffer.rebaseOffset();
 	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Z)
 	  .setPosition(.5*sizeZ*Ogre::Vector3::UNIT_Z)
 	  .addToTriangleBuffer(buffer);
-	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Y)
 	  .setPosition(.5*sizeY*Ogre::Vector3::NEGATIVE_UNIT_Y)
 	  .addToTriangleBuffer(buffer);
-	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Y)
 	  .setPosition(.5*sizeY*Ogre::Vector3::UNIT_Y)
 	  .addToTriangleBuffer(buffer);
-	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_X)
 	  .setPosition(.5*sizeX*Ogre::Vector3::NEGATIVE_UNIT_X)
 	  .addToTriangleBuffer(buffer);
-	buffer.rebaseOffset();
 	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
 	  .setNormal(Ogre::Vector3::UNIT_X)
 	  .setPosition(.5*sizeX*Ogre::Vector3::UNIT_X)

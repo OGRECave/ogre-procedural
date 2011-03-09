@@ -40,6 +40,11 @@ class Utils
 
 	static int counter;
 public:
+	
+	static void log(const Ogre::String& st)
+	{
+		Ogre::LogManager::getSingleton().logMessage("[PROCEDURAL] " + st);
+	}
 
 	static Ogre::Vector3 min(const Ogre::Vector3& v1, const Ogre::Vector3& v2)
 	{

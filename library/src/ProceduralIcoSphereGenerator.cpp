@@ -190,6 +190,10 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	}
 	
 	/// Step 5 : realize
+	buffer.rebaseOffset();
+	buffer.estimateVertexCount(vertices.size());
+	buffer.estimateIndexCount(size);
+
 	for (int i=0; i<vertices.size(); i++)
 	{
 		buffer.position(radius*vertices[i]);

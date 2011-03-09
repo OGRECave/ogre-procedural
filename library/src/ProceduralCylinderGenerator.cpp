@@ -37,6 +37,17 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	assert(height>0. && radius>0. && "Height and radius must be positive");
 	assert(numSegBase>0 && numSegHeight>0 && "Num seg must be positive integers");
 
+	buffer.rebaseOffset();
+	if (capped)
+	{
+		buffer.estimateVertexCount((numSegHeight+1)*(numSegBase+1)+2*(numSegBase+1)+2);
+		buffer.estimateIndexCount(numSegHeight*(numSegBase+1)*6+6*numSegBase);		
+	} else {
+		buffer.estimateVertexCount((numSegHeight+1)*(numSegBase+1));
+		buffer.estimateIndexCount(numSegHeight*(numSegBase+1)*6);
+	}
+
+
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 	int offset = 0;
@@ -50,15 +61,16 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			buffer.normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
 			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
-			if (i != numSegHeight) {
+			if (i != numSegHeight) 
+			{
 				buffer.index(offset + numSegBase + 1);
 				buffer.index(offset);
 				buffer.index(offset + numSegBase);
 				buffer.index(offset + numSegBase + 1);
 				buffer.index(offset + 1);
 				buffer.index(offset);
-				}
-					offset ++;
+			}
+			offset ++;
 		}
 	if (capped)
 	{

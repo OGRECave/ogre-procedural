@@ -37,6 +37,9 @@ void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	assert(!normal.isZeroLength() && "Normal must not be null");
 	assert(sizeX>0. && sizeY>0. && "Size must be positive");
 	
+	buffer.rebaseOffset();
+	buffer.estimateVertexCount((numSegX+1)*(numSegY+1));
+	buffer.estimateIndexCount(numSegX*numSegY*6);
 	int offset = 0;
 
 	Ogre::Vector3 vX = normal.perpendicular();
@@ -83,12 +86,5 @@ void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		}
 		offset++;
 	}
-	offset+=numSegY+1;
-
-	std::vector<Ogre::Vector3> extremePoints;
-	extremePoints.push_back(position+orig);
-	extremePoints.push_back(position+orig+sizeX*vX);
-	extremePoints.push_back(position+orig+sizeY*vY);
-	extremePoints.push_back(position+orig+sizeX*vX+sizeY*vY);
 }
 }

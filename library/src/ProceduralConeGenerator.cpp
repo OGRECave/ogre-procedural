@@ -35,6 +35,10 @@ void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	assert(height>0. && radius>0. && "Height and radius must be positive");
 	assert(numSegBase>0 && numSegHeight>0 && "Num seg must be positive integers");
+
+	buffer.rebaseOffset();
+	buffer.estimateVertexCount((numSegHeight+1)*(numSegBase+1)+numSegBase+2);
+	buffer.estimateIndexCount(numSegHeight*numSegBase*6+3*numSegBase);
 	
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
