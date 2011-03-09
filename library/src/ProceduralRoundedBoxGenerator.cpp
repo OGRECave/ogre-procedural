@@ -38,6 +38,8 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 	assert(numSegX>0 && numSegY>0 && numSegZ>0 && chamferNumSeg>0 && "Num seg must be positive integers");
 	assert(sizeX>0. && sizeY>0. && sizeZ>0. && chamferSize>0. && "Sizes must be positive");
 	buffer.rebaseOffset();
+	buffer.estimateVertexCount((chamferNumSeg+1)*(chamferNumSeg+1));
+	buffer.estimateIndexCount(chamferNumSeg*chamferNumSeg*6);	
 	int offset = 0;
 
 	Ogre::Vector3 offsetPosition((isXPositive?1:-1)*.5*sizeX, (isYPositive?1:-1)*.5*sizeY, (isZPositive?1:-1)*.5*sizeZ);
@@ -51,12 +53,14 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 	if ((!isXPositive)&&(!isZPositive)) offsetSegAngle = Ogre::Math::PI;
 
 	// Generate the group of rings for the sphere
-	for(unsigned int ring = 0; ring <= chamferNumSeg; ring++ ) {
+	for(unsigned int ring = 0; ring <= chamferNumSeg; ring++ ) 
+	{
 		Ogre::Real r0 = chamferSize * sinf (ring * deltaRingAngle + offsetRingAngle);
 		Ogre::Real y0 = chamferSize * cosf (ring * deltaRingAngle + offsetRingAngle);
 
 		// Generate the group of segments for the current ring
-		for(unsigned int seg = 0; seg <= chamferNumSeg; seg++) {
+		for(unsigned int seg = 0; seg <= chamferNumSeg; seg++) 
+		{
 			Ogre::Real x0 = r0 * sinf(seg * deltaSegAngle + offsetSegAngle);
 			Ogre::Real z0 = r0 * cosf(seg * deltaSegAngle + offsetSegAngle);
 
@@ -67,8 +71,8 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
 				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) chamferNumSeg * uTile, (Ogre::Real) ring / (Ogre::Real) chamferNumSeg * vTile);
 
-			if ((ring != chamferNumSeg) && (seg != chamferNumSeg)) {
-			//if (ring != chamferNumSeg) {
+			if ((ring != chamferNumSeg) && (seg != chamferNumSeg)) 
+			{			
 				// each vertex (except the last) has six indices pointing to it
 				buffer.index(offset + chamferNumSeg + 2);
 				buffer.index(offset);
@@ -76,9 +80,9 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 				buffer.index(offset + chamferNumSeg + 2);
 				buffer.index(offset + 1);
 				buffer.index(offset);
-				}
-			
-				offset ++;
+			}
+
+			offset ++;
 		} // end for seg
 	} // end for ring
 }
@@ -89,9 +93,9 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 					0 => undefined
  */
 void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos) const
-{
+{	
 	int offset = 0;
-	buffer.rebaseOffset();
+
 	Ogre::Vector3 centerPosition = .5*xPos * sizeX * Ogre::Vector3::UNIT_X + .5*yPos * sizeY * Ogre::Vector3::UNIT_Y + .5*zPos * sizeZ * Ogre::Vector3::UNIT_Z;
 	Ogre::Vector3 vy0 = (1-abs(xPos)) * Ogre::Vector3::UNIT_X + (1-abs(yPos)) * Ogre::Vector3::UNIT_Y + (1-abs(zPos)) * Ogre::Vector3::UNIT_Z;//extrusion direction	
 
@@ -103,7 +107,7 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 
 	Ogre::Real height= (1-abs(xPos)) * sizeX+(1-abs(yPos)) * sizeY+(1-abs(zPos)) * sizeZ;//TODO
 	Ogre::Vector3 offsetPosition= centerPosition -.5*height*vy0;
-	int numSegHeight=1;//TODO
+	int numSegHeight=1;
 
 	Ogre::Real deltaAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
@@ -114,6 +118,10 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 		numSegHeight = numSegY;
 	else if (zPos==0)
 		numSegHeight = numSegZ;
+
+	buffer.rebaseOffset();	
+	buffer.estimateIndexCount(6*numSegHeight*chamferNumSeg);
+	buffer.estimateVertexCount((numSegHeight+1)*(chamferNumSeg+1));
 	
 	for (int i = 0; i <=numSegHeight; i++)
 		for (int j = 0; j<=chamferNumSeg; j++)
@@ -124,20 +132,21 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 			buffer.normal((x0*vx0+z0*vz0).normalisedCopy());
 			buffer.textureCoord(j/(Ogre::Real)chamferNumSeg*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
-			if (i != numSegHeight && j!=chamferNumSeg) {
+			if (i != numSegHeight && j!=chamferNumSeg) 
+			{
 				buffer.index(offset + chamferNumSeg + 2);
 				buffer.index(offset);
 				buffer.index(offset + chamferNumSeg+1);
 				buffer.index(offset + chamferNumSeg + 2);
 				buffer.index(offset + 1);
 				buffer.index(offset);
-				}
-					offset ++;
+			}
+			offset ++;
 		}
 }
 
 void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
-{
+{			
 	int offset = 0;
 	// Generate the pseudo-box shape
 	PlaneGenerator pg;

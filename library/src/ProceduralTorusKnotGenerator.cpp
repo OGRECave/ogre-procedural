@@ -36,6 +36,11 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
 	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
 	assert(p>0 && q>0 && "p and q must be positive");
+
+	buffer.rebaseOffset();
+	buffer.estimateVertexCount((numSegCircle*p+1)*(numSegSection+1));
+	buffer.estimateIndexCount((numSegCircle*p)*(numSegSection+1)*6);
+
 	int offset = 0;
 
 	for (int i = 0; i <= numSegCircle * p;i++)

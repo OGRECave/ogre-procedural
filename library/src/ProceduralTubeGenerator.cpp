@@ -36,7 +36,10 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	assert(innerRadius<outerRadius && "Outer radius must be bigger than inner radius");
 	assert(numSegBase>0 && numSegHeight>0 && "Num seg must be positive integers");
 
-
+	buffer.rebaseOffset();
+	buffer.estimateVertexCount((numSegHeight+1)*(numSegBase+1)*2+(numSegBase+1)*4);
+	buffer.estimateIndexCount(6*(numSegBase+1)*numSegHeight*2+6*numSegBase*2);
+	
 	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 	int offset = 0;
@@ -50,15 +53,16 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			buffer.normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
 			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
-			if (i != numSegHeight) {
+			if (i != numSegHeight) 
+			{
 				buffer.index(offset + numSegBase + 1);
 				buffer.index(offset);
 				buffer.index(offset + numSegBase);
 				buffer.index(offset + numSegBase + 1);
 				buffer.index(offset + 1);
 				buffer.index(offset);
-				}
-					offset ++;
+			}
+			offset ++;
 		}
 
 	for (int i = 0; i <=numSegHeight; i++)
@@ -70,15 +74,16 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			buffer.normal(-Ogre::Vector3(x0,0,z0).normalisedCopy());
 			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
-			if (i != numSegHeight) {
+			if (i != numSegHeight) 
+			{
 				buffer.index(offset + numSegBase + 1);
 				buffer.index(offset + numSegBase);
 				buffer.index(offset);
 				buffer.index(offset + numSegBase + 1);
 				buffer.index(offset);
 				buffer.index(offset + 1);
-				}
-					offset ++;
+			}
+			offset ++;
 		}
 
 
