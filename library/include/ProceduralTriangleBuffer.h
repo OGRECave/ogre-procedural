@@ -149,18 +149,20 @@ class TriangleBuffer
 	{
 		mEstimatedVertexCount += vertexCount;
 		mVertices.reserve(mEstimatedVertexCount);
+		//Utils::log("estimated vertex count : " + Ogre::StringConverter::toString(vertexCount));
 	}
 
 	void estimateIndexCount(unsigned int indexCount)
 	{
 		mEstimatedIndexCount += indexCount;
 		mIndices.reserve(mEstimatedIndexCount);
+		//Utils::log("estimated index count : " + Ogre::StringConverter::toString(indexCount));
 	}
 
-	void debugOutput()
+	/*void debugOutput()
 	{
 		Utils::log("final num vertex : " + Ogre::StringConverter::toString(mVertices.size()) + " - final index size : " + Ogre::StringConverter::toString(mIndices.size()));
-	}
+	}*/
 };
 }
 #endif

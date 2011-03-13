@@ -37,6 +37,10 @@ void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 		assert(numSegShape>1 && "Shape must contain at least two points");
 		int offset =0;
 
+		buffer.rebaseOffset();
+		buffer.estimateIndexCount(numSeg*numSegShape*6);
+		buffer.estimateVertexCount((numSegShape+1)*(numSeg+1));
+
 		for (int i=0;i<=numSeg;i++)
 		{
 			Ogre::Real angle = i/(Ogre::Real)numSeg*Ogre::Math::TWO_PI;
@@ -71,6 +75,6 @@ void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 				}
 				offset ++;
 			}
-		}
+		}		
 	}
 }
