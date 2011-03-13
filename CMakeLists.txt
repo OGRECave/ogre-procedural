@@ -27,6 +27,7 @@ endif(WIN32 OR APPLE)
 find_package(OGRE REQUIRED)
 
 option(PROCEDURAL_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
+option(PROCEDURAL_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
 
 # Specify build paths
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/lib")
@@ -40,4 +41,8 @@ add_subdirectory(library)
 
 if (PROCEDURAL_BUILD_SAMPLES)	
 	add_subdirectory(samples)
+endif()
+
+if (PROCEDURAL_BUILD_TESTS)
+	add_subdirectory(tests)
 endif()
