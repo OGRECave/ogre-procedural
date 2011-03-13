@@ -38,18 +38,28 @@ namespace Procedural
 		int numSegPath = mExtrusionPath->getSegCount();
 		int numSegShape = mShapeToExtrude->getSegCount();
 		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
-		
+				
 		// Triangulate the begin and end caps
 		std::vector<int> indexBuffer;
 		if (!mExtrusionPath->isClosed() && mCapped)
 			Triangulator::triangulate(*mShapeToExtrude, indexBuffer);
 
+		// Estimate vertex and index count
+		buffer.rebaseOffset();
+		if (!mExtrusionPath->isClosed() && mCapped)
+		{
+			buffer.estimateIndexCount(numSegShape*numSegPath*6 + 2*indexBuffer.size());
+			buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1) + 2*(numSegShape+1));
+		} else {
+			buffer.estimateIndexCount(numSegShape*numSegPath*6);
+			buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1));
+		}
+
 		Ogre::Quaternion qBegin, qEnd, lastQ;		
 		Ogre::Vector3 lastV0;
 
 	for (int i = 0; i <= numSegPath;i++)
-	{
-		
+	{		
 		Ogre::Vector3 v0 = mExtrusionPath->getPoint(i);
 
 		Ogre::Vector3 direction = mExtrusionPath->getAvgDirection(i);
@@ -105,7 +115,7 @@ namespace Procedural
 			}			
 		}
 	}
-	if (mCapped)
+	if (!mExtrusionPath->isClosed() && mCapped)
 	{
 		//begin cap
 			buffer.rebaseOffset();
@@ -151,6 +161,6 @@ namespace Procedural
 				buffer.index(indexBuffer[i*3+1]);
 				buffer.index(indexBuffer[i*3+2]);
 			}
-	}	
+	}		
 }
 }
