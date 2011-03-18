@@ -108,9 +108,8 @@ public:
 	/**
 	 * Equivalent of Ogre::Vector3::angleBetween, applied to Ogre::Vector2
 	 */
-	static Ogre::Radian angleBetween(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
-	{
-		// TODO : also compute angle greater than PI
+	static inline Ogre::Radian angleBetween(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
+	{		
 		Ogre::Real lenProduct = v1.length() * v2.length();
 		// Divide by zero check
 		if(lenProduct < 1e-6f)
@@ -120,6 +119,18 @@ public:
 	
 		f = Ogre::Math::Clamp(f, (Ogre::Real)-1.0, (Ogre::Real)1.0);
 		return Ogre::Math::ACos(f);
+	}
+
+	static inline Ogre::Radian angleTo(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
+	{
+		Ogre::Radian angle = angleBetween(v1, v2);
+		
+		if (v1.crossProduct(v2)<0)
+		{
+			angle = (Ogre::Radian)Ogre::Math::TWO_PI - angle;
+		}
+
+		return angle;
 	}
 };
 }
