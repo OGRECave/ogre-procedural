@@ -69,7 +69,7 @@ public:
 	{
 		TriangleBuffer tbuffer;
 		addToTriangleBuffer(tbuffer);
-		Ogre::MeshPtr mesh = tbuffer.transformToMesh(sceneMgr, name, group);
+		Ogre::MeshPtr mesh = tbuffer.transformToMesh(name, group);
 		return mesh;
 	}
 
