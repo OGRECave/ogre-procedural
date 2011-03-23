@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreMesh.h"
 #include "OgreSceneManager.h"
 #include "ProceduralUtils.h"
+#include "ProceduralRoot.h"
 
 namespace Procedural
 {
@@ -66,9 +67,10 @@ class TriangleBuffer
 	/**
 	 * Builds an Ogre Mesh from this buffer.
 	 */
-	Ogre::MeshPtr transformToMesh(Ogre::SceneManager* sceneMgr, const std::string& name,
+	Ogre::MeshPtr transformToMesh(const std::string& name,
 		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
 	{
+		Ogre::SceneManager* sceneMgr = Root::getInstance()->sceneManager;
 		Ogre::ManualObject * manual = sceneMgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 

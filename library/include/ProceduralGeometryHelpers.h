@@ -97,7 +97,17 @@ class Segment2D
 	public:
 	Segment2D(Ogre::Vector2 a, Ogre::Vector2 b) : mA(a), mB(b) {}
 
-	/**
+	Ogre::Vector2 getA()
+	{
+		return mA;	
+	}
+
+	Ogre::Vector2 getB()
+	{
+		return mB;
+	}
+
+	/**	  
 	 * Computes the interesction between two segments [p1p2] and [p3p4]
 	 * @arg p1 Point p1
 	 * @arg p2 Point p2
