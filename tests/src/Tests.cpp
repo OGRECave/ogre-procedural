@@ -35,8 +35,13 @@ void Unit_Tests::createScene(void)
 		Procedural::Root::getInstance()->sceneManager = mSceneMgr;
 
 		// Register all unit tests
-		mUnitTests.push_back(new Test_Primitives(mSceneMgr));
-		mUnitTests.push_back(new Test_Empty(mSceneMgr));
+		//mUnitTests.push_back(new Test_AfshinBug(mSceneMgr));
+		//mUnitTests.push_back(new Test_Primitives(mSceneMgr));
+		//mUnitTests.push_back(new Test_Empty(mSceneMgr));*/
+		//mUnitTests.push_back(new Test_Triangulation(mSceneMgr));
+		mUnitTests.push_back(new Test_ShapeGenerators(mSceneMgr));
+		/*mUnitTests.push_back(new Test_Extruder(mSceneMgr));
+		mUnitTests.push_back(new Test_Lathe(mSceneMgr));*/
 
 		// Init first test
 		mUnitTests[0]->init();

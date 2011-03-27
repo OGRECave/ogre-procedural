@@ -53,36 +53,42 @@ class _ProceduralExport Shape
 public:
 	Shape() : closed(false), outSide(SIDE_RIGHT) {}
 
+	/* --------------------------------------------------------------------------- */
 	inline Shape& addPoint(const Ogre::Vector2& pt)
 	{
 		points.push_back(pt);
 		return *this;
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline Shape& addPoint(Ogre::Real x, Ogre::Real y)
 	{
 		points.push_back(Ogre::Vector2(x, y));
 		return *this;
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline Shape& reset()
 	{
 		points.clear();
 		return *this;
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline std::vector<Ogre::Vector2> getPoints() const
 	{
 		return points;
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline const Ogre::Vector2& getPoint(int i) const
 	{
 		if (closed)
 			return points[Utils::modulo(i,points.size())];
 		return points[Utils::cap(i,0,points.size()-1)];
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline Shape& close()
 	{
 		assert(points.size()>0 && "Cannot close an empty shape");
@@ -100,7 +106,8 @@ public:
 		outSide = side;
 		return *this;
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline Side getOutSide() const
 	{
 		return outSide;
@@ -112,12 +119,14 @@ public:
 		outSide = (outSide == SIDE_LEFT)? SIDE_RIGHT: SIDE_LEFT;
 		return *this;
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline int getSegCount() const
 	{
 		return (points.size()-1) + (closed?1:0);
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline bool isClosed() const
 	{
 	  return closed;
@@ -148,27 +157,31 @@ public:
 		else
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getAvgDirection(int i) const
 	{
 		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getNormalAfter(int i) const
 	{
 		if (outSide==SIDE_RIGHT)
 		return -getDirectionAfter(i).perpendicular();
 		return getDirectionAfter(i).perpendicular();
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getNormalBefore(int i) const
 	{
 		if (outSide==SIDE_RIGHT)
 		return -getDirectionBefore(i).perpendicular();
 		return getDirectionBefore(i).perpendicular();
 	}
-
+	
+	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getAvgNormal(int i) const
 	{
 		if (outSide==SIDE_RIGHT)
@@ -211,26 +224,41 @@ public:
 	 */
 	MultiShape booleanDifference(const Shape& other) const;
 
+	/**
+	 * On a closed shape, find if the outside is located on the right
+	 * or on the left. If the outside can easily be determined, 
+	 * you'd rather use setOutside(), which doesn't need any computation.
+	 */
+	Side findRealOutSide();
+
 	private:
 
 	enum BooleanOperationType { BOT_UNION, BOT_INTERSECTION, BOT_DIFFERENCE};
 
 	MultiShape _booleanOperation(const Shape& other, BooleanOperationType opType) const;
 
-	char _isIncreasing(Ogre::Real d, BooleanOperationType opType, char shapeSelector) const;
-	
-
 	struct IntersectionInShape
 	{
 		int index[2];
+		bool onVertex[2];
 		Ogre::Vector2 position;
 		IntersectionInShape(int i, int j, Ogre::Vector2 intersect) : position(intersect)
 		{
 			index[0] = i;
 			index[1] = j;
-		}
+			onVertex[0] = false;
+			onVertex[1] = false;
+		}		
 	};
 
+	bool Shape::_isLookingForOutside(BooleanOperationType opType, char shapeSelector) const;
+	
+	char _isIncreasing(Ogre::Real d, BooleanOperationType opType, char shapeSelector) const;
+
+	//char _isIncreasing(BooleanOperationType opType, char shapeSelector) const;
+	
+	bool _findWhereToGo(const Shape* inputShapes[], BooleanOperationType opType, IntersectionInShape intersection, Ogre::uint8& shapeSelector, char& isIncreasing, int& currentSegment) const;
+	
 	void _findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const;
 };
 
@@ -380,7 +408,7 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
 				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
 				Ogre::Real t2 = t*t;
 				Ogre::Real t3 = t*t2;
-				Ogre::Vector2 P = 0.5*((-t3+2*t2-t)*P1 + (3*t3-5*t2+2.)*P2 + (-3*t3+4*t2+t)*P3 + (t3-t2)*P4);
+				Ogre::Vector2 P = 0.5f*((-t3+2.f*t2-t)*P1 + (3.f*t3-5.f*t2+2.f)*P2 + (-3.f*t3+4.f*t2+t)*P3 + (t3-t2)*P4);
 				shape.addPoint(P);
 			}
 			if (i==points.size()-2 && !closed)
@@ -465,8 +493,8 @@ public:
 			const ControlPoint& p1 = safeGetPoint(i+1);
 			const ControlPoint& p2 = safeGetPoint(i+2);
 			
-			Ogre::Vector2 m0 = (1-p0.tension)*(1+p0.bias)*(1+p0.continuity)/2.*(p0.position-pm1.position)+(1-p0.tension)*(1-p0.bias)*(1-p0.continuity)/2.*(p1.position-p0.position);
-			Ogre::Vector2 m1 = (1-p1.tension)*(1+p1.bias)*(1-p1.continuity)/2.*(p1.position-p0.position)+(1-p1.tension)*(1-p1.bias)*(1+p1.continuity)/2.*(p2.position-p1.position);
+			Ogre::Vector2 m0 = (1-p0.tension)*(1+p0.bias)*(1+p0.continuity)/2.f*(p0.position-pm1.position)+(1-p0.tension)*(1-p0.bias)*(1-p0.continuity)/2.f*(p1.position-p0.position);
+			Ogre::Vector2 m1 = (1-p1.tension)*(1+p1.bias)*(1-p1.continuity)/2.f*(p1.position-p0.position)+(1-p1.tension)*(1-p1.bias)*(1+p1.continuity)/2.f*(p2.position-p1.position);
 			
 			for (int j=0;j<numSeg;j++)
 			{
@@ -510,10 +538,10 @@ class _ProceduralExport RectangleShape
 	Shape realizeShape()
 	{
 		Shape s;
-		s.addPoint(-.5*width,-.5*height)
-		 .addPoint(.5*width,-.5*height)
-		 .addPoint(.5*width,.5*height)
-		 .addPoint(-.5*width,.5*height)
+		s.addPoint(-.5f*width,-.5f*height)
+		 .addPoint(.5f*width,-.5f*height)
+		 .addPoint(.5f*width,.5f*height)
+		 .addPoint(-.5f*width,.5f*height)
 		 .close();
 		return s;
 	}
