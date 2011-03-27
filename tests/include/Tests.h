@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "BaseApplication.h"
 #include "Procedural.h"
 using namespace Ogre;
+using namespace Procedural;
 
 class Unit_Test
 {	
@@ -46,10 +47,12 @@ protected:
 		Entity* ent = mSceneMgr->createEntity(meshName);
 		SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 		sn->attachObject(ent);
-		ent->setMaterialName("Examples/Rockwall");	
+		//ent->setMaterialName("Examples/Rockwall");	
 		mEntities.push_back(ent);
 		mSceneNodes.push_back(sn);
-	}  
+		int currentIndex = mEntities.size();
+		sn->setPosition(currentIndex*10.0, 0., (currentIndex%10)*10.0);		
+	}
 
 public:
 	Unit_Test(SceneManager* sn) : mSceneMgr(sn) {}
@@ -99,7 +102,8 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
-			Procedural::SphereGenerator().realizeMesh("sphereMesh");
+			Procedural::SphereGenerator sg = Procedural::SphereGenerator();
+			sg.realizeMesh("sphereMesh");			
 			putMesh("sphereMesh");
 		}
 	};
@@ -119,6 +123,93 @@ class Unit_Tests : public BaseApplication
 		{
 		}
 	};
+
+	/* --------------------------------------------------------------------------- */
+	class Test_Triangulation : public Unit_Test
+	{
+	public:		
+		Test_Triangulation(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Tests Delaunay Triangulation";
+		}
+
+		void initImpl()
+		{
+			Procedural::Shape s = Procedural::Shape().addPoint(0,0).addPoint(5,0).addPoint(0,5).close();
+			Procedural::Triangulator::triangulateToMesh(s, "contourMesh");
+			putMesh("contourMesh");
+		}
+	};
+
+	/* --------------------------------------------------------------------------- */
+	class Test_ShapeGenerators : public Unit_Test
+	{
+	public:		
+		Test_ShapeGenerators(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Tests different types of shape generation";
+		}
+
+		void initImpl()
+		{
+			//CSG
+			Procedural::Shape s1 = Procedural::CircleShape().realizeShape();
+			Procedural::Shape s2 = Procedural::RectangleShape().setWidth(0.5).setHeight(2).realizeShape();
+			
+			s1.realizeMesh("contour1");
+			putMesh("contour1");
+			s2.realizeMesh("contour2");
+			putMesh("contour2");
+			Procedural::MultiShape s;
+			s = s1.booleanIntersect(s2);			
+			s.realizeMesh("contourinter");
+			putMesh("contourinter");
+			s = s1.booleanUnion(s2);
+			s.realizeMesh("contourunion");
+			putMesh("contourunion");
+			s = s1.booleanDifference(s2);
+			s.realizeMesh("contourdifference");
+			putMesh("contourdifference");
+		}
+	};
+
+	/* --------------------------------------------------------------------------- */
+	class Test_Extruder : public Unit_Test
+	{
+	public:		
+		Test_Extruder(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Tests the extruder";
+		}
+
+		void initImpl()
+		{
+		}
+	};
+
+	/* --------------------------------------------------------------------------- */
+	class Test_Lathe : public Unit_Test
+	{
+	public:		
+		Test_Lathe(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Tests the lathe";
+		}
+
+		void initImpl()
+		{
+		}
+	};
+
+
 
 	/* --------------------------------------------------------------------------- */
 	std::vector<Unit_Test*> mUnitTests;
