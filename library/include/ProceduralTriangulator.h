@@ -119,6 +119,32 @@ public:
 	 * @arg ouput A vector of index where is outputed the resulting triangle indexes
 	 */
 	static void triangulate(const Shape& shape, std::vector<int>& output);
+
+	static void triangulateToMesh(const Shape& shape, std::string out)
+	{
+		TriangleBuffer buffer;
+		std::vector<int> indexBuffer;		
+		triangulate(shape,indexBuffer);
+		for (int j =0;j<=shape.getSegCount();j++)
+			{
+				Ogre::Vector2 vp2 = shape.getPoint(j);
+				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
+				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
+
+				Ogre::Vector3 newPoint = vp;				
+				buffer.position(newPoint);				
+				buffer.normal(normal);
+				buffer.textureCoord(vp2.x, vp2.y);
+			}
+			
+			for (int i=0;i<indexBuffer.size()/3;i++)
+			{				
+				buffer.index(indexBuffer[i*3]);
+				buffer.index(indexBuffer[i*3+2]);
+				buffer.index(indexBuffer[i*3+1]);
+			}
+		buffer.transformToMesh(out);
+	}
 };
 
 }
