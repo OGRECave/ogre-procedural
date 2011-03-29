@@ -55,8 +55,8 @@ namespace Procedural
 			buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1));
 		}
 
-		Ogre::Quaternion qBegin, qEnd, lastQ;		
-		Ogre::Vector3 lastV0;
+		Ogre::Quaternion qBegin, qEnd/*, lastQ*/;		
+		//Ogre::Vector3 lastV0;
 
 	for (int i = 0; i <= numSegPath;i++)
 	{		
@@ -74,7 +74,7 @@ namespace Procedural
 		if (i == 0) qBegin = q;
 		if (i == numSegPath) qEnd = q;
 
-		if (mFixSharpAngles && i>0)
+		/*if (mFixSharpAngles && i>0)
 		{
 			Plane plane1(lastQ * Ogre::Vector3::UNIT_Z, lastV0);
 			Plane plane2(q * Ogre::Vector3::UNIT_Z, v0);
@@ -89,7 +89,7 @@ namespace Procedural
 			}
 		}
 		lastQ = q;
-		lastV0 = v0;
+		lastV0 = v0;*/
 
 		for (int j =0;j<=numSegShape;j++)
 		{
@@ -105,13 +105,17 @@ namespace Procedural
 			buffer.textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
 
 			if (j <numSegShape && i <numSegPath)
-			{				
-				buffer.index(numSegShape + 2);
-				buffer.index(numSegShape + 1);
-				buffer.index(0);
-				buffer.index(numSegShape + 2);				
-				buffer.index(0);
-				buffer.index(1);
+			{		
+				if (mShapeToExtrude->getOutSide() == SIDE_LEFT)
+				{
+					buffer.triangle(numSegShape + 1, numSegShape + 2, 0);
+					buffer.triangle(0, numSegShape + 2, 1);
+				}
+				else 
+				{
+					buffer.triangle(numSegShape + 2, numSegShape + 1, 0);
+					buffer.triangle(numSegShape + 2, 0, 1);
+				}
 			}			
 		}
 	}
