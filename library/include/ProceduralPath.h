@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreVector3.h"
 #include "ProceduralUtils.h"
 #include "ProceduralPlatform.h"
+#include "ProceduralRoot.h"
 
 namespace Procedural
 {
@@ -163,7 +164,62 @@ public:
 	}
 
 };
+//-----------------------------------------------------------------------
+template<class T>
+class BaseSpline3
+{
+protected:
+	int numSeg;
+	bool closed;
+public:
+	BaseSpline3() : numSeg(4), closed(false) {}	
 
+	T& setNumSeg(int numSeg)
+	{
+		assert(numSeg>=1);
+		this->numSeg = numSeg;
+		return (T&)*this;
+	}
+		
+	T& close()
+	{
+		closed = true;
+		return (T&)*this;
+	}
+};
+//-----------------------------------------------------------------------
+/**
+ * Builds a path from a Catmull-Rom Spline.
+ */
+class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3>
+{	
+	std::vector<Ogre::Vector3> points;
+	public:	
+	CatmullRomSpline3& addPoint(const Ogre::Vector3& pt)
+	{
+		points.push_back(pt);
+		return *this;
+	}
+
+	CatmullRomSpline3& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		points.push_back(Ogre::Vector3(x,y,z));
+		return *this;
+	}
+	
+	const Ogre::Vector3& safeGetPoint(int i) const
+	{
+		if (closed)
+			return points[Utils::modulo(i,points.size())];
+		return points[Utils::cap(i,0,points.size()-1)];
+	}
+	
+	/**
+	 * Build a path from Catmull-Rom control points
+	 */
+	Path realizePath();
+};
+//-----------------------------------------------------------------------
 /**
  * Enables to build a Path from Bezier control points.
  * Tangents are automatically calculated from control points, so the curve will "touch" every point you define
