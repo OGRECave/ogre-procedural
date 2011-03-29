@@ -43,6 +43,7 @@ Ogre::MeshPtr MultiShape::realizeMesh(const std::string& name)
 		}		
 		
 		Ogre::MeshPtr mesh = manual->convertToMesh(name);
+		Root::getInstance()->sceneManager->destroyManualObject(manual);
 		return mesh;
 	}
 
