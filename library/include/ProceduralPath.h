@@ -284,7 +284,7 @@ public:
 
 	Path realizePath()
 	{
-		assert(numSeg>1);
+		assert(numSeg>0);
 		Path p;
 		for (int i=0;i<=numSeg;i++)
 		{
