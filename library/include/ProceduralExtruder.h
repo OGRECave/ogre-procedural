@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "ProceduralPath.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralMeshGenerator.h"
+#include "ProceduralMultiShape.h"
 
 namespace Procedural
 {
@@ -42,9 +43,13 @@ namespace Procedural
 class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 {
 	Shape* mShapeToExtrude;
+	MultiShape* mMultiShapeToExtrude;
 	Path* mExtrusionPath;
 	bool mCapped;
 	bool mFixSharpAngles;
+
+	void _extrudeImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const;
+	
 public:
 	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mFixSharpAngles(false)
 	{}
@@ -55,10 +60,19 @@ public:
 	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
-	/** Sets the shape to extrude */
+	/** Sets the shape to extrude. Mutually exclusive with setMultiShapeToExtrude. */
 	inline Extruder & setShapeToExtrude(Shape* shapeToExtrude)
 	{
+		mMultiShapeToExtrude = 0;
 		mShapeToExtrude = shapeToExtrude;
+		return *this;
+	}
+
+	/** Sets the multishape to extrude. Mutually exclusive with setShapeToExtrude. */
+	inline Extruder & setMultiShapeToExtrude(MultiShape* multiShapeToExtrude)
+	{
+		mShapeToExtrude = 0;
+		mMultiShapeToExtrude = multiShapeToExtrude;
 		return *this;
 	}
 

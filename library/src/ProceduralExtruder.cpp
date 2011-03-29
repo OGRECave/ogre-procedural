@@ -32,17 +32,17 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
+	void Extruder::_extrudeImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
 	{
-		assert(mExtrusionPath && mShapeToExtrude && "Shape and Path must not be null!");
+		assert(mExtrusionPath && shapeToExtrude && "Shape and Path must not be null!");
 		int numSegPath = mExtrusionPath->getSegCount();
-		int numSegShape = mShapeToExtrude->getSegCount();
+		int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
 				
 		// Triangulate the begin and end caps
 		std::vector<int> indexBuffer;
 		if (!mExtrusionPath->isClosed() && mCapped)
-			Triangulator::triangulate(*mShapeToExtrude, indexBuffer);
+			Triangulator::triangulate(*shapeToExtrude, indexBuffer);
 
 		// Estimate vertex and index count
 		buffer.rebaseOffset();
@@ -93,9 +93,9 @@ namespace Procedural
 
 		for (int j =0;j<=numSegShape;j++)
 		{
-			Ogre::Vector2 vp2 = mShapeToExtrude->getPoint(j);
-			Ogre::Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
-			Ogre::Vector2 vp2normal = mShapeToExtrude->getAvgNormal(j);
+			Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
+			Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+			Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
 			Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);							
 			buffer.rebaseOffset();
@@ -106,7 +106,7 @@ namespace Procedural
 
 			if (j <numSegShape && i <numSegPath)
 			{		
-				if (mShapeToExtrude->getOutSide() == SIDE_LEFT)
+				if (shapeToExtrude->getOutSide() == SIDE_LEFT)
 				{
 					buffer.triangle(numSegShape + 1, numSegShape + 2, 0);
 					buffer.triangle(0, numSegShape + 2, 1);
@@ -125,9 +125,9 @@ namespace Procedural
 			buffer.rebaseOffset();
 			for (int j =0;j<=numSegShape;j++)
 			{
-				Ogre::Vector2 vp2 = mShapeToExtrude->getPoint(j);
-				Ogre::Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
-				Ogre::Vector2 vp2normal = mShapeToExtrude->getAvgNormal(j);
+				Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
+				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+				Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
 
@@ -147,9 +147,9 @@ namespace Procedural
 			buffer.rebaseOffset();
 			for (int j =0;j<=numSegShape;j++)
 			{
-				Ogre::Vector2 vp2 = mShapeToExtrude->getPoint(j);
-				Ogre::Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
-				Ogre::Vector2 vp2normal = mShapeToExtrude->getAvgNormal(j);
+				Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
+				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+				Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 				Ogre::Vector3 normal = Ogre::Vector3::UNIT_Z;				
 
@@ -167,4 +167,16 @@ namespace Procedural
 			}
 	}		
 }
+
+	void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
+	{
+		assert((mShapeToExtrude || mMultiShapeToExtrude) && "Either shape or multishape must be defined!");
+		if (mShapeToExtrude)
+			_extrudeImpl(buffer, mShapeToExtrude);
+		else 
+		{
+			for (int i=0; i<mMultiShapeToExtrude->getShapeCount();i++)			
+			_extrudeImpl(buffer, &mMultiShapeToExtrude->getShape(i));
+		}
+	}
 }
