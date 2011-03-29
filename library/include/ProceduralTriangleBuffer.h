@@ -147,6 +147,18 @@ class TriangleBuffer
 		return *this;
 	}
 
+	/** 
+	 * Adds a triangle to the index buffer.
+	 * Index is relative to the latest rebaseOffset().
+	 */
+	inline TriangleBuffer& triangle(int i1, int i2, int i3)
+	{
+		mIndices.push_back(globalOffset+i1);
+		mIndices.push_back(globalOffset+i2);
+		mIndices.push_back(globalOffset+i3);
+		return *this;
+	}
+
 	void estimateVertexCount(unsigned int vertexCount)
 	{
 		mEstimatedVertexCount += vertexCount;
