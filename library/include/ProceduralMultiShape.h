@@ -40,23 +40,29 @@ class _ProceduralExport MultiShape
 	
 	public:
 	MultiShape()
-	{}	
-	
+	{}		
+	//-----------------------------------------------------------------------
 	MultiShape(const Shape& shape)
 	{
 		shapes.push_back(shape);
-	}	
-	
-	void addShape(const Shape& shape)
+	}		
+	//-----------------------------------------------------------------------
+	MultiShape& addShape(const Shape& shape)
 	{
 		shapes.push_back(shape);
-	}
-	
+		return *this;
+	}	
+	//-----------------------------------------------------------------------
 	Shape& getShape(int i)
 	{		
 		return shapes[i];
-	}
-	
+	}	
+	//-----------------------------------------------------------------------
+	int getShapeCount()
+	{
+		return shapes.size();
+	}	
+	//-----------------------------------------------------------------------
 	void addMultiShape(const MultiShape& other)
 	{
 		for (std::vector<Shape>::const_iterator it = other.shapes.begin(); it!=other.shapes.end(); it++)
