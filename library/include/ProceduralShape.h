@@ -105,33 +105,30 @@ public:
 	{
 		outSide = side;
 		return *this;
-	}
-	
+	}	
 	/* --------------------------------------------------------------------------- */
 	inline Side getOutSide() const
 	{
 		return outSide;
 	}
-
+	/* --------------------------------------------------------------------------- */
 	/// Switches the inside and the outside
 	inline Shape& switchSide()
 	{
 		outSide = (outSide == SIDE_LEFT)? SIDE_RIGHT: SIDE_LEFT;
 		return *this;
-	}
-	
+	}	
 	/* --------------------------------------------------------------------------- */
 	inline int getSegCount() const
 	{
 		return (points.size()-1) + (closed?1:0);
-	}
-	
+	}	
 	/* --------------------------------------------------------------------------- */
 	inline bool isClosed() const
 	{
 	  return closed;
 	}	
-
+	/* --------------------------------------------------------------------------- */
 	/**
 	 * Returns local direction after the current point
 	 */
@@ -144,7 +141,7 @@ public:
 		else
 			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
 	}
-
+	/* --------------------------------------------------------------------------- */
 	/**
 	 * Returns local direction after the current point
 	 */
@@ -156,31 +153,26 @@ public:
 			return (points[1] - points[0]).normalisedCopy();
 		else
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
-	}
-	
+	}	
 	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getAvgDirection(int i) const
 	{
 		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
-
-	}
-	
+	}	
 	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getNormalAfter(int i) const
 	{
 		if (outSide==SIDE_RIGHT)
 		return -getDirectionAfter(i).perpendicular();
 		return getDirectionAfter(i).perpendicular();
-	}
-	
+	}	
 	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getNormalBefore(int i) const
 	{
 		if (outSide==SIDE_RIGHT)
 		return -getDirectionBefore(i).perpendicular();
 		return getDirectionBefore(i).perpendicular();
-	}
-	
+	}	
 	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getAvgNormal(int i) const
 	{
@@ -188,22 +180,22 @@ public:
 		return -getAvgDirection(i).perpendicular();
 		return getAvgDirection(i).perpendicular();
 	}
-
+	/* --------------------------------------------------------------------------- */
 	/**
 	 * Outputs a mesh representing the shape.
 	 * Mostly for debugging purposes
 	 */
 	Ogre::MeshPtr realizeMesh(const std::string& name);
-	
+	/* --------------------------------------------------------------------------- */
 	void _appendToManualObject(Ogre::ManualObject* manual);
-
+	/* --------------------------------------------------------------------------- */
 	/**
 	 * Tells whether a point is inside a shape or not
 	 * @arg point The point to check
 	 * @return true if the point is inside this shape, false otherwise
 	 */
 	bool isPointInside(const Ogre::Vector2& point) const;
-	
+	/* --------------------------------------------------------------------------- */
 	/**
 	 * Computes the intersection between this shape and another one.
 	 * Both shapes must be closed.
@@ -211,19 +203,19 @@ public:
 	 * @return The intersection of two shapes, as a new shape
 	 */
 	MultiShape booleanIntersect(const Shape& other) const;
-	
+	/* --------------------------------------------------------------------------- */
 	/**
 	 * Computes the union between this shape and another one.
 	 * Both shapes must be closed.
 	 */
 	MultiShape booleanUnion(const Shape& other) const;
-	
+	/* --------------------------------------------------------------------------- */
 	/**
 	 * Computes the difference between this shape and another one.
 	 * Both shapes must be closed.
 	 */
 	MultiShape booleanDifference(const Shape& other) const;
-
+	/* --------------------------------------------------------------------------- */
 	/**
 	 * On a closed shape, find if the outside is located on the right
 	 * or on the left. If the outside can easily be determined, 
@@ -262,6 +254,7 @@ public:
 	void _findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const;
 };
 
+//-----------------------------------------------------------------------
 template<class T>
 class BaseSpline2
 {
@@ -297,6 +290,7 @@ public:
 	}
 };
 
+//-----------------------------------------------------------------------
 /**
  * Produces a shape from Cubic Hermite control points
  */
@@ -329,39 +323,10 @@ public:
 	/**
 	 * Builds a shape from control points
 	 */
-	Shape realizeShape()
-	{
-	Shape shape;
-
-		int numPoints = closed?points.size():points.size()-1;		
-		for (int i=0;i<numPoints;i++)
-		{
-			const Ogre::Vector2& p0 = points[i].position;
-			const Ogre::Vector2& m0 = points[i].tangentAfter;
-			const Ogre::Vector2& p1 = safeGetPoint(i+1).position;
-			const Ogre::Vector2& m1 = safeGetPoint(i+1).tangentBefore;
-
-			for (int j=0;j<numSeg;j++)
-			{
-				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
-				Ogre::Real t2 = t*t;
-				Ogre::Real t3 = t2*t;
-				Ogre::Vector2 P = (2*t3-3*t2+1)*p0+(t3-2*t2+t)*m0+(-2*t3+3*t2)*p1+(t3-t2)*m1;
-				shape.addPoint(P);
-			}
-			if (i==points.size()-2 && !closed)
-			{
-				shape.addPoint(p1);
-			}
-		}
-		if (closed)
-			shape.close();
-		shape.setOutSide(outSide);
-
-		return shape;
-	}
+	Shape realizeShape();
 };
 
+//-----------------------------------------------------------------------
 /**
  * Builds a shape from a Catmull-Rom Spline.
  */
@@ -391,40 +356,10 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
 	/**
 	 * Build a shape from bezier control points
 	 */
-	Shape realizeShape()
-	{
-		Shape shape;
-
-		int numPoints = closed?points.size():points.size()-1;		
-		for (int i=0;i<numPoints;i++)
-		{			
-			const Ogre::Vector2& P1 = safeGetPoint(i-1);
-			const Ogre::Vector2& P2 = safeGetPoint(i);
-			const Ogre::Vector2& P3 = safeGetPoint(i+1);
-			const Ogre::Vector2& P4 = safeGetPoint(i+2);
-
-			for (int j=0;j<numSeg;j++)
-			{				
-				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
-				Ogre::Real t2 = t*t;
-				Ogre::Real t3 = t*t2;
-				Ogre::Vector2 P = 0.5f*((-t3+2.f*t2-t)*P1 + (3.f*t3-5.f*t2+2.f)*P2 + (-3.f*t3+4.f*t2+t)*P3 + (t3-t2)*P4);
-				shape.addPoint(P);
-			}
-			if (i==points.size()-2 && !closed)
-			{
-				shape.addPoint(P3);
-			}
-
-		}
-		if (closed)
-			shape.close();
-		shape.setOutSide(outSide);
-
-		return shape;
-	}
+	Shape realizeShape();
 };
 
+//-----------------------------------------------------------------------
 /**
  * Builds a shape from a Kochanek Bartels spline.
  *
@@ -481,38 +416,11 @@ public:
 	/**
 	 * Builds a shape from control points
 	 */
-	Shape realizeShape()
-	{
-		Shape shape;
-		
-		int numPoints = closed?points.size():points.size()-1;		
-		for (int i=0;i<numPoints;i++)
-		{
-			const ControlPoint& pm1 = safeGetPoint(i-1);
-			const ControlPoint& p0 = safeGetPoint(i);
-			const ControlPoint& p1 = safeGetPoint(i+1);
-			const ControlPoint& p2 = safeGetPoint(i+2);
-			
-			Ogre::Vector2 m0 = (1-p0.tension)*(1+p0.bias)*(1+p0.continuity)/2.f*(p0.position-pm1.position)+(1-p0.tension)*(1-p0.bias)*(1-p0.continuity)/2.f*(p1.position-p0.position);
-			Ogre::Vector2 m1 = (1-p1.tension)*(1+p1.bias)*(1-p1.continuity)/2.f*(p1.position-p0.position)+(1-p1.tension)*(1-p1.bias)*(1+p1.continuity)/2.f*(p2.position-p1.position);
-			
-			for (int j=0;j<numSeg;j++)
-			{
-				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
-				Ogre::Real t2 = t*t;
-				Ogre::Real t3 = t2*t;
-				Ogre::Vector2 P = (2*t3-3*t2+1)*p0.position+(t3-2*t2+t)*m0+(-2*t3+3*t2)*p1.position+(t3-t2)*m1;
-				shape.addPoint(P);
-			}
-			if (i==points.size()-2 && !closed)
-			{
-				shape.addPoint(p1.position);
-			}
-		}
-		return shape;
-	}
+	Shape realizeShape();
+	
 };
 
+//-----------------------------------------------------------------------
 /**
  * Builds a rectangular shape
  */
@@ -547,6 +455,7 @@ class _ProceduralExport RectangleShape
 	}
 };
 
+//-----------------------------------------------------------------------
 /**
  * Builds a circular shape
  */
