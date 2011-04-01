@@ -63,7 +63,7 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			buffer.position( x0, 0.5*mHeight + y0, z0);
+			buffer.position( x0, 0.5f*mHeight + y0, z0);
 			if (enableNormals)
 				buffer.normal(Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
@@ -85,12 +85,12 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	Real deltaAngle = (Math::TWO_PI / mNumSegments);
 	Real deltamHeight = mHeight/(Real)mNumSegHeight;
 
-	for (int i = 1; i < mNumSegHeight; i++)
-		for (int j = 0; j<=mNumSegments; j++)
+	for (unsigned short i = 1; i < mNumSegHeight; i++)
+		for (unsigned short j = 0; j<=mNumSegments; j++)
 		{
 			Real x0 = mRadius * cosf(j*deltaAngle);
 			Real z0 = mRadius * sinf(j*deltaAngle);
-			buffer.position(x0, 0.5*mHeight-i*deltamHeight, z0);
+			buffer.position(x0, 0.5f*mHeight-i*deltamHeight, z0);
 			buffer.normal(Vector3(x0,0,z0).normalisedCopy());
 			buffer.textureCoord(j/(Real)mNumSegments*uTile, i/(Real)mNumSegHeight*vTile * cylinderRatio + sphereRatio);
 
@@ -119,7 +119,7 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			buffer.position( x0, -0.5*mHeight + y0, z0);
+			buffer.position( x0, -0.5f*mHeight + y0, z0);
 			if (enableNormals)
 				buffer.normal(Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)

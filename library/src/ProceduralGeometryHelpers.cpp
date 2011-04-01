@@ -99,7 +99,7 @@ bool Plane::intersect(const Plane& other, Line& outputLine) const
 		if (direction.squaredLength() < 1e-08)
 			return false;
 		
-		Ogre::Real denom = 1./(normal.x*other.normal.y-other.normal.x*normal.y);
+		Ogre::Real denom = 1.f/(normal.x*other.normal.y-other.normal.x*normal.y);
 		{
 			Ogre::Real d1 = d;
 			Ogre::Real d2 = other.d;

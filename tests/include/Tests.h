@@ -295,12 +295,12 @@ class Unit_Tests : public BaseApplication
 protected:
 	bool keyReleased( const OIS::KeyEvent &arg )
 	{		
-		if (arg.key == OIS::KeyCode::KC_ADD || arg.key == OIS::KC_PGDOWN)
+		if (arg.key == OIS::KC_ADD || arg.key == OIS::KC_PGDOWN)
 		{
 			nextTest();
 			return true;
 		}
-		if (arg.key == OIS::KeyCode::KC_SUBTRACT || arg.key == OIS::KC_PGUP)		
+		if (arg.key == OIS::KC_SUBTRACT || arg.key == OIS::KC_PGUP)		
 		{
 			previousTest();
 			return true;

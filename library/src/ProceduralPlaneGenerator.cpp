@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "ProceduralPlaneGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -42,27 +44,27 @@ void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	buffer.estimateIndexCount(numSegX*numSegY*6);
 	int offset = 0;
 
-	Ogre::Vector3 vX = normal.perpendicular();
-	Ogre::Vector3 vY = normal.crossProduct(vX);
-	Ogre::Vector3 delta1 = sizeX / numSegX * vX;
-	Ogre::Vector3 delta2 = sizeY / numSegY * vY;
+	Vector3 vX = normal.perpendicular();
+	Vector3 vY = normal.crossProduct(vX);
+	Vector3 delta1 = sizeX / numSegX * vX;
+	Vector3 delta2 = sizeY / numSegY * vY;
 	// build one corner of the square
-	Ogre::Vector3 orig = -0.5*sizeX*vX - 0.5*sizeY*vY;
+	Vector3 orig = -0.5f*sizeX*vX - 0.5f*sizeY*vY;
 
-	for (int i1 = 0; i1<=numSegX; i1++)
-		for (int i2 = 0; i2<=numSegY; i2++)
+	for (unsigned short i1 = 0; i1<=numSegX; i1++)
+		for (unsigned short i2 = 0; i2<=numSegY; i2++)
 		{
 			buffer.position(orig+i1*delta1+i2*delta2+position);
-			buffer.textureCoord(i1/(Ogre::Real)numSegX*uTile, i2/(Ogre::Real)numSegY*vTile);
+			buffer.textureCoord(i1/(Real)numSegX*uTile, i2/(Real)numSegY*vTile);
 			buffer.normal(normal);
 		}
 
 	bool reverse = false;
 	if (delta1.crossProduct(delta2).dotProduct(normal)>0)
 		reverse= true;
-	for (int n1 = 0; n1<numSegX; n1++)
+	for (unsigned short n1 = 0; n1<numSegX; n1++)
 	{
-		for (int n2 = 0; n2<numSegY; n2++)
+		for (unsigned short n2 = 0; n2<numSegY; n2++)
 		{
 			if (reverse)
 			{

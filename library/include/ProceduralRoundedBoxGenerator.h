@@ -39,63 +39,61 @@ namespace Procedural
  */
 class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGenerator>
 {
-	Ogre::Real sizeX,sizeY,sizeZ;
-	int numSegX,numSegY,numSegZ;
-	Ogre::Real chamferSize;
-	int chamferNumSeg;
-
-	int offset;
-	
+	Ogre::Real mSizeX,mSizeY,mSizeZ;
+	unsigned short mNumSegX,mNumSegY,mNumSegZ;
+	Ogre::Real mChamferSize;
+	unsigned short mChamferNumSeg;
+		
 public:
-	RoundedBoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
-		numSegX(1), numSegY(1), numSegZ(1), chamferSize(.1f), chamferNumSeg(8) {}
+	RoundedBoxGenerator() : mSizeX(1.f), mSizeY(1.f), mSizeZ(1.f),
+		mNumSegX(1), mNumSegY(1), mNumSegZ(1), mChamferSize(.1f), mChamferNumSeg(8) {}
 
 	/** Sets the size of the box along X axis */
 	RoundedBoxGenerator& setSizeX(Ogre::Real sizeX)
 	{
-		this->sizeX = sizeX;
+		mSizeX = sizeX;
 		return *this;
 	}
 
 	/** Sets the size of the box along Y axis */
 	RoundedBoxGenerator& setSizeY(Ogre::Real sizeY)
 	{
-		this->sizeY = sizeY;
+		mSizeY = sizeY;
 		return *this;
 	}
 
 	/** Sets the size of the box along Z axis */
 	RoundedBoxGenerator& setSizeZ(Ogre::Real sizeZ)
 	{
-		this->sizeZ = sizeZ;
+		mSizeZ = sizeZ;
 		return *this;
 	}
 
 	/** Sets the number of segments along X axis */
-	RoundedBoxGenerator& setNumSegX(int numSegX)
+	RoundedBoxGenerator& setNumSegX(unsigned short numSegX)
 	{
-		this->numSegX = numSegX;
+		mNumSegX = numSegX;
 		return *this;
 	}
 
 	/** Sets the number of segments along Y axis */
-	RoundedBoxGenerator& setNumSegY(int numSegY)
+	RoundedBoxGenerator& setNumSegY(unsigned short numSegY)
 	{
-		this->numSegY = numSegY;
+		mNumSegY = numSegY;
 		return *this;
 	}
 
 	/** Sets the number of segments along Z axis */
-	RoundedBoxGenerator& setNumSegZ(int numSegZ)
+	RoundedBoxGenerator& setNumSegZ(unsigned short numSegZ)
 	{
-		this->numSegZ = numSegZ;
+		mNumSegZ = numSegZ;
 		return *this;
 	}
 
 	/** Sets the size of the chamfer, ie the radius of the rounded part */
 	RoundedBoxGenerator& setChamferSize(Ogre::Real chamferSize)
 	{
-		this->chamferSize = chamferSize;
+		mChamferSize = chamferSize;
 		return *this;
 	}
 

@@ -40,7 +40,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	int offset = 0;
 
 	/// Step 1 : Generate icosahedron
-	Ogre::Real phi = .5*(1.+sqrt(5.f));
+	Ogre::Real phi = .5f*(1.f+sqrt(5.f));
 	Ogre::Real invnorm = 1/sqrt(phi*phi+1);
 
 	vertices.push_back(invnorm*Ogre::Vector3(-1,  phi, 0));//0
@@ -82,7 +82,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	int size = 60;
 
 	/// Step 2 : tessellate
-	for (int iteration = 0; iteration<numIterations; iteration++)
+	for (unsigned short iteration = 0; iteration<numIterations; iteration++)
 	{
 		size*=4;
 		std::vector<int> newFaces;
@@ -122,22 +122,22 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	/// Step 3 : generate texcoords
 	std::vector<Ogre::Vector2> texCoords;
-	for (int i=0;i<vertices.size();i++)
+	for (unsigned short i=0;i<vertices.size();i++)
 	{
 		const Ogre::Vector3& vec = vertices[i];
 		Ogre::Real u, v;
 		Ogre::Real r0 = sqrtf(vec.x*vec.x+vec.z*vec.z);
 		Ogre::Real alpha;
 		alpha = atan2f(vec.z,vec.x);
-		u = alpha/Ogre::Math::TWO_PI+.5;
-		v = atan2f(vec.y, r0)/Ogre::Math::PI + .5;
+		u = alpha/Ogre::Math::TWO_PI+.5f;
+		v = atan2f(vec.y, r0)/Ogre::Math::PI + .5f;
 		texCoords.push_back(Ogre::Vector2(u,v));
 	}
 
 	/// Step 4 : fix texcoords
 	// find vertices to split
 	std::vector<int> indexToSplit;
-	for (int i=0;i<faces.size()/3;i++)
+	for (unsigned short i=0;i<faces.size()/3;i++)
 	{
 		Ogre::Vector2& t0 = texCoords[faces[i*3+0]];
 		Ogre::Vector2& t1 = texCoords[faces[i*3+1]];
@@ -165,7 +165,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		}
 	}
 	//split vertices
-	for (int i=0;i<indexToSplit.size();i++)
+	for (unsigned short i=0;i<indexToSplit.size();i++)
 	{
 		int index = indexToSplit[i];
 		//duplicate vertex
@@ -175,7 +175,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		texCoords.push_back(t);
 		int newIndex = vertices.size()-1;
 		//reassign indices
-		for (int j=0;j<faces.size();j++)
+		for (unsigned short j=0;j<faces.size();j++)
 		{
 			if (faces[j]==index)
 			{
@@ -194,15 +194,15 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	buffer.estimateVertexCount(vertices.size());
 	buffer.estimateIndexCount(size);
 
-	for (int i=0; i<vertices.size(); i++)
+	for (unsigned short i=0; i<vertices.size(); i++)
 	{
 		buffer.position(radius*vertices[i]);
 		if (enableNormals)
 			buffer.normal(vertices[i]);//note : vertices are already normalised
-		for (unsigned int tc=0; tc<numTexCoordSet; tc++)
+		for (unsigned short tc=0; tc<numTexCoordSet; tc++)
 			buffer.textureCoord(texCoords[i].x*uTile,texCoords[i].y*vTile);
 	}
-	for (int i=0; i<size; i++)
+	for (unsigned short i=0; i<size; i++)
 	{
 		buffer.index(offset+faces[i]);
 	}

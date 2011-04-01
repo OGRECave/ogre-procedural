@@ -67,6 +67,7 @@ int Triangulator::Triangle::findSegNumber(int i0, int i1) const
 			return 0;
 		if ((i0==i[2] && i1==i[0])||(i0==i[0] && i1==i[2]))
 			return 1;
+		throw new std::exception("we should not be here!");
 	}
 //-----------------------------------------------------------------------
 bool Triangulator::Triangle::isPointInside(Ogre::Vector2 point)
@@ -114,7 +115,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	tbuffer.push_back(superTriangle);
 
 	// Point insertion loop
-	for (int i=0;i<pointList.size()-3;i++)
+	for (unsigned short i=0;i<pointList.size()-3;i++)
 	{
 		// Insert 1 point, find triangle containing it
 		Vector2& p = pointList[i];
@@ -188,7 +189,7 @@ void Triangulator::addConstraints(const Shape& shape, DelaunayTriangleBuffer& tb
 {	
 	std::vector<DelaunaySegment> segList;
 	// Determine which segments should be added
-	for (int i = 0; i<shape.getPoints().size()-1; i++)
+	for (unsigned short i = 0; i<shape.getPoints().size()-1; i++)
 	{		
 		bool isAlreadyIn = false;
 		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
