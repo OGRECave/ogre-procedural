@@ -40,51 +40,58 @@ namespace Procedural
  */
 class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
 {
-	Ogre::Real sizeX,sizeY,sizeZ;
-	int numSegX,numSegY,numSegZ;
+	Ogre::Real mSizeX,mSizeY,mSizeZ;
+	int mNumSegX,mNumSegY,mNumSegZ;
 public:
-	BoxGenerator() : sizeX(1.f), sizeY(1.f), sizeZ(1.f),
-		numSegX(1), numSegY(1), numSegZ(1) {}
+	/// Default constructor
+	BoxGenerator() : mSizeX(1.f), mSizeY(1.f), mSizeZ(1.f),
+		mNumSegX(1), mNumSegY(1), mNumSegZ(1) {}
+
+	/**
+	 * Constructor with arguments
+	 */
+	BoxGenerator(Ogre::Real sizeX, Ogre::Real sizeY, Ogre::Real sizeZ) : mSizeX(sizeX), mSizeY(sizeY), mSizeZ(sizeZ),
+		mNumSegX(1), mNumSegY(1), mNumSegZ(1) {}
 
 	/** Sets size along X axis (default=1) */
 	BoxGenerator& setSizeX(Ogre::Real sizeX)
 	{
-		this->sizeX = sizeX;
+		mSizeX = sizeX;
 		return *this;
 	}
 
 	/** Sets size along Y axis (default=1) */
 	BoxGenerator& setSizeY(Ogre::Real sizeY)
 	{
-		this->sizeY = sizeY;
+		mSizeY = sizeY;
 		return *this;
 	}
 
 	/** Sets size along Z axis (default=1) */
 	BoxGenerator& setSizeZ(Ogre::Real sizeZ)
 	{
-		this->sizeZ = sizeZ;
+		mSizeZ = sizeZ;
 		return *this;
 	}
 
 	/** Sets the number of segments along X axis (default=1) */
 	BoxGenerator& setNumSegX(int numSegX)
 	{
-		this->numSegX = numSegX;
+		mNumSegX = numSegX;
 		return *this;
 	}
 
 	/** Sets the number of segments along Y axis (default=1) */
 	BoxGenerator& setNumSegY(int numSegY)
 	{
-		this->numSegY = numSegY;
+		mNumSegY = numSegY;
 		return *this;
 	}
 
 	/** Sets the number of segments along Z axis (default=1) */
 	BoxGenerator& setNumSegZ(int numSegZ)
 	{
-		this->numSegZ = numSegZ;
+		mNumSegZ = numSegZ;
 		return *this;
 	}
 
