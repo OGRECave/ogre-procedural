@@ -42,16 +42,30 @@ protected:
 	std::vector<SceneNode*> mSceneNodes;
 	Ogre::Timer mTimer;
 
-	void putMesh(const String& meshName)
+	void putMesh(const String& meshName, int materialIndex=0)
 	{
 		Entity* ent = mSceneMgr->createEntity(meshName);
 		SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 		sn->attachObject(ent);
-		//ent->setMaterialName("Examples/Rockwall");	
+		switch (materialIndex)
+		{
+			case 1:ent->setMaterialName("Examples/Rockwall");break;
+		}
 		mEntities.push_back(ent);
 		mSceneNodes.push_back(sn);
 		int currentIndex = mEntities.size();
-		sn->setPosition(currentIndex*10.0, 0., (currentIndex%10)*10.0);		
+		int numSN = mSceneNodes.size();
+		int side = sqrt((float)numSN);
+		for (int i=0; i<numSN; i++)
+		{
+			mSceneNodes[i]->setPosition(((i%side) - side * .5)*10., 0., -(i/side - side*.5)*10.);
+		}
+	}
+
+	void putMesh(MeshPtr mesh, int materialIndex=0)
+	{
+		String s = mesh->getName();
+		putMesh(s, materialIndex);
 	}
 
 public:
@@ -62,10 +76,10 @@ public:
 
 	void init()
 	{
-		Procedural::Utils::log("Loading test : " + getDescription());
+		Utils::log("Loading test : " + getDescription());
 		mTimer.reset();
 		initImpl();
-		Procedural::Utils::log("Test loaded in : " + Ogre::StringConverter::toString(mTimer.getMilliseconds()) + " ms");
+		Utils::log("Test loaded in : " + Ogre::StringConverter::toString(mTimer.getMilliseconds()) + " ms");
 	}
 
 	void destroy()
@@ -102,7 +116,7 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
-			Procedural::SphereGenerator sg = Procedural::SphereGenerator();
+			SphereGenerator sg = SphereGenerator();
 			sg.realizeMesh("sphereMesh");			
 			putMesh("sphereMesh");
 		}
@@ -137,34 +151,34 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
-			Procedural::Shape s = Procedural::Shape().addPoint(0,0).addPoint(5,0).addPoint(0,5).close();
-			Procedural::Triangulator::triangulateToMesh(s, "contourMesh");
+			Shape s = Shape().addPoint(0,0).addPoint(5,0).addPoint(0,5).close();
+			Triangulator::triangulateToMesh(s, "contourMesh");
 			putMesh("contourMesh");
 		}
 	};
 
 	/* --------------------------------------------------------------------------- */
-	class Test_ShapeGenerators : public Unit_Test
+	class Test_ShapeBoolean : public Unit_Test
 	{
 	public:		
-		Test_ShapeGenerators(SceneManager* sn) : Unit_Test(sn) {}
+		Test_ShapeBoolean(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
 		{
-			return "Tests different types of shape generation";
+			return "Tests different types of 2D CSG : union, difference and intersection";
 		}
 
 		void initImpl()
 		{
 			//CSG
-			Procedural::Shape s1 = Procedural::CircleShape().realizeShape();
-			Procedural::Shape s2 = Procedural::RectangleShape().setWidth(0.5).setHeight(2).realizeShape();
+			Shape s1 = CircleShape().realizeShape();
+			Shape s2 = RectangleShape().setWidth(0.5).setHeight(2).realizeShape();
 			
 			s1.realizeMesh("contour1");
 			putMesh("contour1");
 			s2.realizeMesh("contour2");
 			putMesh("contour2");
-			Procedural::MultiShape s;
+			MultiShape s;
 			s = s1.booleanIntersect(s2);			
 			s.realizeMesh("contourinter");
 			putMesh("contourinter");
@@ -190,6 +204,50 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
+			//Shape shape = CircleShape().setRadius(3.).realizeShape();
+			Shape shape = Shape().addPoint(0,0).addPoint(0,1).addPoint(1,1).addPoint(1,0).setOutSide(SIDE_RIGHT).close();
+			Shape shape2 = Shape().addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,0).setOutSide(SIDE_LEFT).close();
+			Path line = LinePath().betweenPoints(Vector3::ZERO, Vector3(1,10,0)).setNumSeg(2).realizePath();
+			Path line2 = LinePath().betweenPoints(Vector3(1,10,0), Vector3::ZERO).setNumSeg(2).realizePath();
+			Extruder e;
+			e.setCapped(false);
+			
+			e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh("ext1");
+			putMesh("ext1",1);
+			////////////////
+			
+			e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh("ext2");
+			putMesh("ext2",1);
+			
+			e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh("ext3");
+			putMesh("ext3",1);
+			////////////////
+			
+			e.setShapeToExtrude(&shape2).setExtrusionPath(&line2).realizeMesh("ext4");
+			putMesh("ext4",1);
+		}
+	};
+
+	/* --------------------------------------------------------------------------- */
+	class Test_Amireh : public Unit_Test
+	{
+	public:		
+		Test_Amireh(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Tests the amireh use case";
+		}
+
+		void initImpl()
+		{	
+			Shape shape1 = CircleShape().setRadius(1).setNumSeg(16).realizeShape();
+			Shape shape2 = CircleShape().setRadius(1).setNumSeg(16).realizeShape().switchSide();
+			MultiShape multiShape= MultiShape().addShape(shape1).addShape(shape2);
+			Shape shape = CircleShape().setRadius(1).setNumSeg(16).realizeShape();
+			Path line = CatmullRomSpline3().addPoint(0,0,-3).addPoint(0,0,-1).addPoint(0,0,1).addPoint(-1,0,2).addPoint(-3,0,2).addPoint(-5,0,2).realizePath();			
+			MeshPtr mptr = Extruder().setCapped(false).setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh();			
+			putMesh(mptr,1);			
 		}
 	};
 
@@ -227,22 +285,22 @@ class Unit_Tests : public BaseApplication
 
 	void nextTest()
 	{
-		switchToTest(Procedural::Utils::modulo(mCurrentTestIndex+1,mUnitTests.size()));
+		switchToTest(Utils::modulo(mCurrentTestIndex+1,mUnitTests.size()));
 	}
 	void previousTest()
 	{
-		switchToTest(Procedural::Utils::modulo(mCurrentTestIndex-1,mUnitTests.size()));
+		switchToTest(Utils::modulo(mCurrentTestIndex-1,mUnitTests.size()));
 	}
 
 protected:
 	bool keyReleased( const OIS::KeyEvent &arg )
 	{		
-		if (arg.key == OIS::KeyCode::KC_ADD)
+		if (arg.key == OIS::KeyCode::KC_ADD || arg.key == OIS::KC_PGDOWN)
 		{
 			nextTest();
 			return true;
 		}
-		if (arg.key == OIS::KeyCode::KC_SUBTRACT)		
+		if (arg.key == OIS::KeyCode::KC_SUBTRACT || arg.key == OIS::KC_PGUP)		
 		{
 			previousTest();
 			return true;
@@ -253,6 +311,8 @@ protected:
 	virtual void createScene(void);
 	
 	virtual void createCamera(void);
+
+	virtual void createViewports(void);
 	
 	virtual bool frameStarted(const FrameEvent& evt);
 public:

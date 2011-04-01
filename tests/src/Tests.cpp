@@ -35,13 +35,13 @@ void Unit_Tests::createScene(void)
 		Procedural::Root::getInstance()->sceneManager = mSceneMgr;
 
 		// Register all unit tests
-		//mUnitTests.push_back(new Test_AfshinBug(mSceneMgr));
 		//mUnitTests.push_back(new Test_Primitives(mSceneMgr));
 		//mUnitTests.push_back(new Test_Empty(mSceneMgr));*/
 		//mUnitTests.push_back(new Test_Triangulation(mSceneMgr));
-		mUnitTests.push_back(new Test_ShapeGenerators(mSceneMgr));
-		/*mUnitTests.push_back(new Test_Extruder(mSceneMgr));
-		mUnitTests.push_back(new Test_Lathe(mSceneMgr));*/
+		//mUnitTests.push_back(new Test_ShapeBoolean(mSceneMgr));
+		//mUnitTests.push_back(new Test_Extruder(mSceneMgr));
+		mUnitTests.push_back(new Test_Amireh(mSceneMgr));
+		//mUnitTests.push_back(new Test_Lathe(mSceneMgr));*/
 
 		// Init first test
 		mUnitTests[0]->init();
@@ -53,9 +53,11 @@ void Unit_Tests::createCamera(void)
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
 	mSceneMgr->setShadowFarDistance(100.0);
 	mSceneMgr->setShadowTextureSize(1024);
-	mSceneMgr->setAmbientLight(ColourValue::Black);
+	mSceneMgr->setAmbientLight(ColourValue(0.5,0.5,0.5));	
+	
 	// Setup camera and light
-	mCamera->setPosition(0,50,-50);
+	mCamera->setNearClipDistance(.5);
+	mCamera->setPosition(0,10,50);
 	mCamera->lookAt(0,0,0);
 	// Slow down speed, as the scene is small
 	mCameraMan->setTopSpeed(20);
@@ -72,6 +74,12 @@ void Unit_Tests::createCamera(void)
 	movingLight->setSpecularColour(ColourValue::White);
 	movingLight->setPosition(mCamera->getPosition());
 	movingLight->setCastShadows(false);
+}
+
+void Unit_Tests::createViewports(void)
+{
+	BaseApplication::createViewports();
+	mCamera->getViewport()->setBackgroundColour(ColourValue(0.2,0.4,0.2));
 }
 
 bool Unit_Tests::frameStarted(const FrameEvent& evt)
