@@ -34,34 +34,34 @@ namespace Procedural
 {
 void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(numSegX>0 && numSegY>0 && numSegZ>0 && "Num seg must be positive integers");
-	assert(sizeX>0. && sizeY>0. && sizeZ>0. && "Sizes must be positive");
+	assert(mNumSegX>0 && mNumSegY>0 && mNumSegZ>0 && "Num seg must be positive integers");
+	assert(mSizeX>0. && mSizeY>0. && mSizeZ>0. && "Sizes must be positive");
 
 	PlaneGenerator pg;
 	pg.setUTile(uTile).setVTile(vTile);
-	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
+	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Z)
-	  .setPosition(.5*sizeZ*Ogre::Vector3::NEGATIVE_UNIT_Z)
+	  .setPosition(.5*mSizeZ*Ogre::Vector3::NEGATIVE_UNIT_Z)
 	  .addToTriangleBuffer(buffer);
-	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
+	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Z)
-	  .setPosition(.5*sizeZ*Ogre::Vector3::UNIT_Z)
+	  .setPosition(.5*mSizeZ*Ogre::Vector3::UNIT_Z)
 	  .addToTriangleBuffer(buffer);
-	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
+	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Y)
-	  .setPosition(.5*sizeY*Ogre::Vector3::NEGATIVE_UNIT_Y)
+	  .setPosition(.5*mSizeY*Ogre::Vector3::NEGATIVE_UNIT_Y)
 	  .addToTriangleBuffer(buffer);
-	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
+	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Y)
-	  .setPosition(.5*sizeY*Ogre::Vector3::UNIT_Y)
+	  .setPosition(.5*mSizeY*Ogre::Vector3::UNIT_Y)
 	  .addToTriangleBuffer(buffer);
-	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
+	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_X)
-	  .setPosition(.5*sizeX*Ogre::Vector3::NEGATIVE_UNIT_X)
+	  .setPosition(.5*mSizeX*Ogre::Vector3::NEGATIVE_UNIT_X)
 	  .addToTriangleBuffer(buffer);
-	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
+	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Ogre::Vector3::UNIT_X)
-	  .setPosition(.5*sizeX*Ogre::Vector3::UNIT_X)
+	  .setPosition(.5*mSizeX*Ogre::Vector3::UNIT_X)
 	  .addToTriangleBuffer(buffer);
 }
 }

@@ -38,16 +38,25 @@ namespace Procedural
  */
 class _ProceduralExport CapsuleGenerator : public MeshGenerator<CapsuleGenerator>
 {
-	Ogre::Real radius;
-	unsigned int numRings;
-	unsigned int numSegments;
-	unsigned int numSegHeight;
-	Ogre::Real height;
+	///Radius of the spheric part
+	Ogre::Real mRadius;
+
+	unsigned int mNumRings;
+	unsigned int mNumSegments;
+	unsigned int mNumSegHeight;
+
+	///Total height
+	Ogre::Real mHeight;
 
 public:
-	CapsuleGenerator() : radius(1.0),
-		numRings(8), numSegments(16), height(1.0), numSegHeight(1)
+	/// Default constructor
+	CapsuleGenerator() : mRadius(1.0), mHeight(1.0),
+		mNumRings(8), mNumSegments(16), mNumSegHeight(1)
 	{}
+
+	/// Constructor with arguments
+	CapsuleGenerator(Ogre::Real radius, Ogre::Real height, unsigned int numRings, unsigned int numSegments, unsigned int numSegHeight) :
+	mRadius(radius), mHeight(height), mNumRings(numRings), mNumSegments(numSegments), mNumSegHeight(numSegHeight) {}
 	
 	/**
 	 * Builds the mesh into the given TriangleBuffer
@@ -58,35 +67,35 @@ public:
 	/** Sets the radius of the cylinder part (default=1)*/
 	inline CapsuleGenerator & setRadius(Ogre::Real radius)
 	{
-		this->radius = radius;
+		mRadius = radius;
 		return *this;
 	}
 
 	/** Sets the number of segments of the sphere part (default=8)*/
 	inline CapsuleGenerator & setNumRings(unsigned int numRings)
 	{
-		this->numRings = numRings;
+		mNumRings = numRings;
 		return *this;
 	}
 
 	/** Sets the number of segments when rotating around the cylinder (default=16)*/
 	inline CapsuleGenerator & setNumSegments(unsigned int numSegments)
 	{
-		this->numSegments = numSegments;
+		mNumSegments = numSegments;
 		return *this;
 	}
 
 	/** Sets the number of segments along the axis of the cylinder (default=1)*/
 	inline CapsuleGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
-		this->numSegHeight = numSegHeight;
+		mNumSegHeight = numSegHeight;
 		return *this;
 	}
 
 	/** Sets the height of the cylinder part of the capsule (default=1)*/
 	inline CapsuleGenerator & setHeight(Ogre::Real height)
 	{
-		this->height = height;
+		mHeight = height;
 		return *this;
 	}
 

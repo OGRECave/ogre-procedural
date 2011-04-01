@@ -29,49 +29,51 @@ THE SOFTWARE.
 #include "ProceduralCapsuleGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(numRings>0 && numSegments>0 && numSegHeight>0 && "Num seg must be positive integers");
-	assert(height>0. && radius>0. && "Height and radius must be positive");
+	assert(mNumRings>0 && mNumSegments>0 && mNumSegHeight>0 && "Num seg must be positive integers");
+	assert(mHeight>0. && mRadius>0. && "mHeight and radius must be positive");
 
 	buffer.rebaseOffset();
-	buffer.estimateVertexCount((2*numRings+2)*(numSegments+1) + (numSegHeight-1)*(numSegments+1));
-	buffer.estimateIndexCount((2*numRings+1)*(numSegments+1)*6 + (numSegHeight-1)*(numSegments+1)*6);
+	buffer.estimateVertexCount((2*mNumRings+2)*(mNumSegments+1) + (mNumSegHeight-1)*(mNumSegments+1));
+	buffer.estimateIndexCount((2*mNumRings+1)*(mNumSegments+1)*6 + (mNumSegHeight-1)*(mNumSegments+1)*6);
 
-	Ogre::Real fDeltaRingAngle = (Ogre::Math::HALF_PI / numRings);
-	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
+	Real fDeltaRingAngle = (Math::HALF_PI / mNumRings);
+	Real fDeltaSegAngle = (Math::TWO_PI / mNumSegments);
 
-	Ogre::Real sphereRatio = radius / (2 * radius + height);
-	Ogre::Real cylinderRatio = height / (2 * radius + height);
+	Real sphereRatio = mRadius / (2 * mRadius + mHeight);
+	Real cylinderRatio = mHeight / (2 * mRadius + mHeight);
 	int offset = 0;
 	// Top half sphere
 
 	// Generate the group of rings for the sphere
-	for(unsigned int ring = 0; ring <= numRings; ring++ ) 
+	for(unsigned int ring = 0; ring <= mNumRings; ring++ ) 
 	{
-		Ogre::Real r0 = radius * sinf ( ring * fDeltaRingAngle);
-		Ogre::Real y0 = radius * cosf (ring * fDeltaRingAngle);
+		Real r0 = mRadius * sinf ( ring * fDeltaRingAngle);
+		Real y0 = mRadius * cosf (ring * fDeltaRingAngle);
 
 		// Generate the group of segments for the current ring
-		for(unsigned int seg = 0; seg <= numSegments; seg++) 
+		for(unsigned int seg = 0; seg <= mNumSegments; seg++) 
 		{
-			Ogre::Real x0 = r0 * cosf(seg * fDeltaSegAngle);
-			Ogre::Real z0 = r0 * sinf(seg * fDeltaSegAngle);
+			Real x0 = r0 * cosf(seg * fDeltaSegAngle);
+			Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			buffer.position( x0, 0.5*height + y0, z0);
+			buffer.position( x0, 0.5*mHeight + y0, z0);
 			if (enableNormals)
-				buffer.normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
+				buffer.normal(Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) numSegments * uTile, (Ogre::Real) ring / (Ogre::Real) numRings * vTile * sphereRatio);
+				buffer.textureCoord((Real) seg / (Real) mNumSegments * uTile, (Real) ring / (Real) mNumRings * vTile * sphereRatio);
 			
 			// each vertex (except the last) has six indices pointing to it
-			buffer.index(offset + numSegments + 1);
-			buffer.index(offset + numSegments);
+			buffer.index(offset + mNumSegments + 1);
+			buffer.index(offset + mNumSegments);
 			buffer.index(offset);
-			buffer.index(offset + numSegments + 1);
+			buffer.index(offset + mNumSegments + 1);
 			buffer.index(offset);
 			buffer.index(offset + 1);
 			
@@ -80,22 +82,22 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	} // end for ring
 
 	// Cylinder part
-	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegments);
-	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
+	Real deltaAngle = (Math::TWO_PI / mNumSegments);
+	Real deltamHeight = mHeight/(Real)mNumSegHeight;
 
-	for (int i = 1; i < numSegHeight; i++)
-		for (int j = 0; j<=numSegments; j++)
+	for (int i = 1; i < mNumSegHeight; i++)
+		for (int j = 0; j<=mNumSegments; j++)
 		{
-			Ogre::Real x0 = radius * cosf(j*deltaAngle);
-			Ogre::Real z0 = radius * sinf(j*deltaAngle);
-			buffer.position(x0, 0.5*height-i*deltaHeight, z0);
-			buffer.normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			buffer.textureCoord(j/(Ogre::Real)numSegments*uTile, i/(Ogre::Real)numSegHeight*vTile * cylinderRatio + sphereRatio);
+			Real x0 = mRadius * cosf(j*deltaAngle);
+			Real z0 = mRadius * sinf(j*deltaAngle);
+			buffer.position(x0, 0.5*mHeight-i*deltamHeight, z0);
+			buffer.normal(Vector3(x0,0,z0).normalisedCopy());
+			buffer.textureCoord(j/(Real)mNumSegments*uTile, i/(Real)mNumSegHeight*vTile * cylinderRatio + sphereRatio);
 
-			buffer.index(offset + numSegments + 1);
-			buffer.index(offset + numSegments);
+			buffer.index(offset + mNumSegments + 1);
+			buffer.index(offset + mNumSegments);
 			buffer.index(offset);
-			buffer.index(offset + numSegments + 1);
+			buffer.index(offset + mNumSegments + 1);
 			buffer.index(offset);
 			buffer.index(offset + 1);
 
@@ -105,31 +107,31 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	// Bottom half sphere
 
 	// Generate the group of rings for the sphere
-	for(unsigned int ring = 0; ring <= numRings; ring++) 
+	for(unsigned int ring = 0; ring <= mNumRings; ring++) 
 	{
-		Ogre::Real r0 = radius * sinf (Ogre::Math::HALF_PI + ring * fDeltaRingAngle);
-		Ogre::Real y0 =  radius * cosf (Ogre::Math::HALF_PI + ring * fDeltaRingAngle);
+		Real r0 = mRadius * sinf (Math::HALF_PI + ring * fDeltaRingAngle);
+		Real y0 =  mRadius * cosf (Math::HALF_PI + ring * fDeltaRingAngle);
 
 		// Generate the group of segments for the current ring
-		for(unsigned int seg = 0; seg <= numSegments; seg++) 
+		for(unsigned int seg = 0; seg <= mNumSegments; seg++) 
 		{
-			Ogre::Real x0 = r0 * cosf(seg * fDeltaSegAngle);
-			Ogre::Real z0 = r0 * sinf(seg * fDeltaSegAngle);
+			Real x0 = r0 * cosf(seg * fDeltaSegAngle);
+			Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			buffer.position( x0, -0.5*height + y0, z0);
+			buffer.position( x0, -0.5*mHeight + y0, z0);
 			if (enableNormals)
-				buffer.normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
+				buffer.normal(Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) numSegments * uTile, (Ogre::Real) ring / (Ogre::Real) numRings * vTile*sphereRatio + cylinderRatio + sphereRatio);
+				buffer.textureCoord((Real) seg / (Real) mNumSegments * uTile, (Real) ring / (Real) mNumRings * vTile*sphereRatio + cylinderRatio + sphereRatio);
 
-			if (ring != numRings) 
+			if (ring != mNumRings) 
 			{
 				// each vertex (except the last) has six indices pointing to it
-				buffer.index(offset + numSegments + 1);
-				buffer.index(offset + numSegments);
+				buffer.index(offset + mNumSegments + 1);
+				buffer.index(offset + mNumSegments);
 				buffer.index(offset);
-				buffer.index(offset + numSegments + 1);
+				buffer.index(offset + mNumSegments + 1);
 				buffer.index(offset);
 				buffer.index(offset + 1);
 			}

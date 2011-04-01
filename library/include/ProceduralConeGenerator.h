@@ -38,15 +38,15 @@ namespace Procedural
  */
 class _ProceduralExport ConeGenerator : public MeshGenerator<ConeGenerator>
 {
-	int numSegBase;
-	int numSegHeight;
-	Ogre::Real radius;
-	Ogre::Real height;
+	int mNumSegBase;
+	int mNumSegHeight;
+	Ogre::Real mRadius;
+	Ogre::Real mHeight;
 public:
-	ConeGenerator() : numSegBase(16),
-		numSegHeight(1),
-		radius(1.f),
-		height(1.f)
+	ConeGenerator() : mNumSegBase(16),
+		mNumSegHeight(1),
+		mRadius(1.f),
+		mHeight(1.f)
 	{}
 
 	/**
@@ -58,28 +58,28 @@ public:
 	/** Sets the number of segments on the side of the base (default=16)*/
 	inline ConeGenerator & setNumSegBase(int numSegBase)
 	{
-		this->numSegBase = numSegBase;
+		mNumSegBase = numSegBase;
 		return *this;
 	}
 
 	/** Sets the number of segments on the height (default=1) */
 	inline ConeGenerator & setNumSegHeight(int numSegHeight)
 	{
-		this->numSegHeight = numSegHeight;
+		mNumSegHeight = numSegHeight;
 		return *this;
 	}
 
 	/** Sets the base radius (default=1)*/
 	inline ConeGenerator & setRadius(Ogre::Real radius)
 	{
-		this->radius = radius;
+		mRadius = radius;
 		return *this;
 	}
 
 	/** Sets the height of the cone (default=1)*/
 	inline ConeGenerator & setHeight(Ogre::Real height)
 	{
-		this->height = height;
+		mHeight = height;
 		return *this;
 	}
 
