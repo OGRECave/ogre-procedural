@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define PROCEDURAL_PATH_INCLUDED
 
 #include "OgreVector3.h"
+#include "OgreSimpleSpline.h"
 #include "ProceduralUtils.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralRoot.h"
@@ -195,6 +196,25 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 {	
 	std::vector<Ogre::Vector3> points;
 	public:	
+	CatmullRomSpline3() {}
+	
+	CatmullRomSpline3(const Ogre::SimpleSpline& input) 
+	{
+		points.resize(input.getNumPoints());
+		for (unsigned short i=0; i<input.getNumPoints(); i++)
+		{
+			points.push_back(input.getPoint(i));
+		}
+	}
+	
+	Ogre::SimpleSpline toSimpleSpline() const 
+	{
+		Ogre::SimpleSpline spline;
+		for (int i=0;i<points.size();i++)
+			spline.addPoint(points[i]);
+		return spline;
+	}
+	
 	CatmullRomSpline3& addPoint(const Ogre::Vector3& pt)
 	{
 		points.push_back(pt);
@@ -217,7 +237,7 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 	/**
 	 * Build a path from Catmull-Rom control points
 	 */
-	Path realizePath();
+	Path realizePath();	
 };
 //-----------------------------------------------------------------------
 /**
