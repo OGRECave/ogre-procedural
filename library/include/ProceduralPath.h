@@ -210,7 +210,7 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 	Ogre::SimpleSpline toSimpleSpline() const 
 	{
 		Ogre::SimpleSpline spline;
-		for (int i=0;i<points.size();i++)
+		for (unsigned short i=0;i<points.size();i++)
 			spline.addPoint(points[i]);
 		return spline;
 	}
@@ -298,7 +298,7 @@ public:
 	{
 		Path path;
 
-		for (int i=0;i<points.size();i++)
+		for (unsigned short i=0;i<points.size();i++)
 		{
 			const Ogre::Vector3& P0 = points[i];
 			const Ogre::Vector3& P3 = getPoint(i+1);
@@ -306,7 +306,7 @@ public:
 			Ogre::Vector3 P1 = P0 + 0.5 * (getPoint(i+1)-getPoint(i-1));
 			Ogre::Vector3 P2 = P3 - 0.5 * (getPoint(i+2)-P0);
 
-			for (int j=0;j<numSeg;j++)
+			for (unsigned short j=0;j<numSeg;j++)
 			{
 				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
 				Ogre::Vector3 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;

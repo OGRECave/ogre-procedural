@@ -137,7 +137,7 @@ public:
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
 			
-			for (int i=0;i<indexBuffer.size()/3;i++)
+			for (unsigned short i=0;i<indexBuffer.size()/3;i++)
 			{				
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+2]);

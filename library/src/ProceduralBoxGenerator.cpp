@@ -30,6 +30,8 @@ THE SOFTWARE.
 #include "ProceduralPlaneGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -40,28 +42,28 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	PlaneGenerator pg;
 	pg.setUTile(uTile).setVTile(vTile);
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
-	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Z)
-	  .setPosition(.5*mSizeZ*Ogre::Vector3::NEGATIVE_UNIT_Z)
+	  .setNormal(Vector3::NEGATIVE_UNIT_Z)
+	  .setPosition(.5f*mSizeZ*Vector3::NEGATIVE_UNIT_Z)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
-	  .setNormal(Ogre::Vector3::UNIT_Z)
-	  .setPosition(.5*mSizeZ*Ogre::Vector3::UNIT_Z)
+	  .setNormal(Vector3::UNIT_Z)
+	  .setPosition(.5f*mSizeZ*Vector3::UNIT_Z)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
-	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Y)
-	  .setPosition(.5*mSizeY*Ogre::Vector3::NEGATIVE_UNIT_Y)
+	  .setNormal(Vector3::NEGATIVE_UNIT_Y)
+	  .setPosition(.5f*mSizeY*Vector3::NEGATIVE_UNIT_Y)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
-	  .setNormal(Ogre::Vector3::UNIT_Y)
-	  .setPosition(.5*mSizeY*Ogre::Vector3::UNIT_Y)
+	  .setNormal(Vector3::UNIT_Y)
+	  .setPosition(.5f*mSizeY*Vector3::UNIT_Y)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
-	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_X)
-	  .setPosition(.5*mSizeX*Ogre::Vector3::NEGATIVE_UNIT_X)
+	  .setNormal(Vector3::NEGATIVE_UNIT_X)
+	  .setPosition(.5f*mSizeX*Vector3::NEGATIVE_UNIT_X)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
-	  .setNormal(Ogre::Vector3::UNIT_X)
-	  .setPosition(.5*mSizeX*Ogre::Vector3::UNIT_X)
+	  .setNormal(Vector3::UNIT_X)
+	  .setPosition(.5f*mSizeX*Vector3::UNIT_X)
 	  .addToTriangleBuffer(buffer);
 }
 }

@@ -39,7 +39,7 @@ Side Shape::findRealOutSide()
 {
 	float x = points[0].x;
 	int index=0;
-	for (int i=1;i<points.size();i++)
+	for (unsigned short i=1;i<points.size();i++)
 	{
 		if (x<points[i].x)
 		{
@@ -57,11 +57,11 @@ Side Shape::findRealOutSide()
 //-----------------------------------------------------------------------
 void Shape::_findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const
 {
-	for (int i=0; i<getSegCount(); i++)
+	for (unsigned short i=0; i<getSegCount(); i++)
 	{		
 		Segment2D seg1(getPoint(i), getPoint(i+1));
 		
-		for (int j=0; j<other.getSegCount(); j++)
+		for (unsigned short j=0; j<other.getSegCount(); j++)
 		{
 			Segment2D seg2(other.getPoint(j), other.getPoint(j+1));
 			
@@ -171,7 +171,6 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 	}
 	
 	bool isOutside[4];
-	uint8 selectedDirection;
 	std::pair<Radian, uint8> sortedDirections[4];
 
 	// sort by angle	
@@ -197,7 +196,7 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 	}
 
 	//find first eligible segment that is not the current segment
-	for (int i=0;i<4;i++)
+	for (unsigned short i=0;i<4;i++)
 		if ((isOutside[i] == _isLookingForOutside(opType, i%2)) && (i!=incomingDirection))
 		{
 			shapeSelector = i%2;

@@ -65,12 +65,12 @@ void Unit_Tests::createCamera(void)
 	Light* l = mSceneMgr->createLight("myLight");
 	l->setType(Light::LT_DIRECTIONAL);
 	l->setDirection(Vector3(0,-1,1).normalisedCopy());
-	l->setDiffuseColour(ColourValue(.7,.5,.5));
+	l->setDiffuseColour(ColourValue(.7f,.5f,.5f));
 	l->setSpecularColour(ColourValue::White);
 
 	movingLight = mSceneMgr->createLight("movingLight");
 	movingLight->setType(Light::LT_POINT);
-	movingLight->setDiffuseColour(ColourValue(.5,.5,.7));
+	movingLight->setDiffuseColour(ColourValue(.5f,.5f,.7f));
 	movingLight->setSpecularColour(ColourValue::White);
 	movingLight->setPosition(mCamera->getPosition());
 	movingLight->setCastShadows(false);
@@ -79,7 +79,7 @@ void Unit_Tests::createCamera(void)
 void Unit_Tests::createViewports(void)
 {
 	BaseApplication::createViewports();
-	mCamera->getViewport()->setBackgroundColour(ColourValue(0.2,0.4,0.2));
+	mCamera->getViewport()->setBackgroundColour(ColourValue(0.2f,0.4f,0.2f));
 }
 
 bool Unit_Tests::frameStarted(const FrameEvent& evt)

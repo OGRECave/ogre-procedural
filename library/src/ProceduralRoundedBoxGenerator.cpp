@@ -35,31 +35,31 @@ namespace Procedural
 
 void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, bool isYPositive, bool isZPositive) const
 {
-	assert(numSegX>0 && numSegY>0 && numSegZ>0 && chamferNumSeg>0 && "Num seg must be positive integers");
-	assert(sizeX>0. && sizeY>0. && sizeZ>0. && chamferSize>0. && "Sizes must be positive");
+	assert(mNumSegX>0 && mNumSegY>0 && mNumSegZ>0 && mChamferNumSeg>0 && "Num seg must be positive integers");
+	assert(mSizeX>0. && mSizeY>0. && mSizeZ>0. && mChamferSize>0. && "Sizes must be positive");
 	buffer.rebaseOffset();
-	buffer.estimateVertexCount((chamferNumSeg+1)*(chamferNumSeg+1));
-	buffer.estimateIndexCount(chamferNumSeg*chamferNumSeg*6);	
+	buffer.estimateVertexCount((mChamferNumSeg+1)*(mChamferNumSeg+1));
+	buffer.estimateIndexCount(mChamferNumSeg*mChamferNumSeg*6);	
 	int offset = 0;
 
-	Ogre::Vector3 offsetPosition((isXPositive?1:-1)*.5*sizeX, (isYPositive?1:-1)*.5*sizeY, (isZPositive?1:-1)*.5*sizeZ);
-	Ogre::Real deltaRingAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
-	Ogre::Real deltaSegAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
+	Ogre::Vector3 offsetPosition((isXPositive?1:-1)*.5f*mSizeX, (isYPositive?1:-1)*.5f*mSizeY, (isZPositive?1:-1)*.5f*mSizeZ);
+	Ogre::Real deltaRingAngle = (Ogre::Math::HALF_PI / mChamferNumSeg);
+	Ogre::Real deltaSegAngle = (Ogre::Math::HALF_PI / mChamferNumSeg);
 	Ogre::Real offsetRingAngle = isYPositive?0:Ogre::Math::HALF_PI;
 	Ogre::Real offsetSegAngle;
 	if (isXPositive&&isZPositive) offsetSegAngle = 0;
-	if ((!isXPositive)&&isZPositive) offsetSegAngle = 1.5*Ogre::Math::PI;
+	if ((!isXPositive)&&isZPositive) offsetSegAngle = 1.5f*Ogre::Math::PI;
 	if (isXPositive&&(!isZPositive)) offsetSegAngle = Ogre::Math::HALF_PI;
 	if ((!isXPositive)&&(!isZPositive)) offsetSegAngle = Ogre::Math::PI;
 
 	// Generate the group of rings for the sphere
-	for(unsigned int ring = 0; ring <= chamferNumSeg; ring++ ) 
+	for(unsigned short ring = 0; ring <= mChamferNumSeg; ring++ ) 
 	{
-		Ogre::Real r0 = chamferSize * sinf (ring * deltaRingAngle + offsetRingAngle);
-		Ogre::Real y0 = chamferSize * cosf (ring * deltaRingAngle + offsetRingAngle);
+		Ogre::Real r0 = mChamferSize * sinf (ring * deltaRingAngle + offsetRingAngle);
+		Ogre::Real y0 = mChamferSize * cosf (ring * deltaRingAngle + offsetRingAngle);
 
 		// Generate the group of segments for the current ring
-		for(unsigned int seg = 0; seg <= chamferNumSeg; seg++) 
+		for(unsigned short seg = 0; seg <= mChamferNumSeg; seg++) 
 		{
 			Ogre::Real x0 = r0 * sinf(seg * deltaSegAngle + offsetSegAngle);
 			Ogre::Real z0 = r0 * cosf(seg * deltaSegAngle + offsetSegAngle);
@@ -68,16 +68,16 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 			buffer.position( x0 + offsetPosition.x, y0 + offsetPosition.y, z0 + offsetPosition.z);
 			if (enableNormals)
 				buffer.normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
-			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) chamferNumSeg * uTile, (Ogre::Real) ring / (Ogre::Real) chamferNumSeg * vTile);
+			for (unsigned short tc=0;tc<numTexCoordSet;tc++)
+				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) mChamferNumSeg * uTile, (Ogre::Real) ring / (Ogre::Real) mChamferNumSeg * vTile);
 
-			if ((ring != chamferNumSeg) && (seg != chamferNumSeg)) 
+			if ((ring != mChamferNumSeg) && (seg != mChamferNumSeg)) 
 			{			
 				// each vertex (except the last) has six indices pointing to it
-				buffer.index(offset + chamferNumSeg + 2);
+				buffer.index(offset + mChamferNumSeg + 2);
 				buffer.index(offset);
-				buffer.index(offset + chamferNumSeg +1);
-				buffer.index(offset + chamferNumSeg + 2);
+				buffer.index(offset + mChamferNumSeg +1);
+				buffer.index(offset + mChamferNumSeg + 2);
 				buffer.index(offset + 1);
 				buffer.index(offset);
 			}
@@ -96,8 +96,8 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 {	
 	int offset = 0;
 
-	Ogre::Vector3 centerPosition = .5*xPos * sizeX * Ogre::Vector3::UNIT_X + .5*yPos * sizeY * Ogre::Vector3::UNIT_Y + .5*zPos * sizeZ * Ogre::Vector3::UNIT_Z;
-	Ogre::Vector3 vy0 = (1-abs(xPos)) * Ogre::Vector3::UNIT_X + (1-abs(yPos)) * Ogre::Vector3::UNIT_Y + (1-abs(zPos)) * Ogre::Vector3::UNIT_Z;//extrusion direction	
+	Ogre::Vector3 centerPosition = .5f*xPos * mSizeX * Ogre::Vector3::UNIT_X + .5f*yPos * mSizeY * Ogre::Vector3::UNIT_Y + .5f*zPos * mSizeZ * Ogre::Vector3::UNIT_Z;
+	Ogre::Vector3 vy0 = (1.f-abs(xPos)) * Ogre::Vector3::UNIT_X + (1.f-abs(yPos)) * Ogre::Vector3::UNIT_Y + (1.f-abs(zPos)) * Ogre::Vector3::UNIT_Z;//extrusion direction	
 
 	Ogre::Vector3 vx0 = Utils::vectorAntiPermute(vy0);
 	Ogre::Vector3 vz0 = Utils::vectorPermute(vy0);
@@ -105,39 +105,39 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 	if (vz0.dotProduct(centerPosition)<0.0) vz0=-vz0;
 	if (vx0.crossProduct(vy0).dotProduct(vz0)<0.0) vy0=-vy0;
 
-	Ogre::Real height= (1-abs(xPos)) * sizeX+(1-abs(yPos)) * sizeY+(1-abs(zPos)) * sizeZ;//TODO
-	Ogre::Vector3 offsetPosition= centerPosition -.5*height*vy0;
+	Ogre::Real height= (1-abs(xPos)) * mSizeX+(1-abs(yPos)) * mSizeY+(1-abs(zPos)) * mSizeZ;//TODO
+	Ogre::Vector3 offsetPosition= centerPosition -.5f*height*vy0;
 	int numSegHeight=1;
 
-	Ogre::Real deltaAngle = (Ogre::Math::HALF_PI / chamferNumSeg);
+	Ogre::Real deltaAngle = (Ogre::Math::HALF_PI / mChamferNumSeg);
 	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
 
 	if (xPos==0)
-		numSegHeight = numSegX;
+		numSegHeight = mNumSegX;
 	else if (yPos==0)
-		numSegHeight = numSegY;
+		numSegHeight = mNumSegY;
 	else if (zPos==0)
-		numSegHeight = numSegZ;
+		numSegHeight = mNumSegZ;
 
 	buffer.rebaseOffset();	
-	buffer.estimateIndexCount(6*numSegHeight*chamferNumSeg);
-	buffer.estimateVertexCount((numSegHeight+1)*(chamferNumSeg+1));
+	buffer.estimateIndexCount(6*numSegHeight*mChamferNumSeg);
+	buffer.estimateVertexCount((numSegHeight+1)*(mChamferNumSeg+1));
 	
-	for (int i = 0; i <=numSegHeight; i++)
-		for (int j = 0; j<=chamferNumSeg; j++)
+	for (unsigned short i = 0; i <=numSegHeight; i++)
+		for (unsigned short j = 0; j<=mChamferNumSeg; j++)
 		{
-			Ogre::Real x0 = chamferSize * cosf(j*deltaAngle);
-			Ogre::Real z0 = chamferSize * sinf(j*deltaAngle);
+			Ogre::Real x0 = mChamferSize * cosf(j*deltaAngle);
+			Ogre::Real z0 = mChamferSize * sinf(j*deltaAngle);
 			buffer.position(x0 * vx0 + i*deltaHeight * vy0 + z0 * vz0 + offsetPosition);
 			buffer.normal((x0*vx0+z0*vz0).normalisedCopy());
-			buffer.textureCoord(j/(Ogre::Real)chamferNumSeg*uTile, i/(Ogre::Real)numSegHeight*vTile);
+			buffer.textureCoord(j/(Ogre::Real)mChamferNumSeg*uTile, i/(Ogre::Real)numSegHeight*vTile);
 
-			if (i != numSegHeight && j!=chamferNumSeg) 
+			if (i != numSegHeight && j!=mChamferNumSeg) 
 			{
-				buffer.index(offset + chamferNumSeg + 2);
+				buffer.index(offset + mChamferNumSeg + 2);
 				buffer.index(offset);
-				buffer.index(offset + chamferNumSeg+1);
-				buffer.index(offset + chamferNumSeg + 2);
+				buffer.index(offset + mChamferNumSeg+1);
+				buffer.index(offset + mChamferNumSeg + 2);
 				buffer.index(offset + 1);
 				buffer.index(offset);
 			}
@@ -151,34 +151,34 @@ void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	// Generate the pseudo-box shape
 	PlaneGenerator pg;
 	pg.setUTile(uTile).setVTile(vTile);
-	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
+	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Z)
-	  .setPosition((.5*sizeZ+chamferSize)*Ogre::Vector3::NEGATIVE_UNIT_Z)
+	  .setPosition((.5f*mSizeZ+mChamferSize)*Ogre::Vector3::NEGATIVE_UNIT_Z)
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
-	pg.setNumSegX(numSegY).setNumSegY(numSegX).setSizeX(sizeY).setSizeY(sizeX)
+	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Z)
-	  .setPosition((.5*sizeZ+chamferSize)*Ogre::Vector3::UNIT_Z)
+	  .setPosition((.5f*mSizeZ+mChamferSize)*Ogre::Vector3::UNIT_Z)
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
-	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
+	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_Y)
-	  .setPosition((.5*sizeY+chamferSize)*Ogre::Vector3::NEGATIVE_UNIT_Y)
+	  .setPosition((.5f*mSizeY+mChamferSize)*Ogre::Vector3::NEGATIVE_UNIT_Y)
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
-	pg.setNumSegX(numSegZ).setNumSegY(numSegX).setSizeX(sizeZ).setSizeY(sizeX)
+	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Ogre::Vector3::UNIT_Y)
-	  .setPosition((.5*sizeY+chamferSize)*Ogre::Vector3::UNIT_Y)
+	  .setPosition((.5f*mSizeY+mChamferSize)*Ogre::Vector3::UNIT_Y)
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
-	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
+	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Ogre::Vector3::NEGATIVE_UNIT_X)
-	  .setPosition((.5*sizeX+chamferSize)*Ogre::Vector3::NEGATIVE_UNIT_X)
+	  .setPosition((.5f*mSizeX+mChamferSize)*Ogre::Vector3::NEGATIVE_UNIT_X)
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
-	pg.setNumSegX(numSegZ).setNumSegY(numSegY).setSizeX(sizeZ).setSizeY(sizeY)
+	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Ogre::Vector3::UNIT_X)
-	  .setPosition((.5*sizeX+chamferSize)*Ogre::Vector3::UNIT_X)
+	  .setPosition((.5f*mSizeX+mChamferSize)*Ogre::Vector3::UNIT_X)
 	  .addToTriangleBuffer(buffer);
 	  
 	// Generate the corners

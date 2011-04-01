@@ -137,7 +137,7 @@ namespace Procedural
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
 			
-			for (int i=0;i<indexBuffer.size()/3;i++)
+			for (unsigned short i=0;i<indexBuffer.size()/3;i++)
 			{				
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+2]);
@@ -145,7 +145,7 @@ namespace Procedural
 			}
 		// end cap
 			buffer.rebaseOffset();
-			for (int j =0;j<=numSegShape;j++)
+			for (unsigned short j =0;j<=numSegShape;j++)
 			{
 				Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
 				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
@@ -159,7 +159,7 @@ namespace Procedural
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
 			
-			for (int i=0;i<indexBuffer.size()/3;i++)
+			for (unsigned short i=0;i<indexBuffer.size()/3;i++)
 			{				
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+1]);
