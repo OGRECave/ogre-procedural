@@ -37,10 +37,10 @@ void Unit_Tests::createScene(void)
 		// Register all unit tests
 		//mUnitTests.push_back(new Test_Primitives(mSceneMgr));
 		//mUnitTests.push_back(new Test_Empty(mSceneMgr));*/
-		//mUnitTests.push_back(new Test_Triangulation(mSceneMgr));
+		mUnitTests.push_back(new Test_Triangulation(mSceneMgr));
 		//mUnitTests.push_back(new Test_ShapeBoolean(mSceneMgr));
 		//mUnitTests.push_back(new Test_Extruder(mSceneMgr));
-		mUnitTests.push_back(new Test_Amireh(mSceneMgr));
+		//mUnitTests.push_back(new Test_Amireh(mSceneMgr));
 		//mUnitTests.push_back(new Test_Lathe(mSceneMgr));*/
 
 		// Init first test
@@ -57,7 +57,7 @@ void Unit_Tests::createCamera(void)
 	
 	// Setup camera and light
 	mCamera->setNearClipDistance(.5);
-	mCamera->setPosition(0,10,50);
+	mCamera->setPosition(0,10,-50);
 	mCamera->lookAt(0,0,0);
 	// Slow down speed, as the scene is small
 	mCameraMan->setTopSpeed(20);

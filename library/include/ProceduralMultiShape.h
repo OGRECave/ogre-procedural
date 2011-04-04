@@ -53,12 +53,19 @@ class _ProceduralExport MultiShape
 		return *this;
 	}	
 	//-----------------------------------------------------------------------
-	Shape& getShape(int i)
+	const Shape& getShape(int i) const
 	{		
 		return shapes[i];
 	}	
 	//-----------------------------------------------------------------------
-	int getShapeCount()
+	Shape& getShape(int i)
+	{		
+		return shapes[i];
+	}
+	//-----------------------------------------------------------------------
+	std::vector<Ogre::Vector2> getPoints() const;
+	//-----------------------------------------------------------------------
+	int getShapeCount() const
 	{
 		return shapes.size();
 	}	
@@ -72,6 +79,8 @@ class _ProceduralExport MultiShape
 	}	
 	//-----------------------------------------------------------------------
 	Ogre::MeshPtr MultiShape::realizeMesh(const std::string& name);
+	//-----------------------------------------------------------------------
+	bool isPointInside(const Ogre::Vector2& point) const;
 	
 };
 }
