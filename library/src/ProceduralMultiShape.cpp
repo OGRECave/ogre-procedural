@@ -29,22 +29,49 @@ THE SOFTWARE.
 #include "ProceduralMultiShape.h"
 #include "ProceduralShape.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
-Ogre::MeshPtr MultiShape::realizeMesh(const std::string& name)
+	MeshPtr MultiShape::realizeMesh(const std::string& name)
 	{
-		Ogre::ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
+		ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
 				
 		for (std::vector<Shape>::iterator it = shapes.begin(); it!=shapes.end(); it++)
 		{
-			manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
+			manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
 			it->_appendToManualObject(manual);
 			manual->end();
 		}		
 		
-		Ogre::MeshPtr mesh = manual->convertToMesh(name);
+		MeshPtr mesh = manual->convertToMesh(name);
 		Root::getInstance()->sceneManager->destroyManualObject(manual);
 		return mesh;
+	}
+
+	std::vector<Vector2> MultiShape::getPoints() const
+	{
+		std::vector<Vector2> result;		
+		for (size_t i = 0;i<shapes.size(); i++)
+		{
+			std::vector<Vector2> points = shapes[i].getPoints();
+			result.insert(result.end(), points.begin(), points.end());
+		}
+		return result;
+	}
+
+
+	bool MultiShape::isPointInside(const Vector2& point) const
+	{
+		int score=0;
+		for (size_t i =0;i<shapes.size();i++)
+		{
+			if (shapes[i].isPointInside(point))
+				score++;
+			else
+				score--;
+		}
+		return score>=1;
 	}
 
 }

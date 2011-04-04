@@ -33,10 +33,10 @@ THE SOFTWARE.
 #include "OgreVector3.h"
 #include "OgreMatrix4.h"
 #include "ProceduralUtils.h"
+#include "ProceduralMultiShape.h"
 
 namespace Procedural
 {
-
 typedef std::vector<Ogre::Vector2> PointList;
 
 /**
@@ -51,9 +51,9 @@ class _ProceduralExport Triangulator
 	typedef std::list<Triangle> DelaunayTriangleBuffer;
 		
 	static void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer);
-	static void addConstraints(const Shape& shape, DelaunayTriangleBuffer& tbuffer);
+	static void addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer);
 	static void triangulatePolygon(const std::vector<int>& input, const DelaunaySegment& seg, DelaunayTriangleBuffer& tbuffer, const PointList& pointList);	
-	
+	static void triangulate(const MultiShape& multiShape, std::vector<int>& output, PointList& outputVertices);
 	
 //-----------------------------------------------------------------------
 struct DelaunaySegment
@@ -75,7 +75,7 @@ struct Triangle
 		this->pl = pl;
 	}
 
-	Ogre::Vector2 p(int k) const
+	inline Ogre::Vector2 p(int k) const
 	{
 		return (*pl)[i[k]];
 	}
@@ -83,6 +83,11 @@ struct Triangle
 	bool operator==(const Triangle& other) const
 	{
 		return i[0]==other.i[0] && i[1]==other.i[1] && i[2]==other.i[2];
+	}
+
+	inline Ogre::Vector2 getMidPoint() const
+	{
+		return 1.f/3.f * (p(0)+p(1)+p(2));
 	}
 
 	void detach();
@@ -125,7 +130,7 @@ public:
 		TriangleBuffer buffer;
 		std::vector<int> indexBuffer;		
 		triangulate(shape,indexBuffer);
-		for (int j =0;j<=shape.getSegCount();j++)
+		for (size_t j =0;j<=shape.getSegCount();j++)
 			{
 				Ogre::Vector2 vp2 = shape.getPoint(j);
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
@@ -137,7 +142,34 @@ public:
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
 			
-			for (unsigned short i=0;i<indexBuffer.size()/3;i++)
+			for (size_t i=0;i<indexBuffer.size()/3;i++)
+			{				
+				buffer.index(indexBuffer[i*3]);
+				buffer.index(indexBuffer[i*3+2]);
+				buffer.index(indexBuffer[i*3+1]);
+			}
+		buffer.transformToMesh(out);
+	}
+
+	static void triangulateToMesh(const MultiShape& multiShape, std::string out)
+	{
+		TriangleBuffer buffer;
+		PointList pointList;
+		std::vector<int> indexBuffer;		
+		triangulate(multiShape, indexBuffer, pointList);
+		for (size_t j =0;j<pointList.size();j++)
+			{
+				Ogre::Vector2 vp2 = pointList[j];
+				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
+				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
+
+				Ogre::Vector3 newPoint = vp;				
+				buffer.position(newPoint);				
+				buffer.normal(normal);
+				buffer.textureCoord(vp2.x, vp2.y);
+			}
+			
+			for (size_t i=0;i<indexBuffer.size()/3;i++)
 			{				
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+2]);

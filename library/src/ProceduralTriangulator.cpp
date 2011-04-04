@@ -185,27 +185,35 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	pointList.pop_back();
 }
 //-----------------------------------------------------------------------
-void Triangulator::addConstraints(const Shape& shape, DelaunayTriangleBuffer& tbuffer)
+void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer)
 {	
 	std::vector<DelaunaySegment> segList;
-	// Determine which segments should be added
-	for (unsigned short i = 0; i<shape.getPoints().size()-1; i++)
-	{		
-		bool isAlreadyIn = false;
-		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
-		{
-			if (it->containsSegment(i,i+1)) 
+	size_t shapeOffset = 0;
+	// First, list all the segments that are not already in one of the delaunay triangles
+	for (int k=0;k<multiShape.getShapeCount();k++)
+	{
+		const Shape& shape = multiShape.getShape(k);
+		// Determine which segments should be added
+		for (unsigned short i = 0; i<shape.getPoints().size()-1; i++)
+		{		
+			bool isAlreadyIn = false;
+			for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
 			{
+				if (it->containsSegment(shapeOffset+i,shapeOffset+i+1)) 
+				{
 					isAlreadyIn = true;
 					break;
-			}			
+				}			
+			}
+			// only do something for segments not already in DT
+			if (!isAlreadyIn)
+			{
+				segList.push_back(DelaunaySegment(i, i+1));
+			}
 		}
-		// only do something for segments not already in DT
-		if (!isAlreadyIn)
-		{
-			segList.push_back(DelaunaySegment(i, i+1));
-		}
+		shapeOffset+=shape.getPoints().size();
 	}
+
 	// Re-Triangulate according to the new segments
 	for (std::vector<DelaunaySegment>::iterator it=segList.begin();it!=segList.end();it++)
 	{
@@ -214,48 +222,18 @@ void Triangulator::addConstraints(const Shape& shape, DelaunayTriangleBuffer& tb
 		// TODO Triangulate each polygon (directly into DelaunayTriangleBuffer)
 	}
 	// Clean up segments outside of shape
-	if (shape.isClosed())
-	{
-		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
+	//if (shape.isClosed())
+	//{
+		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();)
 		{
-			bool isTriangleOut = false;
-			for (int i=0;i<3;i++)
-			{
-				int ind1 = it->i[i];
-				int ind2 = it->i[(1+i)%3];					
-				// if side of triangle==segment, it won't tell us if outside or inside => skip
-				if (abs(ind1-ind2)!=1)
-				{
-					Ogre::Vector2 v = shape.getPoint(ind2)-shape.getPoint(ind1);
-					Ogre::Real d1 = v.dotProduct(shape.getNormalBefore(ind1));
-					Ogre::Real d2 = v.dotProduct(shape.getNormalAfter(ind1));
-					Ogre::Vector2 t1 = shape.getDirectionBefore(ind1);
-					Ogre::Vector2 n1 = shape.getNormalAfter(ind1);
-					if (t1.dotProduct(n1)>0.)
-					{
-						if (d1>0. || d2>0.)
-						{
-							isTriangleOut = true;
-							break;
-						}
-					}
-					else
-					{
-						if (d1>0. && d2>0.)
-						{
-							isTriangleOut = true;
-							break;
-						}
-					}					
-				}
-			}
+			bool isTriangleOut = !multiShape.isPointInside(it->getMidPoint());
+			
 			if (isTriangleOut)
-			{
 				it = tbuffer.erase(it);
-				it--;
-			}
-		}			
-	}
+			 else
+				it++;
+		}	
+	//}
 
 }
 //-----------------------------------------------------------------------
@@ -311,5 +289,24 @@ void Triangulator::triangulate(const Shape& shape, std::vector<int>& output)
 		output.push_back(it->i[2]);
 	}
 }
+//-----------------------------------------------------------------------
+void Triangulator::triangulate(const MultiShape& multiShape, std::vector<int>& output, PointList& outputVertices)
+{
+	// Do the Delaunay triangulation
+	outputVertices = multiShape.getPoints();
+	DelaunayTriangleBuffer dtb;
+	delaunay(outputVertices, dtb);
+	
+	addConstraints(multiShape, dtb);
+	
+	//Outputs index buffer	
+	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
+	{
+		output.push_back(it->i[0]);
+		output.push_back(it->i[1]);
+		output.push_back(it->i[2]);
+	}
+}
+
 
 }

@@ -151,8 +151,11 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
-			Shape s = Shape().addPoint(0,0).addPoint(5,0).addPoint(0,5).close();
-			Triangulator::triangulateToMesh(s, "contourMesh");
+			Shape s1 = RectangleShape().setWidth(3.).setHeight(3.).realizeShape();
+			Shape s2 = CircleShape().realizeShape().switchSide();
+			MultiShape ms = MultiShape().addShape(s1).addShape(s2);
+
+			Triangulator::triangulateToMesh(ms, "contourMesh");
 			putMesh("contourMesh");
 		}
 	};

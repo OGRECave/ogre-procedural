@@ -46,53 +46,53 @@ enum Side {SIDE_LEFT, SIDE_RIGHT};
  */
 class _ProceduralExport Shape
 {
-	std::vector<Ogre::Vector2> points;
-	bool closed;
-	Side outSide;
+	std::vector<Ogre::Vector2> mPoints;
+	bool mClosed;
+	Side mOutSide;
 
 public:
-	Shape() : closed(false), outSide(SIDE_RIGHT) {}
+	Shape() : mClosed(false), mOutSide(SIDE_RIGHT) {}
 
 	/* --------------------------------------------------------------------------- */
 	inline Shape& addPoint(const Ogre::Vector2& pt)
 	{
-		points.push_back(pt);
+		mPoints.push_back(pt);
 		return *this;
 	}
 	
 	/* --------------------------------------------------------------------------- */
 	inline Shape& addPoint(Ogre::Real x, Ogre::Real y)
 	{
-		points.push_back(Ogre::Vector2(x, y));
+		mPoints.push_back(Ogre::Vector2(x, y));
 		return *this;
 	}
 	
 	/* --------------------------------------------------------------------------- */
 	inline Shape& reset()
 	{
-		points.clear();
+		mPoints.clear();
 		return *this;
 	}
 	
 	/* --------------------------------------------------------------------------- */
 	inline std::vector<Ogre::Vector2> getPoints() const
 	{
-		return points;
+		return mPoints;
 	}
 	
 	/* --------------------------------------------------------------------------- */
 	inline const Ogre::Vector2& getPoint(int i) const
 	{
-		if (closed)
-			return points[Utils::modulo(i,points.size())];
-		return points[Utils::cap(i,0,points.size()-1)];
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 	
 	/* --------------------------------------------------------------------------- */
 	inline Shape& close()
 	{
-		assert(points.size()>0 && "Cannot close an empty shape");
-		closed = true;
+		assert(mPoints.size()>0 && "Cannot close an empty shape");
+		mClosed = true;
 		return *this;
 	}
 
@@ -103,30 +103,30 @@ public:
 	 */
 	inline Shape& setOutSide(Side side)
 	{
-		outSide = side;
+		mOutSide = side;
 		return *this;
 	}	
 	/* --------------------------------------------------------------------------- */
 	inline Side getOutSide() const
 	{
-		return outSide;
+		return mOutSide;
 	}
 	/* --------------------------------------------------------------------------- */
 	/// Switches the inside and the outside
 	inline Shape& switchSide()
 	{
-		outSide = (outSide == SIDE_LEFT)? SIDE_RIGHT: SIDE_LEFT;
+		mOutSide = (mOutSide == SIDE_LEFT)? SIDE_RIGHT: SIDE_LEFT;
 		return *this;
 	}	
 	/* --------------------------------------------------------------------------- */
-	inline int getSegCount() const
+	inline size_t getSegCount() const
 	{
-		return (points.size()-1) + (closed?1:0);
+		return (mPoints.size()-1) + (mClosed?1:0);
 	}	
 	/* --------------------------------------------------------------------------- */
 	inline bool isClosed() const
 	{
-	  return closed;
+	  return mClosed;
 	}	
 	/* --------------------------------------------------------------------------- */
 	/**
@@ -136,8 +136,8 @@ public:
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!closed && i == points.size()-1 && i>0)
-			return (points[i] - points[i-1]).normalisedCopy();
+		if (!mClosed && i == mPoints.size()-1 && i>0)
+			return (mPoints[i] - mPoints[i-1]).normalisedCopy();
 		else
 			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
 	}
@@ -149,8 +149,8 @@ public:
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!closed && i == 1)
-			return (points[1] - points[0]).normalisedCopy();
+		if (!mClosed && i == 1)
+			return (mPoints[1] - mPoints[0]).normalisedCopy();
 		else
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
 	}	
@@ -162,21 +162,21 @@ public:
 	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getNormalAfter(int i) const
 	{
-		if (outSide==SIDE_RIGHT)
+		if (mOutSide==SIDE_RIGHT)
 		return -getDirectionAfter(i).perpendicular();
 		return getDirectionAfter(i).perpendicular();
 	}	
 	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getNormalBefore(int i) const
 	{
-		if (outSide==SIDE_RIGHT)
+		if (mOutSide==SIDE_RIGHT)
 		return -getDirectionBefore(i).perpendicular();
 		return getDirectionBefore(i).perpendicular();
 	}	
 	/* --------------------------------------------------------------------------- */
 	inline Ogre::Vector2 getAvgNormal(int i) const
 	{
-		if (outSide==SIDE_RIGHT)
+		if (mOutSide==SIDE_RIGHT)
 		return -getAvgDirection(i).perpendicular();
 		return getAvgDirection(i).perpendicular();
 	}
@@ -221,7 +221,7 @@ public:
 	 * or on the left. If the outside can easily be determined, 
 	 * you'd rather use setOutside(), which doesn't need any computation.
 	 */
-	Side findRealOutSide();
+	Side findRealOutSide() const;
 
 	private:
 

@@ -35,15 +35,15 @@ namespace Procedural
 {
 	
 //-----------------------------------------------------------------------
-Side Shape::findRealOutSide() 
+Side Shape::findRealOutSide() const
 {
-	float x = points[0].x;
+	float x = mPoints[0].x;
 	int index=0;
-	for (unsigned short i=1;i<points.size();i++)
+	for (unsigned short i=1;i<mPoints.size();i++)
 	{
-		if (x<points[i].x)
+		if (x<mPoints[i].x)
 		{
-			x = points[i].x;
+			x = mPoints[i].x;
 			index = i;
 		}
 	}
@@ -167,7 +167,7 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 		}
 	for (uint8 i=0;i<4;i++)
 	{
-		sides[i]=(i/2==0?-1:1)*(inputShapes[i%2]->outSide == SIDE_RIGHT?-1:1);
+		sides[i]=(i/2==0?-1:1)*(inputShapes[i%2]->mOutSide == SIDE_RIGHT?-1:1);
 	}
 	
 	bool isOutside[4];
@@ -224,8 +224,8 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 //-----------------------------------------------------------------------
 MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opType) const
 {
-	assert(closed && other.closed);
-	assert(points.size()>1 && other.points.size()>1);
+	assert(mClosed && other.mClosed);
+	assert(mPoints.size()>1 && other.mPoints.size()>1);
 	
 	// Compute the intersection between the 2 shapes
 	std::vector<IntersectionInShape> intersections;
@@ -387,14 +387,14 @@ bool Shape::isPointInside(const Vector2& point) const
 	Real closestSegmentDistance = std::numeric_limits<Real>::max();
 	Vector2 closestSegmentIntersection;
 
-	for (int i =0;i<getSegCount();i++)
+	for (size_t i =0;i<getSegCount();i++)
 	{
 		Vector2 A = getPoint(i);
 		Vector2 B = getPoint(i+1);
-		if (A.y!=B.y && (A.y-point.y)*(B.y-point.y)<0.)
+		if (A.y!=B.y && (A.y-point.y)*(B.y-point.y)<=0.)
 		{
-			Vector2 intersect((point.y-A.y)/(B.y-A.y), point.y);			
-			float dist = abs(point.x-closestSegmentIntersection.x);
+			Vector2 intersect(A.x+(point.y-A.y)*(B.x-A.x)/(B.y-A.y), point.y);			
+			float dist = abs(point.x-intersect.x);
 			if (dist<closestSegmentDistance)
 			{
 				closestSegmentIndex = i;
@@ -404,10 +404,16 @@ bool Shape::isPointInside(const Vector2& point) const
 		}
 	}
 	if (closestSegmentIndex!=-1)
+	{
 		if (getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0)		
 			return true;
-
-	return false;
+		else
+			return false;
+	}
+	if (findRealOutSide() == mOutSide)
+		return false;
+	else 
+		return true;
 }
 //-----------------------------------------------------------------------
 MeshPtr Shape::realizeMesh(const std::string& name)
@@ -425,10 +431,10 @@ MeshPtr Shape::realizeMesh(const std::string& name)
 //-----------------------------------------------------------------------
 void Shape::_appendToManualObject(ManualObject* manual)
 {
-	for (std::vector<Vector2>::iterator itPos = points.begin(); itPos != points.end();itPos++)		
+	for (std::vector<Vector2>::iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)		
 		manual->position(Vector3(itPos->x, itPos->y, 0.f));		
-	if (closed)
-		manual->position(Vector3(points.begin()->x, points.begin()->y, 0.f));
+	if (mClosed)
+		manual->position(Vector3(mPoints.begin()->x, mPoints.begin()->y, 0.f));
 }
 //-----------------------------------------------------------------------
 Shape CubicHermiteSpline2::realizeShape()
