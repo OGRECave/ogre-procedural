@@ -23,7 +23,8 @@ set( HDRS
 	include/ProceduralUtils.h
 	include/ProceduralExtruder.h
 	include/ProceduralLathe.h
-	include/ProceduralShape.h
+	include/ProceduralShape.h	
+	include/ProceduralShapeGenerators.h
 	include/ProceduralPath.h
 	include/ProceduralTriangulator.h
 	include/ProceduralTriangleBuffer.h
@@ -46,7 +47,8 @@ set( SRCS
 		src/ProceduralTorusKnotGenerator.cpp
 		src/ProceduralTubeGenerator.cpp		
 		src/ProceduralUtils.cpp
-		src/ProceduralShape.cpp
+		src/ProceduralShape.cpp		
+		src/ProceduralShapeGenerators.cpp
 		src/ProceduralPath.cpp
 		src/ProceduralExtruder.cpp
 		src/ProceduralLathe.cpp
