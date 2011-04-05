@@ -43,10 +43,11 @@ class _ProceduralExport ConeGenerator : public MeshGenerator<ConeGenerator>
 	Ogre::Real mRadius;
 	Ogre::Real mHeight;
 public:
-	ConeGenerator() : mNumSegBase(16),
-		mNumSegHeight(1),
-		mRadius(1.f),
-		mHeight(1.f)
+	ConeGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, int numSegBase = 16, int numSegHeight = 1) :
+		mNumSegBase(numSegBase),
+		mNumSegHeight(numSegHeight),
+		mRadius(radius),
+		mHeight(height)
 	{}
 
 	/**
