@@ -43,6 +43,7 @@ THE SOFTWARE.
 #include "ProceduralExtruder.h"
 #include "ProceduralLathe.h"
 #include "ProceduralShape.h"
+#include "ProceduralShapeGenerators.h"
 #include "ProceduralMultiShape.h"
 #include "ProceduralPath.h"
 #include "ProceduralTriangulator.h"
