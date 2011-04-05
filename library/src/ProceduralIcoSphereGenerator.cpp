@@ -33,8 +33,8 @@ namespace Procedural
 {
 void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(radius>0. && "Radius must me positive");
-	assert(numIterations>0 && "numIterations must be positive");
+	assert(mRadius>0. && "Radius must me positive");
+	assert(mNumIterations>0 && "numIterations must be positive");
 
 	std::vector<Ogre::Vector3> vertices;
 	int offset = 0;
@@ -82,7 +82,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	int size = 60;
 
 	/// Step 2 : tessellate
-	for (unsigned short iteration = 0; iteration<numIterations; iteration++)
+	for (unsigned short iteration = 0; iteration<mNumIterations; iteration++)
 	{
 		size*=4;
 		std::vector<int> newFaces;
@@ -196,7 +196,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	for (unsigned short i=0; i<vertices.size(); i++)
 	{
-		buffer.position(radius*vertices[i]);
+		buffer.position(mRadius*vertices[i]);
 		if (enableNormals)
 			buffer.normal(vertices[i]);//note : vertices are already normalised
 		for (unsigned short tc=0; tc<numTexCoordSet; tc++)

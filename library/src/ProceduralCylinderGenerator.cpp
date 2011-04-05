@@ -34,45 +34,45 @@ namespace Procedural
 
 void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(height>0. && radius>0. && "Height and radius must be positive");
-	assert(numSegBase>0 && numSegHeight>0 && "Num seg must be positive integers");
+	assert(mHeight>0. && mRadius>0. && "height and radius must be positive");
+	assert(mNumSegBase>0 && mNumSegHeight>0 && "Num seg must be positive integers");
 
 	buffer.rebaseOffset();
-	if (capped)
+	if (mCapped)
 	{
-		buffer.estimateVertexCount((numSegHeight+1)*(numSegBase+1)+2*(numSegBase+1)+2);
-		buffer.estimateIndexCount(numSegHeight*(numSegBase+1)*6+6*numSegBase);		
+		buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1)+2*(mNumSegBase+1)+2);
+		buffer.estimateIndexCount(mNumSegHeight*(mNumSegBase+1)*6+6*mNumSegBase);		
 	} else {
-		buffer.estimateVertexCount((numSegHeight+1)*(numSegBase+1));
-		buffer.estimateIndexCount(numSegHeight*(numSegBase+1)*6);
+		buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1));
+		buffer.estimateIndexCount(mNumSegHeight*(mNumSegBase+1)*6);
 	}
 
 
-	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
-	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
+	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / mNumSegBase);
+	Ogre::Real deltaHeight = mHeight/(Ogre::Real)mNumSegHeight;
 	int offset = 0;
 
-	for (int i = 0; i <=numSegHeight; i++)
-		for (int j = 0; j<=numSegBase; j++)
+	for (int i = 0; i <=mNumSegHeight; i++)
+		for (int j = 0; j<=mNumSegBase; j++)
 		{
-			Ogre::Real x0 = radius * cosf(j*deltaAngle);
-			Ogre::Real z0 = radius * sinf(j*deltaAngle);
+			Ogre::Real x0 = mRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = mRadius * sinf(j*deltaAngle);
 			buffer.position(x0, i*deltaHeight, z0);
 			buffer.normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
+			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile, i/(Ogre::Real)mNumSegHeight*vTile);
 
-			if (i != numSegHeight) 
+			if (i != mNumSegHeight) 
 			{
-				buffer.index(offset + numSegBase + 1);
+				buffer.index(offset + mNumSegBase + 1);
 				buffer.index(offset);
-				buffer.index(offset + numSegBase);
-				buffer.index(offset + numSegBase + 1);
+				buffer.index(offset + mNumSegBase);
+				buffer.index(offset + mNumSegBase + 1);
 				buffer.index(offset + 1);
 				buffer.index(offset);
 			}
 			offset ++;
 		}
-	if (capped)
+	if (mCapped)
 	{
 		//low cap
 		int centerIndex = offset;
@@ -80,15 +80,15 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
 		buffer.textureCoord(0.0,vTile);
 		offset++;
-		for (int j=0;j<=numSegBase;j++)
+		for (int j=0;j<=mNumSegBase;j++)
 		{
-			Ogre::Real x0 = radius * cosf(j*deltaAngle);
-			Ogre::Real z0 = radius * sinf(j*deltaAngle);
+			Ogre::Real x0 = mRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = mRadius * sinf(j*deltaAngle);
 
 			buffer.position(x0, 0.0f, z0);
 			buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)numSegBase,0.0);
-			if (j!=numSegBase)
+			buffer.textureCoord(j/(Ogre::Real)mNumSegBase,0.0);
+			if (j!=mNumSegBase)
 			{
 				buffer.index(centerIndex);
 				buffer.index(offset);
@@ -98,19 +98,19 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		}
 		// high cap
 		centerIndex = offset;
-		buffer.position(0,height,0);
+		buffer.position(0,mHeight,0);
 		buffer.normal(Ogre::Vector3::UNIT_Y);
 		buffer.textureCoord(0.0,0.0);
 		offset++;
-		for (int j=0;j<=numSegBase;j++)
+		for (int j=0;j<=mNumSegBase;j++)
 		{
-			Ogre::Real x0 = radius * cosf(j*deltaAngle);
-			Ogre::Real z0 = radius * sinf(j*deltaAngle);
+			Ogre::Real x0 = mRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = mRadius * sinf(j*deltaAngle);
 
-			buffer.position(x0, height, z0);
+			buffer.position(x0, mHeight, z0);
 			buffer.normal(Ogre::Vector3::UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile,vTile);
-			if (j!=numSegBase)
+			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,vTile);
+			if (j!=mNumSegBase)
 			{
 				buffer.index(centerIndex);
 				buffer.index(offset+1);

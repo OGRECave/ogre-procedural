@@ -38,18 +38,19 @@ namespace Procedural
  */
 class _ProceduralExport CylinderGenerator : public MeshGenerator<CylinderGenerator>
 {
-	int numSegBase;
-	int numSegHeight;
-	bool capped;
-	Ogre::Real radius;
-	Ogre::Real height;
+	int mNumSegBase;
+	int mNumSegHeight;
+	bool mCapped;
+	Ogre::Real mRadius;
+	Ogre::Real mHeight;
 
 public:
-	CylinderGenerator() : numSegBase(16),
-		numSegHeight(1),
-		capped(true),
-		radius(1.f),
-		height(1.f)
+	CylinderGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, int numSegBase = 16, int numSegHeight = 1, bool capped = true) : 
+	    mNumSegBase(numSegBase),
+		mNumSegHeight(numSegHeight),
+		mCapped(capped),
+		mRadius(radius),
+		mHeight(height)
 	{}
 
 	/**
@@ -61,35 +62,35 @@ public:
 	/** Sets the number of segments when rotating around the cylinder's axis (default=16) */
 	inline CylinderGenerator & setNumSegBase(int numSegBase)
 	{
-		this->numSegBase = numSegBase;
+		mNumSegBase = numSegBase;
 		return *this;
 	}
 
 	/** Sets the number of segments along the height of the cylinder (default=1) */
 	inline CylinderGenerator & setNumSegHeight(int numSegHeight)
 	{
-		this->numSegHeight = numSegHeight;
+		mNumSegHeight = numSegHeight;
 		return *this;
 	}
 
 	/** Sets whether the cylinder has endings or not (default=true) */
 	inline CylinderGenerator & setCapped(bool capped)
 	{
-		this->capped = capped;
+		mCapped = capped;
 		return *this;
 	}
 
 	/** Sets the radius of the cylinder (default=1) */
 	inline CylinderGenerator & setRadius(Ogre::Real radius)
 	{
-		this->radius = radius;
+		mRadius = radius;
 		return *this;
 	}
 
 	/** Sets the height of the cylinder (default=1) */
 	inline CylinderGenerator & setHeight(Ogre::Real height)
 	{
-		this->height = height;
+		mHeight = height;
 		return *this;
 	}
 

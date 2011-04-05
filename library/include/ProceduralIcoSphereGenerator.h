@@ -38,12 +38,13 @@ namespace Procedural
  */
 class _ProceduralExport IcoSphereGenerator : public MeshGenerator<IcoSphereGenerator>
 {
-	Ogre::Real radius;
-	unsigned int numIterations;
+	Ogre::Real mRadius;
+	unsigned int mNumIterations;
 
 public:
-	IcoSphereGenerator() : radius(1.),
-		numIterations(2)
+	IcoSphereGenerator(Ogre::Real radius = 1.f, unsigned int numIterations = 2) : 
+		mRadius(radius),
+		mNumIterations(numIterations)
 	{}
 
 	/**
@@ -55,7 +56,7 @@ public:
 	/** Sets the radius of the sphere (default=1) */
 	inline IcoSphereGenerator & setRadius(Ogre::Real radius)
 	{
-		this->radius = radius;
+		mRadius = radius;
 		return *this;
 	}
 
@@ -66,7 +67,7 @@ public:
 	*/
 	inline IcoSphereGenerator & setNumIterations(unsigned int numIterations)
 	{
-		this->numIterations = numIterations;
+		mNumIterations = numIterations;
 		return *this;
 	}
 
