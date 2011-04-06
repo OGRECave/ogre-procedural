@@ -32,7 +32,8 @@ THE SOFTWARE.
 using namespace Ogre;
 
 namespace Procedural
-{
+{	
+//-----------------------------------------------------------------------
 	MeshPtr MultiShape::realizeMesh(const std::string& name)
 	{
 		ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
@@ -47,8 +48,8 @@ namespace Procedural
 		MeshPtr mesh = manual->convertToMesh(name);
 		Root::getInstance()->sceneManager->destroyManualObject(manual);
 		return mesh;
-	}
-
+	}	
+//-----------------------------------------------------------------------
 	std::vector<Vector2> MultiShape::getPoints() const
 	{
 		std::vector<Vector2> result;		
@@ -58,20 +59,50 @@ namespace Procedural
 			result.insert(result.end(), points.begin(), points.end());
 		}
 		return result;
-	}
-
-
+	}	
+//-----------------------------------------------------------------------
 	bool MultiShape::isPointInside(const Vector2& point) const
 	{
-		int score=0;
-		for (size_t i =0;i<shapes.size();i++)
+		// Draw a horizontal lines that goes through "point"
+		// Using the closest intersection, find whethe the point is actually inside
+		int closestSegmentIndex=-1;
+		Real closestSegmentDistance = std::numeric_limits<Real>::max();
+		Vector2 closestSegmentIntersection;
+		int closestSegmentShape = -1;
+		
+		for (size_t k =0;k<shapes.size();k++)
 		{
-			if (shapes[i].isPointInside(point))
-				score++;
-			else
-				score--;
+			const Shape& shape = shapes[k];
+			for (size_t i =0;i<shape.getSegCount();i++)
+			{
+				Vector2 A = shape.getPoint(i);
+				Vector2 B = shape.getPoint(i+1);
+				if (A.y!=B.y && (A.y-point.y)*(B.y-point.y)<=0.)
+				{
+					Vector2 intersect(A.x+(point.y-A.y)*(B.x-A.x)/(B.y-A.y), point.y);			
+					float dist = abs(point.x-intersect.x);
+					if (dist<closestSegmentDistance)
+					{
+						closestSegmentIndex = i;
+						closestSegmentDistance = dist;
+						closestSegmentIntersection = intersect;
+						closestSegmentShape = k;
+					}
+				}
+			}
 		}
-		return score>=1;
+		if (closestSegmentIndex!=-1)
+		{
+			if (shapes[closestSegmentShape].getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0)		
+				return true;
+			else
+				return false;
+		}
+		// the shapes must not contradict each other about outside, so just ask the first shape
+		if (shapes[0].findRealOutSide() == shapes[0].getOutSide())
+			return false;
+		else 
+			return true;
 	}
 
 }

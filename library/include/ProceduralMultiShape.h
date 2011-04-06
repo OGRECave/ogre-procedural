@@ -34,6 +34,12 @@ namespace Procedural
 {
 	class Shape;
 
+/**
+ * Holds a bunch of shapes.
+ * There are a number of assumptions that are made and are not checked
+ * against : the shapes must not cross each other
+ * 
+ */
 class _ProceduralExport MultiShape
 {
 	std::vector<Shape> shapes;
