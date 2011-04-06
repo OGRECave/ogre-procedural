@@ -31,4 +31,18 @@ THE SOFTWARE.
 namespace Procedural
 {
 	int Utils::counter = 0;
+
+	using namespace Ogre;
+	//-----------------------------------------------------------------------
+	Quaternion Utils::_computeQuaternion(Ogre::Vector3 direction)
+	{
+		// First, compute an approximate quaternion (everything is ok except Roll angle)
+		Quaternion quat = Vector3::UNIT_Z.getRotationTo(direction);
+		// Then, compute a correction quaternion : we want the "up" direction to be always the same
+		Vector3 projectedY = Vector3::UNIT_Y - Vector3::UNIT_Y.dotProduct(direction) * direction;
+		Vector3 tY = quat * Vector3::UNIT_Y;
+		Quaternion quat2 = tY.getRotationTo(projectedY);
+		Quaternion q = quat2 * quat;
+		return q;
+	}
 }
