@@ -38,17 +38,20 @@ namespace Procedural
  */
 class _ProceduralExport TorusKnotGenerator : public MeshGenerator<TorusKnotGenerator>
 {
-	int numSegSection;
-	int numSegCircle;
-	Ogre::Real radius;
-	Ogre::Real sectionRadius;
-	int p;
-	int q;
+	int mNumSegSection;
+	int mNumSegCircle;
+	Ogre::Real mRadius;
+	Ogre::Real mSectionRadius;
+	int mP;
+	int mQ;
 public:
-	TorusKnotGenerator() : numSegSection(8),
-						numSegCircle(16),
-						radius(1.f),
-						sectionRadius(.2f), p(2),q(3) {}
+	TorusKnotGenerator(Ogre::Real radius=1.f, Ogre::Real sectionRadius=.2f, int p=2, int q=3, int numSegSection=8, int numSegCircle=16) :
+		mNumSegSection(numSegSection),
+		mNumSegCircle(numSegCircle),
+		mRadius(radius),
+		mSectionRadius(sectionRadius), 
+		mP(p),
+		mQ(q) {}
 
 	/**
 	 * Builds the mesh into the given TriangleBuffer
@@ -59,42 +62,42 @@ public:
 	/** Sets the number of segments along the section (default=8) */
 	inline TorusKnotGenerator & setNumSegSection(int numSegSection)
 	{
-		this->numSegSection = numSegSection;
+		mNumSegSection = numSegSection;
 		return *this;
 	}
 
 	/** Sets the number of segments along the circle (default=16) */
 	inline TorusKnotGenerator & setNumSegCircle(int numSegCircle)
 	{
-		this->numSegCircle = numSegCircle;
+		mNumSegCircle = numSegCircle;
 		return *this;
 	}
 
 	/** Sets the main radius of the knot (default=1) */
 	inline TorusKnotGenerator & setRadius(Ogre::Real radius)
 	{
-		this->radius = radius;
+		mRadius = radius;
 		return *this;
 	}
 
 	/** Sets the section radius (default=0.2) */
 	inline TorusKnotGenerator & setSectionRadius(Ogre::Real sectionRadius)
 	{
-		this->sectionRadius = sectionRadius;
+		mSectionRadius = sectionRadius;
 		return *this;
 	}
 
 	/** Sets the p parameter of the knot (default=2) */
 	inline TorusKnotGenerator & setP(int p)
 	{
-		this->p = p;
+		mP = p;
 		return *this;
 	}
 
 	/** Sets the q parameter of the knot (default=3) */
 	inline TorusKnotGenerator & setQ(int q)
 	{
-		this->q = q;
+		mQ = q;
 		return *this;
 	}
 	

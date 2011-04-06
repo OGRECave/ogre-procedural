@@ -33,36 +33,36 @@ namespace Procedural
 {
 void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
-	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
+	assert(mNumSegSection>0 && mNumSegCircle>0 && "Num seg must be positive");
+	assert(mRadius>0. && mSectionRadius>0. && "Radius must be positive");
 
 	buffer.rebaseOffset();
-	buffer.estimateVertexCount((numSegCircle+1)*(numSegSection+1));
-	buffer.estimateIndexCount((numSegCircle)*(numSegSection+1)*6);
+	buffer.estimateVertexCount((mNumSegCircle+1)*(mNumSegSection+1));
+	buffer.estimateIndexCount((mNumSegCircle)*(mNumSegSection+1)*6);
 
-	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / numSegSection);
-	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / numSegCircle);
+	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / mNumSegSection);
+	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / mNumSegCircle);
 	int offset = 0;
 
-	for (int i = 0; i <=numSegCircle; i++)
-		for (int j = 0; j<=numSegSection; j++)
+	for (int i = 0; i <=mNumSegCircle; i++)
+		for (int j = 0; j<=mNumSegSection; j++)
 		{
-			Ogre::Vector3 c0(radius, 0.0, 0.0);
-			Ogre::Vector3 v0(radius+sectionRadius * cosf(j*deltaSection),sectionRadius * sinf(j*deltaSection),0.0);
+			Ogre::Vector3 c0(mRadius, 0.0, 0.0);
+			Ogre::Vector3 v0(mRadius+mSectionRadius * cosf(j*deltaSection),mSectionRadius * sinf(j*deltaSection),0.0);
 			Ogre::Quaternion q;
 			q.FromAngleAxis(Ogre::Radian(i*deltaCircle),Ogre::Vector3::UNIT_Y);
 			Ogre::Vector3 v = q * v0;
 			Ogre::Vector3 c = q * c0;
 			buffer.position(v);
 			buffer.normal((v-c).normalisedCopy());
-			buffer.textureCoord(i/(Ogre::Real)numSegCircle*uTile, j/(Ogre::Real)numSegSection*vTile);
+			buffer.textureCoord(i/(Ogre::Real)mNumSegCircle*uTile, j/(Ogre::Real)mNumSegSection*vTile);
 
-			if (i != numSegCircle)
+			if (i != mNumSegCircle)
 			{
-				buffer.index(offset + numSegSection + 1);
+				buffer.index(offset + mNumSegSection + 1);
 				buffer.index(offset);
-				buffer.index(offset + numSegSection);
-				buffer.index(offset + numSegSection + 1);
+				buffer.index(offset + mNumSegSection);
+				buffer.index(offset + mNumSegSection + 1);
 				buffer.index(offset + 1);
 				buffer.index(offset);
 			}

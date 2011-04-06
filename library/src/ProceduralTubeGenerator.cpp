@@ -32,54 +32,54 @@ THE SOFTWARE.
 namespace Procedural {
 void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(height>0. && outerRadius>0. && innerRadius>0. && "Height and radius must be positive");
-	assert(innerRadius<outerRadius && "Outer radius must be bigger than inner radius");
-	assert(numSegBase>0 && numSegHeight>0 && "Num seg must be positive integers");
+	assert(mHeight>0. && mOuterRadius>0. && mInnerRadius>0. && "Height and radius must be positive");
+	assert(mInnerRadius<=mOuterRadius && "Outer radius must be bigger than inner radius");
+	assert(mNumSegBase>0 && mNumSegHeight>0 && "Num seg must be positive integers");
 
 	buffer.rebaseOffset();
-	buffer.estimateVertexCount((numSegHeight+1)*(numSegBase+1)*2+(numSegBase+1)*4);
-	buffer.estimateIndexCount(6*(numSegBase+1)*numSegHeight*2+6*numSegBase*2);
+	buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1)*2+(mNumSegBase+1)*4);
+	buffer.estimateIndexCount(6*(mNumSegBase+1)*mNumSegHeight*2+6*mNumSegBase*2);
 	
-	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / numSegBase);
-	Ogre::Real deltaHeight = height/(Ogre::Real)numSegHeight;
+	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / mNumSegBase);
+	Ogre::Real deltaHeight = mHeight/(Ogre::Real)mNumSegHeight;
 	int offset = 0;
 
-	for (int i = 0; i <=numSegHeight; i++)
-		for (int j = 0; j<=numSegBase; j++)
+	for (int i = 0; i <=mNumSegHeight; i++)
+		for (int j = 0; j<=mNumSegBase; j++)
 		{
-			Ogre::Real x0 = outerRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = outerRadius * sinf(j*deltaAngle);
+			Ogre::Real x0 = mOuterRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = mOuterRadius * sinf(j*deltaAngle);
 			buffer.position(x0, i*deltaHeight, z0);
 			buffer.normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
+			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile, i/(Ogre::Real)mNumSegHeight*vTile);
 
-			if (i != numSegHeight) 
+			if (i != mNumSegHeight) 
 			{
-				buffer.index(offset + numSegBase + 1);
+				buffer.index(offset + mNumSegBase + 1);
 				buffer.index(offset);
-				buffer.index(offset + numSegBase);
-				buffer.index(offset + numSegBase + 1);
+				buffer.index(offset + mNumSegBase);
+				buffer.index(offset + mNumSegBase + 1);
 				buffer.index(offset + 1);
 				buffer.index(offset);
 			}
 			offset ++;
 		}
 
-	for (int i = 0; i <=numSegHeight; i++)
-		for (int j = 0; j<=numSegBase; j++)
+	for (int i = 0; i <=mNumSegHeight; i++)
+		for (int j = 0; j<=mNumSegBase; j++)
 		{
-			Ogre::Real x0 = innerRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = innerRadius * sinf(j*deltaAngle);
+			Ogre::Real x0 = mInnerRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = mInnerRadius * sinf(j*deltaAngle);
 			buffer.position(x0, i*deltaHeight, z0);
 			buffer.normal(-Ogre::Vector3(x0,0,z0).normalisedCopy());
-			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile, i/(Ogre::Real)numSegHeight*vTile);
+			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile, i/(Ogre::Real)mNumSegHeight*vTile);
 
-			if (i != numSegHeight) 
+			if (i != mNumSegHeight) 
 			{
-				buffer.index(offset + numSegBase + 1);
-				buffer.index(offset + numSegBase);
+				buffer.index(offset + mNumSegBase + 1);
+				buffer.index(offset + mNumSegBase);
 				buffer.index(offset);
-				buffer.index(offset + numSegBase + 1);
+				buffer.index(offset + mNumSegBase + 1);
 				buffer.index(offset);
 				buffer.index(offset + 1);
 			}
@@ -88,23 +88,23 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 
 		//low cap
-		for (int j=0;j<=numSegBase;j++)
+		for (int j=0;j<=mNumSegBase;j++)
 		{
-			Ogre::Real x0 = innerRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = innerRadius * sinf(j*deltaAngle);
+			Ogre::Real x0 = mInnerRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = mInnerRadius * sinf(j*deltaAngle);
 
 			buffer.position(x0, 0.0f, z0);
 			buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile,vTile);
+			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,vTile);
 
-			x0 = outerRadius * cosf(j*deltaAngle);
-			z0 = outerRadius * sinf(j*deltaAngle);
+			x0 = mOuterRadius * cosf(j*deltaAngle);
+			z0 = mOuterRadius * sinf(j*deltaAngle);
 
 			buffer.position(x0, 0.0f, z0);
 			buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile,0.0);
+			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,0.0);
 
-			if (j!=numSegBase)
+			if (j!=mNumSegBase)
 			{
 				buffer.index(offset);
 				buffer.index(offset+1);
@@ -118,23 +118,23 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 
 		//high cap
-		for (int j=0;j<=numSegBase;j++)
+		for (int j=0;j<=mNumSegBase;j++)
 		{
-			Ogre::Real x0 = innerRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = innerRadius * sinf(j*deltaAngle);
+			Ogre::Real x0 = mInnerRadius * cosf(j*deltaAngle);
+			Ogre::Real z0 = mInnerRadius * sinf(j*deltaAngle);
 
-			buffer.position(x0, height, z0);
+			buffer.position(x0, mHeight, z0);
 			buffer.normal(Ogre::Vector3::UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile,0.0);
+			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,0.0);
 
-			x0 = outerRadius * cosf(j*deltaAngle);
-			z0 = outerRadius * sinf(j*deltaAngle);
+			x0 = mOuterRadius * cosf(j*deltaAngle);
+			z0 = mOuterRadius * sinf(j*deltaAngle);
 
-			buffer.position(x0, height, z0);
+			buffer.position(x0, mHeight, z0);
 			buffer.normal(Ogre::Vector3::UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)numSegBase*uTile,vTile);
+			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,vTile);
 
-			if (j!=numSegBase)
+			if (j!=mNumSegBase)
 			{
 				buffer.index(offset+1);
 				buffer.index(offset);

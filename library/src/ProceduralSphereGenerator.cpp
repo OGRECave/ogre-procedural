@@ -33,24 +33,24 @@ namespace Procedural
 {
 void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(numRings>0 && numSegments>0 && "Num seg must be positive");
-	assert(radius>0 && "Radius must be positive");
+	assert(mNumRings>0 && mNumSegments>0 && "Num seg must be positive");
+	assert(mRadius>0 && "Radius must be positive");
 
 	buffer.rebaseOffset();
-	buffer.estimateVertexCount((numRings+1)*(numSegments+1));
-	buffer.estimateIndexCount(numRings*(numSegments+1)*6);
+	buffer.estimateVertexCount((mNumRings+1)*(mNumSegments+1));
+	buffer.estimateIndexCount(mNumRings*(mNumSegments+1)*6);
 
-	Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / numRings);
-	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / numSegments);
+	Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / mNumRings);
+	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / mNumSegments);
 	int offset = 0;
 
 	// Generate the group of rings for the sphere
-	for(unsigned int ring = 0; ring <= numRings; ring++ ) {
-		Ogre::Real r0 = radius * sinf (ring * fDeltaRingAngle);
-		Ogre::Real y0 = radius * cosf (ring * fDeltaRingAngle);
+	for(unsigned int ring = 0; ring <= mNumRings; ring++ ) {
+		Ogre::Real r0 = mRadius * sinf (ring * fDeltaRingAngle);
+		Ogre::Real y0 = mRadius * cosf (ring * fDeltaRingAngle);
 
 		// Generate the group of segments for the current ring
-		for(unsigned int seg = 0; seg <= numSegments; seg++) {
+		for(unsigned int seg = 0; seg <= mNumSegments; seg++) {
 			Ogre::Real x0 = r0 * sinf(seg * fDeltaSegAngle);
 			Ogre::Real z0 = r0 * cosf(seg * fDeltaSegAngle);
 
@@ -59,14 +59,14 @@ void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			if (enableNormals)
 				buffer.normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
 			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) numSegments * uTile, (Ogre::Real) ring / (Ogre::Real) numRings * vTile);
+				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) mNumSegments * uTile, (Ogre::Real) ring / (Ogre::Real) mNumRings * vTile);
 
-			if (ring != numRings) {
+			if (ring != mNumRings) {
 				// each vertex (except the last) has six indices pointing to it
-				buffer.index(offset + numSegments + 1);
+				buffer.index(offset + mNumSegments + 1);
 				buffer.index(offset);
-				buffer.index(offset + numSegments);
-				buffer.index(offset + numSegments + 1);
+				buffer.index(offset + mNumSegments);
+				buffer.index(offset + mNumSegments + 1);
 				buffer.index(offset + 1);
 				buffer.index(offset);
 				offset ++;

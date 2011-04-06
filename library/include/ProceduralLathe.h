@@ -39,24 +39,24 @@ namespace Procedural
  */
 class _ProceduralExport Lathe : public MeshGenerator<Lathe>
 {
-	Shape* shapeToExtrude;
-	int numSeg;
+	Shape* mShapeToExtrude;
+	int mNumSeg;
 
 public:
-	Lathe() : shapeToExtrude(0), numSeg(16)
+	Lathe(Shape* shapeToExtrude = 0, int numSeg = 16) : mShapeToExtrude(shapeToExtrude), mNumSeg(numSeg)
 	{}
 
 	/** Sets the number of segments when rotating around the axis (default=16)*/
 	inline Lathe& setNumSeg(int numSeg)
 	{
-		this->numSeg = numSeg;
+		mNumSeg = numSeg;
 		return *this;
 	}
 	
 	/** Sets the shape to extrude */
 	inline Lathe & setShapeToExtrude(Shape* shapeToExtrude)
 	{
-		this->shapeToExtrude = shapeToExtrude;
+		mShapeToExtrude = shapeToExtrude;
 		return *this;
 	}
 

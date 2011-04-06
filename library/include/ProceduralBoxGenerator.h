@@ -34,7 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
- * Generates a box mesh
+ * Generates a box mesh centered on the origin.
  * Default size is 1.0 with 1 quad per face.
  *
  */
@@ -43,15 +43,8 @@ class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
 	Ogre::Real mSizeX,mSizeY,mSizeZ;
 	int mNumSegX,mNumSegY,mNumSegZ;
 public:
-	/// Default constructor
-	BoxGenerator() : mSizeX(1.f), mSizeY(1.f), mSizeZ(1.f),
-		mNumSegX(1), mNumSegY(1), mNumSegZ(1) {}
-
-	/**
-	 * Constructor with arguments
-	 */
-	BoxGenerator(Ogre::Real sizeX, Ogre::Real sizeY, Ogre::Real sizeZ) : mSizeX(sizeX), mSizeY(sizeY), mSizeZ(sizeZ),
-		mNumSegX(1), mNumSegY(1), mNumSegZ(1) {}
+	BoxGenerator(Ogre::Real sizeX=1.f, Ogre::Real sizeY=1.f, Ogre::Real sizeZ=1.f, int numSegX=1, int numSegY=1, int numSegZ=1) : 
+	  mSizeX(sizeX), mSizeY(sizeY), mSizeZ(sizeZ), mNumSegX(numSegX), mNumSegY(numSegY), mNumSegZ(numSegZ) {}
 
 	/** Sets size along X axis (default=1) */
 	BoxGenerator& setSizeX(Ogre::Real sizeX)
@@ -71,6 +64,15 @@ public:
 	BoxGenerator& setSizeZ(Ogre::Real sizeZ)
 	{
 		mSizeZ = sizeZ;
+		return *this;
+	}
+
+	/** Sets the size (default=1,1,1) */
+	BoxGenerator& setSize(Ogre::Vector3 size)
+	{
+		mSizeX = size.x;
+		mSizeY = size.y;
+		mSizeZ = size.z;
 		return *this;
 	}
 

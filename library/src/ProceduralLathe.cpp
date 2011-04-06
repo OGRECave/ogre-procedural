@@ -32,39 +32,39 @@ namespace Procedural
 {
 void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
-		assert( shapeToExtrude && "Shape must not be null!");
-		int numSegShape = shapeToExtrude->getSegCount();
+		assert( mShapeToExtrude && "Shape must not be null!");
+		int numSegShape = mShapeToExtrude->getSegCount();
 		assert(numSegShape>1 && "Shape must contain at least two points");
 		int offset =0;
 
 		buffer.rebaseOffset();
-		buffer.estimateIndexCount(numSeg*numSegShape*6);
-		buffer.estimateVertexCount((numSegShape+1)*(numSeg+1));
+		buffer.estimateIndexCount(mNumSeg*numSegShape*6);
+		buffer.estimateVertexCount((numSegShape+1)*(mNumSeg+1));
 
-		for (int i=0;i<=numSeg;i++)
+		for (int i=0;i<=mNumSeg;i++)
 		{
-			Ogre::Real angle = i/(Ogre::Real)numSeg*Ogre::Math::TWO_PI;
+			Ogre::Real angle = i/(Ogre::Real)mNumSeg*Ogre::Math::TWO_PI;
 			Ogre::Quaternion q;
 			q.FromAngleAxis((Ogre::Radian)angle,Ogre::Vector3::UNIT_Y);
 
 			for (int j=0;j<=numSegShape;j++)
 			{
-				Ogre::Vector2 v0 = shapeToExtrude->getPoint(j);
+				Ogre::Vector2 v0 = mShapeToExtrude->getPoint(j);
 				Ogre::Vector3 vp(v0.x,v0.y,0);
-				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+				Ogre::Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
 				Ogre::Vector2 vp2normal = vp2direction.perpendicular();
 				Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);
 				normal.normalise();
-				if (shapeToExtrude->getOutSide() == SIDE_LEFT)
+				if (mShapeToExtrude->getOutSide() == SIDE_LEFT)
 				{
 					normal = -normal;
 				}
 
 				buffer.position(q*vp);
 				buffer.normal(q*normal);
-				buffer.textureCoord(i/(Ogre::Real)numSeg*uTile, j/(Ogre::Real)numSegShape*vTile);
+				buffer.textureCoord(i/(Ogre::Real)mNumSeg*uTile, j/(Ogre::Real)numSegShape*vTile);
 
-				if (j <numSegShape && i <numSeg)
+				if (j <numSegShape && i <mNumSeg)
 				{
 					buffer.index(offset + numSegShape + 2);
 					buffer.index(offset);
