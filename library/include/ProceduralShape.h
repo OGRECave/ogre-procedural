@@ -80,7 +80,9 @@ public:
 		return mPoints;
 	}
 	
-	/* --------------------------------------------------------------------------- */
+	/**
+	 * Bounds-safe method to get a point : it will allow you to go beyond the bounds
+	 */
 	inline const Ogre::Vector2& getPoint(int i) const
 	{
 		if (mClosed)
@@ -88,7 +90,10 @@ public:
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 	
-	/* --------------------------------------------------------------------------- */
+	/**
+	 * Makes the shape a closed shape, ie it will automatically connect 
+	 * the last point to the first point.
+	 */
 	inline Shape& close()
 	{
 		assert(mPoints.size()>0 && "Cannot close an empty shape");
@@ -118,17 +123,17 @@ public:
 		mOutSide = (mOutSide == SIDE_LEFT)? SIDE_RIGHT: SIDE_LEFT;
 		return *this;
 	}	
-	/* --------------------------------------------------------------------------- */
+
 	inline size_t getSegCount() const
 	{
 		return (mPoints.size()-1) + (mClosed?1:0);
 	}	
-	/* --------------------------------------------------------------------------- */
+
 	inline bool isClosed() const
 	{
 	  return mClosed;
 	}	
-	/* --------------------------------------------------------------------------- */
+
 	/**
 	 * Returns local direction after the current point
 	 */
@@ -141,7 +146,7 @@ public:
 		else
 			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
 	}
-	/* --------------------------------------------------------------------------- */
+
 	/**
 	 * Returns local direction after the current point
 	 */
@@ -154,48 +159,51 @@ public:
 		else
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
 	}	
-	/* --------------------------------------------------------------------------- */
+
 	inline Ogre::Vector2 getAvgDirection(int i) const
 	{
 		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 	}	
-	/* --------------------------------------------------------------------------- */
+
 	inline Ogre::Vector2 getNormalAfter(int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
 		return -getDirectionAfter(i).perpendicular();
 		return getDirectionAfter(i).perpendicular();
 	}	
-	/* --------------------------------------------------------------------------- */
+
 	inline Ogre::Vector2 getNormalBefore(int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
 		return -getDirectionBefore(i).perpendicular();
 		return getDirectionBefore(i).perpendicular();
 	}	
-	/* --------------------------------------------------------------------------- */
+
 	inline Ogre::Vector2 getAvgNormal(int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
 		return -getAvgDirection(i).perpendicular();
 		return getAvgDirection(i).perpendicular();
 	}
-	/* --------------------------------------------------------------------------- */
+
 	/**
 	 * Outputs a mesh representing the shape.
 	 * Mostly for debugging purposes
 	 */
 	Ogre::MeshPtr realizeMesh(const std::string& name);
-	/* --------------------------------------------------------------------------- */
+	
+	/**
+	 * Appends the shape vertices to a manual object being edited
+	 */
 	void _appendToManualObject(Ogre::ManualObject* manual);
-	/* --------------------------------------------------------------------------- */
+
 	/**
 	 * Tells whether a point is inside a shape or not
 	 * @arg point The point to check
 	 * @return true if the point is inside this shape, false otherwise
 	 */
 	bool isPointInside(const Ogre::Vector2& point) const;
-	/* --------------------------------------------------------------------------- */
+	 
 	/**
 	 * Computes the intersection between this shape and another one.
 	 * Both shapes must be closed.
@@ -203,25 +211,37 @@ public:
 	 * @return The intersection of two shapes, as a new shape
 	 */
 	MultiShape booleanIntersect(const Shape& other) const;
-	/* --------------------------------------------------------------------------- */
+	 
 	/**
 	 * Computes the union between this shape and another one.
 	 * Both shapes must be closed.
 	 */
 	MultiShape booleanUnion(const Shape& other) const;
-	/* --------------------------------------------------------------------------- */
+	 
 	/**
 	 * Computes the difference between this shape and another one.
 	 * Both shapes must be closed.
 	 */
 	MultiShape booleanDifference(const Shape& other) const;
-	/* --------------------------------------------------------------------------- */
+	 
 	/**
 	 * On a closed shape, find if the outside is located on the right
 	 * or on the left. If the outside can easily be determined, 
 	 * you'd rather use setOutside(), which doesn't need any computation.
 	 */
-	Side findRealOutSide() const;
+	Side findRealOutSide() const;	
+
+	/**
+	 * Applies the given translation to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param translation the translation vector
+     */
+	Shape& translate(const Ogre::Vector2& translation)
+	{
+		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+			*it+=translation;
+		return *this;
+	}
 
 	private:
 
@@ -246,9 +266,7 @@ public:
 	bool Shape::_isLookingForOutside(BooleanOperationType opType, char shapeSelector) const;
 	
 	char _isIncreasing(Ogre::Real d, BooleanOperationType opType, char shapeSelector) const;
-
-	//char _isIncreasing(BooleanOperationType opType, char shapeSelector) const;
-	
+		
 	bool _findWhereToGo(const Shape* inputShapes[], BooleanOperationType opType, IntersectionInShape intersection, Ogre::uint8& shapeSelector, char& isIncreasing, int& currentSegment) const;
 	
 	void _findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const;

@@ -30,58 +30,50 @@ THE SOFTWARE.
 #include "ProceduralTriangulator.h"
 #include "ProceduralGeometryHelpers.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
-	void Extruder::_extrudeImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
+	//-----------------------------------------------------------------------
+	Quaternion Extruder::_computeQuaternion(Ogre::Vector3 direction)
+	{
+		// First, compute an approximate quaternion (everything is ok except Roll angle)
+		Quaternion quat = Vector3::UNIT_Z.getRotationTo(direction);
+		// Then, compute a correction quaternion : we want the "up" direction to be always the same
+		Vector3 projectedY = Vector3::UNIT_Y - Vector3::UNIT_Y.dotProduct(direction) * direction;
+		Vector3 tY = quat * Vector3::UNIT_Y;
+		Quaternion quat2 = tY.getRotationTo(projectedY);
+		Quaternion q = quat2 * quat;
+		return q;
+	}
+	//-----------------------------------------------------------------------
+	void Extruder::_extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
 	{
 		assert(mExtrusionPath && shapeToExtrude && "Shape and Path must not be null!");
 		int numSegPath = mExtrusionPath->getSegCount();
 		int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
-				
-		// Triangulate the begin and end caps
-		std::vector<int> indexBuffer;
-		if (!mExtrusionPath->isClosed() && mCapped)
-			Triangulator::triangulate(*shapeToExtrude, indexBuffer);
-
+	
 		// Estimate vertex and index count
 		buffer.rebaseOffset();
-		if (!mExtrusionPath->isClosed() && mCapped)
-		{
-			buffer.estimateIndexCount(numSegShape*numSegPath*6 + 2*indexBuffer.size());
-			buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1) + 2*(numSegShape+1));
-		} else {
-			buffer.estimateIndexCount(numSegShape*numSegPath*6);
-			buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1));
-		}
-
-		Ogre::Quaternion qBegin, qEnd/*, lastQ*/;		
-		//Ogre::Vector3 lastV0;
-
+		buffer.estimateIndexCount(numSegShape*numSegPath*6);
+		buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1));
+				
 	for (int i = 0; i <= numSegPath;i++)
 	{		
-		Ogre::Vector3 v0 = mExtrusionPath->getPoint(i);
+		Vector3 v0 = mExtrusionPath->getPoint(i);
+		Vector3 direction = mExtrusionPath->getAvgDirection(i);
 
-		Ogre::Vector3 direction = mExtrusionPath->getAvgDirection(i);
-
-		// First, compute an approximate quaternion (everything is ok except Roll angle)
-		Ogre::Quaternion quat = Ogre::Vector3::UNIT_Z.getRotationTo(direction);
-		// Then, compute a correction quaternion : we want the "up" direction to be always the same
-		Ogre::Vector3 projectedY = Ogre::Vector3::UNIT_Y - Ogre::Vector3::UNIT_Y.dotProduct(direction) * direction;
-		Ogre::Vector3 tY = quat * Ogre::Vector3::UNIT_Y;
-		Ogre::Quaternion quat2 = tY.getRotationTo(projectedY);
-		Ogre::Quaternion q = quat2 * quat;
-		if (i == 0) qBegin = q;
-		if (i == numSegPath) qEnd = q;
-
+		Quaternion q = _computeQuaternion(direction);
+				
 		/*if (mFixSharpAngles && i>0)
 		{
-			Plane plane1(lastQ * Ogre::Vector3::UNIT_Z, lastV0);
-			Plane plane2(q * Ogre::Vector3::UNIT_Z, v0);
+			Plane plane1(lastQ * Vector3::UNIT_Z, lastV0);
+			Plane plane2(q * Vector3::UNIT_Z, v0);
 			Line inter;
 			if (plane1.intersect(plane2, inter))
 			{
-				Ogre::Vector3 v = inter.shortestPathToPoint(v0);
+				Vector3 v = inter.shortestPathToPoint(v0);
 				if (v.length() < 2.0) // TODO : shape.boundingCircle
 				{
 					v0 = v0 + (2.0-v.length()) * v.normalisedCopy();
@@ -93,16 +85,16 @@ namespace Procedural
 
 		for (int j =0;j<=numSegShape;j++)
 		{
-			Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
-			Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
-			Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
-			Ogre::Vector3 vp(vp2.x, vp2.y, 0);
-			Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);							
+			Vector2 vp2 = shapeToExtrude->getPoint(j);
+			Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+			Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
+			Vector3 vp(vp2.x, vp2.y, 0);
+			Vector3 normal(vp2normal.x, vp2normal.y, 0);							
 			buffer.rebaseOffset();
-			Ogre::Vector3 newPoint = v0+q*vp;
+			Vector3 newPoint = v0+q*vp;
 			buffer.position(newPoint);
 			buffer.normal(q*normal);
-			buffer.textureCoord(i/(Ogre::Real)numSegPath*uTile, j/(Ogre::Real)numSegShape*vTile);
+			buffer.textureCoord(i/(Real)numSegPath*uTile, j/(Real)numSegShape*vTile);
 
 			if (j <numSegShape && i <numSegPath)
 			{		
@@ -118,20 +110,39 @@ namespace Procedural
 				}
 			}			
 		}
-	}
-	if (!mExtrusionPath->isClosed() && mCapped)
+	}			
+}
+	//-----------------------------------------------------------------------
+	void Extruder::_extrudeCapImpl(TriangleBuffer& buffer) const
 	{
-		//begin cap
-			buffer.rebaseOffset();
-			for (int j =0;j<=numSegShape;j++)
-			{
-				Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
-				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
-				Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
-				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
-				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
+			std::vector<int> indexBuffer;
+			PointList pointList;
 
-				Ogre::Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*vp;				
+			buffer.rebaseOffset();
+
+			if (mShapeToExtrude)
+			{
+				Triangulator::triangulate(*mShapeToExtrude, indexBuffer);
+				pointList = mShapeToExtrude->getPoints();
+			} else
+			{
+				Triangulator::triangulate(*mMultiShapeToExtrude, indexBuffer, pointList);
+			}
+			buffer.estimateIndexCount(2*indexBuffer.size());
+			buffer.estimateVertexCount(2*pointList.size());
+
+			Quaternion qBegin = _computeQuaternion(mExtrusionPath->getDirectionAfter(0));
+			Quaternion qEnd = _computeQuaternion(mExtrusionPath->getDirectionBefore(mExtrusionPath->getSegCount()));
+			
+			//begin cap
+			buffer.rebaseOffset();
+			for (int j =0;j<pointList.size();j++)
+			{
+				Vector2 vp2 = pointList[j];
+				Vector3 vp(vp2.x, vp2.y, 0);
+				Vector3 normal = -Vector3::UNIT_Z;				
+
+				Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*vp;				
 				buffer.position(newPoint);				
 				buffer.normal(qBegin*normal);
 				buffer.textureCoord(vp2.x, vp2.y);
@@ -145,15 +156,13 @@ namespace Procedural
 			}
 		// end cap
 			buffer.rebaseOffset();
-			for (unsigned short j =0;j<=numSegShape;j++)
+			for (unsigned short j =0;j<pointList.size();j++)
 			{
-				Ogre::Vector2 vp2 = shapeToExtrude->getPoint(j);
-				Ogre::Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
-				Ogre::Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
-				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
-				Ogre::Vector3 normal = Ogre::Vector3::UNIT_Z;				
+				Vector2 vp2 = pointList[j];
+				Vector3 vp(vp2.x, vp2.y, 0);
+				Vector3 normal = Vector3::UNIT_Z;				
 
-				Ogre::Vector3 newPoint = mExtrusionPath->getPoint(numSegPath)+qEnd*vp;				
+				Vector3 newPoint = mExtrusionPath->getPoint(mExtrusionPath->getSegCount())+qEnd*vp;				
 				buffer.position(newPoint);				
 				buffer.normal(qEnd*normal);
 				buffer.textureCoord(vp2.x, vp2.y);
@@ -165,18 +174,24 @@ namespace Procedural
 				buffer.index(indexBuffer[i*3+1]);
 				buffer.index(indexBuffer[i*3+2]);
 			}
-	}		
-}
-
+	
+	}
+	//-----------------------------------------------------------------------
 	void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
 		assert((mShapeToExtrude || mMultiShapeToExtrude) && "Either shape or multishape must be defined!");
+
+		// Triangulate the begin and end caps
+	
+		if (!mExtrusionPath->isClosed() && mCapped)
+			_extrudeCapImpl(buffer);
+
 		if (mShapeToExtrude)
-			_extrudeImpl(buffer, mShapeToExtrude);
+			_extrudeBodyImpl(buffer, mShapeToExtrude);
 		else 
 		{
 			for (int i=0; i<mMultiShapeToExtrude->getShapeCount();i++)			
-			_extrudeImpl(buffer, &mMultiShapeToExtrude->getShape(i));
+				_extrudeBodyImpl(buffer, &mMultiShapeToExtrude->getShape(i));
 		}
 	}
 }

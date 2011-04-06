@@ -53,7 +53,6 @@ class _ProceduralExport Triangulator
 	static void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer);
 	static void addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer);
 	static void triangulatePolygon(const std::vector<int>& input, const DelaunaySegment& seg, DelaunayTriangleBuffer& tbuffer, const PointList& pointList);	
-	static void triangulate(const MultiShape& multiShape, std::vector<int>& output, PointList& outputVertices);
 	
 //-----------------------------------------------------------------------
 struct DelaunaySegment
@@ -124,6 +123,9 @@ public:
 	 * @arg ouput A vector of index where is outputed the resulting triangle indexes
 	 */
 	static void triangulate(const Shape& shape, std::vector<int>& output);
+
+	static void triangulate(const MultiShape& multiShape, std::vector<int>& output, PointList& outputVertices);
+	
 
 	static void triangulateToMesh(const Shape& shape, std::string out)
 	{

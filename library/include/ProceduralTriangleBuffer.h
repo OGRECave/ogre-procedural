@@ -158,7 +158,11 @@ class TriangleBuffer
 		mIndices.push_back(globalOffset+i3);
 		return *this;
 	}
-
+	 
+	/**
+	 * Gives an estimation of the number of vertices need for this triangle buffer.
+	 * If this function is called several times, it means an extra vertices count, not an absolute measure.
+	 */
 	void estimateVertexCount(unsigned int vertexCount)
 	{
 		mEstimatedVertexCount += vertexCount;
@@ -166,6 +170,10 @@ class TriangleBuffer
 		//Utils::log("estimated vertex count : " + Ogre::StringConverter::toString(vertexCount));
 	}
 
+	/**
+	 * Gives an estimation of the number of indices needed for this triangle buffer.
+	 * If this function is called several times, it means an extra indices count, not an absolute measure.
+	 */
 	void estimateIndexCount(unsigned int indexCount)
 	{
 		mEstimatedIndexCount += indexCount;
