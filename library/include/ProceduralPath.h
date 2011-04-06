@@ -42,50 +42,50 @@ namespace Procedural
  */
 class _ProceduralExport Path
 {
-	std::vector<Ogre::Vector3> points;
-	bool closed;
+	std::vector<Ogre::Vector3> mPoints;
+	bool mClosed;
 public:
-	Path() : closed(false)	{}
+	Path() : mClosed(false)	{}
 
 	/** Adds a point to the path, as a Vector3 */
 	Path& addPoint(const Ogre::Vector3& pt)
 	{
-		points.push_back(pt);
+		mPoints.push_back(pt);
 		return *this;
 	}
 
 	/** Adds a point to the path, using its 3 coordinates */
 	Path& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
-		points.push_back(Ogre::Vector3(x,y,z));
+		mPoints.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
 
 	/** Clears the content of the Path */
 	Path& reset()
 	{
-		points.clear();
+		mPoints.clear();
 		return *this;
 	}
 
 	/** Define the path as being closed. Almost the same as adding a last point on the first point position */
 	Path& close()
 	{
-		assert(points.size()>0 && "Cannot close an empty path");
-		closed = true;
+		assert(mPoints.size()>0 && "Cannot close an empty path");
+		mClosed = true;
 		return *this;
 	}
 	
 	/** Tells if the path is closed or not */
 	bool isClosed()
 	{
-		return closed;
+		return mClosed;
 	}
 
 	/** Gets the list of points as a vector of Vector3 */
 	std::vector<Ogre::Vector3> getPoints()
 	{
-		return points;
+		return mPoints;
 	}
 
 	/** Safely gets a given point.
@@ -95,9 +95,9 @@ public:
 	 */
 	const Ogre::Vector3& getPoint(int i)
 	{
-		if (closed)
-			return points[Utils::modulo(i,points.size())];
-		return points[Utils::cap(i,0,points.size()-1)];
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 
 	/** Gets the number of segments in the path
@@ -105,7 +105,7 @@ public:
 	 */
 	int getSegCount()
 	{
-		return (points.size()-1) + (closed?1:0);
+		return (mPoints.size()-1) + (mClosed?1:0);
 	}
 
 	/**
@@ -115,8 +115,8 @@ public:
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!closed && i == points.size()-1 && i>0)
-			return (points[i] - points[i-1]).normalisedCopy();
+		if (!mClosed && i == mPoints.size()-1 && i>0)
+			return (mPoints[i] - mPoints[i-1]).normalisedCopy();
 		else
 			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
 	}
@@ -128,8 +128,8 @@ public:
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!closed && i == 1)
-			return (points[1] - points[0]).normalisedCopy();
+		if (!mClosed && i == 1)
+			return (mPoints[1] - mPoints[0]).normalisedCopy();
 		else
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
 	}
@@ -154,10 +154,10 @@ public:
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
 			   
 		
-		for (std::vector<Ogre::Vector3>::iterator itPos = points.begin(); itPos != points.end();itPos++)		
+		for (std::vector<Ogre::Vector3>::iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)		
 			manual->position(*itPos);		
-		if (closed)
-			manual->position(*(points.begin()));
+		if (mClosed)
+			manual->position(*(mPoints.begin()));
 		manual->end();
 		Ogre::MeshPtr mesh = manual->convertToMesh(name);
 
@@ -170,21 +170,21 @@ template<class T>
 class BaseSpline3
 {
 protected:
-	int numSeg;
-	bool closed;
+	int mNumSeg;
+	bool mClosed;
 public:
-	BaseSpline3() : numSeg(4), closed(false) {}	
+	BaseSpline3() : mNumSeg(4), mClosed(false) {}	
 
 	T& setNumSeg(int numSeg)
 	{
 		assert(numSeg>=1);
-		this->numSeg = numSeg;
+		mNumSeg = numSeg;
 		return (T&)*this;
 	}
 		
 	T& close()
 	{
-		closed = true;
+		mClosed = true;
 		return (T&)*this;
 	}
 };
@@ -194,44 +194,42 @@ public:
  */
 class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3>
 {	
-	std::vector<Ogre::Vector3> points;
+	std::vector<Ogre::Vector3> mPoints;
 	public:	
 	CatmullRomSpline3() {}
 	
 	CatmullRomSpline3(const Ogre::SimpleSpline& input) 
 	{
-		points.resize(input.getNumPoints());
+		mPoints.resize(input.getNumPoints());
 		for (unsigned short i=0; i<input.getNumPoints(); i++)
-		{
-			points.push_back(input.getPoint(i));
-		}
+			mPoints.push_back(input.getPoint(i));
 	}
 	
 	Ogre::SimpleSpline toSimpleSpline() const 
 	{
 		Ogre::SimpleSpline spline;
-		for (unsigned short i=0;i<points.size();i++)
-			spline.addPoint(points[i]);
+		for (unsigned short i=0;i<mPoints.size();i++)
+			spline.addPoint(mPoints[i]);
 		return spline;
 	}
 	
 	CatmullRomSpline3& addPoint(const Ogre::Vector3& pt)
 	{
-		points.push_back(pt);
+		mPoints.push_back(pt);
 		return *this;
 	}
 
 	CatmullRomSpline3& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
-		points.push_back(Ogre::Vector3(x,y,z));
+		mPoints.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
 	
 	const Ogre::Vector3& safeGetPoint(int i) const
 	{
-		if (closed)
-			return points[Utils::modulo(i,points.size())];
-		return points[Utils::cap(i,0,points.size()-1)];
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 	
 	/**
@@ -246,49 +244,49 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
  */
 class _ProceduralExport BezierPath
 {
-	std::vector<Ogre::Vector3> points;
+	std::vector<Ogre::Vector3> mPoints;
 
-	int numSeg;
-	bool isClosed;
+	int mNumSeg;
+	bool mClosed;
 public:
-	BezierPath() : numSeg(4), isClosed(false) {}
+	BezierPath() : mNumSeg(4), mClosed(false) {}
 
 	BezierPath& addPoint(const Ogre::Vector3& pt)
 	{
-		points.push_back(pt);
+		mPoints.push_back(pt);
 		return *this;
 	}
 
 	BezierPath& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
-	    points.push_back(Ogre::Vector3(x,y,z));
+	    mPoints.push_back(Ogre::Vector3(x,y,z));
 	    return *this;
 	}
 
 	BezierPath& reset()
 	{
-		points.clear();
+		mPoints.clear();
 		return *this;
 	}
 
 	BezierPath& close()
 	{
-		isClosed = true;
+		mClosed = true;
 		return *this;
 	}
 
 	BezierPath& setNumSeg(int numSeg)
 	{
 		assert(numSeg>=1);
-		this->numSeg = numSeg;
+		mNumSeg = numSeg;
 		return *this;
 	}
 
 	const Ogre::Vector3& getPoint(int i)
 	{
-		if (isClosed)
-			return points[Utils::modulo(i,points.size())];
-		return points[Utils::cap(i,0,points.size()-1)];
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 
 	/**
@@ -298,26 +296,26 @@ public:
 	{
 		Path path;
 
-		for (unsigned short i=0;i<points.size();i++)
+		for (unsigned short i=0;i<mPoints.size();i++)
 		{
-			const Ogre::Vector3& P0 = points[i];
+			const Ogre::Vector3& P0 = mPoints[i];
 			const Ogre::Vector3& P3 = getPoint(i+1);
 
 			Ogre::Vector3 P1 = P0 + 0.5 * (getPoint(i+1)-getPoint(i-1));
 			Ogre::Vector3 P2 = P3 - 0.5 * (getPoint(i+2)-P0);
 
-			for (unsigned short j=0;j<numSeg;j++)
+			for (unsigned short j=0;j<mNumSeg;j++)
 			{
-				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;
+				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)mNumSeg;
 				Ogre::Vector3 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;
 				path.addPoint(P);
 			}
-			if (i==points.size()-1 && !isClosed)
+			if (i==mPoints.size()-1 && !mClosed)
 			{
 				path.addPoint(P3);
 			}
 		}
-		if (isClosed)
+		if (mClosed)
 			path.close();
 
 		return path;
@@ -326,45 +324,44 @@ public:
 
 class _ProceduralExport LinePath
 {
-	Ogre::Vector3 point1, point2;
-
-	int numSeg;
+	Ogre::Vector3 mPoint1, mPoint2;
+	int mNumSeg;
 
 public:
-	LinePath() : point1(Ogre::Vector3::ZERO), point2(Ogre::Vector3::UNIT_Y), numSeg(1) {}
+	LinePath() : mPoint1(Ogre::Vector3::ZERO), mPoint2(Ogre::Vector3::UNIT_Y), mNumSeg(1) {}
 
 	LinePath& setPoint1(Ogre::Vector3 point1)
 	{
-		this->point1 = point1;
+		mPoint1 = point1;
 		return *this;
 	}
 
 	LinePath& setPoint2(Ogre::Vector3 point2)
 	{
-		this->point2 = point2;
+		mPoint2 = point2;
 		return *this;
 	}
 	
 	LinePath& setNumSeg(int numSeg)
 	{
-		this->numSeg = numSeg;
+		mNumSeg = numSeg;
 		return *this;
 	}
 
 	LinePath& betweenPoints(Ogre::Vector3 point1, Ogre::Vector3 point2)
 	{
-		this->point1 = point1;
-		this->point2 = point2;
+		mPoint1 = point1;
+		mPoint2 = point2;
 		return *this;
 	}
 
 	Path realizePath()
 	{
-		assert(numSeg>0);
+		assert(mNumSeg>0);
 		Path p;
-		for (int i=0;i<=numSeg;i++)
+		for (int i=0;i<=mNumSeg;i++)
 		{
-			p.addPoint(i/(Ogre::Real)numSeg * point1 + i/(Ogre::Real)numSeg * point2);
+			p.addPoint(i/(Ogre::Real)mNumSeg * mPoint1 + i/(Ogre::Real)mNumSeg * mPoint2);
 		}
 		return p;
 	}

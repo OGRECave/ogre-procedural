@@ -38,34 +38,34 @@ namespace Procedural
  */
 class _ProceduralExport SphereGenerator : public MeshGenerator<SphereGenerator>
 {
-	Ogre::Real radius;
-	unsigned int numRings;
-	unsigned int numSegments;
+	Ogre::Real mRadius;
+	unsigned int mNumRings;
+	unsigned int mNumSegments;
 
 public:
-	SphereGenerator() : radius(1.0),
-		numRings(16), numSegments(16)
+	SphereGenerator(Ogre::Real radius = 1.f, int numRings = 16, int numSegments = 16) : 
+	  mRadius(radius),mNumRings(numRings), mNumSegments(numSegments)
 
 	{}
 
 	/** Sets the radius of the sphere (default=1) */
 	inline SphereGenerator & setRadius(Ogre::Real radius)
 	{
-		this->radius = radius;
+		mRadius = radius;
 		return *this;
 	}
 
 	/** Sets the number of rings (default=16) */
 	inline SphereGenerator & setNumRings(unsigned int numRings)
 	{
-		this->numRings = numRings;
+		mNumRings = numRings;
 		return *this;
 	}
 
 	/** Sets the number of segments (default=16) */
 	inline SphereGenerator & setNumSegments(unsigned int numSegments)
 	{
-		this->numSegments = numSegments;
+		mNumSegments = numSegments;
 		return *this;
 	}
 	

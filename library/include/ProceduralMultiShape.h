@@ -42,7 +42,7 @@ namespace Procedural
  */
 class _ProceduralExport MultiShape
 {
-	std::vector<Shape> shapes;
+	std::vector<Shape> mShapes;
 	
 	public:
 	MultiShape()
@@ -50,37 +50,37 @@ class _ProceduralExport MultiShape
 	//-----------------------------------------------------------------------
 	MultiShape(const Shape& shape)
 	{
-		shapes.push_back(shape);
+		mShapes.push_back(shape);
 	}		
 	//-----------------------------------------------------------------------
 	MultiShape& addShape(const Shape& shape)
 	{
-		shapes.push_back(shape);
+		mShapes.push_back(shape);
 		return *this;
 	}	
 	//-----------------------------------------------------------------------
 	const Shape& getShape(int i) const
 	{		
-		return shapes[i];
+		return mShapes[i];
 	}	
 	//-----------------------------------------------------------------------
 	Shape& getShape(int i)
 	{		
-		return shapes[i];
+		return mShapes[i];
 	}
 	//-----------------------------------------------------------------------
 	std::vector<Ogre::Vector2> getPoints() const;
 	//-----------------------------------------------------------------------
 	int getShapeCount() const
 	{
-		return shapes.size();
+		return mShapes.size();
 	}	
 	//-----------------------------------------------------------------------
 	void addMultiShape(const MultiShape& other)
 	{
-		for (std::vector<Shape>::const_iterator it = other.shapes.begin(); it!=other.shapes.end(); it++)
+		for (std::vector<Shape>::const_iterator it = other.mShapes.begin(); it!=other.mShapes.end(); it++)
 		{
-			shapes.push_back(*it);
+			mShapes.push_back(*it);
 		}
 	}	
 	//-----------------------------------------------------------------------

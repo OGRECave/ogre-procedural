@@ -38,15 +38,16 @@ namespace Procedural
  */
 class _ProceduralExport TorusGenerator : public MeshGenerator<TorusGenerator>
 {
-	int numSegSection;
-	int numSegCircle;
-	Ogre::Real radius;
-	Ogre::Real sectionRadius;
+	int mNumSegSection;
+	int mNumSegCircle;
+	Ogre::Real mRadius;
+	Ogre::Real mSectionRadius;
 public:
-	TorusGenerator() : numSegSection(16),
-						numSegCircle(16),
-						radius(1.f),
-						sectionRadius(0.2f) {}
+	TorusGenerator(Ogre::Real radius=1.f, Ogre::Real sectionRadius=.2f, int numSegSection=16, int numSegCircle=16) : 
+		mNumSegSection(numSegSection),
+		mNumSegCircle(numSegCircle),
+		mRadius(radius),
+		mSectionRadius(sectionRadius) {}
 
 	/**
 	 * Builds the mesh into the given TriangleBuffer
@@ -57,28 +58,28 @@ public:
 	/** Sets the number of segments on the section circle */
 	inline TorusGenerator & setNumSegSection(int numSegSection)
 	{
-		this->numSegSection = numSegSection;
+		mNumSegSection = numSegSection;
 		return *this;
 	}
 
 	/** Sets the number of segments along the guiding circle */
 	inline TorusGenerator & setNumSegCircle(int numSegCircle)
 	{
-		this->numSegCircle = numSegCircle;
+		mNumSegCircle = numSegCircle;
 		return *this;
 	}
 
 	/** Sets the radius of the guiding circle */
 	inline TorusGenerator & setRadius(Ogre::Real radius)
 	{
-		this->radius = radius;
+		mRadius = radius;
 		return *this;
 	}
 
 	/** Sets the radius of the section circle */
 	inline TorusGenerator & setSectionRadius(Ogre::Real sectionRadius)
 	{
-		this->sectionRadius = sectionRadius;
+		mSectionRadius = sectionRadius;
 		return *this;
 	}
 

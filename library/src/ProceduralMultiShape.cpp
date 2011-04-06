@@ -38,7 +38,7 @@ namespace Procedural
 	{
 		ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
 				
-		for (std::vector<Shape>::iterator it = shapes.begin(); it!=shapes.end(); it++)
+		for (std::vector<Shape>::iterator it = mShapes.begin(); it!=mShapes.end(); it++)
 		{
 			manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
 			it->_appendToManualObject(manual);
@@ -53,9 +53,9 @@ namespace Procedural
 	std::vector<Vector2> MultiShape::getPoints() const
 	{
 		std::vector<Vector2> result;		
-		for (size_t i = 0;i<shapes.size(); i++)
+		for (size_t i = 0;i<mShapes.size(); i++)
 		{
-			std::vector<Vector2> points = shapes[i].getPoints();
+			std::vector<Vector2> points = mShapes[i].getPoints();
 			result.insert(result.end(), points.begin(), points.end());
 		}
 		return result;
@@ -70,9 +70,9 @@ namespace Procedural
 		Vector2 closestSegmentIntersection;
 		int closestSegmentShape = -1;
 		
-		for (size_t k =0;k<shapes.size();k++)
+		for (size_t k =0;k<mShapes.size();k++)
 		{
-			const Shape& shape = shapes[k];
+			const Shape& shape = mShapes[k];
 			for (size_t i =0;i<shape.getSegCount();i++)
 			{
 				Vector2 A = shape.getPoint(i);
@@ -93,13 +93,13 @@ namespace Procedural
 		}
 		if (closestSegmentIndex!=-1)
 		{
-			if (shapes[closestSegmentShape].getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0)		
+			if (mShapes[closestSegmentShape].getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0)		
 				return true;
 			else
 				return false;
 		}
 		// the shapes must not contradict each other about outside, so just ask the first shape
-		if (shapes[0].findRealOutSide() == shapes[0].getOutSide())
+		if (mShapes[0].findRealOutSide() == mShapes[0].getOutSide())
 			return false;
 		else 
 			return true;

@@ -33,27 +33,27 @@ namespace Procedural
 {
 void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(numSegSection>0 && numSegCircle>0 && "Num seg must be positive");
-	assert(radius>0. && sectionRadius>0. && "Radius must be positive");
-	assert(p>0 && q>0 && "p and q must be positive");
+	assert(mNumSegSection>0 && mNumSegCircle>0 && "Num seg and circle must be positive");
+	assert(mRadius>0. && mSectionRadius>0. && "Radius and section radius must be positive");
+	assert(mP>0 && mQ>0 && "p and q must be positive");
 
 	buffer.rebaseOffset();
-	buffer.estimateVertexCount((numSegCircle*p+1)*(numSegSection+1));
-	buffer.estimateIndexCount((numSegCircle*p)*(numSegSection+1)*6);
+	buffer.estimateVertexCount((mNumSegCircle*mP+1)*(mNumSegSection+1));
+	buffer.estimateIndexCount((mNumSegCircle*mQ)*(mNumSegSection+1)*6);
 
 	int offset = 0;
 
-	for (int i = 0; i <= numSegCircle * p;i++)
+	for (int i = 0; i <= mNumSegCircle * mP;i++)
 	{
-		Ogre::Real phi = Ogre::Math::TWO_PI * i/(Ogre::Real)numSegCircle;
-		Ogre::Real x0 = radius*(2 + cos(q*phi/(Ogre::Real)p)) * cos(phi) / 3.f;
-		Ogre::Real y0 = radius*sin(q*phi/(Ogre::Real)p) / 3.f;
-		Ogre::Real z0 = radius*(2 + cos(q*phi/(Ogre::Real)p)) * sin(phi) / 3.f;
+		Ogre::Real phi = Ogre::Math::TWO_PI * i/(Ogre::Real)mNumSegCircle;
+		Ogre::Real x0 = mRadius*(2 + cos(mQ*phi/(Ogre::Real)mP)) * cos(phi) / 3.f;
+		Ogre::Real y0 = mRadius*sin(mQ*phi/(Ogre::Real)mP) / 3.f;
+		Ogre::Real z0 = mRadius*(2 + cos(mQ*phi/(Ogre::Real)mP)) * sin(phi) / 3.f;
 
-		Ogre::Real phi1 = Ogre::Math::TWO_PI * (i+1)/(Ogre::Real)numSegCircle;
-		Ogre::Real x1 = radius*(2 + cos(q*phi1/p)) * cos(phi1) / 3.f;
-		Ogre::Real y1 = radius*sin(q*phi1/p) / 3.f;
-		Ogre::Real z1 = radius*(2 + cos(q*phi1/p)) * sin(phi1) / 3.f;
+		Ogre::Real phi1 = Ogre::Math::TWO_PI * (i+1)/(Ogre::Real)mNumSegCircle;
+		Ogre::Real x1 = mRadius*(2 + cos(mQ*phi1/mP)) * cos(phi1) / 3.f;
+		Ogre::Real y1 = mRadius*sin(mQ*phi1/mP) / 3.f;
+		Ogre::Real z1 = mRadius*(2 + cos(mQ*phi1/mP)) * sin(phi1) / 3.f;
 
 		Ogre::Vector3 v0(x0,y0,z0);
 		Ogre::Vector3 v1(x1,y1,z1);
@@ -67,21 +67,21 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		Ogre::Quaternion quat2 = tY.getRotationTo(projectedY);
 		Ogre::Quaternion q = quat2 * quat;
 
-		for (int j =0;j<=numSegSection;j++)
+		for (int j =0;j<=mNumSegSection;j++)
 		{
-			Ogre::Real alpha = Ogre::Math::TWO_PI *j/numSegSection;
-			Ogre::Vector3 vp = sectionRadius*(q * Ogre::Vector3(cos(alpha), sin(alpha),0));
+			Ogre::Real alpha = Ogre::Math::TWO_PI *j/mNumSegSection;
+			Ogre::Vector3 vp = mSectionRadius*(mQ * Ogre::Vector3(cos(alpha), sin(alpha),0));
 
 			buffer.position(v0+vp);
 			buffer.normal(vp.normalisedCopy());
-			buffer.textureCoord(i/(Ogre::Real)numSegCircle*uTile, j/(Ogre::Real)numSegSection*vTile);
+			buffer.textureCoord(i/(Ogre::Real)mNumSegCircle*uTile, j/(Ogre::Real)mNumSegSection*vTile);
 
-			if (i != numSegCircle * p)
+			if (i != mNumSegCircle * mP)
 			{
-				buffer.index(offset + numSegSection + 1);
-				buffer.index(offset + numSegSection);
+				buffer.index(offset + mNumSegSection + 1);
+				buffer.index(offset + mNumSegSection);
 				buffer.index(offset);
-				buffer.index(offset + numSegSection + 1);
+				buffer.index(offset + mNumSegSection + 1);
 				buffer.index(offset);
 				buffer.index(offset + 1);
 			}
