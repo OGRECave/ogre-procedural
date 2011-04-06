@@ -33,19 +33,7 @@ THE SOFTWARE.
 using namespace Ogre;
 
 namespace Procedural
-{
-	//-----------------------------------------------------------------------
-	Quaternion Extruder::_computeQuaternion(Ogre::Vector3 direction)
-	{
-		// First, compute an approximate quaternion (everything is ok except Roll angle)
-		Quaternion quat = Vector3::UNIT_Z.getRotationTo(direction);
-		// Then, compute a correction quaternion : we want the "up" direction to be always the same
-		Vector3 projectedY = Vector3::UNIT_Y - Vector3::UNIT_Y.dotProduct(direction) * direction;
-		Vector3 tY = quat * Vector3::UNIT_Y;
-		Quaternion quat2 = tY.getRotationTo(projectedY);
-		Quaternion q = quat2 * quat;
-		return q;
-	}
+{	
 	//-----------------------------------------------------------------------
 	void Extruder::_extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
 	{
@@ -64,7 +52,7 @@ namespace Procedural
 		Vector3 v0 = mExtrusionPath->getPoint(i);
 		Vector3 direction = mExtrusionPath->getAvgDirection(i);
 
-		Quaternion q = _computeQuaternion(direction);
+		Quaternion q = Utils::_computeQuaternion(direction);
 				
 		/*if (mFixSharpAngles && i>0)
 		{
@@ -131,12 +119,12 @@ namespace Procedural
 			buffer.estimateIndexCount(2*indexBuffer.size());
 			buffer.estimateVertexCount(2*pointList.size());
 
-			Quaternion qBegin = _computeQuaternion(mExtrusionPath->getDirectionAfter(0));
-			Quaternion qEnd = _computeQuaternion(mExtrusionPath->getDirectionBefore(mExtrusionPath->getSegCount()));
+			Quaternion qBegin = Utils::_computeQuaternion(mExtrusionPath->getDirectionAfter(0));
+			Quaternion qEnd = Utils::_computeQuaternion(mExtrusionPath->getDirectionBefore(mExtrusionPath->getSegCount()));
 			
 			//begin cap
 			buffer.rebaseOffset();
-			for (int j =0;j<pointList.size();j++)
+			for (size_t j =0;j<pointList.size();j++)
 			{
 				Vector2 vp2 = pointList[j];
 				Vector3 vp(vp2.x, vp2.y, 0);
@@ -148,7 +136,7 @@ namespace Procedural
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
 			
-			for (unsigned short i=0;i<indexBuffer.size()/3;i++)
+			for (size_t i=0;i<indexBuffer.size()/3;i++)
 			{				
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+2]);
@@ -156,7 +144,7 @@ namespace Procedural
 			}
 		// end cap
 			buffer.rebaseOffset();
-			for (unsigned short j =0;j<pointList.size();j++)
+			for (size_t j =0;j<pointList.size();j++)
 			{
 				Vector2 vp2 = pointList[j];
 				Vector3 vp(vp2.x, vp2.y, 0);
@@ -168,7 +156,7 @@ namespace Procedural
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
 			
-			for (unsigned short i=0;i<indexBuffer.size()/3;i++)
+			for (size_t i=0;i<indexBuffer.size()/3;i++)
 			{				
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+1]);

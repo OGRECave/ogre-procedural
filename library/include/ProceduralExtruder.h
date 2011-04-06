@@ -51,12 +51,6 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 	void _extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const;
 
 	void _extrudeCapImpl(TriangleBuffer& buffer) const;
-
-	/**
-	 * Computes a quaternion between UNIT_Z and direction.
-	 * It keeps the "up" vector to UNIT_Y
-	 */
-	static Ogre::Quaternion _computeQuaternion(Ogre::Vector3 direction);
 	
 public:
 	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mFixSharpAngles(false)

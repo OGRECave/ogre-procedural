@@ -132,6 +132,13 @@ public:
 
 		return angle;
 	}
+
+	/**
+	 * Computes a quaternion between UNIT_Z and direction.
+	 * It keeps the "up" vector to UNIT_Y
+	 */
+	static Ogre::Quaternion _computeQuaternion(Ogre::Vector3 direction);
+	
 };
 }
 #endif
