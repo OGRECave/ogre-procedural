@@ -44,16 +44,24 @@ namespace Procedural
 class TriangleBuffer
 {
 	std::vector<int> mIndices;
-	std::vector<Ogre::Vector3> mVertices;
-	std::vector<Ogre::Vector3> mNormals;
-	std::vector<Ogre::Vector2> mUvs;
+
+	struct Vertex
+	{
+		Ogre::Vector3 mPosition;
+		Ogre::Vector3 mNormal;
+		Ogre::Vector2 mUV;
+	};
+
+	std::vector<Vertex> mVertices;
+	//std::vector<Vertex>::iterator mCurrentVertex;
+	Vertex* mCurrentVertex;
 	int mEstimatedVertexCount;
 	int mEstimatedIndexCount;
 	
 	int globalOffset;
 	
 	public:
-	TriangleBuffer() : globalOffset(0), mEstimatedVertexCount(0), mEstimatedIndexCount(0)
+		TriangleBuffer() : globalOffset(0), mEstimatedVertexCount(0), mEstimatedIndexCount(0), mCurrentVertex(0)//, mCurrentVertex(mVertices.end())
 	{}
 
 	/**
@@ -74,15 +82,11 @@ class TriangleBuffer
 		Ogre::ManualObject * manual = sceneMgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-		std::vector<Ogre::Vector3>::iterator itPos = mVertices.begin();
-		std::vector<Ogre::Vector2>::iterator itUvs = mUvs.begin();
-		std::vector<Ogre::Vector3>::iterator itNormals = mNormals.begin();
-
-		for (; itPos != mVertices.end();itPos++,itUvs++,itNormals++)
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it != mVertices.end();it++)
 		{
-			manual->position(*itPos);
-			manual->textureCoord(*itUvs);
-			manual->normal(*itNormals);
+			manual->position(it->mPosition);
+			manual->textureCoord(it->mUV);
+			manual->normal(it->mNormal);
 		}
 		for (std::vector<int>::iterator it = mIndices.begin(); it!=mIndices.end();it++)
 		{
@@ -104,36 +108,42 @@ class TriangleBuffer
 
 	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& position(const Ogre::Vector3& pos)
-	{
-		mVertices.push_back(pos);
+	{	
+		Vertex v;
+		v.mPosition = pos;
+		mVertices.push_back(v);
+		mCurrentVertex = &mVertices.back();
 		return *this;
 	}
 
 	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& position(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
-		mVertices.push_back(Ogre::Vector3(x,y,z));
+		Vertex v;
+		v.mPosition = Ogre::Vector3(x,y,z);
+		mVertices.push_back(v);		
+		mCurrentVertex = &mVertices.back();
 		return *this;
 	}
 	
 	/** Sets the normal of the current vertex */
-	inline TriangleBuffer& normal(const Ogre::Vector3& norm)
+	inline TriangleBuffer& normal(const Ogre::Vector3& normal)
 	{
-		mNormals.push_back(norm);
+		mCurrentVertex->mNormal = normal;
 		return *this;
 	}
 
 	/** Sets the texture coordinates of the current vertex */
 	inline TriangleBuffer& textureCoord(float u, float v)
 	{
-		mUvs.push_back(Ogre::Vector2(u,v));
+		mCurrentVertex->mUV = Ogre::Vector2(u,v);
 		return *this;
 	}
 
 	/** Sets the texture coordinates of the current vertex */
 	inline TriangleBuffer& textureCoord(const Ogre::Vector2& vec)
 	{
-		mUvs.push_back(vec);
+		mCurrentVertex->mUV = vec;
 		return *this;
 	}
 
