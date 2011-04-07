@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "ProceduralTorusKnotGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -45,36 +47,30 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	for (int i = 0; i <= mNumSegCircle * mP;i++)
 	{
-		Ogre::Real phi = Ogre::Math::TWO_PI * i/(Ogre::Real)mNumSegCircle;
-		Ogre::Real x0 = mRadius*(2 + cos(mQ*phi/(Ogre::Real)mP)) * cos(phi) / 3.f;
-		Ogre::Real y0 = mRadius*sin(mQ*phi/(Ogre::Real)mP) / 3.f;
-		Ogre::Real z0 = mRadius*(2 + cos(mQ*phi/(Ogre::Real)mP)) * sin(phi) / 3.f;
+		Real phi = Math::TWO_PI * i/(Real)mNumSegCircle;
+		Real x0 = mRadius*(2 + cos(mQ*phi/(Real)mP)) * cos(phi) / 3.f;
+		Real y0 = mRadius*sin(mQ*phi/(Real)mP) / 3.f;
+		Real z0 = mRadius*(2 + cos(mQ*phi/(Real)mP)) * sin(phi) / 3.f;
 
-		Ogre::Real phi1 = Ogre::Math::TWO_PI * (i+1)/(Ogre::Real)mNumSegCircle;
-		Ogre::Real x1 = mRadius*(2 + cos(mQ*phi1/mP)) * cos(phi1) / 3.f;
-		Ogre::Real y1 = mRadius*sin(mQ*phi1/mP) / 3.f;
-		Ogre::Real z1 = mRadius*(2 + cos(mQ*phi1/mP)) * sin(phi1) / 3.f;
+		Real phi1 = Math::TWO_PI * (i+1)/(Real)mNumSegCircle;
+		Real x1 = mRadius*(2 + cos(mQ*phi1/(Real)mP)) * cos(phi1) / 3.f;
+		Real y1 = mRadius*sin(mQ*phi1/mP) / 3.f;
+		Real z1 = mRadius*(2 + cos(mQ*phi1/(Real)mP)) * sin(phi1) / 3.f;
 
-		Ogre::Vector3 v0(x0,y0,z0);
-		Ogre::Vector3 v1(x1,y1,z1);
-		Ogre::Vector3 direction((v1-v0).normalisedCopy());
+		Vector3 v0(x0,y0,z0);
+		Vector3 v1(x1,y1,z1);
+		Vector3 direction((v1-v0).normalisedCopy());
 				
-		// First, compute an approximate quaternion (everything is ok except Roll angle)
-		Ogre::Quaternion quat = Ogre::Vector3::UNIT_Z.getRotationTo(direction);
-		// Then, compute a correction quaternion : we want the "up" direction to be always the same
-		Ogre::Vector3 projectedY = Ogre::Vector3::UNIT_Y - Ogre::Vector3::UNIT_Y.dotProduct(direction) * direction;		
-		Ogre::Vector3 tY = quat * Ogre::Vector3::UNIT_Y;
-		Ogre::Quaternion quat2 = tY.getRotationTo(projectedY);
-		Ogre::Quaternion q = quat2 * quat;
+		Quaternion q = Utils::_computeQuaternion(direction);
 
 		for (int j =0;j<=mNumSegSection;j++)
 		{
-			Ogre::Real alpha = Ogre::Math::TWO_PI *j/mNumSegSection;
-			Ogre::Vector3 vp = mSectionRadius*(mQ * Ogre::Vector3(cos(alpha), sin(alpha),0));
+			Real alpha = Math::TWO_PI *j/mNumSegSection;
+			Vector3 vp = mSectionRadius*(q * Vector3(cos(alpha), sin(alpha),0));
 
 			buffer.position(v0+vp);
 			buffer.normal(vp.normalisedCopy());
-			buffer.textureCoord(i/(Ogre::Real)mNumSegCircle*uTile, j/(Ogre::Real)mNumSegSection*vTile);
+			buffer.textureCoord(i/(Real)mNumSegCircle*uTile, j/(Real)mNumSegSection*vTile);
 
 			if (i != mNumSegCircle * mP)
 			{
