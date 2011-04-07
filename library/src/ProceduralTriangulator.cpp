@@ -218,6 +218,8 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 	for (std::vector<DelaunaySegment>::iterator it=segList.begin();it!=segList.end();it++)
 	{
 		// TODO remove all edges intersecting *it
+		//			find a triangle which has a point in common with the segment
+		// 
 		// TODO build two polygons
 		// TODO Triangulate each polygon (directly into DelaunayTriangleBuffer)
 	}

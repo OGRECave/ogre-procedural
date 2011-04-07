@@ -121,6 +121,9 @@ public:
 		return Ogre::Math::ACos(f);
 	}
 
+	/**
+	 * Gives the oriented angle from v1 to v2
+	 */
 	static inline Ogre::Radian angleTo(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
 	{
 		Ogre::Radian angle = angleBetween(v1, v2);
