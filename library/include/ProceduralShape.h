@@ -243,6 +243,21 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Applies the given rotation to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param angle of rotation
+     */
+	Shape& rotate(Ogre::Radian angle)
+	{
+		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		{
+			it->x = Ogre::Math::Cos(angle.valueRadians()) * it->x + Ogre::Math::Cos(angle.valueRadians()) * it->y;
+			it->y =-Ogre::Math::Sin(angle.valueRadians()) * it->x + Ogre::Math::Sin(angle.valueRadians()) * it->y;
+		}
+		return *this;
+	}
+
 	private:
 
 	enum BooleanOperationType { BOT_UNION, BOT_INTERSECTION, BOT_DIFFERENCE};
