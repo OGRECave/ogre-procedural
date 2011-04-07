@@ -105,7 +105,7 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 	if (vz0.dotProduct(centerPosition)<0.0) vz0=-vz0;
 	if (vx0.crossProduct(vy0).dotProduct(vz0)<0.0) vy0=-vy0;
 
-	Ogre::Real height= (1-abs(xPos)) * mSizeX+(1-abs(yPos)) * mSizeY+(1-abs(zPos)) * mSizeZ;//TODO
+	Ogre::Real height= (1-abs(xPos)) * mSizeX+(1-abs(yPos)) * mSizeY+(1-abs(zPos)) * mSizeZ;
 	Ogre::Vector3 offsetPosition= centerPosition -.5f*height*vy0;
 	int numSegHeight=1;
 

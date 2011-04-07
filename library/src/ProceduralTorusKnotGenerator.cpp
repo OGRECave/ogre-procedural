@@ -39,7 +39,7 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((mNumSegCircle*mP+1)*(mNumSegSection+1));
-	buffer.estimateIndexCount((mNumSegCircle*mQ)*(mNumSegSection+1)*6);
+	buffer.estimateIndexCount((mNumSegCircle*mP)*(mNumSegSection+1)*6);
 
 	int offset = 0;
 
