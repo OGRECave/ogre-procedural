@@ -84,7 +84,7 @@ class _ProceduralExport MultiShape
 		}
 	}	
 	//-----------------------------------------------------------------------
-	Ogre::MeshPtr MultiShape::realizeMesh(const std::string& name);
+	Ogre::MeshPtr realizeMesh(const std::string& name);
 	//-----------------------------------------------------------------------
 	bool isPointInside(const Ogre::Vector2& point) const;
 	
