@@ -252,10 +252,45 @@ public:
 	{
 		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
 		{
-			it->x = Ogre::Math::Cos(angle.valueRadians()) * it->x + Ogre::Math::Cos(angle.valueRadians()) * it->y;
-			it->y =-Ogre::Math::Sin(angle.valueRadians()) * it->x + Ogre::Math::Sin(angle.valueRadians()) * it->y;
+			it->x = Ogre::Math::Cos(angle.valueRadians()) * it->x - Ogre::Math::Sin(angle.valueRadians()) * it->y;
+			it->y = Ogre::Math::Sin(angle.valueRadians()) * it->x + Ogre::Math::Cos(angle.valueRadians()) * it->y;
 		}
 		return *this;
+	}
+
+	/**
+	 * Applies the given scale to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param amount of scale
+     */	
+	Shape& scale(Ogre::Real amount)
+	{
+		return scale(amount, amount);
+	}
+
+	/**
+	 * Applies the given scale to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param amount of scale
+     */	
+	Shape& scale(Ogre::Real scaleX, Ogre::Real scaleY)
+	{
+		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		{
+			it->x *= scaleX;
+			it->y *= scaleY;
+		}
+		return *this;
+	}
+
+	/**
+	 * Applies the given scale to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param amount of scale
+     */	
+	Shape& scale(Ogre::Vector2 amount)
+	{
+		return scale(amount.x, amount.y);
 	}
 
 	private:
@@ -278,7 +313,7 @@ public:
 		}		
 	};
 
-	bool Shape::_isLookingForOutside(BooleanOperationType opType, char shapeSelector) const;
+	bool _isLookingForOutside(BooleanOperationType opType, char shapeSelector) const;
 	
 	char _isIncreasing(Ogre::Real d, BooleanOperationType opType, char shapeSelector) const;
 		
