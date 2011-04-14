@@ -250,10 +250,14 @@ public:
      */
 	Shape& rotate(Ogre::Radian angle)
 	{
+		Ogre::Real c = Ogre::Math::Cos(angle.valueRadians());
+		Ogre::Real s = Ogre::Math::Sin(angle.valueRadians());
 		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
 		{
-			it->x = Ogre::Math::Cos(angle.valueRadians()) * it->x - Ogre::Math::Sin(angle.valueRadians()) * it->y;
-			it->y = Ogre::Math::Sin(angle.valueRadians()) * it->x + Ogre::Math::Cos(angle.valueRadians()) * it->y;
+			Ogre::Real x = it->x;
+			Ogre::Real y = it->y;
+			it->x = c * x - s * y;
+			it->y = s * x + c * y;
 		}
 		return *this;
 	}
