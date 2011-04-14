@@ -87,6 +87,12 @@ class _ProceduralExport MultiShape
 	Ogre::MeshPtr realizeMesh(const std::string& name);
 	//-----------------------------------------------------------------------
 	bool isPointInside(const Ogre::Vector2& point) const;
+	//-----------------------------------------------------------------------
+	/**
+	 * Tells whether multishape is "closed" or not.
+	 * MultiShape is considered to be closed if and only if all shapes are closed
+	 */
+	bool isClosed() const;
 	
 };
 }
