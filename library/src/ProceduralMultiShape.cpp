@@ -104,5 +104,15 @@ namespace Procedural
 		else 
 			return true;
 	}
+//-----------------------------------------------------------------------
+	bool MultiShape::isClosed() const
+	{
+		for (std::vector<Shape>::const_iterator it = mShapes.begin(); it!=mShapes.end(); it++)
+		{
+			if (!it->isClosed())
+				return false;
+		}
+		return true;
+	}
 
 }
