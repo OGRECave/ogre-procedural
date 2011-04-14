@@ -151,11 +151,17 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
-			Shape s1 = RectangleShape().setWidth(7.).setHeight(3.).realizeShape();
-			Shape s2 = CircleShape().setNumSeg(16).realizeShape().switchSide().translate(-2. * Vector2::UNIT_X);			
-			Shape s3 = CircleShape().setNumSeg(16).realizeShape().switchSide().translate( 2. * Vector2::UNIT_X);
-			MultiShape ms = MultiShape().addShape(s1).addShape(s2).addShape(s3);
-
+			Shape s1 = CircleShape().setNumSeg(16).realizeShape().scale(4,4);
+			Shape s2 = CircleShape().setNumSeg(16).realizeShape().switchSide().scale(1,.3).translate(1.5*Vector2::UNIT_X);
+			MultiShape ms = MultiShape().addShape(s1);
+			for (int i=0;i<8;i++)
+			{
+				Shape s = s2;
+				s.rotate((Radian)i/8.*Math::TWO_PI);
+				ms.addShape(s);
+			}
+			ms.realizeMesh("notri");
+			putMesh("notri");
 			Triangulator::triangulateToMesh(ms, "contourMesh");
 			putMesh("contourMesh");
 
@@ -220,42 +226,15 @@ class Unit_Tests : public BaseApplication
 			Extruder e;
 			e.setCapped(false);
 			
-			e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh("ext1");
-			putMesh("ext1",1);
+			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);
 			////////////////
 			
-			e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh("ext2");
-			putMesh("ext2",1);
+			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh(),1);
 			
-			e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh("ext3");
-			putMesh("ext3",1);
+			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh(),1);
 			////////////////
 			
-			e.setShapeToExtrude(&shape2).setExtrusionPath(&line2).realizeMesh("ext4");
-			putMesh("ext4",1);
-		}
-	};
-
-	/* --------------------------------------------------------------------------- */
-	class Test_Amireh : public Unit_Test
-	{
-	public:		
-		Test_Amireh(SceneManager* sn) : Unit_Test(sn) {}
-
-		String getDescription()
-		{
-			return "Tests the amireh use case";
-		}
-
-		void initImpl()
-		{	
-			Shape shape1 = CircleShape().setRadius(1).setNumSeg(16).realizeShape();
-			Shape shape2 = CircleShape().setRadius(1).setNumSeg(16).realizeShape().switchSide();
-			MultiShape multiShape= MultiShape().addShape(shape1).addShape(shape2);
-			Shape shape = CircleShape().setRadius(1).setNumSeg(16).realizeShape();
-			Path line = CatmullRomSpline3().addPoint(0,0,-3).addPoint(0,0,-1).addPoint(0,0,1).addPoint(-1,0,2).addPoint(-3,0,2).addPoint(-5,0,2).realizePath();			
-			MeshPtr mptr = Extruder().setCapped(false).setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh();			
-			putMesh(mptr,1);			
+			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line2).realizeMesh(),1);
 		}
 	};
 
