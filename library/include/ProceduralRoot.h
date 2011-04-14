@@ -33,8 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Singleton that holds the general parameters of OgreProcedural.
+/** Singleton that holds the general parameters of OgreProcedural.
  * The only required parameter is the scene manager
  */
 class _ProceduralExport Root
@@ -44,7 +43,10 @@ class _ProceduralExport Root
     {}
     public:
 
+	/// The default scene manager used by OgreProcedural to create manual objects
     Ogre::SceneManager* sceneManager;
+
+	/// Return the singleton pointer of this class
     static Root* getInstance()
     {
         if (!instance)

@@ -36,6 +36,7 @@ namespace Procedural
 {
 	class Line;
 //-----------------------------------------------------------------------
+/// Represents a 2D circle
 class Circle
 {
 	private:
@@ -46,22 +47,27 @@ class Circle
 
 	Circle() {}
 	
+	/// Contructor with arguments
 	Circle(Ogre::Vector2 center, Ogre::Real radius) : mCenter(center), mRadius(radius)
 	{}
 	
+	/// Contructor with arguments
 	Circle(Ogre::Vector2 p1, Ogre::Vector2 p2, Ogre::Vector2 p3);	
 	
+	/// Tells whether that point is inside the circle or not
 	bool isPointInside(const Ogre::Vector2& p) const
 	{
 		return (p-mCenter).length() < mRadius;
 	}
 };
 //-----------------------------------------------------------------------
+/// Extends the Ogre::Plane class to be able to compute the intersection between 2 planes
 class Plane : public Ogre::Plane
 {
 public:
 	Plane() : Ogre::Plane() {}
-
+	
+	/// Contructor with arguments
 	Plane(const Ogre::Vector3& normal, const Ogre::Vector3& pos) : Ogre::Plane(normal, pos) {}
 
 	/**
@@ -73,6 +79,7 @@ public:
 	bool intersect(const Plane& other, Line& outputLine) const;
 };
 //-----------------------------------------------------------------------
+/// Represents a line in 3D
 class Line
 {
 	Ogre::Vector3 mPoint;
@@ -80,28 +87,40 @@ class Line
 
 public:
 	Line() {}
+	
+	/// Contructor with arguments
+	/// @arg point a point on the line
+	/// @arg direction a normalized vector representing the direction of that line
 	Line(Ogre::Vector3 point, Ogre::Vector3 direction) : mPoint(point), mDirection(direction.normalisedCopy()) {}
 
+	/// Builds the line between 2 points
 	void setFrom2Points(const Ogre::Vector3& a, const Ogre::Vector3& b)
 	{
 		mPoint = a;
 		mDirection = (b-a).normalisedCopy();
 	}
+
+	/// Finds the shortest vector between that line and a point
 	Ogre::Vector3 shortestPathToPoint(const Ogre::Vector3& point) const;
 };
 //-----------------------------------------------------------------------
+/// Represents a 2D segment
 class Segment2D
 {
 	Ogre::Vector2 mA;
 	Ogre::Vector2 mB;
 	public:
+		
+	/// Contructor with arguments
 	Segment2D(Ogre::Vector2 a, Ogre::Vector2 b) : mA(a), mB(b) {}
 
+	/// Returns point A
 	Ogre::Vector2 getA()
 	{
 		return mA;	
 	}
 
+	/// Returns point B
 	Ogre::Vector2 getB()
 	{
 		return mB;

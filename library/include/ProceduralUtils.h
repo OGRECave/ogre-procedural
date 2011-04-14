@@ -32,30 +32,31 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Holds a bunch of static utility functions
- */
+/// Holds a bunch of static utility functions
 class Utils
 {
 
 	static int counter;
 public:
-	
+	/// Outputs something to the ogre log, with a [PROCEDURAL] prefix
 	static void log(const Ogre::String& st)
 	{
 		Ogre::LogManager::getSingleton().logMessage("[PROCEDURAL] " + st);
 	}
 
+	/// Gets the min between 2 vectors
 	static Ogre::Vector3 min(const Ogre::Vector3& v1, const Ogre::Vector3& v2)
 	{
 		return Ogre::Vector3(std::min(v1.x, v2.x), std::min(v1.y, v2.y), std::min(v1.z, v2.z));
 	}
 
+	/// Gets the max between 2 vectors
 	static Ogre::Vector3 max(const Ogre::Vector3& v1, const Ogre::Vector3& v2)
 	{
 		return Ogre::Vector3(std::max(v1.x, v2.x), std::max(v1.y, v2.y), std::max(v1.z, v2.z));
 	}
 
+	/// Builds an AABB from a list of points
 	static Ogre::AxisAlignedBox AABBfromPoints(std::vector<Ogre::Vector3> points)
 	{
 		Ogre::AxisAlignedBox aabb;
@@ -72,22 +73,26 @@ public:
 		return aabb;
 	}
 
+	/// Generate a name from a prefix and a counter
 	static std::string getName(const std::string& prefix= "default")
 	{
 		counter++;
 		return prefix;
 	}
 
+	/// Shifts the components of the vector to the right
 	static Ogre::Vector3 vectorPermute(const Ogre::Vector3& in)
 	{
 		return Ogre::Vector3(in.z, in.x, in.y);
 	}
 
+	/// Shifts the components of the vector to the left
 	static Ogre::Vector3 vectorAntiPermute(const Ogre::Vector3& in)
 	{
 		return Ogre::Vector3(in.y, in.z, in.x);
 	}
 
+	/// Caps n between min and max
 	static int cap(int n, int min, int max)
 	{
 		return std::max(std::min(n,max),min);

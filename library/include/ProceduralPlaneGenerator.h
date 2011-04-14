@@ -33,9 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Builds a plane mesh
- */
+/// Builds a plane mesh
 class _ProceduralExport PlaneGenerator : public MeshGenerator<PlaneGenerator>
 {
 	int numSegX;

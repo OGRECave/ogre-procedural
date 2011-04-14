@@ -33,9 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Builds an Y-axis tube mesh, i.e. an emptied cylinder
- */
+/// Builds an Y-axis tube mesh, i.e. an emptied cylinder
 class _ProceduralExport TubeGenerator : public MeshGenerator<TubeGenerator>
 {
 	int mNumSegBase;
@@ -45,6 +43,7 @@ class _ProceduralExport TubeGenerator : public MeshGenerator<TubeGenerator>
 	Ogre::Real mHeight;
 
 public:
+	/// Constructor with arguments
 	TubeGenerator(Ogre::Real outerRadius=2.f, Ogre::Real innerRadius=1.f, Ogre::Real height=1.f, int numSegBase=16, int numSegHeight=1) : 
 	    mNumSegBase(numSegBase),
 		mNumSegHeight(numSegHeight),

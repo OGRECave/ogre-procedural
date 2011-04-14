@@ -33,8 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Builds a torus knot mesh
+/** Builds a torus knot mesh
  */
 class _ProceduralExport TorusKnotGenerator : public MeshGenerator<TorusKnotGenerator>
 {
@@ -45,6 +44,7 @@ class _ProceduralExport TorusKnotGenerator : public MeshGenerator<TorusKnotGener
 	int mP;
 	int mQ;
 public:
+	/// Constructor with arguments
 	TorusKnotGenerator(Ogre::Real radius=1.f, Ogre::Real sectionRadius=.2f, int p=2, int q=3, int numSegSection=8, int numSegCircle=16) :
 		mNumSegSection(numSegSection),
 		mNumSegCircle(numSegCircle),

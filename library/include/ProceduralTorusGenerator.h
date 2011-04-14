@@ -33,8 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Builds a torus mesh whose axis is Y
+/** Builds a torus mesh whose axis is Y
  */
 class _ProceduralExport TorusGenerator : public MeshGenerator<TorusGenerator>
 {
@@ -43,6 +42,7 @@ class _ProceduralExport TorusGenerator : public MeshGenerator<TorusGenerator>
 	Ogre::Real mRadius;
 	Ogre::Real mSectionRadius;
 public:
+	/// Constructor with arguments
 	TorusGenerator(Ogre::Real radius=1.f, Ogre::Real sectionRadius=.2f, int numSegSection=16, int numSegCircle=16) : 
 		mNumSegSection(numSegSection),
 		mNumSegCircle(numSegCircle),

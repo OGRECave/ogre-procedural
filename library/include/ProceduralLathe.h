@@ -34,15 +34,16 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Builds a mesh by rotating a shape 360° around Y-axis.
+/** Builds a mesh by rotating a shape 360° around Y-axis.
+ * The shape is assumed to be defined in the X>0 half-plane
  */
 class _ProceduralExport Lathe : public MeshGenerator<Lathe>
 {
 	Shape* mShapeToExtrude;
 	int mNumSeg;
 
-public:
+public:	
+	/// Contructor with arguments
 	Lathe(Shape* shapeToExtrude = 0, int numSeg = 16) : mShapeToExtrude(shapeToExtrude), mNumSeg(numSeg)
 	{}
 

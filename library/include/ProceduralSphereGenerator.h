@@ -33,8 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Builds an UV sphere mesh
+/** Builds an UV sphere mesh
  */
 class _ProceduralExport SphereGenerator : public MeshGenerator<SphereGenerator>
 {
@@ -43,6 +42,7 @@ class _ProceduralExport SphereGenerator : public MeshGenerator<SphereGenerator>
 	unsigned int mNumSegments;
 
 public:
+	/// Constructor with arguments
 	SphereGenerator(Ogre::Real radius = 1.f, int numRings = 16, int numSegments = 16) : 
 	  mRadius(radius),mNumRings(numRings), mNumSegments(numSegments)
 

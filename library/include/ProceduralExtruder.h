@@ -36,8 +36,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Extrudes a 2D shape along a path to build an extruded mesh.
+/** Extrudes a 2D shape along a path to build an extruded mesh.
  * Can be used to build things such as pipelines, roads...
  */
 class _ProceduralExport Extruder : public MeshGenerator<Extruder>
@@ -53,6 +52,7 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 	void _extrudeCapImpl(TriangleBuffer& buffer) const;
 	
 public:
+	/// Default constructor
 	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mFixSharpAngles(false)
 	{}
 	
@@ -92,6 +92,10 @@ public:
 		return *this;
 	}
 
+	/// WIP
+	/// Sets the FixSharpAngles option (default = false)
+	/// When enabled, extruder tries to prevent the generated mesh to self intersect when 
+	/// the angles coming from the path are too sharp
 	inline Extruder & setFixSharpAngles(bool fixSharpAngles)
 	{
 		mFixSharpAngles = fixSharpAngles;

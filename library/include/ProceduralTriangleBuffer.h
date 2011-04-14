@@ -36,8 +36,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * This is ogre-procedural's temporary mesh buffer.
+/** This is ogre-procedural's temporary mesh buffer.
  * It stores all the info needed to build an Ogre Mesh, yet is intented to be more flexible, since
  * there is no link towards hardware.
  */
@@ -169,6 +168,7 @@ class TriangleBuffer
 		return *this;
 	}
 	
+	/// Applies a matrix to transform all vertices inside the triangle buffer
 	void applyTransform(const Ogre::Matrix4& matrix)
 	{
 		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)

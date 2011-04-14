@@ -33,15 +33,15 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Builds an icosphere mesh, ie a sphere built with equally sized triangles
+/** Builds an icosphere mesh, ie a sphere built with equally sized triangles
  */
 class _ProceduralExport IcoSphereGenerator : public MeshGenerator<IcoSphereGenerator>
 {
 	Ogre::Real mRadius;
 	unsigned int mNumIterations;
 
-public:
+public:	
+	/// Contructor with arguments
 	IcoSphereGenerator(Ogre::Real radius = 1.f, unsigned int numIterations = 2) : 
 		mRadius(radius),
 		mNumIterations(numIterations)

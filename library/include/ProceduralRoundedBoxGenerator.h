@@ -33,8 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Builds a rounded box.
+/** Builds a rounded box.
  * You can choose the size of the rounded borders to get a sharper or smoother look.
  */
 class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGenerator>
@@ -102,9 +101,13 @@ public:
 	 * @param buffer The TriangleBuffer on where to append the mesh.
 	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
+
+private:
 	
+	/// Internal. Builds an "edge" of the rounded box, ie a quarter cylinder
 	void _addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos) const;
 	
+	/// Internal. Builds a "corner" of the rounded box, ie a 1/8th of a sphere
 	void _addCorner(TriangleBuffer& buffer, bool isXPositive, bool isYPositive, bool isZPositive) const;
 
 };

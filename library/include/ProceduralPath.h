@@ -36,8 +36,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Succession of points in 3D space.
+/** Succession of points in 3D space.
  * Can be closed or not.
  */
 class _ProceduralExport Path
@@ -45,6 +44,7 @@ class _ProceduralExport Path
 	std::vector<Ogre::Vector3> mPoints;
 	bool mClosed;
 public:
+	/// Default constructor
 	Path() : mClosed(false)	{}
 
 	/** Adds a point to the path, as a Vector3 */
@@ -166,22 +166,27 @@ public:
 
 };
 //-----------------------------------------------------------------------
+/// Base class for Path generators
 template<class T>
 class BaseSpline3
 {
 protected:
+	/// The number of segments between 2 control points
 	int mNumSeg;
+	/// Tells if the spline is closed or not
 	bool mClosed;
 public:
 	BaseSpline3() : mNumSeg(4), mClosed(false) {}	
 
+	/// Sets the number of segments between 2 control points
 	T& setNumSeg(int numSeg)
 	{
 		assert(numSeg>=1);
 		mNumSeg = numSeg;
 		return (T&)*this;
 	}
-		
+	
+	/// Closes the spline
 	T& close()
 	{
 		mClosed = true;
@@ -191,13 +196,17 @@ public:
 //-----------------------------------------------------------------------
 /**
  * Builds a path from a Catmull-Rom Spline.
+ * Catmull-Rom Spline is the exact equivalent of Ogre's simple spline, ie
+ * a spline for which position is smoothly interpolated between control points
  */
 class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3>
 {	
 	std::vector<Ogre::Vector3> mPoints;
 	public:	
+	/// Default constructor
 	CatmullRomSpline3() {}
 	
+	/// Copy constructor from an Ogre simplespline
 	CatmullRomSpline3(const Ogre::SimpleSpline& input) 
 	{
 		mPoints.resize(input.getNumPoints());
@@ -205,6 +214,7 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 			mPoints.push_back(input.getPoint(i));
 	}
 	
+	/// Outputs current spline to an Ogre spline
 	Ogre::SimpleSpline toSimpleSpline() const 
 	{
 		Ogre::SimpleSpline spline;
@@ -213,18 +223,21 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 		return spline;
 	}
 	
+	/// Adds a control point
 	CatmullRomSpline3& addPoint(const Ogre::Vector3& pt)
 	{
 		mPoints.push_back(pt);
 		return *this;
 	}
 
+	/// Adds a control point
 	CatmullRomSpline3& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
 		mPoints.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
 	
+	/// Safely gets a control point
 	const Ogre::Vector3& safeGetPoint(int i) const
 	{
 		if (mClosed)
@@ -238,116 +251,38 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 	Path realizePath();	
 };
 //-----------------------------------------------------------------------
-/**
- * Enables to build a Path from Bezier control points.
- * Tangents are automatically calculated from control points, so the curve will "touch" every point you define
- */
-class _ProceduralExport BezierPath
-{
-	std::vector<Ogre::Vector3> mPoints;
-
-	int mNumSeg;
-	bool mClosed;
-public:
-	BezierPath() : mNumSeg(4), mClosed(false) {}
-
-	BezierPath& addPoint(const Ogre::Vector3& pt)
-	{
-		mPoints.push_back(pt);
-		return *this;
-	}
-
-	BezierPath& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
-	{
-	    mPoints.push_back(Ogre::Vector3(x,y,z));
-	    return *this;
-	}
-
-	BezierPath& reset()
-	{
-		mPoints.clear();
-		return *this;
-	}
-
-	BezierPath& close()
-	{
-		mClosed = true;
-		return *this;
-	}
-
-	BezierPath& setNumSeg(int numSeg)
-	{
-		assert(numSeg>=1);
-		mNumSeg = numSeg;
-		return *this;
-	}
-
-	const Ogre::Vector3& getPoint(int i)
-	{
-		if (mClosed)
-			return mPoints[Utils::modulo(i,mPoints.size())];
-		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
-	}
-
-	/**
-	 * Build a shape from bezier shape
-	 */
-	Path realizePath()
-	{
-		Path path;
-
-		for (unsigned short i=0;i<mPoints.size();i++)
-		{
-			const Ogre::Vector3& P0 = mPoints[i];
-			const Ogre::Vector3& P3 = getPoint(i+1);
-
-			Ogre::Vector3 P1 = P0 + 0.5 * (getPoint(i+1)-getPoint(i-1));
-			Ogre::Vector3 P2 = P3 - 0.5 * (getPoint(i+2)-P0);
-
-			for (unsigned short j=0;j<mNumSeg;j++)
-			{
-				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)mNumSeg;
-				Ogre::Vector3 P = pow(1-t,3)*P0 + 3*pow(1-t,2)*t*P1 + 3*(1-t)*pow(t,2)*P2 + pow(t,3)*P3;
-				path.addPoint(P);
-			}
-			if (i==mPoints.size()-1 && !mClosed)
-			{
-				path.addPoint(P3);
-			}
-		}
-		if (mClosed)
-			path.close();
-
-		return path;
-	}
-};
-
+/// Builds a line Path between 2 points
 class _ProceduralExport LinePath
 {
 	Ogre::Vector3 mPoint1, mPoint2;
 	int mNumSeg;
 
 public:
+	/// Default constructor
 	LinePath() : mPoint1(Ogre::Vector3::ZERO), mPoint2(Ogre::Vector3::UNIT_Y), mNumSeg(1) {}
 
+	/// Sets first point
 	LinePath& setPoint1(Ogre::Vector3 point1)
 	{
 		mPoint1 = point1;
 		return *this;
 	}
 
+	/// Sets second point
 	LinePath& setPoint2(Ogre::Vector3 point2)
 	{
 		mPoint2 = point2;
 		return *this;
 	}
 	
+	/// Sets the number of segments for this line
 	LinePath& setNumSeg(int numSeg)
 	{
 		mNumSeg = numSeg;
 		return *this;
 	}
 
+	/// Builds a linepath between 2 points
 	LinePath& betweenPoints(Ogre::Vector3 point1, Ogre::Vector3 point2)
 	{
 		mPoint1 = point1;
@@ -355,6 +290,7 @@ public:
 		return *this;
 	}
 
+	/// Outputs a path
 	Path realizePath()
 	{
 		assert(mNumSeg>0);
