@@ -33,16 +33,15 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Generates a box mesh centered on the origin.
+/** Generates a box mesh centered on the origin.
  * Default size is 1.0 with 1 quad per face.
- *
  */
 class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
 {
 	Ogre::Real mSizeX,mSizeY,mSizeZ;
 	int mNumSegX,mNumSegY,mNumSegZ;
 public:
+	/// Contructor with arguments
 	BoxGenerator(Ogre::Real sizeX=1.f, Ogre::Real sizeY=1.f, Ogre::Real sizeZ=1.f, int numSegX=1, int numSegY=1, int numSegZ=1) : 
 	  mSizeX(sizeX), mSizeY(sizeY), mSizeZ(sizeZ), mNumSegX(numSegX), mNumSegY(numSegY), mNumSegZ(numSegZ) {}
 

@@ -40,8 +40,7 @@ namespace Procedural
 {
 enum Side {SIDE_LEFT, SIDE_RIGHT};
 
-/**
- * Describes a succession of interconnected 2D points.
+/** Describes a succession of interconnected 2D points.
  * It can be closed or not, and there's always an outside and an inside
  */
 class _ProceduralExport Shape
@@ -51,30 +50,32 @@ class _ProceduralExport Shape
 	Side mOutSide;
 
 public:
+	/// Default constructor
 	Shape() : mClosed(false), mOutSide(SIDE_RIGHT) {}
 
-	/* --------------------------------------------------------------------------- */
+	//---------------------------------------------------------------------------
+	/// Adds a point to the shape
 	inline Shape& addPoint(const Ogre::Vector2& pt)
 	{
 		mPoints.push_back(pt);
 		return *this;
-	}
-	
-	/* --------------------------------------------------------------------------- */
+	}	
+	//---------------------------------------------------------------------------
+	/// Adds a point to the shape
 	inline Shape& addPoint(Ogre::Real x, Ogre::Real y)
 	{
 		mPoints.push_back(Ogre::Vector2(x, y));
 		return *this;
-	}
-	
-	/* --------------------------------------------------------------------------- */
+	}	
+	//---------------------------------------------------------------------------
+	/// Clears the content of the shape
 	inline Shape& reset()
 	{
 		mPoints.clear();
 		return *this;
 	}
-	
-	/* --------------------------------------------------------------------------- */
+	//---------------------------------------------------------------------------
+	/// Gets raw vector data of this shape
 	inline std::vector<Ogre::Vector2> getPoints() const
 	{
 		return mPoints;
@@ -112,6 +113,7 @@ public:
 		return *this;
 	}	
 	/* --------------------------------------------------------------------------- */
+	/// Gets which side is out
 	inline Side getOutSide() const
 	{
 		return mOutSide;
@@ -123,12 +125,12 @@ public:
 		mOutSide = (mOutSide == SIDE_LEFT)? SIDE_RIGHT: SIDE_LEFT;
 		return *this;
 	}	
-
+	/// Gets the number of segments in that shape
 	inline size_t getSegCount() const
 	{
 		return (mPoints.size()-1) + (mClosed?1:0);
 	}	
-
+	/// Gets whether the shape is closed or not
 	inline bool isClosed() const
 	{
 	  return mClosed;
@@ -160,11 +162,13 @@ public:
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
 	}	
 
+	/// Gets the average between before direction and after direction
 	inline Ogre::Vector2 getAvgDirection(int i) const
 	{
 		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 	}	
 
+	/// Gets the shape normal just after that point
 	inline Ogre::Vector2 getNormalAfter(int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
@@ -172,6 +176,7 @@ public:
 		return getDirectionAfter(i).perpendicular();
 	}	
 
+	/// Gets the shape normal just before that point
 	inline Ogre::Vector2 getNormalBefore(int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
@@ -179,6 +184,7 @@ public:
 		return getDirectionBefore(i).perpendicular();
 	}	
 
+	/// Gets the "normal" of that point ie an average between before and after normals
 	inline Ogre::Vector2 getAvgNormal(int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
@@ -246,7 +252,7 @@ public:
 	/**
 	 * Applies the given rotation to all the points already defined.
 	 * Has strictly no effect on the points defined after that
-	 * @param angle of rotation
+	 * @param angle angle of rotation
      */
 	Shape& rotate(Ogre::Radian angle)
 	{
@@ -265,7 +271,7 @@ public:
 	/**
 	 * Applies the given scale to all the points already defined.
 	 * Has strictly no effect on the points defined after that
-	 * @param amount of scale
+	 * @param amount amount of scale
      */	
 	Shape& scale(Ogre::Real amount)
 	{
@@ -275,7 +281,8 @@ public:
 	/**
 	 * Applies the given scale to all the points already defined.
 	 * Has strictly no effect on the points defined after that
-	 * @param amount of scale
+	 * @param scaleX amount of scale in the X direction
+	 * @param scaleY amount of scale in the Y direction
      */	
 	Shape& scale(Ogre::Real scaleX, Ogre::Real scaleY)
 	{

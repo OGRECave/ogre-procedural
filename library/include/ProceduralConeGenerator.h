@@ -33,16 +33,15 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Generates a cone mesh along Y-axis
- */
+/// Generates a cone mesh along Y-axis
 class _ProceduralExport ConeGenerator : public MeshGenerator<ConeGenerator>
 {
 	int mNumSegBase;
 	int mNumSegHeight;
 	Ogre::Real mRadius;
 	Ogre::Real mHeight;
-public:
+public:	
+	/// Contructor with arguments
 	ConeGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, int numSegBase = 16, int numSegHeight = 1) :
 		mNumSegBase(numSegBase),
 		mNumSegHeight(numSegHeight),

@@ -33,37 +33,46 @@ THE SOFTWARE.
 namespace Procedural
 {
 //-----------------------------------------------------------------------
+/// Base class for Shape generators
 template<class T>
 class BaseSpline2
 {
 protected:
-	int numSeg;
-	bool closed;
-	Side outSide;
+	/// The number of segments between 2 control points
+	int mNumSeg;
+	/// Whether the shape will be closed or not
+	bool mClosed;
+	/// The "out" side of the shape
+	Side mOutSide;
 public:
-	BaseSpline2() : numSeg(4), closed(false), outSide(SIDE_RIGHT) {}
+	/// Default constructor
+	BaseSpline2() : mNumSeg(4), mClosed(false), mOutSide(SIDE_RIGHT) {}
 	
-	T& setOutSide(Side side)
+	/// Sets the out side of the shape
+	T& setOutSide(Side outSide)
 	{
-		outSide = side;
+		mOutSide = outSide;
 		return (T&)*this;
 	}
 
+	/// Gets the out side of the shape
 	Side getOutSide() const
 	{
-		return outSide;
+		return mOutSide;
 	}
 
+	/// Sets the number of segments between 2 control points
 	T& setNumSeg(int numSeg)
 	{
 		assert(numSeg>=1);
-		this->numSeg = numSeg;
+		mNumSeg = numSeg;
 		return (T&)*this;
 	}
-		
+
+	/// Closes the spline
 	T& close()
 	{
-		closed = true;
+		mClosed = true;
 		return (T&)*this;
 	}
 };
@@ -83,19 +92,20 @@ class _ProceduralExport CubicHermiteSpline2 : public BaseSpline2<CubicHermiteSpl
 		ControlPoint(Ogre::Vector2 p, Ogre::Vector2 before, Ogre::Vector2 after) : position(p), tangentBefore(before), tangentAfter(after) {}
 	};
 
-	std::vector<ControlPoint> points;	
+	std::vector<ControlPoint> mPoints;	
 	
 public:
+	/// Adds a control point
 	void addPoint(Ogre::Vector2 p, Ogre::Vector2 before, Ogre::Vector2 after)
 	{
-		points.push_back(ControlPoint(p, before, after));
+		mPoints.push_back(ControlPoint(p, before, after));
 	}
-	
+	/// Safely gets a control point
 	const ControlPoint& safeGetPoint(int i) const
 	{
-		if (closed)
-			return points[Utils::modulo(i,points.size())];
-		return points[Utils::cap(i,0,points.size()-1)];
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 
 	/**
@@ -107,28 +117,32 @@ public:
 //-----------------------------------------------------------------------
 /**
  * Builds a shape from a Catmull-Rom Spline.
+ * A catmull-rom smoothly interpolates position between control points
  */
 class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2>
 {	
-	std::vector<Ogre::Vector2> points;
+	std::vector<Ogre::Vector2> mPoints;
 	public:	
+	/// Adds a control point
 	CatmullRomSpline2& addPoint(const Ogre::Vector2& pt)
 	{
-		points.push_back(pt);
+		mPoints.push_back(pt);
 		return *this;
 	}
 
+	/// Adds a control point
 	CatmullRomSpline2& addPoint(Ogre::Real x, Ogre::Real y)
 	{
-		points.push_back(Ogre::Vector2(x,y));
+		mPoints.push_back(Ogre::Vector2(x,y));
 		return *this;
 	}
 	
+	/// Safely gets a control point
 	const Ogre::Vector2& safeGetPoint(int i) const
 	{
-		if (closed)
-			return points[Utils::modulo(i,points.size())];
-		return points[Utils::cap(i,0,points.size()-1)];
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 	
 	/**
@@ -156,26 +170,29 @@ class _ProceduralExport KochanekBartelsSpline2 : public BaseSpline2<KochanekBart
 		ControlPoint(Ogre::Vector2 p) : position(p), tension(0.), bias(0.), continuity(0.) {}
 	};
 
-	std::vector<ControlPoint> points;
+	std::vector<ControlPoint> mPoints;
 	
 public:
+	/// Adds a control point
 	KochanekBartelsSpline2& addPoint(Ogre::Real x, Ogre::Real y)
 	{
-		points.push_back(ControlPoint(Ogre::Vector2(x,y)));
+		mPoints.push_back(ControlPoint(Ogre::Vector2(x,y)));
 		return *this;
 	}
 
+	/// Adds a control point
 	KochanekBartelsSpline2& addPoint(Ogre::Vector2 p)
 	{
-		points.push_back(ControlPoint(p));
+		mPoints.push_back(ControlPoint(p));
 		return *this;
 	}
 
+	/// Safely gets a control point
 	const ControlPoint& safeGetPoint(int i) const
 	{
-		if (closed)
-			return points[Utils::modulo(i,points.size())];
-		return points[Utils::cap(i,0,points.size()-1)];
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 
 	/**
@@ -187,7 +204,7 @@ public:
 	 */
 	KochanekBartelsSpline2& addPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c)
 	{
-		points.push_back(ControlPoint(p,t,b,c));
+		mPoints.push_back(ControlPoint(p,t,b,c));
 		return *this;
 	}
 
@@ -204,30 +221,34 @@ public:
  */
 class _ProceduralExport RectangleShape
 {
-	Ogre::Real width,height;
+	Ogre::Real mWidth,mHeight;
 
 	public:
-	RectangleShape() : width(1.0), height(1.0) {}
+	/// Default constructor
+	RectangleShape() : mWidth(1.0), mHeight(1.0) {}
 
+	/// Sets width
 	RectangleShape& setWidth(Ogre::Real width)
 	{
-		this->width = width;
+		mWidth = width;
 		return *this;
 	}
 
+	/// Sets height
 	RectangleShape& setHeight(Ogre::Real height)
 	{
-		this->height = height;
+		mHeight = height;
 		return *this;
 	}
 
+	/// Builds the shape
 	Shape realizeShape()
 	{
 		Shape s;
-		s.addPoint(-.5f*width,-.5f*height)
-		 .addPoint(.5f*width,-.5f*height)
-		 .addPoint(.5f*width,.5f*height)
-		 .addPoint(-.5f*width,.5f*height)
+		s.addPoint(-.5f*mWidth,-.5f*mHeight)
+		 .addPoint(.5f*mWidth,-.5f*mHeight)
+		 .addPoint(.5f*mWidth,.5f*mHeight)
+		 .addPoint(-.5f*mWidth,.5f*mHeight)
 		 .close();
 		return s;
 	}
@@ -239,31 +260,35 @@ class _ProceduralExport RectangleShape
  */
 class _ProceduralExport CircleShape
 {
-	Ogre::Real radius;
-	int numSeg;
+	Ogre::Real mRadius;
+	int mNumSeg;
 
 	public:
-	CircleShape() : radius(1.0), numSeg(8) {}
+	/// Default constructor
+	CircleShape() : mRadius(1.0), mNumSeg(8) {}
 
+	/// Sets radius
 	CircleShape& setRadius(Ogre::Real radius)
 	{
-		this->radius = radius;
+		mRadius = radius;
 		return *this;
 	}
 
+	/// Sets number of segments
 	CircleShape& setNumSeg(int numSeg)
 	{
-		this->numSeg = numSeg;
+		mNumSeg = numSeg;
 		return *this;
 	}
 
+	/// Builds the shape
 	Shape realizeShape()
 	{
 		Shape s;
-		Ogre::Real deltaAngle = Ogre::Math::TWO_PI/(Ogre::Real)numSeg;
-		for (int i=0;i<numSeg;i++)
+		Ogre::Real deltaAngle = Ogre::Math::TWO_PI/(Ogre::Real)mNumSeg;
+		for (int i=0;i<mNumSeg;i++)
 		{
-			s.addPoint(radius*cosf(i*deltaAngle), radius*sinf(i*deltaAngle));
+			s.addPoint(mRadius*cosf(i*deltaAngle), mRadius*sinf(i*deltaAngle));
 		}
 		s.close();
 		return s;

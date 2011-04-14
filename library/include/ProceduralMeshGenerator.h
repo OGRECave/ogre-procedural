@@ -37,20 +37,28 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
- * Superclass of everything that builds meshes
+/** Superclass of everything that builds meshes
  */
 template <typename T>
 class MeshGenerator
 {
 protected:
+	/// A pointer to the default scene manager
 	Ogre::SceneManager* sceneMgr;
+
+	/// U tile for texture coords generation
 	Ogre::Real uTile;
+
+	/// V tile for texture coords generation
 	Ogre::Real vTile;
 
+	/// Whether to produces normals or not
 	bool enableNormals;
+
+	/// The number of texture coordinate sets to include
 	unsigned int numTexCoordSet;
 public:
+	/// Default constructor
 	MeshGenerator() : uTile(1.f),
 					  vTile(1.f),
 					  enableNormals(true),
@@ -63,6 +71,7 @@ public:
 	/**
 	 * Builds a mesh.
 	 * @param name of the mesh for the MeshManager
+	 * @param group ressource group in which the mesh will be created
 	 */
 	Ogre::MeshPtr realizeMesh(const std::string& name = "", 
         const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)

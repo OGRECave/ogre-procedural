@@ -34,8 +34,7 @@ namespace Procedural
 {
 	class Shape;
 
-/**
- * Holds a bunch of shapes.
+/** Holds a bunch of shapes.
  * There are a number of assumptions that are made and are not checked
  * against : the shapes must not cross each other
  * 
@@ -45,37 +44,45 @@ class _ProceduralExport MultiShape
 	std::vector<Shape> mShapes;
 	
 	public:
+	/// Default constructor
 	MultiShape()
 	{}		
 	//-----------------------------------------------------------------------
+	/// Constructor from a single shape
 	MultiShape(const Shape& shape)
 	{
 		mShapes.push_back(shape);
 	}		
 	//-----------------------------------------------------------------------
+	/// Adds a shape to the list of shapes
 	MultiShape& addShape(const Shape& shape)
 	{
 		mShapes.push_back(shape);
 		return *this;
 	}	
 	//-----------------------------------------------------------------------
+	/// Returns the i-th shape
 	const Shape& getShape(int i) const
 	{		
 		return mShapes[i];
 	}	
 	//-----------------------------------------------------------------------
+	/// Returns the i-th shape
 	Shape& getShape(int i)
 	{		
 		return mShapes[i];
 	}
 	//-----------------------------------------------------------------------
+	/// Builds an aggregated list of all points contained in all shapes
 	std::vector<Ogre::Vector2> getPoints() const;
 	//-----------------------------------------------------------------------
+	/// Returns the number of shapes in that MultiShape
 	int getShapeCount() const
 	{
 		return mShapes.size();
 	}	
 	//-----------------------------------------------------------------------
+	/// Append every shape of an other multishape to the current multiShape
 	void addMultiShape(const MultiShape& other)
 	{
 		for (std::vector<Shape>::const_iterator it = other.mShapes.begin(); it!=other.mShapes.end(); it++)
@@ -84,8 +91,13 @@ class _ProceduralExport MultiShape
 		}
 	}	
 	//-----------------------------------------------------------------------
+	/// Outputs the Multi Shape to a Mesh, mostly for visualisation or debugging purposes
 	Ogre::MeshPtr realizeMesh(const std::string& name);
 	//-----------------------------------------------------------------------
+	/// Tells whether a point is located inside that multishape
+	/// It assumes that all of the shapes in that multishape are closed, 
+	/// and that they don't contradict each other, 
+	/// ie a point cannot be outside and inside at the same time
 	bool isPointInside(const Ogre::Vector2& point) const;
 	//-----------------------------------------------------------------------
 	/**
