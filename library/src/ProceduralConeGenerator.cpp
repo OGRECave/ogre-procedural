@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "ProceduralConeGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -40,24 +42,26 @@ void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1)+mNumSegBase+2);
 	buffer.estimateIndexCount(mNumSegHeight*mNumSegBase*6+3*mNumSegBase);
 	
-	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / mNumSegBase);
-	Ogre::Real deltaHeight = mHeight/(Ogre::Real)mNumSegHeight;
+	Real deltaAngle = (Math::TWO_PI / mNumSegBase);
+	Real deltaHeight = mHeight/(Real)mNumSegHeight;
 	int offset = 0;
 
-	Ogre::Vector3 refNormal = Ogre::Vector3(mRadius, mHeight, 0.f).normalisedCopy();
-	Ogre::Quaternion q;
+	Vector3 refNormal = Vector3(mRadius, mHeight, 0.f).normalisedCopy();
+	Quaternion q;
 
 	for (int i = 0; i <=mNumSegHeight; i++)
 	{
-		Ogre::Real r0 = mRadius * (1 - i / (Ogre::Real)mNumSegHeight);
+		Real r0 = mRadius * (1 - i / (Real)mNumSegHeight);
 		for (int j = 0; j<=mNumSegBase; j++)
 		{
-			Ogre::Real x0 = r0* cosf(j*deltaAngle);
-			Ogre::Real z0 = r0 * sinf(j*deltaAngle);
-			buffer.position(x0, i*deltaHeight, z0);
-			q.FromAngleAxis(Ogre::Radian(-j*deltaAngle), Ogre::Vector3::UNIT_Y);
-			buffer.normal(q*refNormal);
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile, i/(Ogre::Real)mNumSegHeight*vTile);
+			Real x0 = r0* cosf(j*deltaAngle);
+			Real z0 = r0 * sinf(j*deltaAngle);
+
+			q.FromAngleAxis(Radian(-j*deltaAngle), Vector3::UNIT_Y);
+
+			addPoint(buffer, Vector3(x0, i*deltaHeight, z0),
+							q*refNormal,
+							Vector2(j/(Real)mNumSegBase, i/(Real)mNumSegHeight));
 
 			if (i != mNumSegHeight&& j != mNumSegBase)
 			{
@@ -75,18 +79,19 @@ void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	//low cap
 	int centerIndex = offset;
-	buffer.position(0,0,0);
-	buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-	buffer.textureCoord(0.0,vTile);
+	addPoint(buffer, Vector3::ZERO,
+					Vector3::NEGATIVE_UNIT_Y,
+					Vector2::UNIT_Y);
 	offset++;
 	for (int j=0; j<=mNumSegBase; j++)
 	{
-		Ogre::Real x0 = mRadius * cosf(j*deltaAngle);
-		Ogre::Real z0 = mRadius * sinf(j*deltaAngle);
+		Real x0 = mRadius * cosf(j*deltaAngle);
+		Real z0 = mRadius * sinf(j*deltaAngle);
 
-		buffer.position(x0, 0.0f, z0);
-		buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-		buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,0.0);
+		addPoint(buffer, Vector3(x0, 0.0f, z0),
+				 Vector3::NEGATIVE_UNIT_Y,
+				 Vector2(j/(Real)mNumSegBase,0.0));
+
 		if (j!=mNumSegBase)
 		{
 			buffer.index(centerIndex);

@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "ProceduralCylinderGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 
@@ -48,18 +50,19 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	}
 
 
-	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / mNumSegBase);
-	Ogre::Real deltaHeight = mHeight/(Ogre::Real)mNumSegHeight;
+	Real deltaAngle = (Math::TWO_PI / mNumSegBase);
+	Real deltaHeight = mHeight/(Real)mNumSegHeight;
 	int offset = 0;
 
 	for (int i = 0; i <=mNumSegHeight; i++)
 		for (int j = 0; j<=mNumSegBase; j++)
 		{
-			Ogre::Real x0 = mRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = mRadius * sinf(j*deltaAngle);
-			buffer.position(x0, i*deltaHeight, z0);
-			buffer.normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile, i/(Ogre::Real)mNumSegHeight*vTile);
+			Real x0 = mRadius * cosf(j*deltaAngle);
+			Real z0 = mRadius * sinf(j*deltaAngle);
+			
+			addPoint(buffer, Vector3(x0, i*deltaHeight, z0),
+				Vector3(x0,0,z0).normalisedCopy(),
+				Vector2(j/(Real)mNumSegBase, i/(Real)mNumSegHeight));
 
 			if (i != mNumSegHeight) 
 			{
@@ -76,18 +79,18 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
 		//low cap
 		int centerIndex = offset;
-		buffer.position(0,0,0);
-		buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-		buffer.textureCoord(0.0,vTile);
+		addPoint(buffer, Vector3::ZERO,
+						 Vector3::NEGATIVE_UNIT_Y,
+						 Vector2::UNIT_Y);
 		offset++;
 		for (int j=0;j<=mNumSegBase;j++)
 		{
-			Ogre::Real x0 = mRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = mRadius * sinf(j*deltaAngle);
+			Real x0 = mRadius * cosf(j*deltaAngle);
+			Real z0 = mRadius * sinf(j*deltaAngle);
 
-			buffer.position(x0, 0.0f, z0);
-			buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase,0.0);
+			addPoint(buffer, Vector3(x0, 0.0f, z0),
+							Vector3::NEGATIVE_UNIT_Y,
+							Vector2(j/(Real)mNumSegBase,0.0));
 			if (j!=mNumSegBase)
 			{
 				buffer.index(centerIndex);
@@ -98,18 +101,18 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		}
 		// high cap
 		centerIndex = offset;
-		buffer.position(0,mHeight,0);
-		buffer.normal(Ogre::Vector3::UNIT_Y);
-		buffer.textureCoord(0.0,0.0);
+		addPoint(buffer, Vector3(0,mHeight,0),
+						 Vector3::UNIT_Y,
+						 Vector2::ZERO);
 		offset++;
 		for (int j=0;j<=mNumSegBase;j++)
 		{
-			Ogre::Real x0 = mRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = mRadius * sinf(j*deltaAngle);
+			Real x0 = mRadius * cosf(j*deltaAngle);
+			Real z0 = mRadius * sinf(j*deltaAngle);
 
-			buffer.position(x0, mHeight, z0);
-			buffer.normal(Ogre::Vector3::UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,vTile);
+			addPoint(buffer, Vector3(x0, mHeight, z0),
+							 Vector3::UNIT_Y,
+							 Vector2(j/(Real)mNumSegBase,1.));
 			if (j!=mNumSegBase)
 			{
 				buffer.index(centerIndex);

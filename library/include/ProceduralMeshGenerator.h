@@ -44,28 +44,32 @@ class MeshGenerator
 {
 protected:
 	/// A pointer to the default scene manager
-	Ogre::SceneManager* sceneMgr;
+	Ogre::SceneManager* mSceneMgr;
 
 	/// U tile for texture coords generation
-	Ogre::Real uTile;
+	Ogre::Real mUTile;
 
 	/// V tile for texture coords generation
-	Ogre::Real vTile;
+	Ogre::Real mVTile;
+
+	/// Rectangle in which the texture coordinates will be placed
+	Ogre::Vector2 mUVOrigin;
 
 	/// Whether to produces normals or not
-	bool enableNormals;
+	bool mEnableNormals;
 
 	/// The number of texture coordinate sets to include
-	unsigned int numTexCoordSet;
+	unsigned char mNumTexCoordSet;
 public:
 	/// Default constructor
-	MeshGenerator() : uTile(1.f),
-					  vTile(1.f),
-					  enableNormals(true),
-					  numTexCoordSet(1)
+	MeshGenerator() : mUTile(1.f),
+					  mVTile(1.f),
+					  mEnableNormals(true),
+					  mNumTexCoordSet(1),
+					  mUVOrigin(0,0)
 	{
-		sceneMgr = Root::getInstance()->sceneManager;
-		assert(sceneMgr && "Scene Manager must be set in Root");
+		mSceneMgr = Root::getInstance()->sceneManager;
+		assert(mSceneMgr && "Scene Manager must be set in Root");
 	}
 
 	/**
@@ -96,7 +100,7 @@ public:
 	 */
 	inline T& setUTile(Ogre::Real uTile)
 	{
-		this->uTile = uTile;
+		mUTile = uTile;
 		return static_cast<T&>(*this);
 	}
 
@@ -105,26 +109,47 @@ public:
 	 */	
 	inline T & setVTile(Ogre::Real vTile)
 	{
-		this->vTile = vTile;
+		mVTile = vTile;
 		return static_cast<T&>(*this);
 	}
 
+	/**
+	 * Sets the texture rectangle
+	 */	
+	inline T & setTextureRectangle(Ogre::Rectangle textureRectangle)
+	{
+		mUVOrigin = Ogre::Vector2(textureRectangle.top, textureRectangle.left);
+		mUTile = textureRectangle.right-textureRectangle.left;
+		mVTile = textureRectangle.bottom-textureRectangle.top;
+		return static_cast<T&>(*this);
+	}
+	
 	/**
 	 * Sets whether normals are enabled or not (default=true)
 	 */	
 	inline T & setEnableNormals(bool enableNormals)
 	{
-		this->enableNormals = enableNormals;
+		mEnableNormals = enableNormals;
 		return static_cast<T&>(*this);
 	}
 
 	/**
 	 * Sets the number of texture coordintate sets (default=1)
 	 */
-	inline T & setNumTexCoordSet(unsigned int numTexCoordSet)
+	inline T & setNumTexCoordSet(unsigned char numTexCoordSet)
 	{
-		this->numTexCoordSet = numTexCoordSet;
+		mNumTexCoordSet = numTexCoordSet;
 		return static_cast<T&>(*this);
+	}
+
+protected:
+	inline void addPoint(TriangleBuffer& buffer, const Ogre::Vector3& position, const Ogre::Vector3& normal, const Ogre::Vector2& uv) const
+	{
+		buffer.position(position);
+		if (mEnableNormals)
+			buffer.normal(normal);
+		for (unsigned char i=0;i<mNumTexCoordSet;i++)
+			buffer.textureCoord(mUVOrigin.x + uv.x*mUTile, mUVOrigin.y+uv.y*mVTile);
 	}
 
 };

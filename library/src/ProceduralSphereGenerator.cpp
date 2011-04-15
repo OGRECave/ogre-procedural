@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "ProceduralSphereGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -40,26 +42,24 @@ void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	buffer.estimateVertexCount((mNumRings+1)*(mNumSegments+1));
 	buffer.estimateIndexCount(mNumRings*(mNumSegments+1)*6);
 
-	Ogre::Real fDeltaRingAngle = (Ogre::Math::PI / mNumRings);
-	Ogre::Real fDeltaSegAngle = (Ogre::Math::TWO_PI / mNumSegments);
+	Real fDeltaRingAngle = (Math::PI / mNumRings);
+	Real fDeltaSegAngle = (Math::TWO_PI / mNumSegments);
 	int offset = 0;
 
 	// Generate the group of rings for the sphere
 	for(unsigned int ring = 0; ring <= mNumRings; ring++ ) {
-		Ogre::Real r0 = mRadius * sinf (ring * fDeltaRingAngle);
-		Ogre::Real y0 = mRadius * cosf (ring * fDeltaRingAngle);
+		Real r0 = mRadius * sinf (ring * fDeltaRingAngle);
+		Real y0 = mRadius * cosf (ring * fDeltaRingAngle);
 
 		// Generate the group of segments for the current ring
 		for(unsigned int seg = 0; seg <= mNumSegments; seg++) {
-			Ogre::Real x0 = r0 * sinf(seg * fDeltaSegAngle);
-			Ogre::Real z0 = r0 * cosf(seg * fDeltaSegAngle);
+			Real x0 = r0 * sinf(seg * fDeltaSegAngle);
+			Real z0 = r0 * cosf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			buffer.position( x0, y0, z0);
-			if (enableNormals)
-				buffer.normal(Ogre::Vector3(x0, y0, z0).normalisedCopy());
-			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				buffer.textureCoord((Ogre::Real) seg / (Ogre::Real) mNumSegments * uTile, (Ogre::Real) ring / (Ogre::Real) mNumRings * vTile);
+			addPoint(buffer, Vector3(x0, y0, z0),
+							 Vector3(x0, y0, z0).normalisedCopy(),
+							 Vector2((Real) seg / (Real) mNumSegments, (Real) ring / (Real) mNumRings));
 
 			if (ring != mNumRings) {
 				// each vertex (except the last) has six indices pointing to it

@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "ProceduralTubeGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural {
 void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
@@ -40,18 +42,18 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1)*2+(mNumSegBase+1)*4);
 	buffer.estimateIndexCount(6*(mNumSegBase+1)*mNumSegHeight*2+6*mNumSegBase*2);
 	
-	Ogre::Real deltaAngle = (Ogre::Math::TWO_PI / mNumSegBase);
-	Ogre::Real deltaHeight = mHeight/(Ogre::Real)mNumSegHeight;
+	Real deltaAngle = (Math::TWO_PI / mNumSegBase);
+	Real deltaHeight = mHeight/(Real)mNumSegHeight;
 	int offset = 0;
 
 	for (int i = 0; i <=mNumSegHeight; i++)
 		for (int j = 0; j<=mNumSegBase; j++)
 		{
-			Ogre::Real x0 = mOuterRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = mOuterRadius * sinf(j*deltaAngle);
-			buffer.position(x0, i*deltaHeight, z0);
-			buffer.normal(Ogre::Vector3(x0,0,z0).normalisedCopy());
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile, i/(Ogre::Real)mNumSegHeight*vTile);
+			Real x0 = mOuterRadius * cosf(j*deltaAngle);
+			Real z0 = mOuterRadius * sinf(j*deltaAngle);
+			addPoint(buffer, Vector3(x0, i*deltaHeight, z0),
+									Vector3(x0,0,z0).normalisedCopy(),
+									Vector2(j/(Real)mNumSegBase, i/(Real)mNumSegHeight));
 
 			if (i != mNumSegHeight) 
 			{
@@ -68,11 +70,11 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	for (int i = 0; i <=mNumSegHeight; i++)
 		for (int j = 0; j<=mNumSegBase; j++)
 		{
-			Ogre::Real x0 = mInnerRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = mInnerRadius * sinf(j*deltaAngle);
-			buffer.position(x0, i*deltaHeight, z0);
-			buffer.normal(-Ogre::Vector3(x0,0,z0).normalisedCopy());
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile, i/(Ogre::Real)mNumSegHeight*vTile);
+			Real x0 = mInnerRadius * cosf(j*deltaAngle);
+			Real z0 = mInnerRadius * sinf(j*deltaAngle);
+			addPoint(buffer, Vector3(x0, i*deltaHeight, z0),
+							 -Vector3(x0,0,z0).normalisedCopy(),
+							 Vector2(j/(Real)mNumSegBase, i/(Real)mNumSegHeight));
 
 			if (i != mNumSegHeight) 
 			{
@@ -90,19 +92,19 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		//low cap
 		for (int j=0;j<=mNumSegBase;j++)
 		{
-			Ogre::Real x0 = mInnerRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = mInnerRadius * sinf(j*deltaAngle);
+			Real x0 = mInnerRadius * cosf(j*deltaAngle);
+			Real z0 = mInnerRadius * sinf(j*deltaAngle);
 
-			buffer.position(x0, 0.0f, z0);
-			buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,vTile);
+			addPoint(buffer, Vector3(x0, 0.0f, z0),
+							 Vector3::NEGATIVE_UNIT_Y,
+							 Vector2(j/(Real)mNumSegBase,1.));
 
 			x0 = mOuterRadius * cosf(j*deltaAngle);
 			z0 = mOuterRadius * sinf(j*deltaAngle);
 
-			buffer.position(x0, 0.0f, z0);
-			buffer.normal(Ogre::Vector3::NEGATIVE_UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,0.0);
+			addPoint(buffer, Vector3(x0, 0.0f, z0),
+							 Vector3::NEGATIVE_UNIT_Y,
+							 Vector2(j/(Real)mNumSegBase,0.));
 
 			if (j!=mNumSegBase)
 			{
@@ -120,19 +122,19 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		//high cap
 		for (int j=0;j<=mNumSegBase;j++)
 		{
-			Ogre::Real x0 = mInnerRadius * cosf(j*deltaAngle);
-			Ogre::Real z0 = mInnerRadius * sinf(j*deltaAngle);
+			Real x0 = mInnerRadius * cosf(j*deltaAngle);
+			Real z0 = mInnerRadius * sinf(j*deltaAngle);
 
-			buffer.position(x0, mHeight, z0);
-			buffer.normal(Ogre::Vector3::UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,0.0);
+			addPoint(buffer, Vector3(x0, mHeight, z0),
+							 Vector3::UNIT_Y,
+							 Vector2(j/(Real)mNumSegBase,0.));
 
 			x0 = mOuterRadius * cosf(j*deltaAngle);
 			z0 = mOuterRadius * sinf(j*deltaAngle);
 
-			buffer.position(x0, mHeight, z0);
-			buffer.normal(Ogre::Vector3::UNIT_Y);
-			buffer.textureCoord(j/(Ogre::Real)mNumSegBase*uTile,vTile);
+			addPoint(buffer, Vector3(x0, mHeight, z0),
+							 Vector3::UNIT_Y,
+							 Vector2(j/(Real)mNumSegBase,1.));
 
 			if (j!=mNumSegBase)
 			{

@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "ProceduralTorusGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -40,22 +42,22 @@ void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	buffer.estimateVertexCount((mNumSegCircle+1)*(mNumSegSection+1));
 	buffer.estimateIndexCount((mNumSegCircle)*(mNumSegSection+1)*6);
 
-	Ogre::Real deltaSection = (Ogre::Math::TWO_PI / mNumSegSection);
-	Ogre::Real deltaCircle = (Ogre::Math::TWO_PI / mNumSegCircle);
+	Real deltaSection = (Math::TWO_PI / mNumSegSection);
+	Real deltaCircle = (Math::TWO_PI / mNumSegCircle);
 	int offset = 0;
 
 	for (int i = 0; i <=mNumSegCircle; i++)
 		for (int j = 0; j<=mNumSegSection; j++)
 		{
-			Ogre::Vector3 c0(mRadius, 0.0, 0.0);
-			Ogre::Vector3 v0(mRadius+mSectionRadius * cosf(j*deltaSection),mSectionRadius * sinf(j*deltaSection),0.0);
-			Ogre::Quaternion q;
-			q.FromAngleAxis(Ogre::Radian(i*deltaCircle),Ogre::Vector3::UNIT_Y);
-			Ogre::Vector3 v = q * v0;
-			Ogre::Vector3 c = q * c0;
-			buffer.position(v);
-			buffer.normal((v-c).normalisedCopy());
-			buffer.textureCoord(i/(Ogre::Real)mNumSegCircle*uTile, j/(Ogre::Real)mNumSegSection*vTile);
+			Vector3 c0(mRadius, 0.0, 0.0);
+			Vector3 v0(mRadius+mSectionRadius * cosf(j*deltaSection),mSectionRadius * sinf(j*deltaSection),0.0);
+			Quaternion q;
+			q.FromAngleAxis(Radian(i*deltaCircle),Vector3::UNIT_Y);
+			Vector3 v = q * v0;
+			Vector3 c = q * c0;
+			addPoint(buffer, v,
+							 (v-c).normalisedCopy(),
+							 Vector2(i/(Real)mNumSegCircle, j/(Real)mNumSegSection));
 
 			if (i != mNumSegCircle)
 			{

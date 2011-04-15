@@ -63,11 +63,9 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			buffer.position( x0, 0.5f*mHeight + y0, z0);
-			if (enableNormals)
-				buffer.normal(Vector3(x0, y0, z0).normalisedCopy());
-			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				buffer.textureCoord((Real) seg / (Real) mNumSegments * uTile, (Real) ring / (Real) mNumRings * vTile * sphereRatio);
+			addPoint(buffer, Vector3(x0, 0.5f*mHeight + y0, z0),
+							 Vector3(x0, y0, z0).normalisedCopy(),
+							 Vector2((Real) seg / (Real) mNumSegments, (Real) ring / (Real) mNumRings * sphereRatio));
 			
 			// each vertex (except the last) has six indices pointing to it
 			buffer.index(offset + mNumSegments + 1);
@@ -90,9 +88,10 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		{
 			Real x0 = mRadius * cosf(j*deltaAngle);
 			Real z0 = mRadius * sinf(j*deltaAngle);
-			buffer.position(x0, 0.5f*mHeight-i*deltamHeight, z0);
-			buffer.normal(Vector3(x0,0,z0).normalisedCopy());
-			buffer.textureCoord(j/(Real)mNumSegments*uTile, i/(Real)mNumSegHeight*vTile * cylinderRatio + sphereRatio);
+
+			addPoint(buffer, Vector3(x0, 0.5f*mHeight-i*deltamHeight, z0),
+							 Vector3(x0,0,z0).normalisedCopy(),
+							 Vector2(j/(Real)mNumSegments, i/(Real)mNumSegHeight * cylinderRatio + sphereRatio));
 
 			buffer.index(offset + mNumSegments + 1);
 			buffer.index(offset + mNumSegments);
@@ -119,12 +118,10 @@ void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			Real z0 = r0 * sinf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
-			buffer.position( x0, -0.5f*mHeight + y0, z0);
-			if (enableNormals)
-				buffer.normal(Vector3(x0, y0, z0).normalisedCopy());
-			for (unsigned int tc=0;tc<numTexCoordSet;tc++)
-				buffer.textureCoord((Real) seg / (Real) mNumSegments * uTile, (Real) ring / (Real) mNumRings * vTile*sphereRatio + cylinderRatio + sphereRatio);
-
+			addPoint(buffer, Vector3(x0, -0.5f*mHeight + y0, z0), 
+							 Vector3(x0, y0, z0).normalisedCopy(), 
+							 Vector2((Real) seg / (Real) mNumSegments, (Real) ring / (Real) mNumRings*sphereRatio + cylinderRatio + sphereRatio));
+			
 			if (ring != mNumRings) 
 			{
 				// each vertex (except the last) has six indices pointing to it
