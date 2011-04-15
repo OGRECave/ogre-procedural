@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "ProceduralIcoSphereGenerator.h"
 #include "ProceduralUtils.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -36,25 +38,25 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	assert(mRadius>0. && "Radius must me positive");
 	assert(mNumIterations>0 && "numIterations must be positive");
 
-	std::vector<Ogre::Vector3> vertices;
+	std::vector<Vector3> vertices;
 	int offset = 0;
 
 	/// Step 1 : Generate icosahedron
-	Ogre::Real phi = .5f*(1.f+sqrt(5.f));
-	Ogre::Real invnorm = 1/sqrt(phi*phi+1);
+	Real phi = .5f*(1.f+sqrt(5.f));
+	Real invnorm = 1/sqrt(phi*phi+1);
 
-	vertices.push_back(invnorm*Ogre::Vector3(-1,  phi, 0));//0
-	vertices.push_back(invnorm*Ogre::Vector3( 1,  phi, 0));//1
-	vertices.push_back(invnorm*Ogre::Vector3(0,   1,  -phi));//2
-	vertices.push_back(invnorm*Ogre::Vector3(0,   1,   phi));//3
-	vertices.push_back(invnorm*Ogre::Vector3(-phi,0,  -1));//4
-	vertices.push_back(invnorm*Ogre::Vector3(-phi,0,   1));//5
-	vertices.push_back(invnorm*Ogre::Vector3( phi,0,  -1));//6
-	vertices.push_back(invnorm*Ogre::Vector3( phi,0,   1));//7
-	vertices.push_back(invnorm*Ogre::Vector3(0,   -1, -phi));//8
-	vertices.push_back(invnorm*Ogre::Vector3(0,   -1,  phi));//9
-	vertices.push_back(invnorm*Ogre::Vector3(-1,  -phi,0));//10
-	vertices.push_back(invnorm*Ogre::Vector3( 1,  -phi,0));//11
+	vertices.push_back(invnorm*Vector3(-1,  phi, 0));//0
+	vertices.push_back(invnorm*Vector3( 1,  phi, 0));//1
+	vertices.push_back(invnorm*Vector3(0,   1,  -phi));//2
+	vertices.push_back(invnorm*Vector3(0,   1,   phi));//3
+	vertices.push_back(invnorm*Vector3(-phi,0,  -1));//4
+	vertices.push_back(invnorm*Vector3(-phi,0,   1));//5
+	vertices.push_back(invnorm*Vector3( phi,0,  -1));//6
+	vertices.push_back(invnorm*Vector3( phi,0,   1));//7
+	vertices.push_back(invnorm*Vector3(0,   -1, -phi));//8
+	vertices.push_back(invnorm*Vector3(0,   -1,  phi));//9
+	vertices.push_back(invnorm*Vector3(-1,  -phi,0));//10
+	vertices.push_back(invnorm*Vector3( 1,  -phi,0));//11
 
 	int firstFaces[] = {0,1,2,
 						0,3,1,
@@ -96,9 +98,9 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			int i12 = vertices.size();
 			int i23 = i12+1;
 			int i13 = i12+2;
-			Ogre::Vector3 v1 = vertices[i1];
-			Ogre::Vector3 v2 = vertices[i2];
-			Ogre::Vector3 v3 = vertices[i3];
+			Vector3 v1 = vertices[i1];
+			Vector3 v2 = vertices[i2];
+			Vector3 v3 = vertices[i3];
 			//make 1 vertice at the center of each edge and project it onto the sphere
 			vertices.push_back((v1+v2).normalisedCopy());
 			vertices.push_back((v2+v3).normalisedCopy());
@@ -121,17 +123,17 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	}
 
 	/// Step 3 : generate texcoords
-	std::vector<Ogre::Vector2> texCoords;
+	std::vector<Vector2> texCoords;
 	for (unsigned short i=0;i<vertices.size();i++)
 	{
-		const Ogre::Vector3& vec = vertices[i];
-		Ogre::Real u, v;
-		Ogre::Real r0 = sqrtf(vec.x*vec.x+vec.z*vec.z);
-		Ogre::Real alpha;
+		const Vector3& vec = vertices[i];
+		Real u, v;
+		Real r0 = sqrtf(vec.x*vec.x+vec.z*vec.z);
+		Real alpha;
 		alpha = atan2f(vec.z,vec.x);
-		u = alpha/Ogre::Math::TWO_PI+.5f;
-		v = atan2f(vec.y, r0)/Ogre::Math::PI + .5f;
-		texCoords.push_back(Ogre::Vector2(u,v));
+		u = alpha/Math::TWO_PI+.5f;
+		v = atan2f(vec.y, r0)/Math::PI + .5f;
+		texCoords.push_back(Vector2(u,v));
 	}
 
 	/// Step 4 : fix texcoords
@@ -139,9 +141,9 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	std::vector<int> indexToSplit;
 	for (unsigned short i=0;i<faces.size()/3;i++)
 	{
-		Ogre::Vector2& t0 = texCoords[faces[i*3+0]];
-		Ogre::Vector2& t1 = texCoords[faces[i*3+1]];
-		Ogre::Vector2& t2 = texCoords[faces[i*3+2]];
+		Vector2& t0 = texCoords[faces[i*3+0]];
+		Vector2& t1 = texCoords[faces[i*3+1]];
+		Vector2& t2 = texCoords[faces[i*3+2]];
 		if (abs(t2.x-t0.x)>0.5)
 		{
 			if (t0.x<0.5)
@@ -169,8 +171,8 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
 		int index = indexToSplit[i];
 		//duplicate vertex
-		Ogre::Vector3 v = vertices[index];
-		Ogre::Vector2 t = texCoords[index] + Ogre::Vector2::UNIT_X;
+		Vector3 v = vertices[index];
+		Vector2 t = texCoords[index] + Vector2::UNIT_X;
 		vertices.push_back(v);
 		texCoords.push_back(t);
 		int newIndex = vertices.size()-1;
@@ -196,11 +198,9 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	for (unsigned short i=0; i<vertices.size(); i++)
 	{
-		buffer.position(mRadius*vertices[i]);
-		if (enableNormals)
-			buffer.normal(vertices[i]);//note : vertices are already normalised
-		for (unsigned short tc=0; tc<numTexCoordSet; tc++)
-			buffer.textureCoord(texCoords[i].x*uTile,texCoords[i].y*vTile);
+		addPoint(buffer, mRadius*vertices[i],
+						 vertices[i],//note : vertices are already normalised
+						 Vector2(texCoords[i].x,texCoords[i].y));
 	}
 	for (unsigned short i=0; i<size; i++)
 	{

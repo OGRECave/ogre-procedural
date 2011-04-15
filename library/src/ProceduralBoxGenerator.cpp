@@ -40,7 +40,7 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	assert(mSizeX>0. && mSizeY>0. && mSizeZ>0. && "Sizes must be positive");
 
 	PlaneGenerator pg;
-	pg.setUTile(uTile).setVTile(vTile);
+	pg.setUTile(mUTile).setVTile(mVTile);
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Vector3::NEGATIVE_UNIT_Z)
 	  .setPosition(.5f*mSizeZ*Vector3::NEGATIVE_UNIT_Z)

@@ -80,9 +80,10 @@ namespace Procedural
 			Vector3 normal(vp2normal.x, vp2normal.y, 0);							
 			buffer.rebaseOffset();
 			Vector3 newPoint = v0+q*vp;
-			buffer.position(newPoint);
-			buffer.normal(q*normal);
-			buffer.textureCoord(i/(Real)numSegPath*uTile, j/(Real)numSegShape*vTile);
+
+			addPoint(buffer, newPoint,
+							 q*normal, 
+							 Vector2(i/(Real)numSegPath, j/(Real)numSegShape));
 
 			if (j <numSegShape && i <numSegPath)
 			{		
@@ -130,10 +131,10 @@ namespace Procedural
 				Vector3 vp(vp2.x, vp2.y, 0);
 				Vector3 normal = -Vector3::UNIT_Z;				
 
-				Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*vp;				
-				buffer.position(newPoint);				
-				buffer.normal(qBegin*normal);
-				buffer.textureCoord(vp2.x, vp2.y);
+				Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*vp;
+				addPoint(buffer, newPoint,
+								 qBegin*normal,
+								 vp2);
 			}
 			
 			for (size_t i=0;i<indexBuffer.size()/3;i++)
@@ -142,7 +143,8 @@ namespace Procedural
 				buffer.index(indexBuffer[i*3+2]);
 				buffer.index(indexBuffer[i*3+1]);
 			}
-		// end cap
+
+			// end cap
 			buffer.rebaseOffset();
 			for (size_t j =0;j<pointList.size();j++)
 			{
@@ -151,9 +153,9 @@ namespace Procedural
 				Vector3 normal = Vector3::UNIT_Z;				
 
 				Vector3 newPoint = mExtrusionPath->getPoint(mExtrusionPath->getSegCount())+qEnd*vp;				
-				buffer.position(newPoint);				
-				buffer.normal(qEnd*normal);
-				buffer.textureCoord(vp2.x, vp2.y);
+				addPoint(buffer, newPoint,
+								 qEnd*normal,
+								 vp2);
 			}
 			
 			for (size_t i=0;i<indexBuffer.size()/3;i++)

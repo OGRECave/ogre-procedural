@@ -28,6 +28,8 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralLathe.h"
 
+using namespace Ogre;
+
 namespace Procedural
 {
 void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -43,26 +45,26 @@ void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 		for (int i=0;i<=mNumSeg;i++)
 		{
-			Ogre::Real angle = i/(Ogre::Real)mNumSeg*Ogre::Math::TWO_PI;
-			Ogre::Quaternion q;
-			q.FromAngleAxis((Ogre::Radian)angle,Ogre::Vector3::UNIT_Y);
+			Real angle = i/(Real)mNumSeg*Math::TWO_PI;
+			Quaternion q;
+			q.FromAngleAxis((Radian)angle,Vector3::UNIT_Y);
 
 			for (int j=0;j<=numSegShape;j++)
 			{
-				Ogre::Vector2 v0 = mShapeToExtrude->getPoint(j);
-				Ogre::Vector3 vp(v0.x,v0.y,0);
-				Ogre::Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
-				Ogre::Vector2 vp2normal = vp2direction.perpendicular();
-				Ogre::Vector3 normal(vp2normal.x, vp2normal.y, 0);
+				Vector2 v0 = mShapeToExtrude->getPoint(j);
+				Vector3 vp(v0.x,v0.y,0);
+				Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
+				Vector2 vp2normal = vp2direction.perpendicular();
+				Vector3 normal(vp2normal.x, vp2normal.y, 0);
 				normal.normalise();
 				if (mShapeToExtrude->getOutSide() == SIDE_LEFT)
 				{
 					normal = -normal;
 				}
 
-				buffer.position(q*vp);
-				buffer.normal(q*normal);
-				buffer.textureCoord(i/(Ogre::Real)mNumSeg*uTile, j/(Ogre::Real)numSegShape*vTile);
+				addPoint(buffer, q*vp,
+								 q*normal,
+								 Vector2(i/(Real)mNumSeg, j/(Real)numSegShape));
 
 				if (j <numSegShape && i <mNumSeg)
 				{

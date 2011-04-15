@@ -68,9 +68,9 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			Real alpha = Math::TWO_PI *j/mNumSegSection;
 			Vector3 vp = mSectionRadius*(q * Vector3(cos(alpha), sin(alpha),0));
 
-			buffer.position(v0+vp);
-			buffer.normal(vp.normalisedCopy());
-			buffer.textureCoord(i/(Real)mNumSegCircle*uTile, j/(Real)mNumSegSection*vTile);
+			addPoint(buffer, v0+vp,
+							 vp.normalisedCopy(),
+							 Vector2(i/(Real)mNumSegCircle, j/(Real)mNumSegSection));
 
 			if (i != mNumSegCircle * mP)
 			{

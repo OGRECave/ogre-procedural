@@ -54,9 +54,9 @@ void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	for (unsigned short i1 = 0; i1<=numSegX; i1++)
 		for (unsigned short i2 = 0; i2<=numSegY; i2++)
 		{
-			buffer.position(orig+i1*delta1+i2*delta2+position);
-			buffer.textureCoord(i1/(Real)numSegX*uTile, i2/(Real)numSegY*vTile);
-			buffer.normal(normal);
+			addPoint(buffer, orig+i1*delta1+i2*delta2+position,
+						     normal,
+							 Vector2(i1/(Real)numSegX, i2/(Real)numSegY));
 		}
 
 	bool reverse = false;
