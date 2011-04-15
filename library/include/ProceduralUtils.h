@@ -44,16 +44,28 @@ public:
 		Ogre::LogManager::getSingleton().logMessage("[PROCEDURAL] " + st);
 	}
 
-	/// Gets the min between 2 vectors
+	/// Gets the min of the coordinates between 2 vectors
 	static Ogre::Vector3 min(const Ogre::Vector3& v1, const Ogre::Vector3& v2)
 	{
 		return Ogre::Vector3(std::min(v1.x, v2.x), std::min(v1.y, v2.y), std::min(v1.z, v2.z));
 	}
 
-	/// Gets the max between 2 vectors
+	/// Gets the max of the coordinates between 2 vectors
 	static Ogre::Vector3 max(const Ogre::Vector3& v1, const Ogre::Vector3& v2)
 	{
 		return Ogre::Vector3(std::max(v1.x, v2.x), std::max(v1.y, v2.y), std::max(v1.z, v2.z));
+	}
+
+	/// Gets the min of the coordinates between 2 vectors
+	static Ogre::Vector2 min(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
+	{
+		return Ogre::Vector2(std::min(v1.x, v2.x), std::min(v1.y, v2.y));
+	}
+
+	/// Gets the max of the coordinates between 2 vectors
+	static Ogre::Vector2 max(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
+	{
+		return Ogre::Vector2(std::max(v1.x, v2.x), std::max(v1.y, v2.y));
 	}
 
 	/// Builds an AABB from a list of points

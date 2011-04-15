@@ -49,9 +49,8 @@ class _ProceduralExport Triangulator
 	typedef std::list<Triangle> DelaunayTriangleBuffer;
 		
 	static void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer);
-	static void addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer);
-	static void triangulatePolygon(const std::vector<int>& input, const DelaunaySegment& seg, DelaunayTriangleBuffer& tbuffer, const PointList& pointList);	
-	
+	static void addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer, const PointList& pl);
+	static void _recursiveTriangulatePolygon(const DelaunaySegment& cuttingSeg, std::vector<int> inputPoints, DelaunayTriangleBuffer& tbuffer, const PointList&  pl);
 //-----------------------------------------------------------------------
 struct DelaunaySegment
 {
@@ -106,6 +105,14 @@ struct Triangle
 	}
 
 	bool isPointInsideCircumcircle(const Ogre::Vector2& point);
+
+	void makeDirectIfNeeded()
+	{
+		if ((p(1)-p(0)).crossProduct(p(2)-p(0))<0)
+		{
+			std::swap(i[0], i[1]);
+		}
+	}
 };
 //-----------------------------------------------------------------------
 struct TouchSuperTriangle
