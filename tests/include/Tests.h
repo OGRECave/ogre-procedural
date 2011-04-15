@@ -151,7 +151,7 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
-			Shape s1 = CircleShape().setNumSeg(16).realizeShape().scale(4,4);
+			/*Shape s1 = CircleShape().setNumSeg(16).realizeShape().scale(4,4);
 			Shape s2 = CircleShape().setNumSeg(16).realizeShape().switchSide().scale(1,.3).translate(1.5*Vector2::UNIT_X);
 			MultiShape ms = MultiShape().addShape(s1);
 			for (int i=0;i<8;i++)
@@ -167,7 +167,13 @@ class Unit_Tests : public BaseApplication
 
 			Path p = LinePath().realizePath();
 			Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p).realizeMesh("extrudedMesh");
-			putMesh("extrudedMesh",1);
+			putMesh("extrudedMesh",1);*/
+
+			Shape s = Shape().addPoint(0.2,.9).addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,2).addPoint(2,2).addPoint(2,-1).addPoint(0.,-.2).setOutSide(SIDE_LEFT).close();			
+			s.realizeMesh("notri");
+			putMesh("notri");
+			Triangulator::triangulateToMesh(s, "contourMesh");
+			putMesh("contourMesh");
 		}
 	};
 

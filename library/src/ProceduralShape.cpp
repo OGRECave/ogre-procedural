@@ -66,7 +66,7 @@ void Shape::_findAllIntersections(const Shape& other, std::vector<IntersectionIn
 			Segment2D seg2(other.getPoint(j), other.getPoint(j+1));
 			
 			Vector2 intersect;
-			if (seg1.intersect(seg2, intersect))
+			if (seg1.findIntersect(seg2, intersect))
 			{
 				IntersectionInShape inter(i, j, intersect);
 				// check if intersection is "borderline" : too near to a vertex				

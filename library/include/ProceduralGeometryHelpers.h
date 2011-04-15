@@ -127,16 +127,15 @@ class Segment2D
 	}
 
 	/**	  
-	 * Computes the interesction between two segments [p1p2] and [p3p4]
-	 * @arg p1 Point p1
-	 * @arg p2 Point p2
-	 * @arg p3 Point p3
-	 * @arg p4 Point p4
+	 * Computes the interesction between current segment and another segment
+	 * @arg the other segment
 	 * @arg intersection the point of intersection if outputed there if it exists
 	 * @return true if segments intersect, false otherwise
 	 */
-	bool intersect(const Segment2D& other, Ogre::Vector2& intersection) const;
+	bool findIntersect(const Segment2D& other, Ogre::Vector2& intersection) const;
 
+	/// Tells whether this segments intersects the other segment
+	bool intersects(const Segment2D& other) const;
 };
 }
 #endif

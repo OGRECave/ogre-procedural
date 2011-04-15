@@ -68,7 +68,9 @@ namespace Procedural
 		int closestSegmentIndex=-1;
 		Real closestSegmentDistance = std::numeric_limits<Real>::max();
 		Vector2 closestSegmentIntersection;
-		int closestSegmentShape = -1;
+		const Shape* closestSegmentShape = 0;
+		bool isOnVertexA = false;
+		bool isOnVertexB = false;
 		
 		for (size_t k =0;k<mShapes.size();k++)
 		{
@@ -86,17 +88,18 @@ namespace Procedural
 						closestSegmentIndex = i;
 						closestSegmentDistance = dist;
 						closestSegmentIntersection = intersect;
-						closestSegmentShape = k;
+						closestSegmentShape = &shape;
 					}
 				}
 			}
 		}
 		if (closestSegmentIndex!=-1)
 		{
-			if (mShapes[closestSegmentShape].getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0)		
-				return true;
-			else
-				return false;
+			if (closestSegmentIntersection.squaredDistance(closestSegmentShape->getPoint(closestSegmentIndex))<1e-8)
+				return (closestSegmentShape->getAvgNormal(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);
+			if (closestSegmentIntersection.squaredDistance(closestSegmentShape->getPoint(closestSegmentIndex+1))<1e-8)
+				return (closestSegmentShape->getAvgNormal(closestSegmentIndex+1).x * (point.x-closestSegmentIntersection.x)<0);
+			return (closestSegmentShape->getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);				
 		}
 		// the shapes must not contradict each other about outside, so just ask the first shape
 		if (mShapes[0].findRealOutSide() == mShapes[0].getOutSide())
