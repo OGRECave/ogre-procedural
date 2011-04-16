@@ -304,6 +304,48 @@ public:
 		return scale(amount.x, amount.y);
 	}
 
+	/// Returns the total lineic length of that shape
+	Ogre::Real getTotalLength() const
+	{
+		Ogre::Real length = 0;
+		for (int i=0;i<mPoints.size()-1;i++)
+			length+=(mPoints[i+1]-mPoints[i]).length();
+		if (mClosed)
+			length+=(mPoints.back()-*mPoints.begin()).length();
+		return length;
+	}
+
+	/// Gets a position on the shape with index of the point and a percentage of position on the segment
+	/// @arg i index of the segment
+	/// @arg coord a number between 0 and 1 meaning the percentage of position on the segment
+	inline Ogre::Vector2 getPosition(int i, Ogre::Real coord) const
+	{
+		assert(mClosed||i<mPoints.size()-1 && "Out of Bounds");
+		assert(coord>=0. && coord<=1. && "Coord must be comprised between 0 and 1");
+		Ogre::Vector2 A = getPoint(i);
+		Ogre::Vector2 B = getPoint(i+1);
+		return A + coord*(B-A);
+	}
+	
+	/// Gets a position on the shape from lineic coordinate
+	/// @arg coord lineic coordinate
+	inline Ogre::Vector2 getPosition(Ogre::Real coord) const
+	{
+		assert(mPoints.size()>=2 && "The shape must at least contain 2 points");
+		int i=0;
+		while(true)
+		{
+			Ogre::Real nextLen = (getPoint(i+1) - getPoint(i)).length();
+			if (coord>nextLen)
+				coord-=nextLen;
+			else
+				return getPosition(i, coord);
+			if (!mClosed && i>= mPoints.size()-2)
+				return mPoints.back();
+			i++;
+		}
+	}
+
 	private:
 
 	enum BooleanOperationType { BOT_UNION, BOT_INTERSECTION, BOT_DIFFERENCE};
