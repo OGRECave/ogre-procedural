@@ -46,6 +46,7 @@ THE SOFTWARE.
 #include "ProceduralShapeGenerators.h"
 #include "ProceduralMultiShape.h"
 #include "ProceduralPath.h"
+#include "ProceduralPathGenerators.h"
 #include "ProceduralTriangulator.h"
 #include "ProceduralTriangleBuffer.h"
 
