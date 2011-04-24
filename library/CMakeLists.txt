@@ -26,6 +26,7 @@ set( HDRS
 	include/ProceduralShape.h	
 	include/ProceduralShapeGenerators.h
 	include/ProceduralPath.h
+	include/ProceduralPathGenerators.h
 	include/ProceduralTriangulator.h
 	include/ProceduralTriangleBuffer.h
 	include/ProceduralStableHeaders.h
@@ -50,6 +51,7 @@ set( SRCS
 		src/ProceduralShape.cpp		
 		src/ProceduralShapeGenerators.cpp
 		src/ProceduralPath.cpp
+		src/ProceduralPathGenerators.cpp
 		src/ProceduralExtruder.cpp
 		src/ProceduralLathe.cpp
 		src/ProceduralTriangulator.cpp
