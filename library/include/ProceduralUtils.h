@@ -89,7 +89,7 @@ public:
 	static std::string getName(const std::string& prefix= "default")
 	{
 		counter++;
-		return prefix;
+		return prefix + Ogre::StringConverter::toString(counter);
 	}
 
 	/// Shifts the components of the vector to the right
