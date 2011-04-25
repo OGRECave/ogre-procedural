@@ -325,15 +325,20 @@ class Unit_Tests : public BaseApplication
 			Extruder e;
 			e.setCapped(false);
 			
-			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);
-			////////////////
-			
-			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh(),1);
-			
-			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh(),1);
-			////////////////
-			
+			// linear extrusion
+			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);			
+			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh(),1);			
+			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh(),1);			
 			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line2).realizeMesh(),1);
+
+			// extrusion with rotation track
+			Path l = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
+			Track t = Track().addKeyFrame(2,0).addKeyFrame(5,1.5).addKeyFrame(8,0);
+			Track t2 = Track().addKeyFrame(0,.8).addKeyFrame(10,1.2);
+			Shape s = RectangleShape().realizeShape();
+			Extruder ex;
+			putMesh(ex.setShapeToExtrude(&s).setExtrusionPath(&l).setRotationTrack(&t).setScaleTrack(&t2).realizeMesh(),1);
+
 		}
 	};
 

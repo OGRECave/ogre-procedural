@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "ProceduralPlatform.h"
 #include "ProceduralMeshGenerator.h"
 #include "ProceduralMultiShape.h"
+#include "ProceduralTrack.h"
 
 namespace Procedural
 {
@@ -46,6 +47,8 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 	Path* mExtrusionPath;
 	bool mCapped;
 	bool mFixSharpAngles;
+	Track* mRotationTrack;
+	Track* mScaleTrack;
 
 	void _extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const;
 
@@ -53,7 +56,7 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 	
 public:
 	/// Default constructor
-	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mFixSharpAngles(false)
+	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mFixSharpAngles(false), mRotationTrack(0), mScaleTrack(0)
 	{}
 	
 	/**
@@ -82,6 +85,20 @@ public:
 	inline Extruder & setExtrusionPath(Path* extrusionPath)
 	{
 		mExtrusionPath = extrusionPath;
+		return *this;
+	}
+
+	/** Sets the rotation track (optional) */
+	inline Extruder& setRotationTrack(Track* rotationTrack)
+	{
+		mRotationTrack = rotationTrack;
+		return *this;
+	}
+
+	/** Sets the scale track (optional) */
+	inline Extruder& setScaleTrack(Track* scaleTrack)
+	{
+		mScaleTrack = scaleTrack;
 		return *this;
 	}
 

@@ -49,5 +49,6 @@ THE SOFTWARE.
 #include "ProceduralPathGenerators.h"
 #include "ProceduralTriangulator.h"
 #include "ProceduralTriangleBuffer.h"
+#include "ProceduralTrack.h"
 
 #endif
