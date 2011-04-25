@@ -27,6 +27,7 @@ set( HDRS
 	include/ProceduralShapeGenerators.h
 	include/ProceduralPath.h
 	include/ProceduralPathGenerators.h
+	include/ProceduralTrack.h
 	include/ProceduralTriangulator.h
 	include/ProceduralTriangleBuffer.h
 	include/ProceduralStableHeaders.h

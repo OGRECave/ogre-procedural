@@ -49,13 +49,25 @@ namespace Procedural
 
 		/*if (mFixSharpAngles)
 			mExtrusionPath->fixSharpAngles(shapeToExtrude->findBoundingRadius());*/
+		Ogre::Real lineicPos=0.;
 				
 	for (int i = 0; i <= numSegPath;i++)
 	{		
 		Vector3 v0 = mExtrusionPath->getPoint(i);
 		Vector3 direction = mExtrusionPath->getAvgDirection(i);
 
-		Quaternion q = Utils::_computeQuaternion(direction);			
+		Quaternion q = Utils::_computeQuaternion(direction);
+
+		Real scale=1.;
+
+		if (i>0) lineicPos+=(v0-mExtrusionPath->getPoint(i-1)).length();
+		if (mRotationTrack)
+		{
+			Real angle = mRotationTrack->getValue(lineicPos);				
+			q= q*Quaternion((Radian)angle, Vector3::UNIT_Z);
+		}
+		if (mScaleTrack)
+			scale = mScaleTrack->getValue(lineicPos);
 
 		for (int j =0;j<=numSegShape;j++)
 		{
@@ -65,7 +77,7 @@ namespace Procedural
 			Vector3 vp(vp2.x, vp2.y, 0);
 			Vector3 normal(vp2normal.x, vp2normal.y, 0);							
 			buffer.rebaseOffset();
-			Vector3 newPoint = v0+q*vp;
+			Vector3 newPoint = v0+q*(scale*vp);
 
 			addPoint(buffer, newPoint,
 							 q*normal, 
