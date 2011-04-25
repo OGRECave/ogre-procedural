@@ -196,7 +196,7 @@ public:
 	 * Outputs a mesh representing the shape.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name);
+	Ogre::MeshPtr realizeMesh(const std::string& name="");
 	
 	/**
 	 * Appends the shape vertices to a manual object being edited
@@ -308,7 +308,7 @@ public:
 	Ogre::Real getTotalLength() const
 	{
 		Ogre::Real length = 0;
-		for (int i=0;i<mPoints.size()-1;i++)
+		for (unsigned int i=0;i<mPoints.size()-1;i++)
 			length+=(mPoints[i+1]-mPoints[i]).length();
 		if (mClosed)
 			length+=(mPoints.back()-*mPoints.begin()).length();
@@ -344,6 +344,14 @@ public:
 				return mPoints.back();
 			i++;
 		}
+	}
+
+	Ogre::Real findBoundingRadius() const
+	{
+		Ogre::Real sqRadius=0.f;
+		for (unsigned int i=0;i<mPoints.size();i++)
+			sqRadius=std::max(sqRadius,mPoints[i].squaredLength());
+		return Ogre::Math::Sqrt(sqRadius);
 	}
 
 	private:

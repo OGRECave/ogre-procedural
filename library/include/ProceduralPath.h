@@ -189,21 +189,31 @@ public:
 	 * Outputs a mesh representing the path.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name)
+	Ogre::MeshPtr realizeMesh(const std::string& name = "")
 	{
-		Ogre::ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
-		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
-			   
+		Ogre::ManualObject * manual = Root::getInstance()->sceneManager->createManualObject();
+		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);			   
 		
 		for (std::vector<Ogre::Vector3>::iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)		
 			manual->position(*itPos);		
 		if (mClosed)
 			manual->position(*(mPoints.begin()));
 		manual->end();
-		Ogre::MeshPtr mesh = manual->convertToMesh(name);
+				
+		Ogre::MeshPtr mesh;
+		if (name=="")
+			mesh = manual->convertToMesh(Utils::getName());
+		else
+	 		mesh = manual->convertToMesh(name);
 
 		return mesh;
 	}
+
+	/**
+	 * WIP
+	 * Shifts all points that form sharp angles
+	 */
+	//void fixSharpAngles(Ogre::Real radius);
 
 };
 
