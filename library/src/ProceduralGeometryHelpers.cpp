@@ -115,13 +115,25 @@ bool Plane::intersect(const Plane& other, Line& outputLine) const
 		if (direction.squaredLength() < 1e-08)
 			return false;
 		
-		Real denom = 1.f/(normal.x*other.normal.y-other.normal.x*normal.y);
+		Real cp = normal.x*other.normal.y-other.normal.x*normal.y;
+		if (cp!=0)
 		{
-			Real d1 = d;
-			Real d2 = other.d;
-			point1.x = (normal.y*d2-other.normal.y*d1)*denom;
-			point1.y = (other.normal.x*d1-normal.x*d2)*denom;
+			Real denom = 1.f/cp;
+			point1.x = (normal.y*other.d-other.normal.y*d)*denom;
+			point1.y = (other.normal.x*d-normal.x*other.d)*denom;
 			point1.z = 0;
+		} else if ((cp= normal.y*other.normal.z-other.normal.y*normal.z)!=0)
+		{ //special case #1
+			Real denom = 1.f/cp;
+			point1.x = 0;
+			point1.y = (normal.z*other.d-other.normal.z*d)*denom;
+			point1.z = (other.normal.y*d-normal.y*other.d)*denom;			
+		} else if ((cp= normal.x*other.normal.z-other.normal.x*normal.z)!=0)
+		{ //special case #2			
+			Real denom = 1.f/cp;			
+			point1.x = (normal.z*other.d-other.normal.z*d)*denom;
+			point1.y = 0;
+			point1.z = (other.normal.x*d-normal.x*other.d)*denom;			
 		}
 		
 		outputLine = Line(point1, direction);
