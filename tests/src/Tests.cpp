@@ -31,17 +31,27 @@ THE SOFTWARE.
 //-------------------------------------------------------------------------------------
 void Unit_Tests::createScene(void)
 {
+	
+	Ogre::Overlay* o = Ogre::OverlayManager::getSingleton().create("myOverlay");	
+	Ogre::OverlayContainer* cont = (Ogre::OverlayContainer*)OverlayManager::getSingleton().createOverlayElement("Panel","myCont");
+	o->add2D(cont);
+	Ogre::OverlayElement* el = OverlayManager::getSingleton().createOverlayElement("TextArea","myText");
+	cont->addChild(el);
+	el->setCaption("Ogre program");
+	el->setParameter("font_name","SdkTrays/Caption");
+	o->show();
+
 		// Setup Procedural root (crappy init method, have to find another one)
 		Procedural::Root::getInstance()->sceneManager = mSceneMgr;
 
 		// Register all unit tests
-		//mUnitTests.push_back(new Test_Primitives(mSceneMgr));
-		//mUnitTests.push_back(new Test_Empty(mSceneMgr));*/
-		mUnitTests.push_back(new Test_Triangulation(mSceneMgr));
-		//mUnitTests.push_back(new Test_ShapeBoolean(mSceneMgr));
-		//mUnitTests.push_back(new Test_Extruder(mSceneMgr));
-		//mUnitTests.push_back(new Test_Amireh(mSceneMgr));
-		//mUnitTests.push_back(new Test_Lathe(mSceneMgr));*/
+		mUnitTests.push_back(new Test_Primitives(mSceneMgr));
+		mUnitTests.push_back(new Test_SharpAngles(mSceneMgr));
+		mUnitTests.push_back(new Test_Triangulation(mSceneMgr));		
+		mUnitTests.push_back(new Test_ShapeBoolean(mSceneMgr));
+		mUnitTests.push_back(new Test_Extruder(mSceneMgr));
+		mUnitTests.push_back(new Test_Lathe(mSceneMgr));
+		mUnitTests.push_back(new Test_Splines(mSceneMgr));
 
 		// Init first test
 		mUnitTests[0]->init();

@@ -80,6 +80,7 @@ public:
 		mTimer.reset();
 		initImpl();
 		Utils::log("Test loaded in : " + Ogre::StringConverter::toString(mTimer.getMilliseconds()) + " ms");
+		Ogre::OverlayManager::getSingleton().getOverlayElement("myText")->setCaption(getDescription());
 	}
 
 	void destroy()
@@ -111,32 +112,86 @@ class Unit_Tests : public BaseApplication
 
 		String getDescription()
 		{
-			return "Tests all primitive generation";
+			return "Primitive generation";
 		}
 
 		void initImpl()
-		{
-			SphereGenerator sg = SphereGenerator();
-			sg.realizeMesh("sphereMesh");			
-			putMesh("sphereMesh");
+		{			
+			putMesh(BoxGenerator().realizeMesh(), 1);
+			putMesh(CapsuleGenerator().realizeMesh(), 1);
+			putMesh(ConeGenerator().realizeMesh(), 1);
+			putMesh(CylinderGenerator().realizeMesh(), 1);
+			putMesh(IcoSphereGenerator().realizeMesh(), 1);
+			putMesh(PlaneGenerator().realizeMesh(), 1);
+			putMesh(RoundedBoxGenerator().realizeMesh(), 1);			
+			putMesh(SphereGenerator().realizeMesh(), 1);
+			putMesh(TorusGenerator().realizeMesh(), 1);
+			putMesh(TorusKnotGenerator().realizeMesh(), 1);
+			putMesh(TubeGenerator().realizeMesh(), 1);
 		}
 	};
 
 	/* --------------------------------------------------------------------------- */
-	class Test_Empty : public Unit_Test
+	class Test_SharpAngles : public Unit_Test
 	{
 	public:		
-		Test_Empty(SceneManager* sn) : Unit_Test(sn) {}
+		Test_SharpAngles(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
 		{
-			return "Tests nothing";
+			return "Sharp Angles";
 		}
 
 		void initImpl()
 		{
+			CatmullRomSpline3 pp;
+			pp.addPoint(0,0,0).addPoint(0,0,4).addPoint(1,0,5).addPoint(5,0,5);
+			Path p = pp.realizePath();
+			Shape s = CircleShape().setRadius(3.).realizeShape();
+			Extruder e;
+			putMesh(e.setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh(),1);
+			putMesh(p.realizeMesh());
+			putMesh(e.setFixSharpAngles(true).setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh(),1);
+			putMesh(p.realizeMesh());
 		}
 	};
+	/* --------------------------------------------------------------------------- */
+	/*class Test_RollerCoaster : public Unit_Test
+	{
+	public:		
+		Test_RollerCoaster(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Roller Coaster! Fuck Yeah!";
+		}
+
+		void initImpl()
+		{
+			PlaneGenerator pg;
+			putMesh(pg.setSizeX(1000).setSizeY(1000).realizeMesh(),1);
+			Shape s = CircleShape().realizeShape();
+			Shape s2 = CircleShape().setRadius(0.5).realizeShape();
+			s2.translate(Ogre::Vector2(2,2));
+			Shape s3 = CircleShape().setRadius(0.5).realizeShape();
+			s3.translate(Ogre::Vector2(-2,2));
+			MultiShape ms;
+			ms.addShape(s).addShape(s2).addShape(s3);
+			CatmullRomSpline3 crs;
+			
+			Ogre::Vector3 v(0,10,0);
+			for (int i=0;i<100;i++)
+			{
+				v+=Ogre::Vector3(Math::RangeRandom(1,5), Math::RangeRandom(-1,1), Math::RangeRandom(-5,5));
+				if (v.y<10) v.y=10;
+				crs.addPoint(v);
+			}
+			Path p = crs.realizePath();
+			Extruder e;
+			e.setExtrusionPath(&p).setMultiShapeToExtrude(&ms);
+			putMesh(e.realizeMesh(),1);
+		}
+	};*/
 
 	/* --------------------------------------------------------------------------- */
 	class Test_Triangulation : public Unit_Test
@@ -146,12 +201,12 @@ class Unit_Tests : public BaseApplication
 
 		String getDescription()
 		{
-			return "Tests Delaunay Triangulation";
+			return "Delaunay Triangulation";
 		}
 
 		void initImpl()
 		{
-			/*Shape s1 = CircleShape().setNumSeg(16).realizeShape().scale(4,4);
+			Shape s1 = CircleShape().setNumSeg(16).realizeShape().scale(4,4);
 			Shape s2 = CircleShape().setNumSeg(16).realizeShape().switchSide().scale(1,.3).translate(1.5*Vector2::UNIT_X);
 			MultiShape ms = MultiShape().addShape(s1);
 			for (int i=0;i<8;i++)
@@ -160,20 +215,18 @@ class Unit_Tests : public BaseApplication
 				s.rotate((Radian)i/8.*Math::TWO_PI);
 				ms.addShape(s);
 			}
-			ms.realizeMesh("notri");
-			putMesh("notri");
+			putMesh(ms.realizeMesh());
 			Triangulator::triangulateToMesh(ms, "contourMesh");
 			putMesh("contourMesh");
 
 			Path p = LinePath().realizePath();
 			Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p).realizeMesh("extrudedMesh");
-			putMesh("extrudedMesh",1);*/
+			putMesh("extrudedMesh",1);
 
 			Shape s = Shape().addPoint(0.2,.9).addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,2).addPoint(2,2).addPoint(2,-1).addPoint(0.,-.2).setOutSide(SIDE_LEFT).close();			
-			s.realizeMesh("notri");
-			putMesh("notri");
-			Triangulator::triangulateToMesh(s, "contourMesh");
-			putMesh("contourMesh");
+			putMesh(s.realizeMesh());
+			Triangulator::triangulateToMesh(s, "contourMesh2");
+			putMesh("contourMesh2");
 		}
 	};
 
@@ -211,6 +264,47 @@ class Unit_Tests : public BaseApplication
 		}
 	};
 
+		/* --------------------------------------------------------------------------- */
+	class Test_Splines : public Unit_Test
+	{
+	public:		
+		Test_Splines(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Shape and path splines";
+		}
+
+		void initImpl()
+		{
+			// CatmullRomSpline
+			CatmullRomSpline2 cs;
+			cs.addPoint(Vector2(0,-1))
+				.addPoint(Vector2(2,2))
+				.addPoint(Vector2(1,2.5))
+				.addPoint(Vector2(0,1.5))
+				.addPoint(Vector2(-1,2.5))
+				.addPoint(Vector2(-2,2))
+				.setNumSeg(8)
+				.close();
+			putMesh(cs.realizeShape().realizeMesh());
+
+			// Kochanek Bartels
+			KochanekBartelsSpline2 kbs2;
+			kbs2.addPoint(Vector2(0,-1),0,0,-1)
+				.addPoint(Vector2(2,2))
+				.addPoint(Vector2(1,3))
+				.addPoint(Vector2(0,1.5),0,0,-1)
+				.addPoint(Vector2(-1,3))
+				.addPoint(Vector2(-2,2))
+				.setNumSeg(8)
+				.close();
+
+			putMesh(kbs2.realizeShape().realizeMesh());
+
+		}
+	};
+
 	/* --------------------------------------------------------------------------- */
 	class Test_Extruder : public Unit_Test
 	{
@@ -219,12 +313,11 @@ class Unit_Tests : public BaseApplication
 
 		String getDescription()
 		{
-			return "Tests the extruder";
+			return "Extruder";
 		}
 
 		void initImpl()
 		{
-			//Shape shape = CircleShape().setRadius(3.).realizeShape();
 			Shape shape = Shape().addPoint(0,0).addPoint(0,1).addPoint(1,1).addPoint(1,0).setOutSide(SIDE_RIGHT).close();
 			Shape shape2 = Shape().addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,0).setOutSide(SIDE_LEFT).close();
 			Path line = LinePath().betweenPoints(Vector3::ZERO, Vector3(1,10,0)).setNumSeg(2).realizePath();
@@ -252,11 +345,16 @@ class Unit_Tests : public BaseApplication
 
 		String getDescription()
 		{
-			return "Tests the lathe";
+			return "Lathe";
 		}
 
 		void initImpl()
 		{
+			CatmullRomSpline2 cs;
+			cs.addPoint(0,0).addPoint(1,0).addPoint(3,5).addPoint(1,10).addPoint(0,10);
+			Shape s = cs.realizeShape();
+			Lathe l = Lathe().setShapeToExtrude(&s);
+			putMesh(l.realizeMesh(),1);
 		}
 	};
 
