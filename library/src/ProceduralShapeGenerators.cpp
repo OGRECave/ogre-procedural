@@ -124,6 +124,9 @@ Shape CatmullRomSpline2::realizeShape()
 				shape.addPoint(p1.position);
 			}
 		}
+		if (mClosed)
+			shape.close();
+		shape.setOutSide(mOutSide);
 		return shape;
 	}
 }
