@@ -424,7 +424,11 @@ MeshPtr Shape::realizeMesh(const std::string& name)
 	_appendToManualObject(manual);
 	
 	manual->end();
-	MeshPtr mesh = manual->convertToMesh(name);
+	MeshPtr mesh;
+	if (name=="")
+		mesh = manual->convertToMesh(Utils::getName());
+	else
+		mesh = manual->convertToMesh(name);
 	Root::getInstance()->sceneManager->destroyManualObject(manual);
 	return mesh;
 }
