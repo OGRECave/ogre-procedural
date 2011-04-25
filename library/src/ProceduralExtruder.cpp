@@ -46,30 +46,16 @@ namespace Procedural
 		buffer.rebaseOffset();
 		buffer.estimateIndexCount(numSegShape*numSegPath*6);
 		buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1));
+
+		/*if (mFixSharpAngles)
+			mExtrusionPath->fixSharpAngles(shapeToExtrude->findBoundingRadius());*/
 				
 	for (int i = 0; i <= numSegPath;i++)
 	{		
 		Vector3 v0 = mExtrusionPath->getPoint(i);
 		Vector3 direction = mExtrusionPath->getAvgDirection(i);
 
-		Quaternion q = Utils::_computeQuaternion(direction);
-				
-		/*if (mFixSharpAngles && i>0)
-		{
-			Plane plane1(lastQ * Vector3::UNIT_Z, lastV0);
-			Plane plane2(q * Vector3::UNIT_Z, v0);
-			Line inter;
-			if (plane1.intersect(plane2, inter))
-			{
-				Vector3 v = inter.shortestPathToPoint(v0);
-				if (v.length() < 2.0) // TODO : shape.boundingCircle
-				{
-					v0 = v0 + (2.0-v.length()) * v.normalisedCopy();
-				}
-			}
-		}
-		lastQ = q;
-		lastV0 = v0;*/
+		Quaternion q = Utils::_computeQuaternion(direction);			
 
 		for (int j =0;j<=numSegShape;j++)
 		{
