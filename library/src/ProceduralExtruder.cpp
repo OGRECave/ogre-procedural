@@ -118,18 +118,25 @@ namespace Procedural
 			buffer.estimateIndexCount(2*indexBuffer.size());
 			buffer.estimateVertexCount(2*pointList.size());
 
-			Quaternion qBegin = Utils::_computeQuaternion(mExtrusionPath->getDirectionAfter(0));
-			Quaternion qEnd = Utils::_computeQuaternion(mExtrusionPath->getDirectionBefore(mExtrusionPath->getSegCount()));
 			
 			//begin cap
 			buffer.rebaseOffset();
+			Quaternion qBegin = Utils::_computeQuaternion(mExtrusionPath->getDirectionAfter(0));
+			if (mRotationTrack)
+			{
+				Real angle = mRotationTrack->getFirstValue();
+				qBegin = qBegin*Quaternion((Radian)angle, Vector3::UNIT_Z);
+			}	
+			Real scaleBegin=1.;
+			if (mScaleTrack)
+				scaleBegin = mScaleTrack->getFirstValue();
 			for (size_t j =0;j<pointList.size();j++)
 			{
 				Vector2 vp2 = pointList[j];
 				Vector3 vp(vp2.x, vp2.y, 0);
 				Vector3 normal = -Vector3::UNIT_Z;				
 
-				Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*vp;
+				Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*(scaleBegin*vp);
 				addPoint(buffer, newPoint,
 								 qBegin*normal,
 								 vp2);
@@ -144,13 +151,23 @@ namespace Procedural
 
 			// end cap
 			buffer.rebaseOffset();
+			Quaternion qEnd = Utils::_computeQuaternion(mExtrusionPath->getDirectionBefore(mExtrusionPath->getSegCount()));
+			if (mRotationTrack)
+			{
+				Real angle = mRotationTrack->getLastValue();
+				qEnd = qEnd*Quaternion((Radian)angle, Vector3::UNIT_Z);
+			}			
+			Real scaleEnd=1.;
+			if (mScaleTrack)
+				scaleEnd = mScaleTrack->getLastValue();
+			
 			for (size_t j =0;j<pointList.size();j++)
 			{
 				Vector2 vp2 = pointList[j];
 				Vector3 vp(vp2.x, vp2.y, 0);
 				Vector3 normal = Vector3::UNIT_Z;				
 
-				Vector3 newPoint = mExtrusionPath->getPoint(mExtrusionPath->getSegCount())+qEnd*vp;				
+				Vector3 newPoint = mExtrusionPath->getPoint(mExtrusionPath->getSegCount())+qEnd*(scaleEnd*vp);
 				addPoint(buffer, newPoint,
 								 qEnd*normal,
 								 vp2);

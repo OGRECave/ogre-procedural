@@ -61,6 +61,16 @@ public:
 		Ogre::Real y2 = it->second;
 		return (pos-x1)/(x2-x1)*(y2-y1)+y1;
 	}
+
+	Ogre::Real getFirstValue()
+	{
+		return mKeyFrames.begin()->second;
+	}
+
+	Ogre::Real getLastValue()
+	{
+		return (--mKeyFrames.end())->second;
+	}
 };
 }
 #endif
