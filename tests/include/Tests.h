@@ -331,13 +331,32 @@ class Unit_Tests : public BaseApplication
 			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh(),1);			
 			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line2).realizeMesh(),1);
 
-			// extrusion with rotation track
-			Path l = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
-			Track t = Track().addKeyFrame(2,0).addKeyFrame(5,1.5).addKeyFrame(8,0);
-			Track t2 = Track().addKeyFrame(0,.8).addKeyFrame(10,1.2);
-			Shape s = RectangleShape().realizeShape();
-			Extruder ex;
-			putMesh(ex.setShapeToExtrude(&s).setExtrusionPath(&l).setRotationTrack(&t).setScaleTrack(&t2).realizeMesh(),1);
+			// extrusion with rotation and scale track
+			{
+				Path l = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
+				Track t = Track().addKeyFrame(2,0).addKeyFrame(5,1.5).addKeyFrame(8,0);
+				Track t2 = Track().addKeyFrame(0,.8).addKeyFrame(10,1.2);
+				Shape s = RectangleShape().realizeShape();
+				Extruder ex;
+				putMesh(ex.setShapeToExtrude(&s).setExtrusionPath(&l).setRotationTrack(&t).setScaleTrack(&t2).realizeMesh(),1);
+			}
+
+			// tests different addressing modes for the (scale) track
+			{
+				Path l = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
+				Track t = Track(Track::AM_ABSOLUTE_LINEIC).addKeyFrame(0,1).addKeyFrame(5,1.5).addKeyFrame(8,1);
+				Shape s = RectangleShape().realizeShape();
+				Extruder ex;
+				// Absolute lineic
+				putMesh(ex.setShapeToExtrude(&s).setExtrusionPath(&l).setScaleTrack(&t).realizeMesh(),1);
+				// Relative Lineic
+				Track t2 = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,1).addKeyFrame(0.5,1.5).addKeyFrame(1,1);
+				putMesh(ex.setScaleTrack(&t2).realizeMesh(),1);
+				// On path point
+				Track t3 = Track(Track::AM_POINT).addKeyFrame(0,1).addKeyFrame(3,1.5).addKeyFrame(4,1);
+				putMesh(ex.setScaleTrack(&t3).realizeMesh(),1);
+			}
+
 
 		}
 	};
