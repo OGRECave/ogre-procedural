@@ -53,6 +53,7 @@ set( SRCS
 		src/ProceduralShapeGenerators.cpp
 		src/ProceduralPath.cpp
 		src/ProceduralPathGenerators.cpp
+		src/ProceduralTrack.cpp
 		src/ProceduralExtruder.cpp
 		src/ProceduralLathe.cpp
 		src/ProceduralTriangulator.cpp

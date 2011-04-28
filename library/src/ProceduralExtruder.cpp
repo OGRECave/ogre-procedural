@@ -49,6 +49,13 @@ namespace Procedural
 
 		/*if (mFixSharpAngles)
 			mExtrusionPath->fixSharpAngles(shapeToExtrude->findBoundingRadius());*/
+		Real totalPathLength=0;
+		if ((mRotationTrack && mRotationTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC) ||
+			(mScaleTrack && mScaleTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC))
+		{
+			totalPathLength = mExtrusionPath->getTotalLength();
+		}
+
 		Ogre::Real lineicPos=0.;
 				
 	for (int i = 0; i <= numSegPath;i++)
@@ -61,13 +68,28 @@ namespace Procedural
 		Real scale=1.;
 
 		if (i>0) lineicPos+=(v0-mExtrusionPath->getPoint(i-1)).length();
+
 		if (mRotationTrack)
 		{
-			Real angle = mRotationTrack->getValue(lineicPos);				
+			Real angle;
+			if (mRotationTrack->getAddressingMode() == Track::AM_RELATIVE_LINEIC)
+				angle = mRotationTrack->getValue(lineicPos / totalPathLength);
+			else if (mRotationTrack->getAddressingMode() == Track::AM_ABSOLUTE_LINEIC)
+				angle = mRotationTrack->getValue(lineicPos);
+			else if (mRotationTrack->getAddressingMode() == Track::AM_POINT)
+				angle = mRotationTrack->getValue(i);
+
 			q= q*Quaternion((Radian)angle, Vector3::UNIT_Z);
 		}
 		if (mScaleTrack)
-			scale = mScaleTrack->getValue(lineicPos);
+		{
+			if (mScaleTrack->getAddressingMode() == Track::AM_RELATIVE_LINEIC)
+				scale = mScaleTrack->getValue(lineicPos / totalPathLength);
+			else if (mScaleTrack->getAddressingMode() == Track::AM_ABSOLUTE_LINEIC)
+				scale = mScaleTrack->getValue(lineicPos);
+			else if (mScaleTrack->getAddressingMode() == Track::AM_POINT)
+				scale = mScaleTrack->getValue(i);
+		}
 
 		for (int j =0;j<=numSegShape;j++)
 		{

@@ -28,39 +28,38 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_TRACK_INCLUDED
 #define PROCEDURAL_TRACK_INCLUDED
 
+#include "ProceduralPlatform.h"
 #include "OgreMath.h"
 
 namespace Procedural
 {
+//---------------------------------------------------
 class _ProceduralExport Track
 {
-	std::map<Ogre::Real, Ogre::Real> mKeyFrames;
 public:
+	enum AddressingMode
+	{
+		AM_ABSOLUTE_LINEIC, AM_RELATIVE_LINEIC, AM_POINT, AM_ABSOLUTE_LINEIC_INSERT_POINT, AM_RELATIVE_LINEIC_INSERT_POINT
+	};
+protected:
+	std::map<Ogre::Real, Ogre::Real> mKeyFrames;
+	
+	AddressingMode mAddressingMode;
+public:
+	Track(AddressingMode addressingMode=AM_ABSOLUTE_LINEIC) : mAddressingMode(addressingMode) {}
+
+	AddressingMode getAddressingMode() const
+	{
+		return mAddressingMode;
+	}
+
 	inline Track& addKeyFrame(Ogre::Real pos, Ogre::Real value)
 	{
 		mKeyFrames[pos] = value;
 		return *this;
 	}
 
-	Ogre::Real getValue(Ogre::Real pos)
-	{
-		std::map<Ogre::Real, Ogre::Real>::iterator it = mKeyFrames.lower_bound(pos);
-		if (it==mKeyFrames.begin())
-			return it->second;
-		if (it==mKeyFrames.end())
-		{
-			std::map<Ogre::Real, Ogre::Real>::iterator itlast = mKeyFrames.end();
-			itlast--;
-			return itlast->second;
-		}
-		std::map<Ogre::Real, Ogre::Real>::iterator itBefore=it;
-		itBefore--;
-		Ogre::Real x1 = itBefore->first;
-		Ogre::Real y1 = itBefore->second;
-		Ogre::Real x2 = it->first;
-		Ogre::Real y2 = it->second;
-		return (pos-x1)/(x2-x1)*(y2-y1)+y1;
-	}
+	Ogre::Real getValue(Ogre::Real pos);
 
 	Ogre::Real getFirstValue()
 	{
@@ -72,5 +71,8 @@ public:
 		return (--mKeyFrames.end())->second;
 	}
 };
+//---------------------------------------------------
+
+
 }
 #endif
