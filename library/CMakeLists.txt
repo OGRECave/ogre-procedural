@@ -71,7 +71,11 @@ add_library(OgreProcedural SHARED ${HDRS} ${SRCS})
 
 set_target_properties(OgreProcedural PROPERTIES DEBUG_POSTFIX _d)
 
-set_target_properties(OgreProcedural PROPERTIES PREFIX "")
+if (UNIX)
+    set_target_properties(OgreProcedural PROPERTIES PREFIX "lib")
+else (UNIX)
+    set_target_properties(OgreProcedural PROPERTIES PREFIX "")
+endif (UNIX)
 
 target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
