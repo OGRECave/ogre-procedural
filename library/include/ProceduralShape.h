@@ -241,7 +241,7 @@ public:
 	 * Applies the given translation to all the points already defined.
 	 * Has strictly no effect on the points defined after that
 	 * @param translation the translation vector
-     */
+	 */
 	Shape& translate(const Ogre::Vector2& translation)
 	{
 		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
@@ -253,7 +253,7 @@ public:
 	 * Applies the given rotation to all the points already defined.
 	 * Has strictly no effect on the points defined after that
 	 * @param angle angle of rotation
-     */
+	 */
 	Shape& rotate(Ogre::Radian angle)
 	{
 		Ogre::Real c = Ogre::Math::Cos(angle.valueRadians());
@@ -272,7 +272,7 @@ public:
 	 * Applies the given scale to all the points already defined.
 	 * Has strictly no effect on the points defined after that
 	 * @param amount amount of scale
-     */	
+	 */	
 	Shape& scale(Ogre::Real amount)
 	{
 		return scale(amount, amount);
@@ -283,7 +283,7 @@ public:
 	 * Has strictly no effect on the points defined after that
 	 * @param scaleX amount of scale in the X direction
 	 * @param scaleY amount of scale in the Y direction
-     */	
+	 */	
 	Shape& scale(Ogre::Real scaleX, Ogre::Real scaleY)
 	{
 		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
@@ -298,7 +298,7 @@ public:
 	 * Applies the given scale to all the points already defined.
 	 * Has strictly no effect on the points defined after that
 	 * @param amount of scale
-     */	
+	 */	
 	Shape& scale(Ogre::Vector2 amount)
 	{
 		return scale(amount.x, amount.y);
@@ -353,6 +353,38 @@ public:
 			sqRadius=std::max(sqRadius,mPoints[i].squaredLength());
 		return Ogre::Math::Sqrt(sqRadius);
 	}
+		
+	MultiShape thicken(Ogre::Real amount) 
+	{		
+		if (!mClosed)
+		{
+			Shape s;
+			s.setOutSide(mOutSide);
+			for (unsigned int i=0;i<mPoints.size();i++)
+				s.addPoint(mPoints[i]+amount*getAvgNormal(i));
+			for (int i=mPoints.size()-1;i>=0;i--)
+				s.addPoint(mPoints[i]-amount*getAvgNormal(i));
+			s.close();
+			return MultiShape().addShape(s);
+		} 
+		else 
+		{
+			MultiShape ms;
+			Shape s1;
+			for (unsigned int i=0;i<mPoints.size();i++)
+				s1.addPoint(mPoints[i]+amount*getAvgNormal(i));
+			s1.close();
+			s1.setOutSide(mOutSide);
+			ms.addShape(s1);
+			Shape s2;
+			for (unsigned int i=0;i<mPoints.size();i++)			
+				s2.addPoint(mPoints[i]-amount*getAvgNormal(i));
+			s2.close();
+			s2.setOutSide(mOutSide==SIDE_LEFT?SIDE_RIGHT:SIDE_LEFT);
+			ms.addShape(s2);
+			return ms;						
+		}
+	}
 
 	private:
 
@@ -381,6 +413,7 @@ public:
 	bool _findWhereToGo(const Shape* inputShapes[], BooleanOperationType opType, IntersectionInShape intersection, Ogre::uint8& shapeSelector, char& isIncreasing, int& currentSegment) const;
 	
 	void _findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const;
+
 };
 }
 

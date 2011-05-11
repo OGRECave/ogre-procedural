@@ -52,6 +52,7 @@ void Unit_Tests::createScene(void)
 		mUnitTests.push_back(new Test_Extruder(mSceneMgr));
 		mUnitTests.push_back(new Test_Lathe(mSceneMgr));
 		mUnitTests.push_back(new Test_Splines(mSceneMgr));
+		mUnitTests.push_back(new Test_ShapeThick(mSceneMgr));
 
 		// Init first test
 		mUnitTests[0]->init();
