@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "ProceduralUtils.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralRoot.h"
+#include "ProceduralTrack.h"
 
 namespace Procedural
 {
@@ -144,15 +145,7 @@ public:
 	}
 
 	/// Returns the total lineic length of that shape
-	Ogre::Real getTotalLength() const
-	{
-		Ogre::Real length = 0;
-		for (int i=0;i<mPoints.size()-1;i++)
-			length+=(mPoints[i+1]-mPoints[i]).length();
-		if (mClosed)
-			length+=(mPoints.back()-*mPoints.begin()).length();
-		return length;
-	}
+	Ogre::Real getTotalLength() const;
 
 	/// Gets a position on the shape with index of the point and a percentage of position on the segment
 	/// @arg i index of the segment
@@ -168,52 +161,21 @@ public:
 	
 	/// Gets a position on the shape from lineic coordinate
 	/// @arg coord lineic coordinate
-	inline Ogre::Vector3 getPosition(Ogre::Real coord) const
-	{
-		assert(mPoints.size()>=2 && "The path must at least contain 2 points");
-		int i=0;
-		while(true)
-		{
-			Ogre::Real nextLen = (getPoint(i+1) - getPoint(i)).length();
-			if (coord>nextLen)
-				coord-=nextLen;
-			else
-				return getPosition(i, coord);
-			if (!mClosed && i>= mPoints.size()-2)
-				return mPoints.back();
-			i++;
-		}
-	}
+	 Ogre::Vector3 getPosition(Ogre::Real coord) const;
 
 	/**
 	 * Outputs a mesh representing the path.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name = "")
-	{
-		Ogre::ManualObject * manual = Root::getInstance()->sceneManager->createManualObject();
-		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);			   
-		
-		for (std::vector<Ogre::Vector3>::iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)		
-			manual->position(*itPos);		
-		if (mClosed)
-			manual->position(*(mPoints.begin()));
-		manual->end();
-				
-		Ogre::MeshPtr mesh;
-		if (name=="")
-			mesh = manual->convertToMesh(Utils::getName());
-		else
-	 		mesh = manual->convertToMesh(name);
-
-		return mesh;
-	}
+	Ogre::MeshPtr realizeMesh(const std::string& name = "");
 
 	/**
 	 * WIP
 	 * Shifts all points that form sharp angles
 	 */
 	//void fixSharpAngles(Ogre::Real radius);
+
+	Path mergeKeysWithTrack(const Track& track);
 
 };
 

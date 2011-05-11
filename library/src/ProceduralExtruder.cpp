@@ -41,14 +41,9 @@ namespace Procedural
 		int numSegPath = mExtrusionPath->getSegCount();
 		int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
-	
-		// Estimate vertex and index count
-		buffer.rebaseOffset();
-		buffer.estimateIndexCount(numSegShape*numSegPath*6);
-		buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1));
 
 		/*if (mFixSharpAngles)
-			mExtrusionPath->fixSharpAngles(shapeToExtrude->findBoundingRadius());*/
+		mExtrusionPath->fixSharpAngles(shapeToExtrude->findBoundingRadius());*/
 		Real totalPathLength=0;
 		if ((mRotationTrack && mRotationTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC) ||
 			(mScaleTrack && mScaleTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC))
@@ -57,151 +52,152 @@ namespace Procedural
 		}
 
 		Ogre::Real lineicPos=0.;
-				
-	for (int i = 0; i <= numSegPath;i++)
-	{		
-		Vector3 v0 = mExtrusionPath->getPoint(i);
-		Vector3 direction = mExtrusionPath->getAvgDirection(i);
-
-		Quaternion q = Utils::_computeQuaternion(direction);
-
-		Real scale=1.;
-
-		if (i>0) lineicPos+=(v0-mExtrusionPath->getPoint(i-1)).length();
-
+		Path path = *mExtrusionPath;
 		if (mRotationTrack)
-		{
-			Real angle;
-			if (mRotationTrack->getAddressingMode() == Track::AM_RELATIVE_LINEIC)
-				angle = mRotationTrack->getValue(lineicPos / totalPathLength);
-			else if (mRotationTrack->getAddressingMode() == Track::AM_ABSOLUTE_LINEIC)
-				angle = mRotationTrack->getValue(lineicPos);
-			else if (mRotationTrack->getAddressingMode() == Track::AM_POINT)
-				angle = mRotationTrack->getValue(i);
-
-			q= q*Quaternion((Radian)angle, Vector3::UNIT_Z);
-		}
+			path = path.mergeKeysWithTrack(*mRotationTrack);
 		if (mScaleTrack)
+			path = path.mergeKeysWithTrack(*mScaleTrack);
+		numSegPath = path.getSegCount();
+		// Estimate vertex and index count
+		buffer.rebaseOffset();
+		buffer.estimateIndexCount(numSegShape*numSegPath*6);
+		buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1));
+				
+		for (int i=0;i<=numSegPath;i++)
 		{
-			if (mScaleTrack->getAddressingMode() == Track::AM_RELATIVE_LINEIC)
-				scale = mScaleTrack->getValue(lineicPos / totalPathLength);
-			else if (mScaleTrack->getAddressingMode() == Track::AM_ABSOLUTE_LINEIC)
-				scale = mScaleTrack->getValue(lineicPos);
-			else if (mScaleTrack->getAddressingMode() == Track::AM_POINT)
-				scale = mScaleTrack->getValue(i);
-		}
+			Vector3 v0 = path.getPoint(i);
+			Vector3 direction = path.getAvgDirection(i);
 
-		for (int j =0;j<=numSegShape;j++)
-		{
-			Vector2 vp2 = shapeToExtrude->getPoint(j);
-			Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
-			Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
-			Vector3 vp(vp2.x, vp2.y, 0);
-			Vector3 normal(vp2normal.x, vp2normal.y, 0);							
-			buffer.rebaseOffset();
-			Vector3 newPoint = v0+q*(scale*vp);
+			Quaternion q = Utils::_computeQuaternion(direction);
 
-			addPoint(buffer, newPoint,
-							 q*normal, 
-							 Vector2(i/(Real)numSegPath, j/(Real)numSegShape));
+			Real scale=1.;
+					
+			if (i>0) lineicPos += (v0-path.getPoint(i-1)).length();
+			
+			// Get the values of angle and scale
+			if (mRotationTrack)
+			{
+				Real angle;
+				angle = mRotationTrack->getValue(lineicPos, lineicPos / totalPathLength, i);
 
-			if (j <numSegShape && i <numSegPath)
-			{		
-				if (shapeToExtrude->getOutSide() == SIDE_LEFT)
-				{
-					buffer.triangle(numSegShape + 1, numSegShape + 2, 0);
-					buffer.triangle(0, numSegShape + 2, 1);
-				}
-				else 
-				{
-					buffer.triangle(numSegShape + 2, numSegShape + 1, 0);
-					buffer.triangle(numSegShape + 2, 0, 1);
-				}
+				q = q*Quaternion((Radian)angle, Vector3::UNIT_Z);
+			}
+			if (mScaleTrack)
+			{
+				scale = mScaleTrack->getValue(lineicPos, lineicPos / totalPathLength, i);
+			}
+			// Insert new points
+			for (int j =0;j<=numSegShape;j++)
+			{
+				Vector2 vp2 = shapeToExtrude->getPoint(j);
+				Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+				Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
+				Vector3 vp(vp2.x, vp2.y, 0);
+				Vector3 normal(vp2normal.x, vp2normal.y, 0);							
+				buffer.rebaseOffset();
+				Vector3 newPoint = v0+q*(scale*vp);
+
+				addPoint(buffer, newPoint,
+					q*normal, 
+					Vector2(i/(Real)numSegPath, j/(Real)numSegShape));
+
+				if (j <numSegShape && i <numSegPath)
+				{		
+					if (shapeToExtrude->getOutSide() == SIDE_LEFT)
+					{
+						buffer.triangle(numSegShape + 1, numSegShape + 2, 0);
+						buffer.triangle(0, numSegShape + 2, 1);
+					}
+					else 
+					{
+						buffer.triangle(numSegShape + 2, numSegShape + 1, 0);
+						buffer.triangle(numSegShape + 2, 0, 1);
+					}
+				}			
 			}			
-		}
-	}			
-}
+		}			
+	}
 	//-----------------------------------------------------------------------
 	void Extruder::_extrudeCapImpl(TriangleBuffer& buffer) const
 	{
-			std::vector<int> indexBuffer;
-			PointList pointList;
+		std::vector<int> indexBuffer;
+		PointList pointList;
 
-			buffer.rebaseOffset();
+		buffer.rebaseOffset();
 
-			if (mShapeToExtrude)
-			{
-				Triangulator::triangulate(*mShapeToExtrude, indexBuffer);
-				pointList = mShapeToExtrude->getPoints();
-			} else
-			{
-				Triangulator::triangulate(*mMultiShapeToExtrude, indexBuffer, pointList);
-			}
-			buffer.estimateIndexCount(2*indexBuffer.size());
-			buffer.estimateVertexCount(2*pointList.size());
+		if (mShapeToExtrude)
+		{
+			Triangulator::triangulate(*mShapeToExtrude, indexBuffer);
+			pointList = mShapeToExtrude->getPoints();
+		} else
+		{
+			Triangulator::triangulate(*mMultiShapeToExtrude, indexBuffer, pointList);
+		}
+		buffer.estimateIndexCount(2*indexBuffer.size());
+		buffer.estimateVertexCount(2*pointList.size());
 
-			
-			//begin cap
-			buffer.rebaseOffset();
-			Quaternion qBegin = Utils::_computeQuaternion(mExtrusionPath->getDirectionAfter(0));
-			if (mRotationTrack)
-			{
-				Real angle = mRotationTrack->getFirstValue();
-				qBegin = qBegin*Quaternion((Radian)angle, Vector3::UNIT_Z);
-			}	
-			Real scaleBegin=1.;
-			if (mScaleTrack)
-				scaleBegin = mScaleTrack->getFirstValue();
-			for (size_t j =0;j<pointList.size();j++)
-			{
-				Vector2 vp2 = pointList[j];
-				Vector3 vp(vp2.x, vp2.y, 0);
-				Vector3 normal = -Vector3::UNIT_Z;				
 
-				Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*(scaleBegin*vp);
-				addPoint(buffer, newPoint,
-								 qBegin*normal,
-								 vp2);
-			}
-			
-			for (size_t i=0;i<indexBuffer.size()/3;i++)
-			{				
-				buffer.index(indexBuffer[i*3]);
-				buffer.index(indexBuffer[i*3+2]);
-				buffer.index(indexBuffer[i*3+1]);
-			}
+		//begin cap
+		buffer.rebaseOffset();
+		Quaternion qBegin = Utils::_computeQuaternion(mExtrusionPath->getDirectionAfter(0));
+		if (mRotationTrack)
+		{
+			Real angle = mRotationTrack->getFirstValue();
+			qBegin = qBegin*Quaternion((Radian)angle, Vector3::UNIT_Z);
+		}	
+		Real scaleBegin=1.;
+		if (mScaleTrack)
+			scaleBegin = mScaleTrack->getFirstValue();
+		for (size_t j =0;j<pointList.size();j++)
+		{
+			Vector2 vp2 = pointList[j];
+			Vector3 vp(vp2.x, vp2.y, 0);
+			Vector3 normal = -Vector3::UNIT_Z;				
 
-			// end cap
-			buffer.rebaseOffset();
-			Quaternion qEnd = Utils::_computeQuaternion(mExtrusionPath->getDirectionBefore(mExtrusionPath->getSegCount()));
-			if (mRotationTrack)
-			{
-				Real angle = mRotationTrack->getLastValue();
-				qEnd = qEnd*Quaternion((Radian)angle, Vector3::UNIT_Z);
-			}			
-			Real scaleEnd=1.;
-			if (mScaleTrack)
-				scaleEnd = mScaleTrack->getLastValue();
-			
-			for (size_t j =0;j<pointList.size();j++)
-			{
-				Vector2 vp2 = pointList[j];
-				Vector3 vp(vp2.x, vp2.y, 0);
-				Vector3 normal = Vector3::UNIT_Z;				
+			Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*(scaleBegin*vp);
+			addPoint(buffer, newPoint,
+				qBegin*normal,
+				vp2);
+		}
 
-				Vector3 newPoint = mExtrusionPath->getPoint(mExtrusionPath->getSegCount())+qEnd*(scaleEnd*vp);
-				addPoint(buffer, newPoint,
-								 qEnd*normal,
-								 vp2);
-			}
-			
-			for (size_t i=0;i<indexBuffer.size()/3;i++)
-			{				
-				buffer.index(indexBuffer[i*3]);
-				buffer.index(indexBuffer[i*3+1]);
-				buffer.index(indexBuffer[i*3+2]);
-			}
-	
+		for (size_t i=0;i<indexBuffer.size()/3;i++)
+		{				
+			buffer.index(indexBuffer[i*3]);
+			buffer.index(indexBuffer[i*3+2]);
+			buffer.index(indexBuffer[i*3+1]);
+		}
+
+		// end cap
+		buffer.rebaseOffset();
+		Quaternion qEnd = Utils::_computeQuaternion(mExtrusionPath->getDirectionBefore(mExtrusionPath->getSegCount()));
+		if (mRotationTrack)
+		{
+			Real angle = mRotationTrack->getLastValue();
+			qEnd = qEnd*Quaternion((Radian)angle, Vector3::UNIT_Z);
+		}			
+		Real scaleEnd=1.;
+		if (mScaleTrack)
+			scaleEnd = mScaleTrack->getLastValue();
+
+		for (size_t j =0;j<pointList.size();j++)
+		{
+			Vector2 vp2 = pointList[j];
+			Vector3 vp(vp2.x, vp2.y, 0);
+			Vector3 normal = Vector3::UNIT_Z;				
+
+			Vector3 newPoint = mExtrusionPath->getPoint(mExtrusionPath->getSegCount())+qEnd*(scaleEnd*vp);
+			addPoint(buffer, newPoint,
+				qEnd*normal,
+				vp2);
+		}
+
+		for (size_t i=0;i<indexBuffer.size()/3;i++)
+		{				
+			buffer.index(indexBuffer[i*3]);
+			buffer.index(indexBuffer[i*3+1]);
+			buffer.index(indexBuffer[i*3+2]);
+		}
+
 	}
 	//-----------------------------------------------------------------------
 	void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -209,7 +205,7 @@ namespace Procedural
 		assert((mShapeToExtrude || mMultiShapeToExtrude) && "Either shape or multishape must be defined!");
 
 		// Triangulate the begin and end caps
-	
+
 		if (!mExtrusionPath->isClosed() && mCapped)
 			_extrudeCapImpl(buffer);
 

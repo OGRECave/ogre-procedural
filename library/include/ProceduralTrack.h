@@ -39,14 +39,16 @@ class _ProceduralExport Track
 public:
 	enum AddressingMode
 	{
-		AM_ABSOLUTE_LINEIC, AM_RELATIVE_LINEIC, AM_POINT, AM_ABSOLUTE_LINEIC_INSERT_POINT, AM_RELATIVE_LINEIC_INSERT_POINT
+		AM_ABSOLUTE_LINEIC, AM_RELATIVE_LINEIC, AM_POINT
 	};
 protected:
 	std::map<Ogre::Real, Ogre::Real> mKeyFrames;
+
+	bool mInsertPoint;
 	
 	AddressingMode mAddressingMode;
 public:
-	Track(AddressingMode addressingMode=AM_ABSOLUTE_LINEIC) : mAddressingMode(addressingMode) {}
+	Track(AddressingMode addressingMode=AM_ABSOLUTE_LINEIC) : mAddressingMode(addressingMode), mInsertPoint(true) {}
 
 	AddressingMode getAddressingMode() const
 	{
@@ -59,7 +61,22 @@ public:
 		return *this;
 	}
 
-	Ogre::Real getValue(Ogre::Real pos);
+	inline bool isInsertPoint() const
+	{
+		return mInsertPoint;
+	}
+
+	Ogre::Real getValue(Ogre::Real absPos, Ogre::Real relPos, int index) const;
+
+	Ogre::Real getValue(Ogre::Real pos) const;
+
+	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueBefore(Ogre::Real absPos, Ogre::Real relPos, int index) const;
+
+	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueBefore(Ogre::Real pos) const;
+
+	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueAfter(Ogre::Real absPos, Ogre::Real relPos, int index) const;
+
+	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueAfter(Ogre::Real pos) const;
 
 	Ogre::Real getFirstValue()
 	{
