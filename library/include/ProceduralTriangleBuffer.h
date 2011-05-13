@@ -169,7 +169,7 @@ class TriangleBuffer
 	}
 	
 	/// Applies a matrix to transform all vertices inside the triangle buffer
-	void applyTransform(const Ogre::Matrix4& matrix)
+	TriangleBuffer& applyTransform(const Ogre::Matrix4& matrix)
 	{
 		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
 		{
@@ -177,6 +177,57 @@ class TriangleBuffer
 			it->mNormal = matrix * it->mNormal;
 			it->mNormal.normalise();
 		}
+		return *this;
+	}
+
+	/// Applies the translation immediately to all the points contained in that triangle buffer
+	/// @arg amount translation vector
+	TriangleBuffer& translate(const Ogre::Vector3& amount)
+	{
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
+		{
+			it->mPosition += amount;
+		}
+		return *this;
+	}
+
+	/// Applies the translation immediately to all the points contained in that triangle buffer
+	TriangleBuffer& translate(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		return translate(Ogre::Vector3(x, y, z));
+	}
+
+	/// Applies the rotation immediately to all the points contained in that triangle buffer
+	/// @arg quat the rotation quaternion to apply
+	TriangleBuffer& rotate(Ogre::Quaternion quat)
+	{
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
+		{
+			it->mPosition = quat * it->mPosition;		
+			it->mNormal = quat * it->mNormal;
+			it->mNormal.normalise();
+		}
+		return *this;
+	}
+
+	/// Applies an immediate scale operation to that triangle buffer
+	/// @arg scale Scale vector
+	TriangleBuffer& scale(const Ogre::Vector3& scale)
+	{
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
+		{
+			it->mPosition = scale * it->mPosition;
+		}
+		return *this;
+	}
+
+	/// Applies an immediate scale operation to that triangle buffer
+	/// @arg x X scale component
+	/// @arg y Y scale component
+	/// @arg z Z scale component
+	TriangleBuffer& scale(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		return scale(Ogre::Vector3(x,y,z));
 	}
 
 	/**
@@ -187,7 +238,6 @@ class TriangleBuffer
 	{
 		mEstimatedVertexCount += vertexCount;
 		mVertices.reserve(mEstimatedVertexCount);
-		//Utils::log("estimated vertex count : " + Ogre::StringConverter::toString(vertexCount));
 	}
 	
 	/**
@@ -198,13 +248,7 @@ class TriangleBuffer
 	{
 		mEstimatedIndexCount += indexCount;
 		mIndices.reserve(mEstimatedIndexCount);
-		//Utils::log("estimated index count : " + Ogre::StringConverter::toString(indexCount));
 	}
-
-	/*void debugOutput()
-	{
-		Utils::log("final num vertex : " + Ogre::StringConverter::toString(mVertices.size()) + " - final index size : " + Ogre::StringConverter::toString(mIndices.size()));
-	}*/
 };
 }
 #endif

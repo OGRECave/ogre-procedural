@@ -440,4 +440,36 @@ void Shape::_appendToManualObject(ManualObject* manual)
 	if (mClosed)
 		manual->position(Vector3(mPoints.begin()->x, mPoints.begin()->y, 0.f));
 }
+//-----------------------------------------------------------------------
+MultiShape Shape::thicken(Real amount)
+	{		
+		if (!mClosed)
+		{
+			Shape s;
+			s.setOutSide(mOutSide);
+			for (unsigned int i=0;i<mPoints.size();i++)
+				s.addPoint(mPoints[i]+amount*getAvgNormal(i));
+			for (int i=mPoints.size()-1;i>=0;i--)
+				s.addPoint(mPoints[i]-amount*getAvgNormal(i));
+			s.close();
+			return MultiShape().addShape(s);
+		} 
+		else 
+		{
+			MultiShape ms;
+			Shape s1;
+			for (unsigned int i=0;i<mPoints.size();i++)
+				s1.addPoint(mPoints[i]+amount*getAvgNormal(i));
+			s1.close();
+			s1.setOutSide(mOutSide);
+			ms.addShape(s1);
+			Shape s2;
+			for (unsigned int i=0;i<mPoints.size();i++)			
+				s2.addPoint(mPoints[i]-amount*getAvgNormal(i));
+			s2.close();
+			s2.setOutSide(mOutSide==SIDE_LEFT?SIDE_RIGHT:SIDE_LEFT);
+			ms.addShape(s2);
+			return ms;						
+		}
+	}
 }
