@@ -1,0 +1,82 @@
+function(procedural_create_vcproj_userfile TARGETNAME)
+  if (MSVC)
+	if (${MSVC_VERSION} EQUAL 1600)
+	   configure_file(
+	  ${PROCEDURAL_TEMPLATES_DIR}/VisualStudioUserFile.vcxproj.user.in
+	  ${CMAKE_CURRENT_BINARY_DIR}/${TARGETNAME}.vcxproj.user
+	  @ONLY
+	)
+	else()
+	  configure_file(
+	  ${PROCEDURAL_TEMPLATES_DIR}/VisualStudioUserFile.vcproj.user.in
+	  ${CMAKE_CURRENT_BINARY_DIR}/${TARGETNAME}.vcproj.user
+	  @ONLY
+	)
+	endif()
+  endif ()
+ endfunction(procedural_create_vcproj_userfile)
+  
+macro(copy_release_dir INPUT INPUTDIR)
+  if (EXISTS ${INPUTDIR}/${INPUT})
+    if (MINGW OR NMAKE)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} COPYONLY)
+	else ()
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/release/${INPUT} COPYONLY)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/relwithdebinfo/${INPUT} COPYONLY)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/minsizerel/${INPUT} COPYONLY)
+	endif ()
+  endif ()
+endmacro ()
+
+macro(copy_release INPUT)
+	copy_release_dir(${INPUT} ${OGRE_PLUGIN_DIR_REL})
+endmacro()
+
+macro(configure_release_dir INPUT INPUTDIR)
+  if (EXISTS ${INPUTDIR}/${INPUT})
+    if (MINGW OR NMAKE OR UNIX)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} @ONLY)
+	else ()
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/release/${INPUT} @ONLY)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/relwithdebinfo/${INPUT} @ONLY)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/minsizerel/${INPUT} @ONLY)
+	endif ()
+  endif ()
+endmacro ()
+
+macro(copy_release_debug INPUT INPUTDIR)
+  if (EXISTS ${INPUTDIR}/${INPUT})
+    if (MINGW OR NMAKE OR UNIX)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} COPYONLY)
+	else ()
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/release/${INPUT} COPYONLY)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/relwithdebinfo/${INPUT} COPYONLY)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/minsizerel/${INPUT} COPYONLY)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debug/${INPUT} COPYONLY)
+	endif ()
+ endif ()
+endmacro ()
+
+macro(copy_debug_dir INPUT INPUTDIR)
+  if (EXISTS ${INPUTDIR}/${INPUT})
+    if (MINGW OR NMAKE)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} COPYONLY)
+	else ()
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debug/${INPUT} COPYONLY)
+	endif ()
+  endif ()
+endmacro()
+
+macro(configure_debug_dir INPUT INPUTDIR)
+  if (EXISTS ${INPUTDIR}/${INPUT})
+    if (MINGW OR NMAKE OR UNIX)
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} @ONLY)
+	else ()
+      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debug/${INPUT} @ONLY)
+	endif ()
+  endif ()
+endmacro()
+
+macro(copy_debug INPUT)
+	copy_debug_dir(${INPUT} ${OGRE_PLUGIN_DIR_DBG})
+endmacro()
