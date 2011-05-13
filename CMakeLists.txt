@@ -8,6 +8,8 @@ set(CMAKE_MODULE_PATH
   "${PROCEDURAL_SOURCE_DIR}/CMake/Packages"
 )
 
+set(PROCEDURAL_VERSION_DASH_SEPARATED "0.2")
+
 if (CMAKE_BUILD_TYPE STREQUAL "")
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
   # differentiation between debug and release builds.
@@ -26,8 +28,11 @@ endif(WIN32 OR APPLE)
 
 find_package(OGRE REQUIRED)
 
+find_package(Doxygen)
+
 option(PROCEDURAL_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(PROCEDURAL_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
+option(PROCEDURAL_INSTALL_DOCS "Install documentation." FALSE)
 
 # Specify build paths
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/lib")
@@ -37,7 +42,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/bin")
 set(PROCEDURAL_TEMPLATES_DIR "${PROCEDURAL_SOURCE_DIR}/CMake/Templates")
 set(PROCEDURAL_WORK_DIR ${PROCEDURAL_BINARY_DIR})
 
+# Configure version file for use by scripts
+configure_file("${PROCEDURAL_TEMPLATES_DIR}/version.txt.in" "${PROCEDURAL_BINARY_DIR}/version.txt" @ONLY)
+
 add_subdirectory(library)
+
+#useful macros for samples and tests
+include(ProceduralMacros)
 
 if (PROCEDURAL_BUILD_SAMPLES)	
 	add_subdirectory(samples)
@@ -46,3 +57,9 @@ endif()
 if (PROCEDURAL_BUILD_TESTS)
 	add_subdirectory(tests)
 endif()
+
+# Install documentation
+add_subdirectory(docs)
+
+# Install CMake modules
+add_subdirectory(CMake)

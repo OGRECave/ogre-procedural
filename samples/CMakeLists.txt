@@ -1,87 +1,3 @@
-function(procedural_create_vcproj_userfile TARGETNAME)
-  if (MSVC)
-	if (${MSVC_VERSION} EQUAL 1600)
-	   configure_file(
-	  ${PROCEDURAL_TEMPLATES_DIR}/VisualStudioUserFile.vcxproj.user.in
-	  ${CMAKE_CURRENT_BINARY_DIR}/${TARGETNAME}.vcxproj.user
-	  @ONLY
-	)
-	else()
-	  configure_file(
-	  ${PROCEDURAL_TEMPLATES_DIR}/VisualStudioUserFile.vcproj.user.in
-	  ${CMAKE_CURRENT_BINARY_DIR}/${TARGETNAME}.vcproj.user
-	  @ONLY
-	)
-	endif()
-  endif ()
- endfunction(procedural_create_vcproj_userfile)
-  
-macro(copy_release_dir INPUT INPUTDIR)
-  if (EXISTS ${INPUTDIR}/${INPUT})
-    if (MINGW OR NMAKE)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} COPYONLY)
-	else ()
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/release/${INPUT} COPYONLY)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/relwithdebinfo/${INPUT} COPYONLY)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/minsizerel/${INPUT} COPYONLY)
-	endif ()
-  endif ()
-endmacro ()
-
-macro(copy_release INPUT)
-	copy_release_dir(${INPUT} ${OGRE_PLUGIN_DIR_REL})
-endmacro()
-
-macro(configure_release_dir INPUT INPUTDIR)
-  if (EXISTS ${INPUTDIR}/${INPUT})
-    if (MINGW OR NMAKE OR UNIX)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} @ONLY)
-	else ()
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/release/${INPUT} @ONLY)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/relwithdebinfo/${INPUT} @ONLY)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/minsizerel/${INPUT} @ONLY)
-	endif ()
-  endif ()
-endmacro ()
-
-macro(copy_release_debug INPUT INPUTDIR)
-  if (EXISTS ${INPUTDIR}/${INPUT})
-    if (MINGW OR NMAKE OR UNIX)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} COPYONLY)
-	else ()
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/release/${INPUT} COPYONLY)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/relwithdebinfo/${INPUT} COPYONLY)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/minsizerel/${INPUT} COPYONLY)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debug/${INPUT} COPYONLY)
-	endif ()
- endif ()
-endmacro ()
-
-macro(copy_debug_dir INPUT INPUTDIR)
-  if (EXISTS ${INPUTDIR}/${INPUT})
-    if (MINGW OR NMAKE)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} COPYONLY)
-	else ()
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debug/${INPUT} COPYONLY)
-	endif ()
-  endif ()
-endmacro()
-
-macro(configure_debug_dir INPUT INPUTDIR)
-  if (EXISTS ${INPUTDIR}/${INPUT})
-    if (MINGW OR NMAKE OR UNIX)
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${INPUT} @ONLY)
-	else ()
-      configure_file(${INPUTDIR}/${INPUT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debug/${INPUT} @ONLY)
-	endif ()
-  endif ()
-endmacro()
-
-macro(copy_debug INPUT)
-	copy_debug_dir(${INPUT} ${OGRE_PLUGIN_DIR_DBG})
-endmacro()
-
-
 find_package(OIS REQUIRED)
 
 if(NOT OIS_FOUND)
@@ -138,3 +54,26 @@ configure_debug_dir(plugins_d.cfg ${PROCEDURAL_TEMPLATES_DIR})
 add_subdirectory(primitives)
 
 add_subdirectory(extrusion)
+
+# Install sample sources
+if (PROCEDURAL_INSTALL_SAMPLES_SOURCE)
+  if (WIN32 OR APPLE)
+    set(PROCEDURAL_SAMPLES_DIR Samples)
+  elseif (UNIX)
+    set(PROCEDURAL_SAMPLES_DIR share/PROCEDURAL/Samples)
+  endif ()
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ DESTINATION ${PROCEDURAL_SAMPLES_DIR}
+    REGEX "^CMakeLists.txt$" EXCLUDE
+    PATTERN "Makefile.am" EXCLUDE
+    PATTERN "Media" EXCLUDE
+    PATTERN "bin" EXCLUDE
+    PATTERN "setup" EXCLUDE
+	PATTERN "obj" EXCLUDE
+	PATTERN "scripts" EXCLUDE
+  )
+  # install a new CMakeLists.txt file to allow building of samples
+  configure_file(${PROCEDURAL_TEMPLATES_DIR}/SDK_CMakeLists.txt.in ${CMAKE_CURRENT_BINARY_DIR}/../CMakeLists.txt @ONLY)
+  configure_file(${PROCEDURAL_TEMPLATES_DIR}/SDK_Samples_CMakeLists.txt.in ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt @ONLY)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/../CMakeLists.txt DESTINATION ${PROCEDURAL_SAMPLES_DIR}/../)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt DESTINATION ${PROCEDURAL_SAMPLES_DIR})
+endif ()
