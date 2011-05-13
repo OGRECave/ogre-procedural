@@ -248,6 +248,16 @@ public:
 			*it+=translation;
 		return *this;
 	}
+		
+	/**
+	 * Applies the given translation to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param translation the translation vector
+	 */
+	Shape& translate(Ogre::Real translationX, Ogre::Real translationY)
+	{
+		return translate(Ogre::Vector2(translationX, translationY));
+	}
 
 	/**
 	 * Applies the given rotation to all the points already defined.
@@ -356,37 +366,7 @@ public:
 	}
 		
 	/// Applies a "thickness" to a shape, ie a bit like the extruder, but in 2D
-	MultiShape thicken(Ogre::Real amount) 
-	{		
-		if (!mClosed)
-		{
-			Shape s;
-			s.setOutSide(mOutSide);
-			for (unsigned int i=0;i<mPoints.size();i++)
-				s.addPoint(mPoints[i]+amount*getAvgNormal(i));
-			for (int i=mPoints.size()-1;i>=0;i--)
-				s.addPoint(mPoints[i]-amount*getAvgNormal(i));
-			s.close();
-			return MultiShape().addShape(s);
-		} 
-		else 
-		{
-			MultiShape ms;
-			Shape s1;
-			for (unsigned int i=0;i<mPoints.size();i++)
-				s1.addPoint(mPoints[i]+amount*getAvgNormal(i));
-			s1.close();
-			s1.setOutSide(mOutSide);
-			ms.addShape(s1);
-			Shape s2;
-			for (unsigned int i=0;i<mPoints.size();i++)			
-				s2.addPoint(mPoints[i]-amount*getAvgNormal(i));
-			s2.close();
-			s2.setOutSide(mOutSide==SIDE_LEFT?SIDE_RIGHT:SIDE_LEFT);
-			ms.addShape(s2);
-			return ms;						
-		}
-	}
+	MultiShape thicken(Ogre::Real amount);
 
 	private:
 
