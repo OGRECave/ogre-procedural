@@ -346,6 +346,7 @@ public:
 		}
 	}
 
+	/// Computes the radius of a bounding circle centered on the origin
 	Ogre::Real findBoundingRadius() const
 	{
 		Ogre::Real sqRadius=0.f;
@@ -354,6 +355,7 @@ public:
 		return Ogre::Math::Sqrt(sqRadius);
 	}
 		
+	/// Applies a "thickness" to a shape, ie a bit like the extruder, but in 2D
 	MultiShape thicken(Ogre::Real amount) 
 	{		
 		if (!mClosed)

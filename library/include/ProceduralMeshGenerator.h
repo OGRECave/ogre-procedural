@@ -78,7 +78,7 @@ public:
 	 * @param group ressource group in which the mesh will be created
 	 */
 	Ogre::MeshPtr realizeMesh(const std::string& name = "", 
-        const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
+		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
 	{
 		TriangleBuffer tbuffer;
 		addToTriangleBuffer(tbuffer);
@@ -143,6 +143,11 @@ public:
 	}
 
 protected:
+	/// Adds a new point to a triangle buffer, using the format defined for that MeshGenerator
+	/// @arg buffer the triangle buffer to update
+	/// @arg position the position of the new point
+	/// @arg normal the normal of the new point
+	/// @arg uv the uv texcoord of the new point
 	inline void addPoint(TriangleBuffer& buffer, const Ogre::Vector3& position, const Ogre::Vector3& normal, const Ogre::Vector2& uv) const
 	{
 		buffer.position(position);

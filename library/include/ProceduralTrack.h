@@ -33,56 +33,81 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-//---------------------------------------------------
+/**
+ * Represents a curve by interpolating between a list of key/values.
+ * It always refers to a "principal" curve (a path, atm), so the keys to either its point index or lineic position.
+ */
 class _ProceduralExport Track
 {
 public:
+	/// Defines addressing mode for the track
+	/// ABSOLUTE_LINEIC : use the distance from the start of the principal curve
+	/// RELATIVE_LINEIC : use the relative distance from the start of the principal curve, considering the total length of main curve is 1.
+	/// POINT : right on the principal curve's key
 	enum AddressingMode
 	{
 		AM_ABSOLUTE_LINEIC, AM_RELATIVE_LINEIC, AM_POINT
 	};
 protected:
+	/// Key frames
 	std::map<Ogre::Real, Ogre::Real> mKeyFrames;
-
+	/// Tells whether we should add new points to principal curve if a key is defined here but not on principal curve
 	bool mInsertPoint;
-	
+	/// Adressing mode of the track (see the enum definition for more details)
 	AddressingMode mAddressingMode;
 public:
-	Track(AddressingMode addressingMode=AM_ABSOLUTE_LINEIC) : mAddressingMode(addressingMode), mInsertPoint(true) {}
+	/// Default constructor.
+	/// Point insertion default to true, and addressing to absolute lineic
+	Track(AddressingMode addressingMode=AM_ABSOLUTE_LINEIC, bool insertPoint=true) : mAddressingMode(addressingMode), mInsertPoint(insertPoint) {}
 
+	/// Gets addressing mode of the curve
 	AddressingMode getAddressingMode() const
 	{
 		return mAddressingMode;
 	}
 
+	/// Inserts a new Key/Value couple anywhere on the track (it is auto-sorted anyway)
 	inline Track& addKeyFrame(Ogre::Real pos, Ogre::Real value)
 	{
 		mKeyFrames[pos] = value;
 		return *this;
 	}
 
+	/// @copydoc Track::mInsertPoint
 	inline bool isInsertPoint() const
 	{
 		return mInsertPoint;
 	}
 
+	/// Gets the value on the current point, taking into account the addressing mode
 	Ogre::Real getValue(Ogre::Real absPos, Ogre::Real relPos, int index) const;
 
+	/// Gets the value on the current point
 	Ogre::Real getValue(Ogre::Real pos) const;
 
+	/// Get the key value couple before current point, taking into account addressing mode.
+	/// If current point is below minimum key, issues minimum key
 	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueBefore(Ogre::Real absPos, Ogre::Real relPos, int index) const;
 
+	/// Get the key value couple before current point.
+	/// If current point is below minimum key, issues minimum key/value
 	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueBefore(Ogre::Real pos) const;
 
+	/// Get the key value couple after current point, taking into account addressing mode.
+	/// If current point is above maximum key, issues maximum key/value
 	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueAfter(Ogre::Real absPos, Ogre::Real relPos, int index) const;
 
+	/// Get the key value couple after current point.
+	/// If current point is above maximum key, issues maximum key/value	
 	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueAfter(Ogre::Real pos) const;
 
+	/// Gets the first value in the track
 	Ogre::Real getFirstValue()
 	{
 		return mKeyFrames.begin()->second;
 	}
 
+	/// Gets the last value in the track
 	Ogre::Real getLastValue()
 	{
 		return (--mKeyFrames.end())->second;
