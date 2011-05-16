@@ -435,6 +435,26 @@ class Unit_Tests : public BaseApplication
 		}
 	};
 
+	/* --------------------------------------------------------------------------- */
+	class Test_InvertNormals : public Unit_Test
+	{
+	public:		
+		Test_InvertNormals(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Invert Normals";
+		}
+
+		void initImpl()
+		{
+			TriangleBuffer tbuff;
+			SphereGenerator().setRadius(5).addToTriangleBuffer(tbuff);
+			tbuff.invertNormals();
+			putMesh(tbuff.transformToMesh("sphere"), 1);
+		}
+	};
+
 
 
 	/* --------------------------------------------------------------------------- */
