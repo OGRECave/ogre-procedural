@@ -216,8 +216,8 @@ class Unit_Tests : public BaseApplication
 				ms.addShape(s);
 			}
 			putMesh(ms.realizeMesh());
-			Triangulator::triangulateToMesh(ms, "contourMesh");
-			putMesh("contourMesh");
+						
+			putMesh(Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh());
 
 			Path p = LinePath().realizePath();
 			Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p).realizeMesh("extrudedMesh");
@@ -225,16 +225,13 @@ class Unit_Tests : public BaseApplication
 
 			Shape s = Shape().addPoint(0.2,.9).addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,2).addPoint(2,2).addPoint(2,-1).addPoint(0.,-.2).setOutSide(SIDE_LEFT).close();			
 			putMesh(s.realizeMesh());
-			Triangulator::triangulateToMesh(s, "contourMesh2");
-			putMesh("contourMesh2");
+			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh());
 
 			Shape s3 = CircleShape().setNumSeg(8).realizeShape();						
-			Triangulator::triangulateToMesh(s3, "centeredCircle");
-			putMesh("centeredCircle");
+			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
 			s3.translate(Vector2(.5,0));
-			Triangulator::triangulateToMesh(s3, "uncenteredCircle");
-			putMesh("uncenteredCircle");
+			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 		}
 	};
 

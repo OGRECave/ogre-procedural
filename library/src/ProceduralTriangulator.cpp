@@ -89,7 +89,7 @@ bool Triangulator::Triangle::isPointInsideCircumcircle(const Vector2& pt)
 }
 //-----------------------------------------------------------------------
 // Triangulation by insertion
-void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer)
+void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer) const
 {
 	// Compute super triangle
 	float maxTriangleSize = 0.f;
@@ -151,7 +151,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	pointList.pop_back();	
 }
 //-----------------------------------------------------------------------
-void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer, const PointList& pl)
+void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer, const PointList& pl) const
 {	
 	std::vector<DelaunaySegment> segList;
 	size_t shapeOffset = 0;
@@ -265,7 +265,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 	}
 }
 //-----------------------------------------------------------------------
-void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSeg, std::vector<int> inputPoints, DelaunayTriangleBuffer& tbuffer, const PointList&  pointList)
+void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSeg, std::vector<int> inputPoints, DelaunayTriangleBuffer& tbuffer, const PointList&  pointList) const
 {
 	if (inputPoints.size() ==1)
 	{
@@ -312,51 +312,44 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 	_recursiveTriangulatePolygon(newCut2, set2, tbuffer, pointList);
 }
 //-----------------------------------------------------------------------
-void Triangulator::triangulate(const Shape& shape, std::vector<int>& output)
+void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertices) const
 {
+	assert((mShapeToTriangulate || mMultiShapeToTriangulate) && "Either shape or multishape must be defined");
+
 	// Do the Delaunay triangulation
-	PointList pl = shape.getPoints();
-	DelaunayTriangleBuffer dtb;
-	delaunay(pl, dtb);
-	
-	addConstraints(shape, dtb, pl);
-	
-	//Outputs index buffer	
-	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
-	{
-		output.push_back(it->i[0]);
-		output.push_back(it->i[1]);
-		output.push_back(it->i[2]);
-	}
-}
-//-----------------------------------------------------------------------
-void Triangulator::triangulate(const MultiShape& multiShape, std::vector<int>& output, PointList& outputVertices)
-{
-	// Do the Delaunay triangulation
-	outputVertices = multiShape.getPoints();
+	if (mShapeToTriangulate)
+		outputVertices = mShapeToTriangulate->getPoints();
+	else
+		outputVertices = mMultiShapeToTriangulate->getPoints();
 	DelaunayTriangleBuffer dtb;
 	delaunay(outputVertices, dtb);
-	
+
 	// Add contraints
-	addConstraints(multiShape, dtb, outputVertices);
-	
+	if (mMultiShapeToTriangulate)
+		addConstraints(*mMultiShapeToTriangulate, dtb, outputVertices);
+	else 
+		addConstraints(*mShapeToTriangulate, dtb, outputVertices);
+
 	//Outputs index buffer	
 	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
 	{
 		output.push_back(it->i[0]);
 		output.push_back(it->i[1]);
 		output.push_back(it->i[2]);
-	}
+	}	
 }
 //-----------------------------------------------------------------------
-void Triangulator::triangulateToMesh(const Shape& shape, std::string out)
+void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
-		TriangleBuffer buffer;
+	assert((mShapeToTriangulate || mMultiShapeToTriangulate) && "Either shape or multishape must be defined");
+	if (mShapeToTriangulate)
+	{		
+		PointList pointList;
 		std::vector<int> indexBuffer;		
-		triangulate(shape,indexBuffer);
-		for (size_t j =0;j<=shape.getSegCount();j++)
+		triangulate(indexBuffer, pointList);
+		for (size_t j =0;j<=mShapeToTriangulate->getSegCount();j++)
 			{
-				Ogre::Vector2 vp2 = shape.getPoint(j);
+				Ogre::Vector2 vp2 = mShapeToTriangulate->getPoint(j);
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
 
@@ -372,15 +365,12 @@ void Triangulator::triangulateToMesh(const Shape& shape, std::string out)
 				buffer.index(indexBuffer[i*3+2]);
 				buffer.index(indexBuffer[i*3+1]);
 			}
-		buffer.transformToMesh(out);
 	}
-//-----------------------------------------------------------------------
-void Triangulator::triangulateToMesh(const MultiShape& multiShape, std::string out)
+	else
 	{
-		TriangleBuffer buffer;
 		PointList pointList;
 		std::vector<int> indexBuffer;		
-		triangulate(multiShape, indexBuffer, pointList);
+		triangulate(indexBuffer, pointList);
 		for (size_t j =0;j<pointList.size();j++)
 			{
 				Ogre::Vector2 vp2 = pointList[j];
@@ -399,6 +389,6 @@ void Triangulator::triangulateToMesh(const MultiShape& multiShape, std::string o
 				buffer.index(indexBuffer[i*3+2]);
 				buffer.index(indexBuffer[i*3+1]);
 			}
-		buffer.transformToMesh(out);
 	}
+}
 }

@@ -328,7 +328,7 @@ public:
 	/// Gets a position on the shape with index of the point and a percentage of position on the segment
 	/// @arg i index of the segment
 	/// @arg coord a number between 0 and 1 meaning the percentage of position on the segment
-	inline Ogre::Vector2 getPosition(int i, Ogre::Real coord) const
+	inline Ogre::Vector2 getPosition(unsigned int i, Ogre::Real coord) const
 	{
 		assert(mClosed||i<mPoints.size()-1 && "Out of Bounds");
 		assert(coord>=0. && coord<=1. && "Coord must be comprised between 0 and 1");
@@ -342,7 +342,7 @@ public:
 	inline Ogre::Vector2 getPosition(Ogre::Real coord) const
 	{
 		assert(mPoints.size()>=2 && "The shape must at least contain 2 points");
-		int i=0;
+		unsigned int i=0;
 		while(true)
 		{
 			Ogre::Real nextLen = (getPoint(i+1) - getPoint(i)).length();
