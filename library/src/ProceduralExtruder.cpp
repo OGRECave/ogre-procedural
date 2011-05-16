@@ -125,14 +125,12 @@ namespace Procedural
 
 		buffer.rebaseOffset();
 
+		Triangulator t;
 		if (mShapeToExtrude)
-		{
-			Triangulator::triangulate(*mShapeToExtrude, indexBuffer);
-			pointList = mShapeToExtrude->getPoints();
-		} else
-		{
-			Triangulator::triangulate(*mMultiShapeToExtrude, indexBuffer, pointList);
-		}
+			t.setShapeToTriangulate(mShapeToExtrude);
+		else
+			t.setMultiShapeToTriangulate(mMultiShapeToExtrude);
+		t.triangulate(indexBuffer, pointList);
 		buffer.estimateIndexCount(2*indexBuffer.size());
 		buffer.estimateVertexCount(2*pointList.size());
 
