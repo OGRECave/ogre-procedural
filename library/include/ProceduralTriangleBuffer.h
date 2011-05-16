@@ -230,6 +230,23 @@ class TriangleBuffer
 		return scale(Ogre::Vector3(x,y,z));
 	}
 
+	/// Applies normal inversion on the triangle buffer
+	TriangleBuffer& invertNormals()
+	{
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end();it++)
+		{
+			it->mNormal = -it->mNormal;
+		}
+		for (int i=0;i<mIndices.size();i++)
+		{
+			if (i%3==1)
+			{
+				std::swap(mIndices[i], mIndices[i-1]);
+			}
+		}
+		return *this;
+	}
+
 	/**
 	 * Gives an estimation of the number of vertices need for this triangle buffer.
 	 * If this function is called several times, it means an extra vertices count, not an absolute measure.
