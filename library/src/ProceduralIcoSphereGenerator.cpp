@@ -139,26 +139,27 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	/// Step 4 : fix texcoords
 	// find vertices to split
 	std::vector<int> indexToSplit;
-	for (unsigned short i=0;i<faces.size()/3;i++)
+
+	for (unsigned int i=0;i<faces.size()/3;i++)
 	{
 		Vector2& t0 = texCoords[faces[i*3+0]];
 		Vector2& t1 = texCoords[faces[i*3+1]];
 		Vector2& t2 = texCoords[faces[i*3+2]];
-		if (abs(t2.x-t0.x)>0.5)
+		if (Math::Abs(t2.x-t0.x)>0.5)
 		{
 			if (t0.x<0.5)
 				indexToSplit.push_back(faces[i*3]);
 			else
 				indexToSplit.push_back(faces[i*3+2]);
 		}
-		if (abs(t1.x-t0.x)>0.5)
+		if (Math::Abs(t1.x-t0.x)>0.5)
 		{
 			if (t0.x<0.5)
 				indexToSplit.push_back(faces[i*3]);
 			else
 				indexToSplit.push_back(faces[i*3+1]);
 		}
-		if (abs(t2.x-t1.x)>0.5)
+		if (Math::Abs(t2.x-t1.x)>0.5)
 		{
 			if (t1.x<0.5)
 				indexToSplit.push_back(faces[i*3+1]);
@@ -166,6 +167,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 				indexToSplit.push_back(faces[i*3+2]);
 		}
 	}
+
 	//split vertices
 	for (unsigned short i=0;i<indexToSplit.size();i++)
 	{
