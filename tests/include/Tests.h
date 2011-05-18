@@ -74,6 +74,12 @@ public:
 	virtual String getDescription()=0;
 	virtual void initImpl()=0;
 
+	void rotate(Ogre::Real amount)
+	{
+	    for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it!=mSceneNodes.end();it++)
+            (*it)->rotate(Ogre::Vector3::UNIT_Y, (Ogre::Radian)amount);
+	}
+
 	void init()
 	{
 		Utils::log("Loading test : " + getDescription());
@@ -449,9 +455,10 @@ class Unit_Tests : public BaseApplication
 		void initImpl()
 		{
 			TriangleBuffer tbuff;
-			SphereGenerator().setRadius(5).addToTriangleBuffer(tbuff);
-			tbuff.invertNormals();
+			IcoSphereGenerator().setNumIterations(1).setRadius(5).addToTriangleBuffer(tbuff);
+			//tbuff.invertNormals();
 			putMesh(tbuff.transformToMesh("sphere"), 1);
+			//putMesh(IcoSphereGenerator().setRadius(5).realizeMesh(),1);
 		}
 	};
 
@@ -494,6 +501,23 @@ protected:
 			return true;
 		}
 		return BaseApplication::keyReleased(arg);
+	}
+
+	bool keyPressed(const OIS::KeyEvent &arg)
+	{
+		if (arg.key == OIS::KC_K)
+		{
+		    mUnitTests[mCurrentTestIndex]->rotate(-.3);
+		    return true;
+		}
+
+        if (arg.key == OIS::KC_L)
+        {
+            mUnitTests[mCurrentTestIndex]->rotate(.3);
+            return true;
+        }
+
+        return BaseApplication::keyPressed(arg);
 	}
 
 	virtual void createScene(void);
