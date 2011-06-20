@@ -46,8 +46,8 @@ void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	Vector3 vX = normal.perpendicular();
 	Vector3 vY = normal.crossProduct(vX);
-	Vector3 delta1 = sizeX / numSegX * vX;
-	Vector3 delta2 = sizeY / numSegY * vY;
+	Vector3 delta1 = sizeX / (Real)numSegX * vX;
+	Vector3 delta2 = sizeY / (Real)numSegY * vY;
 	// build one corner of the square
 	Vector3 orig = -0.5f*sizeX*vX - 0.5f*sizeY*vY;
 
