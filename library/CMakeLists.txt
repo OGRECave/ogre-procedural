@@ -65,7 +65,6 @@ set( SRCS
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	${OGRE_SAMPLES_INCLUDEPATH}
-	./include
 )
 add_definitions(-DPROCEDURAL_NONCLIENT_BUILD)
 

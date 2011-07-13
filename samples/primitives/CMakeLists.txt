@@ -15,7 +15,6 @@ set( SRCS
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	${OGRE_SAMPLES_INCLUDEPATH}
-	../../library/include
 	../common/include
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
@@ -24,6 +23,6 @@ add_executable(Sample_Primitives WIN32 ${HDRS} ${SRCS})
 
 set_target_properties(Sample_Primitives PROPERTIES DEBUG_POSTFIX _d)
 
-target_link_libraries(Sample_Primitives ${OGRE_LIBRARIES} ${OIS_LIBRARIES} OgreProcedural)
+target_link_libraries(Sample_Primitives ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${PROCEDURAL_LIBRARIES})
 
 procedural_create_vcproj_userfile(Sample_Primitives)
