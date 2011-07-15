@@ -45,7 +45,12 @@ set(PROCEDURAL_WORK_DIR ${PROCEDURAL_BINARY_DIR})
 # Configure version file for use by scripts
 configure_file("${PROCEDURAL_TEMPLATES_DIR}/version.txt.in" "${PROCEDURAL_BINARY_DIR}/version.txt" @ONLY)
 
+include_directories("${PROCEDURAL_SOURCE_DIR}/library/include")
+
 add_subdirectory(library)
+
+# definitions for samples
+set(PROCEDURAL_LIBRARIES OgreProcedural) 
 
 #useful macros for samples and tests
 include(ProceduralMacros)
