@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 project(OgreProcedural)
 
 include(PrecompiledHeader)
+include(ProceduralConfigTargets)
 
 set( HDRS
 	include/ProceduralPlatform.h
@@ -80,12 +81,14 @@ endif (UNIX)
 
 target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
-install(TARGETS OgreProcedural 
-		BUNDLE DESTINATION "bin"
-		RUNTIME DESTINATION "bin"
-		LIBRARY DESTINATION "lib"		
-		ARCHIVE DESTINATION "lib"		
-		FRAMEWORK DESTINATION "lib")
+#install(TARGETS OgreProcedural 
+#		BUNDLE DESTINATION "bin"
+#		RUNTIME DESTINATION "bin"
+#		LIBRARY DESTINATION "lib"		
+#		ARCHIVE DESTINATION "lib"		
+#		FRAMEWORK DESTINATION "lib")
+
+procedural_install_target(OgreProcedural)
 		
 install(FILES ${HDRS} DESTINATION include)
 

@@ -1,21 +1,3 @@
-function(procedural_create_vcproj_userfile TARGETNAME)
-  if (MSVC)
-	if (${MSVC_VERSION} EQUAL 1600)
-	   configure_file(
-	  ${PROCEDURAL_TEMPLATES_DIR}/VisualStudioUserFile.vcxproj.user.in
-	  ${CMAKE_CURRENT_BINARY_DIR}/${TARGETNAME}.vcxproj.user
-	  @ONLY
-	)
-	else()
-	  configure_file(
-	  ${PROCEDURAL_TEMPLATES_DIR}/VisualStudioUserFile.vcproj.user.in
-	  ${CMAKE_CURRENT_BINARY_DIR}/${TARGETNAME}.vcproj.user
-	  @ONLY
-	)
-	endif()
-  endif ()
- endfunction(procedural_create_vcproj_userfile)
-  
 macro(copy_release_dir INPUT INPUTDIR)
   if (EXISTS ${INPUTDIR}/${INPUT})
     if (MINGW OR NMAKE)
