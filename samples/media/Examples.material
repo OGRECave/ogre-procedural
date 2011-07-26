@@ -1,0 +1,33 @@
+material Examples/Rockwall
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.4 0.4 0.4
+			diffuse 1.0 1.0 1.0
+			texture_unit
+			{
+				texture old_fence.jpg
+			}
+		}
+	}
+}
+
+material Examples/BeachStones
+{
+	technique
+	{
+		pass
+		{
+			ambient  0.5 0.5 0.5
+			diffuse  1.0 1.0 1.0		
+			specular 0.2 0.2 0.2 1.0 30.0
+
+			texture_unit
+			{
+				texture red_brick.jpg
+			}
+		}
+	}
+}
