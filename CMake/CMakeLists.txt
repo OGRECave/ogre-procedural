@@ -10,12 +10,23 @@ set(INST_FILES
   Packages/FindPROCEDURAL.cmake
   Utils/FindPkgMacros.cmake  
   Utils/PreprocessorUtils.cmake
+  Utils/ProceduralConfigTargets.cmake
   Utils/ProceduralMacros.cmake
 ) 
+
+if (PROCEDURAL_INSTALL_SAMPLES_SOURCE)
+set(INST_FILES ${INST_FILES}
+  Templates/plugins.cfg
+  Templates/plugins_d.cfg
+  Templates/resources.cfg
+  Templates/resources_d.cfg
+)
+endif()
+
 if (WIN32)
   set(INST_FILES ${INST_FILES}
     Templates/VisualStudioUserFile.vcproj.user.in
-    Templates/VisualStudioUserFile.vcxproj.user.in
+    Templates/VisualStudioUserFile.vcxproj.user.in	
   )
 endif ()
 

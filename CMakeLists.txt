@@ -52,8 +52,9 @@ add_subdirectory(library)
 # definitions for samples
 set(PROCEDURAL_LIBRARIES OgreProcedural) 
 
-#useful macros for samples and tests
+# CMake macros
 include(ProceduralMacros)
+include(ProceduralConfigTargets)
 
 if (PROCEDURAL_BUILD_SAMPLES)	
 	add_subdirectory(samples)

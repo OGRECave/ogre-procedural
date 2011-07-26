@@ -5,7 +5,7 @@ if(NOT OIS_FOUND)
 endif()
 
   
-# if win32, copy the Ogre DLLs and media over
+# if win32, copy the Ogre DLLs over
 if(WIN32)
 	copy_release(OgreMain.dll)	
 	copy_debug(OgreMain_d.dll)
@@ -40,10 +40,7 @@ if(UNIX AND NOT APPLE)
 
 endif(UNIX AND NOT APPLE)
 
-copy_release_debug(SdkTrays.zip ${PROCEDURAL_SOURCE_DIR}/samples/media)
-copy_release_debug(old_fence.jpg ${PROCEDURAL_SOURCE_DIR}/samples/media)
-copy_release_debug(red_brick.jpg ${PROCEDURAL_SOURCE_DIR}/samples/media)
-copy_release_debug(Examples.material ${PROCEDURAL_SOURCE_DIR}/samples/media)
+set(PROCEDURAL_MEDIA_DIR "${PROCEDURAL_SOURCE_DIR}/samples/media")
 
 configure_release_dir(resources.cfg ${PROCEDURAL_TEMPLATES_DIR})
 configure_debug_dir(resources_d.cfg ${PROCEDURAL_TEMPLATES_DIR})
@@ -65,7 +62,7 @@ if (PROCEDURAL_INSTALL_SAMPLES_SOURCE)
   install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ DESTINATION ${PROCEDURAL_SAMPLES_DIR}
     REGEX "^CMakeLists.txt$" EXCLUDE
     PATTERN "Makefile.am" EXCLUDE
-    PATTERN "Media" EXCLUDE
+    #PATTERN "Media" EXCLUDE
     PATTERN "bin" EXCLUDE
     PATTERN "setup" EXCLUDE
 	PATTERN "obj" EXCLUDE
