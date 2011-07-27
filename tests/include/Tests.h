@@ -76,8 +76,8 @@ public:
 
 	void rotate(Ogre::Real amount)
 	{
-	    for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it!=mSceneNodes.end();it++)
-            (*it)->rotate(Ogre::Vector3::UNIT_Y, (Ogre::Radian)amount);
+		for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it!=mSceneNodes.end();it++)
+			(*it)->rotate(Ogre::Vector3::UNIT_Y, (Ogre::Radian)amount);
 	}
 
 	void init()
@@ -507,17 +507,17 @@ protected:
 	{
 		if (arg.key == OIS::KC_K)
 		{
-		    mUnitTests[mCurrentTestIndex]->rotate(-.3);
-		    return true;
+			mUnitTests[mCurrentTestIndex]->rotate(-.3);
+			return true;
 		}
 
-        if (arg.key == OIS::KC_L)
-        {
-            mUnitTests[mCurrentTestIndex]->rotate(.3);
-            return true;
-        }
+		if (arg.key == OIS::KC_L)
+		{
+			mUnitTests[mCurrentTestIndex]->rotate(.3);
+			return true;
+		}
 
-        return BaseApplication::keyPressed(arg);
+		return BaseApplication::keyPressed(arg);
 	}
 
 	virtual void createScene(void);
@@ -527,6 +527,8 @@ protected:
 	virtual void createViewports(void);
 	
 	virtual bool frameStarted(const FrameEvent& evt);
+		
+	virtual void destroyScene(void);
 public:
 	Unit_Tests() : mCurrentTestIndex(0)
 	{}

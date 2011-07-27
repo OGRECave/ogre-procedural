@@ -59,6 +59,12 @@ void Unit_Tests::createScene(void)
 		mUnitTests[0]->init();
 }
 
+void Unit_Tests::destroyScene(void)
+{
+	for (std::vector<Unit_Test*>::iterator it = mUnitTests.begin();it!=mUnitTests.end();it++)
+		delete *it;
+}
+
 void Unit_Tests::createCamera(void)
 {
 	BaseApplication::createCamera();
