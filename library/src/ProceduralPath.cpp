@@ -98,7 +98,8 @@ namespace Procedural
 
 	Ogre::MeshPtr Path::realizeMesh(const std::string& name)
 	{
-		Ogre::ManualObject * manual = Root::getInstance()->sceneManager->createManualObject();
+		Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
+		Ogre::ManualObject * manual = smgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);			   
 		
 		for (std::vector<Ogre::Vector3>::iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)		

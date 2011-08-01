@@ -31,8 +31,6 @@ THE SOFTWARE.
 //-------------------------------------------------------------------------------------
 void Sample_Extrusion::createScene(void)
 {
-		// Setup Procedural root (crappy init method, have to find another one)
-		Procedural::Root::getInstance()->sceneManager = mSceneMgr;
 		// Test primitive generation
 		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 		putMesh2("planeMesh");

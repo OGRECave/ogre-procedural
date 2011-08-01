@@ -36,7 +36,8 @@ namespace Procedural
 //-----------------------------------------------------------------------
 	MeshPtr MultiShape::realizeMesh(const std::string& name)
 	{
-		ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
+		Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
+		ManualObject * manual = smgr->createManualObject(name);
 				
 		for (std::vector<Shape>::iterator it = mShapes.begin(); it!=mShapes.end(); it++)
 		{
@@ -50,7 +51,7 @@ namespace Procedural
 			mesh = manual->convertToMesh(Utils::getName());
 		else
 			mesh = manual->convertToMesh(name);
-		Root::getInstance()->sceneManager->destroyManualObject(manual);
+		smgr->destroyManualObject(manual);
 		return mesh;
 	}	
 //-----------------------------------------------------------------------

@@ -39,12 +39,9 @@ namespace Procedural
 class _ProceduralExport Root
 {
     static Root* instance;
-    Root(): sceneManager(0)
+    Root()
     {}
     public:
-
-	/// The default scene manager used by OgreProcedural to create manual objects
-    Ogre::SceneManager* sceneManager;
 
 	/// Return the singleton pointer of this class
     static Root* getInstance()
