@@ -32,7 +32,15 @@ find_package(Doxygen)
 
 option(PROCEDURAL_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(PROCEDURAL_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
-option(PROCEDURAL_INSTALL_DOCS "Install documentation." FALSE)
+#option(PROCEDURAL_INSTALL_DOCS "Install documentation." FALSE)
+#always install docs when they are built ...
+
+# Set docs target directory
+if (WIN32 OR APPLE)
+  set(PROCEDURAL_DOCS_PATH "docs")
+elseif (UNIX)
+  set(PROCEDURAL_DOCS_PATH "share/PROCEDURAL/docs")
+endif ()
 
 # Specify build paths
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/lib")
@@ -121,4 +129,4 @@ INCLUDE(CPack)
 
 # other doc files
 set(DOC_FILES Contributors.txt MIT.txt ReadMe.txt)
-install(FILES ${DOC_FILES} DESTINATION do/c)
+install(FILES ${DOC_FILES} DESTINATION ${PROCEDURAL_DOCS_PATH})
