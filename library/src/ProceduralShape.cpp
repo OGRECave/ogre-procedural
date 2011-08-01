@@ -385,7 +385,7 @@ bool Shape::isPointInside(const Vector2& point) const
 	// Using the closest intersection, find whethe the point is actually inside
 	int closestSegmentIndex=-1;
 	Real closestSegmentDistance = std::numeric_limits<Real>::max();
-	Vector2 closestSegmentIntersection;
+	Vector2 closestSegmentIntersection(Vector2::ZERO);
 
 	for (size_t i =0;i<getSegCount();i++)
 	{
@@ -418,7 +418,8 @@ bool Shape::isPointInside(const Vector2& point) const
 //-----------------------------------------------------------------------
 MeshPtr Shape::realizeMesh(const std::string& name)
 {
-	ManualObject * manual = Root::getInstance()->sceneManager->createManualObject();
+	Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
+	ManualObject * manual = smgr->createManualObject();
 	manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
 	
 	_appendToManualObject(manual);
@@ -429,7 +430,7 @@ MeshPtr Shape::realizeMesh(const std::string& name)
 		mesh = manual->convertToMesh(Utils::getName());
 	else
 		mesh = manual->convertToMesh(name);
-	Root::getInstance()->sceneManager->destroyManualObject(manual);
+	smgr->destroyManualObject(manual);
 	return mesh;
 }
 //-----------------------------------------------------------------------

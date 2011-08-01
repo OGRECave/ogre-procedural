@@ -36,7 +36,7 @@ class BaseSpline3
 {
 protected:
 	/// The number of segments between 2 control points
-	int mNumSeg;
+	unsigned int mNumSeg;
 	/// Tells if the spline is closed or not
 	bool mClosed;
 public:
@@ -119,7 +119,7 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 class _ProceduralExport LinePath
 {
 	Ogre::Vector3 mPoint1, mPoint2;
-	int mNumSeg;
+	unsigned int mNumSeg;
 
 public:
 	/// Default constructor
@@ -157,9 +157,9 @@ public:
 	/// Outputs a path
 	Path realizePath()
 	{
-		assert(mNumSeg>0);
+		assert(mNumSeg > 0);
 		Path p;
-		for (int i=0;i<=mNumSeg;i++)
+		for (unsigned int i = 0; i <= mNumSeg; ++i)
 		{
 			p.addPoint(i/(Ogre::Real)mNumSeg * mPoint1 + i/(Ogre::Real)mNumSeg * mPoint2);
 		}
