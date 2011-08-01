@@ -68,8 +68,8 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_SAMPLES_INCLUDEPATH}
 )
 
-# Static build?
-add_definitions(-DPROCEDURAL_STATIC)
+# SHARED lib build? then add this:
+#add_definitions(-DPROCEDURAL_SHARED)
 
 add_library(OgreProcedural STATIC ${HDRS} ${SRCS})
 
