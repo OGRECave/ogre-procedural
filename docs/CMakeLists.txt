@@ -30,4 +30,14 @@ if(DOXYGEN_FOUND)
 	if (PROCEDURAL_INSTALL_DOCS)
 		install(DIRECTORY ${PROCEDURAL_BINARY_DIR}/api DESTINATION ${PROCEDURAL_DOCS_PATH})
 	endif()
+
+	# cleanup $PROCEDURAL_DOCS_PATH on "make clean"
+	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${PROCEDURAL_DOCS_PATH})
+
+	# add doxygen as dependency to doc-target
+	get_target_property(DOC_TARGET doc TYPE)
+	if(NOT DOC_TARGET)
+		add_custom_target(doc)
+	endif()
+	add_dependencies(doc doxygen)
 endif()
