@@ -80,13 +80,13 @@ public:
             (*it)->rotate(Ogre::Vector3::UNIT_Y, (Ogre::Radian)amount);
 	}
 
-	void init()
+	double init()
 	{
 		Utils::log("Loading test : " + getDescription());
 		mTimer.reset();
 		initImpl();
-		Utils::log("Test loaded in : " + Ogre::StringConverter::toString(mTimer.getMilliseconds()) + " ms");
-		Ogre::OverlayManager::getSingleton().getOverlayElement("myText")->setCaption(getDescription());
+		Utils::log("Test loaded in : " + Ogre::StringConverter::toString(mTimer.getMicroseconds() / 1000000.0f) + " ms");
+		return mTimer.getMicroseconds() / 1000000.0f;
 	}
 
 	void destroy()
@@ -473,8 +473,28 @@ class Unit_Tests : public BaseApplication
 	{
 		if (index == mCurrentTestIndex)
 			return;
-		mUnitTests[mCurrentTestIndex]->destroy();
-		mUnitTests[index]->init();
+		if(mCurrentTestIndex >= 0)
+			mUnitTests[mCurrentTestIndex]->destroy();
+
+		double time = mUnitTests[index]->init();
+		Ogre::String test_description = mUnitTests[index]->getDescription();
+
+		// update text here:
+		String txt = "[OgreProcedual Unit Tests] (Use key N/M to switch between tests)\n";
+		txt += "[" + Ogre::StringConverter::toString(mCurrentTestIndex+1) + "/" + Ogre::StringConverter::toString(mUnitTests.size()) + "] ";
+		
+		// and add the description
+		txt += test_description;
+
+		// properly print the time ...
+		char time_str[255] = {0};
+		sprintf(time_str, " (loaded in %6.6f ms)", time);
+		txt += String(time_str);
+
+		// and finally set it
+		Ogre::OverlayManager::getSingleton().getOverlayElement("myText")->setCaption(txt);
+
+
 		mCurrentTestIndex = index;
 	}
 
@@ -490,12 +510,12 @@ class Unit_Tests : public BaseApplication
 protected:
 	bool keyReleased( const OIS::KeyEvent &arg )
 	{		
-		if (arg.key == OIS::KC_ADD || arg.key == OIS::KC_PGDOWN)
+		if (arg.key == OIS::KC_M || arg.key == OIS::KC_ADD || arg.key == OIS::KC_PGDOWN)
 		{
 			nextTest();
 			return true;
 		}
-		if (arg.key == OIS::KC_SUBTRACT || arg.key == OIS::KC_PGUP)		
+		if (arg.key == OIS::KC_N || arg.key == OIS::KC_SUBTRACT || arg.key == OIS::KC_PGUP)		
 		{
 			previousTest();
 			return true;
@@ -528,7 +548,7 @@ protected:
 	
 	virtual bool frameStarted(const FrameEvent& evt);
 public:
-	Unit_Tests() : mCurrentTestIndex(0)
+	Unit_Tests() : mCurrentTestIndex(-1) // -1 so the first test will always be loaded
 	{}
 
 };
