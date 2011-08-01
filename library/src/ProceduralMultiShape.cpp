@@ -36,7 +36,8 @@ namespace Procedural
 //-----------------------------------------------------------------------
 	MeshPtr MultiShape::realizeMesh(const std::string& name)
 	{
-		ManualObject * manual = Root::getInstance()->sceneManager->createManualObject(name);
+		Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
+		ManualObject * manual = smgr->createManualObject(name);
 				
 		for (std::vector<Shape>::iterator it = mShapes.begin(); it!=mShapes.end(); it++)
 		{
@@ -50,7 +51,7 @@ namespace Procedural
 			mesh = manual->convertToMesh(Utils::getName());
 		else
 			mesh = manual->convertToMesh(name);
-		Root::getInstance()->sceneManager->destroyManualObject(manual);
+		smgr->destroyManualObject(manual);
 		return mesh;
 	}	
 //-----------------------------------------------------------------------
@@ -71,10 +72,10 @@ namespace Procedural
 		// Using the closest intersection, find whethe the point is actually inside
 		int closestSegmentIndex=-1;
 		Real closestSegmentDistance = std::numeric_limits<Real>::max();
-		Vector2 closestSegmentIntersection;
+		Vector2 closestSegmentIntersection(Vector2::ZERO);
 		const Shape* closestSegmentShape = 0;
-		bool isOnVertexA = false;
-		bool isOnVertexB = false;
+		//bool isOnVertexA = false;
+		//bool isOnVertexB = false;
 		
 		for (size_t k =0;k<mShapes.size();k++)
 		{

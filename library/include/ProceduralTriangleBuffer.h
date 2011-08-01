@@ -53,11 +53,11 @@ class TriangleBuffer
 
 	std::vector<Vertex> mVertices;
 	//std::vector<Vertex>::iterator mCurrentVertex;
-	Vertex* mCurrentVertex;
+	int globalOffset;
 	int mEstimatedVertexCount;
 	int mEstimatedIndexCount;
+	Vertex* mCurrentVertex;
 	
-	int globalOffset;
 	
 	public:
 		TriangleBuffer() : globalOffset(0), mEstimatedVertexCount(0), mEstimatedIndexCount(0), mCurrentVertex(0)//, mCurrentVertex(mVertices.end())
@@ -77,7 +77,7 @@ class TriangleBuffer
 	Ogre::MeshPtr transformToMesh(const std::string& name,
 		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
 	{
-		Ogre::SceneManager* sceneMgr = Root::getInstance()->sceneManager;
+		Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		Ogre::ManualObject * manual = sceneMgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
@@ -237,7 +237,7 @@ class TriangleBuffer
 		{
 			it->mNormal = -it->mNormal;
 		}
-		for (int i=0;i<mIndices.size();i++)
+		for (unsigned int i=0; i < mIndices.size(); ++i)
 		{
 			if (i%3==1)
 			{

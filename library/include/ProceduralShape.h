@@ -139,11 +139,11 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	inline Ogre::Vector2 getDirectionAfter(int i) const
+	inline Ogre::Vector2 getDirectionAfter(unsigned int i) const
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!mClosed && i == mPoints.size()-1 && i>0)
+		if (! mClosed && i == mPoints.size() - 1 && i > 0)
 			return (mPoints[i] - mPoints[i-1]).normalisedCopy();
 		else
 			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
@@ -330,7 +330,7 @@ public:
 	/// @arg coord a number between 0 and 1 meaning the percentage of position on the segment
 	inline Ogre::Vector2 getPosition(unsigned int i, Ogre::Real coord) const
 	{
-		assert(mClosed||i<mPoints.size()-1 && "Out of Bounds");
+		assert(mClosed || (i < mPoints.size() - 1 && "Out of Bounds"));
 		assert(coord>=0. && coord<=1. && "Coord must be comprised between 0 and 1");
 		Ogre::Vector2 A = getPoint(i);
 		Ogre::Vector2 B = getPoint(i+1);

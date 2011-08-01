@@ -39,12 +39,12 @@ class _ProceduralExport CapsuleGenerator : public MeshGenerator<CapsuleGenerator
 	///Radius of the spheric part
 	Ogre::Real mRadius;
 
+	///Total height
+	Ogre::Real mHeight;
+
 	unsigned int mNumRings;
 	unsigned int mNumSegments;
 	unsigned int mNumSegHeight;
-
-	///Total height
-	Ogre::Real mHeight;
 
 public:
 	/// Default constructor

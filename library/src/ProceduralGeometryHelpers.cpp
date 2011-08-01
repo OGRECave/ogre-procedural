@@ -110,7 +110,7 @@ bool Segment2D::intersects(const Segment2D& other) const
 bool Plane::intersect(const Plane& other, Line& outputLine) const
 	{		
 		//TODO : handle the case where the plane is perpendicular to T
-		Vector3 point1;
+		Vector3 point1(Ogre::Vector3::ZERO);
 		Vector3 direction = normal.crossProduct(other.normal);
 		if (direction.squaredLength() < 1e-08)
 			return false;

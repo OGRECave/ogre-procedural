@@ -147,7 +147,7 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 
 void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {			
-	int offset = 0;
+	//int offset = 0;
 	// Generate the pseudo-box shape
 	PlaneGenerator pg;
 	pg.setUTile(mUTile).setVTile(mVTile);
