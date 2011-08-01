@@ -68,3 +68,57 @@ add_subdirectory(docs)
 
 # Install CMake modules
 add_subdirectory(CMake)
+
+
+# and CPack
+# cpack
+set(CPACK_PACKAGE_DESCRIPTION "OgreProcedual")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Ogre-Procedural is an Ogre3D based lib enabling developpers to quickly create geometric primitives, such as cubes, spheres, cylinders...")
+set(CPACK_PACKAGE_NAME "ogreprocedual")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "ois ogre")
+set(CPACK_PACKAGE_CONTACT "support@rigsofrods.com")
+set(CPACK_PACKAGE_VENDOR "support@rigsofrods.com")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/MIT.txt")
+SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt")
+# TODO: add the version variable at the top in here
+SET(CPACK_PACKAGE_VERSION_MAJOR "0")
+SET(CPACK_PACKAGE_VERSION_MINOR "2")
+SET(CPACK_PACKAGE_VERSION_PATCH "0")
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OgreProcedual-${PROCEDURAL_VERSION_DASH_SEPARATED}")
+
+SET(CPACK_GENERATOR ZIP)
+IF(UNIX)
+  SET(CPACK_GENERATOR ${CPACK_GENERATOR};STGZ;TGZ)
+ENDIF(UNIX)
+IF(LINUX)
+SET(CPACK_GENERATOR ${CPACK_GENERATOR};DEB;RPM)
+ENDIF(LINUX)
+IF(MSVC)
+  SET(CPACK_GENERATOR ${CPACK_GENERATOR};NSIS)
+ENDIF(MSVC)
+IF(APPLE)
+  SET(CPACK_GENERATOR ${CPACK_GENERATOR};PackageMaker)
+ENDIF(APPLE)
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${PROCEDURAL_VERSION_DASH_SEPARATED}-${CMAKE_SYSTEM_PROCESSOR}")
+
+# some NSIS stuff
+IF(WIN32 AND NOT UNIX)
+  # There is a bug in NSI that does not handle full unix paths properly. Make
+  # sure there is at least one set of four (4) backlasshes.
+  #SET(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
+  #SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\MyExecutable.exe")
+  SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} OgreProcedual")
+  SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\http://www.ogre3d.org/tikiwiki/Ogre+Procedural+Geometry+Library")
+  SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\http://www.ogre3d.org/tikiwiki/Ogre+Procedural+Geometry+Library")
+  SET(CPACK_NSIS_CONTACT "thomas@rigsofrods.com")
+  SET(CPACK_NSIS_MODIFY_PATH ON)
+ELSE(WIN32 AND NOT UNIX)
+  #SET(CPACK_STRIP_FILES "bin/MyExecutable")
+  SET(CPACK_SOURCE_STRIP_FILES "")
+ENDIF(WIN32 AND NOT UNIX)
+#SET(CPACK_PACKAGE_EXECUTABLES "MyExecutable" "My Executable")
+INCLUDE(CPack)
+
+# other doc files
+set(DOC_FILES Contributors.txt MIT.txt ReadMe.txt)
+install(FILES ${DOC_FILES} DESTINATION do/c)
