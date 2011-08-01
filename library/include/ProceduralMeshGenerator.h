@@ -68,7 +68,7 @@ public:
 					  mNumTexCoordSet(1),
 					  mUVOrigin(0,0)
 	{
-		mSceneMgr = Root::getInstance()->sceneManager;
+		mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		assert(mSceneMgr && "Scene Manager must be set in Root");
 	}
 

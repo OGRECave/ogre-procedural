@@ -41,9 +41,6 @@ void Unit_Tests::createScene(void)
 	el->setParameter("font_name","SdkTrays/Caption");
 	o->show();
 
-		// Setup Procedural root (crappy init method, have to find another one)
-		Procedural::Root::getInstance()->sceneManager = mSceneMgr;
-
 		// Register all unit tests
 		mUnitTests.push_back(new Test_Primitives(mSceneMgr));
 		mUnitTests.push_back(new Test_SharpAngles(mSceneMgr));

@@ -77,7 +77,7 @@ class TriangleBuffer
 	Ogre::MeshPtr transformToMesh(const std::string& name,
 		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
 	{
-		Ogre::SceneManager* sceneMgr = Root::getInstance()->sceneManager;
+		Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		Ogre::ManualObject * manual = sceneMgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
