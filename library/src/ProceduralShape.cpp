@@ -385,7 +385,7 @@ bool Shape::isPointInside(const Vector2& point) const
 	// Using the closest intersection, find whethe the point is actually inside
 	int closestSegmentIndex=-1;
 	Real closestSegmentDistance = std::numeric_limits<Real>::max();
-	Vector2 closestSegmentIntersection;
+	Vector2 closestSegmentIntersection(Vector2::ZERO);
 
 	for (size_t i =0;i<getSegCount();i++)
 	{

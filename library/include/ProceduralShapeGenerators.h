@@ -39,7 +39,7 @@ class BaseSpline2
 {
 protected:
 	/// The number of segments between 2 control points
-	int mNumSeg;
+	unsigned int mNumSeg;
 	/// Whether the shape will be closed or not
 	bool mClosed;
 	/// The "out" side of the shape
@@ -261,7 +261,7 @@ class _ProceduralExport RectangleShape
 class _ProceduralExport CircleShape
 {
 	Ogre::Real mRadius;
-	int mNumSeg;
+	unsigned int mNumSeg;
 
 	public:
 	/// Default constructor
@@ -275,7 +275,7 @@ class _ProceduralExport CircleShape
 	}
 
 	/// Sets number of segments
-	CircleShape& setNumSeg(int numSeg)
+	CircleShape& setNumSeg(unsigned int numSeg)
 	{
 		mNumSeg = numSeg;
 		return *this;
@@ -286,7 +286,7 @@ class _ProceduralExport CircleShape
 	{
 		Shape s;
 		Ogre::Real deltaAngle = Ogre::Math::TWO_PI/(Ogre::Real)mNumSeg;
-		for (int i=0;i<mNumSeg;i++)
+		for (unsigned int i = 0; i < mNumSeg; ++i)
 		{
 			s.addPoint(mRadius*cosf(i*deltaAngle), mRadius*sinf(i*deltaAngle));
 		}

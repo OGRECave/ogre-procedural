@@ -112,11 +112,11 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	Ogre::Vector3 getDirectionAfter(int i)
+	Ogre::Vector3 getDirectionAfter(unsigned int i)
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
-		if (!mClosed && i == mPoints.size()-1 && i>0)
+		if (!mClosed && i == mPoints.size() - 1 && i > 0)
 			return (mPoints[i] - mPoints[i-1]).normalisedCopy();
 		else
 			return (getPoint(i+1) - getPoint(i)).normalisedCopy();
@@ -150,9 +150,9 @@ public:
 	/// Gets a position on the shape with index of the point and a percentage of position on the segment
 	/// @arg i index of the segment
 	/// @arg coord a number between 0 and 1 meaning the percentage of position on the segment
-	inline Ogre::Vector3 getPosition(int i, Ogre::Real coord) const
+	inline Ogre::Vector3 getPosition(unsigned int i, Ogre::Real coord) const
 	{
-		assert(mClosed||i<mPoints.size()-1 && "Out of Bounds");
+		assert(mClosed || (i < mPoints.size() - 1 && "Out of Bounds"));
 		assert(coord>=0. && coord<=1. && "Coord must be comprised between 0 and 1");
 		Ogre::Vector3 A = getPoint(i);
 		Ogre::Vector3 B = getPoint(i+1);

@@ -67,16 +67,20 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	${OGRE_SAMPLES_INCLUDEPATH}
 )
-add_definitions(-DPROCEDURAL_NONCLIENT_BUILD)
 
-add_library(OgreProcedural SHARED ${HDRS} ${SRCS})
+# Static build?
+add_definitions(-DPROCEDURAL_STATIC)
+
+add_library(OgreProcedural STATIC ${HDRS} ${SRCS})
 
 set_target_properties(OgreProcedural PROPERTIES DEBUG_POSTFIX _d)
 
 if (UNIX)
     set_target_properties(OgreProcedural PROPERTIES PREFIX "lib")
+    # you might want to use these flags as well:
+    add_definitions(-Wall -Wno-unused-parameter -pedantic -std=c++0x)
 else (UNIX)
-    set_target_properties(OgreProcedural PROPERTIES PREFIX "")
+    #set_target_properties(OgreProcedural PROPERTIES PREFIX "")
 endif (UNIX)
 
 target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
@@ -90,7 +94,7 @@ target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
 procedural_install_target(OgreProcedural)
 		
-install(FILES ${HDRS} DESTINATION include)
+install(FILES ${HDRS} DESTINATION include/OgreProcedual)
 
 # specify a precompiled header to use
 use_precompiled_header(OgreProcedural 

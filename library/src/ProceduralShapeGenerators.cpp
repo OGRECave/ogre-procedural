@@ -35,15 +35,15 @@ Shape CubicHermiteSpline2::realizeShape()
 	{
 	Shape shape;
 
-		int numPoints = mClosed?mPoints.size():mPoints.size()-1;		
-		for (int i=0;i<numPoints;i++)
+		unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
+		for (unsigned int i = 0; i < numPoints; ++i)
 		{
 			const Ogre::Vector2& p0 = mPoints[i].position;
 			const Ogre::Vector2& m0 = mPoints[i].tangentAfter;
 			const Ogre::Vector2& p1 = safeGetPoint(i+1).position;
 			const Ogre::Vector2& m1 = safeGetPoint(i+1).tangentBefore;
 
-			for (int j=0;j<mNumSeg;j++)
+			for (unsigned int j = 0; j < mNumSeg; ++j)
 			{
 				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)mNumSeg;
 				Ogre::Real t2 = t*t;
@@ -51,7 +51,7 @@ Shape CubicHermiteSpline2::realizeShape()
 				Ogre::Vector2 P = (2*t3-3*t2+1)*p0+(t3-2*t2+t)*m0+(-2*t3+3*t2)*p1+(t3-t2)*m1;
 				shape.addPoint(P);
 			}
-			if (i==mPoints.size()-2 && !mClosed)
+			if (i == mPoints.size() - 2 && !mClosed)
 			{
 				shape.addPoint(p1);
 			}
@@ -67,15 +67,15 @@ Shape CatmullRomSpline2::realizeShape()
 	{
 		Shape shape;
 
-		int numPoints = mClosed?mPoints.size():mPoints.size()-1;		
-		for (int i=0;i<numPoints;i++)
+		unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
+		for (unsigned int i = 0; i < numPoints; ++i)
 		{			
 			const Ogre::Vector2& P1 = safeGetPoint(i-1);
 			const Ogre::Vector2& P2 = safeGetPoint(i);
 			const Ogre::Vector2& P3 = safeGetPoint(i+1);
 			const Ogre::Vector2& P4 = safeGetPoint(i+2);
 
-			for (int j=0;j<mNumSeg;j++)
+			for (unsigned int j = 0; j < mNumSeg; ++j)
 			{				
 				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)mNumSeg;
 				Ogre::Real t2 = t*t;
@@ -83,7 +83,7 @@ Shape CatmullRomSpline2::realizeShape()
 				Ogre::Vector2 P = 0.5f*((-t3+2.f*t2-t)*P1 + (3.f*t3-5.f*t2+2.f)*P2 + (-3.f*t3+4.f*t2+t)*P3 + (t3-t2)*P4);
 				shape.addPoint(P);
 			}
-			if (i==mPoints.size()-2 && !mClosed)
+			if (i == mPoints.size() - 2 && !mClosed)
 			{
 				shape.addPoint(P3);
 			}
@@ -100,8 +100,8 @@ Shape CatmullRomSpline2::realizeShape()
 	{
 		Shape shape;
 		
-		int numPoints = mClosed?mPoints.size():mPoints.size()-1;		
-		for (int i=0;i<numPoints;i++)
+		unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
+		for (unsigned int i = 0; i < numPoints; ++i)
 		{
 			const ControlPoint& pm1 = safeGetPoint(i-1);
 			const ControlPoint& p0 = safeGetPoint(i);
@@ -111,7 +111,7 @@ Shape CatmullRomSpline2::realizeShape()
 			Ogre::Vector2 m0 = (1-p0.tension)*(1+p0.bias)*(1+p0.continuity)/2.f*(p0.position-pm1.position)+(1-p0.tension)*(1-p0.bias)*(1-p0.continuity)/2.f*(p1.position-p0.position);
 			Ogre::Vector2 m1 = (1-p1.tension)*(1+p1.bias)*(1-p1.continuity)/2.f*(p1.position-p0.position)+(1-p1.tension)*(1-p1.bias)*(1+p1.continuity)/2.f*(p2.position-p1.position);
 			
-			for (int j=0;j<mNumSeg;j++)
+			for (unsigned int j = 0;j < mNumSeg; ++j)
 			{
 				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)mNumSeg;
 				Ogre::Real t2 = t*t;
@@ -119,7 +119,7 @@ Shape CatmullRomSpline2::realizeShape()
 				Ogre::Vector2 P = (2*t3-3*t2+1)*p0.position+(t3-2*t2+t)*m0+(-2*t3+3*t2)*p1.position+(t3-t2)*m1;
 				shape.addPoint(P);
 			}
-			if (i==mPoints.size()-2 && !mClosed)
+			if (i == mPoints.size() - 2 && !mClosed)
 			{
 				shape.addPoint(p1.position);
 			}
