@@ -72,7 +72,7 @@ namespace Procedural
 		Real pathLineicPos = 0;
 		Path outputPath;
 		outputPath.addPoint(getPoint(0));
-		for (int i=1;i<mPoints.size();)
+		for (unsigned int i = 1; i < mPoints.size(); )
 		{
 			Real nextLineicPos = pathLineicPos + (mPoints[i] - mPoints[i-1]).length();
 
@@ -120,7 +120,7 @@ namespace Procedural
 	Ogre::Vector3 Path::getPosition(Ogre::Real coord) const
 	{
 		assert(mPoints.size()>=2 && "The path must at least contain 2 points");
-		int i=0;
+		unsigned int i=0;
 		while(true)
 		{
 			Ogre::Real nextLen = (getPoint(i+1) - getPoint(i)).length();
@@ -128,7 +128,7 @@ namespace Procedural
 				coord-=nextLen;
 			else
 				return getPosition(i, coord/nextLen);
-			if (!mClosed && i>= mPoints.size()-2)
+			if (!mClosed && i>= mPoints.size() - 2)
 				return mPoints.back();
 			i++;
 		}
@@ -137,7 +137,7 @@ namespace Procedural
 	Ogre::Real Path::getTotalLength() const
 	{
 		Ogre::Real length = 0;
-		for (int i=0;i<mPoints.size()-1;i++)
+		for (unsigned int i = 0; i < mPoints.size() - 1; ++i)
 			length+=(mPoints[i+1]-mPoints[i]).length();
 		if (mClosed)
 			length+=(mPoints.back()-*mPoints.begin()).length();

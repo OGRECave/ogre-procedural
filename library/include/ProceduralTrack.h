@@ -49,12 +49,14 @@ public:
 		AM_ABSOLUTE_LINEIC, AM_RELATIVE_LINEIC, AM_POINT
 	};
 protected:
-	/// Key frames
-	std::map<Ogre::Real, Ogre::Real> mKeyFrames;
-	/// Tells whether we should add new points to principal curve if a key is defined here but not on principal curve
-	bool mInsertPoint;
 	/// Adressing mode of the track (see the enum definition for more details)
 	AddressingMode mAddressingMode;
+	
+	/// Tells whether we should add new points to principal curve if a key is defined here but not on principal curve
+	bool mInsertPoint;
+
+	/// Key frames
+	std::map<Ogre::Real, Ogre::Real> mKeyFrames;
 public:
 	/// Default constructor.
 	/// Point insertion default to true, and addressing to absolute lineic

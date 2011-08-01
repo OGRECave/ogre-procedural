@@ -72,10 +72,10 @@ namespace Procedural
 		// Using the closest intersection, find whethe the point is actually inside
 		int closestSegmentIndex=-1;
 		Real closestSegmentDistance = std::numeric_limits<Real>::max();
-		Vector2 closestSegmentIntersection;
+		Vector2 closestSegmentIntersection(Vector2::ZERO);
 		const Shape* closestSegmentShape = 0;
-		bool isOnVertexA = false;
-		bool isOnVertexB = false;
+		//bool isOnVertexA = false;
+		//bool isOnVertexB = false;
 		
 		for (size_t k =0;k<mShapes.size();k++)
 		{

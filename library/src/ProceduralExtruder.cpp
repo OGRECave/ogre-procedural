@@ -38,8 +38,8 @@ namespace Procedural
 	void Extruder::_extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
 	{
 		assert(mExtrusionPath && shapeToExtrude && "Shape and Path must not be null!");
-		int numSegPath = mExtrusionPath->getSegCount();
-		int numSegShape = shapeToExtrude->getSegCount();
+		unsigned int numSegPath = mExtrusionPath->getSegCount();
+		unsigned int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
 
 		/*if (mFixSharpAngles)
@@ -63,7 +63,7 @@ namespace Procedural
 		buffer.estimateIndexCount(numSegShape*numSegPath*6);
 		buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1));
 				
-		for (int i=0;i<=numSegPath;i++)
+		for (unsigned int i = 0; i <= numSegPath; ++i)
 		{
 			Vector3 v0 = path.getPoint(i);
 			Vector3 direction = path.getAvgDirection(i);
@@ -87,10 +87,10 @@ namespace Procedural
 				scale = mScaleTrack->getValue(lineicPos, lineicPos / totalPathLength, i);
 			}
 			// Insert new points
-			for (int j =0;j<=numSegShape;j++)
+			for (unsigned int j =0; j <= numSegShape; ++j)
 			{
 				Vector2 vp2 = shapeToExtrude->getPoint(j);
-				Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
+				//Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
 				Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
 				Vector3 vp(vp2.x, vp2.y, 0);
 				Vector3 normal(vp2normal.x, vp2normal.y, 0);							
