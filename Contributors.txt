@@ -10,4 +10,6 @@ Maintainers:
 
 Contributors:
     - tdev:
-	some things here and there
+        some things here and there
+	- svenstaro:
+        linux fixes

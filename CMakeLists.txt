@@ -82,7 +82,7 @@ add_subdirectory(CMake)
 # cpack
 set(CPACK_PACKAGE_DESCRIPTION "OgreProcedual")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Ogre-Procedural is an Ogre3D based lib enabling developpers to quickly create geometric primitives, such as cubes, spheres, cylinders...")
-set(CPACK_PACKAGE_NAME "ogreprocedual")
+set(CPACK_PACKAGE_NAME "ogre-procedual")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "ois ogre")
 set(CPACK_PACKAGE_CONTACT "support@rigsofrods.com")
 set(CPACK_PACKAGE_VENDOR "support@rigsofrods.com")
