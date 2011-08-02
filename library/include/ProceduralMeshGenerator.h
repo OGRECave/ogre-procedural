@@ -37,10 +37,19 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+
+/** Superclass Interface of everything that builds meshes
+ */
+class MeshGeneratorInterface
+{
+public:
+	virtual Ogre::MeshPtr realizeMesh(const std::string& name, const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME) = 0;
+};
+
 /** Superclass of everything that builds meshes
  */
 template <typename T>
-class MeshGenerator
+class MeshGenerator : public MeshGeneratorInterface
 {
 protected:
 	/// A pointer to the default scene manager

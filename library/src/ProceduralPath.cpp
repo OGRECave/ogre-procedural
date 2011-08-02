@@ -96,7 +96,7 @@ namespace Procedural
 		return outputPath;
 	}
 
-	Ogre::MeshPtr Path::realizeMesh(const std::string& name)
+	Ogre::MeshPtr Path::realizeMesh(const std::string& name, const Ogre::String& group)
 	{
 		Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		Ogre::ManualObject * manual = smgr->createManualObject();
@@ -110,9 +110,9 @@ namespace Procedural
 				
 		Ogre::MeshPtr mesh;
 		if (name=="")
-			mesh = manual->convertToMesh(Utils::getName());
+			mesh = manual->convertToMesh(Utils::getName(), group);
 		else
-	 		mesh = manual->convertToMesh(name);
+	 		mesh = manual->convertToMesh(name, group);
 
 		return mesh;
 	}

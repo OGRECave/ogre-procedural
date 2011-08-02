@@ -34,13 +34,14 @@ THE SOFTWARE.
 #include "ProceduralPlatform.h"
 #include "ProceduralRoot.h"
 #include "ProceduralTrack.h"
+#include "ProceduralMeshGenerator.h"
 
 namespace Procedural
 {
 /** Succession of points in 3D space.
  * Can be closed or not.
  */
-class _ProceduralExport Path
+class _ProceduralExport Path : public MeshGeneratorInterface
 {
 	std::vector<Ogre::Vector3> mPoints;
 	bool mClosed;
@@ -167,7 +168,7 @@ public:
 	 * Outputs a mesh representing the path.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name = "");
+	Ogre::MeshPtr realizeMesh(const std::string& name="", const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 	/**
 	 * WIP

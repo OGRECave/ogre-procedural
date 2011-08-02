@@ -68,6 +68,16 @@ protected:
 		putMesh(s, materialIndex);
 	}
 
+	void putMesh(std::vector<Ogre::MeshPtr> meshes, int materialIndex=0)
+	{
+		std::vector<Ogre::MeshPtr>::iterator it;
+		for(it = meshes.begin(); it != meshes.end(); it++)
+		{
+			putMesh(*it, materialIndex);
+		}
+	}
+	 
+
 public:
 	Unit_Test(SceneManager* sn) : mSceneMgr(sn) {}
 	
@@ -109,6 +119,28 @@ public:
 class Unit_Tests : public BaseApplication
 {
 	Light* movingLight;
+
+	/* --------------------------------------------------------------------------- */
+	class Test_Serializer : public Unit_Test
+	{
+	public:		
+		Test_Serializer(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Primitive generation via Serializer";
+		}
+
+		void initImpl()
+		{
+			Procedural::Serializer s;
+			s.loadXMLFile("simple-tests.xml");
+			// realize all meshes that are tagged as "realize"
+			putMesh(s.realizeAllMeshes(), 1);
+			// or realize only a specific mesh out of that XML:
+			//putMesh(s.realizeMesh("default_fixed"), 1);
+		}
+	};
 
 	/* --------------------------------------------------------------------------- */
 	class Test_Primitives : public Unit_Test
@@ -162,7 +194,7 @@ class Unit_Tests : public BaseApplication
 		}
 	};
 	/* --------------------------------------------------------------------------- */
-	/*class Test_RollerCoaster : public Unit_Test
+	class Test_RollerCoaster : public Unit_Test
 	{
 	public:		
 		Test_RollerCoaster(SceneManager* sn) : Unit_Test(sn) {}
@@ -197,7 +229,7 @@ class Unit_Tests : public BaseApplication
 			e.setExtrusionPath(&p).setMultiShapeToExtrude(&ms);
 			putMesh(e.realizeMesh(),1);
 		}
-	};*/
+	};
 
 	/* --------------------------------------------------------------------------- */
 	class Test_Triangulation : public Unit_Test

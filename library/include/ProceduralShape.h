@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreManualObject.h"
 #include "ProceduralRoot.h"
 #include "ProceduralMultiShape.h"
+#include "ProceduralMeshGenerator.h"
 
 namespace Procedural
 {
@@ -43,7 +44,7 @@ enum Side {SIDE_LEFT, SIDE_RIGHT};
 /** Describes a succession of interconnected 2D points.
  * It can be closed or not, and there's always an outside and an inside
  */
-class _ProceduralExport Shape
+class _ProceduralExport Shape : public MeshGeneratorInterface
 {
 	std::vector<Ogre::Vector2> mPoints;
 	bool mClosed;
@@ -196,7 +197,7 @@ public:
 	 * Outputs a mesh representing the shape.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name="");
+	Ogre::MeshPtr realizeMesh(const std::string& name="", const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 	
 	/**
 	 * Appends the shape vertices to a manual object being edited

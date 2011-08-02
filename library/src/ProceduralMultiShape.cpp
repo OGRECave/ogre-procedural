@@ -34,7 +34,7 @@ using namespace Ogre;
 namespace Procedural
 {	
 //-----------------------------------------------------------------------
-	MeshPtr MultiShape::realizeMesh(const std::string& name)
+	MeshPtr MultiShape::realizeMesh(const std::string& name, const Ogre::String& group)
 	{
 		Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		ManualObject * manual = smgr->createManualObject(name);
@@ -48,9 +48,9 @@ namespace Procedural
 		
 		MeshPtr mesh;
 		if (name=="")
-			mesh = manual->convertToMesh(Utils::getName());
+			mesh = manual->convertToMesh(Utils::getName(), group);
 		else
-			mesh = manual->convertToMesh(name);
+			mesh = manual->convertToMesh(name, group);
 		smgr->destroyManualObject(manual);
 		return mesh;
 	}	
