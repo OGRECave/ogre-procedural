@@ -64,6 +64,43 @@ namespace Procedural
 		return loadXMLFromString(xml_str);
 	}
 	
+	// some parsing helpers
+	void parseArgument(const char *str, int &res) { res =Ogre::StringConverter::parseInt(str); }
+	void parseArgument(const char *str, unsigned int &res) { res =Ogre::StringConverter::parseInt(str); }
+	void parseArgument(const char *str, Ogre::Real &res) { res = Ogre::StringConverter::parseReal(str); }
+	void parseArgument(const char *str, Ogre::Vector3 &res) { res = Ogre::StringConverter::parseVector3(str); }
+	void parseArgument(const char *str, Ogre::Vector2 &res) { res = Ogre::StringConverter::parseVector2(str); }
+
+	template <class TVarType>
+	TVarType getAttribute(xml_node<> *node, const char *attribute_name, const TVarType defaultValue)
+	{
+		TVarType val = defaultValue;
+		xml_attribute<> *atr = node->first_attribute(attribute_name);
+		if(atr)
+			parseArgument(atr->value(), val);
+		return val;
+	}
+
+	// template function that calls a setter with an attribute value
+	template <class TClass,  class TVarType>
+	TVarType useAttributeForSetter(xml_node<> *node, const char *attribute_name, const TVarType defaultValue, TClass& (TClass::*setterFunction)(TVarType), TClass &instance, bool setDefault = true)
+	{
+		TVarType val = defaultValue;
+		//if(!node) return val;
+		xml_attribute<> *atr = node->first_attribute(attribute_name);
+		if(atr)
+		{
+			parseArgument(atr->value(), val);
+			// now try to use the setter
+			(instance.*setterFunction)(val);
+		} else if(!atr && setDefault)
+		{
+			(instance.*setterFunction)(val);
+		}
+		return val;
+	}
+
+
 	int Serializer::loadXMLFromString(Ogre::String &xml_str)
 	{
 		
@@ -127,9 +164,7 @@ namespace Procedural
 						// add the spline to the paths map
 						Path path = p.realizePath();
 
-						int realize2 = 0;
-						if(pn->first_attribute("realize"))
-							realize2 = StringConverter::parseInt(pn->first_attribute("realize")->value());
+						int realize2 = getAttribute<int>(n, "realize", 0);
 
 						paths[pn->value()] = serializationStorage<Path>(path, realize2);
 						if(realize2) realizeables[pn->value()] = dynamic_cast<MeshGeneratorInterface *>(&paths[pn->value()].obj);
@@ -141,14 +176,11 @@ namespace Procedural
 			}
 			else if(!strcmp(n->name(), "CircleShape"))
 			{
-				Real radius = 1.0f;
-				int segments = 8;
-				if(n->first_attribute("radius"))
-					radius   = StringConverter::parseReal(n->first_attribute("radius")->value());
-				if(n->first_attribute("segments"))
-					segments = StringConverter::parseInt(n->first_attribute("segments")->value());
-
-				Shape s = CircleShape().setRadius(radius).setNumSeg(segments).realizeShape();
+				CircleShape cs = CircleShape();
+				// where the magic happens ;)
+				useAttributeForSetter<CircleShape, Real>(n, "radius", 1, &CircleShape::setRadius, cs);
+				useAttributeForSetter<CircleShape, unsigned int>(n, "segments", 8, &CircleShape::setNumSeg, cs);
+				Shape s = cs.realizeShape();
 
 				// add to shape map
 				shapes[name] = serializationStorage<Shape>(s, realize);
@@ -159,7 +191,7 @@ namespace Procedural
 				Extruder e;
 				for (xml_node<> *en = n->first_node(); en; en = en->next_sibling())
 				{
-					if      (!strcmp(en->name(), "ShapeToExtrude"))
+					if       (!strcmp(en->name(), "ShapeToExtrude"))
 					{
 						e.setShapeToExtrude(&shapes[en->value()].obj);
 					}

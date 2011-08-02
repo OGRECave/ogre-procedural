@@ -59,7 +59,7 @@ public:
 	 */
 	Ogre::MeshPtr realizeMesh(const std::string& XMLMeshName = "default", const std::string& meshName = "", const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
-	std::vector<Ogre::MeshPtr> Serializer::realizeAllMeshes(const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	std::vector<Ogre::MeshPtr> realizeAllMeshes(const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 protected:
 	int loadXMLFromString(Ogre::String &str);
