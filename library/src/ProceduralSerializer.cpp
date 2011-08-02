@@ -66,6 +66,7 @@ namespace Procedural
 	
 	// some parsing helpers
 	void parseArgument(const char *str, int &res) { res =Ogre::StringConverter::parseInt(str); }
+	void parseArgument(const char *str, String &res) { res = Ogre::String(str); }
 	void parseArgument(const char *str, unsigned int &res) { res =Ogre::StringConverter::parseInt(str); }
 	void parseArgument(const char *str, Ogre::Real &res) { res = Ogre::StringConverter::parseReal(str); }
 	void parseArgument(const char *str, Ogre::Vector3 &res) { res = Ogre::StringConverter::parseVector3(str); }
@@ -81,9 +82,25 @@ namespace Procedural
 		return val;
 	}
 
-	// template function that calls a setter with an attribute value
+	// template function that calls a setter with an attribute value, without default value
 	template <class TClass,  class TVarType>
-	TVarType useAttributeForSetter(xml_node<> *node, const char *attribute_name, const TVarType defaultValue, TClass& (TClass::*setterFunction)(TVarType), TClass &instance, bool setDefault = true)
+	TVarType useAttributeForSetter(xml_node<> *node, const char *attribute_name, TClass& (TClass::*setterFunction)(TVarType), TClass &instance)
+	{
+		TVarType val;
+		//if(!node) return val;
+		xml_attribute<> *atr = node->first_attribute(attribute_name);
+		if(atr)
+		{
+			parseArgument(atr->value(), val);
+			// now try to use the setter
+			(instance.*setterFunction)(val);
+		}
+		return val;
+	}
+
+	// same with default value
+	template <class TClass,  class TVarType>
+	TVarType useAttributeForSetter(xml_node<> *node, const char *attribute_name, const TVarType defaultValue, TClass& (TClass::*setterFunction)(TVarType), TClass &instance)
 	{
 		TVarType val = defaultValue;
 		//if(!node) return val;
@@ -93,7 +110,7 @@ namespace Procedural
 			parseArgument(atr->value(), val);
 			// now try to use the setter
 			(instance.*setterFunction)(val);
-		} else if(!atr && setDefault)
+		} else if(!atr)
 		{
 			(instance.*setterFunction)(val);
 		}
@@ -140,14 +157,9 @@ namespace Procedural
 		for (xml_node<> *n = cur_node->first_node(); n; n = n->next_sibling())
 		{
 			// read the name
-			String name = "unnamed";
-			if(n->first_attribute("name"))
-				name = String(n->first_attribute("name")->value());
-			
+			String name = getAttribute<String>(n, "name", "unnamed");
 			// and realize attribute if existing
-			int realize = 0;
-			if(n->first_attribute("realize"))
-				realize = StringConverter::parseInt(n->first_attribute("realize")->value());
+			int realize = getAttribute<int>(n, "realize", 0);;
 
 			//Utils::log("Node name: " + String(n->name()));
 			if(!strcmp(n->name(), "CatmullRomSpline3"))
@@ -185,6 +197,34 @@ namespace Procedural
 				// add to shape map
 				shapes[name] = serializationStorage<Shape>(s, realize);
 				if(realize) realizeables[name] = dynamic_cast<MeshGeneratorInterface *>(&shapes[name].obj);
+			}
+			else if(!strcmp(n->name(), "Box"))
+			{
+				BoxGenerator b = BoxGenerator();
+				useAttributeForSetter<BoxGenerator, Real>(n, "x", &BoxGenerator::setSizeX, b);
+				useAttributeForSetter<BoxGenerator, Real>(n, "y", &BoxGenerator::setSizeY, b);
+				useAttributeForSetter<BoxGenerator, Real>(n, "z", &BoxGenerator::setSizeZ, b);
+				useAttributeForSetter<BoxGenerator, Vector3>(n, "size", &BoxGenerator::setSize, b);
+				useAttributeForSetter<BoxGenerator, int>(n, "segmentsx", &BoxGenerator::setNumSegX, b);
+				useAttributeForSetter<BoxGenerator, int>(n, "segmentsy", &BoxGenerator::setNumSegY, b);
+				useAttributeForSetter<BoxGenerator, int>(n, "segmentsz", &BoxGenerator::setNumSegZ, b);
+
+				// add to map
+				boxes[name] = serializationStorage<BoxGenerator>(b, realize);
+				if(realize) realizeables[name] = dynamic_cast<MeshGeneratorInterface *>(&boxes[name].obj);
+			}
+			else if(!strcmp(n->name(), "Capsule"))
+			{
+				CapsuleGenerator c = CapsuleGenerator();
+				useAttributeForSetter<CapsuleGenerator, Real>(n, "radius", &CapsuleGenerator::setRadius, c);
+				useAttributeForSetter<CapsuleGenerator, unsigned int>(n, "numRings", &CapsuleGenerator::setNumRings, c);
+				useAttributeForSetter<CapsuleGenerator, unsigned int>(n, "numSegments", &CapsuleGenerator::setNumSegments, c);
+				useAttributeForSetter<CapsuleGenerator, unsigned int>(n, "segHeight", &CapsuleGenerator::setNumSegHeight, c);
+				useAttributeForSetter<CapsuleGenerator, Real>(n, "setHeight", &CapsuleGenerator::setHeight, c);
+
+				// add to map
+				capsules[name] = serializationStorage<CapsuleGenerator>(c, realize);
+				if(realize) realizeables[name] = dynamic_cast<MeshGeneratorInterface *>(&capsules[name].obj);
 			}
 			else if(!strcmp(n->name(), "Extruder"))
 			{

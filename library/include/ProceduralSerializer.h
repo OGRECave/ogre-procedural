@@ -88,6 +88,9 @@ protected:
 	std::map < Ogre::String, serializationStorage<Shape> >             shapes;
 	std::map < Ogre::String, serializationStorage<Extruder> >          extruders;
 
+	std::map < Ogre::String, serializationStorage<BoxGenerator> >      boxes;
+	std::map < Ogre::String, serializationStorage<CapsuleGenerator> >  capsules;
+
 	std::map < Ogre::String, MeshGeneratorInterface*>                  realizeables;
 	
 };
