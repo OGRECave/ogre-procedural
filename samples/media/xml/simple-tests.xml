@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<proceduralmesh>
+  <!-- this replicates the sharp edges test -->
+  <CatmullRomSpline3>
+    <point>0 0 0</point>
+    <point>0 0 4</point>
+    <point>1 0 5</point>
+    <point>5 0 5</point>
+	<asPath realize="0">path1</asPath>
+  </CatmullRomSpline3>
+  <CircleShape name="circle1" radius="3" segments="10" realize="0" />
+  
+  <Extruder name="default" realize="1">
+    <ShapeToExtrude>circle1</ShapeToExtrude>
+	<ExtrusionPath>path1</ExtrusionPath>
+  </Extruder>
+  <Extruder name="default_fixed" realize="1">
+    <ShapeToExtrude>circle1</ShapeToExtrude>
+	<ExtrusionPath>path1</ExtrusionPath>
+	<fixSharpAngles />
+  </Extruder>
+  
+  <!-- TODO: add more -->
+  
+</proceduralmesh>

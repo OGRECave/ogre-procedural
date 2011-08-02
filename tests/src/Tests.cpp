@@ -42,8 +42,10 @@ void Unit_Tests::createScene(void)
 	o->show();
 
 	// Register all unit tests
+	mUnitTests.push_back(new Test_Serializer(mSceneMgr));
 	mUnitTests.push_back(new Test_Primitives(mSceneMgr));
 	mUnitTests.push_back(new Test_SharpAngles(mSceneMgr));
+	mUnitTests.push_back(new Test_RollerCoaster(mSceneMgr));
 	mUnitTests.push_back(new Test_Triangulation(mSceneMgr));		
 	mUnitTests.push_back(new Test_ShapeBoolean(mSceneMgr));
 	mUnitTests.push_back(new Test_Extruder(mSceneMgr));

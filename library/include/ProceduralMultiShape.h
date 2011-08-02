@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define PROCEDURAL_MULTISHAPE_INCLUDED
 
 #include "ProceduralRoot.h"
+#include "ProceduralMeshGenerator.h"
 
 namespace Procedural
 {
@@ -39,7 +40,7 @@ namespace Procedural
  * against : the shapes must not cross each other
  * 
  */
-class _ProceduralExport MultiShape
+class _ProceduralExport MultiShape : public MeshGeneratorInterface
 {
 	std::vector<Shape> mShapes;
 	
@@ -91,8 +92,9 @@ class _ProceduralExport MultiShape
 		}
 	}	
 	//-----------------------------------------------------------------------
-	/// Outputs the Multi Shape to a Mesh, mostly for visualisation or debugging purposes
-	Ogre::MeshPtr realizeMesh(const std::string& name="");
+	/// Outputs the Multi Shape to a Mesh, mostly for visualization or debugging purposes
+	Ogre::MeshPtr realizeMesh(const std::string& name="", const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
 	//-----------------------------------------------------------------------
 	/// Tells whether a point is located inside that multishape
 	/// It assumes that all of the shapes in that multishape are closed, 
