@@ -96,6 +96,15 @@ public:
 		return *this;
 	}
 
+	/** Sets the number of segments along all axis */
+	BoxGenerator& setNumSegments(Ogre::Vector3 numSeg)
+	{
+		mNumSegX = numSeg.x;
+		mNumSegY = numSeg.y;
+		mNumSegZ = numSeg.z;
+		return *this;
+	}
+
 	/**
 	 * Builds the mesh into the given TriangleBuffer
 	 * @param buffer The TriangleBuffer on where to append the mesh.

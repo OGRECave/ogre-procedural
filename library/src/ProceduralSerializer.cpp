@@ -44,7 +44,7 @@ using namespace std;
 namespace Procedural
 {
 
-	Serializer::Serializer()
+	Serializer::Serializer() : counter(0)
 	{
 	}
 
@@ -157,7 +157,7 @@ namespace Procedural
 		for (xml_node<> *n = cur_node->first_node(); n; n = n->next_sibling())
 		{
 			// read the name
-			String name = getAttribute<String>(n, "name", "unnamed");
+			String name = getAttribute<String>(n, "name", "unnamed"+StringConverter::toString(counter++));
 			// and realize attribute if existing
 			int realize = getAttribute<int>(n, "realize", 0);;
 
@@ -208,6 +208,7 @@ namespace Procedural
 				useAttributeForSetter<BoxGenerator, int>(n, "segmentsx", &BoxGenerator::setNumSegX, b);
 				useAttributeForSetter<BoxGenerator, int>(n, "segmentsy", &BoxGenerator::setNumSegY, b);
 				useAttributeForSetter<BoxGenerator, int>(n, "segmentsz", &BoxGenerator::setNumSegZ, b);
+				useAttributeForSetter<BoxGenerator, Vector3>(n, "segments", &BoxGenerator::setNumSegments, b);
 
 				// add to map
 				boxes[name] = serializationStorage<BoxGenerator>(b, realize);
@@ -220,7 +221,7 @@ namespace Procedural
 				useAttributeForSetter<CapsuleGenerator, unsigned int>(n, "numRings", &CapsuleGenerator::setNumRings, c);
 				useAttributeForSetter<CapsuleGenerator, unsigned int>(n, "numSegments", &CapsuleGenerator::setNumSegments, c);
 				useAttributeForSetter<CapsuleGenerator, unsigned int>(n, "segHeight", &CapsuleGenerator::setNumSegHeight, c);
-				useAttributeForSetter<CapsuleGenerator, Real>(n, "setHeight", &CapsuleGenerator::setHeight, c);
+				useAttributeForSetter<CapsuleGenerator, Real>(n, "height", &CapsuleGenerator::setHeight, c);
 
 				// add to map
 				capsules[name] = serializationStorage<CapsuleGenerator>(c, realize);
@@ -247,6 +248,9 @@ namespace Procedural
 				}
 				extruders[name] = serializationStorage<Extruder>(e, realize);
 				if(realize) realizeables[name] = dynamic_cast<MeshGeneratorInterface *>(&extruders[name].obj);
+			} else
+			{
+				Utils::log("unknown XML node type: " + name);
 			}
 		}
 		return 0;

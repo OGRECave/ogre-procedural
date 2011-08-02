@@ -20,6 +20,12 @@
 	<fixSharpAngles />
   </Extruder>
   
+  <Box size="5 10 5" segments="1 2 3" realize="1" />
+  
+  <Capsule realize="1" />
+
+  <Capsule radius="5" numRings="10" numSegments="6" segHeight="5" height="15" realize="1" />
+  
   <!-- TODO: add more -->
   
 </proceduralmesh>

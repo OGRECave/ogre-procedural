@@ -62,6 +62,7 @@ public:
 	std::vector<Ogre::MeshPtr> realizeAllMeshes(const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 protected:
+	unsigned int counter;
 	int loadXMLFromString(Ogre::String &str);
 
 	/// overloaded method

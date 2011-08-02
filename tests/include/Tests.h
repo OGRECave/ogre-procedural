@@ -194,6 +194,7 @@ class Unit_Tests : public BaseApplication
 		}
 	};
 	/* --------------------------------------------------------------------------- */
+	/*
 	class Test_RollerCoaster : public Unit_Test
 	{
 	public:		
@@ -230,6 +231,7 @@ class Unit_Tests : public BaseApplication
 			putMesh(e.realizeMesh(),1);
 		}
 	};
+	*/
 
 	/* --------------------------------------------------------------------------- */
 	class Test_Triangulation : public Unit_Test
