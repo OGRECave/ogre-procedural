@@ -76,7 +76,7 @@ namespace Procedural
 	TVarType getAttribute(xml_node<> *node, const char *attribute_name, const TVarType defaultValue)
 	{
 		TVarType val = defaultValue;
-		xml_attribute<> *atr = node->first_attribute(attribute_name);
+		xml_attribute<> *atr = node->first_attribute(attribute_name, 0, false); // not case sensitive
 		if(atr)
 			parseArgument(atr->value(), val);
 		return val;
@@ -88,7 +88,7 @@ namespace Procedural
 	{
 		TVarType val;
 		//if(!node) return val;
-		xml_attribute<> *atr = node->first_attribute(attribute_name);
+		xml_attribute<> *atr = node->first_attribute(attribute_name, 0, false); // not case sensitive
 		if(atr)
 		{
 			parseArgument(atr->value(), val);
@@ -104,7 +104,7 @@ namespace Procedural
 	{
 		TVarType val = defaultValue;
 		//if(!node) return val;
-		xml_attribute<> *atr = node->first_attribute(attribute_name);
+		xml_attribute<> *atr = node->first_attribute(attribute_name, 0, false); // not case sensitive
 		if(atr)
 		{
 			parseArgument(atr->value(), val);
@@ -152,6 +152,9 @@ namespace Procedural
 			Utils::log("XML malformed, no proceduralmesh root node");
 			return 1;
 		}
+
+		// TODO: add file format version properly
+		String version = getAttribute<String>(cur_node, "version", "0");
 
 		// walk the nodes
 		for (xml_node<> *n = cur_node->first_node(); n; n = n->next_sibling())
