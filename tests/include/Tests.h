@@ -137,6 +137,47 @@ class Unit_Tests : public BaseApplication
 		}
 	};
 
+	class Test_ShapeCrash : public Unit_Test
+	{
+	public:		
+		Test_ShapeCrash(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Testing Crash on shape generation";
+		}
+
+		void initImpl()
+		{
+			// this crashes
+
+			//   Schema:
+			//   3---4      7---8
+			//   |   5------6   |
+			//   2--------------1
+			//
+			// TODO: this crashes, FIX!
+			Shape s = Shape()
+					.addPoint(1,0)       // 1
+					.addPoint(-1,0)      // 2
+					.addPoint(-1,-0.5)   // 3
+					.addPoint(-0.5,-0.5) // 4
+					.addPoint(-0.5,-0.1) // 5
+					.addPoint(0.5,-0.1)  // 6
+					.addPoint(0.5,-0.5)  // 7
+					.addPoint(1,-0.5)    // 8
+					.close();
+					
+					
+			CatmullRomSpline3 pp;
+			pp.addPoint(0,0,0).addPoint(0,0,40).addPoint(10,0,50).addPoint(50,0,50);
+			Path p = pp.realizePath();
+					
+			MeshPtr mesh = Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("shapecrash");
+			
+		}
+	};
+
 	/* --------------------------------------------------------------------------- */
 	class Test_SharpAngles : public Unit_Test
 	{
