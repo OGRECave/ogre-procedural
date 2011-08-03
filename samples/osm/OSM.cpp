@@ -114,7 +114,7 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 
 		// create the ways spline
 		Procedural::CatmullRomSpline3 p;
-		p.setNumSeg(2);
+		p.setNumSeg(3);
 		for (size_t i=0;i < ways[g].ref.size();i++)
 		{
 			nodeMap::iterator n = nodes.find(ways[g].ref[i]);
@@ -136,7 +136,14 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 		Procedural::Path path = p.realizePath();
 
 		// and create the mesh with the fitting shape
-		Procedural::Extruder().setExtrusionPath(&path).setShapeToExtrude(&shapes[wayType]).realizeMesh(wayName);
+		MeshPtr mesh = Procedural::Extruder().setExtrusionPath(&path).setShapeToExtrude(&shapes[wayType]).realizeMesh(wayName);
+
+		// now add some LOD
+		p.simplyfy(4);
+		p.setNumSeg(1);
+		path = p.realizePath();
+		MeshPtr mesh_lod1 = Procedural::Extruder().setExtrusionPath(&path).setShapeToExtrude(&shapes[wayType]).realizeMesh(wayName + "_LOD1");
+		mesh->createManualLodLevel(5, wayName + "_LOD1");
 
 		// and put the mesh into the scene
 		putMesh(wayName, materialName);
@@ -266,6 +273,9 @@ void Sample_OSM::putMesh(const std::string& meshName, const std::string& materia
 	sn->attachObject(ent);
 	sn->setPosition(position);
 	ent->setMaterialName(material);
+	// set material for all LODs as well
+	for(int i=0;i<ent->getNumManualLodLevels(); i++)
+		ent->getManualLodLevel(i)->setMaterialName(material);
 }
 
 String Sample_OSM::loadXMLFile(Ogre::String filename, Ogre::String group)
