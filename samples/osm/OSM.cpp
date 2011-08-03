@@ -80,8 +80,8 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 	//Iterate through the nodes referenced by 'way' and extrude them to their correct position.
 	Procedural::Shape shapes[WAY_END];
 
-	shapes[WAY_OTHER] = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
-	shapes[WAY_RESIDENTIAL] = CatmullRomSpline2().setNumSeg(3).addPoint(1,0).addPoint(0,0.3).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
+	shapes[WAY_OTHER]              = CatmullRomSpline2().setNumSeg(2).addPoint(1,0).addPoint(0,0.3).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-3).addPoint(1,-0.3).close().realizeShape();
+	shapes[WAY_RESIDENTIAL]        = CatmullRomSpline2().setNumSeg(2).addPoint(1,0).addPoint(0,0.3).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
 	// with sidewalk
 	/*
 	//   Schemata:
@@ -102,14 +102,16 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 			.close();
 	*/
 
-	shapes[WAY_SECONDARY] = CatmullRomSpline2().setNumSeg(3).addPoint(1,0).addPoint(0,0.2).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
-	shapes[WAY_PRIMARY]   = CatmullRomSpline2().setNumSeg(3).addPoint(1,0).addPoint(0,0.1).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
-	shapes[WAY_MOTORWAY]  = CatmullRomSpline2().setNumSeg(3).addPoint(1,0).addPoint(0,-0.5).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
 
+	shapes[WAY_SECONDARY]          = CatmullRomSpline2().setNumSeg(2).addPoint(1,0).addPoint(0,0.2).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
+	shapes[WAY_PRIMARY]            = CatmullRomSpline2().setNumSeg(2).addPoint(1,0).addPoint(0,0.1).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
+	shapes[WAY_MOTORWAY]           = CatmullRomSpline2().setNumSeg(2).addPoint(1,0).addPoint(0,-0.5).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
+
+	shapes[WAY_OTHER_LOWRES]       = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
 	shapes[WAY_RESIDENTIAL_LOWRES] = Shape().addPoint(0.5,0).addPoint(-0.5,0).addPoint(-0.5,-0.3).addPoint(0.5,-0.3).close();
-	shapes[WAY_SECONDARY_LOWRES] = Shape().addPoint(0.8,0).addPoint(-0.8,0).addPoint(-0.8,-0.3).addPoint(0.8,-0.3).close();
-	shapes[WAY_PRIMARY_LOWRES]   = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
-	shapes[WAY_MOTORWAY_LOWRES]  = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
+	shapes[WAY_SECONDARY_LOWRES]   = Shape().addPoint(0.8,0).addPoint(-0.8,0).addPoint(-0.8,-0.3).addPoint(0.8,-0.3).close();
+	shapes[WAY_PRIMARY_LOWRES]     = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
+	shapes[WAY_MOTORWAY_LOWRES]    = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
 
 	for (size_t g=0;g < ways.size();g++)
 	{
@@ -157,9 +159,8 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 		p.simplyfy(4);
 		p.setNumSeg(1);
 		path = p.realizePath();
-		int lod_type = wayType;
-		if(lod_type == WAY_MOTORWAY) lod_type = WAY_MOTORWAY_LOWRES;
-		if(lod_type == WAY_MOTORWAY) lod_type = WAY_MOTORWAY_LOWRES;
+		int lod_type = wayType + 4; // Magic ;)
+
 		MeshPtr mesh_lod1 = Procedural::Extruder().setExtrusionPath(&path).setShapeToExtrude(&shapes[lod_type]).realizeMesh(wayName + "_LOD1");
 		mesh->createManualLodLevel(5, wayName + "_LOD1");
 
