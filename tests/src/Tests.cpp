@@ -53,6 +53,7 @@ void Unit_Tests::createScene(void)
 	mUnitTests.push_back(new Test_Splines(mSceneMgr));
 	mUnitTests.push_back(new Test_ShapeThick(mSceneMgr));
 	mUnitTests.push_back(new Test_InvertNormals(mSceneMgr));
+	mUnitTests.push_back(new Test_SVGShapeImporter(mSceneMgr));
 
 	// Init first test
 	switchToTest(0);

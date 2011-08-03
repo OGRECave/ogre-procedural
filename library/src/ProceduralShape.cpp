@@ -29,7 +29,10 @@ THE SOFTWARE.
 #include "ProceduralShape.h"
 #include "ProceduralGeometryHelpers.h"
 
+#include "rapidxml.hpp"
+
 using namespace Ogre;
+using namespace rapidxml;
 
 namespace Procedural
 {
@@ -442,6 +445,132 @@ void Shape::_appendToManualObject(ManualObject* manual)
 		manual->position(Vector3(mPoints.begin()->x, mPoints.begin()->y, 0.f));
 }
 //-----------------------------------------------------------------------
+int Shape::loadFromSVG(Ogre::String filename, Ogre::String shapeName, bool moveToCenter, Ogre::String group)
+{
+	String xml_str = String();
+	{
+		// try to open the file, will throw on error
+		DataStreamPtr ds = ResourceGroupManager::getSingleton().openResource(filename, group);
+		// read it into the string
+		xml_str = ds->getAsString();
+	}
+
+	// make a safe-to-modify copy of input_xml
+	// (you should never modify the contents of an std::string directly)
+	std::vector<char> xml_copy(xml_str.begin(), xml_str.end());
+	xml_copy.push_back('\0');
+
+	// only use xml_copy from here on!
+	xml_document<> doc;
+	// we are choosing to parse the XML declaration
+	// parse_no_data_nodes prevents RapidXML from using the somewhat surprising
+	// behavior of having both values and data nodes, and having data nodes take
+	// precedence over values when printing
+	// >>> note that this will skip parsing of CDATA nodes <<<
+	doc.parse<parse_declaration_node | parse_no_data_nodes>(&xml_copy[0]);
+
+	// since we have parsed the XML declaration, it is the first node
+	// (otherwise the first node would be our root node)
+	xml_node<> *svg_node = doc.first_node("svg");
+	if(!svg_node)
+	{
+		Utils::log("No SVG node in file found.");
+		return 1;
+	}
+
+	xml_node<> *g_node = svg_node->first_node("g");
+	if(!g_node)
+	{
+		Utils::log("No G node in SVG found.");
+		return 1;
+	}
+
+	xml_node<> *path_node = g_node->first_node("path");
+	if(!path_node)
+	{
+		Utils::log("No path node in graphics found.");
+		return 1;
+	}
+
+	while(path_node)
+	{
+		xml_attribute<> *atr = path_node->first_attribute("d");
+		if(!atr)
+		{
+			Utils::log("Wrong path format, 'd' not found");
+			return 1;
+		}
+
+		String path_id = "";
+		if(path_node->first_attribute("id")) path_id = String(path_node->first_attribute("id")->value());
+
+		// is this the path we want?
+		if(shapeName.empty() || shapeName == path_id)
+		{
+			// actually parse the path
+			String path_def = String(atr->value());
+
+			// clear all existing points
+			mPoints.clear();
+
+			printf("found path %s\n", path_id.c_str());
+
+			bool absoluteCoords = false;
+			// now the fun begins ;)
+			StringVector args = Ogre::StringUtil::split(path_def, " ");
+
+			// SVG format spec: http://www.w3.org/TR/SVG/paths.html
+
+			// TODO: normalization of the input data, move its center to (0,0) ?
+			// moveToCenter!
+
+			// walk the args
+			Vector2 lp = Vector2::ZERO; // last point
+			for(int i = 0; i < args.size(); i++)
+			{
+				printf("ARG %d\n", i);
+				String &arg = args[i];
+				if(i == 0 && arg != "m" && arg != "M") // m/M = moveto: http://www.w3.org/TR/SVG/paths.html#PathDataMovetoCommands
+				{
+					Utils::log("only m/M (moveto) Paths supported for now");
+					return 1;
+				} else if(i == 0)
+				{
+					absoluteCoords = (arg == "M"); // m = relative, M=absolute
+				}
+
+
+				StringVector args2 = Ogre::StringUtil::split(arg, ",");
+				if(args2.size() == 2)
+				{
+					// add the point
+					Vector2 p = Vector2(atof(args2[0].c_str()), atof(args2[1].c_str()));
+
+					if(!absoluteCoords)
+						p = lp - p;
+
+					addPoint(p);
+
+					lp = p;
+				} else
+				{
+					if(arg == "z" || arg == "Z") // closepath
+					{
+						// close the path
+						close();
+					}
+				}
+			}
+			printf("DONE !!\n");
+			break;
+		}
+		// try the next path
+		path_node = path_node->next_sibling("path");
+	}
+	// seems we are done :)
+	return 0;
+}
+//-----------------------------------------------------------------------
 MultiShape Shape::thicken(Real amount)
 	{		
 		if (!mClosed)
@@ -474,3 +603,4 @@ MultiShape Shape::thicken(Real amount)
 		}
 	}
 }
+

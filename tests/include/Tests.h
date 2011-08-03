@@ -378,9 +378,61 @@ class Unit_Tests : public BaseApplication
 	};
 
 	/* --------------------------------------------------------------------------- */
-	class Test_Extruder : public Unit_Test
+	class Test_SVGShapeImporter : public Unit_Test
 	{
 	public:		
+		Test_SVGShapeImporter(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "SVG Shape Importer";
+		}
+
+		void initImpl()
+		{
+
+			printf("loading SVG ...\n");
+			Shape shape = Shape();
+			shape.loadFromSVG("inkscape-test.svg", "path2985");
+
+			CubicHermiteSpline2 spline;
+			spline.loadFromSVG("inkscape-test.svg", "path3793");
+
+			printf("loading SVG ... DONE\n");
+
+			// now where to extrude along, just as an example
+			/*
+			Path p = CircleShape().setNumSeg(20).setRadius(20) realizePath();
+			CatmullRomSpline3 pp;
+			pp.setNumSeg(3).addPoint(0,0,-40).addPoint(0,0,40).addPoint(200,0,200);
+			Path p = pp.realizePath();
+			*/
+
+
+			CatmullRomSpline3 pp;
+			pp.addPoint(0,0,0).addPoint(50,0,250).addPoint(500,0,500).setNumSeg(10);
+			Path line = pp.realizePath();
+
+
+			putMesh(shape.realizeMesh());
+
+			putMesh(spline.realizeShape().realizeMesh());
+
+			putMesh(line.realizeMesh(),1);
+
+			printf("extruding ...\n");
+			Extruder e;
+			// enable capped to hang the application :-/
+			e.setCapped(false);
+			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);
+			printf("extruding ... DONE\n");
+		}
+	};
+
+	/* --------------------------------------------------------------------------- */
+	class Test_Extruder : public Unit_Test
+	{
+	public:
 		Test_Extruder(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
