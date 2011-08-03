@@ -357,7 +357,16 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
     else if (arg.key == OIS::KC_ESCAPE)
     {
         mShutDown = true;
-    }
+    } else if (arg.key == OIS::KC_O) // switch between standard and orthographic projection
+	{
+		if (mCamera->getProjectionType() == Ogre::PT_PERSPECTIVE)
+		{
+			mCamera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
+			mCamera->setOrthoWindow(100,100);
+		}
+		else
+			mCamera->setProjectionType(Ogre::PT_PERSPECTIVE);
+	}
 
     mCameraMan->injectKeyDown(arg);
     return true;

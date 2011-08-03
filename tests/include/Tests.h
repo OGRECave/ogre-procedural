@@ -233,20 +233,10 @@ class Unit_Tests : public BaseApplication
 			p -= Vector2(-131.92973,0);
 			shape.addPoint(p);
 			shape.close();
-
-			CatmullRomSpline3 pp;
-			pp.addPoint(0,0,0).addPoint(50,0,250).addPoint(500,0,500).setNumSeg(10);
-			Path line = pp.realizePath();
-
+					
 			putMesh(shape.realizeMesh());
 
-			putMesh(line.realizeMesh(),1);
-
-
-			Extruder e;
-			// enable capped to hang the application :-/
-			e.setCapped(true);
-			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);
+			putMesh(Triangulator().setShapeToTriangulate(&shape).realizeMesh());
 		}
 	};
 
