@@ -38,6 +38,8 @@ using namespace Procedural;
 //-------------------------------------------------------------------------------------
 void Sample_OSM::createScene(void)
 {
+	mWindow->getViewport(0)->setBackgroundColour(ColourValue::White);
+
 	rootNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("OSMRootNode");
 
 	generateStreetsFromOSMXMLFile("sample-data.osm.xml");
@@ -50,7 +52,7 @@ void Sample_OSM::createCamera(void)
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
 	mSceneMgr->setShadowFarDistance(100.0);
 	mSceneMgr->setShadowTextureSize(1024);
-	mSceneMgr->setAmbientLight(ColourValue::White);
+	mSceneMgr->setAmbientLight(ColourValue::Black);
 	// Setup camera and light
 	mCamera->setPosition(911,332,-176);
 	mCamera->lookAt(493,0,387);
@@ -79,9 +81,7 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 	Procedural::Shape shapes[WAY_END];
 
 	shapes[WAY_OTHER] = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
-
-
-	shapes[WAY_RESIDENTIAL] = Shape().addPoint(0.5,0).addPoint(-0.5,0).addPoint(-0.5,-0.3).addPoint(0.5,-0.3).close();
+	shapes[WAY_RESIDENTIAL] = CatmullRomSpline2().setNumSeg(3).addPoint(1,0).addPoint(0,0.3).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
 	// with sidewalk
 	/*
 	//   Schemata:
@@ -102,9 +102,14 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 			.close();
 	*/
 
-	shapes[WAY_SECONDARY] = Shape().addPoint(0.8,0).addPoint(-0.8,0).addPoint(-0.8,-0.3).addPoint(0.8,-0.3).close();
-	shapes[WAY_PRIMARY]   = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
-	shapes[WAY_MOTORWAY]  = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
+	shapes[WAY_SECONDARY] = CatmullRomSpline2().setNumSeg(3).addPoint(1,0).addPoint(0,0.2).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
+	shapes[WAY_PRIMARY]   = CatmullRomSpline2().setNumSeg(3).addPoint(1,0).addPoint(0,0.1).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
+	shapes[WAY_MOTORWAY]  = CatmullRomSpline2().setNumSeg(3).addPoint(1,0).addPoint(0,-0.5).addPoint(-1,0).addPoint(-1,-0.3).addPoint(0,-1).addPoint(1,-0.3).close().realizeShape();
+
+	shapes[WAY_RESIDENTIAL_LOWRES] = Shape().addPoint(0.5,0).addPoint(-0.5,0).addPoint(-0.5,-0.3).addPoint(0.5,-0.3).close();
+	shapes[WAY_SECONDARY_LOWRES] = Shape().addPoint(0.8,0).addPoint(-0.8,0).addPoint(-0.8,-0.3).addPoint(0.8,-0.3).close();
+	shapes[WAY_PRIMARY_LOWRES]   = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
+	shapes[WAY_MOTORWAY_LOWRES]  = Shape().addPoint(1,0).addPoint(-1,0).addPoint(-1,-0.3).addPoint(1,-0.3).close();
 
 	for (size_t g=0;g < ways.size();g++)
 	{
@@ -115,6 +120,7 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 		// create the ways spline
 		Procedural::CatmullRomSpline3 p;
 		p.setNumSeg(3);
+		Vector3 lastPos = Vector3::ZERO;
 		for (size_t i=0;i < ways[g].ref.size();i++)
 		{
 			nodeMap::iterator n = nodes.find(ways[g].ref[i]);
@@ -122,6 +128,14 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 			{
 				Vector3 &pos = n->second.pos;
 
+				/*
+				// filter out nodes that are too near, beware, might remove end-node
+				if(pos.distance(lastPos) < 1.2f)
+				{
+					printf("discarded node\n");
+					continue;
+				}
+				*/
 
 				// bit cheating: if its a motorway, we raise it a bit
 				//if(wayType == WAY_MOTORWAY)
@@ -129,6 +143,7 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 				// looks bad in the end as the input data is partly screwed
 
 				p.addPoint(pos);
+				lastPos = pos;
 			}
 		}
 
@@ -142,7 +157,10 @@ void Sample_OSM::generateStreets(nodeMap &nodes, wayVector &ways)
 		p.simplyfy(4);
 		p.setNumSeg(1);
 		path = p.realizePath();
-		MeshPtr mesh_lod1 = Procedural::Extruder().setExtrusionPath(&path).setShapeToExtrude(&shapes[wayType]).realizeMesh(wayName + "_LOD1");
+		int lod_type = wayType;
+		if(lod_type == WAY_MOTORWAY) lod_type = WAY_MOTORWAY_LOWRES;
+		if(lod_type == WAY_MOTORWAY) lod_type = WAY_MOTORWAY_LOWRES;
+		MeshPtr mesh_lod1 = Procedural::Extruder().setExtrusionPath(&path).setShapeToExtrude(&shapes[lod_type]).realizeMesh(wayName + "_LOD1");
 		mesh->createManualLodLevel(5, wayName + "_LOD1");
 
 		// and put the mesh into the scene

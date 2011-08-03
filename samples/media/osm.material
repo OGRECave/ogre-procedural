@@ -8,7 +8,6 @@ material osm_sample/type_0
 			diffuse 0.4 0.4 0.4
 			ambient 0.4 0.4 0.4
 			specular 0 0 0 255 0
-            emissive 0.4 0.4 0.4 1
         } 
     }
 }
@@ -23,7 +22,6 @@ material osm_sample/type_1
 			diffuse 0 1 0
 			ambient 0 1 0
 			specular 0 0 0 255 0
-            emissive 0 1 0 1		
         } 
     }
 }
@@ -38,7 +36,6 @@ material osm_sample/type_2
 			diffuse 1 0 0
 			ambient 1 0 0
 			specular 0 0 0 255 0
-            emissive 1 0 0 1		
         } 
     }
 }
@@ -53,7 +50,6 @@ material osm_sample/type_3
 			diffuse 0 0 1
 			ambient 0 0 1
 			specular 0 0 0 255 0
-            emissive 0 0 1 1		
         } 
     }
 }
@@ -68,7 +64,6 @@ material osm_sample/type_4
 			diffuse 1 1 0
 			ambient 1 1 0
 			specular 0 0 0 255 0
-            emissive 1 1 0 1		
         } 
     }
 }
