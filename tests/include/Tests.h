@@ -158,23 +158,95 @@ class Unit_Tests : public BaseApplication
 			//
 			// TODO: this crashes, FIX!
 			Shape s = Shape()
-					.addPoint(1,0)       // 1
-					.addPoint(-1,0)      // 2
-					.addPoint(-1,-0.5)   // 3
-					.addPoint(-0.5,-0.5) // 4
-					.addPoint(-0.5,-0.1) // 5
-					.addPoint(0.5,-0.1)  // 6
-					.addPoint(0.5,-0.5)  // 7
-					.addPoint(1,-0.5)    // 8
-					.close();
-					
-					
+				.addPoint(1,0)       // 1
+				.addPoint(-1,0)      // 2
+				.addPoint(-1,-0.5)   // 3
+				.addPoint(-0.5,-0.5) // 4
+				.addPoint(-0.5,-0.1) // 5
+				.addPoint(0.5,-0.1)  // 6
+				.addPoint(0.5,-0.5)  // 7
+				.addPoint(1,-0.5)    // 8
+				.close();
+
+
 			CatmullRomSpline3 pp;
 			pp.addPoint(0,0,0).addPoint(0,0,40).addPoint(10,0,50).addPoint(50,0,50);
 			Path p = pp.realizePath();
-					
+
 			MeshPtr mesh = Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("shapecrash");
-			
+
+		}
+	};
+
+	/* --------------------------------------------------------------------------- */
+	class Test_ShapeCrash2 : public Unit_Test
+	{
+	public:		
+		Test_ShapeCrash2(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "Testing Crash on shape generation #2";
+		}
+
+		void initImpl()
+		{
+			Shape shape = Shape();
+			//shape.loadFromSVG("inkscape-test.svg", "path2985");
+
+			// emulating here:
+			// m -54.951207,-16.247524
+			//   27.24849,0
+			//   2.54842,5.29287
+			//   37.0501,-0.19603
+			//   1.56826,-13.13416
+			//   5.48891,0
+			//   2.15635,12.35003
+			//   30.58104,-0.19603
+			//   2.35239,-4.70477
+			//   23.13181,0
+			//   -0.19604,7.8412902
+			//   -131.92973,0
+			// z
+			Vector2 p = Vector2(-54.951207,-16.247524);
+			shape.addPoint(p);
+			p -= Vector2(27.24849,0);
+			shape.addPoint(p);
+			p -= Vector2(2.54842,5.29287);
+			shape.addPoint(p);
+			p -= Vector2(37.0501,-0.19603);
+			shape.addPoint(p);
+			p -= Vector2(1.56826,-13.13416);
+			shape.addPoint(p);
+			p -= Vector2(5.48891,0);
+			shape.addPoint(p);
+			p -= Vector2(2.15635,12.35003);
+			shape.addPoint(p);
+			p -= Vector2(30.58104,-0.19603);
+			shape.addPoint(p);
+			p -= Vector2(2.35239,-4.70477);
+			shape.addPoint(p);
+			p -= Vector2(23.13181,0);
+			shape.addPoint(p);
+			p -= Vector2(-0.19604,7.8412902);
+			shape.addPoint(p);
+			p -= Vector2(-131.92973,0);
+			shape.addPoint(p);
+			shape.close();
+
+			CatmullRomSpline3 pp;
+			pp.addPoint(0,0,0).addPoint(50,0,250).addPoint(500,0,500).setNumSeg(10);
+			Path line = pp.realizePath();
+
+			putMesh(shape.realizeMesh());
+
+			putMesh(line.realizeMesh(),1);
+
+
+			Extruder e;
+			// enable capped to hang the application :-/
+			e.setCapped(true);
+			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);
 		}
 	};
 
