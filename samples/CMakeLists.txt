@@ -52,6 +52,8 @@ add_subdirectory(primitives)
 
 add_subdirectory(extrusion)
 
+add_subdirectory(osm)
+
 # Install sample sources
 if (PROCEDURAL_INSTALL_SAMPLES_SOURCE)
   if (WIN32 OR APPLE)
