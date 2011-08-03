@@ -43,6 +43,7 @@ void Unit_Tests::createScene(void)
 
 	// Register all unit tests
 	mUnitTests.push_back(new Test_Primitives(mSceneMgr));
+	mUnitTests.push_back(new Test_ShapeCrash(mSceneMgr));
 	mUnitTests.push_back(new Test_SharpAngles(mSceneMgr));
 	mUnitTests.push_back(new Test_Triangulation(mSceneMgr));		
 	mUnitTests.push_back(new Test_ShapeBoolean(mSceneMgr));
