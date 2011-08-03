@@ -111,7 +111,25 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 			return mPoints[Utils::modulo(i,mPoints.size())];
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
-	
+
+	/// removes points (every 2nd now), but leave the first and last point
+	CatmullRomSpline3& simplyfy(int grade=2)
+	{
+		if(mPoints.size() > 2)
+		{
+			std::vector<Ogre::Vector3> np;
+			np.push_back(mPoints[0]);
+			for(int i=1; i<mPoints.size()-1;i+=grade)
+			{
+				if(i >= mPoints.size()) break;
+				np.push_back(mPoints[i]);
+			}
+			np.push_back(mPoints[mPoints.size()-1]);
+			mPoints = np;
+		}
+		return *this;
+	}
+
 	/**
 	 * Build a path from Catmull-Rom control points
 	 */
