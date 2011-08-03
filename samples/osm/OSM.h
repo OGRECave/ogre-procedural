@@ -52,7 +52,18 @@ protected:
 		Ogre::Vector3 pos;
 	};
 
-	enum {WAY_OTHER=0, WAY_RESIDENTIAL, WAY_SECONDARY, WAY_PRIMARY, WAY_MOTORWAY, WAY_END};
+	enum {WAY_OTHER=0,
+		WAY_RESIDENTIAL,
+		WAY_SECONDARY,
+		WAY_PRIMARY,
+		WAY_MOTORWAY,
+
+		WAY_RESIDENTIAL_LOWRES,
+		WAY_SECONDARY_LOWRES,
+		WAY_PRIMARY_LOWRES,
+		WAY_MOTORWAY_LOWRES,
+		WAY_END
+	};
 
 	typedef std::map<int, node_t> nodeMap;
 	typedef std::vector<way_t> wayVector;
