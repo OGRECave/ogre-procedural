@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "ProceduralUtils.h"
 #include "OgreMesh.h"
 #include "OgreManualObject.h"
+#include "ProceduralPath.h"
 #include "ProceduralRoot.h"
 #include "ProceduralMultiShape.h"
 #include "ProceduralMeshGenerator.h"
@@ -192,6 +193,9 @@ public:
 		return -getAvgDirection(i).perpendicular();
 		return getAvgDirection(i).perpendicular();
 	}
+
+	/// loads a path from an inkscape exported file
+	int loadFromSVG(Ogre::String filename, Ogre::String shapeName = "", bool moveToCenter = true, Ogre::String group=Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 	/**
 	 * Outputs a mesh representing the shape.
@@ -397,6 +401,14 @@ public:
 	
 	void _findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const;
 
+	Path to2dPath()
+	{
+		Procedural::Path p;
+		for (unsigned int i=0;i<mPoints.size();i++)
+			p.addPoint(mPoints[i].x, 0, mPoints[i].y);
+		return p;
+
+	}
 };
 }
 

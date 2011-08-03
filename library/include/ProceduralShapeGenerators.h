@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define PROCEDURAL_SHAPE_GENERATORS_INCLUDED
 
 #include "ProceduralShape.h"
+#include "ProceduralPath.h"
 
 namespace Procedural
 {
@@ -75,6 +76,7 @@ public:
 		mClosed = true;
 		return (T&)*this;
 	}
+
 };
 
 //-----------------------------------------------------------------------
@@ -107,6 +109,8 @@ public:
 			return mPoints[Utils::modulo(i,mPoints.size())];
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
+
+	int loadFromSVG(Ogre::String filename, Ogre::String shapeName = "", bool moveToCenter = true, Ogre::String group=Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 	/**
 	 * Builds a shape from control points
