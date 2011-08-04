@@ -191,6 +191,9 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			bool isTriangleIntersected = false;
 			for (int i=0;i<3;i++)
 			{
+				//Early out if 2 points are in fact the same
+				if (itTri->i[i]==itSeg->i1 || itTri->i[i]==itSeg->i2 || itTri->i[(i+1)%3]==itSeg->i1 || itTri->i[(i+1)%3]==itSeg->i2)
+					continue;
 				Segment2D seg2(itTri->p(i), itTri->p((i+1)%3));				
 				if (seg1.intersects(seg2))
 				{
@@ -215,6 +218,9 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			else
 				itTri++;
 		}
+
+		if (segments.size() == 0)
+			continue;
 		// Divide the list of points (coming from remaining segments) in 2 groups : "up"side and "down"side		
 		std::vector<int> pointsAbove;
 		std::vector<int> pointsBelow;
