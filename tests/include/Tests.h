@@ -480,7 +480,7 @@ class Unit_Tests : public BaseApplication
 		Ogre::String test_description = mUnitTests[index]->getDescription();
 
 		// update text here:
-		String txt = "[OgreProcedual Unit Tests] (Use key N/M to switch between tests)\n";
+		String txt = "[OgreProcedural Unit Tests] (Use key N/M to switch between tests)\n";
 		txt += "[" + Ogre::StringConverter::toString(mCurrentTestIndex+1) + "/" + Ogre::StringConverter::toString(mUnitTests.size()) + "] ";
 		
 		// and add the description
