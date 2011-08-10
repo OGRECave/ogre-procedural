@@ -136,7 +136,7 @@ class Unit_Tests : public BaseApplication
 			putMesh(TubeGenerator().realizeMesh(), 1);
 		}
 	};
-
+	/* --------------------------------------------------------------------------- */
 	class Test_ShapeCrash : public Unit_Test
 	{
 	public:		
@@ -149,14 +149,11 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
-			// this crashes
-
 			//   Schema:
 			//   3---4      7---8
 			//   |   5------6   |
 			//   2--------------1
 			//
-			// TODO: this crashes, FIX!
 			Shape s = Shape()
 				.addPoint(1,0)       // 1
 				.addPoint(-1,0)      // 2
@@ -168,13 +165,9 @@ class Unit_Tests : public BaseApplication
 				.addPoint(1,-0.5)    // 8
 				.close();
 
+			putMesh(s.realizeMesh());
 
-			CatmullRomSpline3 pp;
-			pp.addPoint(0,0,0).addPoint(0,0,40).addPoint(10,0,50).addPoint(50,0,50);
-			Path p = pp.realizePath();
-
-			MeshPtr mesh = Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("shapecrash");
-
+			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh());
 		}
 	};
 
@@ -192,22 +185,7 @@ class Unit_Tests : public BaseApplication
 		void initImpl()
 		{
 			Shape shape = Shape();
-			//shape.loadFromSVG("inkscape-test.svg", "path2985");
 
-			// emulating here:
-			// m -54.951207,-16.247524
-			//   27.24849,0
-			//   2.54842,5.29287
-			//   37.0501,-0.19603
-			//   1.56826,-13.13416
-			//   5.48891,0
-			//   2.15635,12.35003
-			//   30.58104,-0.19603
-			//   2.35239,-4.70477
-			//   23.13181,0
-			//   -0.19604,7.8412902
-			//   -131.92973,0
-			// z
 			Vector2 p = Vector2(-54.951207,-16.247524);
 			shape.addPoint(p);
 			p -= Vector2(27.24849,0);
@@ -233,6 +211,7 @@ class Unit_Tests : public BaseApplication
 			p -= Vector2(-131.92973,0);
 			shape.addPoint(p);
 			shape.close();
+			shape.scale(.1);
 					
 			putMesh(shape.realizeMesh());
 
@@ -264,43 +243,6 @@ class Unit_Tests : public BaseApplication
 			putMesh(p.realizeMesh());
 		}
 	};
-	/* --------------------------------------------------------------------------- */
-	/*class Test_RollerCoaster : public Unit_Test
-	{
-	public:		
-		Test_RollerCoaster(SceneManager* sn) : Unit_Test(sn) {}
-
-		String getDescription()
-		{
-			return "Roller Coaster! Fuck Yeah!";
-		}
-
-		void initImpl()
-		{
-			PlaneGenerator pg;
-			putMesh(pg.setSizeX(1000).setSizeY(1000).realizeMesh(),1);
-			Shape s = CircleShape().realizeShape();
-			Shape s2 = CircleShape().setRadius(0.5).realizeShape();
-			s2.translate(Ogre::Vector2(2,2));
-			Shape s3 = CircleShape().setRadius(0.5).realizeShape();
-			s3.translate(Ogre::Vector2(-2,2));
-			MultiShape ms;
-			ms.addShape(s).addShape(s2).addShape(s3);
-			CatmullRomSpline3 crs;
-			
-			Ogre::Vector3 v(0,10,0);
-			for (int i=0;i<100;i++)
-			{
-				v+=Ogre::Vector3(Math::RangeRandom(1,5), Math::RangeRandom(-1,1), Math::RangeRandom(-5,5));
-				if (v.y<10) v.y=10;
-				crs.addPoint(v);
-			}
-			Path p = crs.realizePath();
-			Extruder e;
-			e.setExtrusionPath(&p).setMultiShapeToExtrude(&ms);
-			putMesh(e.realizeMesh(),1);
-		}
-	};*/
 
 	/* --------------------------------------------------------------------------- */
 	class Test_Triangulation : public Unit_Test
@@ -583,8 +525,8 @@ class Unit_Tests : public BaseApplication
 		Ogre::String test_description = mUnitTests[index]->getDescription();
 
 		// update text here:
-		String txt = "[OgreProcedual Unit Tests] (Use key N/M to switch between tests)\n";
-		txt += "[" + Ogre::StringConverter::toString(mCurrentTestIndex+1) + "/" + Ogre::StringConverter::toString(mUnitTests.size()) + "] ";
+		String txt = "[OgreProcedural Unit Tests] (Use key N/M to switch between tests)\n";
+		txt += "[" + Ogre::StringConverter::toString(index+1) + "/" + Ogre::StringConverter::toString(mUnitTests.size()) + "] ";
 		
 		// and add the description
 		txt += test_description;
