@@ -143,12 +143,13 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 		}
 	}
 
-	//Remove super triangle
-	TouchSuperTriangle touchSuperTriangle(maxTriangleIndex, maxTriangleIndex+1,maxTriangleIndex+2);
+	// NB : Don't remove super triangle here, because all outer triangles are already removed in the addconstraints method.
+	//      Uncomment that code if delaunay triangulation ever has to be unconstrained...
+	/*TouchSuperTriangle touchSuperTriangle(maxTriangleIndex, maxTriangleIndex+1,maxTriangleIndex+2);
 	tbuffer.remove_if(touchSuperTriangle);
 	pointList.pop_back();
 	pointList.pop_back();
-	pointList.pop_back();	
+	pointList.pop_back();*/	
 }
 //-----------------------------------------------------------------------
 void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer, const PointList& pl) const
@@ -191,6 +192,9 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			bool isTriangleIntersected = false;
 			for (int i=0;i<3;i++)
 			{
+				//Early out if 2 points are in fact the same
+				if (itTri->i[i]==itSeg->i1 || itTri->i[i]==itSeg->i2 || itTri->i[(i+1)%3]==itSeg->i1 || itTri->i[(i+1)%3]==itSeg->i2)
+					continue;
 				Segment2D seg2(itTri->p(i), itTri->p((i+1)%3));				
 				if (seg1.intersects(seg2))
 				{
@@ -215,7 +219,8 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			else
 				itTri++;
 		}
-		// Divide the list of points (coming from remaining segments) in 2 groups : "up"side and "down"side		
+
+		// Divide the list of points (coming from remaining segments) in 2 groups : "above" and "below"		
 		std::vector<int> pointsAbove;
 		std::vector<int> pointsBelow;
 		int pt = itSeg->i1;
@@ -239,7 +244,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 					if (isAbove)
 						pointsAbove.push_back(pt);
 					else
-						pointsBelow.push_back(pt);
+						pointsBelow.push_back(pt);					
 				}
 				break;
 			}
@@ -247,8 +252,8 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 		}
 
 		// Recursively triangulate both polygons
-		_recursiveTriangulatePolygon(*itSeg, pointsAbove, tbuffer, pl);
-		_recursiveTriangulatePolygon(*itSeg, pointsBelow, tbuffer, pl);
+		_recursiveTriangulatePolygon(*itSeg, pointsAbove, tbuffer, pl);		
+		_recursiveTriangulatePolygon(itSeg->inverse(), pointsBelow, tbuffer, pl);
 	}
 	// Clean up segments outside of multishape
 	if (multiShape.isClosed())
@@ -267,6 +272,8 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 //-----------------------------------------------------------------------
 void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSeg, std::vector<int> inputPoints, DelaunayTriangleBuffer& tbuffer, const PointList&  pointList) const
 {
+	if (inputPoints.size() == 0)
+		return;
 	if (inputPoints.size() ==1)
 	{
 		Triangle t(&pointList);
@@ -298,6 +305,7 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 	// Insert current triangle
 	Triangle t(&pointList);
 	t.setVertices(*currentPoint, cuttingSeg.i1, cuttingSeg.i2);
+	t.makeDirectIfNeeded();
 	tbuffer.push_back(t);
 	
 	// Recurse	
@@ -347,9 +355,9 @@ void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		PointList pointList;
 		std::vector<int> indexBuffer;		
 		triangulate(indexBuffer, pointList);
-		for (size_t j =0;j<=mShapeToTriangulate->getSegCount();j++)
+		for (size_t j =0;j<pointList.size();j++)
 			{
-				Ogre::Vector2 vp2 = mShapeToTriangulate->getPoint(j);
+				Ogre::Vector2 vp2 = pointList[j];
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
 

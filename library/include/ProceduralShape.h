@@ -66,7 +66,27 @@ public:
 	{
 		mPoints.push_back(Ogre::Vector2(x, y));
 		return *this;
-	}	
+	}
+	//---------------------------------------------------------------------------
+	/// Adds a point to the shape, relative to the last point added
+	inline Shape& addPointRel(const Ogre::Vector2& pt)
+	{
+		if (mPoints.empty())
+			mPoints.push_back(pt);
+		else
+			mPoints.push_back(pt + *(mPoints.end()-1));
+		return *this;
+	}
+	//---------------------------------------------------------------------------
+	/// Adds a point to the shape, relative to the last point added
+	inline Shape& addPointRel(Ogre::Real x, Ogre::Real y)
+	{
+		if (mPoints.empty())
+			mPoints.push_back(Ogre::Vector2(x, y));
+		else
+			mPoints.push_back(Ogre::Vector2(x, y) + *(mPoints.end()-1));
+		return *this;
+	}
 	//---------------------------------------------------------------------------
 	/// Clears the content of the shape
 	inline Shape& reset()
