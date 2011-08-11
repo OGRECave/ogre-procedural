@@ -41,9 +41,7 @@ namespace Procedural
 		unsigned int numSegPath = mExtrusionPath->getSegCount();
 		unsigned int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
-
-		/*if (mFixSharpAngles)
-		mExtrusionPath->fixSharpAngles(shapeToExtrude->findBoundingRadius());*/
+				
 		Real totalPathLength=0;
 		if ((mRotationTrack && mRotationTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC) ||
 			(mScaleTrack && mScaleTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC))
