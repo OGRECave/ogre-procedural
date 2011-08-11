@@ -46,7 +46,6 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 	MultiShape* mMultiShapeToExtrude;
 	Path* mExtrusionPath;
 	bool mCapped;
-	bool mFixSharpAngles;
 	Track* mRotationTrack;
 	Track* mScaleTrack;
 
@@ -56,7 +55,7 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 	
 public:
 	/// Default constructor
-	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mFixSharpAngles(false), mRotationTrack(0), mScaleTrack(0)
+	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mRotationTrack(0), mScaleTrack(0)
 	{}
 	
 	/**
@@ -106,16 +105,6 @@ public:
 	inline Extruder & setCapped(bool capped)
 	{
 		mCapped = capped;
-		return *this;
-	}
-
-	/// WIP
-	/// Sets the FixSharpAngles option (default = false)
-	/// When enabled, extruder tries to prevent the generated mesh to self intersect when 
-	/// the angles coming from the path are too sharp
-	inline Extruder & setFixSharpAngles(bool fixSharpAngles)
-	{
-		mFixSharpAngles = fixSharpAngles;
 		return *this;
 	}
 };
