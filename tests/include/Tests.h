@@ -135,92 +135,10 @@ class Unit_Tests : public BaseApplication
 			putMesh(TorusKnotGenerator().realizeMesh(), 1);
 			putMesh(TubeGenerator().realizeMesh(), 1);
 		}
-	};
+	};	
 	/* --------------------------------------------------------------------------- */
-	class Test_ShapeCrash : public Unit_Test
-	{
-	public:		
-		Test_ShapeCrash(SceneManager* sn) : Unit_Test(sn) {}
-
-		String getDescription()
-		{
-			return "Testing Crash on shape generation";
-		}
-
-		void initImpl()
-		{
-			//   Schema:
-			//   3---4      7---8
-			//   |   5------6   |
-			//   2--------------1
-			//
-			Shape s = Shape()
-				.addPoint(1,0)       // 1
-				.addPoint(-1,0)      // 2
-				.addPoint(-1,-0.5)   // 3
-				.addPoint(-0.5,-0.5) // 4
-				.addPoint(-0.5,-0.1) // 5
-				.addPoint(0.5,-0.1)  // 6
-				.addPoint(0.5,-0.5)  // 7
-				.addPoint(1,-0.5)    // 8
-				.close();
-
-			putMesh(s.realizeMesh());
-
-			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh());
-		}
-	};
-
-	/* --------------------------------------------------------------------------- */
-	class Test_ShapeCrash2 : public Unit_Test
-	{
-	public:		
-		Test_ShapeCrash2(SceneManager* sn) : Unit_Test(sn) {}
-
-		String getDescription()
-		{
-			return "Testing Crash on shape generation #2";
-		}
-
-		void initImpl()
-		{
-			Shape shape = Shape();
-
-			Vector2 p = Vector2(-54.951207,-16.247524);
-			shape.addPoint(p);
-			p -= Vector2(27.24849,0);
-			shape.addPoint(p);
-			p -= Vector2(2.54842,5.29287);
-			shape.addPoint(p);
-			p -= Vector2(37.0501,-0.19603);
-			shape.addPoint(p);
-			p -= Vector2(1.56826,-13.13416);
-			shape.addPoint(p);
-			p -= Vector2(5.48891,0);
-			shape.addPoint(p);
-			p -= Vector2(2.15635,12.35003);
-			shape.addPoint(p);
-			p -= Vector2(30.58104,-0.19603);
-			shape.addPoint(p);
-			p -= Vector2(2.35239,-4.70477);
-			shape.addPoint(p);
-			p -= Vector2(23.13181,0);
-			shape.addPoint(p);
-			p -= Vector2(-0.19604,7.8412902);
-			shape.addPoint(p);
-			p -= Vector2(-131.92973,0);
-			shape.addPoint(p);
-			shape.close();
-			shape.scale(.1);
-					
-			putMesh(shape.realizeMesh());
-
-			putMesh(Triangulator().setShapeToTriangulate(&shape).realizeMesh());
-		}
-	};
-
-	/* --------------------------------------------------------------------------- */
-	class Test_SharpAngles : public Unit_Test
+	// NB : feature not implemented
+	/*class Test_SharpAngles : public Unit_Test
 	{
 	public:		
 		Test_SharpAngles(SceneManager* sn) : Unit_Test(sn) {}
@@ -242,7 +160,7 @@ class Unit_Tests : public BaseApplication
 			putMesh(e.setFixSharpAngles(true).setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh(),1);
 			putMesh(p.realizeMesh());
 		}
-	};
+	};*/
 
 	/* --------------------------------------------------------------------------- */
 	class Test_Triangulation : public Unit_Test
@@ -283,6 +201,34 @@ class Unit_Tests : public BaseApplication
 
 			s3.translate(Vector2(.5,0));
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
+
+			Shape s4;
+			s4.addPointRel(-54.951207,-16.247524).addPointRel(27.24849,0).addPointRel(2.54842,5.29287)
+				 .addPointRel(37.0501,-0.19603).addPointRel(1.56826,-13.13416).addPointRel(5.48891,0)
+				 .addPointRel(2.15635,12.35003).addPointRel(30.58104,-0.19603).addPointRel(2.35239,-4.70477)
+				 .addPointRel(23.13181,0).addPointRel(-0.19604,7.8412902).addPointRel(-131.92973,0)
+			     .close()
+			     .scale(.1);				
+			
+			putMesh(Triangulator().setShapeToTriangulate(&s4).realizeMesh());
+
+			//   Schema:
+			//   3---4      7---8
+			//   |   5------6   |
+			//   2--------------1
+			//
+			Shape s5 = Shape()
+				.addPoint(1,0)       // 1
+				.addPoint(-1,0)      // 2
+				.addPoint(-1,-0.5)   // 3
+				.addPoint(-0.5,-0.5) // 4
+				.addPoint(-0.5,-0.1) // 5
+				.addPoint(0.5,-0.1)  // 6
+				.addPoint(0.5,-0.5)  // 7
+				.addPoint(1,-0.5)    // 8
+				.close();
+
+			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());
 		}
 	};
 
