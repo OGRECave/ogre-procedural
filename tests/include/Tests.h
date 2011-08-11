@@ -135,10 +135,10 @@ class Unit_Tests : public BaseApplication
 			putMesh(TorusKnotGenerator().realizeMesh(), 1);
 			putMesh(TubeGenerator().realizeMesh(), 1);
 		}
-	};
-
+	};	
 	/* --------------------------------------------------------------------------- */
-	class Test_SharpAngles : public Unit_Test
+	// NB : feature not implemented
+	/*class Test_SharpAngles : public Unit_Test
 	{
 	public:		
 		Test_SharpAngles(SceneManager* sn) : Unit_Test(sn) {}
@@ -159,43 +159,6 @@ class Unit_Tests : public BaseApplication
 			putMesh(p.realizeMesh());
 			putMesh(e.setFixSharpAngles(true).setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh(),1);
 			putMesh(p.realizeMesh());
-		}
-	};
-	/* --------------------------------------------------------------------------- */
-	/*class Test_RollerCoaster : public Unit_Test
-	{
-	public:		
-		Test_RollerCoaster(SceneManager* sn) : Unit_Test(sn) {}
-
-		String getDescription()
-		{
-			return "Roller Coaster! Fuck Yeah!";
-		}
-
-		void initImpl()
-		{
-			PlaneGenerator pg;
-			putMesh(pg.setSizeX(1000).setSizeY(1000).realizeMesh(),1);
-			Shape s = CircleShape().realizeShape();
-			Shape s2 = CircleShape().setRadius(0.5).realizeShape();
-			s2.translate(Ogre::Vector2(2,2));
-			Shape s3 = CircleShape().setRadius(0.5).realizeShape();
-			s3.translate(Ogre::Vector2(-2,2));
-			MultiShape ms;
-			ms.addShape(s).addShape(s2).addShape(s3);
-			CatmullRomSpline3 crs;
-			
-			Ogre::Vector3 v(0,10,0);
-			for (int i=0;i<100;i++)
-			{
-				v+=Ogre::Vector3(Math::RangeRandom(1,5), Math::RangeRandom(-1,1), Math::RangeRandom(-5,5));
-				if (v.y<10) v.y=10;
-				crs.addPoint(v);
-			}
-			Path p = crs.realizePath();
-			Extruder e;
-			e.setExtrusionPath(&p).setMultiShapeToExtrude(&ms);
-			putMesh(e.realizeMesh(),1);
 		}
 	};*/
 
@@ -238,6 +201,34 @@ class Unit_Tests : public BaseApplication
 
 			s3.translate(Vector2(.5,0));
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
+
+			Shape s4;
+			s4.addPointRel(-54.951207,-16.247524).addPointRel(27.24849,0).addPointRel(2.54842,5.29287)
+				 .addPointRel(37.0501,-0.19603).addPointRel(1.56826,-13.13416).addPointRel(5.48891,0)
+				 .addPointRel(2.15635,12.35003).addPointRel(30.58104,-0.19603).addPointRel(2.35239,-4.70477)
+				 .addPointRel(23.13181,0).addPointRel(-0.19604,7.8412902).addPointRel(-131.92973,0)
+			     .close()
+			     .scale(.1);				
+			
+			putMesh(Triangulator().setShapeToTriangulate(&s4).realizeMesh());
+
+			//   Schema:
+			//   3---4      7---8
+			//   |   5------6   |
+			//   2--------------1
+			//
+			Shape s5 = Shape()
+				.addPoint(1,0)       // 1
+				.addPoint(-1,0)      // 2
+				.addPoint(-1,-0.5)   // 3
+				.addPoint(-0.5,-0.5) // 4
+				.addPoint(-0.5,-0.1) // 5
+				.addPoint(0.5,-0.1)  // 6
+				.addPoint(0.5,-0.5)  // 7
+				.addPoint(1,-0.5)    // 8
+				.close();
+
+			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());
 		}
 	};
 
@@ -481,7 +472,7 @@ class Unit_Tests : public BaseApplication
 
 		// update text here:
 		String txt = "[OgreProcedural Unit Tests] (Use key N/M to switch between tests)\n";
-		txt += "[" + Ogre::StringConverter::toString(mCurrentTestIndex+1) + "/" + Ogre::StringConverter::toString(mUnitTests.size()) + "] ";
+		txt += "[" + Ogre::StringConverter::toString(index+1) + "/" + Ogre::StringConverter::toString(mUnitTests.size()) + "] ";
 		
 		// and add the description
 		txt += test_description;
