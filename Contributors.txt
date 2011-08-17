@@ -1,4 +1,4 @@
-This file keeps track of contributors on OgreProcedual. Contributors are
+This file keeps track of contributors on OgreProcedural. Contributors are
 identifier by their username on the ogre forum.
 See also there:
     http://www.ogre3d.org/forums/viewtopic.php?f=11&t=60773
