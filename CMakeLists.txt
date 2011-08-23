@@ -41,14 +41,12 @@ option(PROCEDURAL_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(PROCEDURAL_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
 option(PROCEDURAL_INSTALL_DOCS "Install documentation." FALSE)
 
-if (PROCEDURAL_INSTALL_DOCS)
 # Set docs target directory
 if (WIN32 OR APPLE)
   set(PROCEDURAL_DOCS_PATH "docs")
 elseif (UNIX)
-  set(PROCEDURAL_DOCS_PATH "share/PROCEDURAL/docs")
+  set(PROCEDURAL_DOCS_PATH "share/OgreProcedural/docs")
 endif ()
-endif()
 
 # Specify build paths
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/lib")
@@ -80,10 +78,8 @@ if (PROCEDURAL_BUILD_TESTS)
 	add_subdirectory(tests)
 endif()
 
-if (PROCEDURAL_INSTALL_DOCS)
-# Install documentation
+# documentation
 add_subdirectory(docs)
-endif()
 
 # Install CMake modules
 add_subdirectory(CMake)

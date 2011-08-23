@@ -47,7 +47,7 @@ rem build docs explicitly since INSTALL doesn't include it
 if errorlevel 1 goto msvcerror
 
 rem Delete unnecessary doc files
-pushd api\html
+pushd docs\api\html
 del /Q/F *.hhk *.hhc *.map *.md5 *.dot *.hhp *.plist
 popd
 

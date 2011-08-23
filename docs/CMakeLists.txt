@@ -3,14 +3,6 @@
 # Build API docs, if doxygen is available
 ###############################################################
 
- 
-#if (PROCEDURAL_INSTALL_DOCS)
-  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/api/
-    DESTINATION ${PROCEDURAL_DOCS_PATH}
-    PATTERN "src" EXCLUDE
-  )
-#endif ()
-
 # Build and install API documentation if doxygen is available
 if(DOXYGEN_FOUND)
 	configure_file(${PROCEDURAL_TEMPLATES_DIR}/html.cfg.in ${PROCEDURAL_BINARY_DIR}/html.cfg)
@@ -18,7 +10,7 @@ if(DOXYGEN_FOUND)
 	file(WRITE ${PROCEDURAL_SOURCE_DIR}/docs/api/temp.txt "This file should be deleted before installation. It is only here to force the creation of the api folder")
 	file(REMOVE ${PROCEDURAL_SOURCE_DIR}/docs/api/temp.txt)
 	if (PROCEDURAL_INSTALL_DOCS)
-		install(DIRECTORY ${PROCEDURAL_SOURCE_DIR}/api DESTINATION ${PROCEDURAL_DOCS_PATH})
+		install(DIRECTORY ${PROCEDURAL_BINARY_DIR}/docs/api DESTINATION ${PROCEDURAL_DOCS_PATH})
 	endif()
 
 	# cleanup $PROCEDURAL_DOCS_PATH on "make clean"
@@ -29,5 +21,5 @@ if(DOXYGEN_FOUND)
 	if(NOT DOC_TARGET)
 		add_custom_target(doc)
 	endif()
-	add_dependencies(doc doxygen)
+	#add_dependencies(doc doxygen)
 endif()
