@@ -34,7 +34,7 @@ if (WIN32 OR APPLE)
 endif(WIN32 OR APPLE)
 
 
-get_filename_component(PROCEDURAL_ROOT "${PROCEDURAL_SOURCE_DIR}" ABSOLUTE)
+get_filename_component(OgreProcedural_HOME "${PROCEDURAL_SOURCE_DIR}" ABSOLUTE)
 
 find_package(OGRE REQUIRED)
 find_package(OIS REQUIRED)
