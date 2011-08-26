@@ -40,6 +40,7 @@ find_package(Doxygen)
 option(PROCEDURAL_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(PROCEDURAL_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
 option(PROCEDURAL_INSTALL_DOCS "Install documentation." FALSE)
+option(PROCEDURAL_STATIC "Static build" TRUE)
 
 # Set docs target directory
 if (WIN32 OR APPLE)
