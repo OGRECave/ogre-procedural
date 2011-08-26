@@ -30,14 +30,7 @@ set(OgreProcedural_PREFIX_PATH
  ${OgreProcedural_HOME} ${OgreProcedural_SDK} ${ENV_OgreProcedural_HOME} ${ENV_OgreProcedural_SDK}
   ${OgreProcedural_PREFIX_GUESSES}
 )
-
-message(STATUS "OgreProcedural_HOME ${OgreProcedural_HOME}")
-message(STATUS "OgreProcedural_PREFIX_PATH ${OgreProcedural_PREFIX_PATH}")
-
 create_search_paths(OgreProcedural)
-
-
-message(STATUS "OgreProcedural_INC_SEARCH_PATH ${OgreProcedural_INC_SEARCH_PATH}")
 
 set(OgreProcedural_LIBRARY_NAMES "OgreProcedural")
 get_debug_names(OgreProcedural_LIBRARY_NAMES)

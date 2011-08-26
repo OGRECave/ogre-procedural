@@ -71,26 +71,24 @@ include_directories( ${OIS_INCLUDE_DIRS}
 # SHARED lib build? then add this:
 #add_definitions(-DPROCEDURAL_SHARED)
 
-add_library(OgreProcedural STATIC ${HDRS} ${SRCS})
+# should we build static libs?
+if (PROCEDURAL_STATIC)
+  set(PROCEDURAL_LIB_TYPE STATIC)
+else ()
+  set(PROCEDURAL_LIB_TYPE SHARED)
+endif ()
+
+add_library(OgreProcedural ${PROCEDURAL_LIB_TYPE} ${HDRS} ${SRCS})
 
 set_target_properties(OgreProcedural PROPERTIES DEBUG_POSTFIX _d)
 
-if (UNIX)
-    set_target_properties(OgreProcedural PROPERTIES PREFIX "lib")
-    # you might want to use these flags as well:
-    #add_definitions(-Wall -Wno-unused-parameter -pedantic -std=c++0x)
-else (UNIX)
-    set_target_properties(OgreProcedural PROPERTIES PREFIX "")
-endif (UNIX)
+if (NOT PROCEDURAL_STATIC)
+	if (MINGW)
+		set_target_properties(OgreProcedural PROPERTIES PREFIX "")
+	endif()
+endif()
 
 target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
-
-#install(TARGETS OgreProcedural 
-#		BUNDLE DESTINATION "bin"
-#		RUNTIME DESTINATION "bin"
-#		LIBRARY DESTINATION "lib"		
-#		ARCHIVE DESTINATION "lib"		
-#		FRAMEWORK DESTINATION "lib")
 
 procedural_install_target(OgreProcedural)
 		
@@ -101,16 +99,3 @@ use_precompiled_header(OgreProcedural
   "${CMAKE_CURRENT_SOURCE_DIR}/include/ProceduralStableHeaders.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/ProceduralPrecompiledHeaders.cpp"
 )
-
-#set_target_properties(OgreProcedural PROPERTIES
-# 	ARCHIVE_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/lib
-#    LIBRARY_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/lib
-#    RUNTIME_OUTPUT_DIRECTORY ${PROCEDURAL_BINARY_DIR}/bin
-#  )
-#install(TARGETS OgreProcedural
-	#BUNDLE DESTINATION ${PROCEDURAL_BINARY_DIR}/bin CONFIGURATIONS All
-	#RUNTIME DESTINATION ${PROCEDURAL_BINARY_DIR}/bin CONFIGURATIONS All
-	#LIBRARY DESTINATION ${PROCEDURAL_BINARY_DIR}/bin CONFIGURATIONS All
-	#ARCHIVE DESTINATION ${PROCEDURAL_BINARY_DIR}/bin CONFIGURATIONS All
-	#FRAMEWORK DESTINATION ${PROCEDURAL_BINARY_DIR}/bin CONFIGURATIONS All
-	#)
