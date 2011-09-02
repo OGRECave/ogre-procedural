@@ -9,8 +9,8 @@
 			Name="Debug|Win32"
 			>
 			<DebugSettings
-				Command="@PROCEDURAL_BINARY_DIR@/bin/$(ConfigurationName)/$(TargetFileName)"
-				WorkingDirectory="@PROCEDURAL_WORK_DIR@/bin/$(ConfigurationName)"
+				Command="@OgreProcedural_BINARY_DIR@/bin/$(ConfigurationName)/$(TargetFileName)"
+				WorkingDirectory="@OgreProcedural_WORK_DIR@/bin/$(ConfigurationName)"
 				CommandArguments=""
 				Attach="false"
 				DebuggerType="3"
@@ -37,8 +37,8 @@
 			Name="Release|Win32"
 			>
 			<DebugSettings
-				Command="@PROCEDURAL_BINARY_DIR@/bin/$(ConfigurationName)/$(TargetFileName)"
-				WorkingDirectory="@PROCEDURAL_BINARY_DIR@/bin/$(ConfigurationName)"
+				Command="@OgreProcedural_BINARY_DIR@/bin/$(ConfigurationName)/$(TargetFileName)"
+				WorkingDirectory="@OgreProcedural_BINARY_DIR@/bin/$(ConfigurationName)"
 				CommandArguments=""
 				Attach="false"
 				DebuggerType="3"
@@ -65,8 +65,8 @@
 			Name="RelWithDebInfo|Win32"
 			>
 			<DebugSettings
-				Command="@PROCEDURAL_BINARY_DIR@/bin/$(ConfigurationName)/$(TargetFileName)"
-				WorkingDirectory="@PROCEDURAL_BINARY_DIR@/bin/$(ConfigurationName)"
+				Command="@OgreProcedural_BINARY_DIR@/bin/$(ConfigurationName)/$(TargetFileName)"
+				WorkingDirectory="@OgreProcedural_BINARY_DIR@/bin/$(ConfigurationName)"
 				CommandArguments=""
 				Attach="false"
 				DebuggerType="3"
@@ -93,8 +93,8 @@
 			Name="MinSizeRel|Win32"
 			>
 			<DebugSettings
-				Command="@PROCEDURAL_BINARY_DIR@/bin/$(ConfigurationName)/$(TargetFileName)"
-				WorkingDirectory="@PROCEDURAL_BINARY_DIR@/bin/$(ConfigurationName)"
+				Command="@OgreProcedural_BINARY_DIR@/bin/$(ConfigurationName)/$(TargetFileName)"
+				WorkingDirectory="@OgreProcedural_BINARY_DIR@/bin/$(ConfigurationName)"
 				CommandArguments=""
 				Attach="false"
 				DebuggerType="3"

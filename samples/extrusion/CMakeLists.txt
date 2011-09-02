@@ -23,6 +23,6 @@ add_executable(Sample_Extrusion WIN32 ${HDRS} ${SRCS})
 
 set_target_properties(Sample_Extrusion PROPERTIES DEBUG_POSTFIX _d)
 
-target_link_libraries(Sample_Extrusion ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${PROCEDURAL_LIBRARIES})
+target_link_libraries(Sample_Extrusion ${OgreProcedural_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES} )
 
 procedural_create_vcproj_userfile(Sample_Extrusion)

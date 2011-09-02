@@ -1,20 +1,20 @@
 if(WIN32 OR APPLE)
-	set(PROCEDURAL_CMAKE_DIR "CMake")
+	set(OgreProcedural_CMAKE_DIR "CMake")
 else()
-	set(PROCEDURAL_CMAKE_DIR "${PROCEDURAL_LIB_DIRECTORY}/PROCEDURAL/cmake")
+	set(OgreProcedural_CMAKE_DIR "${OgreProcedural_LIB_DIRECTORY}/OgreProcedural/cmake")
 endif()
 
 set(INST_FILES
   Packages/FindOIS.cmake
   Packages/FindOGRE.cmake
-  Packages/FindPROCEDURAL.cmake
+  Packages/FindOgreProcedural.cmake
   Utils/FindPkgMacros.cmake  
   Utils/PreprocessorUtils.cmake
   Utils/ProceduralConfigTargets.cmake
   Utils/ProceduralMacros.cmake
 ) 
 
-if (PROCEDURAL_INSTALL_SAMPLES_SOURCE)
+if (OgreProcedural_INSTALL_SAMPLES_SOURCE)
 set(INST_FILES ${INST_FILES}
   Templates/plugins.cfg
   Templates/plugins_d.cfg
@@ -41,4 +41,4 @@ if (APPLE)
   )
 endif ()
 
-install(FILES ${INST_FILES} DESTINATION ${PROCEDURAL_CMAKE_DIR})
+install(FILES ${INST_FILES} DESTINATION ${OgreProcedural_CMAKE_DIR})

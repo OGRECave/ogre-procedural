@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(OgreProcedural)
+project(OgreProceduralMain)
 
 include(PrecompiledHeader)
 include(ProceduralConfigTargets)
@@ -69,20 +69,20 @@ include_directories( ${OIS_INCLUDE_DIRS}
 )
 
 # SHARED lib build? then add this:
-#add_definitions(-DPROCEDURAL_SHARED)
+#add_definitions(-DOgreProcedural_SHARED)
 
 # should we build static libs?
-if (PROCEDURAL_STATIC)
-  set(PROCEDURAL_LIB_TYPE STATIC)
+if (OgreProcedural_STATIC)
+  set(OgreProcedural_LIB_TYPE STATIC)
 else ()
-  set(PROCEDURAL_LIB_TYPE SHARED)
+  set(OgreProcedural_LIB_TYPE SHARED)
 endif ()
 
-add_library(OgreProcedural ${PROCEDURAL_LIB_TYPE} ${HDRS} ${SRCS})
+add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})
 
 set_target_properties(OgreProcedural PROPERTIES DEBUG_POSTFIX _d)
 
-if (NOT PROCEDURAL_STATIC)
+if (NOT OgreProcedural_STATIC)
 	if (MINGW)
 		set_target_properties(OgreProcedural PROPERTIES PREFIX "")
 	endif()

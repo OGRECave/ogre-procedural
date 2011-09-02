@@ -19,8 +19,8 @@ if(WIN32)
 	copy_release(OIS.dll)
 	copy_debug(OIS_d.dll)	
 	
-	set(PROCEDURAL_PLUGIN_DIR_REL ".")
-	set(PROCEDURAL_PLUGIN_DIR_DBG ".")
+	set(OgreProcedural_PLUGIN_DIR_REL ".")
+	set(OgreProcedural_PLUGIN_DIR_DBG ".")
 
 	set(OGRE_PLUGIN_DIR_REL ".")
 	set(OGRE_PLUGIN_DIR_DBG ".")
@@ -30,9 +30,9 @@ endif(WIN32)
 # if Linux, copy the Ogre configuration files over
 if(UNIX AND NOT APPLE)
 
-	set(PROCEDURAL_PLUGIN_DIR_REL ".")
-	set(PROCEDURAL_PLUGIN_DIR_DBG ".")
-	set(PROCEDURAL_COMMENT_RENDERSYSTEM_D3D9 "#")
+	set(OgreProcedural_PLUGIN_DIR_REL ".")
+	set(OgreProcedural_PLUGIN_DIR_DBG ".")
+	set(OgreProcedural_COMMENT_RENDERSYSTEM_D3D9 "#")
 	
 	#comes from findOgre.cmake (don't know why it doesn't work there...)
 	get_filename_component(OGRE_PLUGIN_DIR_REL ${OGRE_RenderSystem_GL_LIBRARY_REL} PATH)
@@ -40,13 +40,13 @@ if(UNIX AND NOT APPLE)
 
 endif(UNIX AND NOT APPLE)
 
-set(PROCEDURAL_MEDIA_DIR "${PROCEDURAL_SOURCE_DIR}/samples/media")
+set(OgreProcedural_MEDIA_DIR "${OgreProcedural_SOURCE_DIR}/samples/media")
 
-configure_release_dir(resources.cfg ${PROCEDURAL_TEMPLATES_DIR})
-configure_debug_dir(resources_d.cfg ${PROCEDURAL_TEMPLATES_DIR})
+configure_release_dir(resources.cfg ${OgreProcedural_TEMPLATES_DIR})
+configure_debug_dir(resources_d.cfg ${OgreProcedural_TEMPLATES_DIR})
 
-configure_release_dir(plugins.cfg ${PROCEDURAL_TEMPLATES_DIR})
-configure_debug_dir(plugins_d.cfg ${PROCEDURAL_TEMPLATES_DIR})
+configure_release_dir(plugins.cfg ${OgreProcedural_TEMPLATES_DIR})
+configure_debug_dir(plugins_d.cfg ${OgreProcedural_TEMPLATES_DIR})
 
 project(Unit_Tests)
 
@@ -71,6 +71,6 @@ add_executable(Unit_Tests WIN32 ${HDRS} ${SRCS})
 
 set_target_properties(Unit_Tests PROPERTIES DEBUG_POSTFIX _d)
 
-target_link_libraries(Unit_Tests ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${PROCEDURAL_LIBRARIES})
+target_link_libraries(Unit_Tests ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${OgreProcedural_LIBRARIES})
 
 procedural_create_vcproj_userfile(Unit_Tests)
