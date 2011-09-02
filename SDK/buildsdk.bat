@@ -25,10 +25,10 @@ if "%2" == "clean" rmdir /Q/S %BUILD_DIR%
 mkdir %BUILD_DIR%
 pushd %BUILD_DIR%
 rem call CMake
-cmake -DPROCEDURAL_INSTALL_SAMPLES_SOURCE:BOOL=TRUE -DPROCEDURAL_INSTALL_DOCS:BOOL=TRUE -G%GENERATOR% ..\..
+cmake -DOgreProcedural_INSTALL_SAMPLES_SOURCE:BOOL=TRUE -DOgreProcedural_INSTALL_DOCS:BOOL=TRUE -G%GENERATOR% ..\..
 if errorlevel 1 goto cmakeerror
 
-rem Read PROCEDURAL version
+rem Read OgreProcedural version
 set /p PROCEDURALVERSION=<version.txt
 
 rem Detect whether we're using full version of VStudio or Express
@@ -42,7 +42,7 @@ set DEVENV=VCExpress
 :detecteddevenv
 
 rem build docs explicitly since INSTALL doesn't include it
-%DEVENV% PROCEDURAL.sln /build "Release" /project "doc"
+%DEVENV% OgreProcedural.sln /build "Release" /project "doc"
 
 if errorlevel 1 goto msvcerror
 
@@ -54,8 +54,8 @@ popd
 echo %cd%
 
 rem Build main binaries
-%DEVENV% PROCEDURAL.sln /build "Debug" /project "INSTALL"
-%DEVENV% PROCEDURAL.sln /build "Release" /project "INSTALL"
+%DEVENV% OgreProcedural.sln /build "Debug" /project "INSTALL"
+%DEVENV% OgreProcedural.sln /build "Release" /project "INSTALL"
 
 popd
 

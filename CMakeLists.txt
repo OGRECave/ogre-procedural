@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(PROCEDURAL)
+project(OgreProcedural)
 
 set(CMAKE_MODULE_PATH 
-  "${PROCEDURAL_SOURCE_DIR}/CMake"
-  "${PROCEDURAL_SOURCE_DIR}/CMake/Utils"
-  "${PROCEDURAL_SOURCE_DIR}/CMake/Packages"
+  "${OgreProcedural_SOURCE_DIR}/CMake"
+  "${OgreProcedural_SOURCE_DIR}/CMake/Utils"
+  "${OgreProcedural_SOURCE_DIR}/CMake/Packages"
 )
 
-set(PROCEDURAL_VERSION_DASH_SEPARATED "0.2")
+set(OgreProcedural_VERSION_DASH_SEPARATED "0.2")
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
@@ -21,7 +21,7 @@ set(CMAKE_DEBUG_POSTFIX "_d")
 if (WIN32 OR APPLE)
   if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX
-	  "${PROCEDURAL_BINARY_DIR}/sdk" CACHE PATH "PROCEDURAL install prefix" FORCE
+	  "${OgreProcedural_BINARY_DIR}/sdk" CACHE PATH "PROCEDURAL install prefix" FORCE
     )
   endif (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif(WIN32 OR APPLE)
@@ -37,45 +37,45 @@ endif ()
 
 find_package(Doxygen)
 
-option(PROCEDURAL_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
-option(PROCEDURAL_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
-option(PROCEDURAL_INSTALL_DOCS "Install documentation." FALSE)
-option(PROCEDURAL_STATIC "Static build" TRUE)
+option(OgreProcedural_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
+option(OgreProcedural_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
+option(OgreProcedural_INSTALL_DOCS "Install documentation." FALSE)
+option(OgreProcedural_STATIC "Static build" TRUE)
 
 # Set docs target directory
 if (WIN32 OR APPLE)
-  set(PROCEDURAL_DOCS_PATH "docs")
+  set(OgreProcedural_DOCS_PATH "docs")
 elseif (UNIX)
-  set(PROCEDURAL_DOCS_PATH "share/OgreProcedural/docs")
+  set(OgreProcedural_DOCS_PATH "share/OgreProcedural/docs")
 endif ()
 
 # Specify build paths
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/lib")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/lib")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROCEDURAL_BINARY_DIR}/bin")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OgreProcedural_BINARY_DIR}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OgreProcedural_BINARY_DIR}/lib")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OgreProcedural_BINARY_DIR}/bin")
 
-set(PROCEDURAL_TEMPLATES_DIR "${PROCEDURAL_SOURCE_DIR}/CMake/Templates")
-set(PROCEDURAL_WORK_DIR ${PROCEDURAL_BINARY_DIR})
+set(OgreProcedural_TEMPLATES_DIR "${OgreProcedural_SOURCE_DIR}/CMake/Templates")
+set(OgreProcedural_WORK_DIR ${OgreProcedural_BINARY_DIR})
 
 # Configure version file for use by scripts
-configure_file("${PROCEDURAL_TEMPLATES_DIR}/version.txt.in" "${PROCEDURAL_BINARY_DIR}/version.txt" @ONLY)
+configure_file("${OgreProcedural_TEMPLATES_DIR}/version.txt.in" "${OgreProcedural_BINARY_DIR}/version.txt" @ONLY)
 
-include_directories("${PROCEDURAL_SOURCE_DIR}/library/include")
+include_directories("${OgreProcedural_SOURCE_DIR}/library/include")
 
 add_subdirectory(library)
 
 # definitions for samples
-set(PROCEDURAL_LIBRARIES OgreProcedural) 
+set(OgreProcedural_LIBRARIES OgreProcedural) 
 
 # CMake macros
 include(ProceduralMacros)
 include(ProceduralConfigTargets)
 
-if (PROCEDURAL_BUILD_SAMPLES)	
+if (OgreProcedural_BUILD_SAMPLES)	
 	add_subdirectory(samples)
 endif()
 
-if (PROCEDURAL_BUILD_TESTS)
+if (OgreProcedural_BUILD_TESTS)
 	add_subdirectory(tests)
 endif()
 
@@ -100,7 +100,7 @@ SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt")
 SET(CPACK_PACKAGE_VERSION_MAJOR "0")
 SET(CPACK_PACKAGE_VERSION_MINOR "2")
 SET(CPACK_PACKAGE_VERSION_PATCH "0")
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OgreProcedural-${PROCEDURAL_VERSION_DASH_SEPARATED}")
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OgreProcedural-${OgreProcedural_VERSION_DASH_SEPARATED}")
 
 SET(CPACK_GENERATOR ZIP)
 IF(UNIX)
@@ -115,7 +115,7 @@ ENDIF(MSVC)
 IF(APPLE)
   SET(CPACK_GENERATOR ${CPACK_GENERATOR};PackageMaker)
 ENDIF(APPLE)
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${PROCEDURAL_VERSION_DASH_SEPARATED}-${CMAKE_SYSTEM_PROCESSOR}")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${OgreProcedural_VERSION_DASH_SEPARATED}-${CMAKE_SYSTEM_PROCESSOR}")
 
 # some NSIS stuff
 IF(WIN32 AND NOT UNIX)
@@ -135,8 +135,8 @@ ENDIF(WIN32 AND NOT UNIX)
 #SET(CPACK_PACKAGE_EXECUTABLES "MyExecutable" "My Executable")
 INCLUDE(CPack)
 
-if (PROCEDURAL_INSTALL_DOCS)
+if (OgreProcedural_INSTALL_DOCS)
 # other doc files
 set(DOC_FILES Contributors.txt MIT.txt ReadMe.txt)
-install(FILES ${DOC_FILES} DESTINATION ${PROCEDURAL_DOCS_PATH})
+install(FILES ${DOC_FILES} DESTINATION ${OgreProcedural_DOCS_PATH})
 endif()
