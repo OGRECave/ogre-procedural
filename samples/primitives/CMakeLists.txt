@@ -23,6 +23,6 @@ add_executable(Sample_Primitives WIN32 ${HDRS} ${SRCS})
 
 set_target_properties(Sample_Primitives PROPERTIES DEBUG_POSTFIX _d)
 
-target_link_libraries(Sample_Primitives ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${PROCEDURAL_LIBRARIES})
+target_link_libraries(Sample_Primitives ${OgreProcedural_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
 procedural_create_vcproj_userfile(Sample_Primitives)

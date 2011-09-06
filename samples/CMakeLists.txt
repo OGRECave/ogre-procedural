@@ -19,8 +19,8 @@ if(WIN32)
 	copy_release(OIS.dll)
 	copy_debug(OIS_d.dll)	
 	
-	set(PROCEDURAL_PLUGIN_DIR_REL ".")
-	set(PROCEDURAL_PLUGIN_DIR_DBG ".")
+	set(OgreProcedural_PLUGIN_DIR_REL ".")
+	set(OgreProcedural_PLUGIN_DIR_DBG ".")
 
 	set(OGRE_PLUGIN_DIR_REL ".")
 	set(OGRE_PLUGIN_DIR_DBG ".")
@@ -30,9 +30,9 @@ endif(WIN32)
 # if Linux, copy the Ogre configuration files over
 if(UNIX AND NOT APPLE)
 
-	set(PROCEDURAL_PLUGIN_DIR_REL ".")
-	set(PROCEDURAL_PLUGIN_DIR_DBG ".")
-	set(PROCEDURAL_COMMENT_RENDERSYSTEM_D3D9 "#")
+	set(OgreProcedural_PLUGIN_DIR_REL ".")
+	set(OgreProcedural_PLUGIN_DIR_DBG ".")
+	set(OgreProcedural_COMMENT_RENDERSYSTEM_D3D9 "#")
 	
 	#comes from findOgre.cmake (don't know why it doesn't work there...)
 	get_filename_component(OGRE_PLUGIN_DIR_REL ${OGRE_RenderSystem_GL_LIBRARY_REL} PATH)
@@ -40,26 +40,26 @@ if(UNIX AND NOT APPLE)
 
 endif(UNIX AND NOT APPLE)
 
-set(PROCEDURAL_MEDIA_DIR "${PROCEDURAL_SOURCE_DIR}/samples/media")
+set(OgreProcedural_MEDIA_DIR "${OgreProcedural_SOURCE_DIR}/samples/media")
 
-configure_release_dir(resources.cfg ${PROCEDURAL_TEMPLATES_DIR})
-configure_debug_dir(resources_d.cfg ${PROCEDURAL_TEMPLATES_DIR})
+configure_release_dir(resources.cfg ${OgreProcedural_TEMPLATES_DIR})
+configure_debug_dir(resources_d.cfg ${OgreProcedural_TEMPLATES_DIR})
 
-configure_release_dir(plugins.cfg ${PROCEDURAL_TEMPLATES_DIR})
-configure_debug_dir(plugins_d.cfg ${PROCEDURAL_TEMPLATES_DIR})
+configure_release_dir(plugins.cfg ${OgreProcedural_TEMPLATES_DIR})
+configure_debug_dir(plugins_d.cfg ${OgreProcedural_TEMPLATES_DIR})
 
 add_subdirectory(primitives)
 
 add_subdirectory(extrusion)
 
 # Install sample sources
-if (PROCEDURAL_INSTALL_SAMPLES_SOURCE)
+if (OgreProcedural_INSTALL_SAMPLES_SOURCE)
   if (WIN32 OR APPLE)
-    set(PROCEDURAL_SAMPLES_DIR Samples)
+    set(OgreProcedural_SAMPLES_DIR Samples)
   elseif (UNIX)
-    set(PROCEDURAL_SAMPLES_DIR share/PROCEDURAL/Samples)
+    set(OgreProcedural_SAMPLES_DIR share/PROCEDURAL/Samples)
   endif ()
-  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ DESTINATION ${PROCEDURAL_SAMPLES_DIR}
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ DESTINATION ${OgreProcedural_SAMPLES_DIR}
     REGEX "^CMakeLists.txt$" EXCLUDE
     PATTERN "Makefile.am" EXCLUDE
     #PATTERN "Media" EXCLUDE
@@ -69,8 +69,8 @@ if (PROCEDURAL_INSTALL_SAMPLES_SOURCE)
 	PATTERN "scripts" EXCLUDE
   )
   # install a new CMakeLists.txt file to allow building of samples
-  configure_file(${PROCEDURAL_TEMPLATES_DIR}/SDK_CMakeLists.txt.in ${CMAKE_CURRENT_BINARY_DIR}/../CMakeLists.txt @ONLY)
-  configure_file(${PROCEDURAL_TEMPLATES_DIR}/SDK_Samples_CMakeLists.txt.in ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt @ONLY)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/../CMakeLists.txt DESTINATION ${PROCEDURAL_SAMPLES_DIR}/../)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt DESTINATION ${PROCEDURAL_SAMPLES_DIR})
+  configure_file(${OgreProcedural_TEMPLATES_DIR}/SDK_CMakeLists.txt.in ${CMAKE_CURRENT_BINARY_DIR}/../CMakeLists.txt @ONLY)
+  configure_file(${OgreProcedural_TEMPLATES_DIR}/SDK_Samples_CMakeLists.txt.in ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt @ONLY)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/../CMakeLists.txt DESTINATION ${OgreProcedural_SAMPLES_DIR}/../)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt DESTINATION ${OgreProcedural_SAMPLES_DIR})
 endif ()
