@@ -154,17 +154,8 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
  */
 class _ProceduralExport KochanekBartelsSpline2 : public BaseSpline2<KochanekBartelsSpline2>
 {	
-	struct ControlPoint
-	{
-		Ogre::Vector2 position;
-		Ogre::Real tension;
-		Ogre::Real bias;
-		Ogre::Real continuity;
-		
-		ControlPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c) : position(p), tension(t), bias(b), continuity(c) {}
-		ControlPoint(Ogre::Vector2 p) : position(p), tension(0.), bias(0.), continuity(0.) {}
-	};
-
+	typedef KonachekBartelsSplineControlPoint<Ogre::Vector2> ControlPoint;
+	
 	std::vector<ControlPoint> mPoints;
 	
 public:
