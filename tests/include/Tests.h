@@ -137,32 +137,6 @@ class Unit_Tests : public BaseApplication
 		}
 	};	
 	/* --------------------------------------------------------------------------- */
-	// NB : feature not implemented
-	/*class Test_SharpAngles : public Unit_Test
-	{
-	public:		
-		Test_SharpAngles(SceneManager* sn) : Unit_Test(sn) {}
-
-		String getDescription()
-		{
-			return "Sharp Angles";
-		}
-
-		void initImpl()
-		{
-			CatmullRomSpline3 pp;
-			pp.addPoint(0,0,0).addPoint(0,0,4).addPoint(1,0,5).addPoint(5,0,5);
-			Path p = pp.realizePath();
-			Shape s = CircleShape().setRadius(3.).realizeShape();
-			Extruder e;
-			putMesh(e.setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh(),1);
-			putMesh(p.realizeMesh());
-			putMesh(e.setFixSharpAngles(true).setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh(),1);
-			putMesh(p.realizeMesh());
-		}
-	};*/
-
-	/* --------------------------------------------------------------------------- */
 	class Test_Triangulation : public Unit_Test
 	{
 	public:		
@@ -318,6 +292,14 @@ class Unit_Tests : public BaseApplication
 				.close();
 			putMesh(cs.realizeShape().realizeMesh());
 
+			// CubicHermite Spline
+			CubicHermiteSpline2 chs;			
+			chs.addPoint(Vector2(0,0), Vector2(0,1), Vector2(0,1))
+			   .addPoint(Vector2(0,2), Vector2(1,0), Vector2(0,1))
+			   .addPoint(Vector2(2,2), Vector2(0,1), Vector2(0,1))
+			   .setNumSeg(8).close();
+			putMesh(chs.realizeShape().realizeMesh());
+
 			// Kochanek Bartels
 			KochanekBartelsSpline2 kbs2;
 			kbs2.addPoint(Vector2(0,-1),0,0,-1)
@@ -329,8 +311,7 @@ class Unit_Tests : public BaseApplication
 				.setNumSeg(8)
 				.close();
 
-			putMesh(kbs2.realizeShape().realizeMesh());
-
+			putMesh(kbs2.realizeShape().realizeMesh());			
 		}
 	};
 

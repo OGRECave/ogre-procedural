@@ -169,6 +169,12 @@ public:
 		return mPoints;
 	}
 
+	/// Gets raw vector data of this shape as a non-const reference
+	inline std::vector<Ogre::Vector2>& getPointsReference()
+	{
+		return mPoints;
+	}
+
 	/**
 	 * Bounds-safe method to get a point : it will allow you to go beyond the bounds
 	 */
