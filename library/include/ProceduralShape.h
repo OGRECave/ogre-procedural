@@ -38,6 +38,8 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+	class Path;
+
 enum Side {SIDE_LEFT, SIDE_RIGHT};
 
 /** Describes a succession of interconnected 2D points.
@@ -129,9 +131,9 @@ public:
 		return *this;
 	}
 
-	/// Extracts a part of the shape as a new path
-	/// @arg first first index to be in the new path
-	/// @arg last last index to be in the new path
+	/// Extracts a part of the shape as a new shape
+	/// @arg first first index to be in the new shape
+	/// @arg last last index to be in the new shape
 	inline Shape extractSubShape(int first, int last)
 	{
 		Shape s;
@@ -157,6 +159,9 @@ public:
 		mPoints.clear();
 		return *this;
 	}
+
+	/// Converts the shape to a path, with Y=0
+	Path convertToPath();
 
 	/// Gets raw vector data of this shape
 	inline std::vector<Ogre::Vector2> getPoints() const

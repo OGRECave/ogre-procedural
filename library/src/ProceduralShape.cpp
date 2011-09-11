@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralShape.h"
 #include "ProceduralGeometryHelpers.h"
+#include "ProceduralPath.h"
 
 using namespace Ogre;
 
@@ -473,4 +474,17 @@ MultiShape Shape::thicken(Real amount)
 			return ms;						
 		}
 	}
+//-----------------------------------------------------------------------
+Path Shape::convertToPath()
+{
+	Path p;
+	for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin();it!=mPoints.end();it++)
+	{
+		p.addPoint(it->x, 0, it->y);
+	}
+	if (mClosed)
+		p.close();
+
+	return p;
+}
 }
