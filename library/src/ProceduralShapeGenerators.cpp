@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "ProceduralShapeGenerators.h"
 
 namespace Procedural
-{
+{	
 //-----------------------------------------------------------------------
 Shape CubicHermiteSpline2::realizeShape()
 	{
@@ -38,22 +38,14 @@ Shape CubicHermiteSpline2::realizeShape()
 		unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
 		for (unsigned int i = 0; i < numPoints; ++i)
 		{
-			const Ogre::Vector2& p0 = mPoints[i].position;
-			const Ogre::Vector2& m0 = mPoints[i].tangentAfter;
-			const Ogre::Vector2& p1 = safeGetPoint(i+1).position;
-			const Ogre::Vector2& m1 = safeGetPoint(i+1).tangentBefore;
+			const ControlPoint& pointBefore = mPoints[i];
+			const ControlPoint& pointAfter = safeGetPoint(i+1);
 
-			for (unsigned int j = 0; j < mNumSeg; ++j)
-			{
-				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)mNumSeg;
-				Ogre::Real t2 = t*t;
-				Ogre::Real t3 = t2*t;
-				Ogre::Vector2 P = (2*t3-3*t2+1)*p0+(t3-2*t2+t)*m0+(-2*t3+3*t2)*p1+(t3-t2)*m1;
-				shape.addPoint(P);
-			}
+			computePoint(pointBefore, pointAfter, mNumSeg, shape.getPointsReference());
+
 			if (i == mPoints.size() - 2 && !mClosed)
 			{
-				shape.addPoint(p1);
+				shape.addPoint(pointAfter.position);
 			}
 		}
 		if (mClosed)
