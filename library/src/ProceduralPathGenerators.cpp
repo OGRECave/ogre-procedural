@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 #include "ProceduralStableHeaders.h"
 #include "ProceduralPathGenerators.h"
+#include "ProceduralSplines.h"
 
 namespace Procedural 
 {
@@ -43,14 +44,8 @@ Path CatmullRomSpline3::realizePath()
 			const Ogre::Vector3& P3 = safeGetPoint(i+1);
 			const Ogre::Vector3& P4 = safeGetPoint(i+2);
 
-			for (unsigned int j = 0; j < mNumSeg; ++j)
-			{				
-				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)mNumSeg;
-				Ogre::Real t2 = t*t;
-				Ogre::Real t3 = t*t2;
-				Ogre::Vector3 P = 0.5f*((-t3+2.f*t2-t)*P1 + (3.f*t3-5.f*t2+2.f)*P2 + (-3.f*t3+4.f*t2+t)*P3 + (t3-t2)*P4);
-				path.addPoint(P);
-			}
+			computeCatmullRomPoints(P1, P2, P3, P4, mNumSeg, path.getPointsReference());
+
 			if (i == mPoints.size() - 2 && !mClosed)
 			{
 				path.addPoint(P3);

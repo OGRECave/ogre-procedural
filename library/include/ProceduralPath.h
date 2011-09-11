@@ -104,7 +104,7 @@ public:
 		}
 		return *this;
 	}
-
+	
 	/** Clears the content of the Path */
 	Path& reset()
 	{
@@ -128,6 +128,12 @@ public:
 
 	/** Gets the list of points as a vector of Vector3 */
 	std::vector<Ogre::Vector3> getPoints()
+	{
+		return mPoints;
+	}
+
+	/// Gets raw vector data of this path as a non-const reference
+	inline std::vector<Ogre::Vector3>& getPointsReference()
 	{
 		return mPoints;
 	}
