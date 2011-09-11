@@ -1,0 +1,22 @@
+== Mesh primitives
+
+
+== Shapes and paths
+
+
+=== Content
+
+
+=== Splines
+
+
+=== Special operations
+
+
+==== 2D CSG
+
+==== Thicken
+
+== Extrusion and lathe
+
+Extrusion is an operation that consists in creating a mesh from a shape moved along a path.
