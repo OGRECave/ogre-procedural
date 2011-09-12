@@ -1,17 +1,73 @@
+Main Header
+===========
+:Author: Michael Broutin
+:Revision: Ogre Procedural 0.2 branch
+
+== About this manual
+
+This manual aims to give a global view over what is possible with Ogre Procedural.
+If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc.
+
 == Mesh primitives
 
+There are a few mesh primitives generators.
 
-== Shapes and paths
+.Cube
+
+.RoundedCube
+
+.Sphere
+
+.IcoSphere
+
+Icosphere is visually quite near from Sphere, but has a quite different repartition of the triangles.
+
+.Torus
+
+.TorusKnot
+
+.Cylinder
+
+.Cone
+
+.Tube
+
+.Capsule
 
 
-=== Content
+== Shapes, paths and tracks
 
+In Ogre Procedural, shapes, paths and tracks all are made of line connected points.
+
+The difference between them is that :
+* Tracks are 1D
+* Shapes are 2D
+* Paths are 3D
+
+=== Orientation and closedness
+
+Both shapes and tracks can be closed or not : if closed, there will be an automatic junction between the last point and the first point.
+
+Shapes have an outside and an inside : you can define whether the left or the right side is the outside.
+It also makes sense with non-closed shape (for example, when extruded, the outside corresponds to where the face normal heads).
+There's also a function to guess where is the outside and where is the inside.
 
 === Splines
 
+Splines are a few helper classes used to generate tracks, shapes or paths, by interpolating between a bunch of control points.
+
+.Cubic Hermite Spline
+
+This is often referred as 'Bezier Spline'.
+With Cubic Hermite Spline, you can choose the points and the tangents of the curves that goes through control points.
+
+.Catmull-Rom Spline
+
+It's a particular case of Cubic Hermite Spline, in which tangents are automatically calculated.
+
+.Konachek Bartels Spline
 
 === Special operations
-
 
 ==== 2D CSG
 
