@@ -57,4 +57,27 @@ Path CatmullRomSpline3::realizePath()
 
 		return path;
 	}
+//-----------------------------------------------------------------------
+Path CubicHermiteSpline3::realizePath()
+	{
+	Path path;
+
+		unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
+		for (unsigned int i = 0; i < numPoints; ++i)
+		{
+			const ControlPoint& pointBefore = mPoints[i];
+			const ControlPoint& pointAfter = safeGetPoint(i+1);
+
+			computeCubicHermitePoints(pointBefore, pointAfter, mNumSeg, path.getPointsReference());
+
+			if (i == mPoints.size() - 2 && !mClosed)
+			{
+				path.addPoint(pointAfter.position);
+			}
+		}
+		if (mClosed)
+			path.close();
+
+		return path;
+	}
 }
