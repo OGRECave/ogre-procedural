@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "ProceduralPath.h"
+#include "ProceduralSplines.h"
 
 namespace Procedural
 {
@@ -114,6 +115,37 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 	 */
 	Path realizePath();	
 };
+//-----------------------------------------------------------------------
+/**
+ * Produces a path from Cubic Hermite control points
+ */
+class _ProceduralExport CubicHermiteSpline3 : public BaseSpline3<CubicHermiteSpline3>
+{	
+	typedef CubicHermiteSplineControlPoint<Ogre::Vector3> ControlPoint;
+
+	std::vector<ControlPoint> mPoints;
+	
+public:
+	/// Adds a control point
+	CubicHermiteSpline3& addPoint(Ogre::Vector3 p, Ogre::Vector3 before, Ogre::Vector3 after)
+	{
+		mPoints.push_back(ControlPoint(p, before, after));
+		return *this;
+	}
+	/// Safely gets a control point
+	const ControlPoint& safeGetPoint(int i) const
+	{
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+	}
+
+	/**
+	 * Builds a path from control points
+	 */
+	Path realizePath();
+};
+
 //-----------------------------------------------------------------------
 /// Builds a line Path between 2 points
 class _ProceduralExport LinePath

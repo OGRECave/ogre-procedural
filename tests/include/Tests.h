@@ -311,7 +311,27 @@ class Unit_Tests : public BaseApplication
 				.setNumSeg(8)
 				.close();
 
-			putMesh(kbs2.realizeShape().realizeMesh());			
+			putMesh(kbs2.realizeShape().realizeMesh());
+
+			// CatmullRomSpline3
+			CatmullRomSpline3 cs3;
+			cs3.addPoint(Vector3(0,-1,0))
+				.addPoint(Vector3(2,2,0))
+				.addPoint(Vector3(1,2.5,0))
+				.addPoint(Vector3(0,1.5,0))
+				.addPoint(Vector3(-1,2.5,0))
+				.addPoint(Vector3(-2,2,0))
+				.setNumSeg(8)
+				.close();
+			putMesh(cs3.realizePath().realizeMesh());
+
+			// CubicHermite Spline3
+			CubicHermiteSpline3 chs3;			
+			chs3.addPoint(Vector3(0,0,0), Vector3(0,1,0), Vector3(0,1,0))
+			   .addPoint(Vector3(0,2,0), Vector3(1,0,0), Vector3(0,1,0))
+			   .addPoint(Vector3(2,2,0), Vector3(0,1,0), Vector3(0,1,0))
+			   .setNumSeg(8).close();
+			putMesh(chs3.realizePath().realizeMesh());
 		}
 	};
 
