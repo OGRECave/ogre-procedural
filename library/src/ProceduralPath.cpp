@@ -32,36 +32,7 @@ THE SOFTWARE.
 using namespace Ogre;
 
 namespace Procedural
-{/*
-	void Path::fixSharpAngles(Ogre::Real radius)
-	{
-		Ogre::Vector3 lastV0 = mPoints[0];
-		Quaternion q;
-		Quaternion lastQ = Utils::_computeQuaternion(getAvgDirection(0));
-		for (unsigned int i=1;i<mPoints.size();i++)
-		{	
-			Quaternion q = Utils::_computeQuaternion(getAvgDirection(i));
-			Ogre::Vector3& v0 = mPoints[i];
-			Plane plane1(lastQ * Vector3::UNIT_Z, lastV0);
-			Plane plane2(q * Vector3::UNIT_Z, v0);
-			Line inter;
-			if (plane1.intersect(plane2, inter))
-			{
-				Vector3 v = inter.shortestPathToPoint(v0);
-				if (v.length() < radius)
-				{
-					v0 = v0 + (radius-v.length()) * v.normalisedCopy();
-					v = inter.shortestPathToPoint(lastV0);
-					lastV0+= (radius-v.length()) * v.normalisedCopy();
-					mPoints[i-1] = lastV0;
-				}
-			}
-
-			lastQ = q;
-			lastV0 = v0;
-		}
-	}*/
-
+{
 	Path Path::mergeKeysWithTrack(const Track& track)
 	{
 		if (!track.isInsertPoint() || track.getAddressingMode() == Track::AM_POINT)
@@ -77,7 +48,13 @@ namespace Procedural
 			Real nextLineicPos = pathLineicPos + (mPoints[i] - mPoints[i-1]).length();
 
 			std::map<Real,Real>::const_iterator it = track._getKeyValueAfter(lineicPos, lineicPos/totalLength, i-1);
-			if (nextLineicPos<=it->first || lineicPos>=it->first)
+
+			Real nextTrackPos = it->first;
+			if (track.getAddressingMode() == Track::AM_RELATIVE_LINEIC)
+				nextTrackPos *= totalLength;
+
+			// Adds the closest point to the curve, being either from the path or the track
+			if (nextLineicPos<=nextTrackPos || lineicPos>=nextTrackPos)
 			{
 				outputPath.addPoint(mPoints[i]);
 				i++;				
@@ -86,11 +63,8 @@ namespace Procedural
 			}
 			else
 			{
-				Real trackLineicPos = it->first;
-				if (track.getAddressingMode()==Track::AM_RELATIVE_LINEIC)
-					trackLineicPos*=totalLength;
-				outputPath.addPoint(getPosition(i-1, (trackLineicPos-pathLineicPos)/(nextLineicPos-pathLineicPos)));
-				lineicPos = trackLineicPos;
+				outputPath.addPoint(getPosition(i-1, (nextTrackPos-pathLineicPos)/(nextLineicPos-pathLineicPos)));
+				lineicPos = nextTrackPos;
 			}
 		}
 		return outputPath;

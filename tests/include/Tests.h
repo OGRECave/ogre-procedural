@@ -137,32 +137,6 @@ class Unit_Tests : public BaseApplication
 		}
 	};	
 	/* --------------------------------------------------------------------------- */
-	// NB : feature not implemented
-	/*class Test_SharpAngles : public Unit_Test
-	{
-	public:		
-		Test_SharpAngles(SceneManager* sn) : Unit_Test(sn) {}
-
-		String getDescription()
-		{
-			return "Sharp Angles";
-		}
-
-		void initImpl()
-		{
-			CatmullRomSpline3 pp;
-			pp.addPoint(0,0,0).addPoint(0,0,4).addPoint(1,0,5).addPoint(5,0,5);
-			Path p = pp.realizePath();
-			Shape s = CircleShape().setRadius(3.).realizeShape();
-			Extruder e;
-			putMesh(e.setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh(),1);
-			putMesh(p.realizeMesh());
-			putMesh(e.setFixSharpAngles(true).setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh(),1);
-			putMesh(p.realizeMesh());
-		}
-	};*/
-
-	/* --------------------------------------------------------------------------- */
 	class Test_Triangulation : public Unit_Test
 	{
 	public:		
@@ -318,6 +292,14 @@ class Unit_Tests : public BaseApplication
 				.close();
 			putMesh(cs.realizeShape().realizeMesh());
 
+			// CubicHermite Spline
+			CubicHermiteSpline2 chs;			
+			chs.addPoint(Vector2(0,0), Vector2(0,1), Vector2(0,1))
+			   .addPoint(Vector2(0,2), Vector2(1,0), Vector2(0,1))
+			   .addPoint(Vector2(2,2), Vector2(0,1), Vector2(0,1))
+			   .setNumSeg(8).close();
+			putMesh(chs.realizeShape().realizeMesh());
+
 			// Kochanek Bartels
 			KochanekBartelsSpline2 kbs2;
 			kbs2.addPoint(Vector2(0,-1),0,0,-1)
@@ -331,6 +313,35 @@ class Unit_Tests : public BaseApplication
 
 			putMesh(kbs2.realizeShape().realizeMesh());
 
+			// CatmullRomSpline3
+			CatmullRomSpline3 cs3;
+			cs3.addPoint(Vector3(0,-1,0))
+				.addPoint(Vector3(2,2,0))
+				.addPoint(Vector3(1,2.5,0))
+				.addPoint(Vector3(0,1.5,0))
+				.addPoint(Vector3(-1,2.5,0))
+				.addPoint(Vector3(-2,2,0))
+				.setNumSeg(8)
+				.close();
+			putMesh(cs3.realizePath().realizeMesh());
+
+			// CubicHermite Spline3
+			CubicHermiteSpline3 chs3;			
+			chs3.addPoint(Vector3(0,0,0), Vector3(0,1,0), Vector3(0,1,0))
+			   .addPoint(Vector3(0,2,0), Vector3(1,0,0), Vector3(0,1,0))
+			   .addPoint(Vector3(2,2,0), Vector3(0,1,0), Vector3(0,1,0))
+			   .setNumSeg(8).close();
+			putMesh(chs3.realizePath().realizeMesh());
+
+			// Pseudo Track spline
+			CircleShape circ;
+			Shape s = circ.realizeShape();
+			CatmullRomSpline2 cs2;
+			Track t = cs2.addPoint(0,.8).addPoint(.1,1).addPoint(0.5,0.5).addPoint(1,1).realizeShape().convertToTrack(Track::AM_RELATIVE_LINEIC);
+			Path p;
+			p.addPoint(0,0,0).addPoint(1,1,1);
+			Extruder ex;
+			putMesh(ex.setExtrusionPath(&p).setShapeToExtrude(&s).setScaleTrack(&t).realizeMesh(),1);
 		}
 	};
 

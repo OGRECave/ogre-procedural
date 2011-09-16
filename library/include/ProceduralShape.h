@@ -35,9 +35,12 @@ THE SOFTWARE.
 #include "OgreManualObject.h"
 #include "ProceduralRoot.h"
 #include "ProceduralMultiShape.h"
+#include "ProceduralTrack.h"
 
 namespace Procedural
 {
+	class Path;
+
 enum Side {SIDE_LEFT, SIDE_RIGHT};
 
 /** Describes a succession of interconnected 2D points.
@@ -52,22 +55,40 @@ class _ProceduralExport Shape
 public:
 	/// Default constructor
 	Shape() : mClosed(false), mOutSide(SIDE_RIGHT) {}
-
-	//---------------------------------------------------------------------------
+	
 	/// Adds a point to the shape
 	inline Shape& addPoint(const Ogre::Vector2& pt)
 	{
 		mPoints.push_back(pt);
 		return *this;
 	}	
-	//---------------------------------------------------------------------------
+	
 	/// Adds a point to the shape
 	inline Shape& addPoint(Ogre::Real x, Ogre::Real y)
 	{
-		mPoints.push_back(Ogre::Vector2(x, y));
+		mPoints.push_back(Ogre::Vector2(x, y));		
 		return *this;
 	}
-	//---------------------------------------------------------------------------
+
+	/// Inserts a point to the shape
+	/// @arg index the index before the inserted point
+	/// @arg x new point's x coordinate
+	/// @arg y new point's y coordinate
+	inline Shape& insertPoint(size_t index, Ogre::Real x, Ogre::Real y)
+	{
+		mPoints.insert(mPoints.begin()+index, Ogre::Vector2(x, y));
+		return *this;
+	}
+
+	/// Inserts a point to the shape
+	/// @arg index the index before the inserted point
+	/// @arg pt new point's position
+	inline Shape& insertPoint(size_t index, const Ogre::Vector2& pt)
+	{
+		mPoints.insert(mPoints.begin()+index, pt);
+		return *this;
+	}
+
 	/// Adds a point to the shape, relative to the last point added
 	inline Shape& addPointRel(const Ogre::Vector2& pt)
 	{
@@ -77,7 +98,7 @@ public:
 			mPoints.push_back(pt + *(mPoints.end()-1));
 		return *this;
 	}
-	//---------------------------------------------------------------------------
+
 	/// Adds a point to the shape, relative to the last point added
 	inline Shape& addPointRel(Ogre::Real x, Ogre::Real y)
 	{
@@ -87,20 +108,77 @@ public:
 			mPoints.push_back(Ogre::Vector2(x, y) + *(mPoints.end()-1));
 		return *this;
 	}
-	//---------------------------------------------------------------------------
+
+	/// Appends another shape at the end of this one
+	inline Shape& appendShape(const Shape& other)
+	{
+		mPoints.insert(mPoints.end(), other.mPoints.begin(), other.mPoints.end());
+		return *this;
+	}
+
+	/// Appends another shape at the end of this one, relative to the last point of this shape
+	inline Shape& appendShapeRel(const Shape& other)
+	{
+		if (mPoints.empty())
+			appendShape(other);
+		else
+		{
+			Ogre::Vector2 refVector = *(mPoints.end()-1);
+			std::vector<Ogre::Vector2> pointList(other.mPoints.begin(), other.mPoints.end());
+			for (std::vector<Ogre::Vector2>::iterator it = pointList.begin(); it!=pointList.end(); it++)
+				*it +=refVector;
+			mPoints.insert(mPoints.end(), pointList.begin(), pointList.end());
+		}
+		return *this;
+	}
+
+	/// Extracts a part of the shape as a new shape
+	/// @arg first first index to be in the new shape
+	/// @arg last last index to be in the new shape
+	inline Shape extractSubShape(int first, int last)
+	{
+		Shape s;
+		for (int i=first;i<=last;i++)
+			s.addPoint(mPoints[i]);
+		s.setOutSide(mOutSide);
+		if (mClosed)
+			s.close();
+		return s;
+	}
+
+	/// Reverses direction of the shape
+	/// The outside is preserved
+	inline Shape& reverse()
+	{
+		std::reverse(mPoints.begin(), mPoints.end());
+		switchSide();
+	}
+
 	/// Clears the content of the shape
 	inline Shape& reset()
 	{
 		mPoints.clear();
 		return *this;
 	}
-	//---------------------------------------------------------------------------
+
+	/// Converts the shape to a path, with Y=0
+	Path convertToPath();
+
+	/// Outputs a track, with Key=X and Value=Y
+	Track convertToTrack(Track::AddressingMode addressingMode=Track::AM_ABSOLUTE_LINEIC);
+
 	/// Gets raw vector data of this shape
 	inline std::vector<Ogre::Vector2> getPoints() const
 	{
 		return mPoints;
 	}
-	
+
+	/// Gets raw vector data of this shape as a non-const reference
+	inline std::vector<Ogre::Vector2>& getPointsReference()
+	{
+		return mPoints;
+	}
+
 	/**
 	 * Bounds-safe method to get a point : it will allow you to go beyond the bounds
 	 */
@@ -110,7 +188,7 @@ public:
 			return mPoints[Utils::modulo(i,mPoints.size())];
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
-	
+
 	/**
 	 * Makes the shape a closed shape, ie it will automatically connect 
 	 * the last point to the first point.
@@ -132,24 +210,26 @@ public:
 		mOutSide = side;
 		return *this;
 	}	
-	/* --------------------------------------------------------------------------- */
+
 	/// Gets which side is out
 	inline Side getOutSide() const
 	{
 		return mOutSide;
 	}
-	/* --------------------------------------------------------------------------- */
+
 	/// Switches the inside and the outside
 	inline Shape& switchSide()
 	{
 		mOutSide = (mOutSide == SIDE_LEFT)? SIDE_RIGHT: SIDE_LEFT;
 		return *this;
 	}	
+
 	/// Gets the number of segments in that shape
 	inline size_t getSegCount() const
 	{
 		return (mPoints.size()-1) + (mClosed?1:0);
 	}	
+
 	/// Gets whether the shape is closed or not
 	inline bool isClosed() const
 	{
@@ -252,10 +332,10 @@ public:
 	 
 	/**
 	 * On a closed shape, find if the outside is located on the right
-	 * or on the left. If the outside can easily be determined, 
+	 * or on the left. If the outside can easily be guessed in your context, 
 	 * you'd rather use setOutside(), which doesn't need any computation.
 	 */
-	Side findRealOutSide() const;	
+	Side findRealOutSide() const;
 
 	/**
 	 * Applies the given translation to all the points already defined.

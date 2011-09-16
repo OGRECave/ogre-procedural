@@ -62,6 +62,49 @@ public:
 		return *this;
 	}
 
+	/// Inserts a point to the path
+	/// @arg index the index before the inserted point
+	/// @arg x new point's x coordinate
+	/// @arg y new point's y coordinate
+	/// @arg z new point's z coordinate
+	inline Path& insertPoint(size_t index, Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		mPoints.insert(mPoints.begin()+index, Ogre::Vector3(x, y, z));
+		return *this;
+	}
+
+	/// Inserts a point to the path
+	/// @arg index the index before the inserted point
+	/// @arg pt new point's position
+	inline Path& insertPoint(size_t index, const Ogre::Vector3& pt)
+	{
+		mPoints.insert(mPoints.begin()+index, pt);
+		return *this;
+	}
+
+	/// Appends another path at the end of this one
+	inline Path& appendPath(const Path& other)
+	{
+		mPoints.insert(mPoints.end(), other.mPoints.begin(), other.mPoints.end());
+		return *this;
+	}
+	
+	/// Appends another path at the end of this one, relative to the last point of this path
+	inline Path& appendPathRel(const Path& other)
+	{
+		if (mPoints.empty())
+			appendPath(other);
+		else
+		{
+			Ogre::Vector3 refVector = *(mPoints.end()-1);
+			std::vector<Ogre::Vector3> pointList(other.mPoints.begin(), other.mPoints.end());
+			for (std::vector<Ogre::Vector3>::iterator it = pointList.begin(); it!=pointList.end(); it++)
+				*it += refVector;
+			mPoints.insert(mPoints.end(), pointList.begin(), pointList.end());
+		}
+		return *this;
+	}
+	
 	/** Clears the content of the Path */
 	Path& reset()
 	{
@@ -85,6 +128,12 @@ public:
 
 	/** Gets the list of points as a vector of Vector3 */
 	std::vector<Ogre::Vector3> getPoints()
+	{
+		return mPoints;
+	}
+
+	/// Gets raw vector data of this path as a non-const reference
+	inline std::vector<Ogre::Vector3>& getPointsReference()
 	{
 		return mPoints;
 	}
@@ -168,15 +217,28 @@ public:
 	 * Mostly for debugging purposes
 	 */
 	Ogre::MeshPtr realizeMesh(const std::string& name = "");
-
-	/**
-	 * WIP
-	 * Shifts all points that form sharp angles
-	 */
-	//void fixSharpAngles(Ogre::Real radius);
-
+	
+	/// Creates a path with the keys of this path and extra keys coming from a track
 	Path mergeKeysWithTrack(const Track& track);
 
+	/// Extracts a part of the shape as a new path
+	/// @arg first first index to be in the new path
+	/// @arg last last index to be in the new path
+	inline Path extractSubPath(int first, int last)
+	{
+		Path p;
+		for (int i=first;i<last;i++)
+			p.addPoint(mPoints[i]);
+		if (mClosed)
+			p.close();
+		return p;
+	}
+
+	/// Reverses direction of the path
+	inline Path& reverse()
+	{
+		std::reverse(mPoints.begin(), mPoints.end());
+	}
 };
 
 }
