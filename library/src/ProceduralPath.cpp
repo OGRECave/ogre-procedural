@@ -48,7 +48,13 @@ namespace Procedural
 			Real nextLineicPos = pathLineicPos + (mPoints[i] - mPoints[i-1]).length();
 
 			std::map<Real,Real>::const_iterator it = track._getKeyValueAfter(lineicPos, lineicPos/totalLength, i-1);
-			if (nextLineicPos<=it->first || lineicPos>=it->first)
+
+			Real nextTrackPos = it->first;
+			if (track.getAddressingMode() == Track::AM_RELATIVE_LINEIC)
+				nextTrackPos *= totalLength;
+
+			// Adds the closest point to the curve, being either from the path or the track
+			if (nextLineicPos<=nextTrackPos || lineicPos>=nextTrackPos)
 			{
 				outputPath.addPoint(mPoints[i]);
 				i++;				
@@ -57,11 +63,8 @@ namespace Procedural
 			}
 			else
 			{
-				Real trackLineicPos = it->first;
-				if (track.getAddressingMode()==Track::AM_RELATIVE_LINEIC)
-					trackLineicPos*=totalLength;
-				outputPath.addPoint(getPosition(i-1, (trackLineicPos-pathLineicPos)/(nextLineicPos-pathLineicPos)));
-				lineicPos = trackLineicPos;
+				outputPath.addPoint(getPosition(i-1, (nextTrackPos-pathLineicPos)/(nextLineicPos-pathLineicPos)));
+				lineicPos = nextTrackPos;
 			}
 		}
 		return outputPath;
