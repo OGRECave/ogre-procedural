@@ -332,6 +332,16 @@ class Unit_Tests : public BaseApplication
 			   .addPoint(Vector3(2,2,0), Vector3(0,1,0), Vector3(0,1,0))
 			   .setNumSeg(8).close();
 			putMesh(chs3.realizePath().realizeMesh());
+
+			// Pseudo Track spline
+			CircleShape circ;
+			Shape s = circ.realizeShape();
+			CatmullRomSpline2 cs2;
+			Track t = cs2.addPoint(0,.8).addPoint(.1,1).addPoint(0.5,0.5).addPoint(1,1).realizeShape().convertToTrack(Track::AM_RELATIVE_LINEIC);
+			Path p;
+			p.addPoint(0,0,0).addPoint(1,1,1);
+			Extruder ex;
+			putMesh(ex.setExtrusionPath(&p).setShapeToExtrude(&s).setScaleTrack(&t).realizeMesh(),1);
 		}
 	};
 
