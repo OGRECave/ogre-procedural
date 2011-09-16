@@ -487,4 +487,14 @@ Path Shape::convertToPath()
 
 	return p;
 }
+//-----------------------------------------------------------------------
+Track Shape::convertToTrack(Track::AddressingMode addressingMode)
+{
+	Track t(addressingMode);
+	for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin();it!=mPoints.end();it++)
+	{
+		t.addKeyFrame(it->x, it->y);
+	}
+	return t;
+}
 }

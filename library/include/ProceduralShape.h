@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreManualObject.h"
 #include "ProceduralRoot.h"
 #include "ProceduralMultiShape.h"
+#include "ProceduralTrack.h"
 
 namespace Procedural
 {
@@ -162,6 +163,9 @@ public:
 
 	/// Converts the shape to a path, with Y=0
 	Path convertToPath();
+
+	/// Outputs a track, with Key=X and Value=Y
+	Track convertToTrack(Track::AddressingMode addressingMode=Track::AM_ABSOLUTE_LINEIC);
 
 	/// Gets raw vector data of this shape
 	inline std::vector<Ogre::Vector2> getPoints() const
