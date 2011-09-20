@@ -280,6 +280,40 @@ class _ProceduralExport CircleShape
 		return s;
 	}
 };
+//-----------------------------------------------------------------------
+/**
+ * Produces a shape from Cubic Hermite control points
+ */
+class _ProceduralExport RoundedCornerSpline2 : public BaseSpline2<RoundedCornerSpline2>
+{		
+	Ogre::Real mRadius;
+
+	std::vector<Ogre::Vector2> mPoints;	
+	
+public:
+	RoundedCornerSpline2() : mRadius(.1) {}
+
+	/// Adds a control point
+	RoundedCornerSpline2& addPoint(Ogre::Vector2 p)
+	{
+		mPoints.push_back(p);
+		return *this;
+	}
+	/// Safely gets a control point
+	const Ogre::Vector2& safeGetPoint(int i) const
+	{
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+	}
+
+	/**
+	 * Builds a shape from control points
+	 */
+	Shape realizeShape();
+};
+
+
 }
 
 #endif
