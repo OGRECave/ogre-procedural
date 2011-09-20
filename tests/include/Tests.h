@@ -313,6 +313,14 @@ class Unit_Tests : public BaseApplication
 
 			putMesh(kbs2.realizeShape().realizeMesh());
 
+			RoundedCornerSpline2 rcs2;
+			rcs2.addPoint(Vector2(0,0))
+				.addPoint(Vector2(1,0))
+				.addPoint(Vector2(1,1))
+				.addPoint(Vector2(2,1))
+				.addPoint(Vector2(3,0));
+			putMesh(rcs2.realizeShape().realizeMesh());
+
 			// CatmullRomSpline3
 			CatmullRomSpline3 cs3;
 			cs3.addPoint(Vector3(0,-1,0))
