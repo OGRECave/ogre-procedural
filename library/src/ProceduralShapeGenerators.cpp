@@ -115,11 +115,11 @@ Shape RoundedCornerSpline2::realizeShape()
 	assert(!mPoints.empty());
 
 	Shape shape;
-	unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
+	unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 2);
 	if (!mClosed)
 			shape.addPoint(mPoints[0]);
 		
-	for (unsigned int i = 0; i < numPoints - 1; ++i)
+	for (unsigned int i = 0; i < numPoints; ++i)
 	{
 		const Vector2& p0 = safeGetPoint(i);
 		const Vector2& p1 = safeGetPoint(i+1);
@@ -127,10 +127,17 @@ Shape RoundedCornerSpline2::realizeShape()
 
 		Vector2 vBegin = p1-p0;
 		Vector2 vEnd = p2-p1;
-		Vector2 pBegin = p1 - vBegin.normalisedCopy() * mRadius;
-		Vector2 pEnd = p1 + vEnd.normalisedCopy() * mRadius;
-		Line2D line1(pBegin, vBegin.perpendicular());;
-		Line2D line2(pEnd, vEnd.perpendicular());;
+		
+		// We're capping the radius if it's too big compared to segment length
+		Real radius = mRadius;
+		Real smallestSegLength = std::min(vBegin.length(), vEnd.length());
+		if (smallestSegLength < 2 * mRadius)
+			radius = smallestSegLength / 2.0f;
+		
+		Vector2 pBegin = p1 - vBegin.normalisedCopy() * radius;
+		Vector2 pEnd = p1 + vEnd.normalisedCopy() * radius;
+		Line2D line1(pBegin, vBegin.perpendicular());
+		Line2D line2(pEnd, vEnd.perpendicular());
 		Vector2 center;
 		line1.findIntersect(line2, center);
 		Vector2 vradBegin = pBegin - center;
