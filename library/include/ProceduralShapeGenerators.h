@@ -50,20 +50,20 @@ public:
 	BaseSpline2() : mNumSeg(4), mClosed(false), mOutSide(SIDE_RIGHT) {}
 	
 	/// Sets the out side of the shape
-	T& setOutSide(Side outSide)
+	inline T& setOutSide(Side outSide)
 	{
 		mOutSide = outSide;
 		return (T&)*this;
 	}
 
 	/// Gets the out side of the shape
-	Side getOutSide() const
+	inline Side getOutSide() const
 	{
 		return mOutSide;
 	}
 
 	/// Sets the number of segments between 2 control points
-	T& setNumSeg(int numSeg)
+	inline T& setNumSeg(int numSeg)
 	{
 		assert(numSeg>=1);
 		mNumSeg = numSeg;
@@ -71,7 +71,7 @@ public:
 	}
 
 	/// Closes the spline
-	T& close()
+	inline T& close()
 	{
 		mClosed = true;
 		return (T&)*this;
@@ -90,13 +90,13 @@ class _ProceduralExport CubicHermiteSpline2 : public BaseSpline2<CubicHermiteSpl
 	
 public:
 	/// Adds a control point
-	CubicHermiteSpline2& addPoint(Ogre::Vector2 p, Ogre::Vector2 before, Ogre::Vector2 after)
+	inline CubicHermiteSpline2& addPoint(Ogre::Vector2 p, Ogre::Vector2 before, Ogre::Vector2 after)
 	{
 		mPoints.push_back(ControlPoint(p, before, after));
 		return *this;
 	}
 	/// Safely gets a control point
-	const ControlPoint& safeGetPoint(int i) const
+	inline const ControlPoint& safeGetPoint(int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -119,21 +119,21 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
 	std::vector<Ogre::Vector2> mPoints;
 	public:	
 	/// Adds a control point
-	CatmullRomSpline2& addPoint(const Ogre::Vector2& pt)
+	inline CatmullRomSpline2& addPoint(const Ogre::Vector2& pt)
 	{
 		mPoints.push_back(pt);
 		return *this;
 	}
 
 	/// Adds a control point
-	CatmullRomSpline2& addPoint(Ogre::Real x, Ogre::Real y)
+	inline CatmullRomSpline2& addPoint(Ogre::Real x, Ogre::Real y)
 	{
 		mPoints.push_back(Ogre::Vector2(x,y));
 		return *this;
 	}
 	
 	/// Safely gets a control point
-	const Ogre::Vector2& safeGetPoint(int i) const
+	inline const Ogre::Vector2& safeGetPoint(int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -160,21 +160,21 @@ class _ProceduralExport KochanekBartelsSpline2 : public BaseSpline2<KochanekBart
 	
 public:
 	/// Adds a control point
-	KochanekBartelsSpline2& addPoint(Ogre::Real x, Ogre::Real y)
+	inline KochanekBartelsSpline2& addPoint(Ogre::Real x, Ogre::Real y)
 	{
 		mPoints.push_back(ControlPoint(Ogre::Vector2(x,y)));
 		return *this;
 	}
 
 	/// Adds a control point
-	KochanekBartelsSpline2& addPoint(Ogre::Vector2 p)
+	inline KochanekBartelsSpline2& addPoint(Ogre::Vector2 p)
 	{
 		mPoints.push_back(ControlPoint(p));
 		return *this;
 	}
 
 	/// Safely gets a control point
-	const ControlPoint& safeGetPoint(int i) const
+	inline const ControlPoint& safeGetPoint(int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -188,7 +188,7 @@ public:
 	 * @arg b Bias       +1 = Post-shoot       -1 = Pre-shoot
 	 * @arg c Continuity +1 = Inverted Corners -1 = Box Corners
 	 */
-	KochanekBartelsSpline2& addPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c)
+	inline KochanekBartelsSpline2& addPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c)
 	{
 		mPoints.push_back(ControlPoint(p,t,b,c));
 		return *this;
@@ -214,14 +214,14 @@ class _ProceduralExport RectangleShape
 	RectangleShape() : mWidth(1.0), mHeight(1.0) {}
 
 	/// Sets width
-	RectangleShape& setWidth(Ogre::Real width)
+	inline RectangleShape& setWidth(Ogre::Real width)
 	{
 		mWidth = width;
 		return *this;
 	}
 
 	/// Sets height
-	RectangleShape& setHeight(Ogre::Real height)
+	inline RectangleShape& setHeight(Ogre::Real height)
 	{
 		mHeight = height;
 		return *this;
@@ -254,14 +254,14 @@ class _ProceduralExport CircleShape
 	CircleShape() : mRadius(1.0), mNumSeg(8) {}
 
 	/// Sets radius
-	CircleShape& setRadius(Ogre::Real radius)
+	inline CircleShape& setRadius(Ogre::Real radius)
 	{
 		mRadius = radius;
 		return *this;
 	}
 
 	/// Sets number of segments
-	CircleShape& setNumSeg(unsigned int numSeg)
+	inline CircleShape& setNumSeg(unsigned int numSeg)
 	{
 		mNumSeg = numSeg;
 		return *this;
@@ -292,15 +292,21 @@ class _ProceduralExport RoundedCornerSpline2 : public BaseSpline2<RoundedCornerS
 	
 public:
 	RoundedCornerSpline2() : mRadius(.1) {}
+	
+	inline RoundedCornerSpline2& setRadius(Ogre::Real radius)
+	{
+		mRadius = radius;
+		return *this;
+	}
 
 	/// Adds a control point
-	RoundedCornerSpline2& addPoint(Ogre::Vector2 p)
+	inline RoundedCornerSpline2& addPoint(const Ogre::Vector2& p)
 	{
 		mPoints.push_back(p);
 		return *this;
 	}
 	/// Safely gets a control point
-	const Ogre::Vector2& safeGetPoint(int i) const
+	inline const Ogre::Vector2& safeGetPoint(int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];

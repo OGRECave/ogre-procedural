@@ -44,7 +44,7 @@ public:
 	BaseSpline3() : mNumSeg(4), mClosed(false) {}	
 
 	/// Sets the number of segments between 2 control points
-	T& setNumSeg(int numSeg)
+	inline T& setNumSeg(int numSeg)
 	{
 		assert(numSeg>=1);
 		mNumSeg = numSeg;
@@ -52,7 +52,7 @@ public:
 	}
 	
 	/// Closes the spline
-	T& close()
+	inline T& close()
 	{
 		mClosed = true;
 		return (T&)*this;
@@ -89,21 +89,21 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 	}
 	
 	/// Adds a control point
-	CatmullRomSpline3& addPoint(const Ogre::Vector3& pt)
+	inline CatmullRomSpline3& addPoint(const Ogre::Vector3& pt)
 	{
 		mPoints.push_back(pt);
 		return *this;
 	}
 
 	/// Adds a control point
-	CatmullRomSpline3& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	inline CatmullRomSpline3& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
 		mPoints.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
 	
 	/// Safely gets a control point
-	const Ogre::Vector3& safeGetPoint(int i) const
+	inline const Ogre::Vector3& safeGetPoint(int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -127,13 +127,13 @@ class _ProceduralExport CubicHermiteSpline3 : public BaseSpline3<CubicHermiteSpl
 	
 public:
 	/// Adds a control point
-	CubicHermiteSpline3& addPoint(Ogre::Vector3 p, Ogre::Vector3 before, Ogre::Vector3 after)
+	inline CubicHermiteSpline3& addPoint(Ogre::Vector3 p, Ogre::Vector3 before, Ogre::Vector3 after)
 	{
 		mPoints.push_back(ControlPoint(p, before, after));
 		return *this;
 	}
 	/// Safely gets a control point
-	const ControlPoint& safeGetPoint(int i) const
+	inline const ControlPoint& safeGetPoint(int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -158,28 +158,28 @@ public:
 	LinePath() : mPoint1(Ogre::Vector3::ZERO), mPoint2(Ogre::Vector3::UNIT_Y), mNumSeg(1) {}
 
 	/// Sets first point
-	LinePath& setPoint1(Ogre::Vector3 point1)
+	inline LinePath& setPoint1(Ogre::Vector3 point1)
 	{
 		mPoint1 = point1;
 		return *this;
 	}
 
 	/// Sets second point
-	LinePath& setPoint2(Ogre::Vector3 point2)
+	inline LinePath& setPoint2(Ogre::Vector3 point2)
 	{
 		mPoint2 = point2;
 		return *this;
 	}
 	
 	/// Sets the number of segments for this line
-	LinePath& setNumSeg(int numSeg)
+	inline LinePath& setNumSeg(int numSeg)
 	{
 		mNumSeg = numSeg;
 		return *this;
 	}
 
 	/// Builds a linepath between 2 points
-	LinePath& betweenPoints(Ogre::Vector3 point1, Ogre::Vector3 point2)
+	inline LinePath& betweenPoints(Ogre::Vector3 point1, Ogre::Vector3 point2)
 	{
 		mPoint1 = point1;
 		mPoint2 = point2;

@@ -321,6 +321,11 @@ class Unit_Tests : public BaseApplication
 				.addPoint(Vector2(3,0));
 			putMesh(rcs2.realizeShape().realizeMesh());
 
+			rcs2.addPoint(Vector2(1,-1))
+				.setRadius(.2)
+				.close();
+			putMesh(rcs2.realizeShape().realizeMesh());
+
 			// CatmullRomSpline3
 			CatmullRomSpline3 cs3;
 			cs3.addPoint(Vector3(0,-1,0))
