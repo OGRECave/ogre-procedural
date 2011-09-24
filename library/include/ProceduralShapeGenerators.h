@@ -305,6 +305,14 @@ public:
 		mPoints.push_back(p);
 		return *this;
 	}
+
+	/// Adds a control point
+	inline RoundedCornerSpline2& addPoint(Ogre::Real x, Ogre::Real y)
+	{
+		mPoints.push_back(Ogre::Vector2(x,y));
+		return *this;
+	}
+
 	/// Safely gets a control point
 	inline const Ogre::Vector2& safeGetPoint(int i) const
 	{
