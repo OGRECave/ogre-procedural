@@ -199,4 +199,51 @@ public:
 	}
 
 };
+//-----------------------------------------------------------------------
+/**
+ * Produces a shape by rounding corners of a path
+ */
+class _ProceduralExport RoundedCornerSpline3 : public BaseSpline3<RoundedCornerSpline3>
+{		
+	Ogre::Real mRadius;
+
+	std::vector<Ogre::Vector3> mPoints;	
+	
+public:
+	RoundedCornerSpline3() : mRadius(.1) {}
+	
+	inline RoundedCornerSpline3& setRadius(Ogre::Real radius)
+	{
+		mRadius = radius;
+		return *this;
+	}
+
+	/// Adds a control point
+	inline RoundedCornerSpline3& addPoint(const Ogre::Vector3& p)
+	{
+		mPoints.push_back(p);
+		return *this;
+	}
+
+	/// Adds a control point
+	inline RoundedCornerSpline3& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		mPoints.push_back(Ogre::Vector3(x,y,z));
+		return *this;
+	}
+
+	/// Safely gets a control point
+	inline const Ogre::Vector3& safeGetPoint(int i) const
+	{
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+	}
+
+	/**
+	 * Builds a shape from control points
+	 */
+	Path realizePath();
+};
+
 }
