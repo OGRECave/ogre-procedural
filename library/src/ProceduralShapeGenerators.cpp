@@ -141,8 +141,8 @@ Shape RoundedCornerSpline2::realizeShape()
 		Vector2 center;
 		line1.findIntersect(line2, center);
 		Vector2 vradBegin = pBegin - center;
-		Vector2 vradEnd = pEnd - center;
-		Radian angleTotal = vradBegin.angleBetween(vradEnd);
+		Vector2 vradEnd = pEnd - center;		
+		Radian angleTotal = Utils::angleBetween(vradBegin, vradEnd);
 		if (vradBegin.crossProduct(vradEnd)<0)
 			angleTotal = -angleTotal;
 				
