@@ -39,7 +39,7 @@ Icosphere is visually quite near from Sphere, but has a quite different repartit
 
 In Ogre Procedural, shapes, paths and tracks all are made of line connected points.
 
-The difference between them is that :
+The difference between them is :
 * Tracks are 1D
 * Shapes are 2D
 * Paths are 3D
@@ -67,9 +67,22 @@ It's a particular case of Cubic Hermite Spline, in which tangents are automatica
 
 .Konachek Bartels Spline
 
-=== Special operations
+.Rounded Corner Spline
+
+This one consists in straight lines joining the control points, with corners replaced by circle arcs.
+
+=== Shape specific operations
 
 ==== 2D CSG
+
+You can combine shapes together in order to produce new shapes, using boolean operations.
+Technically, the output is a multishape, because it doesn't always resolve to a single line.
+
+Supported boolean operations are :
+* Union : the result contains everything inside A plus evertyhing inside B
+* Intersection : the result contains everything that is inside A and B
+* Difference : the result contains everything that is in A but not in B
+* Xor (not yet implemented) : the result contains everything that either inside A or inside B but not inside both.
 
 ==== Thicken
 
