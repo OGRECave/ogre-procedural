@@ -1,6 +1,6 @@
-Main Header
-===========
-:Author: Michael Broutin
+Ogre Procedural Manual
+======================
+
 :Revision: Ogre Procedural 0.2 branch
 
 == About this manual
@@ -40,6 +40,7 @@ Icosphere is visually quite near from Sphere, but has a quite different repartit
 In Ogre Procedural, shapes, paths and tracks all are made of line connected points.
 
 The difference between them is :
+
 * Tracks are 1D
 * Shapes are 2D
 * Paths are 3D

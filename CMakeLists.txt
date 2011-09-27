@@ -41,6 +41,7 @@ option(OgreProcedural_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(OgreProcedural_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
 option(OgreProcedural_INSTALL_DOCS "Install documentation." FALSE)
 option(OgreProcedural_STATIC "Static build" TRUE)
+option(OgreProcedural_ILLUSTRATIONS "Build illustrations for manual" FALSE)
 
 # Set docs target directory
 if (WIN32 OR APPLE)
