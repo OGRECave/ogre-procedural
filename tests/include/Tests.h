@@ -170,11 +170,18 @@ class Unit_Tests : public BaseApplication
 			putMesh(s.realizeMesh());
 			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh());
 
-			Shape s3 = CircleShape().setNumSeg(8).realizeShape();						
+			Shape s3 = CircleShape().setNumSeg(16).realizeShape();						
+			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
+
+			s3.translate(Vector2(.01,0));
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
 			s3.translate(Vector2(.5,0));
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
+
+			s3.translate(Vector2(.1,0));
+			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
+
 
 			Shape s4;
 			s4.addPointRel(-54.951207,-16.247524).addPointRel(27.24849,0).addPointRel(2.54842,5.29287)
@@ -202,7 +209,7 @@ class Unit_Tests : public BaseApplication
 				.addPoint(1,-0.5)    // 8
 				.close();
 
-			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());
+			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());		
 		}
 	};
 
