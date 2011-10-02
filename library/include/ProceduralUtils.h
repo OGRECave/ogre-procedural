@@ -42,6 +42,9 @@ public:
 	static void log(const Ogre::String& st)
 	{
 		Ogre::LogManager::getSingleton().logMessage("[PROCEDURAL] " + st);
+	#if (PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32)
+		OutputDebugString((st + "\n").c_str());
+	#endif
 	}
 
 	/// Gets the min of the coordinates between 2 vectors
