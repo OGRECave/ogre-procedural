@@ -104,6 +104,36 @@ public:
 	Ogre::Vector3 shortestPathToPoint(const Ogre::Vector3& point) const;
 };
 //-----------------------------------------------------------------------
+/// Represents a line in 2D
+class Line2D
+{
+	Ogre::Vector2 mPoint;
+	Ogre::Vector2 mDirection;
+
+public:
+	Line2D() {}
+	
+	/// Contructor with arguments
+	/// @arg point a point on the line
+	/// @arg direction a normalized vector representing the direction of that line
+	Line2D(Ogre::Vector2 point, Ogre::Vector2 direction) : mPoint(point), mDirection(direction.normalisedCopy()) {}
+
+	/// Builds the line between 2 points
+	void setFrom2Points(const Ogre::Vector2& a, const Ogre::Vector2& b)
+	{
+		mPoint = a;
+		mDirection = (b-a).normalisedCopy();
+	}
+
+	/**	  
+	 * Computes the interesction between current segment and another segment
+	 * @arg the other segment
+	 * @arg intersection the point of intersection if outputed there if it exists
+	 * @return true if segments intersect, false otherwise
+	 */
+	bool findIntersect(const Line2D& other, Ogre::Vector2& intersection) const;
+};
+//-----------------------------------------------------------------------
 /// Represents a 2D segment
 class Segment2D
 {

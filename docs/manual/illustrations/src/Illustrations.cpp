@@ -1,0 +1,127 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of ogre-procedural
+
+For the latest info, see http://code.google.com/p/ogre-procedural/
+
+Copyright (c) 2010 Michael Broutin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
+#include "Ogre.h"
+#include "Illustrations.h"
+#include "Procedural.h"
+
+//-------------------------------------------------------------------------------------
+	void Illustrations::init()
+	{	
+	
+	String resourcesCfg, pluginsCfg;
+	#ifdef _DEBUG
+	resourcesCfg = "resources_d.cfg";
+	pluginsCfg = "plugins_d.cfg";
+	#else
+	resourcesCfg = "resources.cfg";
+	pluginsCfg = "plugins.cfg";
+	#endif
+
+	mRoot = new Ogre::Root(pluginsCfg); 
+  
+	ConfigFile cf;
+	cf.load(resourcesCfg);
+ 
+	ConfigFile::SectionIterator seci = cf.getSectionIterator();
+ 
+	String secName, typeName, archName;
+	while (seci.hasMoreElements())
+	{
+		secName = seci.peekNextKey();
+		ConfigFile::SettingsMultiMap *settings = seci.getNext();
+		ConfigFile::SettingsMultiMap::iterator i;
+		for (i = settings->begin(); i != settings->end(); ++i)
+		{
+			typeName = i->first;
+			archName = i->second;
+			ResourceGroupManager::getSingleton().addResourceLocation(
+				archName, typeName, secName);
+		}
+	}
+
+	if (!mRoot->restoreConfig())
+		mRoot->showConfigDialog();
+ 
+	mWindow = mRoot->initialise(true, ""); 
+	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
+	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
+	Camera* camera = mSceneMgr->createCamera("SimpleCamera");  
+	mViewPort = mWindow->addViewport(camera);
+	mViewPort->setBackgroundColour(ColourValue::Green);
+	camera->setPosition(0,0,10);
+	camera->lookAt(0,0,0);
+	camera->setNearClipDistance(1.);
+}
+
+void Illustrations::go()
+{		
+	Procedural::CylinderGenerator().realizeMesh("myCylinder");
+	Entity* e= mSceneMgr->createEntity("myCylinder");
+	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(e);
+	mRoot->renderOneFrame();
+	mWindow->writeContentsToFile("screenshot.png");
+
+	mRoot->renderOneFrame();
+	mWindow->writeContentsToFile("screenshot2.png");
+}
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#define WIN32_LEAN_AND_MEAN
+#include "windows.h"
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
+#else
+	int main(int argc, char *argv[])
+#endif
+	{
+		// Create application object
+		Illustrations app;
+
+		try {
+			app.go();
+		} catch( Ogre::Exception& e ) {
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+			MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
+#else
+			std::cerr << "An exception has occured: " <<
+				e.getFullDescription().c_str() << std::endl;
+#endif
+		}
+
+		return 0;
+	}
+
+#ifdef __cplusplus
+}
+#endif

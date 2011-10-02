@@ -42,6 +42,9 @@ public:
 	static void log(const Ogre::String& st)
 	{
 		Ogre::LogManager::getSingleton().logMessage("[PROCEDURAL] " + st);
+	#if (PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32)
+		OutputDebugString((st + "\n").c_str());
+	#endif
 	}
 
 	/// Gets the min of the coordinates between 2 vectors
@@ -104,6 +107,13 @@ public:
 		return Ogre::Vector3(in.y, in.z, in.x);
 	}
 
+	// Rotates a Vector2 by a given oriented angle
+	static inline Ogre::Vector2 rotateVector2(const Ogre::Vector2& in, Ogre::Radian angle)
+	{
+		return Ogre::Vector2(in.x* Ogre::Math::Cos(angle) - in.y * Ogre::Math::Sin(angle),
+			in.x * Ogre::Math::Sin(angle) + in.y * Ogre::Math::Cos(angle));
+	}
+	
 	/// Caps n between min and max
 	static int cap(int n, int min, int max)
 	{

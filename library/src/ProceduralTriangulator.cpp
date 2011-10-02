@@ -75,7 +75,7 @@ bool Triangulator::Triangle::isPointInside(const Vector2& point)
 		return (u >= 0) && (v >= 0) && (u + v - 1 <= 0);
 	}
 //-----------------------------------------------------------------------
-bool Triangulator::Triangle::isPointInsideCircumcircle(const Vector2& pt)
+Triangulator::Triangle::InsideType Triangulator::Triangle::isPointInsideCircumcircle(const Vector2& pt)
 {
 	Vector2 v0=p(0);
 	Vector2 v1=p(1);
@@ -85,7 +85,11 @@ bool Triangulator::Triangle::isPointInsideCircumcircle(const Vector2& pt)
 			   v2.x, v2.y, v2.squaredLength(), 1.,
 			   pt.x, pt.y, pt.squaredLength(), 1.);
 	Real det = m.determinant();
-	return det>=0;
+	if (det>=0)
+		return IT_INSIDE;
+	if (det>-1e-3)
+		return IT_BORDERLINEOUTSIDE;
+	return IT_OUTSIDE;
 }
 //-----------------------------------------------------------------------
 // Triangulation by insertion
@@ -108,15 +112,17 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	superTriangle.i[2]= maxTriangleIndex+2;
 	tbuffer.push_back(superTriangle);
 
-	// Point insertion loop
+	// Point insertion loop	
 	for (unsigned short i=0;i<pointList.size()-3;i++)
 	{		
+		std::list<std::list<Triangle>::iterator> borderlineTriangles;
 		// Insert 1 point, find all triangles for which the point is in circumcircle
 		Vector2& p = pointList[i];
 		std::set<DelaunaySegment> segments;
 		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();)
 		{
-			if (it->isPointInsideCircumcircle(p))
+			Triangle::InsideType isInside = it->isPointInsideCircumcircle(p);
+			if (isInside == Triangle::IT_INSIDE)
 			{
 				for (int k=0;k<3;k++)
 				{
@@ -129,9 +135,64 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 						segments.insert(d1);
 				}
 				it=tbuffer.erase(it);
-			} else
+			} 
+			else if (isInside == Triangle::IT_BORDERLINEOUTSIDE)
+			{
+				borderlineTriangles.push_back(it);
 				it++;
+			}
+			else
+			{
+				it++;
+			}
 		}
+
+		// Robustification of the standard algorithm : if one triangle's circumcircle was borderline against the new point,
+		// test whether that triangle is intersected by new segments or not (normal situation : it should not)
+		// If intersected, the triangle is considered having the new point in its circumc
+		std::set<DelaunaySegment> copySegment = segments;
+		for (std::list<std::list<Triangle>::iterator>::iterator itpTri = borderlineTriangles.begin(); itpTri!=borderlineTriangles.end();itpTri++ ) {
+			DelaunayTriangleBuffer::iterator itTri = *itpTri;
+			bool triRemoved = false;
+			for (std::set<DelaunaySegment>::iterator it = copySegment.begin(); it!=copySegment.end() && !triRemoved;it++)			
+			{			
+			bool isTriangleIntersected = false;
+			for (int k=0;k<2;k++)
+			{			
+			int i1 = (k==0)?it->i1:it->i2;
+			int i2 = i;
+			for (int l=0;l<3;l++)
+			{
+				//Early out if 2 points are in fact the same
+				if (itTri->i[l]==i1 || itTri->i[l]==i2 || itTri->i[(l+1)%3]==i1 || itTri->i[(l+1)%3]==i2)
+					continue;
+				Segment2D seg2(itTri->p(l), itTri->p((l+1)%3));		
+				Segment2D seg1(pointList[i1], pointList[i2]);
+				if (seg1.intersects(seg2))
+				{
+					isTriangleIntersected = true;
+					break;
+				}
+			}
+			
+				}
+			if (isTriangleIntersected) {
+				for (int m=0;m<3;m++)
+				{
+					DelaunaySegment d1(itTri->i[m], itTri->i[(m+1)%3]);
+					if (segments.find(d1)!=segments.end())
+						segments.erase(d1);
+					else if (segments.find(d1.inverse())!=segments.end())
+						segments.erase(d1.inverse());
+					else
+						segments.insert(d1);
+				}
+				tbuffer.erase(itTri);
+				triRemoved=true;
+			}			
+			}
+		}
+			
 		// Find all the non-interior edges
 		for (std::set<DelaunaySegment>::iterator it = segments.begin(); it!=segments.end();it++)
 		{
@@ -180,7 +241,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 		}
 		shapeOffset+=shape.getPoints().size();
 	}
-
+	
 	// Re-Triangulate according to the new segments
 	for (std::vector<DelaunaySegment>::iterator itSeg=segList.begin();itSeg!=segList.end();itSeg++)
 	{
@@ -219,7 +280,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			else
 				itTri++;
 		}
-
+		
 		// Divide the list of points (coming from remaining segments) in 2 groups : "above" and "below"		
 		std::vector<int> pointsAbove;
 		std::vector<int> pointsBelow;
@@ -250,7 +311,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			}
 		}
 		}
-
+		
 		// Recursively triangulate both polygons
 		_recursiveTriangulatePolygon(*itSeg, pointsAbove, tbuffer, pl);		
 		_recursiveTriangulatePolygon(itSeg->inverse(), pointsBelow, tbuffer, pl);
@@ -291,7 +352,7 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 		Circle c(pointList[*currentPoint], pointList[cuttingSeg.i1], pointList[cuttingSeg.i2]);
 		for (std::vector<int>::iterator it = inputPoints.begin();it!=inputPoints.end();it++)
 		{
-			if (c.isPointInside(pointList[*it]) )
+			if (c.isPointInside(pointList[*it]) && (*it != *currentPoint))
 			{			
 				isDelaunay = false;
 				currentPoint = it;
