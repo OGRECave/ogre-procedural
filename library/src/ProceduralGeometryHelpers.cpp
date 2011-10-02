@@ -147,5 +147,32 @@ Vector3 Line::shortestPathToPoint(const Vector3& point) const
 	Vector3 vec = -projection+point-mPoint;
 	return vec;
 }
+//-----------------------------------------------------------------------
+bool Line2D::findIntersect(const Line2D& other, Ogre::Vector2& intersection) const
+{
+	const Vector2& p1 = mPoint;
+	const Vector2& p2 = mPoint+mDirection;
+	const Vector2& p3 = other.mPoint;
+	const Vector2& p4 = other.mPoint+other.mDirection;
+
+	Vector2 d1 = mDirection;
+	float a1 = d1.y;
+	float b1 = -d1.x;
+	float g1 = d1.x*p1.y-d1.y*p1.x;
+			
+	Vector2 d3 = other.mDirection;
+	float a2 = d3.y;
+	float b2 = -d3.x;
+	float g2 = d3.x*p3.y-d3.y*p3.x;
+
+	// if both segments are parallel, early out
+	if (d1.crossProduct(d3) == 0.)
+		return false;
+	float intersectx = (b2*g1-b1*g2)/(b1*a2-b2*a1);
+	float intersecty = (a2*g1-a1*g2)/(a1*b2-a2*b1);		
+	
+	intersection = Vector2(intersectx, intersecty);
+	return true;
+}
 
 }

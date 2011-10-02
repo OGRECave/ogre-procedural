@@ -23,3 +23,7 @@ if(DOXYGEN_FOUND)
 	endif()
 	#add_dependencies(doc doxygen)
 endif()
+
+if(OgreProcedural_ILLUSTRATIONS)
+	add_subdirectory(manual/illustrations)
+endif()

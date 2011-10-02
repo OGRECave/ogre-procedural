@@ -170,11 +170,18 @@ class Unit_Tests : public BaseApplication
 			putMesh(s.realizeMesh());
 			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh());
 
-			Shape s3 = CircleShape().setNumSeg(8).realizeShape();						
+			Shape s3 = CircleShape().setNumSeg(16).realizeShape();						
+			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
+
+			s3.translate(Vector2(.01,0));
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
 			s3.translate(Vector2(.5,0));
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
+
+			s3.translate(Vector2(.1,0));
+			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
+
 
 			Shape s4;
 			s4.addPointRel(-54.951207,-16.247524).addPointRel(27.24849,0).addPointRel(2.54842,5.29287)
@@ -202,7 +209,7 @@ class Unit_Tests : public BaseApplication
 				.addPoint(1,-0.5)    // 8
 				.close();
 
-			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());
+			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());		
 		}
 	};
 
@@ -282,12 +289,12 @@ class Unit_Tests : public BaseApplication
 		{
 			// CatmullRomSpline
 			CatmullRomSpline2 cs;
-			cs.addPoint(Vector2(0,-1))
-				.addPoint(Vector2(2,2))
-				.addPoint(Vector2(1,2.5))
-				.addPoint(Vector2(0,1.5))
-				.addPoint(Vector2(-1,2.5))
-				.addPoint(Vector2(-2,2))
+			cs.addPoint(0,-1)
+				.addPoint(2,2)
+				.addPoint(1,2.5)
+				.addPoint(0,1.5)
+				.addPoint(-1,2.5)
+				.addPoint(-2,2)
 				.setNumSeg(8)
 				.close();
 			putMesh(cs.realizeShape().realizeMesh());
@@ -312,6 +319,30 @@ class Unit_Tests : public BaseApplication
 				.close();
 
 			putMesh(kbs2.realizeShape().realizeMesh());
+
+			// RoundedCornerSpline2
+			RoundedCornerSpline2 rcs2;
+			rcs2.addPoint(0,0)
+				.addPoint(1,0)
+				.addPoint(1,1)
+				.addPoint(2,1)
+				.addPoint(3,0);
+			putMesh(rcs2.realizeShape().realizeMesh());
+
+			rcs2.addPoint(Vector2(1,-1))
+				.setRadius(.2)
+				.close();
+			putMesh(rcs2.realizeShape().realizeMesh());
+
+			// RoundedCornerSpline3
+			RoundedCornerSpline3 rcs3;
+			rcs3.addPoint(0,0,0)
+				.addPoint(0,1,0)
+				.addPoint(1,1,1)
+				.addPoint(0,1,1)
+				.addPoint(0,2,1)
+				.setRadius(.2);
+			putMesh(rcs3.realizePath().realizeMesh());
 
 			// CatmullRomSpline3
 			CatmullRomSpline3 cs3;

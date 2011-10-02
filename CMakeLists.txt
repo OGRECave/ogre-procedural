@@ -41,6 +41,7 @@ option(OgreProcedural_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(OgreProcedural_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
 option(OgreProcedural_INSTALL_DOCS "Install documentation." FALSE)
 option(OgreProcedural_STATIC "Static build" TRUE)
+option(OgreProcedural_ILLUSTRATIONS "Build illustrations for manual" FALSE)
 
 # Set docs target directory
 if (WIN32 OR APPLE)
@@ -56,6 +57,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OgreProcedural_BINARY_DIR}/bin")
 
 set(OgreProcedural_TEMPLATES_DIR "${OgreProcedural_SOURCE_DIR}/CMake/Templates")
 set(OgreProcedural_WORK_DIR ${OgreProcedural_BINARY_DIR})
+set(OgreProcedural_LIB_DIRECTORY "lib${LIB_SUFFIX}" CACHE STRING "Install path for libraries, e.g. 'lib64' on some 64-bit Linux distros.")
 
 # Configure version file for use by scripts
 configure_file("${OgreProcedural_TEMPLATES_DIR}/version.txt.in" "${OgreProcedural_BINARY_DIR}/version.txt" @ONLY)
