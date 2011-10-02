@@ -241,7 +241,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 		}
 		shapeOffset+=shape.getPoints().size();
 	}
-
+	
 	// Re-Triangulate according to the new segments
 	for (std::vector<DelaunaySegment>::iterator itSeg=segList.begin();itSeg!=segList.end();itSeg++)
 	{
@@ -280,7 +280,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			else
 				itTri++;
 		}
-
+		
 		// Divide the list of points (coming from remaining segments) in 2 groups : "above" and "below"		
 		std::vector<int> pointsAbove;
 		std::vector<int> pointsBelow;
@@ -311,7 +311,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			}
 		}
 		}
-
+		
 		// Recursively triangulate both polygons
 		_recursiveTriangulatePolygon(*itSeg, pointsAbove, tbuffer, pl);		
 		_recursiveTriangulatePolygon(itSeg->inverse(), pointsBelow, tbuffer, pl);
@@ -352,7 +352,7 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 		Circle c(pointList[*currentPoint], pointList[cuttingSeg.i1], pointList[cuttingSeg.i2]);
 		for (std::vector<int>::iterator it = inputPoints.begin();it!=inputPoints.end();it++)
 		{
-			if (c.isPointInside(pointList[*it]) )
+			if (c.isPointInside(pointList[*it]) && (*it != *currentPoint))
 			{			
 				isDelaunay = false;
 				currentPoint = it;
