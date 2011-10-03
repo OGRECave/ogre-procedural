@@ -219,7 +219,7 @@ public:
 	Ogre::MeshPtr realizeMesh(const std::string& name = "");
 	
 	/// Creates a path with the keys of this path and extra keys coming from a track
-	Path mergeKeysWithTrack(const Track& track);
+	Path mergeKeysWithTrack(const Track& track) const;
 
 	/// Extracts a part of the shape as a new path
 	/// @arg first first index to be in the new path

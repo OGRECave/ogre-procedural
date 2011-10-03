@@ -336,6 +336,11 @@ public:
 	 * you'd rather use setOutside(), which doesn't need any computation.
 	 */
 	Side findRealOutSide() const;
+	
+	/// Creates a shape with the keys of this shape and extra keys coming from a track
+	/// @arg track the track to merge keys with
+	/// @return a new Shape coming from the merge between original shape and the track
+	Shape mergeKeysWithTrack(const Track& track) const;
 
 	/**
 	 * Applies the given translation to all the points already defined.
