@@ -135,10 +135,10 @@ public:
 	/// Extracts a part of the shape as a new shape
 	/// @arg first first index to be in the new shape
 	/// @arg last last index to be in the new shape
-	inline Shape extractSubShape(int first, int last)
+	inline Shape extractSubShape(unsigned int first, unsigned int last)
 	{
 		Shape s;
-		for (int i=first;i<=last;i++)
+		for (unsigned int i=first;i<=last;i++)
 			s.addPoint(mPoints[i]);
 		s.setOutSide(mOutSide);
 		if (mClosed)
@@ -182,7 +182,7 @@ public:
 	/**
 	 * Bounds-safe method to get a point : it will allow you to go beyond the bounds
 	 */
-	inline const Ogre::Vector2& getPoint(int i) const
+	inline const Ogre::Vector2& getPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -251,7 +251,7 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	inline Ogre::Vector2 getDirectionBefore(int i) const
+	inline Ogre::Vector2 getDirectionBefore(unsigned int i) const
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
@@ -262,13 +262,13 @@ public:
 	}	
 
 	/// Gets the average between before direction and after direction
-	inline Ogre::Vector2 getAvgDirection(int i) const
+	inline Ogre::Vector2 getAvgDirection(unsigned int i) const
 	{
 		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 	}	
 
 	/// Gets the shape normal just after that point
-	inline Ogre::Vector2 getNormalAfter(int i) const
+	inline Ogre::Vector2 getNormalAfter(unsigned int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
 		return -getDirectionAfter(i).perpendicular();
@@ -276,7 +276,7 @@ public:
 	}	
 
 	/// Gets the shape normal just before that point
-	inline Ogre::Vector2 getNormalBefore(int i) const
+	inline Ogre::Vector2 getNormalBefore(unsigned int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
 		return -getDirectionBefore(i).perpendicular();
@@ -284,7 +284,7 @@ public:
 	}	
 
 	/// Gets the "normal" of that point ie an average between before and after normals
-	inline Ogre::Vector2 getAvgNormal(int i) const
+	inline Ogre::Vector2 getAvgNormal(unsigned int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
 		return -getAvgDirection(i).perpendicular();
@@ -480,10 +480,10 @@ public:
 
 	struct IntersectionInShape
 	{
-		int index[2];
+		unsigned int index[2];
 		bool onVertex[2];
 		Ogre::Vector2 position;
-		IntersectionInShape(int i, int j, Ogre::Vector2 intersect) : position(intersect)
+		IntersectionInShape(unsigned int i, unsigned int j, Ogre::Vector2 intersect) : position(intersect)
 		{
 			index[0] = i;
 			index[1] = j;
