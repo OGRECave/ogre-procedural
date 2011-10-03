@@ -148,7 +148,7 @@ Shape RoundedCornerSpline2::realizeShape()
 				
 		for (unsigned int j=0;j<=mNumSeg;j++)
 		{
-			Vector2 deltaVector = Utils::rotateVector2(vradBegin, j * angleTotal / mNumSeg);
+			Vector2 deltaVector = Utils::rotateVector2(vradBegin, (Real)j * angleTotal / (Real)mNumSeg);
 			shape.addPoint(center + deltaVector);
 		}
 	}

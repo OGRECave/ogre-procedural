@@ -82,14 +82,14 @@ public:
 	}
 
 	/// Gets the value on the current point, taking into account the addressing mode
-	Ogre::Real getValue(Ogre::Real absPos, Ogre::Real relPos, int index) const;
+	Ogre::Real getValue(Ogre::Real absPos, Ogre::Real relPos, unsigned int index) const;
 
 	/// Gets the value on the current point
 	Ogre::Real getValue(Ogre::Real pos) const;
 
 	/// Get the key value couple before current point, taking into account addressing mode.
 	/// If current point is below minimum key, issues minimum key
-	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueBefore(Ogre::Real absPos, Ogre::Real relPos, int index) const;
+	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueBefore(Ogre::Real absPos, Ogre::Real relPos, unsigned int index) const;
 
 	/// Get the key value couple before current point.
 	/// If current point is below minimum key, issues minimum key/value
@@ -97,7 +97,7 @@ public:
 
 	/// Get the key value couple after current point, taking into account addressing mode.
 	/// If current point is above maximum key, issues maximum key/value
-	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueAfter(Ogre::Real absPos, Ogre::Real relPos, int index) const;
+	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueAfter(Ogre::Real absPos, Ogre::Real relPos, unsigned int index) const;
 
 	/// Get the key value couple after current point.
 	/// If current point is above maximum key, issues maximum key/value	

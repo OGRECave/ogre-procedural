@@ -67,31 +67,31 @@ namespace Procedural
 			return it;
 	}
 
-	Real Track::getValue(Real absPos, Real relPos, int index) const
+	Real Track::getValue(Real absPos, Real relPos, unsigned int index) const
 	{
 		if (mAddressingMode == AM_ABSOLUTE_LINEIC)
 			return getValue(absPos);
 		if (mAddressingMode == AM_RELATIVE_LINEIC)
 			return getValue(relPos);
-		return getValue(index);
+		return getValue((Real)index);
 	}
 		
-	std::map<Real, Real>::const_iterator Track::_getKeyValueBefore(Real absPos, Real relPos, int index) const
+	std::map<Real, Real>::const_iterator Track::_getKeyValueBefore(Real absPos, Real relPos, unsigned int index) const
 	{
 		if (mAddressingMode == AM_ABSOLUTE_LINEIC)
 			return _getKeyValueBefore(absPos);
 		if (mAddressingMode == AM_RELATIVE_LINEIC)
 			return _getKeyValueBefore(relPos);
-		return _getKeyValueBefore(index);
+		return _getKeyValueBefore((Real)index);
 	}
 	
-	std::map<Real, Real>::const_iterator Track::_getKeyValueAfter(Real absPos, Real relPos, int index) const
+	std::map<Real, Real>::const_iterator Track::_getKeyValueAfter(Real absPos, Real relPos, unsigned int index) const
 	{
 		if (mAddressingMode == AM_ABSOLUTE_LINEIC)
 			return _getKeyValueAfter(absPos);
 		if (mAddressingMode == AM_RELATIVE_LINEIC)
 			return _getKeyValueAfter(relPos);
-		return _getKeyValueAfter(index);
+		return _getKeyValueAfter((Real)index);
 	}
 	
 }

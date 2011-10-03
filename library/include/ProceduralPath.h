@@ -174,7 +174,7 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	Ogre::Vector3 getDirectionBefore(int i)
+	Ogre::Vector3 getDirectionBefore(unsigned int i)
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
@@ -188,7 +188,7 @@ public:
 	 * Returns the local direction at the current point.
 	 * @param i index of the point
 	 */
-	Ogre::Vector3 getAvgDirection(int i)
+	Ogre::Vector3 getAvgDirection(unsigned int i)
 	{
 	    return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 	}
@@ -224,10 +224,10 @@ public:
 	/// Extracts a part of the shape as a new path
 	/// @arg first first index to be in the new path
 	/// @arg last last index to be in the new path
-	inline Path extractSubPath(int first, int last)
+	inline Path extractSubPath(unsigned int first, unsigned int last)
 	{
 		Path p;
-		for (int i=first;i<last;i++)
+		for (unsigned int i=first;i<last;i++)
 			p.addPoint(mPoints[i]);
 		if (mClosed)
 			p.close();

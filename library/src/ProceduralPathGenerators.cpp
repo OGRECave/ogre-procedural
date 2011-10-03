@@ -126,7 +126,7 @@ Path RoundedCornerSpline3::realizePath()
 						
 		for (unsigned int j=0;j<=mNumSeg;j++)
 		{
-			q.FromAngleAxis(angleTotal * j / mNumSeg, vAxis);
+			q.FromAngleAxis(angleTotal * (Real)j / (Real)mNumSeg, vAxis);
 			path.addPoint(center + q*vradBegin);
 		}
 	}

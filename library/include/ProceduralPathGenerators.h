@@ -103,7 +103,7 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 	}
 	
 	/// Safely gets a control point
-	inline const Ogre::Vector3& safeGetPoint(int i) const
+	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -133,7 +133,7 @@ public:
 		return *this;
 	}
 	/// Safely gets a control point
-	inline const ControlPoint& safeGetPoint(int i) const
+	inline const ControlPoint& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -172,7 +172,7 @@ public:
 	}
 	
 	/// Sets the number of segments for this line
-	inline LinePath& setNumSeg(int numSeg)
+	inline LinePath& setNumSeg(unsigned int numSeg)
 	{
 		mNumSeg = numSeg;
 		return *this;
@@ -210,7 +210,7 @@ class _ProceduralExport RoundedCornerSpline3 : public BaseSpline3<RoundedCornerS
 	std::vector<Ogre::Vector3> mPoints;	
 	
 public:
-	RoundedCornerSpline3() : mRadius(.1) {}
+	RoundedCornerSpline3() : mRadius(.1f) {}
 	
 	inline RoundedCornerSpline3& setRadius(Ogre::Real radius)
 	{
@@ -233,7 +233,7 @@ public:
 	}
 
 	/// Safely gets a control point
-	inline const Ogre::Vector3& safeGetPoint(int i) const
+	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
