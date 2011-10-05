@@ -475,10 +475,10 @@ MultiShape Shape::thicken(Real amount)
 		}
 	}
 //-----------------------------------------------------------------------
-Path Shape::convertToPath()
+Path Shape::convertToPath() const
 {
 	Path p;
-	for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin();it!=mPoints.end();it++)
+	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();it++)
 	{
 		p.addPoint(it->x, 0, it->y);
 	}
@@ -488,17 +488,17 @@ Path Shape::convertToPath()
 	return p;
 }
 //-----------------------------------------------------------------------
-Track Shape::convertToTrack(Track::AddressingMode addressingMode)
+Track Shape::convertToTrack(Track::AddressingMode addressingMode) const
 {
 	Track t(addressingMode);
-	for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin();it!=mPoints.end();it++)
+	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();it++)
 	{
 		t.addKeyFrame(it->x, it->y);
 	}
 	return t;
 }
 //-----------------------------------------------------------------------
-Shape Shape::mergeKeysWithTrack(const Track& track)
+Shape Shape::mergeKeysWithTrack(const Track& track) const
 {
 	if (!track.isInsertPoint() || track.getAddressingMode() == Track::AM_POINT)
 		return *this;
