@@ -72,22 +72,54 @@ THE SOFTWARE.
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
 	Camera* camera = mSceneMgr->createCamera("SimpleCamera");  
 	mViewPort = mWindow->addViewport(camera);
-	mViewPort->setBackgroundColour(ColourValue::Green);
+	mViewPort->setBackgroundColour(ColourValue::Blue);
 	camera->setPosition(0,0,10);
 	camera->lookAt(0,0,0);
 	camera->setNearClipDistance(1.);
 }
 
+void Illustrations::next(std::string name)
+{
+	mRoot->renderOneFrame();
+	mWindow->writeContentsToFile(name + ".png");
+
+	for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it != mSceneNodes.end(); it++) 
+	{
+		(*it)->detachAllObjects();
+		mSceneMgr->destroySceneNode(*it);
+	}
+	for (std::vector<Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); it++)
+	{
+		MeshManager::getSingletonPtr()->remove((*it)->getMesh()->getName());			
+		mSceneMgr->destroyEntity(*it);
+	}		
+	mEntities.clear();
+	mSceneNodes.clear();
+}
+
+void Illustrations::putMesh(const String& meshName, int materialIndex)
+{
+	Entity* ent = mSceneMgr->createEntity(meshName);
+	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	sn->attachObject(ent);
+	switch (materialIndex)
+	{
+		case 1:ent->setMaterialName("Examples/Rockwall");break;
+	}
+	mEntities.push_back(ent);
+	mSceneNodes.push_back(sn);	
+}
+
+
 void Illustrations::go()
 {		
 	Procedural::CylinderGenerator().realizeMesh("myCylinder");
-	Entity* e= mSceneMgr->createEntity("myCylinder");
-	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(e);
-	mRoot->renderOneFrame();
-	mWindow->writeContentsToFile("screenshot.png");
+	putMesh("myCylinder");
+	next("img001");
 
-	mRoot->renderOneFrame();
-	mWindow->writeContentsToFile("screenshot2.png");
+	Procedural::BoxGenerator().realizeMesh("myBox");
+	putMesh("myBox");
+	next("img002");
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
