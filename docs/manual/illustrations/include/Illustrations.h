@@ -40,6 +40,10 @@ class Illustrations
 	Viewport* mViewPort;
 	SceneManager* mSceneMgr;
 
+	std::vector<Entity*> mEntities;
+	std::vector<SceneNode*> mSceneNodes;
+
+
 public:
 	Illustrations()
 	{
@@ -48,6 +52,8 @@ public:
 
 	void init();
 	void go();
+	void next(std::string name);
+	void putMesh(const String& meshName, int materialIndex=0);
 	
 };
 
