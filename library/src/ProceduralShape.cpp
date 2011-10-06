@@ -507,6 +507,8 @@ Shape Shape::mergeKeysWithTrack(const Track& track) const
 	Real lineicPos = 0;
 	Real shapeLineicPos = 0;
 	Shape outputShape;
+	if (mClosed)
+		outputShape.close();	
 	outputShape.addPoint(getPoint(0));
 	for (unsigned int i = 1; i < mPoints.size(); )
 	{
