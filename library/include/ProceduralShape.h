@@ -195,7 +195,6 @@ public:
 	 */
 	inline Shape& close()
 	{
-		assert(mPoints.size()>0 && "Cannot close an empty shape");
 		mClosed = true;
 		return *this;
 	}
