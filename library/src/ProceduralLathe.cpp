@@ -27,56 +27,157 @@ THE SOFTWARE.
 */
 #include "ProceduralStableHeaders.h"
 #include "ProceduralLathe.h"
+#include "ProceduralTriangulator.h"
 
 using namespace Ogre;
 
 namespace Procedural
 {
-void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
+//-----------------------------------------------------------------------
+void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
+{
+	int numSegShape = mShapeToExtrude->getSegCount();
+	assert(numSegShape>1 && "Shape must contain at least two points");
+	int offset =0;
+
+	int numSeg = mClosed?mNumSeg+1:mNumSeg;
+	
+	buffer.rebaseOffset();
+	buffer.estimateIndexCount(numSeg*numSegShape*6);
+	buffer.estimateVertexCount((numSegShape+1)*(numSeg+1));
+	
+
+	for (int i=0;i<numSeg;i++)
 	{
-		assert( mShapeToExtrude && "Shape must not be null!");
-		int numSegShape = mShapeToExtrude->getSegCount();
-		assert(numSegShape>1 && "Shape must contain at least two points");
-		int offset =0;
+		Real angle = i/(Real)numSeg*Math::TWO_PI;
+		Quaternion q;
+		q.FromAngleAxis((Radian)angle,Vector3::UNIT_Y);
+
+		for (int j=0;j<=numSegShape;j++)
+		{
+			const Vector2& v0 = mShapeToExtrude->getPoint(j);
+			Vector3 vp(v0.x,v0.y,0);
+			const Vector2& vp2direction = mShapeToExtrude->getAvgDirection(j);
+			Vector2 vp2normal = vp2direction.perpendicular();
+			Vector3 normal(vp2normal.x, vp2normal.y, 0);
+			normal.normalise();
+			if (mShapeToExtrude->getOutSide() == SIDE_LEFT)
+				normal = -normal;
+
+			addPoint(buffer, q*vp,
+							 q*normal,
+							 Vector2(i/(Real)numSeg, j/(Real)numSegShape));
+
+			if (j <numSegShape && i <numSeg)
+			{
+				buffer.index(offset + numSegShape + 2);
+				buffer.index(offset);
+				buffer.index(offset + numSegShape + 1);
+				buffer.index(offset + numSegShape + 2);
+				buffer.index(offset + 1);
+				buffer.index(offset);
+			}
+			offset ++;
+		}
+	}
+}
+//-----------------------------------------------------------------------
+void Lathe::_latheCapImpl(TriangleBuffer& buffer) const
+{
+		std::vector<int> indexBuffer;
+		PointList pointList;
 
 		buffer.rebaseOffset();
-		buffer.estimateIndexCount(mNumSeg*numSegShape*6);
-		buffer.estimateVertexCount((numSegShape+1)*(mNumSeg+1));
 
-		for (int i=0;i<=mNumSeg;i++)
+		Triangulator t;
+		if (mShapeToExtrude)
+			t.setShapeToTriangulate(mShapeToExtrude);
+		else
+			t.setMultiShapeToTriangulate(mMultiShapeToExtrude);
+		t.triangulate(indexBuffer, pointList);
+		buffer.estimateIndexCount(2*indexBuffer.size());
+		buffer.estimateVertexCount(2*pointList.size());
+
+
+		//begin cap
+		buffer.rebaseOffset();
+		/*Quaternion qBegin = Utils::_computeQuaternion(mExtrusionPath->getDirectionAfter(0));
+		if (mRotationTrack)
 		{
-			Real angle = i/(Real)mNumSeg*Math::TWO_PI;
-			Quaternion q;
-			q.FromAngleAxis((Radian)angle,Vector3::UNIT_Y);
+			Real angle = mRotationTrack->getFirstValue();
+			qBegin = qBegin*Quaternion((Radian)angle, Vector3::UNIT_Z);
+		}	
+		Real scaleBegin=1.;
+		if (mScaleTrack)
+			scaleBegin = mScaleTrack->getFirstValue();
+		for (size_t j =0;j<pointList.size();j++)
+		{
+			Vector2 vp2 = pointList[j];
+			Vector3 vp(vp2.x, vp2.y, 0);
+			Vector3 normal = -Vector3::UNIT_Z;				
 
-			for (int j=0;j<=numSegShape;j++)
-			{
-				Vector2 v0 = mShapeToExtrude->getPoint(j);
-				Vector3 vp(v0.x,v0.y,0);
-				Vector2 vp2direction = mShapeToExtrude->getAvgDirection(j);
-				Vector2 vp2normal = vp2direction.perpendicular();
-				Vector3 normal(vp2normal.x, vp2normal.y, 0);
-				normal.normalise();
-				if (mShapeToExtrude->getOutSide() == SIDE_LEFT)
-				{
-					normal = -normal;
-				}
+			Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*(scaleBegin*vp);
+			addPoint(buffer, newPoint,
+				qBegin*normal,
+				vp2);
+		}
 
-				addPoint(buffer, q*vp,
-								 q*normal,
-								 Vector2(i/(Real)mNumSeg, j/(Real)numSegShape));
+		for (size_t i=0;i<indexBuffer.size()/3;i++)
+		{				
+			buffer.index(indexBuffer[i*3]);
+			buffer.index(indexBuffer[i*3+2]);
+			buffer.index(indexBuffer[i*3+1]);
+		}*/
 
-				if (j <numSegShape && i <mNumSeg)
-				{
-					buffer.index(offset + numSegShape + 2);
-					buffer.index(offset);
-					buffer.index(offset + numSegShape + 1);
-					buffer.index(offset + numSegShape + 2);
-					buffer.index(offset + 1);
-					buffer.index(offset);
-				}
-				offset ++;
-			}
-		}		
+		// end cap
+		buffer.rebaseOffset();
+		/*Quaternion qEnd = Utils::_computeQuaternion(mExtrusionPath->getDirectionBefore(mExtrusionPath->getSegCount()));
+		if (mRotationTrack)
+		{
+			Real angle = mRotationTrack->getLastValue();
+			qEnd = qEnd*Quaternion((Radian)angle, Vector3::UNIT_Z);
+		}			
+		Real scaleEnd=1.;
+		if (mScaleTrack)
+			scaleEnd = mScaleTrack->getLastValue();
+
+		for (size_t j =0;j<pointList.size();j++)
+		{
+			Vector2 vp2 = pointList[j];
+			Vector3 vp(vp2.x, vp2.y, 0);
+			Vector3 normal = Vector3::UNIT_Z;				
+
+			Vector3 newPoint = mExtrusionPath->getPoint(mExtrusionPath->getSegCount())+qEnd*(scaleEnd*vp);
+			addPoint(buffer, newPoint,
+				qEnd*normal,
+				vp2);
+		}
+
+		for (size_t i=0;i<indexBuffer.size()/3;i++)
+		{				
+			buffer.index(indexBuffer[i*3]);
+			buffer.index(indexBuffer[i*3+1]);
+			buffer.index(indexBuffer[i*3+2]);
+		}*/
+}
+//-----------------------------------------------------------------------
+void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
+{
+	assert((mShapeToExtrude || mMultiShapeToExtrude) && "Either shape or multishape must be defined!");
+	
+	// Triangulate the begin and end caps
+	if (!mClosed && mCapped)
+		_latheCapImpl(buffer);
+
+	// Extrudes the body
+	if (mShapeToExtrude)
+		_latheBodyImpl(buffer, mShapeToExtrude);
+	else 
+	{
+		for (int i=0; i<mMultiShapeToExtrude->getShapeCount();i++)			
+			_latheBodyImpl(buffer, &mMultiShapeToExtrude->getShape(i));
 	}
+		
+	
+}
 }
