@@ -479,9 +479,12 @@ class Unit_Tests : public BaseApplication
 		void initImpl()
 		{
 			CatmullRomSpline2 cs;
-			cs.addPoint(0,0).addPoint(1,0).addPoint(3,5).addPoint(1,10).addPoint(0,10);
+			cs.addPoint(0,0).addPoint(1,0).addPoint(3,5).addPoint(1,10).addPoint(0,11);
 			Shape s = cs.realizeShape();
 			Lathe l = Lathe().setShapeToExtrude(&s);
+			putMesh(l.realizeMesh(),1);
+
+			l.setAngleBegin(Degree(90)).setAngleEnd(Degree(200));
 			putMesh(l.realizeMesh(),1);
 		}
 	};
