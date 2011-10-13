@@ -74,20 +74,20 @@ namespace Procedural
 	}
 
 	template <class T>
-	struct KonachekBartelsSplineControlPoint
+	struct KochanekBartelsSplineControlPoint
 	{
 		T position;
 		Ogre::Real tension;
 		Ogre::Real bias;
 		Ogre::Real continuity;
 		
-		KonachekBartelsSplineControlPoint(const T& p, Ogre::Real t, Ogre::Real b, Ogre::Real c) : position(p), tension(t), bias(b), continuity(c) {}
-		KonachekBartelsSplineControlPoint(const T& p) : position(p), tension(0.), bias(0.), continuity(0.) {}
+		KochanekBartelsSplineControlPoint(const T& p, Ogre::Real t, Ogre::Real b, Ogre::Real c) : position(p), tension(t), bias(b), continuity(c) {}
+		KochanekBartelsSplineControlPoint(const T& p) : position(p), tension(0.), bias(0.), continuity(0.) {}
 	};
 
 	template<class T>
-	void computeKonachekBartelsPoints(const KonachekBartelsSplineControlPoint<T>& P1, const KonachekBartelsSplineControlPoint<T>& P2, 
-									const KonachekBartelsSplineControlPoint<T>& P3, const KonachekBartelsSplineControlPoint<T>& P4, unsigned int numSeg, std::vector<T>& pointList)
+	void computeKochanekBartelsPoints(const KochanekBartelsSplineControlPoint<T>& P1, const KochanekBartelsSplineControlPoint<T>& P2, 
+									const KochanekBartelsSplineControlPoint<T>& P3, const KochanekBartelsSplineControlPoint<T>& P4, unsigned int numSeg, std::vector<T>& pointList)
 	{
 		Ogre::Vector2 m0 = (1-P2.tension)*(1+P2.bias)*(1+P2.continuity)/2.f*(P2.position-P1.position)+(1-P2.tension)*(1-P2.bias)*(1-P2.continuity)/2.f*(P3.position-P2.position);
 		Ogre::Vector2 m1 = (1-P3.tension)*(1+P3.bias)*(1-P3.continuity)/2.f*(P3.position-P2.position)+(1-P3.tension)*(1-P3.bias)*(1+P3.continuity)/2.f*(P4.position-P3.position);

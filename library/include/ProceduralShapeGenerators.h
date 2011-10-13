@@ -154,7 +154,7 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
  */
 class _ProceduralExport KochanekBartelsSpline2 : public BaseSpline2<KochanekBartelsSpline2>
 {	
-	typedef KonachekBartelsSplineControlPoint<Ogre::Vector2> ControlPoint;
+	typedef KochanekBartelsSplineControlPoint<Ogre::Vector2> ControlPoint;
 	
 	std::vector<ControlPoint> mPoints;
 	
