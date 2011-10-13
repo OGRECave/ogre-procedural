@@ -97,7 +97,7 @@ Shape CatmullRomSpline2::realizeShape()
 			const ControlPoint& P3 = safeGetPoint(i+1);
 			const ControlPoint& P4 = safeGetPoint(i+2);
 			
-			computeKonachekBartelsPoints(P1, P2, P3, P4, mNumSeg, shape.getPointsReference());
+			computeKochanekBartelsPoints(P1, P2, P3, P4, mNumSeg, shape.getPointsReference());
 
 			if (i == mPoints.size() - 2 && !mClosed)
 			{
