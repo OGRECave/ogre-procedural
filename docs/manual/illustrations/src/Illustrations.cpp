@@ -66,14 +66,16 @@ THE SOFTWARE.
 
 	if (!mRoot->restoreConfig())
 		mRoot->showConfigDialog();
- 
+		 
 	mWindow = mRoot->initialise(true, ""); 
+	mWindow->resize(256,256);
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
 	Camera* camera = mSceneMgr->createCamera("SimpleCamera");  
 	mViewPort = mWindow->addViewport(camera);
 	mViewPort->setBackgroundColour(ColourValue::Blue);
-	camera->setPosition(0,0,10);
+	camera->setAspectRatio(1.);
+	camera->setPosition(5,5,5);
 	camera->lookAt(0,0,0);
 	camera->setNearClipDistance(1.);
 }
@@ -97,9 +99,9 @@ void Illustrations::next(std::string name)
 	mSceneNodes.clear();
 }
 
-void Illustrations::putMesh(const String& meshName, int materialIndex)
+void Illustrations::putMesh(MeshPtr mesh, int materialIndex)
 {
-	Entity* ent = mSceneMgr->createEntity(meshName);
+	Entity* ent = mSceneMgr->createEntity(mesh->getName());
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	sn->attachObject(ent);
 	switch (materialIndex)
@@ -112,14 +114,47 @@ void Illustrations::putMesh(const String& meshName, int materialIndex)
 
 
 void Illustrations::go()
-{		
-	Procedural::CylinderGenerator().realizeMesh("myCylinder");
-	putMesh("myCylinder");
-	next("img001");
+{	
+	MeshPtr mp;
+	mp = Procedural::BoxGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_box");
 
-	Procedural::BoxGenerator().realizeMesh("myBox");
-	putMesh("myBox");
-	next("img002");
+	mp = Procedural::RoundedBoxGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_roundedbox");
+
+	mp = Procedural::SphereGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_sphere");
+
+	mp = Procedural::IcoSphereGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_icosphere");
+
+	mp = Procedural::TorusGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_torus");
+
+	mp = Procedural::TorusKnotGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_torusknot");
+
+	mp = Procedural::CylinderGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_cylinder");
+
+	mp = Procedural::ConeGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_cone");
+
+	mp = Procedural::TubeGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_tube");
+
+	mp = Procedural::CapsuleGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_capsule");
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

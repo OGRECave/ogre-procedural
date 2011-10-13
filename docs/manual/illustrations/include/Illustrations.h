@@ -53,7 +53,7 @@ public:
 	void init();
 	void go();
 	void next(std::string name);
-	void putMesh(const String& meshName, int materialIndex=0);
+	void putMesh(MeshPtr mesh, int materialIndex=0);
 	
 };
 
