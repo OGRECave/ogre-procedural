@@ -12,28 +12,47 @@ If you need more detailed information about how to use a specific functionality,
 
 There are a few mesh primitives generators.
 
-.Cube
+.Box
 
-.RoundedCube
+image::primitive_box.png[scale="50"]
+
+.RoundedBox
+
+image::primitive_roundedbox.png[scale="50"]
 
 .Sphere
 
+image::primitive_sphere.png[scale="50"]
+
 .IcoSphere
 
-Icosphere is visually quite near from Sphere, but has a quite different repartition of the triangles.
+Icosphere is visually quite close from Sphere, but has a quite different repartition of the triangles.
+
+image::primitive_icosphere.png[scale="50"]
 
 .Torus
 
+image::primitive_torus.png[scale="50"]
+
 .TorusKnot
+
+image::primitive_torusknot.png[scale="50"]
 
 .Cylinder
 
+image::primitive_cylinder.png[scale="50"]
+
 .Cone
+
+image::primitive_cone.png[scale="50"]
 
 .Tube
 
+image::primitive_tube.png[scale="50"]
+
 .Capsule
 
+image::primitive_capsule.png[scale="50"]
 
 == Shapes, paths and tracks
 
@@ -45,9 +64,11 @@ The difference between them is :
 * Shapes are 2D
 * Paths are 3D
 
+
+
 === Orientation and closedness
 
-Both shapes and tracks can be closed or not : if closed, there will be an automatic junction between the last point and the first point.
+Both shapes, tracks and paths can be closed or not : if closed, there will be an automatic junction between the last point and the first point.
 
 Shapes have an outside and an inside : you can define whether the left or the right side is the outside.
 It also makes sense with non-closed shape (for example, when extruded, the outside corresponds to where the face normal heads).
@@ -55,22 +76,41 @@ There's also a function to guess where is the outside and where is the inside.
 
 === Splines
 
-Splines are a few helper classes used to generate tracks, shapes or paths, by interpolating between a bunch of control points.
+Splines are a few helper classes used to generate shapes or paths, by interpolating between a bunch of control points.
+
+You can also generate a track by first generating a shape, then calling the method convertToTrack(). 
+Shape's X are used as keys and Y as values.
 
 .Cubic Hermite Spline
 
 This is often referred as 'Bezier Spline'.
 With Cubic Hermite Spline, you can choose the points and the tangents of the curves that goes through control points.
 
+image::spline_cubichermite.png[scale="50"]
+
 .Catmull-Rom Spline
 
 It's a particular case of Cubic Hermite Spline, in which tangents are automatically calculated.
 
-.Konachek Bartels Spline
+image::spline_catmullrom.png[scale="50"]
+
+.Kochanek Bartels Spline
+
+Kochanek-Bartels spline is defined by control points and 3 parameters : tension, bias and continuity.
+Here's a description of what they do :
+
+* Tension    T = +1 -> Tight	        T = -1 -> Round	
+* Bias       B = +1 -> Post Shoot       B = -1 -> Pre shoot
+* Continuity C = +1 -> Inverted corners	C = -1 -> Box corners
+
+
+image::spline_kochanekbartels.png[scale="50"]
 
 .Rounded Corner Spline
 
 This one consists in straight lines joining the control points, with corners replaced by circle arcs.
+
+image::spline_roundedcorner.png[scale="50"]
 
 === Shape specific operations
 
@@ -80,13 +120,42 @@ You can combine shapes together in order to produce new shapes, using boolean op
 Technically, the output is a multishape, because it doesn't always resolve to a single line.
 
 Supported boolean operations are :
+
 * Union : the result contains everything inside A plus evertyhing inside B
+image::shape_union.png[scale="50"]
+
 * Intersection : the result contains everything that is inside A and B
+image::shape_intersection.png[scale="50"]
+
 * Difference : the result contains everything that is in A but not in B
+image::shape_difference.png[scale="50"]
+
 * Xor (not yet implemented) : the result contains everything that either inside A or inside B but not inside both.
 
 ==== Thicken
 
-== Extrusion and lathe
+A "thin" shape can be made "thick" by using the thicken operation.
+
+image::shape_thicken.png[scale="50"]
+
+== Extrusion operations
+
+=== Extruder
 
 Extrusion is an operation that consists in creating a mesh from a shape moved along a path.
+
+image::extruder_generic.png[scale="50"]
+
+Special options are available to influence the way the mesh is created :
+
+* Rotation Track
+
+* Scale Track
+
+* Shape Texture Track
+
+
+
+=== Lathe
+
+Lathe is an operation that takes a shape and rotates it around Y-axis to produce a mesh.
