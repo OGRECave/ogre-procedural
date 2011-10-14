@@ -39,6 +39,9 @@ namespace Procedural
 {
 /** Extrudes a 2D shape along a path to build an extruded mesh.
  * Can be used to build things such as pipelines, roads...
+ * 
+ * Note : Concerning UV texCoords, U is along the path and V along the shape.
+ *
  */
 class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 {
@@ -49,6 +52,7 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 	Track* mRotationTrack;
 	Track* mScaleTrack;
 	Track* mShapeTextureTrack;
+	Track* mPathTextureTrack;
 
 	void _extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const;
 
@@ -56,7 +60,7 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 	
 public:
 	/// Default constructor
-	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mRotationTrack(0), mScaleTrack(0), mShapeTextureTrack(0)
+	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mRotationTrack(0), mScaleTrack(0), mShapeTextureTrack(0), mPathTextureTrack(0)
 	{}
 	
 	/**
@@ -102,11 +106,18 @@ public:
 		return *this;
 	}
 	
-	/// Sets the track mapping shape to V texture coord (optional).
+	/// Sets the track that maps shape points to V texture coords (optional).
 	/// Warning : if used with multishape, all shapes will have the same track.
 	inline Extruder& setShapeTextureTrack(Track* shapeTextureTrack) 
 	{
 		mShapeTextureTrack = shapeTextureTrack;
+		return *this;
+	}
+	
+	/// Sets the track that maps path points to V texture coord (optional).
+	inline Extruder& setPathTextureTrack(Track* pathTextureTrack)
+	{
+		mPathTextureTrack = pathTextureTrack;
 		return *this;
 	}
 

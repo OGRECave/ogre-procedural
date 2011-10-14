@@ -59,6 +59,8 @@ namespace Procedural
 			path = path.mergeKeysWithTrack(*mRotationTrack);
 		if (mScaleTrack)
 			path = path.mergeKeysWithTrack(*mScaleTrack);
+		if (mPathTextureTrack)
+			path = path.mergeKeysWithTrack();
 		numSegPath = path.getSegCount();
 		Shape shape = *shapeToExtrude;
 		if (mShapeTextureTrack)
@@ -93,6 +95,12 @@ namespace Procedural
 			{
 				scale = mScaleTrack->getValue(lineicPos, lineicPos / totalPathLength, i);
 			}
+			Real uTexCoord;
+			if (mPathTextureTrack)
+				uTexCoord = mPathTextureTrack->getValue(lineicPos, lineicPos / totalPathLength, i);
+			else
+				uTexCoord = i/(Real)numSegPath;
+			
 			Real lineicShapePos = 0.;
 			// Insert new points
 			for (unsigned int j =0; j <= numSegShape; ++j)
@@ -110,11 +118,11 @@ namespace Procedural
 				if (mShapeTextureTrack)
 					vTexCoord = mShapeTextureTrack->getValue(lineicShapePos, lineicShapePos / totalShapeLength, j);
 				else
-					vTexCoord = j/(Real)numSegShape;
+					vTexCoord = j/(Real)numSegShape;				
 
 				addPoint(buffer, newPoint,
 					q*normal, 
-					Vector2(i/(Real)numSegPath, vTexCoord));
+					Vector2(uTexCoord, vTexCoord));
 
 				if (j <numSegShape && i <numSegPath)
 				{		

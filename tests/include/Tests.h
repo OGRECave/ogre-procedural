@@ -452,13 +452,15 @@ class Unit_Tests : public BaseApplication
 			}
 
 			{
-			// Test irregular texture distribution on shape
-				Shape circle = CircleShape().setNumSeg(20).realizeShape();
-			//Path line = CatmullRomSpline3().addPoint(0,0,0).addPoint(0,5,1).addPoint(0,10,0).realizePath();			
-			Path line = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
-			Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.2).addKeyFrame(1,1);
-			Extruder ex;
-			putMesh(ex.setShapeToExtrude(&circle).setExtrusionPath(&line).setShapeTextureTrack(&t).realizeMesh(),1);
+				// Test irregular texture distribution on shape
+				Shape circle = CircleShape().setNumSeg(20).realizeShape();			
+				Path line = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
+				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.2).addKeyFrame(1,1);
+				Extruder ex;
+				putMesh(ex.setShapeToExtrude(&circle).setExtrusionPath(&line).setShapeTextureTrack(&t).realizeMesh(),1);
+				
+				// Test irregular texture distribution on path
+				putMesh(ex.setShapeTextureTrack(0).setPathTextureTrack(&t), 1);
 			}
 
 
