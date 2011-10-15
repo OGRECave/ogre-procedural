@@ -40,8 +40,8 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 	assert(numSegShape>1 && "Shape must contain at least two points");
 	int offset =0;
 
-	int numSeg = mClosed?mNumSeg+1:mNumSeg;
-	
+	//int numSeg = mClosed?mNumSeg+1:mNumSeg;
+	int numSeg = mNumSeg+1;
 	buffer.rebaseOffset();
 	buffer.estimateIndexCount(numSeg*numSegShape*6);
 	buffer.estimateVertexCount((numSegShape+1)*(numSeg+1));
@@ -94,8 +94,10 @@ void Lathe::_latheCapImpl(TriangleBuffer& buffer) const
 		buffer.rebaseOffset();
 
 		Triangulator t;
+		Shape shapeCopy = *mShapeToExtrude;
+		shapeCopy.close();
 		if (mShapeToExtrude)
-			t.setShapeToTriangulate(mShapeToExtrude);
+			t.setShapeToTriangulate(&shapeCopy);
 		else
 			t.setMultiShapeToTriangulate(mMultiShapeToExtrude);
 		t.triangulate(indexBuffer, pointList);
@@ -105,64 +107,45 @@ void Lathe::_latheCapImpl(TriangleBuffer& buffer) const
 
 		//begin cap
 		buffer.rebaseOffset();
-		/*Quaternion qBegin = Utils::_computeQuaternion(mExtrusionPath->getDirectionAfter(0));
-		if (mRotationTrack)
-		{
-			Real angle = mRotationTrack->getFirstValue();
-			qBegin = qBegin*Quaternion((Radian)angle, Vector3::UNIT_Z);
-		}	
-		Real scaleBegin=1.;
-		if (mScaleTrack)
-			scaleBegin = mScaleTrack->getFirstValue();
-		for (size_t j =0;j<pointList.size();j++)
-		{
-			Vector2 vp2 = pointList[j];
-			Vector3 vp(vp2.x, vp2.y, 0);
-			Vector3 normal = -Vector3::UNIT_Z;				
-
-			Vector3 newPoint = mExtrusionPath->getPoint(0)+qBegin*(scaleBegin*vp);
-			addPoint(buffer, newPoint,
-				qBegin*normal,
-				vp2);
-		}
-
-		for (size_t i=0;i<indexBuffer.size()/3;i++)
-		{				
-			buffer.index(indexBuffer[i*3]);
-			buffer.index(indexBuffer[i*3+2]);
-			buffer.index(indexBuffer[i*3+1]);
-		}*/
-
-		// end cap
-		buffer.rebaseOffset();
-		/*Quaternion qEnd = Utils::_computeQuaternion(mExtrusionPath->getDirectionBefore(mExtrusionPath->getSegCount()));
-		if (mRotationTrack)
-		{
-			Real angle = mRotationTrack->getLastValue();
-			qEnd = qEnd*Quaternion((Radian)angle, Vector3::UNIT_Z);
-		}			
-		Real scaleEnd=1.;
-		if (mScaleTrack)
-			scaleEnd = mScaleTrack->getLastValue();
-
+		Quaternion q;
+		q.FromAngleAxis(mAngleBegin, Vector3::UNIT_Y);
 		for (size_t j =0;j<pointList.size();j++)
 		{
 			Vector2 vp2 = pointList[j];
 			Vector3 vp(vp2.x, vp2.y, 0);
 			Vector3 normal = Vector3::UNIT_Z;				
 
-			Vector3 newPoint = mExtrusionPath->getPoint(mExtrusionPath->getSegCount())+qEnd*(scaleEnd*vp);
-			addPoint(buffer, newPoint,
-				qEnd*normal,
+			addPoint(buffer, q*vp,
+				q*normal,
 				vp2);
 		}
 
 		for (size_t i=0;i<indexBuffer.size()/3;i++)
 		{				
 			buffer.index(indexBuffer[i*3]);
-			buffer.index(indexBuffer[i*3+1]);
+			buffer.index(indexBuffer[i*3+1]);			
 			buffer.index(indexBuffer[i*3+2]);
-		}*/
+		}
+		//end cap
+		buffer.rebaseOffset();
+		q.FromAngleAxis(mAngleEnd, Vector3::UNIT_Y);
+		for (size_t j =0;j<pointList.size();j++)
+		{
+			Vector2 vp2 = pointList[j];
+			Vector3 vp(vp2.x, vp2.y, 0);
+			Vector3 normal = -Vector3::UNIT_Z;				
+
+			addPoint(buffer, q*vp,
+				q*normal,
+				vp2);
+		}
+
+		for (size_t i=0;i<indexBuffer.size()/3;i++)
+		{				
+			buffer.index(indexBuffer[i*3]);
+			buffer.index(indexBuffer[i*3+2]);
+			buffer.index(indexBuffer[i*3+1]);
+		}
 }
 //-----------------------------------------------------------------------
 void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const

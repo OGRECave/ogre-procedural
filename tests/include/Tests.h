@@ -488,6 +488,9 @@ class Unit_Tests : public BaseApplication
 
 			l.setAngleBegin(Degree(90)).setAngleEnd(Degree(200));
 			putMesh(l.realizeMesh(),1);
+
+			l.setCapped(true);
+			putMesh(l.realizeMesh(),1);
 		}
 	};
 
