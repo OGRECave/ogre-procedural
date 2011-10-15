@@ -89,9 +89,10 @@ public:
 	
 	/// Sets whether the lathe is capped or not (default=true)
 	/// Only makes sense if the lathe is not closed.
-	inline Lathe setCapped(bool capped)
+	inline Lathe& setCapped(bool capped)
 	{
 		mCapped = capped;
+		return *this;
 	}
 	
 	/** Sets the shape to extrude 	
