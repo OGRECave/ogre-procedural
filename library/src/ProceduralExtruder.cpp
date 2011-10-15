@@ -44,7 +44,8 @@ namespace Procedural
 				
 		Real totalPathLength=1;
 		if ((mRotationTrack && mRotationTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC) ||
-			(mScaleTrack && mScaleTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC))
+			(mScaleTrack && mScaleTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC) ||
+			(mPathTextureTrack && mPathTextureTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC))
 		{
 			totalPathLength = mExtrusionPath->getTotalLength();
 		}
@@ -60,7 +61,7 @@ namespace Procedural
 		if (mScaleTrack)
 			path = path.mergeKeysWithTrack(*mScaleTrack);
 		if (mPathTextureTrack)
-			path = path.mergeKeysWithTrack();
+			path = path.mergeKeysWithTrack(*mPathTextureTrack);
 		numSegPath = path.getSegCount();
 		Shape shape = *shapeToExtrude;
 		if (mShapeTextureTrack)

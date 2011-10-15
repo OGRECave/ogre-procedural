@@ -460,7 +460,7 @@ class Unit_Tests : public BaseApplication
 				putMesh(ex.setShapeToExtrude(&circle).setExtrusionPath(&line).setShapeTextureTrack(&t).realizeMesh(),1);
 				
 				// Test irregular texture distribution on path
-				putMesh(ex.setShapeTextureTrack(0).setPathTextureTrack(&t), 1);
+				putMesh(ex.setShapeTextureTrack(0).setPathTextureTrack(&t).realizeMesh(), 1);
 			}
 
 
