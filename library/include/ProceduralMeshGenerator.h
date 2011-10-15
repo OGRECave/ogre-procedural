@@ -154,7 +154,7 @@ public:
 	inline T& setSwithUV(bool switchUV)
 	{
 		mSwitchUV = switchUV;
-		return *this;
+		return static_cast<T&>(*this);
 	}
 
 protected:

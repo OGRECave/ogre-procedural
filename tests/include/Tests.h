@@ -461,6 +461,9 @@ class Unit_Tests : public BaseApplication
 				
 				// Test irregular texture distribution on path
 				putMesh(ex.setShapeTextureTrack(0).setPathTextureTrack(&t).realizeMesh(), 1);
+
+				// Test texture UV switch
+				putMesh(ex.setPathTextureTrack(0).setSwithUV(true).realizeMesh(),1);
 			}
 
 
