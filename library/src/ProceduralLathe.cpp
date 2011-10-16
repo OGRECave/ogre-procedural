@@ -46,6 +46,9 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 	buffer.estimateIndexCount(numSeg*numSegShape*6);
 	buffer.estimateVertexCount((numSegShape+1)*(numSeg+1));
 	
+	Radian angleEnd(mAngleEnd);
+	if (mAngleBegin>mAngleEnd)
+		angleEnd+=(Radian)Math::TWO_PI;
 
 	for (int i=0;i<numSeg;i++)
 	{
@@ -53,7 +56,7 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 		if (mClosed)
 			angle = i/(Real)mNumSeg*Math::TWO_PI;
 		else
-			angle = mAngleBegin + i/(Real)mNumSeg*(mAngleEnd-mAngleBegin);
+			angle = mAngleBegin + i/(Real)mNumSeg*(angleEnd-mAngleBegin);
 		Quaternion q;
 		q.FromAngleAxis(angle,Vector3::UNIT_Y);
 
