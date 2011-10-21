@@ -132,6 +132,16 @@ public:
 		mPoints.push_back(ControlPoint(p, before, after));
 		return *this;
 	}
+	/// Adds a control point
+	inline CubicHermiteSpline3& addPoint(Ogre::Vector3 p, CubicHermiteSplineAutoTangentMode autoTangentMode)
+	{
+		ControlPoint cp;
+		cp.position = p;
+		cp.autoTangentBefore = autoTangentMode;
+		cp.autoTangentAfter = autoTangentMode;
+		mPoints.push_back(cp);
+		return *this;
+	}
 	/// Safely gets a control point
 	inline const ControlPoint& safeGetPoint(unsigned int i) const
 	{
