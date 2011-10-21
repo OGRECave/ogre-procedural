@@ -151,7 +151,7 @@ public:
 	}
 	
 	/// @copydoc MeshGenerator::mSwitchUV
-	inline T& setSwithUV(bool switchUV)
+	inline T& setSwitchUV(bool switchUV)
 	{
 		mSwitchUV = switchUV;
 		return static_cast<T&>(*this);
