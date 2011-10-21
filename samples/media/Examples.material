@@ -31,3 +31,22 @@ material Examples/BeachStones
 		}
 	}
 }
+
+material HiddenLine
+{
+	technique
+	{
+		pass
+		{
+			ambient  0.0 0.0 0.0
+			diffuse  1.0 1.0 1.0
+		}
+		
+		pass
+		{
+			lighting off
+			polygon_mode wireframe
+			depth_bias 10
+		}
+	}
+}

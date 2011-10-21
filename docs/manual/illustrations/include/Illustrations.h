@@ -39,6 +39,7 @@ class Illustrations
 	RenderWindow* mWindow;
 	Viewport* mViewPort;
 	SceneManager* mSceneMgr;
+	Camera* mCamera;
 
 	std::vector<Entity*> mEntities;
 	std::vector<SceneNode*> mSceneNodes;
