@@ -471,7 +471,7 @@ class Unit_Tests : public BaseApplication
 				putMesh(ex.setShapeTextureTrack(0).setPathTextureTrack(&t).realizeMesh(), 1);
 
 				// Test texture UV switch
-				putMesh(ex.setPathTextureTrack(0).setSwithUV(true).realizeMesh(),1);
+				putMesh(ex.setPathTextureTrack(0).setSwitchUV(true).realizeMesh(),1);
 			}
 
 
