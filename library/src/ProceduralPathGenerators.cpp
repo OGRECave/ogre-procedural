@@ -36,53 +36,53 @@ namespace Procedural
 {
 //-----------------------------------------------------------------------
 Path CatmullRomSpline3::realizePath()
-	{
-		Path path;
-
-		unsigned int numPoints = mClosed?mPoints.size():mPoints.size()-1;		
-		for (unsigned int i=0; i < numPoints; ++i)
-		{			
-			const Vector3& P1 = safeGetPoint(i-1);
-			const Vector3& P2 = safeGetPoint(i);
-			const Vector3& P3 = safeGetPoint(i+1);
-			const Vector3& P4 = safeGetPoint(i+2);
-
-			computeCatmullRomPoints(P1, P2, P3, P4, mNumSeg, path.getPointsReference());
-
-			if (i == mPoints.size() - 2 && !mClosed)
-			{
-				path.addPoint(P3);
-			}
-
-		}
-		if (mClosed)
-			path.close();
-
-		return path;
-	}
-//-----------------------------------------------------------------------
-Path CubicHermiteSpline3::realizePath()
-	{
+{
 	Path path;
 
-		unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
-		for (unsigned int i = 0; i < numPoints; ++i)
-		{
-			const ControlPoint& pointBefore = mPoints[i];
-			const ControlPoint& pointAfter = safeGetPoint(i+1);
+	unsigned int numPoints = mClosed?mPoints.size():mPoints.size()-1;		
+	for (unsigned int i=0; i < numPoints; ++i)
+	{			
+		const Vector3& P1 = safeGetPoint(i-1);
+		const Vector3& P2 = safeGetPoint(i);
+		const Vector3& P3 = safeGetPoint(i+1);
+		const Vector3& P4 = safeGetPoint(i+2);
 
-			computeCubicHermitePoints(pointBefore, pointAfter, mNumSeg, path.getPointsReference());
+		computeCatmullRomPoints(P1, P2, P3, P4, mNumSeg, path.getPointsReference());
 
-			if (i == mPoints.size() - 2 && !mClosed)
-			{
-				path.addPoint(pointAfter.position);
-			}
-		}
-		if (mClosed)
-			path.close();
-
-		return path;
+		if (i == mPoints.size() - 2 && !mClosed)
+			path.addPoint(P3);
 	}
+	if (mClosed)
+		path.close();
+
+	return path;
+}
+//-----------------------------------------------------------------------
+Path CubicHermiteSpline3::realizePath()
+{
+	Path path;
+	
+	//Precompute tangents
+	for (unsigned int i = 0; i < mPoints.size(); ++i)
+		computeTangents<Vector3>(mPoints[i], safeGetPoint(i-1).position, safeGetPoint(i+1).position);
+
+	unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
+	for (unsigned int i = 0; i < numPoints; ++i)
+	{
+		const ControlPoint& pointBefore = mPoints[i];
+		const ControlPoint& pointAfter = safeGetPoint(i+1);
+
+		computeCubicHermitePoints(pointBefore, pointAfter, mNumSeg, path.getPointsReference());
+
+		if (i == mPoints.size() - 2 && !mClosed)		
+			path.addPoint(pointAfter.position);
+		
+	}
+	if (mClosed)
+		path.close();
+
+	return path;
+}
 
 //-----------------------------------------------------------------------
 Path RoundedCornerSpline3::realizePath()
