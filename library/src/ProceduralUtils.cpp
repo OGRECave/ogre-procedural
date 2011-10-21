@@ -40,6 +40,8 @@ namespace Procedural
 		Quaternion quat = Vector3::UNIT_Z.getRotationTo(direction);
 		// Then, compute a correction quaternion : we want the "up" direction to be always the same
 		Vector3 projectedY = Vector3::UNIT_Y - Vector3::UNIT_Y.dotProduct(direction) * direction;
+		if (projectedY.length()<1e-6)
+			return quat;
 		Vector3 tY = quat * Vector3::UNIT_Y;
 		Quaternion quat2 = tY.getRotationTo(projectedY);
 		Quaternion q = quat2 * quat;
