@@ -71,17 +71,33 @@ THE SOFTWARE.
 	mWindow->resize(256,256);
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
-	Camera* camera = mSceneMgr->createCamera("SimpleCamera");  
-	mViewPort = mWindow->addViewport(camera);
-	mViewPort->setBackgroundColour(ColourValue::Blue);
-	camera->setAspectRatio(1.);
-	camera->setPosition(5,5,5);
-	camera->lookAt(0,0,0);
-	camera->setNearClipDistance(1.);
+	mCamera = mSceneMgr->createCamera("SimpleCamera");  
+	mViewPort = mWindow->addViewport(mCamera);
+	mViewPort->setBackgroundColour(ColourValue::White);
+	mCamera->setAspectRatio(1.);
+	mCamera->setPosition(3,5,5);
+	mCamera->lookAt(0,0,0);
+	mCamera->setNearClipDistance(1.);
+	Light* light = mSceneMgr->createLight();
+	light->setType(Light::LT_DIRECTIONAL);
+	light->setDiffuseColour(ColourValue::White);
+	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
+	//camera->projectSphere
 }
 
 void Illustrations::next(std::string name)
 {
+	Entity* e = *mEntities.begin();
+	SceneNode* sn = *mSceneNodes.begin();
+	Vector3 position = sn->_getDerivedPosition();
+	Real radius = e->getBoundingRadius();
+	Sphere bSphere(position, radius);
+	Real left, top, right, bottom;
+	mCamera->projectSphere(bSphere, &left, &top, &right, &bottom);
+	Real maxCoords = std::max(Math::Abs(left), std::max(Math::Abs(top), std::max(Math::Abs(right), Math::Abs(bottom))));
+	mCamera->setFOVy(Math::ATan(maxCoords/mCamera->getNearClipDistance()));
+
+
 	mRoot->renderOneFrame();
 	mWindow->writeContentsToFile(name + ".png");
 
@@ -104,10 +120,7 @@ void Illustrations::putMesh(MeshPtr mesh, int materialIndex)
 	Entity* ent = mSceneMgr->createEntity(mesh->getName());
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	sn->attachObject(ent);
-	switch (materialIndex)
-	{
-		case 1:ent->setMaterialName("Examples/Rockwall");break;
-	}
+	ent->setMaterialName("HiddenLine");
 	mEntities.push_back(ent);
 	mSceneNodes.push_back(sn);	
 }
@@ -117,7 +130,7 @@ void Illustrations::go()
 {	
 	MeshPtr mp;
 	mp = Procedural::BoxGenerator().realizeMesh();
-	putMesh(mp);
+	putMesh(mp,1);
 	next("primitive_box");
 
 	mp = Procedural::RoundedBoxGenerator().realizeMesh();
