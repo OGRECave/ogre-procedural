@@ -32,24 +32,59 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+	enum CubicHermiteSplineAutoTangentMode
+	{
+		AUTOTANGENT_NONE, AUTOTANGENT_STRAIGHT, AUTOTANGENT_CATMULL
+	};
+		
 	template <class T> 
 	struct CubicHermiteSplineControlPoint
 	{
 		T position;
 		T tangentBefore;
 		T tangentAfter;	
+		CubicHermiteSplineAutoTangentMode autoTangentBefore;
+		CubicHermiteSplineAutoTangentMode autoTangentAfter;
 		
-		CubicHermiteSplineControlPoint(const T& p, const T& before, const T& after) : position(p), tangentBefore(before), tangentAfter(after) {}
+		CubicHermiteSplineControlPoint() {}
+		CubicHermiteSplineControlPoint(const T& p, const T& before, const T& after) : position(p), tangentBefore(before), tangentAfter(after), autoTangentBefore(AUTOTANGENT_NONE), autoTangentAfter(AUTOTANGENT_NONE) {}
 	};
 	
+	template <class T>
+	void computeTangents(CubicHermiteSplineControlPoint<T>& point, const T& pointBefore, const T& pointAfter)
+	{
+		switch (point.autoTangentBefore)
+		{
+		case AUTOTANGENT_STRAIGHT:
+			point.tangentBefore = point.position - pointBefore;
+			break;
+		case AUTOTANGENT_CATMULL:
+			point.tangentBefore = pointAfter - pointBefore;
+			break;
+		}
+
+		switch (point.autoTangentAfter)
+		{
+		case AUTOTANGENT_STRAIGHT:
+			point.tangentAfter = pointAfter - point.position;
+			break;
+		case AUTOTANGENT_CATMULL:
+			point.tangentAfter = pointAfter - pointBefore;
+			break;
+		}
+	}
+	
+	// Computes the Cubic Hermite interpolation between 2 control points
+	// Warning : does not compute auto-tangents, as AUTOTANGENT_CATMULL depend on context
+	// Auto-Tangents should be computed before that call
 	template<class T>
 	void computeCubicHermitePoints(const CubicHermiteSplineControlPoint<T>& pointBefore, const CubicHermiteSplineControlPoint<T>& pointAfter, unsigned int numSeg, std::vector<T>& pointList)
-	{
+	{	
 		const T& p0 = pointBefore.position;
 		const T& m0 = pointBefore.tangentAfter;
 		const T& p1 = pointAfter.position;
 		const T& m1 = pointAfter.tangentBefore;
-		
+				
 		for (unsigned int j = 0; j < numSeg; ++j)
 			{
 				Ogre::Real t = (Ogre::Real)j/(Ogre::Real)numSeg;

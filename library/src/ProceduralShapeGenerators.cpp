@@ -39,6 +39,10 @@ Shape CubicHermiteSpline2::realizeShape()
 	Shape shape;
 
 		unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
+		//Precompute tangents
+		for (unsigned int i = 0; i < mPoints.size(); ++i)
+			computeTangents<Vector2>(mPoints[i], safeGetPoint(i-1).position, safeGetPoint(i+1).position);
+
 		for (unsigned int i = 0; i < numPoints; ++i)
 		{
 			const ControlPoint& pointBefore = mPoints[i];

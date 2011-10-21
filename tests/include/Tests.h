@@ -373,6 +373,13 @@ class Unit_Tests : public BaseApplication
 			p.addPoint(0,0,0).addPoint(1,1,1);
 			Extruder ex;
 			putMesh(ex.setExtrusionPath(&p).setShapeToExtrude(&s).setScaleTrack(&t).realizeMesh(),1);
+
+			// AutoTangents
+			CubicHermiteSpline2 chsAuto;
+			chsAuto.addPoint(Vector2(0,0), AUTOTANGENT_STRAIGHT).addPoint(Vector2(1,0),AUTOTANGENT_STRAIGHT)
+				   .addPoint(Vector2(1,1), AUTOTANGENT_STRAIGHT).addPoint(Vector2(2,1),AUTOTANGENT_CATMULL)
+				   .addPoint(Vector2(2,0), AUTOTANGENT_CATMULL).addPoint(Vector2(3,0),AUTOTANGENT_CATMULL);
+			putMesh(chsAuto.realizeShape().realizeMesh());
 		}
 	};
 
