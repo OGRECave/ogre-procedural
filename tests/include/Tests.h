@@ -461,7 +461,8 @@ class Unit_Tests : public BaseApplication
 			{
 				// Test irregular texture distribution on shape
 				Shape circle = CircleShape().setNumSeg(20).realizeShape();			
-				Path line = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
+				//Path line = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
+				Path line = RoundedCornerSpline3().addPoint(0,0,0).addPoint(0,4,0).addPoint(0,6,2).addPoint(0,10,2).realizePath();
 				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.2).addKeyFrame(1,1);
 				Extruder ex;
 				putMesh(ex.setShapeToExtrude(&circle).setExtrusionPath(&line).setShapeTextureTrack(&t).realizeMesh(),1);
