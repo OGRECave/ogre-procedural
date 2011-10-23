@@ -380,6 +380,12 @@ class Unit_Tests : public BaseApplication
 				   .addPoint(Vector2(1,1), AUTOTANGENT_STRAIGHT).addPoint(Vector2(2,1),AUTOTANGENT_CATMULL)
 				   .addPoint(Vector2(2,0), AUTOTANGENT_CATMULL).addPoint(Vector2(3,0),AUTOTANGENT_CATMULL);
 			putMesh(chsAuto.realizeShape().realizeMesh());
+
+			CubicHermiteSpline3 chs3Auto;
+			chs3Auto.addPoint(Vector3(0,0,0), AUTOTANGENT_STRAIGHT).addPoint(Vector3(1,0,0),AUTOTANGENT_STRAIGHT)
+				   .addPoint(Vector3(1,1,1), AUTOTANGENT_STRAIGHT).addPoint(Vector3(2,1,1),AUTOTANGENT_CATMULL)
+				   .addPoint(Vector3(2,0,1), AUTOTANGENT_CATMULL).addPoint(Vector3(3,0,0),AUTOTANGENT_CATMULL);
+			putMesh(chs3Auto.realizePath().realizeMesh());
 		}
 	};
 
