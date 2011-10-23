@@ -42,16 +42,8 @@ namespace Procedural
 		unsigned int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
 				
-		Real totalPathLength=1;
-		if ((mRotationTrack && mRotationTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC) ||
-			(mScaleTrack && mScaleTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC) ||
-			(mPathTextureTrack && mPathTextureTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC))
-		{
-			totalPathLength = mExtrusionPath->getTotalLength();
-		}
-		Real totalShapeLength = 1;
-		if (mShapeTextureTrack && mShapeTextureTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC)
-			totalShapeLength = shapeToExtrude->getTotalLength();
+		Real totalPathLength = mExtrusionPath->getTotalLength();
+		Real totalShapeLength = shapeToExtrude->getTotalLength();
 		
 		// Merge shape and path with tracks
 		Ogre::Real lineicPos=0.;
@@ -100,7 +92,7 @@ namespace Procedural
 			if (mPathTextureTrack)
 				uTexCoord = mPathTextureTrack->getValue(lineicPos, lineicPos / totalPathLength, i);
 			else
-				uTexCoord = i/(Real)numSegPath;
+				uTexCoord = lineicPos / totalPathLength;
 			
 			Real lineicShapePos = 0.;
 			// Insert new points
@@ -119,7 +111,7 @@ namespace Procedural
 				if (mShapeTextureTrack)
 					vTexCoord = mShapeTextureTrack->getValue(lineicShapePos, lineicShapePos / totalShapeLength, j);
 				else
-					vTexCoord = j/(Real)numSegShape;				
+					vTexCoord = lineicShapePos / totalShapeLength;				
 
 				addPoint(buffer, newPoint,
 					q*normal, 
