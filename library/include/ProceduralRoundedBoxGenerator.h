@@ -33,7 +33,8 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** Builds a rounded box.
+/** 
+ * Builds a rounded box.
  * You can choose the size of the rounded borders to get a sharper or smoother look.
  */
 class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGenerator>

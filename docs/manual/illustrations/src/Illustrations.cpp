@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "Illustrations.h"
 #include "Procedural.h"
 
+using namespace Procedural;
+
 //-------------------------------------------------------------------------------------
 	void Illustrations::init()
 	{	
@@ -92,11 +94,8 @@ void Illustrations::next(std::string name)
 	Vector3 position = sn->_getDerivedPosition();
 	Real radius = e->getBoundingRadius();
 	Sphere bSphere(position, radius);
-	Real left, top, right, bottom;
-	mCamera->projectSphere(bSphere, &left, &top, &right, &bottom);
-	Real maxCoords = std::max(Math::Abs(left), std::max(Math::Abs(top), std::max(Math::Abs(right), Math::Abs(bottom))));
-	mCamera->setFOVy(Math::ATan(maxCoords/mCamera->getNearClipDistance()));
-
+	Real distance = 3*radius/Math::Tan(mCamera->getFOVy());
+	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
 	mRoot->renderOneFrame();
 	mWindow->writeContentsToFile(name + ".png");
@@ -120,54 +119,85 @@ void Illustrations::putMesh(MeshPtr mesh, int materialIndex)
 	Entity* ent = mSceneMgr->createEntity(mesh->getName());
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	sn->attachObject(ent);
-	ent->setMaterialName("HiddenLine");
+	if (materialIndex==0)
+		ent->setMaterialName("HiddenLine");
+	else if (materialIndex==1)
+		ent->setMaterialName("RedLine");
 	mEntities.push_back(ent);
-	mSceneNodes.push_back(sn);	
+	mSceneNodes.push_back(sn);
 }
 
 
 void Illustrations::go()
 {	
 	MeshPtr mp;
-	mp = Procedural::BoxGenerator().realizeMesh();
-	putMesh(mp,1);
+	mp = BoxGenerator().realizeMesh();
+	putMesh(mp);
 	next("primitive_box");
 
-	mp = Procedural::RoundedBoxGenerator().realizeMesh();
+	mp = RoundedBoxGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_roundedbox");
 
-	mp = Procedural::SphereGenerator().realizeMesh();
+	mp = SphereGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_sphere");
 
-	mp = Procedural::IcoSphereGenerator().realizeMesh();
+	mp = IcoSphereGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_icosphere");
 
-	mp = Procedural::TorusGenerator().realizeMesh();
+	mp = TorusGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_torus");
 
-	mp = Procedural::TorusKnotGenerator().realizeMesh();
+	mp = TorusKnotGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_torusknot");
 
-	mp = Procedural::CylinderGenerator().realizeMesh();
+	mp = CylinderGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_cylinder");
 
-	mp = Procedural::ConeGenerator().realizeMesh();
+	mp = ConeGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_cone");
 
-	mp = Procedural::TubeGenerator().realizeMesh();
+	mp = TubeGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_tube");
 
-	mp = Procedural::CapsuleGenerator().realizeMesh();
+	mp = CapsuleGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_capsule");
+
+	mp = CapsuleGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_capsule");
+
+	mp = CatmullRomSpline2().addPoint(0,0).addPoint(1,0).addPoint(1,1).addPoint(2,1).realizeShape().realizeMesh();
+	putMesh(mp,1);
+	next("spline_catmull");
+
+	mp = CubicHermiteSpline2().addPoint(Vector2(0,0), AT_CATMULL).addPoint(Vector2(1,0), AT_CATMULL).addPoint(Vector2(1,1), Vector2(0,2), Vector2(0,-2)).addPoint(Vector2(2,1), AT_CATMULL).setNumSeg(16).realizeShape().realizeMesh();
+	putMesh(mp,1);
+	next("spline_cubichermite");
+
+	Shape s1 = RectangleShape().realizeShape();
+	Shape s2 = s1;
+	s2.translate(.5,.5);
+	mp = s1.booleanUnion(s2).realizeMesh();
+	putMesh(mp,1);
+	next("shape_union");
+
+	mp = s1.booleanIntersect(s2).realizeMesh();
+	putMesh(mp,1);
+	next("shape_intersection");
+
+	mp = s1.booleanDifference(s2).realizeMesh();
+	putMesh(mp,1);
+	next("shape_difference");
+
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

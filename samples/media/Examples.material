@@ -40,13 +40,28 @@ material HiddenLine
 		{
 			ambient  0.0 0.0 0.0
 			diffuse  1.0 1.0 1.0
+			shading  flat
 		}
 		
 		pass
-		{
-			lighting off
+		{			
+			ambient 0.0 0.0 0.0
+			diffuse 0.0 0.0 0.0
 			polygon_mode wireframe
 			depth_bias 10
+		}
+	}
+}
+
+material RedLine
+{
+	technique
+	{
+		pass
+		{
+			emissive 1.0 0.0 0.0
+			ambient  1.0 0.0 0.0
+			diffuse  1.0 0.0 0.0
 		}
 	}
 }

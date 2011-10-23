@@ -214,7 +214,7 @@ public:
 };
 //-----------------------------------------------------------------------
 /**
- * Produces a shape by rounding corners of a path
+ * Produces a path by rounding corners of a straight-lines path
  */
 class _ProceduralExport RoundedCornerSpline3 : public BaseSpline3<RoundedCornerSpline3>
 {		
@@ -223,8 +223,10 @@ class _ProceduralExport RoundedCornerSpline3 : public BaseSpline3<RoundedCornerS
 	std::vector<Ogre::Vector3> mPoints;	
 	
 public:
+	/// Default constructor
 	RoundedCornerSpline3() : mRadius(.1f) {}
 	
+	/// Sets the radius of the corners (default = 0.1)
 	inline RoundedCornerSpline3& setRadius(Ogre::Real radius)
 	{
 		mRadius = radius;
