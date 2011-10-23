@@ -85,6 +85,7 @@ public:
 	inline Lathe& setClosed(bool closed)
 	{
 		mClosed = closed;
+		return *this;
 	}
 	
 	/// Sets whether the lathe is capped or not (default=true)

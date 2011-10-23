@@ -25,6 +25,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+#ifndef PROCEDURAL_PATH_GENERATORS_INCLUDED
+#define PROCEDURAL_PATH_GENERATORS_INCLUDED
+
 #include "ProceduralPath.h"
 #include "ProceduralSplines.h"
 
@@ -257,3 +260,4 @@ public:
 };
 
 }
+#endif

@@ -69,14 +69,12 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_SAMPLES_INCLUDEPATH}
 )
 
-# SHARED lib build? then add this:
-#add_definitions(-DOgreProcedural_SHARED)
-
 # should we build static libs?
 if (OgreProcedural_STATIC)
   set(OgreProcedural_LIB_TYPE STATIC)
 else ()
   set(OgreProcedural_LIB_TYPE SHARED)
+  add_definitions(-DOgreProcedural_SHARED)
 endif ()
 
 add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})

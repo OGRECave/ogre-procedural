@@ -238,6 +238,7 @@ public:
 	inline Path& reverse()
 	{
 		std::reverse(mPoints.begin(), mPoints.end());
+		return *this;
 	}
 };
 

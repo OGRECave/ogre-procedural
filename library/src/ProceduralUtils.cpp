@@ -28,11 +28,18 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralUtils.h"
 
+int Procedural::Utils::counter = 0;
+
 namespace Procedural
 {
-	int Utils::counter = 0;
-
 	using namespace Ogre;
+	
+	std::string Utils::getName(const std::string& prefix)
+	{
+		counter++;
+		return prefix + Ogre::StringConverter::toString(counter);		
+	}
+	
 	//-----------------------------------------------------------------------
 	Quaternion Utils::_computeQuaternion(Ogre::Vector3 direction)
 	{
