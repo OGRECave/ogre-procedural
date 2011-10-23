@@ -152,6 +152,7 @@ public:
 	{
 		std::reverse(mPoints.begin(), mPoints.end());
 		switchSide();
+		return *this;
 	}
 
 	/// Clears the content of the shape
