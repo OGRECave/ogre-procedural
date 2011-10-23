@@ -34,20 +34,31 @@ namespace Procedural
 {
 	enum CubicHermiteSplineAutoTangentMode
 	{
-		AUTOTANGENT_NONE, AUTOTANGENT_STRAIGHT, AUTOTANGENT_CATMULL
+		AT_NONE, AT_STRAIGHT, AT_CATMULL
 	};
 		
+	/**
+	 * Template control point for Cubic Hermite splines.
+	 */
 	template <class T> 
 	struct CubicHermiteSplineControlPoint
 	{
+		/// Position of the control point
 		T position;
+		/// Tangent just before the control point
 		T tangentBefore;
-		T tangentAfter;	
+		/// Tangent just after the control point
+		T tangentAfter;
+		/// Auto tangent mode for the tangent just before the control point
 		CubicHermiteSplineAutoTangentMode autoTangentBefore;
+		/// Auto tangent mode for the tangent just after the control point
 		CubicHermiteSplineAutoTangentMode autoTangentAfter;
 		
+		/// Default constructor
 		CubicHermiteSplineControlPoint() {}
-		CubicHermiteSplineControlPoint(const T& p, const T& before, const T& after) : position(p), tangentBefore(before), tangentAfter(after), autoTangentBefore(AUTOTANGENT_NONE), autoTangentAfter(AUTOTANGENT_NONE) {}
+
+		/// Constructor with arguments
+		CubicHermiteSplineControlPoint(const T& p, const T& before, const T& after) : position(p), tangentBefore(before), tangentAfter(after), autoTangentBefore(AT_NONE), autoTangentAfter(AT_NONE) {}
 	};
 	
 	template <class T>
@@ -55,20 +66,20 @@ namespace Procedural
 	{
 		switch (point.autoTangentBefore)
 		{
-		case AUTOTANGENT_STRAIGHT:
+		case AT_STRAIGHT:
 			point.tangentBefore = point.position - pointBefore;
 			break;
-		case AUTOTANGENT_CATMULL:
+		case AT_CATMULL:
 			point.tangentBefore = pointAfter - pointBefore;
 			break;
 		}
 
 		switch (point.autoTangentAfter)
 		{
-		case AUTOTANGENT_STRAIGHT:
+		case AT_STRAIGHT:
 			point.tangentAfter = pointAfter - point.position;
 			break;
-		case AUTOTANGENT_CATMULL:
+		case AT_CATMULL:
 			point.tangentAfter = pointAfter - pointBefore;
 			break;
 		}
@@ -108,15 +119,27 @@ namespace Procedural
 			}
 	}
 
+	/**
+	 * Template control point for KochanekBartels's splines
+	 */
 	template <class T>
 	struct KochanekBartelsSplineControlPoint
 	{
+		/// Position of the control point
 		T position;
+
+		/// Tension of the control point
 		Ogre::Real tension;
+
+		/// Bias of the control point
 		Ogre::Real bias;
+
+		/// Continuity of the control point
 		Ogre::Real continuity;
 		
+		/// Constructor with arguments
 		KochanekBartelsSplineControlPoint(const T& p, Ogre::Real t, Ogre::Real b, Ogre::Real c) : position(p), tension(t), bias(b), continuity(c) {}
+		/// Constructor with tension=bias=continuity=0
 		KochanekBartelsSplineControlPoint(const T& p) : position(p), tension(0.), bias(0.), continuity(0.) {}
 	};
 

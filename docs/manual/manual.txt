@@ -6,7 +6,7 @@ Ogre Procedural Manual
 == About this manual
 
 This manual aims to give a global view over what is possible with Ogre Procedural.
-If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc.
+If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc (you can find it here : http://ogreprocedural.free.fr).
 
 == Mesh primitives
 
@@ -92,7 +92,7 @@ image::spline_cubichermite.png[scale="50"]
 
 It's a particular case of Cubic Hermite Spline, in which tangents are automatically calculated.
 
-image::spline_catmullrom.png[scale="50"]
+image::spline_catmull.png[scale="50"]
 
 .Kochanek Bartels Spline
 
@@ -122,12 +122,15 @@ Technically, the output is a multishape, because it doesn't always resolve to a 
 Supported boolean operations are :
 
 * Union : the result contains everything inside A plus evertyhing inside B
+
 image::shape_union.png[scale="50"]
 
 * Intersection : the result contains everything that is inside A and B
+
 image::shape_intersection.png[scale="50"]
 
 * Difference : the result contains everything that is in A but not in B
+
 image::shape_difference.png[scale="50"]
 
 * Xor (not yet implemented) : the result contains everything that either inside A or inside B but not inside both.

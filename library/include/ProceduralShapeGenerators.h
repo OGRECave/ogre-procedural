@@ -304,6 +304,7 @@ class _ProceduralExport RoundedCornerSpline2 : public BaseSpline2<RoundedCornerS
 public:
 	RoundedCornerSpline2() : mRadius(.1f) {}
 	
+	/// Sets the radius of the corners
 	inline RoundedCornerSpline2& setRadius(Ogre::Real radius)
 	{
 		mRadius = radius;

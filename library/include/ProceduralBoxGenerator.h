@@ -33,7 +33,8 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** Generates a box mesh centered on the origin.
+/** 
+ * Generates a box mesh centered on the origin.
  * Default size is 1.0 with 1 quad per face.
  */
 class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
