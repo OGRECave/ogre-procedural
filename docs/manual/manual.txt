@@ -103,7 +103,6 @@ Here's a description of what they do :
 * Bias       B = +1 -> Post Shoot       B = -1 -> Pre shoot
 * Continuity C = +1 -> Inverted corners	C = -1 -> Box corners
 
-
 image::spline_kochanekbartels.png[scale="50"]
 
 .Rounded Corner Spline
@@ -133,8 +132,6 @@ image::shape_intersection.png[scale="50"]
 
 image::shape_difference.png[scale="50"]
 
-* Xor (not yet implemented) : the result contains everything that either inside A or inside B but not inside both.
-
 ==== Thicken
 
 A "thin" shape can be made "thick" by using the thicken operation.
@@ -149,16 +146,30 @@ Extrusion is an operation that consists in creating a mesh from a shape moved al
 
 image::extruder_generic.png[scale="50"]
 
+Extrusion can also be applied to a multishape.
+
+image::extruder_multishape.png[scale="50"]
+
 Special options are available to influence the way the mesh is created :
 
 * Rotation Track
 
+image::extruder_rotationtrack.png[scale="50"]
+
 * Scale Track
+
+image::extruder_scaletrack.png[scale="50"]
 
 * Shape Texture Track
 
-
+image::extruder_texturetrack.png[scale="50"]
 
 === Lathe
 
 Lathe is an operation that takes a shape and rotates it around Y-axis to produce a mesh.
+
+image::lathe_generic.png[scale="50"]
+
+Lathe can also be restricted to a given angle range.
+
+image::lathe_anglerange.png[scale="50"]
