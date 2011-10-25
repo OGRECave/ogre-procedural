@@ -96,10 +96,21 @@ public:
 		return *this;
 	}
 	/// Adds a control point
-	inline CubicHermiteSpline2& addPoint(Ogre::Vector2 p, CubicHermiteSplineAutoTangentMode autoTangentMode)
+	inline CubicHermiteSpline2& addPoint(Ogre::Vector2 p, CubicHermiteSplineAutoTangentMode autoTangentMode = AT_CATMULL)
 	{
 		ControlPoint cp;
 		cp.position = p;
+		cp.autoTangentBefore = autoTangentMode;
+		cp.autoTangentAfter = autoTangentMode;
+		mPoints.push_back(cp);
+		return *this;
+	}
+
+		/// Adds a control point
+	inline CubicHermiteSpline2& addPoint(Ogre::Real x, Ogre::Real y, CubicHermiteSplineAutoTangentMode autoTangentMode = AT_CATMULL)
+	{
+		ControlPoint cp;
+		cp.position = Ogre::Vector2(x,y);
 		cp.autoTangentBefore = autoTangentMode;
 		cp.autoTangentAfter = autoTangentMode;
 		mPoints.push_back(cp);
