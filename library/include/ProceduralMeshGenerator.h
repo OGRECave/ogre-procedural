@@ -150,7 +150,7 @@ public:
 		return static_cast<T&>(*this);
 	}
 	
-	/// @copydoc MeshGenerator::mSwitchUV
+	/// Sets whether to switch U and V texture coordinates
 	inline T& setSwitchUV(bool switchUV)
 	{
 		mSwitchUV = switchUV;
