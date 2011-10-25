@@ -357,7 +357,8 @@ public:
 	/**
 	 * Applies the given translation to all the points already defined.
 	 * Has strictly no effect on the points defined after that
-	 * @param translation the translation vector
+	 * @param translationX X component of the translation vector
+	 * @param translationY Y component of the translation vector
 	 */
 	Shape& translate(Ogre::Real translationX, Ogre::Real translationY)
 	{
