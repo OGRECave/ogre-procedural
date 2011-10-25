@@ -77,8 +77,7 @@ using namespace Procedural;
 	mViewPort = mWindow->addViewport(mCamera);
 	mViewPort->setBackgroundColour(ColourValue::White);
 	mCamera->setAspectRatio(1.);
-	mCamera->setPosition(3,5,5);
-	mCamera->lookAt(0,0,0);
+	cameraPerspective();
 	mCamera->setNearClipDistance(1.);
 	Light* light = mSceneMgr->createLight();
 	light->setType(Light::LT_DIRECTIONAL);
@@ -89,17 +88,22 @@ using namespace Procedural;
 
 void Illustrations::next(std::string name)
 {
-	Entity* e = *mEntities.begin();
+	// Optimise camera placing
 	SceneNode* sn = *mSceneNodes.begin();
 	Vector3 position = sn->_getDerivedPosition();
-	Real radius = e->getBoundingRadius();
+	Real radius = 0;
+	for (std::vector<Ogre::Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); it++)
+		radius = std::max((*it)->getBoundingRadius(), radius);
+	
 	Sphere bSphere(position, radius);
 	Real distance = 3*radius/Math::Tan(mCamera->getFOVy());
 	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
+	// Write scene to png image
 	mRoot->renderOneFrame();
 	mWindow->writeContentsToFile(name + ".png");
 
+	// Clear the scene
 	for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it != mSceneNodes.end(); it++) 
 	{
 		(*it)->detachAllObjects();
@@ -130,6 +134,10 @@ void Illustrations::putMesh(MeshPtr mesh, int materialIndex)
 
 void Illustrations::go()
 {	
+	//
+	// Primitives
+	//
+
 	MeshPtr mp;
 	mp = BoxGenerator().realizeMesh();
 	putMesh(mp);
@@ -175,17 +183,37 @@ void Illustrations::go()
 	putMesh(mp);
 	next("primitive_capsule");
 
-	mp = CatmullRomSpline2().addPoint(0,0).addPoint(1,0).addPoint(1,1).addPoint(2,1).realizeShape().realizeMesh();
+	//
+	// Operations on shapes and splines
+	//
+
+	cameraFront();
+
+	mp = CatmullRomSpline2().addPoint(0,0).addPoint(1,0).addPoint(1,1).addPoint(2,1).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).realizeShape().translate(-2, 0).realizeMesh();
 	putMesh(mp,1);
 	next("spline_catmull");
 
-	mp = CubicHermiteSpline2().addPoint(Vector2(0,0), AT_CATMULL).addPoint(Vector2(1,0), AT_CATMULL).addPoint(Vector2(1,1), Vector2(0,2), Vector2(0,-2)).addPoint(Vector2(2,1), AT_CATMULL).setNumSeg(16).realizeShape().realizeMesh();
+	mp = CubicHermiteSpline2().addPoint(Vector2(0,0), AT_CATMULL).addPoint(Vector2(1,0), AT_CATMULL).addPoint(Vector2(1,1), Vector2(0,2), Vector2(0,-2)).addPoint(Vector2(2,1), AT_CATMULL).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).setNumSeg(16).realizeShape().translate(-2,0).realizeMesh();
 	putMesh(mp,1);
 	next("spline_cubichermite");
+
+	mp = KochanekBartelsSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0),1,0,0).addPoint(Vector2(1,1),-1,0,0).addPoint(Vector2(2,1),0,1,0).addPoint(Vector2(2,0),0,-1,0).addPoint(Vector2(3,0),0,0,1).addPoint(Vector2(3,1),0,0,-1).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).realizeShape().translate(-2,0).realizeMesh();
+	putMesh(mp,1);
+	next("spline_konachekbartels");
+
+	mp = RoundedCornerSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).setRadius(0.3).realizeShape().translate(-2,0).realizeMesh();
+	putMesh(mp,1);
+	next("spline_roundedcorner");
+
 
 	Shape s1 = RectangleShape().realizeShape();
 	Shape s2 = s1;
 	s2.translate(.5,.5);
+
+	putMesh(s1.realizeMesh(), 1);
+	putMesh(s2.realizeMesh(), 1);
+	next("shape_booleansetup");
+
 	mp = s1.booleanUnion(s2).realizeMesh();
 	putMesh(mp,1);
 	next("shape_union");

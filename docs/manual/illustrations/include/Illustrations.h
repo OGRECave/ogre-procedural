@@ -55,6 +55,18 @@ public:
 	void go();
 	void next(std::string name);
 	void putMesh(MeshPtr mesh, int materialIndex=0);
+
+	void cameraPerspective()
+	{
+		mCamera->setPosition(3,5,5);
+		mCamera->lookAt(0,0,0);
+	}
+
+	void cameraFront()
+	{
+		mCamera->setPosition(0,0,5);
+		mCamera->lookAt(0,0,0);
+	}
 	
 };
 
