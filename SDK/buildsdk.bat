@@ -1,6 +1,8 @@
 @echo off
 if "%1" == "" goto paramErr
 if "%VSINSTALLDIR%" == "" goto envErr
+if "%OGRE_HOME%" == "" goto envErr
+if "%BOOST_ROOT%" == "" goto envErr
 
 set COMPILER=%1
 
@@ -77,6 +79,8 @@ goto end
 
 :envErr
 echo You need to run this script after running vcvars32.bat
+echo You also need to set OGRE_HOME environnement variable to your Ogre SDK's directory
+echo You also need to set BOOST_ROOT environnement variable to your Boost directory
 set errorlevel=1
 goto end
 
