@@ -99,9 +99,13 @@ image::spline_catmull.png[scale="50"]
 Kochanek-Bartels spline is defined by control points and 3 parameters : tension, bias and continuity.
 Here's a description of what they do :
 
-* Tension    T = +1 -> Tight	        T = -1 -> Round	
-* Bias       B = +1 -> Post Shoot       B = -1 -> Pre shoot
-* Continuity C = +1 -> Inverted corners	C = -1 -> Box corners
+[options="header"]
+|=========================================
+|Parameter  | +1              | -1
+|Tension    |Tight            |Round
+|Bias       |Post Shoot       |Pre shoot
+|Continuity |Inverted corners |Box corners
+|=========================================
 
 image::spline_kochanekbartels.png[scale="50"]
 
@@ -118,25 +122,39 @@ image::spline_roundedcorner.png[scale="50"]
 You can combine shapes together in order to produce new shapes, using boolean operations.
 Technically, the output is a multishape, because it doesn't always resolve to a single line.
 
+As an exemple, let's say we have these 2 shapes :
+
+image::shape_booleansetup.png[scale="50"]
+
 Supported boolean operations are :
 
 * Union : the result contains everything inside A plus evertyhing inside B
 
-image::shape_union.png[scale="50"]
+image::shape_booleanunion.png[scale="50"]
 
 * Intersection : the result contains everything that is inside A and B
 
-image::shape_intersection.png[scale="50"]
+image::shape_booleanintersection.png[scale="50"]
 
 * Difference : the result contains everything that is in A but not in B
 
-image::shape_difference.png[scale="50"]
+image::shape_booleandifference.png[scale="50"]
 
 ==== Thicken
 
 A "thin" shape can be made "thick" by using the thicken operation.
 
-image::shape_thicken.png[scale="50"]
+.before 
+image::shape_thick1.png[scale="50"] 
+
+.after 
+image::shape_thick2.png[scale="50"]
+
+=== Triangulation
+
+A delaunay triangulation can be performed on a shape or a multishape.
+
+
 
 == Extrusion operations
 
