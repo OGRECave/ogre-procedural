@@ -62,9 +62,15 @@ public:
 		mCamera->lookAt(0,0,0);
 	}
 
-	void cameraFront()
+	void cameraBack()
 	{
 		mCamera->setPosition(0,0,5);
+		mCamera->lookAt(0,0,0);
+	}
+
+	void cameraFront()
+	{
+		mCamera->setPosition(0,0,-5);
 		mCamera->lookAt(0,0,0);
 	}
 	

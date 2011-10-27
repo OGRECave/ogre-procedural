@@ -187,7 +187,7 @@ void Illustrations::go()
 	// Operations on shapes and splines
 	//
 
-	cameraFront();
+	cameraBack();
 
 	mp = CatmullRomSpline2().addPoint(0,0).addPoint(1,0).addPoint(1,1).addPoint(2,1).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).realizeShape().translate(-2, 0).realizeMesh();
 	putMesh(mp,1);
@@ -199,13 +199,16 @@ void Illustrations::go()
 
 	mp = KochanekBartelsSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0),1,0,0).addPoint(Vector2(1,1),-1,0,0).addPoint(Vector2(2,1),0,1,0).addPoint(Vector2(2,0),0,-1,0).addPoint(Vector2(3,0),0,0,1).addPoint(Vector2(3,1),0,0,-1).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).realizeShape().translate(-2,0).realizeMesh();
 	putMesh(mp,1);
-	next("spline_konachekbartels");
+	next("spline_kochanekbartels");
 
 	mp = RoundedCornerSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).setRadius(0.3).realizeShape().translate(-2,0).realizeMesh();
 	putMesh(mp,1);
 	next("spline_roundedcorner");
 
-
+	//
+	// Boolean operations
+	//
+	{
 	Shape s1 = RectangleShape().realizeShape();
 	Shape s2 = s1;
 	s2.translate(.5,.5);
@@ -216,16 +219,45 @@ void Illustrations::go()
 
 	mp = s1.booleanUnion(s2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_union");
+	next("shape_booleanunion");
 
 	mp = s1.booleanIntersect(s2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_intersection");
+	next("shape_booleanintersection");
 
 	mp = s1.booleanDifference(s2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_difference");
+	next("shape_booleandifference");
+	}
 
+	//
+	// Thicken
+	//
+	{
+	Shape s;
+	mp = s.addPoint(-1,-1).addPoint(0.5,0).addPoint(-0.5,0).addPoint(1,1).realizeMesh();
+	putMesh(mp,1);
+	next("shape_thick1");
+
+	mp = s.thicken(.2).realizeMesh();
+	putMesh(mp,1);
+	next("shape_thick2");
+	}
+
+	//
+	// Delaunay
+	//
+	{
+		cameraFront();
+		MultiShape ms;
+		CircleShape cs;
+		ms.addShape(cs.setRadius(2).realizeShape());
+		ms.addShape(cs.setRadius(.3).realizeShape().translate(-1,.3).switchSide());
+		ms.addShape(cs.realizeShape().translate(1,.3).switchSide());
+		mp = Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh();
+		putMesh(mp);
+		next("shape_triangulation");
+	}
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
