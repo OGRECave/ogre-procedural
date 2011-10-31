@@ -1,11 +1,13 @@
 project(Unit_Tests)
 
 set( HDRS
+		../library/include/ProceduralStableHeaders.h
 		../samples/common/include/BaseApplication.h
 		include/Tests.h
 	)
 
 set( SRCS
+		../library/src/ProceduralPrecompiledHeaders.cpp
 		../samples/common/src/BaseApplication.cpp
 		src/Tests.cpp
 	)
@@ -24,3 +26,9 @@ set_target_properties(Unit_Tests PROPERTIES DEBUG_POSTFIX _d)
 target_link_libraries(Unit_Tests ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${OgreProcedural_LIBRARIES})
 
 procedural_create_vcproj_userfile(Unit_Tests)
+
+# specify a precompiled header to use
+use_precompiled_header(Unit_Tests 
+  "../library/include/ProceduralStableHeaders.h"
+  "../library/src/ProceduralPrecompiledHeaders.cpp"
+)
