@@ -206,7 +206,7 @@ public:
 		Path p;
 		for (unsigned int i = 0; i <= mNumSeg; ++i)
 		{
-			p.addPoint(i/(Ogre::Real)mNumSeg * mPoint1 + i/(Ogre::Real)mNumSeg * mPoint2);
+			p.addPoint((1-i/(Ogre::Real)mNumSeg) * mPoint1 + i/(Ogre::Real)mNumSeg * mPoint2);
 		}
 		return p;
 	}
