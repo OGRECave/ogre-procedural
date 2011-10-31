@@ -376,15 +376,15 @@ class Unit_Tests : public BaseApplication
 
 			// AutoTangents
 			CubicHermiteSpline2 chsAuto;
-			chsAuto.addPoint(Vector2(0,0), AUTOTANGENT_STRAIGHT).addPoint(Vector2(1,0),AUTOTANGENT_STRAIGHT)
-				   .addPoint(Vector2(1,1), AUTOTANGENT_STRAIGHT).addPoint(Vector2(2,1),AUTOTANGENT_CATMULL)
-				   .addPoint(Vector2(2,0), AUTOTANGENT_CATMULL).addPoint(Vector2(3,0),AUTOTANGENT_CATMULL);
+			chsAuto.addPoint(Vector2(0,0), AT_STRAIGHT).addPoint(Vector2(1,0),AT_STRAIGHT)
+				   .addPoint(Vector2(1,1), AT_STRAIGHT).addPoint(Vector2(2,1),AT_CATMULL)
+				   .addPoint(Vector2(2,0), AT_CATMULL).addPoint(Vector2(3,0),AT_CATMULL);
 			putMesh(chsAuto.realizeShape().realizeMesh());
 
 			CubicHermiteSpline3 chs3Auto;
-			chs3Auto.addPoint(Vector3(0,0,0), AUTOTANGENT_STRAIGHT).addPoint(Vector3(1,0,0),AUTOTANGENT_STRAIGHT)
-				   .addPoint(Vector3(1,1,1), AUTOTANGENT_STRAIGHT).addPoint(Vector3(2,1,1),AUTOTANGENT_CATMULL)
-				   .addPoint(Vector3(2,0,1), AUTOTANGENT_CATMULL).addPoint(Vector3(3,0,0),AUTOTANGENT_CATMULL);
+			chs3Auto.addPoint(Vector3(0,0,0), AT_STRAIGHT).addPoint(Vector3(1,0,0),AT_STRAIGHT)
+				   .addPoint(Vector3(1,1,1), AT_STRAIGHT).addPoint(Vector3(2,1,1),AT_CATMULL)
+				   .addPoint(Vector3(2,0,1), AT_CATMULL).addPoint(Vector3(3,0,0),AT_CATMULL);
 			putMesh(chs3Auto.realizePath().realizeMesh());
 		}
 	};
