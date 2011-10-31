@@ -53,12 +53,12 @@ public:
 
 	void init();
 	void go();
-	void next(std::string name);
+	void next(std::string name, Real size);
 	void putMesh(MeshPtr mesh, int materialIndex=0);
 
 	void cameraPerspective()
 	{
-		mCamera->setPosition(3,5,5);
+		mCamera->setPosition(3,5,-5);
 		mCamera->lookAt(0,0,0);
 	}
 

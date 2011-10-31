@@ -65,7 +65,6 @@ The difference between them is :
 * Paths are 3D
 
 
-
 === Orientation and closedness
 
 Both shapes, tracks and paths can be closed or not : if closed, there will be an automatic junction between the last point and the first point.
@@ -154,7 +153,7 @@ image::shape_thick2.png[scale="50"]
 
 A delaunay triangulation can be performed on a shape or a multishape.
 
-
+image::shape_triangulation.png[scale="50"] 
 
 == Extrusion operations
 

@@ -86,17 +86,10 @@ using namespace Procedural;
 	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
 }
 
-void Illustrations::next(std::string name)
+void Illustrations::next(std::string name, Real size)
 {
 	// Optimise camera placing
-	SceneNode* sn = *mSceneNodes.begin();
-	Vector3 position = sn->_getDerivedPosition();
-	Real radius = 0;
-	for (std::vector<Ogre::Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); it++)
-		radius = std::max((*it)->getBoundingRadius(), radius);
-	
-	Sphere bSphere(position, radius);
-	Real distance = 3*radius/Math::Tan(mCamera->getFOVy());
+	Real distance = 2*size/Math::Tan(mCamera->getFOVy());
 	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
 	// Write scene to png image
@@ -141,48 +134,43 @@ void Illustrations::go()
 	MeshPtr mp;
 	mp = BoxGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_box");
+	next("primitive_box", 1.1);
 
 	mp = RoundedBoxGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_roundedbox");
+	next("primitive_roundedbox", 1.3);
 
 	mp = SphereGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_sphere");
+	next("primitive_sphere", 1.4);
 
 	mp = IcoSphereGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_icosphere");
+	next("primitive_icosphere", 1.4);
 
 	mp = TorusGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_torus");
+	next("primitive_torus", 1.6);
 
 	mp = TorusKnotGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_torusknot");
+	next("primitive_torusknot", 1.6);
 
 	mp = CylinderGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_cylinder");
+	next("primitive_cylinder", 1.8);
 
 	mp = ConeGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_cone");
+	next("primitive_cone", 1.4);
 
 	mp = TubeGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_tube");
+	next("primitive_tube", 3);
 
 	mp = CapsuleGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_capsule");
-
-	mp = CapsuleGenerator().realizeMesh();
-	putMesh(mp);
-	next("primitive_capsule");
-
+	next("primitive_capsule", 2);
 	//
 	// Operations on shapes and splines
 	//
@@ -191,19 +179,19 @@ void Illustrations::go()
 
 	mp = CatmullRomSpline2().addPoint(0,0).addPoint(1,0).addPoint(1,1).addPoint(2,1).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).realizeShape().translate(-2, 0).realizeMesh();
 	putMesh(mp,1);
-	next("spline_catmull");
+	next("spline_catmull", 3);
 
 	mp = CubicHermiteSpline2().addPoint(Vector2(0,0), AT_CATMULL).addPoint(Vector2(1,0), AT_CATMULL).addPoint(Vector2(1,1), Vector2(0,2), Vector2(0,-2)).addPoint(Vector2(2,1), AT_CATMULL).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).setNumSeg(16).realizeShape().translate(-2,0).realizeMesh();
 	putMesh(mp,1);
-	next("spline_cubichermite");
+	next("spline_cubichermite", 3);
 
 	mp = KochanekBartelsSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0),1,0,0).addPoint(Vector2(1,1),-1,0,0).addPoint(Vector2(2,1),0,1,0).addPoint(Vector2(2,0),0,-1,0).addPoint(Vector2(3,0),0,0,1).addPoint(Vector2(3,1),0,0,-1).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).realizeShape().translate(-2,0).realizeMesh();
 	putMesh(mp,1);
-	next("spline_kochanekbartels");
+	next("spline_kochanekbartels", 3);
 
 	mp = RoundedCornerSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).setRadius(0.3).realizeShape().translate(-2,0).realizeMesh();
 	putMesh(mp,1);
-	next("spline_roundedcorner");
+	next("spline_roundedcorner", 3);
 
 	//
 	// Boolean operations
@@ -215,19 +203,19 @@ void Illustrations::go()
 
 	putMesh(s1.realizeMesh(), 1);
 	putMesh(s2.realizeMesh(), 1);
-	next("shape_booleansetup");
+	next("shape_booleansetup", 1.5);
 
 	mp = s1.booleanUnion(s2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleanunion");
+	next("shape_booleanunion", 1.5);
 
 	mp = s1.booleanIntersect(s2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleanintersection");
+	next("shape_booleanintersection", 1.5);
 
 	mp = s1.booleanDifference(s2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleandifference");
+	next("shape_booleandifference", 1.5);
 	}
 
 	//
@@ -237,11 +225,11 @@ void Illustrations::go()
 	Shape s;
 	mp = s.addPoint(-1,-1).addPoint(0.5,0).addPoint(-0.5,0).addPoint(1,1).realizeMesh();
 	putMesh(mp,1);
-	next("shape_thick1");
+	next("shape_thick1", 1.5);
 
 	mp = s.thicken(.2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_thick2");
+	next("shape_thick2", 1.5);
 	}
 
 	//
@@ -254,9 +242,38 @@ void Illustrations::go()
 		ms.addShape(cs.setRadius(2).realizeShape());
 		ms.addShape(cs.setRadius(.3).realizeShape().translate(-1,.3).switchSide());
 		ms.addShape(cs.realizeShape().translate(1,.3).switchSide());
+		ms.addShape(cs.realizeShape().switchSide());
+		ms.addShape(cs.realizeShape().scale(2,1).translate(0,-1).switchSide());
 		mp = Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh();
 		putMesh(mp);
-		next("shape_triangulation");
+		next("shape_triangulation", 3);
+	}
+
+	//
+	// Extrusion
+	//
+	{
+		cameraPerspective();
+		//Shape s = RoundedCornerSpline2().addPoint(-1,0).addPoint(0,1).addPoint(1,0).addPoint(0,2).close().realizeShape();
+		//Shape s = CircleShape().realizeShape();
+		Shape s = Shape().addPoint(-1,-1).addPoint(1,-1).addPoint(1,1).addPoint(0,0).addPoint(-1,1).close();
+		Path p = RoundedCornerSpline3().addPoint(-6,2.5,-2.5).addPoint(-5,0,-2.5).addPoint(0,0,2.5).addPoint(5,0,-2.5).setRadius(1.).realizePath();
+		mp = Extruder().setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh();
+		putMesh(mp);
+		next("extruder_generic", 10);
+
+		Shape s2 = RectangleShape().setHeight(.5).realizeShape();
+		Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(1.0,-1.0);
+		Path p2 = LinePath().betweenPoints(Vector3(-5,0,0),Vector3(5,0,0)).setNumSeg(10).realizePath();
+		mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setRotationTrack(&t).realizeMesh();
+		putMesh(mp);
+		next("extruder_rotationtrack", 7);
+
+		t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,.5).addKeyFrame(.4,.5).addKeyFrame(.5,1.2).addKeyFrame(.8,1).addKeyFrame(1.0,1);
+		mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setScaleTrack(&t).realizeMesh();
+		putMesh(mp);
+		next("extruder_scaletrack", 7);
+
 	}
 }
 
