@@ -73,6 +73,10 @@ set(OgreProcedural_LIBRARIES OgreProcedural)
 include(ProceduralMacros)
 include(ProceduralConfigTargets)
 
+if (OgreProcedural_ILLUSTRATIONS OR OgreProcedural_BUILD_SAMPLES OR OgreProcedural_BUILD_TESTS)
+	prepare_demo_dirs()
+endif()
+
 if (OgreProcedural_BUILD_SAMPLES)	
 	add_subdirectory(samples)
 endif()
