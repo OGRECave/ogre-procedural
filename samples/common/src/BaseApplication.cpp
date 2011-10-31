@@ -14,6 +14,7 @@ This source file is part of the
       http://www.ogre3d.org/tikiwiki/
 -----------------------------------------------------------------------------
 */
+#include "ProceduralStableHeaders.h"
 #include "BaseApplication.h"
 
 //-------------------------------------------------------------------------------------

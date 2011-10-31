@@ -25,6 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+#include "ProceduralStableHeaders.h"
 #include "Ogre.h"
 #include "Illustrations.h"
 #include "Procedural.h"
@@ -83,7 +84,6 @@ using namespace Procedural;
 	light->setType(Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
 	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
-	//camera->projectSphere
 }
 
 void Illustrations::next(std::string name)
