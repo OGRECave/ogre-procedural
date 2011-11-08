@@ -28,6 +28,16 @@ endif(WIN32 OR APPLE)
 
 find_package(OGRE REQUIRED)
 
+if (NOT DEFINED BOOST_ROOT)
+	message(STATUS "BOOST_ROOT not defined. Searching for it in ogre subdir")
+	if (EXISTS "${OGRE_HOME}/boost_1_44")
+		message(STATUS "setting BOOST_ROOT")
+		set (BOOST_ROOT "${OGRE_HOME}/boost_1_44" CACHE PATH "boost root")
+		message(STATUS "${BOOST_ROOT}")
+		
+	endif()
+endif()
+
 find_package(Boost)
 
 if (Boost_FOUND)
