@@ -35,39 +35,12 @@ void Sample_Extrusion::createScene(void)
 		// Test primitive generation
 		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 		putMesh2("planeMesh");
-		//Procedural::Path p = Procedural::Path().addPoint(0,5,0).addPoint(0,4,10).addPoint(10,5,10).addPoint(20,3,0).close();
-		Procedural::Path p = Procedural::CatmullRomSpline3().setNumSeg(8).addPoint(0,5,0).addPoint(0,4,10).addPoint(10,5,10).addPoint(20,3,0).close().realizePath();
-		//Procedural::Shape s = Procedural::Shape().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close();
-		Procedural::Shape s = Procedural::CatmullRomSpline2().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close().realizeShape();
-		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("extrudedMesh");
+		Procedural::Path p = Procedural::CatmullRomSpline3().setNumSeg(8).addPoint(0,0,0).addPoint(0,0,10).addPoint(10,0,10).addPoint(20,0,0).close().realizePath();
+		Procedural::Shape s = Procedural::Shape().addPoint(-1.2,.2).addPoint(-1,.2).addPoint(-.9,.1).addPoint(.9,.1).addPoint(1,.2).addPoint(1.2,.2);
+		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2).addKeyFrame(3,.8).addKeyFrame(5,1);
+		s.setOutSide(Procedural::SIDE_LEFT);
+		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).setShapeTextureTrack(&textureTrack).setUTile(20.).realizeMesh("extrudedMesh");
 		putMesh("extrudedMesh");
-
-		// Not-closed shape		
-		Procedural::Shape s2 = Procedural::CatmullRomSpline2().addPoint(0,4).addPoint(5,6).addPoint(1,10).addPoint(5,15).addPoint(0,20).setNumSeg(16).setOutSide(Procedural::SIDE_LEFT).realizeShape();
-		//Procedural::Shape s2 = Procedural::CatmullRomSpline2().addPoint(0,0).addPoint(5,5).addPoint(0,10).setNumSeg(4).setOutSide(Procedural::SIDE_LEFT).realizeShape();
-		//Procedural::Shape s3 = Procedural::KochanekBartelsSpline2().addPoint(0,0).addPoint(Ogre::Vector2(5,5),-1,0,-1).addPoint(0,10).addPoint(5,15).addPoint(0,20).setNumSeg(16).setOutSide(Procedural::SIDE_LEFT).realizeShape();
-		//Procedural::Shape s3 = Procedural::RectangleShape().setWidth(5.).setHeight(5.).realizeShape();
-		Procedural::Shape s3 = Procedural::CircleShape().setRadius(3.).realizeShape();
-
-
-		// Test Lathe generator
-		Procedural::Lathe().setShapeToExtrude(&s2).realizeMesh("lathedMesh");
-		putMesh("lathedMesh");
-
-		// Test triangulator
-		//Procedural::Triangulator::triangulate(s2).transformToMesh(mSceneMgr,"toto");
-		//putMesh("toto");
-
-		// Test display shapes
-		/*s2.realizeMesh("shape2");
-		putMesh("shape2");*/
-		/*s3.realizeMesh("shape3");
-		putMesh("shape3");*/
-
-		// Test display path
-		/*p.realizeMesh("path");
-		putMesh("path");*/
-
 }
 
 void Sample_Extrusion::createCamera(void)
@@ -120,7 +93,7 @@ void Sample_Extrusion::putMesh(const std::string& meshName, const Vector3& posit
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	sn->attachObject(ent2);
 	sn->setPosition(position);
-	ent2->setMaterialName("Examples/BeachStones");
+	ent2->setMaterialName("Examples/Road");
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
