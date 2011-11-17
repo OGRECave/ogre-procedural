@@ -28,6 +28,16 @@ endif(WIN32 OR APPLE)
 
 find_package(OGRE REQUIRED)
 
+if (NOT DEFINED BOOST_ROOT)
+	message(STATUS "BOOST_ROOT not defined. Searching for it in ogre subdir")
+	if (EXISTS "${OGRE_HOME}/boost_1_44")
+		message(STATUS "setting BOOST_ROOT")
+		set (BOOST_ROOT "${OGRE_HOME}/boost_1_44" CACHE PATH "boost root")
+		message(STATUS "${BOOST_ROOT}")
+		
+	endif()
+endif()
+
 find_package(Boost)
 
 if (Boost_FOUND)
@@ -72,6 +82,10 @@ set(OgreProcedural_LIBRARIES OgreProcedural)
 # CMake macros
 include(ProceduralMacros)
 include(ProceduralConfigTargets)
+
+if (OgreProcedural_ILLUSTRATIONS OR OgreProcedural_BUILD_SAMPLES OR OgreProcedural_BUILD_TESTS)
+	prepare_demo_dirs()
+endif()
 
 if (OgreProcedural_BUILD_SAMPLES)	
 	add_subdirectory(samples)

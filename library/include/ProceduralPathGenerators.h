@@ -25,6 +25,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+#ifndef PROCEDURAL_PATH_GENERATORS_INCLUDED
+#define PROCEDURAL_PATH_GENERATORS_INCLUDED
+
 #include "ProceduralPath.h"
 #include "ProceduralSplines.h"
 
@@ -103,7 +106,7 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 	}
 	
 	/// Safely gets a control point
-	inline const Ogre::Vector3& safeGetPoint(int i) const
+	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -132,8 +135,18 @@ public:
 		mPoints.push_back(ControlPoint(p, before, after));
 		return *this;
 	}
+	/// Adds a control point
+	inline CubicHermiteSpline3& addPoint(Ogre::Vector3 p, CubicHermiteSplineAutoTangentMode autoTangentMode)
+	{
+		ControlPoint cp;
+		cp.position = p;
+		cp.autoTangentBefore = autoTangentMode;
+		cp.autoTangentAfter = autoTangentMode;
+		mPoints.push_back(cp);
+		return *this;
+	}
 	/// Safely gets a control point
-	inline const ControlPoint& safeGetPoint(int i) const
+	inline const ControlPoint& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -172,7 +185,7 @@ public:
 	}
 	
 	/// Sets the number of segments for this line
-	inline LinePath& setNumSeg(int numSeg)
+	inline LinePath& setNumSeg(unsigned int numSeg)
 	{
 		mNumSeg = numSeg;
 		return *this;
@@ -193,7 +206,7 @@ public:
 		Path p;
 		for (unsigned int i = 0; i <= mNumSeg; ++i)
 		{
-			p.addPoint(i/(Ogre::Real)mNumSeg * mPoint1 + i/(Ogre::Real)mNumSeg * mPoint2);
+			p.addPoint((1-i/(Ogre::Real)mNumSeg) * mPoint1 + i/(Ogre::Real)mNumSeg * mPoint2);
 		}
 		return p;
 	}
@@ -201,7 +214,7 @@ public:
 };
 //-----------------------------------------------------------------------
 /**
- * Produces a shape by rounding corners of a path
+ * Produces a path by rounding corners of a straight-lines path
  */
 class _ProceduralExport RoundedCornerSpline3 : public BaseSpline3<RoundedCornerSpline3>
 {		
@@ -210,8 +223,10 @@ class _ProceduralExport RoundedCornerSpline3 : public BaseSpline3<RoundedCornerS
 	std::vector<Ogre::Vector3> mPoints;	
 	
 public:
-	RoundedCornerSpline3() : mRadius(.1) {}
+	/// Default constructor
+	RoundedCornerSpline3() : mRadius(.1f) {}
 	
+	/// Sets the radius of the corners (default = 0.1)
 	inline RoundedCornerSpline3& setRadius(Ogre::Real radius)
 	{
 		mRadius = radius;
@@ -233,7 +248,7 @@ public:
 	}
 
 	/// Safely gets a control point
-	inline const Ogre::Vector3& safeGetPoint(int i) const
+	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -247,3 +262,4 @@ public:
 };
 
 }
+#endif

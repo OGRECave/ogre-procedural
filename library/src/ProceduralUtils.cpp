@@ -28,11 +28,18 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralUtils.h"
 
+int Procedural::Utils::counter = 0;
+
 namespace Procedural
 {
-	int Utils::counter = 0;
-
 	using namespace Ogre;
+	
+	std::string Utils::getName(const std::string& prefix)
+	{
+		counter++;
+		return prefix + Ogre::StringConverter::toString(counter);		
+	}
+	
 	//-----------------------------------------------------------------------
 	Quaternion Utils::_computeQuaternion(Ogre::Vector3 direction)
 	{
@@ -40,6 +47,8 @@ namespace Procedural
 		Quaternion quat = Vector3::UNIT_Z.getRotationTo(direction);
 		// Then, compute a correction quaternion : we want the "up" direction to be always the same
 		Vector3 projectedY = Vector3::UNIT_Y - Vector3::UNIT_Y.dotProduct(direction) * direction;
+		if (projectedY.length()<1e-6)
+			return quat;
 		Vector3 tY = quat * Vector3::UNIT_Y;
 		Quaternion quat2 = tY.getRotationTo(projectedY);
 		Quaternion q = quat2 * quat;

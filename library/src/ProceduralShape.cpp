@@ -475,10 +475,10 @@ MultiShape Shape::thicken(Real amount)
 		}
 	}
 //-----------------------------------------------------------------------
-Path Shape::convertToPath()
+Path Shape::convertToPath() const
 {
 	Path p;
-	for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin();it!=mPoints.end();it++)
+	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();it++)
 	{
 		p.addPoint(it->x, 0, it->y);
 	}
@@ -488,13 +488,53 @@ Path Shape::convertToPath()
 	return p;
 }
 //-----------------------------------------------------------------------
-Track Shape::convertToTrack(Track::AddressingMode addressingMode)
+Track Shape::convertToTrack(Track::AddressingMode addressingMode) const
 {
 	Track t(addressingMode);
-	for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin();it!=mPoints.end();it++)
+	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();it++)
 	{
 		t.addKeyFrame(it->x, it->y);
 	}
 	return t;
 }
+//-----------------------------------------------------------------------
+Shape Shape::mergeKeysWithTrack(const Track& track) const
+{
+	if (!track.isInsertPoint() || track.getAddressingMode() == Track::AM_POINT)
+		return *this;
+	Real totalLength=getTotalLength();
+	
+	Real lineicPos = 0;
+	Real shapeLineicPos = 0;
+	Shape outputShape;
+	if (mClosed)
+		outputShape.close();	
+	outputShape.addPoint(getPoint(0));
+	for (unsigned int i = 1; i < mPoints.size(); )
+	{
+		Real nextLineicPos = shapeLineicPos + (mPoints[i] - mPoints[i-1]).length();
+
+		std::map<Real,Real>::const_iterator it = track._getKeyValueAfter(lineicPos, lineicPos/totalLength, i-1);
+
+		Real nextTrackPos = it->first;
+		if (track.getAddressingMode() == Track::AM_RELATIVE_LINEIC)
+			nextTrackPos *= totalLength;
+
+		// Adds the closest point to the curve, being either from the shape or the track
+		if (nextLineicPos<=nextTrackPos || lineicPos>=nextTrackPos)
+		{
+			outputShape.addPoint(mPoints[i]);
+			i++;				
+			lineicPos = nextLineicPos;
+			shapeLineicPos = nextLineicPos;
+		}
+		else
+		{
+			outputShape.addPoint(getPosition(i-1, (nextTrackPos-shapeLineicPos)/(nextLineicPos-shapeLineicPos)));
+			lineicPos = nextTrackPos;
+		}
+	}
+	return outputShape;
+}
+
 }

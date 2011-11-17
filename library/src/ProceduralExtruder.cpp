@@ -42,20 +42,24 @@ namespace Procedural
 		unsigned int numSegShape = shapeToExtrude->getSegCount();
 		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
 				
-		Real totalPathLength=0;
-		if ((mRotationTrack && mRotationTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC) ||
-			(mScaleTrack && mScaleTrack->getAddressingMode()==Track::AM_RELATIVE_LINEIC))
-		{
-			totalPathLength = mExtrusionPath->getTotalLength();
-		}
-
+		Real totalPathLength = mExtrusionPath->getTotalLength();
+		Real totalShapeLength = shapeToExtrude->getTotalLength();
+		
+		// Merge shape and path with tracks
 		Ogre::Real lineicPos=0.;
 		Path path = *mExtrusionPath;
 		if (mRotationTrack)
 			path = path.mergeKeysWithTrack(*mRotationTrack);
 		if (mScaleTrack)
 			path = path.mergeKeysWithTrack(*mScaleTrack);
+		if (mPathTextureTrack)
+			path = path.mergeKeysWithTrack(*mPathTextureTrack);
 		numSegPath = path.getSegCount();
+		Shape shape = *shapeToExtrude;
+		if (mShapeTextureTrack)
+			shape = shape.mergeKeysWithTrack(*mShapeTextureTrack);
+		numSegShape = shape.getSegCount();
+		
 		// Estimate vertex and index count
 		buffer.rebaseOffset();
 		buffer.estimateIndexCount(numSegShape*numSegPath*6);
@@ -84,20 +88,34 @@ namespace Procedural
 			{
 				scale = mScaleTrack->getValue(lineicPos, lineicPos / totalPathLength, i);
 			}
+			Real uTexCoord;
+			if (mPathTextureTrack)
+				uTexCoord = mPathTextureTrack->getValue(lineicPos, lineicPos / totalPathLength, i);
+			else
+				uTexCoord = lineicPos / totalPathLength;
+			
+			Real lineicShapePos = 0.;
 			// Insert new points
 			for (unsigned int j =0; j <= numSegShape; ++j)
-			{
+			{				
 				Vector2 vp2 = shapeToExtrude->getPoint(j);
 				//Vector2 vp2direction = shapeToExtrude->getAvgDirection(j);
 				Vector2 vp2normal = shapeToExtrude->getAvgNormal(j);
 				Vector3 vp(vp2.x, vp2.y, 0);
 				Vector3 normal(vp2normal.x, vp2normal.y, 0);							
 				buffer.rebaseOffset();
-				Vector3 newPoint = v0+q*(scale*vp);
+				Vector3 newPoint = v0+q*(scale*vp);				
+				if (j>0)
+					lineicShapePos += (vp2 - shape.getPoint(j-1)).length();
+				Real vTexCoord;
+				if (mShapeTextureTrack)
+					vTexCoord = mShapeTextureTrack->getValue(lineicShapePos, lineicShapePos / totalShapeLength, j);
+				else
+					vTexCoord = lineicShapePos / totalShapeLength;				
 
 				addPoint(buffer, newPoint,
 					q*normal, 
-					Vector2(i/(Real)numSegPath, j/(Real)numSegShape));
+					Vector2(uTexCoord, vTexCoord));
 
 				if (j <numSegShape && i <numSegPath)
 				{		
@@ -201,10 +219,10 @@ namespace Procedural
 		assert((mShapeToExtrude || mMultiShapeToExtrude) && "Either shape or multishape must be defined!");
 
 		// Triangulate the begin and end caps
-
 		if (!mExtrusionPath->isClosed() && mCapped)
 			_extrudeCapImpl(buffer);
 
+		// Extrudes the body
 		if (mShapeToExtrude)
 			_extrudeBodyImpl(buffer, mShapeToExtrude);
 		else 

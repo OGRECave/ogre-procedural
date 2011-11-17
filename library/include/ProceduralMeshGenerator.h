@@ -28,6 +28,7 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_MESH_GENERATOR_INCLUDED
 #define PROCEDURAL_MESH_GENERATOR_INCLUDED
 
+#include "OgreRectangle.h"
 #include "OgreSceneManager.h"
 #include "OgreMesh.h"
 #include "OgreManualObject.h"
@@ -60,6 +61,11 @@ protected:
 
 	/// Rectangle in which the texture coordinates will be placed
 	Ogre::Vector2 mUVOrigin;
+	
+	/// If set to true, the UV coordinates coming from the mesh generator will be switched.
+	/// It can be used, for example, if your texture doesn't fit the mesh generator's assumptions about UV.
+	/// If UV were to fit in a given rectangle, they still fit in it after the switch.
+	bool mSwitchUV;
 
 public:
 	/// Default constructor
@@ -67,7 +73,8 @@ public:
 					  mVTile(1.f),
 					  mEnableNormals(true),
 					  mNumTexCoordSet(1),
-					  mUVOrigin(0,0)
+					  mUVOrigin(0,0),
+					  mSwitchUV(false)
 	{
 		mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		assert(mSceneMgr && "Scene Manager must be set in Root");
@@ -142,6 +149,13 @@ public:
 		mNumTexCoordSet = numTexCoordSet;
 		return static_cast<T&>(*this);
 	}
+	
+	/// Sets whether to switch U and V texture coordinates
+	inline T& setSwitchUV(bool switchUV)
+	{
+		mSwitchUV = switchUV;
+		return static_cast<T&>(*this);
+	}
 
 protected:
 	/// Adds a new point to a triangle buffer, using the format defined for that MeshGenerator
@@ -154,8 +168,12 @@ protected:
 		buffer.position(position);
 		if (mEnableNormals)
 			buffer.normal(normal);
-		for (unsigned char i=0;i<mNumTexCoordSet;i++)
-			buffer.textureCoord(mUVOrigin.x + uv.x*mUTile, mUVOrigin.y+uv.y*mVTile);
+		if (mSwitchUV)
+			for (unsigned char i=0;i<mNumTexCoordSet;i++)
+				buffer.textureCoord(mUVOrigin.x + uv.y*mUTile, mUVOrigin.y+uv.x*mVTile);
+		else
+			for (unsigned char i=0;i<mNumTexCoordSet;i++)
+				buffer.textureCoord(mUVOrigin.x + uv.x*mUTile, mUVOrigin.y+uv.y*mVTile);
 	}
 
 };

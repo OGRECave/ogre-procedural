@@ -33,7 +33,7 @@ using namespace Ogre;
 
 namespace Procedural
 {
-	Path Path::mergeKeysWithTrack(const Track& track)
+	Path Path::mergeKeysWithTrack(const Track& track) const
 	{
 		if (!track.isInsertPoint() || track.getAddressingMode() == Track::AM_POINT)
 			return *this;
