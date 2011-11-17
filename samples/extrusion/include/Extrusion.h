@@ -33,14 +33,10 @@ using namespace Ogre;
 
 class Sample_Extrusion : public BaseApplication
 {
-	Light* movingLight;
 	virtual bool frameStarted(const FrameEvent& evt);
 protected:
 	virtual void createScene(void);
-	void putMesh(const std::string& meshName, const Vector3& position = Vector3::ZERO);
-	void putMesh2(const std::string& meshName, const Vector3& position = Vector3::ZERO);
-
 	virtual void createCamera(void);
 };
 
-#endif // #ifndef __TutorialApplication_h_
+#endif
