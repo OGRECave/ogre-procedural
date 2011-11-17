@@ -32,7 +32,7 @@ THE SOFTWARE.
 //-------------------------------------------------------------------------------------
 void Sample_Primitives::createScene(void)
 {
-		// Test primitive generation
+		// Generates every type of primitive
 		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 		putMesh2("planeMesh");
 	    Procedural::SphereGenerator().setRadius(2.f).setUTile(5.).setVTile(5.).realizeMesh("sphereMesh");
@@ -56,60 +56,18 @@ void Sample_Primitives::createScene(void)
 		Procedural::RoundedBoxGenerator().setSizeX(1.f).setSizeY(5.f).setSizeZ(5.f).setChamferSize(1.f).realizeMesh("roundedBoxMesh");
 		putMesh("roundedBoxMesh", Vector3(20,10,10));		
 }
-
+//-------------------------------------------------------------------------------------
 void Sample_Primitives::createCamera(void)
 {
 	BaseApplication::createCamera();
-	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
-	mSceneMgr->setShadowFarDistance(100.0);
-	mSceneMgr->setShadowTextureSize(1024);
-	mSceneMgr->setAmbientLight(ColourValue::Black);
-	// Setup camera and light
-	mCamera->setPosition(0,50,-50);
-	mCamera->lookAt(0,0,0);
-	// Slow down speed, as the scene is small
-	mCameraMan->setTopSpeed(20);
-
-	Light* l = mSceneMgr->createLight("myLight");
-	l->setType(Light::LT_DIRECTIONAL);
-	l->setDirection(Vector3(0,-1,1).normalisedCopy());
-	l->setDiffuseColour(ColourValue(.7f,.5f,.5f));
-	l->setSpecularColour(ColourValue::White);
-		
-	movingLight = mSceneMgr->createLight("movingLight");
-	movingLight->setType(Light::LT_POINT);
-	movingLight->setDiffuseColour(ColourValue(.5f,.5f,.7f));
-	movingLight->setSpecularColour(ColourValue::White);
-	movingLight->setPosition(mCamera->getPosition());
-	movingLight->setCastShadows(false);
 }
-
+//-------------------------------------------------------------------------------------
 bool Sample_Primitives::frameStarted(const FrameEvent& evt)
 {
 	movingLight->setPosition(mCamera->getPosition());
 	return true;
 }
-
-
-void Sample_Primitives::putMesh2(const std::string& meshName, const Vector3& position)
-{
-	Entity* ent2 = mSceneMgr->createEntity(meshName);
-	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(position);
-	ent2->setMaterialName("Examples/Rockwall");
-	ent2->setCastShadows(false);
-}
-
-void Sample_Primitives::putMesh(const std::string& meshName, const Vector3& position)
-{
-	Entity* ent2 = mSceneMgr->createEntity(meshName);
-	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(position);
-	ent2->setMaterialName("Examples/BeachStones");
-}
-
+//-------------------------------------------------------------------------------------
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"

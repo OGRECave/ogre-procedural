@@ -32,69 +32,34 @@ THE SOFTWARE.
 //-------------------------------------------------------------------------------------
 void Sample_Extrusion::createScene(void)
 {
-		// Test primitive generation
+		// -- Ground plane
 		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 		putMesh2("planeMesh");
-		Procedural::Path p = Procedural::CatmullRomSpline3().setNumSeg(8).addPoint(0,0,0).addPoint(0,0,10).addPoint(10,0,10).addPoint(20,0,0).close().realizePath();
-		Procedural::Shape s = Procedural::Shape().addPoint(-1.2,.2).addPoint(-1,.2).addPoint(-.9,.1).addPoint(.9,.1).addPoint(1,.2).addPoint(1.2,.2);
-		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2).addKeyFrame(3,.8).addKeyFrame(5,1);
-		s.setOutSide(Procedural::SIDE_LEFT);
-		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).setShapeTextureTrack(&textureTrack).setUTile(20.).realizeMesh("extrudedMesh");
-		putMesh("extrudedMesh");
-}
 
+		// -- Road
+		// The path of the road, generated from a simple spline
+		Procedural::Path p = Procedural::CatmullRomSpline3().setNumSeg(8).addPoint(0,0,0).addPoint(0,0,10).addPoint(10,0,10).addPoint(20,0,0).close().realizePath().scale(2);
+		// The shape that will be extruded along the path
+		Procedural::Shape s = Procedural::Shape().addPoint(-1.2f,.2f).addPoint(-1.f,.2f).addPoint(-.9f,.1f).addPoint(.9f,.1f).addPoint(1.f,.2f).addPoint(1.2f,.2f).scale(2).setOutSide(Procedural::SIDE_LEFT);
+		// This is an example use of a shape texture track, 
+		// which specifies how texture coordinates should be mapped relative to the shape points
+		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2).addKeyFrame(3,.8).addKeyFrame(5,1);
+		// The extruder actually creates the road mesh from all parameters
+		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).setShapeTextureTrack(&textureTrack).setUTile(20.).realizeMesh("extrudedMesh");
+		putMesh3("extrudedMesh");
+}
+//-------------------------------------------------------------------------------------
 void Sample_Extrusion::createCamera(void)
 {
 	BaseApplication::createCamera();
-	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
-	mSceneMgr->setShadowFarDistance(100.0);
-	mSceneMgr->setShadowTextureSize(1024);
-	mSceneMgr->setAmbientLight(ColourValue::Black);
-	// Setup camera and light
-	mCamera->setPosition(0,50,-50);
-	mCamera->lookAt(0,0,0);
-	// Slow down speed, as the scene is small
-	mCameraMan->setTopSpeed(20);
-
-	Light* l = mSceneMgr->createLight("myLight");
-	l->setType(Light::LT_DIRECTIONAL);
-	l->setDirection(Vector3(0,-1,1).normalisedCopy());
-	l->setDiffuseColour(ColourValue(.7f,.5f,.5f));
-	l->setSpecularColour(ColourValue::White);
-
-	movingLight = mSceneMgr->createLight("movingLight");
-	movingLight->setType(Light::LT_POINT);
-	movingLight->setDiffuseColour(ColourValue(.5f,.5f,.7f));
-	movingLight->setSpecularColour(ColourValue::White);
-	movingLight->setPosition(mCamera->getPosition());
-	movingLight->setCastShadows(false);
 }
-
+//-------------------------------------------------------------------------------------
 bool Sample_Extrusion::frameStarted(const FrameEvent& evt)
 {
 	movingLight->setPosition(mCamera->getPosition());
 	return true;
 }
 
-
-void Sample_Extrusion::putMesh2(const std::string& meshName, const Vector3& position)
-{
-	Entity* ent2 = mSceneMgr->createEntity(meshName);
-	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(position);
-	ent2->setMaterialName("Examples/Rockwall");
-	ent2->setCastShadows(false);
-}
-
-void Sample_Extrusion::putMesh(const std::string& meshName, const Vector3& position)
-{
-	Entity* ent2 = mSceneMgr->createEntity(meshName);
-	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(position);
-	ent2->setMaterialName("Examples/Road");
-}
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
