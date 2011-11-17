@@ -40,6 +40,23 @@ find_package(OGRE REQUIRED)
 find_package(OIS REQUIRED)
 find_package(OgreProcedural REQUIRED)
 
+if (NOT DEFINED BOOST_ROOT)
+	message(STATUS "BOOST_ROOT not defined. Searching for it in ogre subdir")
+	if (EXISTS "${OGRE_HOME}/boost_1_44")
+		message(STATUS "setting BOOST_ROOT")
+		set (BOOST_ROOT "${OGRE_HOME}/boost_1_44" CACHE PATH "boost root")
+		message(STATUS "${BOOST_ROOT}")
+		
+	endif()
+endif()
+
+find_package(Boost)
+
+if (Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+  link_directories(${Boost_LIBRARY_DIRS})
+endif ()
+
 option(OgreProcedural_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 
 # Specify build paths

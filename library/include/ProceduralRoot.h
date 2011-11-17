@@ -34,22 +34,22 @@ THE SOFTWARE.
 namespace Procedural
 {
 /** Singleton that holds the general parameters of OgreProcedural.
- * The only required parameter is the scene manager
+ *  Unused for now.
  */
 class _ProceduralExport Root
 {
-    static Root* instance;
-    Root()
-    {}
-    public:
+	static Root* instance;
+	Root()
+	{}
+	public:
 
 	/// Return the singleton pointer of this class
-    static Root* getInstance()
-    {
-        if (!instance)
-            instance = new Root();
-        return instance;
-    }
+	static Root* getInstance()
+	{
+		if (!instance)
+			instance = new Root();
+		return instance;
+	}
 
 };
 }

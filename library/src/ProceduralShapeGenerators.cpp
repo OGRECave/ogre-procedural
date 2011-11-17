@@ -39,6 +39,10 @@ Shape CubicHermiteSpline2::realizeShape()
 	Shape shape;
 
 		unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 1);
+		//Precompute tangents
+		for (unsigned int i = 0; i < mPoints.size(); ++i)
+			computeTangents<Vector2>(mPoints[i], safeGetPoint(i-1).position, safeGetPoint(i+1).position);
+
 		for (unsigned int i = 0; i < numPoints; ++i)
 		{
 			const ControlPoint& pointBefore = mPoints[i];
@@ -97,7 +101,7 @@ Shape CatmullRomSpline2::realizeShape()
 			const ControlPoint& P3 = safeGetPoint(i+1);
 			const ControlPoint& P4 = safeGetPoint(i+2);
 			
-			computeKonachekBartelsPoints(P1, P2, P3, P4, mNumSeg, shape.getPointsReference());
+			computeKochanekBartelsPoints(P1, P2, P3, P4, mNumSeg, shape.getPointsReference());
 
 			if (i == mPoints.size() - 2 && !mClosed)
 			{
@@ -148,7 +152,7 @@ Shape RoundedCornerSpline2::realizeShape()
 				
 		for (unsigned int j=0;j<=mNumSeg;j++)
 		{
-			Vector2 deltaVector = Utils::rotateVector2(vradBegin, j * angleTotal / mNumSeg);
+			Vector2 deltaVector = Utils::rotateVector2(vradBegin, (Real)j * angleTotal / (Real)mNumSeg);
 			shape.addPoint(center + deltaVector);
 		}
 	}

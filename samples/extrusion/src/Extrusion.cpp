@@ -25,102 +25,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+#include "ProceduralStableHeaders.h"
 #include "Extrusion.h"
 #include "Procedural.h"
 
 //-------------------------------------------------------------------------------------
 void Sample_Extrusion::createScene(void)
 {
-		// Test primitive generation
+		// -- Ground plane
 		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 		putMesh2("planeMesh");
-		//Procedural::Path p = Procedural::Path().addPoint(0,5,0).addPoint(0,4,10).addPoint(10,5,10).addPoint(20,3,0).close();
-		Procedural::Path p = Procedural::CatmullRomSpline3().setNumSeg(8).addPoint(0,5,0).addPoint(0,4,10).addPoint(10,5,10).addPoint(20,3,0).close().realizePath();
-		//Procedural::Shape s = Procedural::Shape().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close();
-		Procedural::Shape s = Procedural::CatmullRomSpline2().addPoint(-1,0).addPoint(0,1).addPoint(1,0).close().realizeShape();
-		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh("extrudedMesh");
-		putMesh("extrudedMesh");
 
-		// Not-closed shape		
-		Procedural::Shape s2 = Procedural::CatmullRomSpline2().addPoint(0,4).addPoint(5,6).addPoint(1,10).addPoint(5,15).addPoint(0,20).setNumSeg(16).setOutSide(Procedural::SIDE_LEFT).realizeShape();
-		//Procedural::Shape s2 = Procedural::CatmullRomSpline2().addPoint(0,0).addPoint(5,5).addPoint(0,10).setNumSeg(4).setOutSide(Procedural::SIDE_LEFT).realizeShape();
-		//Procedural::Shape s3 = Procedural::KochanekBartelsSpline2().addPoint(0,0).addPoint(Ogre::Vector2(5,5),-1,0,-1).addPoint(0,10).addPoint(5,15).addPoint(0,20).setNumSeg(16).setOutSide(Procedural::SIDE_LEFT).realizeShape();
-		//Procedural::Shape s3 = Procedural::RectangleShape().setWidth(5.).setHeight(5.).realizeShape();
-		Procedural::Shape s3 = Procedural::CircleShape().setRadius(3.).realizeShape();
-
-
-		// Test Lathe generator
-		Procedural::Lathe().setShapeToExtrude(&s2).realizeMesh("lathedMesh");
-		putMesh("lathedMesh");
-
-		// Test triangulator
-		//Procedural::Triangulator::triangulate(s2).transformToMesh(mSceneMgr,"toto");
-		//putMesh("toto");
-
-		// Test display shapes
-		/*s2.realizeMesh("shape2");
-		putMesh("shape2");*/
-		/*s3.realizeMesh("shape3");
-		putMesh("shape3");*/
-
-		// Test display path
-		/*p.realizeMesh("path");
-		putMesh("path");*/
-
+		// -- Road
+		// The path of the road, generated from a simple spline
+		Procedural::Path p = Procedural::CatmullRomSpline3().setNumSeg(8).addPoint(0,0,0).addPoint(0,0,10).addPoint(10,0,10).addPoint(20,0,0).close().realizePath().scale(2);
+		// The shape that will be extruded along the path
+		Procedural::Shape s = Procedural::Shape().addPoint(-1.2f,.2f).addPoint(-1.f,.2f).addPoint(-.9f,.1f).addPoint(.9f,.1f).addPoint(1.f,.2f).addPoint(1.2f,.2f).scale(2).setOutSide(Procedural::SIDE_LEFT);
+		// This is an example use of a shape texture track, 
+		// which specifies how texture coordinates should be mapped relative to the shape points
+		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2).addKeyFrame(3,.8).addKeyFrame(5,1);
+		// The extruder actually creates the road mesh from all parameters
+		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).setShapeTextureTrack(&textureTrack).setUTile(20.).realizeMesh("extrudedMesh");
+		putMesh3("extrudedMesh");
 }
-
+//-------------------------------------------------------------------------------------
 void Sample_Extrusion::createCamera(void)
 {
 	BaseApplication::createCamera();
-	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
-	mSceneMgr->setShadowFarDistance(100.0);
-	mSceneMgr->setShadowTextureSize(1024);
-	mSceneMgr->setAmbientLight(ColourValue::Black);
-	// Setup camera and light
-	mCamera->setPosition(0,50,-50);
-	mCamera->lookAt(0,0,0);
-	// Slow down speed, as the scene is small
-	mCameraMan->setTopSpeed(20);
-
-	Light* l = mSceneMgr->createLight("myLight");
-	l->setType(Light::LT_DIRECTIONAL);
-	l->setDirection(Vector3(0,-1,1).normalisedCopy());
-	l->setDiffuseColour(ColourValue(.7f,.5f,.5f));
-	l->setSpecularColour(ColourValue::White);
-
-	movingLight = mSceneMgr->createLight("movingLight");
-	movingLight->setType(Light::LT_POINT);
-	movingLight->setDiffuseColour(ColourValue(.5f,.5f,.7f));
-	movingLight->setSpecularColour(ColourValue::White);
-	movingLight->setPosition(mCamera->getPosition());
-	movingLight->setCastShadows(false);
 }
-
+//-------------------------------------------------------------------------------------
 bool Sample_Extrusion::frameStarted(const FrameEvent& evt)
 {
 	movingLight->setPosition(mCamera->getPosition());
 	return true;
 }
 
-
-void Sample_Extrusion::putMesh2(const std::string& meshName, const Vector3& position)
-{
-	Entity* ent2 = mSceneMgr->createEntity(meshName);
-	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(position);
-	ent2->setMaterialName("Examples/Rockwall");
-	ent2->setCastShadows(false);
-}
-
-void Sample_Extrusion::putMesh(const std::string& meshName, const Vector3& position)
-{
-	Entity* ent2 = mSceneMgr->createEntity(meshName);
-	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(position);
-	ent2->setMaterialName("Examples/BeachStones");
-}
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN

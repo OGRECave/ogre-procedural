@@ -108,8 +108,6 @@ public:
 
 class Unit_Tests : public BaseApplication
 {
-	Light* movingLight;
-
 	/* --------------------------------------------------------------------------- */
 	class Test_Primitives : public Unit_Test
 	{
@@ -210,6 +208,7 @@ class Unit_Tests : public BaseApplication
 				.close();
 
 			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());		
+						
 		}
 	};
 
@@ -373,6 +372,19 @@ class Unit_Tests : public BaseApplication
 			p.addPoint(0,0,0).addPoint(1,1,1);
 			Extruder ex;
 			putMesh(ex.setExtrusionPath(&p).setShapeToExtrude(&s).setScaleTrack(&t).realizeMesh(),1);
+
+			// AutoTangents
+			CubicHermiteSpline2 chsAuto;
+			chsAuto.addPoint(Vector2(0,0), AT_STRAIGHT).addPoint(Vector2(1,0),AT_STRAIGHT)
+				   .addPoint(Vector2(1,1), AT_STRAIGHT).addPoint(Vector2(2,1),AT_CATMULL)
+				   .addPoint(Vector2(2,0), AT_CATMULL).addPoint(Vector2(3,0),AT_CATMULL);
+			putMesh(chsAuto.realizeShape().realizeMesh());
+
+			CubicHermiteSpline3 chs3Auto;
+			chs3Auto.addPoint(Vector3(0,0,0), AT_STRAIGHT).addPoint(Vector3(1,0,0),AT_STRAIGHT)
+				   .addPoint(Vector3(1,1,1), AT_STRAIGHT).addPoint(Vector3(2,1,1),AT_CATMULL)
+				   .addPoint(Vector3(2,0,1), AT_CATMULL).addPoint(Vector3(3,0,0),AT_CATMULL);
+			putMesh(chs3Auto.realizePath().realizeMesh());
 		}
 	};
 
@@ -389,6 +401,7 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
+			{
 			Shape shape = Shape().addPoint(0,0).addPoint(0,1).addPoint(1,1).addPoint(1,0).setOutSide(SIDE_RIGHT).close();
 			Shape shape2 = Shape().addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,0).setOutSide(SIDE_LEFT).close();
 			Path line = LinePath().betweenPoints(Vector3::ZERO, Vector3(1,10,0)).setNumSeg(2).realizePath();
@@ -401,6 +414,7 @@ class Unit_Tests : public BaseApplication
 			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh(),1);			
 			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh(),1);			
 			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line2).realizeMesh(),1);
+			}
 
 			// extrusion with rotation and scale track
 			{
@@ -449,6 +463,34 @@ class Unit_Tests : public BaseApplication
 				putMesh(ex2.setShapeToExtrude(&unaxed3).setExtrusionPath(&l3).setRotationTrack(&r2).realizeMesh(),1);
 			}
 
+			{
+				// Test irregular texture distribution on shape
+				Shape circle = CircleShape().setNumSeg(20).realizeShape();			
+				//Path line = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
+				Path line = RoundedCornerSpline3().addPoint(0,0,0).addPoint(0,4,0).addPoint(0,6,2).addPoint(0,10,2).realizePath();
+				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.2).addKeyFrame(1,1);
+				Extruder ex;
+				putMesh(ex.setShapeToExtrude(&circle).setExtrusionPath(&line).setShapeTextureTrack(&t).realizeMesh(),1);
+				
+				// Test irregular texture distribution on path
+				putMesh(ex.setShapeTextureTrack(0).setPathTextureTrack(&t).realizeMesh(), 1);
+
+				// Test texture UV switch
+				putMesh(ex.setPathTextureTrack(0).setSwitchUV(true).realizeMesh(),1);
+			}
+
+			{
+				Shape s = Shape().addPoint(-1,-1).addPoint(1,-1).addPoint(1,1).addPoint(0,0).addPoint(-1,1).close();
+				Path p = RoundedCornerSpline3().addPoint(-10,5,-2.5).addPoint(-5,0,-2.5).addPoint(0,0,2.5).addPoint(5,0,-2.5).setRadius(2.).realizePath();
+				MeshPtr mp = Extruder().setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh();
+				putMesh(mp, 1);					
+
+				Shape s2 = RectangleShape().setHeight(.5).realizeShape();
+				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.0).addKeyFrame(1.0,1.0);
+				Path p2 = LinePath().betweenPoints(Vector3(-5,0,0),Vector3(5,0,0)).setNumSeg(10).realizePath();
+				mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setRotationTrack(&t).realizeMesh();
+				putMesh(mp, 1);
+			}
 
 		}
 	};
@@ -467,9 +509,19 @@ class Unit_Tests : public BaseApplication
 		void initImpl()
 		{
 			CatmullRomSpline2 cs;
-			cs.addPoint(0,0).addPoint(1,0).addPoint(3,5).addPoint(1,10).addPoint(0,10);
+			cs.addPoint(0,0).addPoint(1,0).addPoint(3,5).addPoint(1,10).addPoint(0,11);
 			Shape s = cs.realizeShape();
 			Lathe l = Lathe().setShapeToExtrude(&s);
+			putMesh(l.realizeMesh(),1);
+
+			l.setAngleBegin(Degree(90)).setAngleEnd(Degree(200));
+			l.setCapped(false);
+			putMesh(l.realizeMesh(),1);
+
+			l.setCapped(true);
+			putMesh(l.realizeMesh(),1);
+
+			l.setAngleBegin(Degree(200)).setAngleEnd(Degree(90));
 			putMesh(l.realizeMesh(),1);
 		}
 	};

@@ -63,7 +63,7 @@ public:
 	}
 
 	/// Sets the number of segments between 2 control points
-	inline T& setNumSeg(int numSeg)
+	inline T& setNumSeg(unsigned int numSeg)
 	{
 		assert(numSeg>=1);
 		mNumSeg = numSeg;
@@ -95,8 +95,30 @@ public:
 		mPoints.push_back(ControlPoint(p, before, after));
 		return *this;
 	}
+	/// Adds a control point
+	inline CubicHermiteSpline2& addPoint(Ogre::Vector2 p, CubicHermiteSplineAutoTangentMode autoTangentMode = AT_CATMULL)
+	{
+		ControlPoint cp;
+		cp.position = p;
+		cp.autoTangentBefore = autoTangentMode;
+		cp.autoTangentAfter = autoTangentMode;
+		mPoints.push_back(cp);
+		return *this;
+	}
+
+		/// Adds a control point
+	inline CubicHermiteSpline2& addPoint(Ogre::Real x, Ogre::Real y, CubicHermiteSplineAutoTangentMode autoTangentMode = AT_CATMULL)
+	{
+		ControlPoint cp;
+		cp.position = Ogre::Vector2(x,y);
+		cp.autoTangentBefore = autoTangentMode;
+		cp.autoTangentAfter = autoTangentMode;
+		mPoints.push_back(cp);
+		return *this;
+	}
+
 	/// Safely gets a control point
-	inline const ControlPoint& safeGetPoint(int i) const
+	inline const ControlPoint& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -133,7 +155,7 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
 	}
 	
 	/// Safely gets a control point
-	inline const Ogre::Vector2& safeGetPoint(int i) const
+	inline const Ogre::Vector2& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -154,7 +176,7 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
  */
 class _ProceduralExport KochanekBartelsSpline2 : public BaseSpline2<KochanekBartelsSpline2>
 {	
-	typedef KonachekBartelsSplineControlPoint<Ogre::Vector2> ControlPoint;
+	typedef KochanekBartelsSplineControlPoint<Ogre::Vector2> ControlPoint;
 	
 	std::vector<ControlPoint> mPoints;
 	
@@ -174,7 +196,7 @@ public:
 	}
 
 	/// Safely gets a control point
-	inline const ControlPoint& safeGetPoint(int i) const
+	inline const ControlPoint& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
@@ -291,8 +313,9 @@ class _ProceduralExport RoundedCornerSpline2 : public BaseSpline2<RoundedCornerS
 	std::vector<Ogre::Vector2> mPoints;	
 	
 public:
-	RoundedCornerSpline2() : mRadius(.1) {}
+	RoundedCornerSpline2() : mRadius(.1f) {}
 	
+	/// Sets the radius of the corners
 	inline RoundedCornerSpline2& setRadius(Ogre::Real radius)
 	{
 		mRadius = radius;
@@ -314,7 +337,7 @@ public:
 	}
 
 	/// Safely gets a control point
-	inline const Ogre::Vector2& safeGetPoint(int i) const
+	inline const Ogre::Vector2& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];

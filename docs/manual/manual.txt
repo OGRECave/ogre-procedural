@@ -6,34 +6,53 @@ Ogre Procedural Manual
 == About this manual
 
 This manual aims to give a global view over what is possible with Ogre Procedural.
-If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc.
+If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc (you can find it here : http://ogreprocedural.free.fr).
 
 == Mesh primitives
 
 There are a few mesh primitives generators.
 
-.Cube
+.Box
 
-.RoundedCube
+image::primitive_box.png[scale="50"]
+
+.RoundedBox
+
+image::primitive_roundedbox.png[scale="50"]
 
 .Sphere
 
+image::primitive_sphere.png[scale="50"]
+
 .IcoSphere
 
-Icosphere is visually quite near from Sphere, but has a quite different repartition of the triangles.
+Icosphere is visually quite close from Sphere, but has a quite different repartition of the triangles.
+
+image::primitive_icosphere.png[scale="50"]
 
 .Torus
 
+image::primitive_torus.png[scale="50"]
+
 .TorusKnot
+
+image::primitive_torusknot.png[scale="50"]
 
 .Cylinder
 
+image::primitive_cylinder.png[scale="50"]
+
 .Cone
+
+image::primitive_cone.png[scale="50"]
 
 .Tube
 
+image::primitive_tube.png[scale="50"]
+
 .Capsule
 
+image::primitive_capsule.png[scale="50"]
 
 == Shapes, paths and tracks
 
@@ -45,9 +64,10 @@ The difference between them is :
 * Shapes are 2D
 * Paths are 3D
 
+
 === Orientation and closedness
 
-Both shapes and tracks can be closed or not : if closed, there will be an automatic junction between the last point and the first point.
+Both shapes, tracks and paths can be closed or not : if closed, there will be an automatic junction between the last point and the first point.
 
 Shapes have an outside and an inside : you can define whether the left or the right side is the outside.
 It also makes sense with non-closed shape (for example, when extruded, the outside corresponds to where the face normal heads).
@@ -55,22 +75,44 @@ There's also a function to guess where is the outside and where is the inside.
 
 === Splines
 
-Splines are a few helper classes used to generate tracks, shapes or paths, by interpolating between a bunch of control points.
+Splines are a few helper classes used to generate shapes or paths, by interpolating between a bunch of control points.
+
+You can also generate a track by first generating a shape, then calling the method convertToTrack(). 
+Shape's X are used as keys and Y as values.
 
 .Cubic Hermite Spline
 
 This is often referred as 'Bezier Spline'.
 With Cubic Hermite Spline, you can choose the points and the tangents of the curves that goes through control points.
 
+image::spline_cubichermite.png[scale="50"]
+
 .Catmull-Rom Spline
 
 It's a particular case of Cubic Hermite Spline, in which tangents are automatically calculated.
 
-.Konachek Bartels Spline
+image::spline_catmull.png[scale="50"]
+
+.Kochanek Bartels Spline
+
+Kochanek-Bartels spline is defined by control points and 3 parameters : tension, bias and continuity.
+Here's a description of what they do :
+
+[options="header"]
+|=========================================
+|Parameter  | +1              | -1
+|Tension    |Tight            |Round
+|Bias       |Post Shoot       |Pre shoot
+|Continuity |Inverted corners |Box corners
+|=========================================
+
+image::spline_kochanekbartels.png[scale="50"]
 
 .Rounded Corner Spline
 
 This one consists in straight lines joining the control points, with corners replaced by circle arcs.
+
+image::spline_roundedcorner.png[scale="50"]
 
 === Shape specific operations
 
@@ -79,14 +121,72 @@ This one consists in straight lines joining the control points, with corners rep
 You can combine shapes together in order to produce new shapes, using boolean operations.
 Technically, the output is a multishape, because it doesn't always resolve to a single line.
 
+As an exemple, let's say we have these 2 shapes :
+
+image::shape_booleansetup.png[scale="50"]
+
 Supported boolean operations are :
+
 * Union : the result contains everything inside A plus evertyhing inside B
+
+image::shape_booleanunion.png[scale="50"]
+
 * Intersection : the result contains everything that is inside A and B
+
+image::shape_booleanintersection.png[scale="50"]
+
 * Difference : the result contains everything that is in A but not in B
-* Xor (not yet implemented) : the result contains everything that either inside A or inside B but not inside both.
+
+image::shape_booleandifference.png[scale="50"]
 
 ==== Thicken
 
-== Extrusion and lathe
+A "thin" shape can be made "thick" by using the thicken operation.
+
+.before 
+image::shape_thick1.png[scale="50"] 
+
+.after 
+image::shape_thick2.png[scale="50"]
+
+=== Triangulation
+
+A delaunay triangulation can be performed on a shape or a multishape.
+
+image::shape_triangulation.png[scale="50"] 
+
+== Extrusion operations
+
+=== Extruder
 
 Extrusion is an operation that consists in creating a mesh from a shape moved along a path.
+
+image::extruder_generic.png[scale="50"]
+
+Extrusion can also be applied to a multishape.
+
+image::extruder_multishape.png[scale="50"]
+
+Special options are available to influence the way the mesh is created :
+
+* Rotation Track
+
+image::extruder_rotationtrack.png[scale="50"]
+
+* Scale Track
+
+image::extruder_scaletrack.png[scale="50"]
+
+* Shape Texture Track
+
+image::extruder_texturetrack.png[scale="50"]
+
+=== Lathe
+
+Lathe is an operation that takes a shape and rotates it around Y-axis to produce a mesh.
+
+image::lathe_generic.png[scale="50"]
+
+Lathe can also be restricted to a given angle range.
+
+image::lathe_anglerange.png[scale="50"]

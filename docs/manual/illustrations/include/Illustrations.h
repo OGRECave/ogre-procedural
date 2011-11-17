@@ -39,6 +39,11 @@ class Illustrations
 	RenderWindow* mWindow;
 	Viewport* mViewPort;
 	SceneManager* mSceneMgr;
+	Camera* mCamera;
+
+	std::vector<Entity*> mEntities;
+	std::vector<SceneNode*> mSceneNodes;
+
 
 public:
 	Illustrations()
@@ -48,6 +53,26 @@ public:
 
 	void init();
 	void go();
+	void next(std::string name, Real size);
+	void putMesh(MeshPtr mesh, int materialIndex=0);
+
+	void cameraPerspective()
+	{
+		mCamera->setPosition(3,5,-5);
+		mCamera->lookAt(0,0,0);
+	}
+
+	void cameraBack()
+	{
+		mCamera->setPosition(0,0,5);
+		mCamera->lookAt(0,0,0);
+	}
+
+	void cameraFront()
+	{
+		mCamera->setPosition(0,0,-5);
+		mCamera->lookAt(0,0,0);
+	}
 	
 };
 

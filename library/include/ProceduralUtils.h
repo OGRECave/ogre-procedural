@@ -29,13 +29,13 @@ THE SOFTWARE.
 #define PROCEDURAL_UTILS_INCLUDED
 #include "OgreVector3.h"
 #include "OgreAxisAlignedBox.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
 /// Holds a bunch of static utility functions
-class Utils
+class _ProceduralExport Utils
 {
-
 	static int counter;
 public:
 	/// Outputs something to the ogre log, with a [PROCEDURAL] prefix
@@ -89,11 +89,7 @@ public:
 	}
 
 	/// Generate a name from a prefix and a counter
-	static std::string getName(const std::string& prefix= "default")
-	{
-		counter++;
-		return prefix + Ogre::StringConverter::toString(counter);
-	}
+	static std::string getName(const std::string& prefix= "default");
 
 	/// Shifts the components of the vector to the right
 	static Ogre::Vector3 vectorPermute(const Ogre::Vector3& in)
