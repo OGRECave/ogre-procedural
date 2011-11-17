@@ -108,8 +108,6 @@ public:
 
 class Unit_Tests : public BaseApplication
 {
-	Light* movingLight;
-
 	/* --------------------------------------------------------------------------- */
 	class Test_Primitives : public Unit_Test
 	{
@@ -210,6 +208,7 @@ class Unit_Tests : public BaseApplication
 				.close();
 
 			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());		
+						
 		}
 	};
 
@@ -480,6 +479,18 @@ class Unit_Tests : public BaseApplication
 				putMesh(ex.setPathTextureTrack(0).setSwitchUV(true).realizeMesh(),1);
 			}
 
+			{
+				Shape s = Shape().addPoint(-1,-1).addPoint(1,-1).addPoint(1,1).addPoint(0,0).addPoint(-1,1).close();
+				Path p = RoundedCornerSpline3().addPoint(-10,5,-2.5).addPoint(-5,0,-2.5).addPoint(0,0,2.5).addPoint(5,0,-2.5).setRadius(2.).realizePath();
+				MeshPtr mp = Extruder().setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh();
+				putMesh(mp, 1);					
+
+				Shape s2 = RectangleShape().setHeight(.5).realizeShape();
+				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.0).addKeyFrame(1.0,1.0);
+				Path p2 = LinePath().betweenPoints(Vector3(-5,0,0),Vector3(5,0,0)).setNumSeg(10).realizePath();
+				mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setRotationTrack(&t).realizeMesh();
+				putMesh(mp, 1);
+			}
 
 		}
 	};
