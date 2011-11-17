@@ -221,6 +221,68 @@ public:
 	/// Creates a path with the keys of this path and extra keys coming from a track
 	Path mergeKeysWithTrack(const Track& track) const;
 
+		/**
+	 * Applies the given translation to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param translation the translation vector
+	 */
+	Path& translate(const Ogre::Vector3& translation)
+	{
+		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+			*it+=translation;
+		return *this;
+	}
+		
+	/**
+	 * Applies the given translation to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param translationX X component of the translation vector
+	 * @param translationY Y component of the translation vector
+	 * @param translationZ Z component of the translation vector
+	 */
+	Path& translate(Ogre::Real translationX, Ogre::Real translationY, Ogre::Real translationZ)
+	{
+		return translate(Ogre::Vector3(translationX, translationY, translationZ));
+	}
+
+	/**
+	 * Applies the given scale to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param amount amount of scale
+	 */	
+	Path& scale(Ogre::Real amount)
+	{
+		return scale(amount, amount, amount);
+	}
+
+	/**
+	 * Applies the given scale to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param scaleX amount of scale in the X direction
+	 * @param scaleY amount of scale in the Y direction
+	 * @param scaleZ amount of scale in the Z direction
+	 */	
+	Path& scale(Ogre::Real scaleX, Ogre::Real scaleY, Ogre::Real scaleZ)
+	{
+		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		{
+			it->x *= scaleX;
+			it->y *= scaleY;			
+			it->z *= scaleZ;
+		}
+		return *this;
+	}
+
+	/**
+	 * Applies the given scale to all the points already defined.
+	 * Has strictly no effect on the points defined after that
+	 * @param amount of scale
+	 */	
+	Path& scale(Ogre::Vector3 amount)
+	{
+		return scale(amount.x, amount.y, amount.z);
+	}
+
 	/// Extracts a part of the shape as a new path
 	/// @arg first first index to be in the new path
 	/// @arg last last index to be in the new path
