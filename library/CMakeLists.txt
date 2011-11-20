@@ -77,6 +77,12 @@ else ()
   add_definitions(-DOgreProcedural_SHARED)
 endif ()
 
+if(MSVC) # Sort the odd stuff out
+    add_definitions("/WX /MP /EHsc")
+else() # Clang/GCC/Mingw
+    add_definitions("-Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-but-set-parameter -pedantic -std=c++0x")
+endif()
+
 add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})
 
 set_target_properties(OgreProcedural PROPERTIES DEBUG_POSTFIX _d)

@@ -72,6 +72,8 @@ namespace Procedural
 		case AT_CATMULL:
 			point.tangentBefore = pointAfter - pointBefore;
 			break;
+        case AT_NONE:
+            break;
 		}
 
 		switch (point.autoTangentAfter)
@@ -82,6 +84,8 @@ namespace Procedural
 		case AT_CATMULL:
 			point.tangentAfter = pointAfter - pointBefore;
 			break;
+        case AT_NONE:
+            break;
 		}
 	}
 	
