@@ -151,9 +151,9 @@ Vector3 Line::shortestPathToPoint(const Vector3& point) const
 bool Line2D::findIntersect(const Line2D& other, Ogre::Vector2& intersection) const
 {
 	const Vector2& p1 = mPoint;
-	const Vector2& p2 = mPoint+mDirection;
+	//const Vector2& p2 = mPoint+mDirection;
 	const Vector2& p3 = other.mPoint;
-	const Vector2& p4 = other.mPoint+other.mDirection;
+	//const Vector2& p4 = other.mPoint+other.mDirection;
 
 	Vector2 d1 = mDirection;
 	float a1 = d1.y;

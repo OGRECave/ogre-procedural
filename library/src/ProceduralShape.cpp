@@ -141,7 +141,7 @@ bool _sortAngles(std::pair<Radian, uint8> one, std::pair<Radian, uint8> two) // 
 	return one.first<two.first; 
 }
 //-----------------------------------------------------------------------
-bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opType, IntersectionInShape intersection, uint8& shapeSelector, char& isIncreasing, int& currentSegment) const
+bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opType, IntersectionInShape intersection, uint8& shapeSelector, char& isIncreasing, unsigned int& currentSegment) const
 {
 	if (intersection.onVertex[0] || intersection.onVertex[1])
 	{
@@ -294,7 +294,7 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 		
 		Vector2 currentPosition = intersections.begin()->position;
 		IntersectionInShape firstIntersection = *intersections.begin();
-		int currentSegment =  firstIntersection.index[shapeSelector];
+		unsigned int currentSegment =  firstIntersection.index[shapeSelector];
 		intersections.erase(intersections.begin());
 		outputShape.addPoint(currentPosition);
 
@@ -312,7 +312,7 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 			std::vector<IntersectionInShape>::iterator found_next_intersection = intersections.end();
 			Real distanceToNextIntersection = std::numeric_limits<Real>::max();
 			
-			int nextPoint = currentSegment+ (isIncreasing==1?1:0);
+			unsigned int nextPoint = currentSegment+ (isIncreasing==1?1:0);
 			bool nextPointIsOnIntersection = false;
 			
 			for (std::vector<IntersectionInShape>::iterator it = intersections.begin(); it != intersections.end(); it++)
