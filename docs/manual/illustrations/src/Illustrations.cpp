@@ -80,6 +80,7 @@ using namespace Procedural;
 	mCamera->setAspectRatio(1.);
 	cameraPerspective();
 	mCamera->setNearClipDistance(1.);
+	mSceneMgr->setAmbientLight(ColourValue(0.5,0.3,0.1));
 	Light* light = mSceneMgr->createLight();
 	light->setType(Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
@@ -274,6 +275,20 @@ void Illustrations::go()
 		putMesh(mp);
 		next("extruder_scaletrack", 7);
 
+	}
+
+	//
+	// Lathe
+	//
+	{
+		Shape s = Shape().addPoint(0,-3).addPoint(1,-3).addPoint(1,0).addPoint(.8,1).addPoint(.8,2).addPoint(1.5,3).addPoint(0,4);
+		mp = Lathe().setShapeToExtrude(&s).realizeMesh();
+		putMesh(mp);
+		next("lathe_generic",5);
+
+		mp = Lathe().setShapeToExtrude(&s).setAngleBegin((Radian)2).setAngleEnd((Radian)0).realizeMesh();
+		putMesh(mp);
+		next("lathe_anglerange",5);
 	}
 }
 
