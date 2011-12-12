@@ -6,7 +6,8 @@ Ogre Procedural Manual
 == About this manual
 
 This manual aims to give a global view over what is possible with Ogre Procedural.
-If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc (you can find it here : http://ogreprocedural.free.fr).
+
+If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc (you can find it here : http://doc.ogreprocedural.org).
 
 == Mesh primitives
 
@@ -26,9 +27,9 @@ image::primitive_sphere.png[scale="50"]
 
 .IcoSphere
 
-Icosphere is visually quite close from Sphere, but has a quite different repartition of the triangles.
-
 image::primitive_icosphere.png[scale="50"]
+
+Icosphere is visually quite close from Sphere, but has a quite different repartition of the triangles.
 
 .Torus
 
@@ -77,8 +78,8 @@ There's also a function to guess where is the outside and where is the inside.
 
 Splines are a few helper classes used to generate shapes or paths, by interpolating between a bunch of control points.
 
-You can also generate a track by first generating a shape, then calling the method convertToTrack(). 
-Shape's X are used as keys and Y as values.
+TIP: You can also generate a track by first generating a shape, then calling the method convertToTrack(). 
+      Shape's X are used as keys and Y as values.
 
 .Cubic Hermite Spline
 
@@ -96,6 +97,7 @@ image::spline_catmull.png[scale="50"]
 .Kochanek Bartels Spline
 
 Kochanek-Bartels spline is defined by control points and 3 parameters : tension, bias and continuity.
+
 Here's a description of what they do :
 
 [options="header"]
@@ -151,7 +153,9 @@ image::shape_thick2.png[scale="50"]
 
 === Triangulation
 
-A delaunay triangulation can be performed on a shape or a multishape.
+A constrained triangulation can be performed on a shape or a multishape. It means that points from the shape(s) are joined together to form triangles.
+
+The algorithm used is Bowyer-Watson, which is an implementation of a Delaunay triangulation (Delaunay simply means that triangulation is 'best quality', ie has as few thin triangles as possible)
 
 image::shape_triangulation.png[scale="50"] 
 
@@ -160,6 +164,8 @@ image::shape_triangulation.png[scale="50"]
 === Extruder
 
 Extrusion is an operation that consists in creating a mesh from a shape moved along a path.
+
+That operation is particularly well suited for roads, pipelines, pillars...
 
 image::extruder_generic.png[scale="50"]
 
