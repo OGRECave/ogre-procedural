@@ -40,7 +40,23 @@ material Examples/Road
 		{
 			texture_unit
 			{
-				texture road.png			
+				texture road.png
+			}
+		}
+	}
+}
+
+material Examples/Marble
+{
+	technique
+	{
+		pass
+		{
+			diffuse 1.0 1.0 1.0
+			
+			texture_unit
+			{
+				texture marble.jpg			
 			}
 		}
 	}
@@ -52,7 +68,7 @@ material HiddenLine
 	{
 		pass
 		{
-			ambient  0.0 0.0 0.0
+			ambient  1.0 1.0 1.0
 			diffuse  1.0 1.0 1.0
 			shading  flat
 		}
