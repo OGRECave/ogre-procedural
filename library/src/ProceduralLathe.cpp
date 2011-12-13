@@ -68,7 +68,7 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 			Vector2 vp2normal = vp2direction.perpendicular();
 			Vector3 normal(vp2normal.x, vp2normal.y, 0);
 			normal.normalise();
-			if (mShapeToExtrude->getOutSide() == SIDE_LEFT)
+			if (mShapeToExtrude->getOutSide() == SIDE_RIGHT)
 				normal = -normal;
 
 			addPoint(buffer, q*vp,
