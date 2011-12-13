@@ -296,31 +296,27 @@ bool BaseApplication::frameRenderingQueued(const FrameEvent& evt)
 //-------------------------------------------------------------------------------------
 void BaseApplication::putMesh3(const std::string& meshName, const Vector3& position)
 {
-	Entity* ent2 = mSceneMgr->createEntity(meshName);
-	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(position);
-	ent2->setMaterialName("Examples/Road");
-	ent2->setCastShadows(false);
+	putMeshMat(meshName, "Examples/Road", position, false);
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::putMesh2(const std::string& meshName, const Vector3& position)
 {
-	Entity* ent2 = mSceneMgr->createEntity(meshName);
-	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	sn->attachObject(ent2);
-	sn->setPosition(position);
-	ent2->setMaterialName("Examples/Rockwall");
-	ent2->setCastShadows(false);
+	putMeshMat(meshName, "Examples/Rockwall", position, false);
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::putMesh(const std::string& meshName, const Vector3& position)
+{
+	putMeshMat(meshName, "Examples/BeachStones", position, true);
+}
+//-------------------------------------------------------------------------------------
+void BaseApplication::putMeshMat(const std::string& meshName, const std::string& matName, const Vector3& position, bool castShadows)
 {
 	Entity* ent2 = mSceneMgr->createEntity(meshName);
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	sn->attachObject(ent2);
 	sn->setPosition(position);
-	ent2->setMaterialName("Examples/BeachStones");
+	ent2->setMaterialName(matName);
+	ent2->setCastShadows(castShadows);
 }
 //-------------------------------------------------------------------------------------
 bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
