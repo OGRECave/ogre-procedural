@@ -164,6 +164,14 @@ public:
 	 * It keeps the "up" vector to UNIT_Y
 	 */
 	static Ogre::Quaternion _computeQuaternion(Ogre::Vector3 direction);
+
+	/**
+	 * Maps a vector2 to vector3, with Y=0
+	 */
+	static inline Ogre::Vector3 vec2ToVec3Y(const Ogre::Vector2& pos)
+	{
+		return Ogre::Vector3(pos.x, 0, pos.y);
+	}
 	
 };
 }

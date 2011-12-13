@@ -498,7 +498,7 @@ public:
 	
 	char _isIncreasing(Ogre::Real d, BooleanOperationType opType, char shapeSelector) const;
 		
-	bool _findWhereToGo(const Shape* inputShapes[], BooleanOperationType opType, IntersectionInShape intersection, Ogre::uint8& shapeSelector, char& isIncreasing, int& currentSegment) const;
+	bool _findWhereToGo(const Shape* inputShapes[], BooleanOperationType opType, IntersectionInShape intersection, Ogre::uint8& shapeSelector, char& isIncreasing, unsigned int& currentSegment) const;
 	
 	void _findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const;
 

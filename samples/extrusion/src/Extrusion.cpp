@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "Extrusion.h"
 #include "Procedural.h"
+#include "ProceduralUtils.h"
 
 //-------------------------------------------------------------------------------------
 void Sample_Extrusion::createScene(void)
@@ -47,6 +48,24 @@ void Sample_Extrusion::createScene(void)
 		// The extruder actually creates the road mesh from all parameters
 		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).setShapeTextureTrack(&textureTrack).setUTile(20.).realizeMesh("extrudedMesh");
 		putMesh3("extrudedMesh");
+
+		// -- Pillar
+		// The path of the pillar, just a straight line
+		Procedural::Path p2 = Procedural::LinePath().betweenPoints(Vector3(0,0,0), Vector3(0,5,0)).realizePath();
+		// We're doing something custom for the shape to extrude
+		Procedural::Shape s2;
+		for (int i=0;i<=64;i++)						
+			s2.addPoint(.5*(1-.1*Math::Abs(Math::Sin(i/8.*Math::TWO_PI))) * Vector2(Math::Cos(i/64.*Math::TWO_PI), Math::Sin(i/64.*Math::TWO_PI)));
+		Procedural::Extruder().setExtrusionPath(&p2).setShapeToExtrude(&s2).setCapped(false).realizeMesh("pillar");
+		// We put the pillars on the side of the road
+		for (int i=0;i<p.getSegCount();i++)
+			if (i%2==0)
+				putMeshMat("pillar", "Examples/Marble", p.getPoint(i)+4*p.getAvgDirection(i).crossProduct(Ogre::Vector3::UNIT_Y).normalisedCopy());
+
+		// -- Jarre
+		// 
+		//Procedural::Shape s3 = Procedural::CubicHermiteSpline2().addPoint(Ogre::Vector2(0,0), Ogre::Vector2::UNIT_X, Ogre::Vector2::UNIT_X)
+			//.addPoint(;
 }
 //-------------------------------------------------------------------------------------
 void Sample_Extrusion::createCamera(void)
