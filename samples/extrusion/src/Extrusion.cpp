@@ -64,8 +64,21 @@ void Sample_Extrusion::createScene(void)
 
 		// -- Jarre
 		// 
-		//Procedural::Shape s3 = Procedural::CubicHermiteSpline2().addPoint(Ogre::Vector2(0,0), Ogre::Vector2::UNIT_X, Ogre::Vector2::UNIT_X)
-			//.addPoint(;
+		Procedural::Shape s3 = Procedural::CubicHermiteSpline2().addPoint(Ogre::Vector2(0,0), Ogre::Vector2::UNIT_X, Ogre::Vector2::UNIT_X)
+																.addPoint(Ogre::Vector2(2,3))
+																.addPoint(Ogre::Vector2(.5,5), Ogre::Vector2(-1,1).normalisedCopy(), Ogre::Vector2::UNIT_Y)
+																.addPoint(Ogre::Vector2(1,7), Ogre::Vector2(1,1).normalisedCopy()).realizeShape().thicken(.1).getShape(0);
+		Procedural::Lathe().setShapeToExtrude(&s3).realizeMesh("jarre");
+		putMeshMat("jarre", "Examples/Marble", Vector3(5,0,5));
+		Procedural::Shape s4 = Procedural::CircleShape().setRadius(.2).realizeShape();
+		Procedural::Path p3  = Procedural::CatmullRomSpline3().addPoint(Ogre::Vector3(0,6.5,.75))
+																.addPoint(Ogre::Vector3(0,6,1.5))
+																.addPoint(Ogre::Vector3(0,5,.55)).setNumSeg(10).realizePath();					
+		Procedural::Extruder().setShapeToExtrude(&s4).setExtrusionPath(&p3).realizeMesh("jarre2");		
+		putMeshMat("jarre2", "Examples/Marble", Vector3(5,0,5));
+		p3.reflect(Ogre::Vector3::UNIT_Z);
+		Procedural::Extruder().setShapeToExtrude(&s4).setExtrusionPath(&p3).realizeMesh("jarre3");		
+		putMeshMat("jarre3", "Examples/Marble", Vector3(5,0,5));
 }
 //-------------------------------------------------------------------------------------
 void Sample_Extrusion::createCamera(void)

@@ -415,9 +415,22 @@ public:
 	 * Has strictly no effect on the points defined after that
 	 * @param amount of scale
 	 */	
-	Shape& scale(Ogre::Vector2 amount)
+	Shape& scale(const Ogre::Vector2& amount)
 	{
 		return scale(amount.x, amount.y);
+	}
+		
+	/**
+	 * Reflect all points in this shape against a zero-origined line with a given normal
+	 * @param the normal
+	 */
+	Shape& reflect(const Ogre::Vector2& normal)
+	{
+		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		{
+			*it = it->reflect(normal);
+		}
+		return *this;
 	}
 
 	/// Returns the total lineic length of that shape
