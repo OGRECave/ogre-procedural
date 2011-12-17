@@ -278,9 +278,22 @@ public:
 	 * Has strictly no effect on the points defined after that
 	 * @param amount of scale
 	 */	
-	Path& scale(Ogre::Vector3 amount)
+	Path& scale(const Ogre::Vector3& amount)
 	{
 		return scale(amount.x, amount.y, amount.z);
+	}
+
+	/**
+	 * Reflect all points in this path against a zero-origined plane with a given normal
+	 * @param the normal
+	 */
+	Path& reflect(const Ogre::Vector3& normal)
+	{
+		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		{
+			*it = it->reflect(normal);
+		}
+		return *this;
 	}
 
 	/// Extracts a part of the shape as a new path
