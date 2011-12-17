@@ -41,15 +41,17 @@ namespace Procedural
 	}
 	
 	//-----------------------------------------------------------------------
-	Quaternion Utils::_computeQuaternion(Ogre::Vector3 direction)
+	Quaternion Utils::_computeQuaternion(const Ogre::Vector3& direction, const Ogre::Vector3& upVector)
 	{
 		// First, compute an approximate quaternion (everything is ok except Roll angle)
 		Quaternion quat = Vector3::UNIT_Z.getRotationTo(direction);
 		// Then, compute a correction quaternion : we want the "up" direction to be always the same
-		Vector3 projectedY = Vector3::UNIT_Y - Vector3::UNIT_Y.dotProduct(direction) * direction;
+		Vector3 projectedY = upVector - upVector.dotProduct(direction) * direction;
 		if (projectedY.length()<1e-6)
 			return quat;
-		Vector3 tY = quat * Vector3::UNIT_Y;
+		Vector3 tY = quat * upVector;
+		if (tY.dotProduct(projectedY)<0)
+			projectedY = -projectedY;
 		Quaternion quat2 = tY.getRotationTo(projectedY);
 		Quaternion q = quat2 * quat;
 		return q;

@@ -163,7 +163,7 @@ public:
 	 * Computes a quaternion between UNIT_Z and direction.
 	 * It keeps the "up" vector to UNIT_Y
 	 */
-	static Ogre::Quaternion _computeQuaternion(Ogre::Vector3 direction);
+	static Ogre::Quaternion _computeQuaternion(const Ogre::Vector3& direction, const Ogre::Vector3& upVector = Ogre::Vector3::UNIT_Y);
 
 	/**
 	 * Maps a vector2 to vector3, with Y=0
