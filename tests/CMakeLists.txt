@@ -14,7 +14,6 @@ set( SRCS
 
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
-	${OGRE_SAMPLES_INCLUDEPATH}
 	../samples/common/include
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
