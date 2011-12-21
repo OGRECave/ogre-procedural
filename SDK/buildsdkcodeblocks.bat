@@ -1,8 +1,5 @@
 @echo off
 set GENERATOR="CodeBlocks - MinGW Makefiles"
-set PATH=%PATH%;C:\Program Files (x86)\CodeBlocks
-set OGRE_SDK_RELEASE=E:\Prog\Builds\Ogre18_CB_Unity\sdk
-set OGRE_SDK_DEBUG=E:\Prog\Builds\Ogre18_CB_Unity_debug\sdk
 
 rem check 7z and dot
 7z > NUL
