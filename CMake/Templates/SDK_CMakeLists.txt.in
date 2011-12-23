@@ -67,11 +67,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OgreProcedural_BINARY_DIR}/bin")
 set(OgreProcedural_TEMPLATES_DIR "${OgreProcedural_SOURCE_DIR}/CMake")
 set(OgreProcedural_WORK_DIR ${OgreProcedural_BINARY_DIR})
 
-#include_directories(
-#  ${OGRE_INCLUDE_DIRS}
-#  ${OIS_INCLUDE_DIRS}
-#  ${OgreProcedural_INCLUDE_DIRS}
-#)
+include_directories(
+  ${OgreProcedural_INCLUDE_DIRS}
+)
 
 include(ProceduralMacros)
 include(ProceduralConfigTargets)
