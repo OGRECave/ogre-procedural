@@ -166,7 +166,7 @@ public:
 	Path convertToPath() const;
 
 	/// Outputs a track, with Key=X and Value=Y
-	Track convertToTrack(Track::AddressingMode addressingMode=Track::AM_ABSOLUTE_LINEIC) const;
+	Track convertToTrack(Track::AddressingMode addressingMode=Track::AM_RELATIVE_LINEIC) const;
 
 	/// Gets raw vector data of this shape
 	inline std::vector<Ogre::Vector2> getPoints() const

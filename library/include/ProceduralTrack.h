@@ -59,8 +59,8 @@ protected:
 	std::map<Ogre::Real, Ogre::Real> mKeyFrames;
 public:
 	/// Default constructor.
-	/// Point insertion default to true, and addressing to absolute lineic
-	Track(AddressingMode addressingMode=AM_ABSOLUTE_LINEIC, bool insertPoint=true) : mAddressingMode(addressingMode), mInsertPoint(insertPoint) {}
+	/// Point insertion default to true, and addressing to relative lineic
+	Track(AddressingMode addressingMode=AM_RELATIVE_LINEIC, bool insertPoint=true) : mAddressingMode(addressingMode), mInsertPoint(insertPoint) {}
 
 	/// Gets addressing mode of the curve
 	AddressingMode getAddressingMode() const
