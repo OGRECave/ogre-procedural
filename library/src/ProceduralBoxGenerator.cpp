@@ -41,29 +41,34 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	PlaneGenerator pg;
 	pg.setUTile(mUTile).setVTile(mVTile);
+	if (mTransform)
+	{
+		pg.setScale(mScale);
+		pg.setOrientation(mOrientation);
+	}
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Vector3::NEGATIVE_UNIT_Z)
-	  .setPosition(.5f*mSizeZ*Vector3::NEGATIVE_UNIT_Z)
+	  .setPosition(mPosition+.5f*mSizeZ*Vector3::NEGATIVE_UNIT_Z)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Vector3::UNIT_Z)
-	  .setPosition(.5f*mSizeZ*Vector3::UNIT_Z)
+	  .setPosition(mPosition+.5f*mSizeZ*Vector3::UNIT_Z)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Vector3::NEGATIVE_UNIT_Y)
-	  .setPosition(.5f*mSizeY*Vector3::NEGATIVE_UNIT_Y)
+	  .setPosition(mPosition+.5f*mSizeY*Vector3::NEGATIVE_UNIT_Y)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Vector3::UNIT_Y)
-	  .setPosition(.5f*mSizeY*Vector3::UNIT_Y)
+	  .setPosition(mPosition+.5f*mSizeY*Vector3::UNIT_Y)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Vector3::NEGATIVE_UNIT_X)
-	  .setPosition(.5f*mSizeX*Vector3::NEGATIVE_UNIT_X)
+	  .setPosition(mPosition+.5f*mSizeX*Vector3::NEGATIVE_UNIT_X)
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Vector3::UNIT_X)
-	  .setPosition(.5f*mSizeX*Vector3::UNIT_X)
+	  .setPosition(mPosition+.5f*mSizeX*Vector3::UNIT_X)
 	  .addToTriangleBuffer(buffer);
 }
 }
