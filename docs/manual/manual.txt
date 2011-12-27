@@ -116,7 +116,20 @@ This one consists in straight lines joining the control points, with corners rep
 
 image::spline_roundedcorner.png[scale="50"]
 
-=== Shape specific operations
+=== Track specifics
+
+Tracks are used to represent a variable that varies along a path or a shape.
+
+For that reason, the keys of the track are defined relatively to the points in the main curve.
+
+There are 3 different addressing modes :
+
+* AM_ABSOLUTE_LINEIC : the key represents a distance from the beginning of the curve.
+* AM_RELATIVE_LINEIC : the key represents a relative distance inside the [0;1] segment, 0 being the beginning and 1 the end of the curve.
+* AM_POINT : the key represents the index of a point in the main curve.
+
+
+=== Shape specifics
 
 ==== 2D CSG
 
