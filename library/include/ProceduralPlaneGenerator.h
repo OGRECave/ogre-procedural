@@ -36,17 +36,16 @@ namespace Procedural
 /// Builds a plane mesh
 class _ProceduralExport PlaneGenerator : public MeshGenerator<PlaneGenerator>
 {
-	int numSegX;
-	int numSegY;
-	Ogre::Vector3 normal;
-	Ogre::Real sizeX;
-	Ogre::Real sizeY;
-	Ogre::Vector3 position;
+	int mNumSegX;
+	int mNumSegY;
+	Ogre::Vector3 mNormal;
+	Ogre::Real mSizeX;
+	Ogre::Real mSizeY;
 public:
 
-	PlaneGenerator(): numSegX(1), numSegY(1),
-		normal(Ogre::Vector3::UNIT_Y),
-		sizeX(1), sizeY(1),position(Ogre::Vector3::ZERO)
+	PlaneGenerator(): mNumSegX(1), mNumSegY(1),
+		mNormal(Ogre::Vector3::UNIT_Y),
+		mSizeX(1), mSizeY(1)
 	{}
 	
 	/**
@@ -58,45 +57,37 @@ public:
 	/** Sets the number of segements along local X axis */
 	inline PlaneGenerator & setNumSegX(int numSegX)
 	{
-		this->numSegX = numSegX;
+		mNumSegX = numSegX;
 		return *this;
 	}
 
 	/** Sets the number of segments along local Y axis */
 	inline PlaneGenerator & setNumSegY(int numSegY)
 	{
-		this->numSegY = numSegY;
+		mNumSegY = numSegY;
 		return *this;
 	}
 
 	/** Sets the normal of the plane */
 	inline PlaneGenerator & setNormal(Ogre::Vector3 normal)
 	{
-		this->normal = normal;
+		mNormal = normal;
 		return *this;
 	}
 
 	/** Sets the size of the plane along local X axis */
 	inline PlaneGenerator & setSizeX(Ogre::Real sizeX)
 	{
-		this->sizeX = sizeX;
+		mSizeX = sizeX;
 		return *this;
 	}
 
 	/** Sets the size of the plane along local Y axis */
 	inline PlaneGenerator & setSizeY(Ogre::Real sizeY)
 	{
-		this->sizeY = sizeY;
+		mSizeY = sizeY;
 		return *this;
 	}
-
-	/** Set a point that is located on the plane, in order to compute offset */
-	inline PlaneGenerator & setPosition(Ogre::Vector3 position)
-	{
-		this->position = position;
-		return *this;
-	}
-
 };
 }
 #endif
