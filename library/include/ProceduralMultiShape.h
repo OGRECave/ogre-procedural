@@ -52,7 +52,10 @@ class _ProceduralExport MultiShape
 	MultiShape(const Shape& shape)
 	{
 		mShapes.push_back(shape);
-	}		
+	}
+	//-----------------------------------------------------------------------
+	/// Constructor from a variable number of shapes
+	MultiShape(int count, ...);
 	//-----------------------------------------------------------------------
 	/// Adds a shape to the list of shapes
 	MultiShape& addShape(const Shape& shape)

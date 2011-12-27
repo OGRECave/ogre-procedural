@@ -55,6 +55,15 @@ namespace Procedural
 		return mesh;
 	}	
 //-----------------------------------------------------------------------
+	MultiShape::MultiShape(int count, ...)
+	{	
+		va_list shapes;		
+		va_start(shapes, count);     
+		for (int i = 0; i < count; i++)
+			mShapes.push_back(va_arg(shapes, Shape));
+		va_end(shapes);
+	}
+//-----------------------------------------------------------------------
 	std::vector<Vector2> MultiShape::getPoints() const
 	{
 		std::vector<Vector2> result;		
