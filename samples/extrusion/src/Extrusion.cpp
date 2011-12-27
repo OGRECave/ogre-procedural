@@ -54,9 +54,10 @@ void Sample_Extrusion::createScene(void)
 		Procedural::Path p2 = Procedural::LinePath().betweenPoints(Vector3(0,0,0), Vector3(0,5,0)).realizePath();
 		// We're doing something custom for the shape to extrude
 		Procedural::Shape s2;
-		for (int i=0;i<=64;i++)						
+		for (int i=0;i<64;i++)						
 			s2.addPoint(.5*(1-.1*Math::Abs(Math::Sin(i/8.*Math::TWO_PI))) * Vector2(Math::Cos(i/64.*Math::TWO_PI), Math::Sin(i/64.*Math::TWO_PI)));
-		Procedural::Extruder().setExtrusionPath(&p2).setShapeToExtrude(&s2).setCapped(false).realizeMesh("pillar");
+		s2.close();
+		Procedural::Extruder().setExtrusionPath(&p2).setShapeToExtrude(&s2).setCapped(true).realizeMesh("pillar");
 		// We put the pillars on the side of the road
 		for (int i=0;i<p.getSegCount();i++)
 			if (i%2==0)
