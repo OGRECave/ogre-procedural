@@ -67,6 +67,18 @@ protected:
 	/// If UV were to fit in a given rectangle, they still fit in it after the switch.
 	bool mSwitchUV;
 
+	/// Orientation to apply the mesh
+	Ogre::Quaternion mOrientation;
+
+	/// Scale to apply the mesh
+	Ogre::Vector3 mScale;
+
+	/// Position to apply to the mesh
+	Ogre::Vector3 mPosition;
+
+	// Whether a transform has been defined or not
+	bool mTransform;
+
 public:
 	/// Default constructor
 	MeshGenerator() : mUTile(1.f),
@@ -74,7 +86,11 @@ public:
 					  mEnableNormals(true),
 					  mNumTexCoordSet(1),
 					  mUVOrigin(0,0),
-					  mSwitchUV(false)
+					  mSwitchUV(false),
+					  mOrientation(Ogre::Quaternion::IDENTITY),
+					  mPosition(0,0,0),
+					  mScale(1,1,1),
+					  mTransform(false)
 	{
 		mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		assert(mSceneMgr && "Scene Manager must be set in Root");
@@ -157,6 +173,65 @@ public:
 		return static_cast<T&>(*this);
 	}
 
+	/// Sets an orientation to give when building the mesh
+	inline T& setOrientation(const Ogre::Quaternion& orientation)
+	{
+		mOrientation = orientation;
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Sets a translation baked into the resulting mesh
+	inline T& setPosition(const Ogre::Vector3& position)
+	{
+		mPosition = position;
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Sets a translation baked into the resulting mesh
+	inline T& setPosition(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		mPosition = Ogre::Vector3(x, y, z);
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+
+	/// Sets a scale baked into the resulting mesh
+	inline T& setScale(const Ogre::Vector3& scale)
+	{
+		mScale = scale;
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Sets a uniform scale baked into the resulting mesh
+	inline T& setScale(Ogre::Real scale)
+	{
+		mScale = Ogre::Vector3(scale);
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Sets a scale baked into the resulting mesh
+	inline T& setScale(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		mScale = Ogre::Vector3(x, y, z);
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Resets all transforms (orientation, position and scale) that would have been applied to the mesh to their default values
+	inline T& resetTransforms()
+	{
+		mTranform = false;
+		mPosition = Ogre::Vector3::ZERO;
+		mOrientation = Ogre::Quaternion::IDENTITY;
+		mScale = Ogre::Vector3(1);
+		return static_cast<T&>(*this);
+	}
+	
 protected:
 	/// Adds a new point to a triangle buffer, using the format defined for that MeshGenerator
 	/// @arg buffer the triangle buffer to update
@@ -165,7 +240,10 @@ protected:
 	/// @arg uv the uv texcoord of the new point
 	inline void addPoint(TriangleBuffer& buffer, const Ogre::Vector3& position, const Ogre::Vector3& normal, const Ogre::Vector2& uv) const
 	{
-		buffer.position(position);
+		if (mTransform)
+			buffer.position(mPosition + mOrientation * (mScale * position));
+		else
+			buffer.position(position);
 		if (mEnableNormals)
 			buffer.normal(normal);
 		if (mSwitchUV)
