@@ -180,6 +180,12 @@ public:
 		return mPoints;
 	}
 
+	/// Gets raw vector data of this shape as a non-const reference
+	inline const std::vector<Ogre::Vector2>& getPointsReference() const
+	{
+		return mPoints;
+	}
+	
 	/**
 	 * Bounds-safe method to get a point : it will allow you to go beyond the bounds
 	 */
@@ -336,6 +342,11 @@ public:
 	 * you'd rather use setOutside(), which doesn't need any computation.
 	 */
 	Side findRealOutSide() const;
+
+	/**
+	 * Determines whether the outside as defined by user equals "real" outside
+	*/
+	bool isOutsideRealOutside() const;
 	
 	/// Creates a shape with the keys of this shape and extra keys coming from a track
 	/// @arg track the track to merge keys with

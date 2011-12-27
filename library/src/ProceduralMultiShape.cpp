@@ -78,13 +78,11 @@ namespace Procedural
 	bool MultiShape::isPointInside(const Vector2& point) const
 	{
 		// Draw a horizontal lines that goes through "point"
-		// Using the closest intersection, find whethe the point is actually inside
+		// Using the closest intersection, find whether the point is actually inside
 		int closestSegmentIndex=-1;
 		Real closestSegmentDistance = std::numeric_limits<Real>::max();
 		Vector2 closestSegmentIntersection(Vector2::ZERO);
 		const Shape* closestSegmentShape = 0;
-		//bool isOnVertexA = false;
-		//bool isOnVertexB = false;
 		
 		for (size_t k =0;k<mShapes.size();k++)
 		{
@@ -115,11 +113,9 @@ namespace Procedural
 				return (closestSegmentShape->getAvgNormal(closestSegmentIndex+1).x * (point.x-closestSegmentIntersection.x)<0);
 			return (closestSegmentShape->getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);				
 		}
-		// the shapes must not contradict each other about outside, so just ask the first shape
-		if (mShapes[0].findRealOutSide() == mShapes[0].getOutSide())
-			return false;
-		else 
-			return true;
+		// We're in the case where the point is on the "real outside" of the multishape
+		// So, if the real outside == user defined outside, then the point is "user-defined outside"
+		return !isOutsideRealOutside();
 	}
 //-----------------------------------------------------------------------
 	bool MultiShape::isClosed() const
@@ -131,5 +127,34 @@ namespace Procedural
 		}
 		return true;
 	}
+//-----------------------------------------------------------------------
+bool MultiShape::isOutsideRealOutside() const
+{
+	Ogre::Real x = std::numeric_limits<Ogre::Real>::min();
+	int index=0;
+	int shapeIndex = 0;
+	for (size_t j = 0; j < mShapes.size(); j++)
+	{
+		const Shape& s = mShapes[j];
+		const std::vector<Ogre::Vector2>& points = s.getPointsReference();
+		for (unsigned short i=0; i < s.getPoints().size(); i++)
+		{
+			if (x < points[i].x)
+			{
+				x = points[i].x;
+				index = i;
+				shapeIndex = j;
+			}
+		}
+	}
+	Radian alpha1 = Utils::angleTo(Vector2::UNIT_Y, mShapes[shapeIndex].getDirectionAfter(index));
+	Radian alpha2 = Utils::angleTo(Vector2::UNIT_Y, -mShapes[shapeIndex].getDirectionBefore(index));
+	Side shapeSide;
+	if (alpha1<alpha2)
+		shapeSide = SIDE_RIGHT;
+	else
+		shapeSide = SIDE_LEFT;
+	return shapeSide == mShapes[shapeIndex].getOutSide();
+}
 
 }

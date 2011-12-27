@@ -38,11 +38,11 @@ namespace Procedural
 //-----------------------------------------------------------------------
 Side Shape::findRealOutSide() const
 {
-	float x = mPoints[0].x;
+	Ogre::Real x = mPoints[0].x;
 	int index=0;
 	for (unsigned short i=1;i<mPoints.size();i++)
 	{
-		if (x<mPoints[i].x)
+		if (x < mPoints[i].x)
 		{
 			x = mPoints[i].x;
 			index = i;
@@ -54,6 +54,11 @@ Side Shape::findRealOutSide() const
 		return SIDE_RIGHT;
 	else
 		return SIDE_LEFT;
+}
+//-----------------------------------------------------------------------
+bool Shape::isOutsideRealOutside() const
+{
+	return findRealOutSide() == mOutSide;
 }
 //-----------------------------------------------------------------------
 void Shape::_findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const

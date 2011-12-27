@@ -208,7 +208,13 @@ class Unit_Tests : public BaseApplication
 				.close();
 
 			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());		
-						
+
+			{
+				Shape s6 = CircleShape().realizeShape();
+				Shape s7 = Shape(s6).scale(.5).switchSide();
+				MultiShape ms(2, s7, s6);				
+				putMesh(Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh());
+			}			
 		}
 	};
 
@@ -489,6 +495,19 @@ class Unit_Tests : public BaseApplication
 				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.0).addKeyFrame(1.0,1.0);
 				Path p2 = LinePath().betweenPoints(Vector3(-5,0,0),Vector3(5,0,0)).setNumSeg(10).realizePath();
 				mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setRotationTrack(&t).realizeMesh();
+				putMesh(mp, 1);
+			}
+
+			{
+				//Shape s2 = RectangleShape().realizeShape().switchSide();
+				Shape s2 = CircleShape().realizeShape().switchSide();
+				Shape s3 = s2;
+				s3.scale(2).translate(.1,0).switchSide();
+				MultiShape ms;
+				ms.addShape(s2).addShape(s3);
+				//MultiShape ms = MultiShape(2, s2, Shape(s2).scale(1.5).switchSide());
+				Path p3 = CatmullRomSpline3().addPoint(0,0,0).addPoint(2.5,0,2.5).addPoint(5,0,0).realizePath();
+				MeshPtr mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
 				putMesh(mp, 1);
 			}
 
