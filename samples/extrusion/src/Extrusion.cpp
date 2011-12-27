@@ -62,7 +62,11 @@ void Sample_Extrusion::createScene(void)
 		// We're also setting up a scale track, as traditionnal pillars are not perfectly straight
 		Procedural::Track pillarTrack = Procedural::CatmullRomSpline2().addPoint(0,1).addPoint(0.5,.95).addPoint(1,.8).realizeShape().convertToTrack(Procedural::Track::AM_RELATIVE_LINEIC);
 		// Creation of the pillar mesh
-		Procedural::Extruder().setExtrusionPath(&p2).setShapeToExtrude(&s2).setScaleTrack(&pillarTrack).setCapped(true).realizeMesh("pillar");
+		Procedural::TriangleBuffer pillarTB;
+		Procedural::Extruder().setExtrusionPath(&p2).setShapeToExtrude(&s2).setScaleTrack(&pillarTrack).setCapped(false).setPosition(0,1,0).addToTriangleBuffer(pillarTB);
+		Procedural::BoxGenerator().setPosition(0,6.5,0).addToTriangleBuffer(pillarTB);
+		Procedural::BoxGenerator().setPosition(0,.5,0).addToTriangleBuffer(pillarTB);
+		pillarTB.transformToMesh("pillar");
 		// We put the pillars on the side of the road
 		for (int i=0;i<p.getSegCount();i++)
 			if (i%2==0)
