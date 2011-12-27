@@ -102,10 +102,10 @@ struct Triangle
 		return ((i0==i[0] || i0==i[1] || i0==i[2])&&(i1==i[0] || i1==i[1] || i1==i[2]));
 	}
 
-	typedef enum e_InsideType
+	enum InsideType
 	{
 		IT_INSIDE, IT_OUTSIDE, IT_BORDERLINEOUTSIDE
-	} InsideType;
+	};
 
 	InsideType isPointInsideCircumcircle(const Ogre::Vector2& point);
 
