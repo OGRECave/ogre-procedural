@@ -207,14 +207,30 @@ class Unit_Tests : public BaseApplication
 				.addPoint(1,-0.5)    // 8
 				.close();
 
-			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());		
+			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());	
 
+			// Tests for the "shape order bug": if a multishape contains shapes in an order or the opposite, artifacts may happen
 			{
 				Shape s6 = CircleShape().realizeShape();
 				Shape s7 = Shape(s6).scale(.5).switchSide();
 				MultiShape ms(2, s7, s6);				
 				putMesh(Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh());
+
+				MultiShape ms2(2, s6, s7);				
+				putMesh(Triangulator().setMultiShapeToTriangulate(&ms2).realizeMesh());
+
 			}			
+
+			{
+				Shape s2 = RectangleShape().setHeight(.5).realizeShape().switchSide();
+				Shape s3 = s2;
+				s3.scale(1.5).switchSide();
+				MultiShape ms(2, s3, s2);
+				putMesh(Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh());
+
+				MultiShape ms2(2, s2, s3);
+				putMesh(Triangulator().setMultiShapeToTriangulate(&ms2).realizeMesh());
+			}
 		}
 	};
 
@@ -499,16 +515,14 @@ class Unit_Tests : public BaseApplication
 			}
 
 			{
-				//Shape s2 = RectangleShape().realizeShape().switchSide();
-				Shape s2 = CircleShape().realizeShape().switchSide();
+				MeshPtr mp;
+				Shape s2 = RectangleShape().setHeight(.5).realizeShape().switchSide();
 				Shape s3 = s2;
-				s3.scale(2).translate(.1,0).switchSide();
-				MultiShape ms;
-				ms.addShape(s2).addShape(s3);
-				//MultiShape ms = MultiShape(2, s2, Shape(s2).scale(1.5).switchSide());
-				Path p3 = CatmullRomSpline3().addPoint(0,0,0).addPoint(2.5,0,2.5).addPoint(5,0,0).realizePath();
-				MeshPtr mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
-				putMesh(mp, 1);
+				s3.scale(1.5).switchSide();
+				MultiShape ms = MultiShape(2, s2, s3);
+				Path p3 = CatmullRomSpline3().addPoint(0,5,-5).addPoint(0,0,0).addPoint(0,0,5).realizePath();		
+				mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
+				putMesh(mp, 1);				
 			}
 
 		}

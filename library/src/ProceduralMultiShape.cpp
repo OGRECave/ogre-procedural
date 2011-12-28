@@ -137,7 +137,7 @@ bool MultiShape::isOutsideRealOutside() const
 	{
 		const Shape& s = mShapes[j];
 		const std::vector<Ogre::Vector2>& points = s.getPointsReference();
-		for (unsigned short i=0; i < s.getPoints().size(); i++)
+		for (size_t i=0; i < points.size(); i++)
 		{
 			if (x < points[i].x)
 			{

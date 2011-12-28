@@ -236,7 +236,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			// only do something for segments not already in DT
 			if (!isAlreadyIn)
 			{
-				segList.push_back(DelaunaySegment(i, i+1));
+				segList.push_back(DelaunaySegment(shapeOffset+i, shapeOffset+i+1));
 			}
 		}
 		shapeOffset+=shape.getPoints().size();
@@ -398,7 +398,7 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 		addConstraints(*mMultiShapeToTriangulate, dtb, outputVertices);
 	else 
 		addConstraints(*mShapeToTriangulate, dtb, outputVertices);
-
+		
 	//Outputs index buffer	
 	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
 	{
