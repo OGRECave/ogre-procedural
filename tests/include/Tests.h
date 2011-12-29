@@ -582,6 +582,15 @@ class Unit_Tests : public BaseApplication
 
 			l.setAngleBegin(Degree(200)).setAngleEnd(Degree(90));
 			putMesh(l.realizeMesh(),1);
+
+			Procedural::Shape outerCircleShape = Procedural::CircleShape().setRadius(4.f).setNumSeg(50).realizeShape().translate(10,0);
+			Procedural::Shape innerCircleShape = Procedural::CircleShape().setRadius(3.8).setNumSeg(50).realizeShape().translate(10,0).switchSide();
+			//Procedural::MultiShape tubeMultiShape = outerCircleShape.booleanDifference(innerCircleShape);
+			Procedural::MultiShape tubeMultiShape(2, outerCircleShape, innerCircleShape);
+
+			putMesh(Procedural::Lathe().setMultiShapeToExtrude(&tubeMultiShape).setNumSeg(30).setAngleBegin((Ogre::Radian)0.).setAngleEnd((Ogre::Radian)Ogre::Math::PI).realizeMesh(), 1);
+
+			
 		}
 	};
 

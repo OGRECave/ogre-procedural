@@ -128,6 +128,15 @@ namespace Procedural
 		return true;
 	}
 //-----------------------------------------------------------------------
+	void MultiShape::close()
+	{
+		for (std::vector<Shape>::iterator it = mShapes.begin(); it!= mShapes.end(); it++)
+		{
+			it->close();
+		}
+	}
+
+//-----------------------------------------------------------------------
 bool MultiShape::isOutsideRealOutside() const
 {
 	Ogre::Real x = std::numeric_limits<Ogre::Real>::min();
