@@ -542,6 +542,15 @@ class Unit_Tests : public BaseApplication
 				putMesh(mp,1);
 			}
 
+			{
+				MeshPtr mp;
+				Shape s2 = RectangleShape().setHeight(.5).realizeShape();
+				MultiShape ms = MultiShape(2, s2.switchSide(), Shape(s2).scale(1.5));
+				Path p3 = CatmullRomSpline3().addPoint(0,5,-5).addPoint(0,0,0).addPoint(0,0,5).realizePath();		
+				mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
+				putMesh(mp,1);
+			}
+
 		}
 	};
 
