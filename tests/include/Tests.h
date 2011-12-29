@@ -40,7 +40,7 @@ protected:
 
 	std::vector<Entity*> mEntities;
 	std::vector<SceneNode*> mSceneNodes;
-	Ogre::Timer mTimer;
+	Timer mTimer;
 
 	void putMesh(const String& meshName, int materialIndex=0)
 	{
@@ -74,10 +74,10 @@ public:
 	virtual String getDescription()=0;
 	virtual void initImpl()=0;
 
-	void rotate(Ogre::Real amount)
+	void rotate(Real amount)
 	{
 		for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it!=mSceneNodes.end();it++)
-			(*it)->rotate(Ogre::Vector3::UNIT_Y, (Ogre::Radian)amount);
+			(*it)->rotate(Vector3::UNIT_Y, (Radian)amount);
 	}
 
 	double init()
@@ -85,8 +85,8 @@ public:
 		Utils::log("Loading test : " + getDescription());
 		mTimer.reset();
 		initImpl();
-		Utils::log("Test loaded in : " + Ogre::StringConverter::toString(mTimer.getMicroseconds() / 1000000.0f) + " ms");
-		return mTimer.getMicroseconds() / 1000000.0f;
+		Utils::log("Test loaded in : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
+		return mTimer.getMicroseconds() / 1000.0f;
 	}
 
 	void destroy()
@@ -525,6 +525,23 @@ class Unit_Tests : public BaseApplication
 				putMesh(mp, 1);				
 			}
 
+			{
+				MeshPtr mp;
+				Path p;
+				for (int i=0;i<32*32;i++)
+				{
+					Radian r1 = (Radian)i/1024.*Math::TWO_PI;
+					Radian r2 = (Radian)i/32.*Math::TWO_PI;
+					Vector3 v (1+.5*Math::Cos(r2), .5*Math::Sin(r2), 0);
+					Quaternion q;
+					q.FromAngleAxis(r1, Vector3::UNIT_Y);
+					p.addPoint(q*v);
+				}
+				Shape s = RectangleShape().setWidth(.1).setHeight(.05).realizeShape();
+				mp = Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh();
+				putMesh(mp,1);
+			}
+
 		}
 	};
 
@@ -595,11 +612,11 @@ class Unit_Tests : public BaseApplication
 			mUnitTests[mCurrentTestIndex]->destroy();
 
 		double time = mUnitTests[index]->init();
-		Ogre::String test_description = mUnitTests[index]->getDescription();
+		String test_description = mUnitTests[index]->getDescription();
 
 		// update text here:
 		String txt = "[OgreProcedural Unit Tests] (Use key N/M to switch between tests)\n";
-		txt += "[" + Ogre::StringConverter::toString(index+1) + "/" + Ogre::StringConverter::toString(mUnitTests.size()) + "] ";
+		txt += "[" + StringConverter::toString(index+1) + "/" + StringConverter::toString(mUnitTests.size()) + "] ";
 		
 		// and add the description
 		txt += test_description;
@@ -610,7 +627,7 @@ class Unit_Tests : public BaseApplication
 		txt += String(time_str);
 
 		// and finally set it
-		Ogre::OverlayManager::getSingleton().getOverlayElement("myText")->setCaption(txt);
+		OverlayManager::getSingleton().getOverlayElement("myText")->setCaption(txt);
 
 
 		mCurrentTestIndex = index;

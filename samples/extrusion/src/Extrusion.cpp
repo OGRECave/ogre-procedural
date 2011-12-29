@@ -51,20 +51,35 @@ void Sample_Extrusion::createScene(void)
 
 		// -- Pillar
 		// The path of the pillar, just a straight line
-		Procedural::Path p2 = Procedural::LinePath().betweenPoints(Vector3(0,0,0), Vector3(0,5,0)).realizePath();
+		Procedural::Path pillarBodyPath = Procedural::LinePath().betweenPoints(Vector3(0,0,0), Vector3(0,5,0)).realizePath();
 		// We're doing something custom for the shape to extrude
-		Procedural::Shape s2;
+		Procedural::Shape pillarBodyShape;
 		const int pillarSegs=64;
 		for (int i=0;i<pillarSegs;i++)						
-			s2.addPoint(.5*(1-.15*Math::Abs(Math::Sin(i/(float)pillarSegs*8.*Math::TWO_PI))) * 
+			pillarBodyShape.addPoint(.5*(1-.15*Math::Abs(Math::Sin(i/(float)pillarSegs*8.*Math::TWO_PI))) * 
 						Vector2(Math::Cos(i/(float)pillarSegs*Math::TWO_PI), Math::Sin(i/(float)pillarSegs*Math::TWO_PI)));
-		s2.close();
+		pillarBodyShape.close();
 		// We're also setting up a scale track, as traditionnal pillars are not perfectly straight
 		Procedural::Track pillarTrack = Procedural::CatmullRomSpline2().addPoint(0,1).addPoint(0.5,.95).addPoint(1,.8).realizeShape().convertToTrack(Procedural::Track::AM_RELATIVE_LINEIC);
-		// Creation of the pillar mesh
+		// Creation of the pillar body
 		Procedural::TriangleBuffer pillarTB;
-		Procedural::Extruder().setExtrusionPath(&p2).setShapeToExtrude(&s2).setScaleTrack(&pillarTrack).setCapped(false).setPosition(0,1,0).addToTriangleBuffer(pillarTB);
-		Procedural::BoxGenerator().setPosition(0,6.5,0).addToTriangleBuffer(pillarTB);
+		Procedural::Extruder().setExtrusionPath(&pillarBodyPath).setShapeToExtrude(&pillarBodyShape).setScaleTrack(&pillarTrack).setCapped(false).setPosition(0,1,0).addToTriangleBuffer(pillarTB);
+		// Creation of the top and the bottom of the pillar
+		Procedural::Shape s3 = Procedural::RoundedCornerSpline2().addPoint(-1,-.25).addPoint(-1,.25).addPoint(1,.25).addPoint(1,-.25).close().realizeShape().setOutSide(Procedural::SIDE_LEFT);
+		Procedural::Path p3;
+		for (int i=0;i<32;i++)
+		{
+			Ogre::Radian r = (Ogre::Radian) (Ogre::Math::HALF_PI-(float)i/32.*Ogre::Math::TWO_PI);
+			p3.addPoint(0,-.5+.5*i/32.*Math::Sin(r),-1+.5*i/32.*Math::Cos(r));
+		}
+		p3.addPoint(0,0,-1).addPoint(0,0,1);
+		for (int i=0;i<32;i++)
+		{
+			Ogre::Radian r = (Ogre::Radian) (Ogre::Math::HALF_PI-(float)i/32.*Ogre::Math::TWO_PI);
+			p3.addPoint(0,-.5+.5*(1-i/32.)*Math::Sin(r),1+.5*(1-i/32.)*Math::Cos(r));
+		}
+		Procedural::Extruder().setExtrusionPath(&p3).setShapeToExtrude(&s3).setPosition(0,6.,0).addToTriangleBuffer(pillarTB);
+		//Procedural::BoxGenerator().setPosition(0,6.5,0).addToTriangleBuffer(pillarTB);
 		Procedural::BoxGenerator().setPosition(0,.5,0).addToTriangleBuffer(pillarTB);
 		pillarTB.transformToMesh("pillar");
 		// We put the pillars on the side of the road
@@ -76,20 +91,20 @@ void Sample_Extrusion::createScene(void)
 		// 
 		Procedural::TriangleBuffer tb;
 		// Body
-		Procedural::Shape s3 = Procedural::CubicHermiteSpline2().addPoint(Ogre::Vector2(0,0), Ogre::Vector2::UNIT_X, Ogre::Vector2::UNIT_X)
+		Procedural::Shape jarreShape = Procedural::CubicHermiteSpline2().addPoint(Ogre::Vector2(0,0), Ogre::Vector2::UNIT_X, Ogre::Vector2::UNIT_X)
 																.addPoint(Ogre::Vector2(2,3))
 																.addPoint(Ogre::Vector2(.5,5), Ogre::Vector2(-1,1).normalisedCopy(), Ogre::Vector2::UNIT_Y)
 																.addPoint(Ogre::Vector2(1,7), Ogre::Vector2(1,1).normalisedCopy()).realizeShape().thicken(.1).getShape(0);
-		Procedural::Lathe().setShapeToExtrude(&s3).addToTriangleBuffer(tb);
+		Procedural::Lathe().setShapeToExtrude(&jarreShape).addToTriangleBuffer(tb);
 		// Handle 1
-		Procedural::Shape s4 = Procedural::CircleShape().setRadius(.2).realizeShape();
-		Procedural::Path p3  = Procedural::CatmullRomSpline3().addPoint(Ogre::Vector3(0,6.5,.75))
+		Procedural::Shape jarreHandleShape = Procedural::CircleShape().setRadius(.2).realizeShape();
+		Procedural::Path jarreHandlePath = Procedural::CatmullRomSpline3().addPoint(Ogre::Vector3(0,6.5,.75))
 																.addPoint(Ogre::Vector3(0,6,1.5))
 																.addPoint(Ogre::Vector3(0,5,.55)).setNumSeg(10).realizePath();					
-		Procedural::Extruder().setShapeToExtrude(&s4).setExtrusionPath(&p3).addToTriangleBuffer(tb);		
+		Procedural::Extruder().setShapeToExtrude(&jarreHandleShape).setExtrusionPath(&jarreHandlePath).addToTriangleBuffer(tb);		
 		// Handle2
-		p3.reflect(Ogre::Vector3::UNIT_Z);
-		Procedural::Extruder().setShapeToExtrude(&s4).setExtrusionPath(&p3).addToTriangleBuffer(tb);		
+		jarreHandlePath.reflect(Ogre::Vector3::UNIT_Z);
+		Procedural::Extruder().setShapeToExtrude(&jarreHandleShape).setExtrusionPath(&jarreHandlePath).addToTriangleBuffer(tb);		
 		tb.transformToMesh("jarre");
 		putMeshMat("jarre", "Examples/Marble", Vector3(5,0,5));
 }
