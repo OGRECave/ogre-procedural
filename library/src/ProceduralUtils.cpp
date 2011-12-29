@@ -52,7 +52,6 @@ namespace Procedural
         xVec.normalise();
 		Vector3 yVec = zVec.crossProduct( xVec );
 		yVec.normalise();
-		Utils::log(Ogre::StringConverter::toString(yVec));
 		q.FromAxes( xVec, yVec, zVec);
 		return q;	
 	}
