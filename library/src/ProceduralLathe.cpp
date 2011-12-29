@@ -36,7 +36,7 @@ namespace Procedural
 //-----------------------------------------------------------------------
 void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
 {
-	int numSegShape = mShapeToExtrude->getSegCount();
+	int numSegShape = shapeToExtrude->getSegCount();
 	assert(numSegShape>1 && "Shape must contain at least two points");
 	int offset =0;
 
@@ -62,13 +62,13 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 
 		for (int j=0;j<=numSegShape;j++)
 		{
-			const Vector2& v0 = mShapeToExtrude->getPoint(j);
+			const Vector2& v0 = shapeToExtrude->getPoint(j);
 			Vector3 vp(v0.x,v0.y,0);
-			const Vector2& vp2direction = mShapeToExtrude->getAvgDirection(j);
+			const Vector2& vp2direction = shapeToExtrude->getAvgDirection(j);
 			Vector2 vp2normal = vp2direction.perpendicular();
 			Vector3 normal(vp2normal.x, vp2normal.y, 0);
 			normal.normalise();
-			if (mShapeToExtrude->getOutSide() == SIDE_RIGHT)
+			if (shapeToExtrude->getOutSide() == SIDE_RIGHT)
 				normal = -normal;
 
 			addPoint(buffer, q*vp,
@@ -77,12 +77,16 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 
 			if (j <numSegShape && i <numSeg-1)
 			{
-				buffer.index(offset + numSegShape + 2);
-				buffer.index(offset);
-				buffer.index(offset + numSegShape + 1);
-				buffer.index(offset + numSegShape + 2);
-				buffer.index(offset + 1);
-				buffer.index(offset);
+				if (shapeToExtrude->getOutSide() == SIDE_RIGHT)
+				{
+					buffer.triangle(offset + numSegShape + 2, offset, offset + numSegShape + 1);
+					buffer.triangle(offset + numSegShape + 2, offset + 1, offset);
+				}
+				else
+				{
+					buffer.triangle(offset + numSegShape + 2, offset + numSegShape + 1, offset);
+					buffer.triangle(offset + numSegShape + 2, offset, offset + 1);
+				}
 			}
 			offset ++;
 		}
@@ -97,17 +101,25 @@ void Lathe::_latheCapImpl(TriangleBuffer& buffer) const
 		buffer.rebaseOffset();
 
 		Triangulator t;
-		Shape shapeCopy = *mShapeToExtrude;
-		shapeCopy.close();
+		Shape shapeCopy;
+		MultiShape multishapeCopy;
+		
 		if (mShapeToExtrude)
+		{
+			shapeCopy = *mShapeToExtrude;
+			shapeCopy.close();
 			t.setShapeToTriangulate(&shapeCopy);
+		}
 		else
+		{
+			multishapeCopy = *mMultiShapeToExtrude;
+			multishapeCopy.close();
 			t.setMultiShapeToTriangulate(mMultiShapeToExtrude);
+		}
 		t.triangulate(indexBuffer, pointList);
 		buffer.estimateIndexCount(2*indexBuffer.size());
 		buffer.estimateVertexCount(2*pointList.size());
-
-
+		
 		//begin cap
 		buffer.rebaseOffset();
 		Quaternion q;
@@ -163,10 +175,8 @@ void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 	if (mShapeToExtrude)
 		_latheBodyImpl(buffer, mShapeToExtrude);
 	else 
-	{
 		for (int i=0; i<mMultiShapeToExtrude->getShapeCount();i++)			
 			_latheBodyImpl(buffer, &mMultiShapeToExtrude->getShape(i));
-	}
 		
 	
 }

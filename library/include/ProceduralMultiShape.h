@@ -110,6 +110,11 @@ class _ProceduralExport MultiShape
 	bool isClosed() const;
 
 	/**
+	 * Closes all shapes included in this multiShape
+	 */
+	void close();
+
+	/**
 	 * Determines whether the outside as defined by user equals "real" outside
 	 */
 	bool MultiShape::isOutsideRealOutside() const;
