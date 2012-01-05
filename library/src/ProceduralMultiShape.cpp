@@ -107,11 +107,25 @@ namespace Procedural
 		}
 		if (closestSegmentIndex!=-1)
 		{
+			int edgePoint=-1;
 			if (closestSegmentIntersection.squaredDistance(closestSegmentShape->getPoint(closestSegmentIndex))<1e-8)
-				return (closestSegmentShape->getAvgNormal(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);
+				//return (closestSegmentShape->getAvgNormal(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);
+				edgePoint=closestSegmentIndex;
+			else
 			if (closestSegmentIntersection.squaredDistance(closestSegmentShape->getPoint(closestSegmentIndex+1))<1e-8)
-				return (closestSegmentShape->getAvgNormal(closestSegmentIndex+1).x * (point.x-closestSegmentIntersection.x)<0);
-			return (closestSegmentShape->getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);				
+				//return (closestSegmentShape->getAvgNormal(closestSegmentIndex+1).x * (point.x-closestSegmentIntersection.x)<0);
+				edgePoint=closestSegmentIndex+1;
+			if (edgePoint>-1)
+			{
+				Ogre::Radian alpha1 = Utils::angleBetween(point-closestSegmentShape->getPoint(edgePoint), closestSegmentShape->getDirectionAfter(edgePoint));
+				Ogre::Radian alpha2 = Utils::angleBetween(point-closestSegmentShape->getPoint(edgePoint), -closestSegmentShape->getDirectionBefore(edgePoint));
+				if (alpha1<alpha2)
+					closestSegmentIndex=edgePoint;
+				else
+					closestSegmentIndex=edgePoint-1;
+			}
+
+			return (closestSegmentShape->getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);			
 		}
 		// We're in the case where the point is on the "real outside" of the multishape
 		// So, if the real outside == user defined outside, then the point is "user-defined outside"
