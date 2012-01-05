@@ -405,7 +405,12 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 		output.push_back(it->i[0]);
 		output.push_back(it->i[1]);
 		output.push_back(it->i[2]);
-	}	
+	}
+
+	// Remove super triangle
+	outputVertices.pop_back();
+	outputVertices.pop_back();
+	outputVertices.pop_back();
 }
 //-----------------------------------------------------------------------
 void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -427,9 +432,9 @@ void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
 				buffer.normal(normal);
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
-			
+
 			for (size_t i=0;i<indexBuffer.size()/3;i++)
-			{				
+			{		
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+2]);
 				buffer.index(indexBuffer[i*3+1]);
@@ -453,11 +458,11 @@ void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			}
 			
 			for (size_t i=0;i<indexBuffer.size()/3;i++)
-			{				
+			{
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+2]);
 				buffer.index(indexBuffer[i*3+1]);
-			}
+			}		
 	}
 }
 }
