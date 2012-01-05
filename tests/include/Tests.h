@@ -47,6 +47,7 @@ protected:
 		Entity* ent = mSceneMgr->createEntity(meshName);
 		SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 		sn->attachObject(ent);
+		sn->showBoundingBox(true);
 		switch (materialIndex)
 		{
 			case 1:ent->setMaterialName("Examples/Rockwall");break;
@@ -164,9 +165,9 @@ class Unit_Tests : public BaseApplication
 			Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p).realizeMesh("extrudedMesh");
 			putMesh("extrudedMesh",1);
 
-			Shape s = Shape().addPoint(0.2,.9).addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,2).addPoint(2,2).addPoint(2,-1).addPoint(0.,-.2).setOutSide(SIDE_LEFT).close();			
-			putMesh(s.realizeMesh());
-			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh());
+			Shape s = Shape().addPoint(0.2,.9).addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,2).addPoint(2,2).addPoint(2,-1).addPoint(0.,-.2).setOutSide(SIDE_LEFT).close();
+			putMesh(s.realizeMesh(),1);
+			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh(),1);
 
 			Shape s3 = CircleShape().setNumSeg(16).realizeShape();						
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
@@ -584,9 +585,11 @@ class Unit_Tests : public BaseApplication
 			putMesh(l.realizeMesh(),1);
 
 			Procedural::Shape outerCircleShape = Procedural::CircleShape().setRadius(4.f).setNumSeg(50).realizeShape().translate(10,0);
-			Procedural::Shape innerCircleShape = Procedural::CircleShape().setRadius(3.8).setNumSeg(50).realizeShape().translate(10,0).switchSide();
-			//Procedural::MultiShape tubeMultiShape = outerCircleShape.booleanDifference(innerCircleShape);
-			Procedural::MultiShape tubeMultiShape(2, outerCircleShape, innerCircleShape);
+			Procedural::Shape innerCircleShape = Procedural::CircleShape().setRadius(3.8).setNumSeg(50).realizeShape().translate(10,0);
+			
+			Procedural::MultiShape tubeMultiShape = outerCircleShape.booleanDifference(innerCircleShape);
+			
+			//Procedural::MultiShape tubeMultiShape(2, outerCircleShape, innerCircleShape);
 
 			putMesh(Procedural::Lathe().setMultiShapeToExtrude(&tubeMultiShape).setNumSeg(30).setAngleBegin((Ogre::Radian)0.).setAngleEnd((Ogre::Radian)Ogre::Math::PI).realizeMesh(), 1);
 
