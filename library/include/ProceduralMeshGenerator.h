@@ -61,7 +61,7 @@ protected:
 
 	/// Rectangle in which the texture coordinates will be placed
 	Ogre::Vector2 mUVOrigin;
-	
+
 	/// If set to true, the UV coordinates coming from the mesh generator will be switched.
 	/// It can be used, for example, if your texture doesn't fit the mesh generator's assumptions about UV.
 	/// If UV were to fit in a given rectangle, they still fit in it after the switch.
@@ -88,8 +88,8 @@ public:
 					  mUVOrigin(0,0),
 					  mSwitchUV(false),
 					  mOrientation(Ogre::Quaternion::IDENTITY),
-					  mPosition(0,0,0),
 					  mScale(1,1,1),
+					  mPosition(0,0,0),
 					  mTransform(false)
 	{
 		mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
@@ -101,7 +101,7 @@ public:
 	 * @param name of the mesh for the MeshManager
 	 * @param group ressource group in which the mesh will be created
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name = "", 
+	Ogre::MeshPtr realizeMesh(const std::string& name = "",
 		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
 	{
 		TriangleBuffer tbuffer;
@@ -113,7 +113,7 @@ public:
 			mesh = tbuffer.transformToMesh(name, group);
 		return mesh;
 	}
-		
+
 	/**
 	 * Overloaded by each generator to implement the specifics
 	 */
@@ -130,7 +130,7 @@ public:
 
 	/**
 	 * Sets V Tile, ie the number by which v texture coordinates are multiplied (default=1)
-	 */	
+	 */
 	inline T & setVTile(Ogre::Real vTile)
 	{
 		mVTile = vTile;
@@ -139,7 +139,7 @@ public:
 
 	/**
 	 * Sets the texture rectangle
-	 */	
+	 */
 	inline T & setTextureRectangle(Ogre::Rectangle textureRectangle)
 	{
 		mUVOrigin = Ogre::Vector2(textureRectangle.top, textureRectangle.left);
@@ -147,10 +147,10 @@ public:
 		mVTile = textureRectangle.bottom-textureRectangle.top;
 		return static_cast<T&>(*this);
 	}
-	
+
 	/**
 	 * Sets whether normals are enabled or not (default=true)
-	 */	
+	 */
 	inline T & setEnableNormals(bool enableNormals)
 	{
 		mEnableNormals = enableNormals;
@@ -165,7 +165,7 @@ public:
 		mNumTexCoordSet = numTexCoordSet;
 		return static_cast<T&>(*this);
 	}
-	
+
 	/// Sets whether to switch U and V texture coordinates
 	inline T& setSwitchUV(bool switchUV)
 	{
@@ -225,13 +225,13 @@ public:
 	/// Resets all transforms (orientation, position and scale) that would have been applied to the mesh to their default values
 	inline T& resetTransforms()
 	{
-		mTranform = false;
+		mTransform = false;
 		mPosition = Ogre::Vector3::ZERO;
 		mOrientation = Ogre::Quaternion::IDENTITY;
 		mScale = Ogre::Vector3(1);
 		return static_cast<T&>(*this);
 	}
-	
+
 protected:
 	/// Adds a new point to a triangle buffer, using the format defined for that MeshGenerator
 	/// @arg buffer the triangle buffer to update
