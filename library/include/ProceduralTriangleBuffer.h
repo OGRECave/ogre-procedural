@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "ProceduralUtils.h"
 #include "ProceduralRoot.h"
+#include <fstream>
 
 namespace Procedural
 {
@@ -265,6 +266,36 @@ class TriangleBuffer
 	{
 		mEstimatedIndexCount += indexCount;
 		mIndices.reserve(mEstimatedIndexCount);
+	}
+
+	/**
+	 * For debugging purposes, outputs the content of this buffer to a YAML styled file.
+	 */
+	void _dumpContentsToFile(const std::string& fileName)
+	{
+		std::ofstream outFile;
+		outFile.open(fileName);
+
+		outFile<< "Number of vertices : "<< Ogre::StringConverter::toString(mVertices.size()) <<std::endl;
+		outFile<< "Estimated number of vertices : "<< Ogre::StringConverter::toString(mEstimatedVertexCount) <<std::endl;
+		outFile<< "Vertices :"<<std::endl;
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end();it++)
+		{
+			outFile<<" - {";
+			outFile<<" Position: ["<<Ogre::StringConverter::toString(it->mPosition.x)<<", "<<Ogre::StringConverter::toString(it->mPosition.y)<<", "<<Ogre::StringConverter::toString(it->mPosition.z)<<"]";
+			outFile<<", Normal: ["<<Ogre::StringConverter::toString(it->mNormal.x)<<", "<<Ogre::StringConverter::toString(it->mNormal.y)<<", "<<Ogre::StringConverter::toString(it->mNormal.z)<<"]";
+			outFile<<", UV: ["<<Ogre::StringConverter::toString(it->mUV.x)<<", "<<Ogre::StringConverter::toString(it->mUV.y)<<"]";
+			outFile<<"}"<<std::endl;
+		}
+		outFile<< "Number of indices : "<< Ogre::StringConverter::toString(mIndices.size()) <<std::endl;		
+		outFile<< "Estimated number of indices : "<< Ogre::StringConverter::toString(mEstimatedIndexCount) <<std::endl;
+		outFile<< "Indices :"<< std::endl;
+		for (size_t i = 0; i<mIndices.size()/3; i++)
+		{
+			outFile<<" - ["<<Ogre::StringConverter::toString(mIndices[i*3])<<", "<<Ogre::StringConverter::toString(mIndices[i*3+1])<<", "<<Ogre::StringConverter::toString(mIndices[i*3+2])<<"]"<<std::endl;
+		}
+
+		outFile.close();
 	}
 };
 }

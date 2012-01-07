@@ -79,6 +79,12 @@ protected:
 	// Whether a transform has been defined or not
 	bool mTransform;
 
+	// Debug output file
+	std::string mDumpFileName;
+
+	// Enable output to file or not
+	bool mEnableDumpToFile;
+
 public:
 	/// Default constructor
 	MeshGenerator() : mUTile(1.f),
@@ -90,7 +96,9 @@ public:
 					  mOrientation(Ogre::Quaternion::IDENTITY),
 					  mScale(1,1,1),
 					  mPosition(0,0,0),
-					  mTransform(false)
+					  mTransform(false),
+					  mDumpFileName(""),
+					  mEnableDumpToFile(false)
 	{
 		mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		assert(mSceneMgr && "Scene Manager must be set in Root");
@@ -106,6 +114,8 @@ public:
 	{
 		TriangleBuffer tbuffer;
 		addToTriangleBuffer(tbuffer);
+		if (mEnableDumpToFile)
+			tbuffer._dumpContentsToFile(mDumpFileName);
 		Ogre::MeshPtr mesh;
 		if (name == "")
 			mesh = tbuffer.transformToMesh(Utils::getName(), group);
@@ -231,6 +241,22 @@ public:
 		mScale = Ogre::Vector3(1);
 		return static_cast<T&>(*this);
 	}
+
+	/// Activate dump to file
+	inline T& _setDumpToFile(const std::string& fileName)
+	{
+		mEnableDumpToFile = true;
+		mDumpFileName = fileName;
+		return static_cast<T&>(*this);
+	}
+
+	/// Disable dump to file
+	inline T& _disableDumpToFile()
+	{
+		mEnableDumpToFile = false;
+		return static_cast<T&>(*this);
+	}
+
 
 protected:
 	/// Adds a new point to a triangle buffer, using the format defined for that MeshGenerator
