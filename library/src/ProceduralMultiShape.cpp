@@ -32,20 +32,20 @@ THE SOFTWARE.
 using namespace Ogre;
 
 namespace Procedural
-{	
+{
 //-----------------------------------------------------------------------
 	MeshPtr MultiShape::realizeMesh(const std::string& name)
 	{
 		Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		ManualObject * manual = smgr->createManualObject(name);
-				
+
 		for (std::vector<Shape>::iterator it = mShapes.begin(); it!=mShapes.end(); it++)
 		{
 			manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
 			it->_appendToManualObject(manual);
 			manual->end();
-		}		
-		
+		}
+
 		MeshPtr mesh;
 		if (name=="")
 			mesh = manual->convertToMesh(Utils::getName());
@@ -53,27 +53,30 @@ namespace Procedural
 			mesh = manual->convertToMesh(name);
 		smgr->destroyManualObject(manual);
 		return mesh;
-	}	
+	}
 //-----------------------------------------------------------------------
 	MultiShape::MultiShape(int count, ...)
-	{	
-		va_list shapes;		
-		va_start(shapes, count);     
+	{
+		va_list shapes;
+		va_start(shapes, count);
 		for (int i = 0; i < count; i++)
-			mShapes.push_back(va_arg(shapes, Shape));
+		{
+			mShapes.push_back(*va_arg(shapes, const Shape*));
+		}
+
 		va_end(shapes);
 	}
 //-----------------------------------------------------------------------
 	std::vector<Vector2> MultiShape::getPoints() const
 	{
-		std::vector<Vector2> result;		
+		std::vector<Vector2> result;
 		for (size_t i = 0;i<mShapes.size(); i++)
 		{
 			std::vector<Vector2> points = mShapes[i].getPoints();
 			result.insert(result.end(), points.begin(), points.end());
 		}
 		return result;
-	}	
+	}
 //-----------------------------------------------------------------------
 	bool MultiShape::isPointInside(const Vector2& point) const
 	{
@@ -83,7 +86,7 @@ namespace Procedural
 		Real closestSegmentDistance = std::numeric_limits<Real>::max();
 		Vector2 closestSegmentIntersection(Vector2::ZERO);
 		const Shape* closestSegmentShape = 0;
-		
+
 		for (size_t k =0;k<mShapes.size();k++)
 		{
 			const Shape& shape = mShapes[k];
@@ -93,7 +96,7 @@ namespace Procedural
 				Vector2 B = shape.getPoint(i+1);
 				if (A.y!=B.y && (A.y-point.y)*(B.y-point.y)<=0.)
 				{
-					Vector2 intersect(A.x+(point.y-A.y)*(B.x-A.x)/(B.y-A.y), point.y);			
+					Vector2 intersect(A.x+(point.y-A.y)*(B.x-A.x)/(B.y-A.y), point.y);
 					float dist = abs(point.x-intersect.x);
 					if (dist<closestSegmentDistance)
 					{
@@ -125,7 +128,7 @@ namespace Procedural
 					closestSegmentIndex=edgePoint-1;
 			}
 
-			return (closestSegmentShape->getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);			
+			return (closestSegmentShape->getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);
 		}
 		// We're in the case where the point is on the "real outside" of the multishape
 		// So, if the real outside == user defined outside, then the point is "user-defined outside"
