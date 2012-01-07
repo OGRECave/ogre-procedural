@@ -55,6 +55,8 @@ class _ProceduralExport MultiShape
 	}
 
 	/// Constructor from a variable number of shapes
+	/// @arg count the number of shapes to add
+	/// @arg pointer to the shapes to add
 	MultiShape(int count, ...);
 
 	/// Adds a shape to the list of shapes
