@@ -61,8 +61,32 @@ class TriangleBuffer
 	
 	
 	public:
-		TriangleBuffer() : globalOffset(0), mEstimatedVertexCount(0), mEstimatedIndexCount(0), mCurrentVertex(0)//, mCurrentVertex(mVertices.end())
+	TriangleBuffer() : globalOffset(0), mEstimatedVertexCount(0), mEstimatedIndexCount(0), mCurrentVertex(0)
 	{}
+
+	/// Gets a modifiable reference to vertices
+	std::vector<Vertex>& getVertices()
+	{
+		return mVertices;
+	}
+
+	/// Gets a non-modifiable reference to vertices
+	const std::vector<Vertex>& getVertices() const
+	{
+		return mVertices;
+	}
+
+	/// Gets a modifiable reference to vertices
+	std::vector<int>& getIndices()
+	{
+		return mIndices;
+	}
+
+	/// Gets a non-modifiable reference to indices
+	const std::vector<int>& getIndices() const
+	{
+		return mIndices;
+	}
 
 	/**
 	 * Rebase index offset : call that function before you add a new mesh to the triangle buffer
