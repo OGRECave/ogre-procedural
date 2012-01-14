@@ -43,4 +43,12 @@
 #else
  #   define _ProceduralExport
 #endif
+
+#   if (!defined(NDEBUG))
+#       define PROCEDURAL_DEBUG_MODE 1
+#   else
+#       define PROCEDURAL_DEBUG_MODE 0
+#   endif
+
+
 #endif
