@@ -80,7 +80,9 @@ if(WIN32)
 		
 	copy_release(RenderSystem_GL.dll)
 	copy_debug(RenderSystem_GL_d.dll)
-		
+	
+	copy_release(libOIS.dll)
+	copy_debug(libOIS_d.dll)	
 	copy_release(OIS.dll)
 	copy_debug(OIS_d.dll)	
 	
