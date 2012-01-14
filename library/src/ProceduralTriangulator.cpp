@@ -99,8 +99,8 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	float maxTriangleSize = 0.f;
 	for (PointList::iterator it = pointList.begin(); it!=pointList.end();it++)
 	{
-		maxTriangleSize = std::max<float>(maxTriangleSize,fabs(it->x));
-		maxTriangleSize = std::max<float>(maxTriangleSize,fabs(it->y));
+		maxTriangleSize = std::max<float>(maxTriangleSize,Math::Abs(it->x));
+		maxTriangleSize = std::max<float>(maxTriangleSize,Math::Abs(it->y));
 	}
 	int maxTriangleIndex=pointList.size();
 	pointList.push_back(Vector2(-3*maxTriangleSize,-3*maxTriangleSize));
@@ -112,9 +112,9 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	superTriangle.i[2]= maxTriangleIndex+2;
 	tbuffer.push_back(superTriangle);
 
-	// Point insertion loop	
+	// Point insertion loop
 	for (unsigned short i=0;i<pointList.size()-3;i++)
-	{		
+	{
 		std::list<std::list<Triangle>::iterator> borderlineTriangles;
 		// Insert 1 point, find all triangles for which the point is in circumcircle
 		Vector2& p = pointList[i];
@@ -135,7 +135,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 						segments.insert(d1);
 				}
 				it=tbuffer.erase(it);
-			} 
+			}
 			else if (isInside == Triangle::IT_BORDERLINEOUTSIDE)
 			{
 				borderlineTriangles.push_back(it);
@@ -154,11 +154,11 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 		for (std::list<std::list<Triangle>::iterator>::iterator itpTri = borderlineTriangles.begin(); itpTri!=borderlineTriangles.end();itpTri++ ) {
 			DelaunayTriangleBuffer::iterator itTri = *itpTri;
 			bool triRemoved = false;
-			for (std::set<DelaunaySegment>::iterator it = copySegment.begin(); it!=copySegment.end() && !triRemoved;it++)			
-			{			
+			for (std::set<DelaunaySegment>::iterator it = copySegment.begin(); it!=copySegment.end() && !triRemoved;it++)
+			{
 			bool isTriangleIntersected = false;
 			for (int k=0;k<2;k++)
-			{			
+			{
 			int i1 = (k==0)?it->i1:it->i2;
 			int i2 = i;
 			for (int l=0;l<3;l++)
@@ -166,7 +166,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 				//Early out if 2 points are in fact the same
 				if (itTri->i[l]==i1 || itTri->i[l]==i2 || itTri->i[(l+1)%3]==i1 || itTri->i[(l+1)%3]==i2)
 					continue;
-				Segment2D seg2(itTri->p(l), itTri->p((l+1)%3));		
+				Segment2D seg2(itTri->p(l), itTri->p((l+1)%3));
 				Segment2D seg1(pointList[i1], pointList[i2]);
 				if (seg1.intersects(seg2))
 				{
@@ -174,7 +174,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 					break;
 				}
 			}
-			
+
 				}
 			if (isTriangleIntersected) {
 				for (int m=0;m<3;m++)
@@ -189,15 +189,15 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 				}
 				tbuffer.erase(itTri);
 				triRemoved=true;
-			}			
+			}
 			}
 		}
-			
+
 		// Find all the non-interior edges
 		for (std::set<DelaunaySegment>::iterator it = segments.begin(); it!=segments.end();it++)
 		{
 			Triangle dt(&pointList);
-			dt.setVertices(it->i1, it->i2, i);			
+			dt.setVertices(it->i1, it->i2, i);
 			dt.makeDirectIfNeeded();
 			tbuffer.push_back(dt);
 
@@ -210,11 +210,11 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	tbuffer.remove_if(touchSuperTriangle);
 	pointList.pop_back();
 	pointList.pop_back();
-	pointList.pop_back();*/	
+	pointList.pop_back();*/
 }
 //-----------------------------------------------------------------------
 void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer, const PointList& pl) const
-{	
+{
 	std::vector<DelaunaySegment> segList;
 	size_t shapeOffset = 0;
 	// First, list all the segments that are not already in one of the delaunay triangles
@@ -222,16 +222,16 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 	{
 		const Shape& shape = multiShape.getShape(k);
 		// Determine which segments should be added
-		for (unsigned short i = 0; i<shape.getPoints().size()-1; i++)
-		{		
+		for (size_t i = 0; i<shape.getPoints().size()-1; i++)
+		{
 			bool isAlreadyIn = false;
 			for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
 			{
-				if (it->containsSegment(shapeOffset+i,shapeOffset+i+1)) 
+				if (it->containsSegment(shapeOffset+i,shapeOffset+i+1))
 				{
 					isAlreadyIn = true;
 					break;
-				}			
+				}
 			}
 			// only do something for segments not already in DT
 			if (!isAlreadyIn)
@@ -241,11 +241,11 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 		}
 		shapeOffset+=shape.getPoints().size();
 	}
-	
+
 	// Re-Triangulate according to the new segments
 	for (std::vector<DelaunaySegment>::iterator itSeg=segList.begin();itSeg!=segList.end();itSeg++)
 	{
-		// Remove all triangles intersecting the segment and keep a list of outside edges		
+		// Remove all triangles intersecting the segment and keep a list of outside edges
 		std::set<DelaunaySegment> segments;
 		Segment2D seg1(pl[itSeg->i1], pl[itSeg->i2]);
 		for (DelaunayTriangleBuffer::iterator itTri = tbuffer.begin(); itTri!=tbuffer.end(); )
@@ -256,7 +256,7 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 				//Early out if 2 points are in fact the same
 				if (itTri->i[i]==itSeg->i1 || itTri->i[i]==itSeg->i2 || itTri->i[(i+1)%3]==itSeg->i1 || itTri->i[(i+1)%3]==itSeg->i2)
 					continue;
-				Segment2D seg2(itTri->p(i), itTri->p((i+1)%3));				
+				Segment2D seg2(itTri->p(i), itTri->p((i+1)%3));
 				if (seg1.intersects(seg2))
 				{
 					isTriangleIntersected = true;
@@ -280,8 +280,8 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			else
 				itTri++;
 		}
-		
-		// Divide the list of points (coming from remaining segments) in 2 groups : "above" and "below"		
+
+		// Divide the list of points (coming from remaining segments) in 2 groups : "above" and "below"
 		std::vector<int> pointsAbove;
 		std::vector<int> pointsBelow;
 		int pt = itSeg->i1;
@@ -305,15 +305,15 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 					if (isAbove)
 						pointsAbove.push_back(pt);
 					else
-						pointsBelow.push_back(pt);					
+						pointsBelow.push_back(pt);
 				}
 				break;
 			}
 		}
 		}
-		
+
 		// Recursively triangulate both polygons
-		_recursiveTriangulatePolygon(*itSeg, pointsAbove, tbuffer, pl);		
+		_recursiveTriangulatePolygon(*itSeg, pointsAbove, tbuffer, pl);
 		_recursiveTriangulatePolygon(itSeg->inverse(), pointsBelow, tbuffer, pl);
 	}
 	// Clean up segments outside of multishape
@@ -322,12 +322,12 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();)
 		{
 			bool isTriangleOut = !multiShape.isPointInside(it->getMidPoint());
-			
+
 			if (isTriangleOut)
 				it = tbuffer.erase(it);
 			 else
 				it++;
-		}	
+		}
 	}
 }
 //-----------------------------------------------------------------------
@@ -353,7 +353,7 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 		for (std::vector<int>::iterator it = inputPoints.begin();it!=inputPoints.end();it++)
 		{
 			if (c.isPointInside(pointList[*it]) && (*it != *currentPoint))
-			{			
+			{
 				isDelaunay = false;
 				currentPoint = it;
 				break;
@@ -362,14 +362,14 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 		if (isDelaunay)
 			found = true;
 	}
-	
+
 	// Insert current triangle
 	Triangle t(&pointList);
 	t.setVertices(*currentPoint, cuttingSeg.i1, cuttingSeg.i2);
 	t.makeDirectIfNeeded();
 	tbuffer.push_back(t);
-	
-	// Recurse	
+
+	// Recurse
 	DelaunaySegment newCut1(cuttingSeg.i1, *currentPoint);
 	DelaunaySegment newCut2(cuttingSeg.i2, *currentPoint);
 	std::vector<int> set1(inputPoints.begin(), currentPoint);
@@ -396,10 +396,10 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 	// Add contraints
 	if (mMultiShapeToTriangulate)
 		addConstraints(*mMultiShapeToTriangulate, dtb, outputVertices);
-	else 
+	else
 		addConstraints(*mShapeToTriangulate, dtb, outputVertices);
-		
-	//Outputs index buffer	
+
+	//Outputs index buffer
 	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
 	{
 		output.push_back(it->i[0]);
@@ -417,24 +417,24 @@ void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
 	assert((mShapeToTriangulate || mMultiShapeToTriangulate) && "Either shape or multishape must be defined");
 	if (mShapeToTriangulate)
-	{		
+	{
 		PointList pointList;
-		std::vector<int> indexBuffer;		
+		std::vector<int> indexBuffer;
 		triangulate(indexBuffer, pointList);
 		for (size_t j =0;j<pointList.size();j++)
 			{
 				Ogre::Vector2 vp2 = pointList[j];
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
-				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
+				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;
 
-				Ogre::Vector3 newPoint = vp;				
-				buffer.position(newPoint);				
+				Ogre::Vector3 newPoint = vp;
+				buffer.position(newPoint);
 				buffer.normal(normal);
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
 
 			for (size_t i=0;i<indexBuffer.size()/3;i++)
-			{		
+			{
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+2]);
 				buffer.index(indexBuffer[i*3+1]);
@@ -443,26 +443,26 @@ void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	else
 	{
 		PointList pointList;
-		std::vector<int> indexBuffer;		
+		std::vector<int> indexBuffer;
 		triangulate(indexBuffer, pointList);
 		for (size_t j =0;j<pointList.size();j++)
 			{
 				Ogre::Vector2 vp2 = pointList[j];
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
-				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;				
+				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;
 
-				Ogre::Vector3 newPoint = vp;				
-				buffer.position(newPoint);				
+				Ogre::Vector3 newPoint = vp;
+				buffer.position(newPoint);
 				buffer.normal(normal);
 				buffer.textureCoord(vp2.x, vp2.y);
 			}
-			
+
 			for (size_t i=0;i<indexBuffer.size()/3;i++)
 			{
 				buffer.index(indexBuffer[i*3]);
 				buffer.index(indexBuffer[i*3+2]);
 				buffer.index(indexBuffer[i*3+1]);
-			}		
+			}
 	}
 }
 }

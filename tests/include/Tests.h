@@ -179,7 +179,7 @@ class Unit_Tests : public BaseApplication
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
 			s3.translate(Vector2(.1,0));
-			putMesh(Triangulator().setShapeToTriangulate(&s3)._setDumpToFile("triangulator_s3.yaml").realizeMesh());
+			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
 
 			Shape s4;
@@ -208,7 +208,7 @@ class Unit_Tests : public BaseApplication
 				.addPoint(1,-0.5)    // 8
 				.close();
 
-			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());
+			putMesh(Triangulator().setShapeToTriangulate(&s5)._setDumpToFile("triangulator_bug.yaml").realizeMesh());
 
 			// Tests for the "shape order bug": if a multishape contains shapes in an order or the opposite, artifacts may happen
 			{
