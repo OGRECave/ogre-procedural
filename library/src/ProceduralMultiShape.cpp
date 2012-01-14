@@ -97,7 +97,7 @@ namespace Procedural
 				if (A.y!=B.y && (A.y-point.y)*(B.y-point.y)<=0.)
 				{
 					Vector2 intersect(A.x+(point.y-A.y)*(B.x-A.x)/(B.y-A.y), point.y);
-					float dist = abs(point.x-intersect.x);
+					float dist = Math::Abs(point.x-intersect.x);
 					if (dist<closestSegmentDistance)
 					{
 						closestSegmentIndex = i;
@@ -127,7 +127,6 @@ namespace Procedural
 				else
 					closestSegmentIndex=edgePoint-1;
 			}
-
 			return (closestSegmentShape->getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);
 		}
 		// We're in the case where the point is on the "real outside" of the multishape

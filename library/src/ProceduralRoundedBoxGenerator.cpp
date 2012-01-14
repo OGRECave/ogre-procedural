@@ -41,7 +41,7 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 	assert(mSizeX>0. && mSizeY>0. && mSizeZ>0. && mChamferSize>0. && "Sizes must be positive");
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((mChamferNumSeg+1)*(mChamferNumSeg+1));
-	buffer.estimateIndexCount(mChamferNumSeg*mChamferNumSeg*6);	
+	buffer.estimateIndexCount(mChamferNumSeg*mChamferNumSeg*6);
 	int offset = 0;
 
 	Vector3 offsetPosition((isXPositive?1:-1)*.5f*mSizeX, (isYPositive?1:-1)*.5f*mSizeY, (isZPositive?1:-1)*.5f*mSizeZ);
@@ -55,13 +55,13 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 	if ((!isXPositive)&&(!isZPositive)) offsetSegAngle = Math::PI;
 
 	// Generate the group of rings for the sphere
-	for(unsigned short ring = 0; ring <= mChamferNumSeg; ring++ ) 
+	for(unsigned short ring = 0; ring <= mChamferNumSeg; ring++ )
 	{
 		Real r0 = mChamferSize * sinf (ring * deltaRingAngle + offsetRingAngle);
 		Real y0 = mChamferSize * cosf (ring * deltaRingAngle + offsetRingAngle);
 
 		// Generate the group of segments for the current ring
-		for(unsigned short seg = 0; seg <= mChamferNumSeg; seg++) 
+		for(unsigned short seg = 0; seg <= mChamferNumSeg; seg++)
 		{
 			Real x0 = r0 * sinf(seg * deltaSegAngle + offsetSegAngle);
 			Real z0 = r0 * cosf(seg * deltaSegAngle + offsetSegAngle);
@@ -71,8 +71,8 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 							 Vector3(x0, y0, z0).normalisedCopy(),
 							 Vector2((Real) seg / (Real) mChamferNumSeg, (Real) ring / (Real) mChamferNumSeg));
 
-			if ((ring != mChamferNumSeg) && (seg != mChamferNumSeg)) 
-			{			
+			if ((ring != mChamferNumSeg) && (seg != mChamferNumSeg))
+			{
 				// each vertex (except the last) has six indices pointing to it
 				buffer.index(offset + mChamferNumSeg + 2);
 				buffer.index(offset);
@@ -93,11 +93,11 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 					0 => undefined
  */
 void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos) const
-{	
+{
 	int offset = 0;
 
 	Vector3 centerPosition = .5f*xPos * mSizeX * Vector3::UNIT_X + .5f*yPos * mSizeY * Vector3::UNIT_Y + .5f*zPos * mSizeZ * Vector3::UNIT_Z;
-	Vector3 vy0 = (1.f-abs(xPos)) * Vector3::UNIT_X + (1.f-abs(yPos)) * Vector3::UNIT_Y + (1.f-abs(zPos)) * Vector3::UNIT_Z;//extrusion direction	
+	Vector3 vy0 = (1.f-Math::Abs(xPos)) * Vector3::UNIT_X + (1.f-Math::Abs(yPos)) * Vector3::UNIT_Y + (1.f-Math::Abs(zPos)) * Vector3::UNIT_Z;//extrusion direction
 
 	Vector3 vx0 = Utils::vectorAntiPermute(vy0);
 	Vector3 vz0 = Utils::vectorPermute(vy0);
@@ -105,7 +105,7 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 	if (vz0.dotProduct(centerPosition)<0.0) vz0=-vz0;
 	if (vx0.crossProduct(vy0).dotProduct(vz0)<0.0) vy0=-vy0;
 
-	Real height= (1-abs(xPos)) * mSizeX+(1-abs(yPos)) * mSizeY+(1-abs(zPos)) * mSizeZ;
+	Real height= (1-Math::Abs(xPos)) * mSizeX+(1-Math::Abs(yPos)) * mSizeY+(1-Math::Abs(zPos)) * mSizeZ;
 	Vector3 offsetPosition= centerPosition -.5f*height*vy0;
 	int numSegHeight=1;
 
@@ -119,10 +119,10 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 	else if (zPos==0)
 		numSegHeight = mNumSegZ;
 
-	buffer.rebaseOffset();	
+	buffer.rebaseOffset();
 	buffer.estimateIndexCount(6*numSegHeight*mChamferNumSeg);
 	buffer.estimateVertexCount((numSegHeight+1)*(mChamferNumSeg+1));
-	
+
 	for (unsigned short i = 0; i <=numSegHeight; i++)
 		for (unsigned short j = 0; j<=mChamferNumSeg; j++)
 		{
@@ -132,7 +132,7 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 							 (x0*vx0+z0*vz0).normalisedCopy(),
 							 Vector2(j/(Real)mChamferNumSeg, i/(Real)numSegHeight));
 
-			if (i != numSegHeight && j!=mChamferNumSeg) 
+			if (i != numSegHeight && j!=mChamferNumSeg)
 			{
 				buffer.index(offset + mChamferNumSeg + 2);
 				buffer.index(offset);
@@ -146,7 +146,7 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 }
 
 void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
-{			
+{
 	//int offset = 0;
 	// Generate the pseudo-box shape
 	PlaneGenerator pg;
@@ -180,7 +180,7 @@ void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	  .setNormal(Vector3::UNIT_X)
 	  .setPosition((.5f*mSizeX+mChamferSize)*Vector3::UNIT_X)
 	  .addToTriangleBuffer(buffer);
-	  
+
 	// Generate the corners
 	_addCorner(buffer, true,  true,  true);
 	_addCorner(buffer, true,  true,  false);
@@ -190,7 +190,7 @@ void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	_addCorner(buffer, false, true,  false);
 	_addCorner(buffer, false, false, true);
 	_addCorner(buffer, false, false, false);
-			
+
 	// Generate the edges
 	_addEdge(buffer, -1,-1, 0);
 	_addEdge(buffer, -1, 1, 0);
@@ -199,7 +199,7 @@ void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	_addEdge(buffer, -1, 0,-1);
 	_addEdge(buffer, -1, 0, 1);
 	_addEdge(buffer,  1, 0,-1);
-	_addEdge(buffer,  1, 0, 1);	
+	_addEdge(buffer,  1, 0, 1);
 	_addEdge(buffer,  0,-1,-1);
 	_addEdge(buffer,  0,-1, 1);
 	_addEdge(buffer,  0, 1,-1);
