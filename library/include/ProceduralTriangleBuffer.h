@@ -58,8 +58,8 @@ class TriangleBuffer
 	int mEstimatedVertexCount;
 	int mEstimatedIndexCount;
 	Vertex* mCurrentVertex;
-	
-	
+
+
 	public:
 		TriangleBuffer() : globalOffset(0), mEstimatedVertexCount(0), mEstimatedIndexCount(0), mCurrentVertex(0)//, mCurrentVertex(mVertices.end())
 	{}
@@ -108,7 +108,7 @@ class TriangleBuffer
 
 	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& position(const Ogre::Vector3& pos)
-	{	
+	{
 		Vertex v;
 		v.mPosition = pos;
 		mVertices.push_back(v);
@@ -121,11 +121,11 @@ class TriangleBuffer
 	{
 		Vertex v;
 		v.mPosition = Ogre::Vector3(x,y,z);
-		mVertices.push_back(v);		
+		mVertices.push_back(v);
 		mCurrentVertex = &mVertices.back();
 		return *this;
 	}
-	
+
 	/** Sets the normal of the current vertex */
 	inline TriangleBuffer& normal(const Ogre::Vector3& normal)
 	{
@@ -147,7 +147,7 @@ class TriangleBuffer
 		return *this;
 	}
 
-	/** 
+	/**
 	 * Adds an index to the index buffer.
 	 * Index is relative to the latest rebaseOffset().
 	 */
@@ -157,7 +157,7 @@ class TriangleBuffer
 		return *this;
 	}
 
-	/** 
+	/**
 	 * Adds a triangle to the index buffer.
 	 * Index is relative to the latest rebaseOffset().
 	 */
@@ -168,13 +168,13 @@ class TriangleBuffer
 		mIndices.push_back(globalOffset+i3);
 		return *this;
 	}
-	
+
 	/// Applies a matrix to transform all vertices inside the triangle buffer
 	TriangleBuffer& applyTransform(const Ogre::Matrix4& matrix)
 	{
 		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
 		{
-			it->mPosition = matrix * it->mPosition;		
+			it->mPosition = matrix * it->mPosition;
 			it->mNormal = matrix * it->mNormal;
 			it->mNormal.normalise();
 		}
@@ -204,7 +204,7 @@ class TriangleBuffer
 	{
 		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
 		{
-			it->mPosition = quat * it->mPosition;		
+			it->mPosition = quat * it->mPosition;
 			it->mNormal = quat * it->mNormal;
 			it->mNormal.normalise();
 		}
@@ -257,7 +257,7 @@ class TriangleBuffer
 		mEstimatedVertexCount += vertexCount;
 		mVertices.reserve(mEstimatedVertexCount);
 	}
-	
+
 	/**
 	 * Gives an estimation of the number of indices needed for this triangle buffer.
 	 * If this function is called several times, it means an extra indices count, not an absolute measure.
@@ -274,7 +274,7 @@ class TriangleBuffer
 	void _dumpContentsToFile(const std::string& fileName)
 	{
 		std::ofstream outFile;
-		outFile.open(fileName);
+		outFile.open(fileName.c_str());
 
 		outFile<< "Number of vertices : "<< Ogre::StringConverter::toString(mVertices.size()) <<std::endl;
 		outFile<< "Estimated number of vertices : "<< Ogre::StringConverter::toString(mEstimatedVertexCount) <<std::endl;
@@ -287,7 +287,7 @@ class TriangleBuffer
 			outFile<<", UV: ["<<Ogre::StringConverter::toString(it->mUV.x)<<", "<<Ogre::StringConverter::toString(it->mUV.y)<<"]";
 			outFile<<"}"<<std::endl;
 		}
-		outFile<< "Number of indices : "<< Ogre::StringConverter::toString(mIndices.size()) <<std::endl;		
+		outFile<< "Number of indices : "<< Ogre::StringConverter::toString(mIndices.size()) <<std::endl;
 		outFile<< "Estimated number of indices : "<< Ogre::StringConverter::toString(mEstimatedIndexCount) <<std::endl;
 		outFile<< "Indices :"<< std::endl;
 		for (size_t i = 0; i<mIndices.size()/3; i++)
