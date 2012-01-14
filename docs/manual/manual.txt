@@ -9,6 +9,22 @@ This manual aims to give a global view over what is possible with Ogre Procedura
 
 If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc (you can find it here : http://doc.ogreprocedural.org).
 
+== How to use
+
+=== Installing
+
+.Precompiled SDK
+
+If you got the precompiled SDK, 
+
+.Source package
+
+You first have to build
+
+=== Usage
+
+
+
 == Mesh primitives
 
 There are a few mesh primitives generators.

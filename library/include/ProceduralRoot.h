@@ -31,6 +31,14 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "ProceduralPlatform.h"
 
+/**
+ * @mainpage API reference start page
+ * 
+ * This is the reference doc for OgreProcedural, containing description for all classes and function. <br>
+ *
+ * If you want to get a more complete overview of functionnality, you can also check out the manual.
+ */
+
 namespace Procedural
 {
 /** Singleton that holds the general parameters of OgreProcedural.
