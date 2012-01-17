@@ -84,13 +84,26 @@ if(WIN32)
 	copy_release(libOIS.dll)
 	copy_debug(libOIS_d.dll)	
 	copy_release(OIS.dll)
-	copy_debug(OIS_d.dll)	
+	copy_debug(OIS_d.dll)		
 	
+	#MingW doesn't want to run samples if boost dlls are not present (but MSVC is ok with that..)
+	FILE(GLOB BOOST_DEB_DLLS "${OGRE_PLUGIN_DIR_DBG}/*boost*.dll")
+	foreach(DLL ${BOOST_DEB_DLLS})
+		GET_FILENAME_COMPONENT(SHORT_DLL ${DLL} NAME)
+		copy_debug(${SHORT_DLL})
+	endforeach(DLL)
+	FILE(GLOB BOOST_REL_DLLS "${OGRE_PLUGIN_DIR_REL}/*boost*.dll")
+	foreach(DLL ${BOOST_REL_DLLS})
+		GET_FILENAME_COMPONENT(SHORT_DLL ${DLL} NAME)
+		copy_release(${SHORT_DLL})
+	endforeach(DLL)
+		
 	set(OgreProcedural_PLUGIN_DIR_REL ".")
 	set(OgreProcedural_PLUGIN_DIR_DBG ".")
 
 	set(OGRE_PLUGIN_DIR_REL ".")
 	set(OGRE_PLUGIN_DIR_DBG ".")
+	
 	
 endif(WIN32)
 
