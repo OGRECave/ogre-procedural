@@ -43,14 +43,16 @@ namespace Procedural
  */
 class TriangleBuffer
 {
-	std::vector<int> mIndices;
-
+public:
 	struct Vertex
 	{
 		Ogre::Vector3 mPosition;
 		Ogre::Vector3 mNormal;
 		Ogre::Vector2 mUV;
 	};
+protected:
+
+	std::vector<int> mIndices;
 
 	std::vector<Vertex> mVertices;
 	//std::vector<Vertex>::iterator mCurrentVertex;
