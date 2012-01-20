@@ -35,54 +35,54 @@ namespace Procedural
 {
 void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(numSegX>0 && numSegY>0 && "Num seg must be positive");
-	assert(!normal.isZeroLength() && "Normal must not be null");
-	assert(sizeX>0. && sizeY>0. && "Size must be positive");
+	assert(mNumSegX>0 && mNumSegY>0 && "Num seg must be positive");
+	assert(!mNormal.isZeroLength() && "Normal must not be null");
+	assert(mSizeX>0. && mSizeY>0. && "Size must be positive");
 	
 	buffer.rebaseOffset();
-	buffer.estimateVertexCount((numSegX+1)*(numSegY+1));
-	buffer.estimateIndexCount(numSegX*numSegY*6);
+	buffer.estimateVertexCount((mNumSegX+1)*(mNumSegY+1));
+	buffer.estimateIndexCount(mNumSegX*mNumSegY*6);
 	int offset = 0;
 
-	Vector3 vX = normal.perpendicular();
-	Vector3 vY = normal.crossProduct(vX);
-	Vector3 delta1 = sizeX / (Real)numSegX * vX;
-	Vector3 delta2 = sizeY / (Real)numSegY * vY;
+	Vector3 vX = mNormal.perpendicular();
+	Vector3 vY = mNormal.crossProduct(vX);
+	Vector3 delta1 = mSizeX / (Real)mNumSegX * vX;
+	Vector3 delta2 = mSizeY / (Real)mNumSegY * vY;
 	// build one corner of the square
-	Vector3 orig = -0.5f*sizeX*vX - 0.5f*sizeY*vY;
+	Vector3 orig = -0.5f*mSizeX*vX - 0.5f*mSizeY*vY;
 
-	for (unsigned short i1 = 0; i1<=numSegX; i1++)
-		for (unsigned short i2 = 0; i2<=numSegY; i2++)
+	for (unsigned short i1 = 0; i1<=mNumSegX; i1++)
+		for (unsigned short i2 = 0; i2<=mNumSegY; i2++)
 		{
-			addPoint(buffer, orig+i1*delta1+i2*delta2+position,
-						     normal,
-							 Vector2(i1/(Real)numSegX, i2/(Real)numSegY));
+			addPoint(buffer, orig+i1*delta1+i2*delta2,
+						     mNormal,
+							 Vector2(i1/(Real)mNumSegX, i2/(Real)mNumSegY));
 		}
 
 	bool reverse = false;
-	if (delta1.crossProduct(delta2).dotProduct(normal)>0)
+	if (delta1.crossProduct(delta2).dotProduct(mNormal)>0)
 		reverse= true;
-	for (unsigned short n1 = 0; n1<numSegX; n1++)
+	for (unsigned short n1 = 0; n1<mNumSegX; n1++)
 	{
-		for (unsigned short n2 = 0; n2<numSegY; n2++)
+		for (unsigned short n2 = 0; n2<mNumSegY; n2++)
 		{
 			if (reverse)
 			{
 				buffer.index(offset+0);
-				buffer.index(offset+(numSegY+1));
+				buffer.index(offset+(mNumSegY+1));
 				buffer.index(offset+1);
 				buffer.index(offset+1);
-				buffer.index(offset+(numSegY+1));
-				buffer.index(offset+(numSegY+1)+1);
+				buffer.index(offset+(mNumSegY+1));
+				buffer.index(offset+(mNumSegY+1)+1);
 			}
 			else
 			{
 				buffer.index(offset+0);
 				buffer.index(offset+1);
-				buffer.index(offset+(numSegY+1));
+				buffer.index(offset+(mNumSegY+1));
 				buffer.index(offset+1);
-				buffer.index(offset+(numSegY+1)+1);
-				buffer.index(offset+(numSegY+1));
+				buffer.index(offset+(mNumSegY+1)+1);
+				buffer.index(offset+(mNumSegY+1));
 			}
 			offset++;
 		}

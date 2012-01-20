@@ -4,7 +4,7 @@ This source file is part of ogre-procedural
 
 For the latest info, see http://code.google.com/p/ogre-procedural/
 
-Copyright (c) 2010 Michael Broutin
+Copyright (c) 2011 Michael Broutin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -121,10 +121,11 @@ void Illustrations::putMesh(MeshPtr mesh, int materialIndex)
 		ent->setMaterialName("HiddenLine");
 	else if (materialIndex==1)
 		ent->setMaterialName("RedLine");
+	else if (materialIndex==2)
+		ent->setMaterialName("Examples/Road");
 	mEntities.push_back(ent);
 	mSceneNodes.push_back(sn);
 }
-
 
 void Illustrations::go()
 {	
@@ -275,6 +276,19 @@ void Illustrations::go()
 		putMesh(mp);
 		next("extruder_scaletrack", 7);
 
+		Procedural::Shape s4 = Procedural::Shape().addPoint(-1.2f,.2f).addPoint(-1.f,.2f).addPoint(-.9f,.1f).addPoint(.9f,.1f).addPoint(1.f,.2f).addPoint(1.2f,.2f).scale(2).setOutSide(Procedural::SIDE_LEFT);
+		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2).addKeyFrame(3,.8).addKeyFrame(5,1);
+		mp = Extruder().setShapeTextureTrack(&textureTrack).setShapeToExtrude(&s4).setExtrusionPath(&p2).setCapped(false).realizeMesh();
+		putMesh(mp, 2);
+		next("extruder_texturetrack", 7);
+
+		cameraFront();
+		Shape s3 = CircleShape().setNumSeg(16).realizeShape();
+		MultiShape ms = MultiShape(2, s3.switchSide(), Shape(s3).scale(1.1));
+		Path p3 = CatmullRomSpline3().addPoint(0,0,-5).addPoint(0,0,0).addPoint(1,-1,5).realizePath();		
+		mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
+		putMesh(mp);
+		next("extruder_multishape", 4);	
 	}
 
 	//

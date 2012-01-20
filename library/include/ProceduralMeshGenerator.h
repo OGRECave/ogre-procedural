@@ -61,11 +61,29 @@ protected:
 
 	/// Rectangle in which the texture coordinates will be placed
 	Ogre::Vector2 mUVOrigin;
-	
+
 	/// If set to true, the UV coordinates coming from the mesh generator will be switched.
 	/// It can be used, for example, if your texture doesn't fit the mesh generator's assumptions about UV.
 	/// If UV were to fit in a given rectangle, they still fit in it after the switch.
 	bool mSwitchUV;
+
+	/// Orientation to apply the mesh
+	Ogre::Quaternion mOrientation;
+
+	/// Scale to apply the mesh
+	Ogre::Vector3 mScale;
+
+	/// Position to apply to the mesh
+	Ogre::Vector3 mPosition;
+
+	// Whether a transform has been defined or not
+	bool mTransform;
+
+	// Debug output file
+	std::string mDumpFileName;
+
+	// Enable output to file or not
+	bool mEnableDumpToFile;
 
 public:
 	/// Default constructor
@@ -74,7 +92,13 @@ public:
 					  mEnableNormals(true),
 					  mNumTexCoordSet(1),
 					  mUVOrigin(0,0),
-					  mSwitchUV(false)
+					  mSwitchUV(false),
+					  mOrientation(Ogre::Quaternion::IDENTITY),
+					  mScale(1,1,1),
+					  mPosition(0,0,0),
+					  mTransform(false),
+					  mDumpFileName(""),
+					  mEnableDumpToFile(false)
 	{
 		mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		assert(mSceneMgr && "Scene Manager must be set in Root");
@@ -85,11 +109,13 @@ public:
 	 * @param name of the mesh for the MeshManager
 	 * @param group ressource group in which the mesh will be created
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name = "", 
+	Ogre::MeshPtr realizeMesh(const std::string& name = "",
 		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
 	{
 		TriangleBuffer tbuffer;
 		addToTriangleBuffer(tbuffer);
+		if (mEnableDumpToFile)
+			tbuffer._dumpContentsToFile(mDumpFileName);
 		Ogre::MeshPtr mesh;
 		if (name == "")
 			mesh = tbuffer.transformToMesh(Utils::getName(), group);
@@ -97,7 +123,7 @@ public:
 			mesh = tbuffer.transformToMesh(name, group);
 		return mesh;
 	}
-		
+
 	/**
 	 * Overloaded by each generator to implement the specifics
 	 */
@@ -114,7 +140,7 @@ public:
 
 	/**
 	 * Sets V Tile, ie the number by which v texture coordinates are multiplied (default=1)
-	 */	
+	 */
 	inline T & setVTile(Ogre::Real vTile)
 	{
 		mVTile = vTile;
@@ -123,7 +149,7 @@ public:
 
 	/**
 	 * Sets the texture rectangle
-	 */	
+	 */
 	inline T & setTextureRectangle(Ogre::Rectangle textureRectangle)
 	{
 		mUVOrigin = Ogre::Vector2(textureRectangle.top, textureRectangle.left);
@@ -131,10 +157,10 @@ public:
 		mVTile = textureRectangle.bottom-textureRectangle.top;
 		return static_cast<T&>(*this);
 	}
-	
+
 	/**
 	 * Sets whether normals are enabled or not (default=true)
-	 */	
+	 */
 	inline T & setEnableNormals(bool enableNormals)
 	{
 		mEnableNormals = enableNormals;
@@ -149,13 +175,88 @@ public:
 		mNumTexCoordSet = numTexCoordSet;
 		return static_cast<T&>(*this);
 	}
-	
+
 	/// Sets whether to switch U and V texture coordinates
 	inline T& setSwitchUV(bool switchUV)
 	{
 		mSwitchUV = switchUV;
 		return static_cast<T&>(*this);
 	}
+
+	/// Sets an orientation to give when building the mesh
+	inline T& setOrientation(const Ogre::Quaternion& orientation)
+	{
+		mOrientation = orientation;
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Sets a translation baked into the resulting mesh
+	inline T& setPosition(const Ogre::Vector3& position)
+	{
+		mPosition = position;
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Sets a translation baked into the resulting mesh
+	inline T& setPosition(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		mPosition = Ogre::Vector3(x, y, z);
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+
+	/// Sets a scale baked into the resulting mesh
+	inline T& setScale(const Ogre::Vector3& scale)
+	{
+		mScale = scale;
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Sets a uniform scale baked into the resulting mesh
+	inline T& setScale(Ogre::Real scale)
+	{
+		mScale = Ogre::Vector3(scale);
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Sets a scale baked into the resulting mesh
+	inline T& setScale(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		mScale = Ogre::Vector3(x, y, z);
+		mTransform = true;
+		return static_cast<T&>(*this);
+	}
+
+	/// Resets all transforms (orientation, position and scale) that would have been applied to the mesh to their default values
+	inline T& resetTransforms()
+	{
+		mTransform = false;
+		mPosition = Ogre::Vector3::ZERO;
+		mOrientation = Ogre::Quaternion::IDENTITY;
+		mScale = Ogre::Vector3(1);
+		return static_cast<T&>(*this);
+	}
+
+	/// Activate dump to file
+	inline T& _setDumpToFile(const std::string& fileName)
+	{
+		mEnableDumpToFile = true;
+		mDumpFileName = fileName;
+		return static_cast<T&>(*this);
+	}
+
+	/// Disable dump to file
+	inline T& _disableDumpToFile()
+	{
+		mEnableDumpToFile = false;
+		return static_cast<T&>(*this);
+	}
+
 
 protected:
 	/// Adds a new point to a triangle buffer, using the format defined for that MeshGenerator
@@ -165,7 +266,10 @@ protected:
 	/// @arg uv the uv texcoord of the new point
 	inline void addPoint(TriangleBuffer& buffer, const Ogre::Vector3& position, const Ogre::Vector3& normal, const Ogre::Vector2& uv) const
 	{
-		buffer.position(position);
+		if (mTransform)
+			buffer.position(mPosition + mOrientation * (mScale * position));
+		else
+			buffer.position(position);
 		if (mEnableNormals)
 			buffer.normal(normal);
 		if (mSwitchUV)

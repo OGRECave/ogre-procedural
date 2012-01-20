@@ -166,7 +166,7 @@ public:
 	Path convertToPath() const;
 
 	/// Outputs a track, with Key=X and Value=Y
-	Track convertToTrack(Track::AddressingMode addressingMode=Track::AM_ABSOLUTE_LINEIC) const;
+	Track convertToTrack(Track::AddressingMode addressingMode=Track::AM_RELATIVE_LINEIC) const;
 
 	/// Gets raw vector data of this shape
 	inline std::vector<Ogre::Vector2> getPoints() const
@@ -180,6 +180,12 @@ public:
 		return mPoints;
 	}
 
+	/// Gets raw vector data of this shape as a non-const reference
+	inline const std::vector<Ogre::Vector2>& getPointsReference() const
+	{
+		return mPoints;
+	}
+	
 	/**
 	 * Bounds-safe method to get a point : it will allow you to go beyond the bounds
 	 */
@@ -336,6 +342,11 @@ public:
 	 * you'd rather use setOutside(), which doesn't need any computation.
 	 */
 	Side findRealOutSide() const;
+
+	/**
+	 * Determines whether the outside as defined by user equals "real" outside
+	*/
+	bool isOutsideRealOutside() const;
 	
 	/// Creates a shape with the keys of this shape and extra keys coming from a track
 	/// @arg track the track to merge keys with
@@ -415,9 +426,22 @@ public:
 	 * Has strictly no effect on the points defined after that
 	 * @param amount of scale
 	 */	
-	Shape& scale(Ogre::Vector2 amount)
+	Shape& scale(const Ogre::Vector2& amount)
 	{
 		return scale(amount.x, amount.y);
+	}
+		
+	/**
+	 * Reflect all points in this shape against a zero-origined line with a given normal
+	 * @param the normal
+	 */
+	Shape& reflect(const Ogre::Vector2& normal)
+	{
+		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		{
+			*it = it->reflect(normal);
+		}
+		return *this;
 	}
 
 	/// Returns the total lineic length of that shape

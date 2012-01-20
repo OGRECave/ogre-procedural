@@ -130,16 +130,32 @@ class _ProceduralExport CubicHermiteSpline3 : public BaseSpline3<CubicHermiteSpl
 	
 public:
 	/// Adds a control point
-	inline CubicHermiteSpline3& addPoint(Ogre::Vector3 p, Ogre::Vector3 before, Ogre::Vector3 after)
+	inline CubicHermiteSpline3& addPoint(const Ogre::Vector3& p, const Ogre::Vector3& before, const Ogre::Vector3& after)
 	{
 		mPoints.push_back(ControlPoint(p, before, after));
 		return *this;
 	}
 	/// Adds a control point
-	inline CubicHermiteSpline3& addPoint(Ogre::Vector3 p, CubicHermiteSplineAutoTangentMode autoTangentMode)
+	inline CubicHermiteSpline3& addPoint(const Ogre::Vector3& p, const Ogre::Vector3& tangent)
+	{
+		mPoints.push_back(ControlPoint(p, tangent, tangent));
+		return *this;
+	}
+	/// Adds a control point
+	inline CubicHermiteSpline3& addPoint(const Ogre::Vector3& p, CubicHermiteSplineAutoTangentMode autoTangentMode = AT_CATMULL)
 	{
 		ControlPoint cp;
 		cp.position = p;
+		cp.autoTangentBefore = autoTangentMode;
+		cp.autoTangentAfter = autoTangentMode;
+		mPoints.push_back(cp);
+		return *this;
+	}
+	/// Adds a control point
+	inline CubicHermiteSpline3& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z, CubicHermiteSplineAutoTangentMode autoTangentMode = AT_CATMULL)
+	{
+		ControlPoint cp;
+		cp.position = Ogre::Vector3(x,y,z);
 		cp.autoTangentBefore = autoTangentMode;
 		cp.autoTangentAfter = autoTangentMode;
 		mPoints.push_back(cp);

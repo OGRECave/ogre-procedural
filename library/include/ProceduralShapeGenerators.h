@@ -90,13 +90,19 @@ class _ProceduralExport CubicHermiteSpline2 : public BaseSpline2<CubicHermiteSpl
 	
 public:
 	/// Adds a control point
-	inline CubicHermiteSpline2& addPoint(Ogre::Vector2 p, Ogre::Vector2 before, Ogre::Vector2 after)
+	inline CubicHermiteSpline2& addPoint(const Ogre::Vector2& p, const Ogre::Vector2& before, const Ogre::Vector2& after)
 	{
 		mPoints.push_back(ControlPoint(p, before, after));
 		return *this;
 	}
 	/// Adds a control point
-	inline CubicHermiteSpline2& addPoint(Ogre::Vector2 p, CubicHermiteSplineAutoTangentMode autoTangentMode = AT_CATMULL)
+	inline CubicHermiteSpline2& addPoint(const Ogre::Vector2& p, const Ogre::Vector2& tangent)
+	{
+		mPoints.push_back(ControlPoint(p, tangent, tangent));
+		return *this;
+	}
+	/// Adds a control point
+	inline CubicHermiteSpline2& addPoint(const Ogre::Vector2& p, CubicHermiteSplineAutoTangentMode autoTangentMode = AT_CATMULL)
 	{
 		ControlPoint cp;
 		cp.position = p;

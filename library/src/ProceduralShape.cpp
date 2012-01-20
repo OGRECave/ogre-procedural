@@ -34,15 +34,15 @@ using namespace Ogre;
 
 namespace Procedural
 {
-	
+
 //-----------------------------------------------------------------------
 Side Shape::findRealOutSide() const
 {
-	float x = mPoints[0].x;
+	Ogre::Real x = mPoints[0].x;
 	int index=0;
 	for (unsigned short i=1;i<mPoints.size();i++)
 	{
-		if (x<mPoints[i].x)
+		if (x < mPoints[i].x)
 		{
 			x = mPoints[i].x;
 			index = i;
@@ -56,24 +56,29 @@ Side Shape::findRealOutSide() const
 		return SIDE_LEFT;
 }
 //-----------------------------------------------------------------------
+bool Shape::isOutsideRealOutside() const
+{
+	return findRealOutSide() == mOutSide;
+}
+//-----------------------------------------------------------------------
 void Shape::_findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const
 {
 	for (unsigned short i=0; i<getSegCount(); i++)
-	{		
+	{
 		Segment2D seg1(getPoint(i), getPoint(i+1));
-		
+
 		for (unsigned short j=0; j<other.getSegCount(); j++)
 		{
 			Segment2D seg2(other.getPoint(j), other.getPoint(j+1));
-			
+
 			Vector2 intersect;
 			if (seg1.findIntersect(seg2, intersect))
 			{
 				IntersectionInShape inter(i, j, intersect);
-				// check if intersection is "borderline" : too near to a vertex				
+				// check if intersection is "borderline" : too near to a vertex
 				if (seg1.getA().squaredDistance(intersect)<1e-8)
 				{
-					inter.onVertex[0] = true;					
+					inter.onVertex[0] = true;
 				}
 				if (seg1.getB().squaredDistance(intersect)<1e-8)
 				{
@@ -137,8 +142,8 @@ char Shape::_isIncreasing(Real d, BooleanOperationType opType, char shapeSelecto
 }
 //-----------------------------------------------------------------------
 bool _sortAngles(std::pair<Radian, uint8> one, std::pair<Radian, uint8> two) // waiting for lambda functions!
-{ 
-	return one.first<two.first; 
+{
+	return one.first<two.first;
 }
 //-----------------------------------------------------------------------
 bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opType, IntersectionInShape intersection, uint8& shapeSelector, char& isIncreasing, unsigned int& currentSegment) const
@@ -150,7 +155,7 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 	Vector2 directions[4];
 	char sides[4];
 	uint8 incomingDirection;
-	
+
 	// fill-in the incoming arrays
 	if (isIncreasing==0)
 		incomingDirection=255;
@@ -161,7 +166,7 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 		{
 			directions[i] = inputShapes[i]->getDirectionBefore(intersection.index[i]);
 			directions[2+i] = -	inputShapes[i]->getDirectionAfter(intersection.index[i]);
-		} else 
+		} else
 		{
 			directions[2+i] = - inputShapes[i]->getDirectionAfter(intersection.index[i]);
 			directions[i] = - directions[2+i];
@@ -170,14 +175,14 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 	{
 		sides[i]=(i/2==0?-1:1)*(inputShapes[i%2]->mOutSide == SIDE_RIGHT?-1:1);
 	}
-	
+
 	bool isOutside[4];
 	std::pair<Radian, uint8> sortedDirections[4];
 
-	// sort by angle	
+	// sort by angle
 	for (int i=0;i<4;i++)
 	{
-		if (i==0) 
+		if (i==0)
 			sortedDirections[i].first = 0;
 		else
 			sortedDirections[i].first = sides[0] * Utils::angleTo(directions[0], directions[i]);
@@ -211,11 +216,11 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 	else
 	{
 		// determine which way to go
-		int nextShapeSelector = (shapeSelector+1)%2;					
-				
+		int nextShapeSelector = (shapeSelector+1)%2;
+
 		Real d = inputShapes[nextShapeSelector]->getDirectionAfter(intersection.index[nextShapeSelector]).dotProduct(inputShapes[shapeSelector]->getNormalAfter(currentSegment));
 		isIncreasing = _isIncreasing(d, opType, nextShapeSelector);
-		
+
 		shapeSelector = nextShapeSelector;
 
 		currentSegment = intersection.index[shapeSelector];
@@ -227,11 +232,11 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 {
 	assert(mClosed && other.mClosed);
 	assert(mPoints.size()>1 && other.mPoints.size()>1);
-	
+
 	// Compute the intersection between the 2 shapes
 	std::vector<IntersectionInShape> intersections;
 	_findAllIntersections(other, intersections);
-	
+
 	// Build the resulting shape
 	if (intersections.empty())
 	{
@@ -249,7 +254,7 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 				ms.getShape(1).switchSide();
 				return ms;
 			}
-			
+
 		}
 		else if (other.isPointInside(getPoint(0)))
 		{// Shape A is completely inside shape B
@@ -264,7 +269,7 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 				ms.addShape(other);
 				ms.getShape(0).switchSide();
 				return ms;
-			}				
+			}
 		}
 		else
 		{
@@ -279,19 +284,19 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 				return Shape();//empty result
 			else if (opType == BOT_DIFFERENCE)
 				return Shape();//empty result
-		}		
+		}
 	}
 	MultiShape outputMultiShape;
-	
+
 	const Shape* inputShapes[2];
 	inputShapes[0]=this;
-	inputShapes[1]=&other;		
-	
+	inputShapes[1]=&other;
+
 	while (!intersections.empty())
 	{
 		Shape outputShape;
 		uint8 shapeSelector = 0; // 0 : first shape, 1 : second shape
-		
+
 		Vector2 currentPosition = intersections.begin()->position;
 		IntersectionInShape firstIntersection = *intersections.begin();
 		unsigned int currentSegment =  firstIntersection.index[shapeSelector];
@@ -302,21 +307,21 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 
 		if (!_findWhereToGo(inputShapes, opType, firstIntersection, shapeSelector, isIncreasing, currentSegment))
 		{
-			// That intersection is located on a place where the resulting shape won't go => discard			
+			// That intersection is located on a place where the resulting shape won't go => discard
 			continue;
 		}
-						
+
 		while (true)
 		{
-			// find the closest intersection on the same segment, in the correct direction			
+			// find the closest intersection on the same segment, in the correct direction
 			std::vector<IntersectionInShape>::iterator found_next_intersection = intersections.end();
 			Real distanceToNextIntersection = std::numeric_limits<Real>::max();
-			
+
 			unsigned int nextPoint = currentSegment+ (isIncreasing==1?1:0);
 			bool nextPointIsOnIntersection = false;
-			
+
 			for (std::vector<IntersectionInShape>::iterator it = intersections.begin(); it != intersections.end(); it++)
-			{					
+			{
 				if (currentSegment == it->index[shapeSelector])
 				{
 					if (((it->position-currentPosition).dotProduct(it->position-inputShapes[shapeSelector]->getPoint(nextPoint)) < 0)
@@ -345,12 +350,12 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 							outputShape.close();
 							break;
 						}
-					}							
+					}
 			}
-			
+
 			// We actually found the next intersection => change direction and add current intersection to the list
 			if (found_next_intersection != intersections.end())
-			{ 
+			{
 				IntersectionInShape currentIntersection = *found_next_intersection;
 				intersections.erase(found_next_intersection);
 				outputShape.addPoint(currentIntersection.position);
@@ -361,12 +366,12 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 				}
 			}
 			else
-			{ // no intersection found for the moment => just continue on the current segment	
+			{ // no intersection found for the moment => just continue on the current segment
 				if (!nextPointIsOnIntersection)
 				{
 				if (isIncreasing ==1)
 					currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment+1);
-				else 
+				else
 					currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment);
 
 				outputShape.addPoint(currentPosition);
@@ -377,7 +382,7 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 
 		outputMultiShape.addShape(outputShape);
 	}
-	return outputMultiShape;	
+	return outputMultiShape;
 }
 //-----------------------------------------------------------------------
 bool Shape::isPointInside(const Vector2& point) const
@@ -394,8 +399,8 @@ bool Shape::isPointInside(const Vector2& point) const
 		Vector2 B = getPoint(i+1);
 		if (A.y!=B.y && (A.y-point.y)*(B.y-point.y)<=0.)
 		{
-			Vector2 intersect(A.x+(point.y-A.y)*(B.x-A.x)/(B.y-A.y), point.y);			
-			float dist = abs(point.x-intersect.x);
+			Vector2 intersect(A.x+(point.y-A.y)*(B.x-A.x)/(B.y-A.y), point.y);
+			float dist = Math::Abs(point.x-intersect.x);
 			if (dist<closestSegmentDistance)
 			{
 				closestSegmentIndex = i;
@@ -406,14 +411,14 @@ bool Shape::isPointInside(const Vector2& point) const
 	}
 	if (closestSegmentIndex!=-1)
 	{
-		if (getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0)		
+		if (getNormalAfter(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0)
 			return true;
 		else
 			return false;
 	}
 	if (findRealOutSide() == mOutSide)
 		return false;
-	else 
+	else
 		return true;
 }
 //-----------------------------------------------------------------------
@@ -422,9 +427,9 @@ MeshPtr Shape::realizeMesh(const std::string& name)
 	Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 	ManualObject * manual = smgr->createManualObject();
 	manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
-	
+
 	_appendToManualObject(manual);
-	
+
 	manual->end();
 	MeshPtr mesh;
 	if (name=="")
@@ -437,14 +442,14 @@ MeshPtr Shape::realizeMesh(const std::string& name)
 //-----------------------------------------------------------------------
 void Shape::_appendToManualObject(ManualObject* manual)
 {
-	for (std::vector<Vector2>::iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)		
-		manual->position(Vector3(itPos->x, itPos->y, 0.f));		
+	for (std::vector<Vector2>::iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)
+		manual->position(Vector3(itPos->x, itPos->y, 0.f));
 	if (mClosed)
 		manual->position(Vector3(mPoints.begin()->x, mPoints.begin()->y, 0.f));
 }
 //-----------------------------------------------------------------------
 MultiShape Shape::thicken(Real amount)
-	{		
+	{
 		if (!mClosed)
 		{
 			Shape s;
@@ -455,8 +460,8 @@ MultiShape Shape::thicken(Real amount)
 				s.addPoint(mPoints[i]-amount*getAvgNormal(i));
 			s.close();
 			return MultiShape().addShape(s);
-		} 
-		else 
+		}
+		else
 		{
 			MultiShape ms;
 			Shape s1;
@@ -466,12 +471,12 @@ MultiShape Shape::thicken(Real amount)
 			s1.setOutSide(mOutSide);
 			ms.addShape(s1);
 			Shape s2;
-			for (unsigned int i=0;i<mPoints.size();i++)			
+			for (unsigned int i=0;i<mPoints.size();i++)
 				s2.addPoint(mPoints[i]-amount*getAvgNormal(i));
 			s2.close();
 			s2.setOutSide(mOutSide==SIDE_LEFT?SIDE_RIGHT:SIDE_LEFT);
 			ms.addShape(s2);
-			return ms;						
+			return ms;
 		}
 	}
 //-----------------------------------------------------------------------
@@ -503,12 +508,12 @@ Shape Shape::mergeKeysWithTrack(const Track& track) const
 	if (!track.isInsertPoint() || track.getAddressingMode() == Track::AM_POINT)
 		return *this;
 	Real totalLength=getTotalLength();
-	
+
 	Real lineicPos = 0;
 	Real shapeLineicPos = 0;
 	Shape outputShape;
 	if (mClosed)
-		outputShape.close();	
+		outputShape.close();
 	outputShape.addPoint(getPoint(0));
 	for (unsigned int i = 1; i < mPoints.size(); )
 	{
@@ -524,7 +529,7 @@ Shape Shape::mergeKeysWithTrack(const Track& track) const
 		if (nextLineicPos<=nextTrackPos || lineicPos>=nextTrackPos)
 		{
 			outputShape.addPoint(mPoints[i]);
-			i++;				
+			i++;
 			lineicPos = nextLineicPos;
 			shapeLineicPos = nextLineicPos;
 		}

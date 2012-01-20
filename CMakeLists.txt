@@ -33,15 +33,14 @@ if (NOT DEFINED BOOST_ROOT)
 	if (EXISTS "${OGRE_HOME}/boost_1_44")
 		message(STATUS "setting BOOST_ROOT")
 		set (BOOST_ROOT "${OGRE_HOME}/boost_1_44" CACHE PATH "boost root")
-		message(STATUS "${BOOST_ROOT}")
-		
+		message(STATUS "${BOOST_ROOT}")		
 	endif()
 endif()
 
 find_package(Boost)
 
 if (Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
+  include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
   link_directories(${Boost_LIBRARY_DIRS})
 endif ()
 

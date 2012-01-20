@@ -64,9 +64,8 @@ set( SRCS
 		src/ProceduralGeometryHelpers.cpp
 	)
 
-include_directories( ${OIS_INCLUDE_DIRS}
+include_directories(${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
-	${OGRE_SAMPLES_INCLUDEPATH}
 )
 
 # should we build static libs?

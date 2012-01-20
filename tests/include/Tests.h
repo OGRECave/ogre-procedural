@@ -34,19 +34,20 @@ using namespace Ogre;
 using namespace Procedural;
 
 class Unit_Test
-{	
+{
 protected:
 	SceneManager* mSceneMgr;
 
 	std::vector<Entity*> mEntities;
 	std::vector<SceneNode*> mSceneNodes;
-	Ogre::Timer mTimer;
+	Timer mTimer;
 
 	void putMesh(const String& meshName, int materialIndex=0)
 	{
 		Entity* ent = mSceneMgr->createEntity(meshName);
 		SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 		sn->attachObject(ent);
+		sn->showBoundingBox(true);
 		switch (materialIndex)
 		{
 			case 1:ent->setMaterialName("Examples/Rockwall");break;
@@ -70,14 +71,14 @@ protected:
 
 public:
 	Unit_Test(SceneManager* sn) : mSceneMgr(sn) {}
-	
+
 	virtual String getDescription()=0;
 	virtual void initImpl()=0;
 
-	void rotate(Ogre::Real amount)
+	void rotate(Real amount)
 	{
 		for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it!=mSceneNodes.end();it++)
-			(*it)->rotate(Ogre::Vector3::UNIT_Y, (Ogre::Radian)amount);
+			(*it)->rotate(Vector3::UNIT_Y, (Radian)amount);
 	}
 
 	double init()
@@ -85,22 +86,22 @@ public:
 		Utils::log("Loading test : " + getDescription());
 		mTimer.reset();
 		initImpl();
-		Utils::log("Test loaded in : " + Ogre::StringConverter::toString(mTimer.getMicroseconds() / 1000000.0f) + " ms");
-		return mTimer.getMicroseconds() / 1000000.0f;
+		Utils::log("Test loaded in : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
+		return mTimer.getMicroseconds() / 1000.0f;
 	}
 
 	void destroy()
 	{
-		for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it != mSceneNodes.end(); it++) 
+		for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it != mSceneNodes.end(); it++)
 		{
 			(*it)->detachAllObjects();
 			mSceneMgr->destroySceneNode(*it);
 		}
 		for (std::vector<Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); it++)
 		{
-			MeshManager::getSingletonPtr()->remove((*it)->getMesh()->getName());			
+			MeshManager::getSingletonPtr()->remove((*it)->getMesh()->getName());
 			mSceneMgr->destroyEntity(*it);
-		}		
+		}
 		mEntities.clear();
 		mSceneNodes.clear();
 	}
@@ -111,7 +112,7 @@ class Unit_Tests : public BaseApplication
 	/* --------------------------------------------------------------------------- */
 	class Test_Primitives : public Unit_Test
 	{
-	public:		
+	public:
 		Test_Primitives(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
@@ -120,24 +121,24 @@ class Unit_Tests : public BaseApplication
 		}
 
 		void initImpl()
-		{			
+		{
 			putMesh(BoxGenerator().realizeMesh(), 1);
 			putMesh(CapsuleGenerator().realizeMesh(), 1);
 			putMesh(ConeGenerator().realizeMesh(), 1);
 			putMesh(CylinderGenerator().realizeMesh(), 1);
 			putMesh(IcoSphereGenerator().realizeMesh(), 1);
 			putMesh(PlaneGenerator().realizeMesh(), 1);
-			putMesh(RoundedBoxGenerator().realizeMesh(), 1);			
+			putMesh(RoundedBoxGenerator().realizeMesh(), 1);
 			putMesh(SphereGenerator().realizeMesh(), 1);
 			putMesh(TorusGenerator().realizeMesh(), 1);
 			putMesh(TorusKnotGenerator().realizeMesh(), 1);
 			putMesh(TubeGenerator().realizeMesh(), 1);
 		}
-	};	
+	};
 	/* --------------------------------------------------------------------------- */
 	class Test_Triangulation : public Unit_Test
 	{
-	public:		
+	public:
 		Test_Triangulation(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
@@ -157,18 +158,18 @@ class Unit_Tests : public BaseApplication
 				ms.addShape(s);
 			}
 			putMesh(ms.realizeMesh());
-						
+
 			putMesh(Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh());
 
 			Path p = LinePath().realizePath();
 			Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p).realizeMesh("extrudedMesh");
 			putMesh("extrudedMesh",1);
 
-			Shape s = Shape().addPoint(0.2,.9).addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,2).addPoint(2,2).addPoint(2,-1).addPoint(0.,-.2).setOutSide(SIDE_LEFT).close();			
-			putMesh(s.realizeMesh());
-			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh());
+			Shape s = Shape().addPoint(0.2,.9).addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,2).addPoint(2,2).addPoint(2,-1).addPoint(0.,-.2).setOutSide(SIDE_LEFT).close();
+			putMesh(s.realizeMesh(),1);
+			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh(),1);
 
-			Shape s3 = CircleShape().setNumSeg(16).realizeShape();						
+			Shape s3 = CircleShape().setNumSeg(16).realizeShape();
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
 			s3.translate(Vector2(.01,0));
@@ -187,8 +188,8 @@ class Unit_Tests : public BaseApplication
 				 .addPointRel(2.15635,12.35003).addPointRel(30.58104,-0.19603).addPointRel(2.35239,-4.70477)
 				 .addPointRel(23.13181,0).addPointRel(-0.19604,7.8412902).addPointRel(-131.92973,0)
 			     .close()
-			     .scale(.1);				
-			
+			     .scale(.1);
+
 			putMesh(Triangulator().setShapeToTriangulate(&s4).realizeMesh());
 
 			//   Schema:
@@ -207,15 +208,37 @@ class Unit_Tests : public BaseApplication
 				.addPoint(1,-0.5)    // 8
 				.close();
 
-			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());		
-						
+			putMesh(Triangulator().setShapeToTriangulate(&s5)._setDumpToFile("triangulator_bug.yaml").realizeMesh());
+
+			// Tests for the "shape order bug": if a multishape contains shapes in an order or the opposite, artifacts may happen
+			{
+				Shape s6 = CircleShape().realizeShape();
+				Shape s7 = Shape(s6).scale(.5).switchSide();
+				MultiShape ms(2, &s7, &s6);
+				putMesh(Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh());
+
+				MultiShape ms2(2, &s6, &s7);
+				putMesh(Triangulator().setMultiShapeToTriangulate(&ms2).realizeMesh());
+
+			}
+
+			{
+				Shape s2 = RectangleShape().setHeight(.5).realizeShape().switchSide();
+				Shape s3 = s2;
+				s3.scale(1.5).switchSide();
+				MultiShape ms(2, &s3, &s2);
+				putMesh(Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh());
+
+				MultiShape ms2(2, &s2, &s3);
+				putMesh(Triangulator().setMultiShapeToTriangulate(&ms2).realizeMesh());
+			}
 		}
 	};
 
 	/* --------------------------------------------------------------------------- */
 	class Test_ShapeBoolean : public Unit_Test
 	{
-	public:		
+	public:
 		Test_ShapeBoolean(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
@@ -228,13 +251,13 @@ class Unit_Tests : public BaseApplication
 			//CSG
 			Shape s1 = CircleShape().realizeShape();
 			Shape s2 = RectangleShape().setWidth(0.5).setHeight(2).realizeShape();
-			
+
 			s1.realizeMesh("contour1");
 			putMesh("contour1");
 			s2.realizeMesh("contour2");
 			putMesh("contour2");
 			MultiShape s;
-			s = s1.booleanIntersect(s2);			
+			s = s1.booleanIntersect(s2);
 			s.realizeMesh("contourinter");
 			putMesh("contourinter");
 			s = s1.booleanUnion(s2);
@@ -249,7 +272,7 @@ class Unit_Tests : public BaseApplication
 	/* --------------------------------------------------------------------------- */
 	class Test_ShapeThick : public Unit_Test
 	{
-	public:		
+	public:
 		Test_ShapeThick(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
@@ -276,7 +299,7 @@ class Unit_Tests : public BaseApplication
 		/* --------------------------------------------------------------------------- */
 	class Test_Splines : public Unit_Test
 	{
-	public:		
+	public:
 		Test_Splines(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
@@ -299,7 +322,7 @@ class Unit_Tests : public BaseApplication
 			putMesh(cs.realizeShape().realizeMesh());
 
 			// CubicHermite Spline
-			CubicHermiteSpline2 chs;			
+			CubicHermiteSpline2 chs;
 			chs.addPoint(Vector2(0,0), Vector2(0,1), Vector2(0,1))
 			   .addPoint(Vector2(0,2), Vector2(1,0), Vector2(0,1))
 			   .addPoint(Vector2(2,2), Vector2(0,1), Vector2(0,1))
@@ -356,7 +379,7 @@ class Unit_Tests : public BaseApplication
 			putMesh(cs3.realizePath().realizeMesh());
 
 			// CubicHermite Spline3
-			CubicHermiteSpline3 chs3;			
+			CubicHermiteSpline3 chs3;
 			chs3.addPoint(Vector3(0,0,0), Vector3(0,1,0), Vector3(0,1,0))
 			   .addPoint(Vector3(0,2,0), Vector3(1,0,0), Vector3(0,1,0))
 			   .addPoint(Vector3(2,2,0), Vector3(0,1,0), Vector3(0,1,0))
@@ -391,7 +414,7 @@ class Unit_Tests : public BaseApplication
 	/* --------------------------------------------------------------------------- */
 	class Test_Extruder : public Unit_Test
 	{
-	public:		
+	public:
 		Test_Extruder(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
@@ -408,11 +431,11 @@ class Unit_Tests : public BaseApplication
 			Path line2 = LinePath().betweenPoints(Vector3(1,10,0), Vector3::ZERO).setNumSeg(2).realizePath();
 			Extruder e;
 			e.setCapped(false);
-			
+
 			// linear extrusion
-			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);			
-			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh(),1);			
-			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh(),1);			
+			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);
+			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh(),1);
+			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh(),1);
 			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line2).realizeMesh(),1);
 			}
 
@@ -465,13 +488,13 @@ class Unit_Tests : public BaseApplication
 
 			{
 				// Test irregular texture distribution on shape
-				Shape circle = CircleShape().setNumSeg(20).realizeShape();			
+				Shape circle = CircleShape().setNumSeg(20).realizeShape();
 				//Path line = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
 				Path line = RoundedCornerSpline3().addPoint(0,0,0).addPoint(0,4,0).addPoint(0,6,2).addPoint(0,10,2).realizePath();
 				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.2).addKeyFrame(1,1);
 				Extruder ex;
 				putMesh(ex.setShapeToExtrude(&circle).setExtrusionPath(&line).setShapeTextureTrack(&t).realizeMesh(),1);
-				
+
 				// Test irregular texture distribution on path
 				putMesh(ex.setShapeTextureTrack(0).setPathTextureTrack(&t).realizeMesh(), 1);
 
@@ -483,7 +506,7 @@ class Unit_Tests : public BaseApplication
 				Shape s = Shape().addPoint(-1,-1).addPoint(1,-1).addPoint(1,1).addPoint(0,0).addPoint(-1,1).close();
 				Path p = RoundedCornerSpline3().addPoint(-10,5,-2.5).addPoint(-5,0,-2.5).addPoint(0,0,2.5).addPoint(5,0,-2.5).setRadius(2.).realizePath();
 				MeshPtr mp = Extruder().setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh();
-				putMesh(mp, 1);					
+				putMesh(mp, 1);
 
 				Shape s2 = RectangleShape().setHeight(.5).realizeShape();
 				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.0).addKeyFrame(1.0,1.0);
@@ -492,13 +515,50 @@ class Unit_Tests : public BaseApplication
 				putMesh(mp, 1);
 			}
 
+			{
+				MeshPtr mp;
+				Shape s2 = RectangleShape().setHeight(.5).realizeShape().switchSide();
+				Shape s3 = s2;
+				s3.scale(1.5).switchSide();
+				MultiShape ms = MultiShape(2, &s2, &s3);
+				Path p3 = CatmullRomSpline3().addPoint(0,5,-5).addPoint(0,0,0).addPoint(0,0,5).realizePath();
+				mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
+				putMesh(mp, 1);
+			}
+
+			{
+				MeshPtr mp;
+				Path p;
+				for (int i=0;i<32*32;i++)
+				{
+					Radian r1 = (Radian)i/1024.*Math::TWO_PI;
+					Radian r2 = (Radian)i/32.*Math::TWO_PI;
+					Vector3 v (1+.5*Math::Cos(r2), .5*Math::Sin(r2), 0);
+					Quaternion q;
+					q.FromAngleAxis(r1, Vector3::UNIT_Y);
+					p.addPoint(q*v);
+				}
+				Shape s = RectangleShape().setWidth(.1).setHeight(.05).realizeShape();
+				mp = Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh();
+				putMesh(mp,1);
+			}
+
+			{
+				MeshPtr mp;
+				Shape s2 = RectangleShape().setHeight(.5).realizeShape();
+				MultiShape ms = MultiShape(2, &(s2.switchSide()), &(Shape(s2).scale(1.5)));
+				Path p3 = CatmullRomSpline3().addPoint(0,5,-5).addPoint(0,0,0).addPoint(0,0,5).realizePath();
+				mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
+				putMesh(mp,1);
+			}
+
 		}
 	};
 
 	/* --------------------------------------------------------------------------- */
 	class Test_Lathe : public Unit_Test
 	{
-	public:		
+	public:
 		Test_Lathe(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
@@ -523,13 +583,24 @@ class Unit_Tests : public BaseApplication
 
 			l.setAngleBegin(Degree(200)).setAngleEnd(Degree(90));
 			putMesh(l.realizeMesh(),1);
+
+			Procedural::Shape outerCircleShape = Procedural::CircleShape().setRadius(4.f).setNumSeg(50).realizeShape().translate(10,0);
+			Procedural::Shape innerCircleShape = Procedural::CircleShape().setRadius(3.8).setNumSeg(50).realizeShape().translate(10,0);
+
+			Procedural::MultiShape tubeMultiShape = outerCircleShape.booleanDifference(innerCircleShape);
+
+			//Procedural::MultiShape tubeMultiShape(2, outerCircleShape, innerCircleShape);
+
+			putMesh(Procedural::Lathe().setMultiShapeToExtrude(&tubeMultiShape).setNumSeg(30).setAngleBegin((Ogre::Radian)0.).setAngleEnd((Ogre::Radian)Ogre::Math::PI).realizeMesh(), 1);
+
+
 		}
 	};
 
 	/* --------------------------------------------------------------------------- */
 	class Test_InvertNormals : public Unit_Test
 	{
-	public:		
+	public:
 		Test_InvertNormals(SceneManager* sn) : Unit_Test(sn) {}
 
 		String getDescription()
@@ -562,12 +633,12 @@ class Unit_Tests : public BaseApplication
 			mUnitTests[mCurrentTestIndex]->destroy();
 
 		double time = mUnitTests[index]->init();
-		Ogre::String test_description = mUnitTests[index]->getDescription();
+		String test_description = mUnitTests[index]->getDescription();
 
 		// update text here:
 		String txt = "[OgreProcedural Unit Tests] (Use key N/M to switch between tests)\n";
-		txt += "[" + Ogre::StringConverter::toString(index+1) + "/" + Ogre::StringConverter::toString(mUnitTests.size()) + "] ";
-		
+		txt += "[" + StringConverter::toString(index+1) + "/" + StringConverter::toString(mUnitTests.size()) + "] ";
+
 		// and add the description
 		txt += test_description;
 
@@ -577,7 +648,7 @@ class Unit_Tests : public BaseApplication
 		txt += String(time_str);
 
 		// and finally set it
-		Ogre::OverlayManager::getSingleton().getOverlayElement("myText")->setCaption(txt);
+		OverlayManager::getSingleton().getOverlayElement("myText")->setCaption(txt);
 
 
 		mCurrentTestIndex = index;
@@ -594,13 +665,13 @@ class Unit_Tests : public BaseApplication
 
 protected:
 	bool keyReleased( const OIS::KeyEvent &arg )
-	{		
+	{
 		if (arg.key == OIS::KC_M || arg.key == OIS::KC_ADD || arg.key == OIS::KC_PGDOWN)
 		{
 			nextTest();
 			return true;
 		}
-		if (arg.key == OIS::KC_N || arg.key == OIS::KC_SUBTRACT || arg.key == OIS::KC_PGUP)		
+		if (arg.key == OIS::KC_N || arg.key == OIS::KC_SUBTRACT || arg.key == OIS::KC_PGUP)
 		{
 			previousTest();
 			return true;
@@ -626,13 +697,13 @@ protected:
 	}
 
 	virtual void createScene(void);
-	
+
 	virtual void createCamera(void);
 
 	virtual void createViewports(void);
-	
+
 	virtual bool frameStarted(const FrameEvent& evt);
-		
+
 	virtual void destroyScene(void);
 public:
 	Unit_Tests() : mCurrentTestIndex(-1) // -1 so the first test will always be loaded

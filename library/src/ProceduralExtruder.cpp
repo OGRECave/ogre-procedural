@@ -65,12 +65,20 @@ namespace Procedural
 		buffer.estimateIndexCount(numSegShape*numSegPath*6);
 		buffer.estimateVertexCount((numSegShape+1)*(numSegPath+1));
 				
+		Vector3 oldup;
 		for (unsigned int i = 0; i <= numSegPath; ++i)
 		{
 			Vector3 v0 = path.getPoint(i);
 			Vector3 direction = path.getAvgDirection(i);
 
 			Quaternion q = Utils::_computeQuaternion(direction);
+						
+			Radian angle = (q*Vector3::UNIT_Y).angleBetween(oldup);
+			if (i>0 && angle>(Radian)Math::HALF_PI/2.)
+			{
+				q = Utils::_computeQuaternion(direction, oldup);
+			}
+			oldup = q * Vector3::UNIT_Y;
 
 			Real scale=1.;
 					
