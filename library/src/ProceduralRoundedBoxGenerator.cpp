@@ -151,34 +151,40 @@ void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	// Generate the pseudo-box shape
 	PlaneGenerator pg;
 	pg.setUTile(mUTile).setVTile(mVTile);
+	if (mTransform)
+	{
+		pg.setScale(mScale);
+		pg.setOrientation(mOrientation);
+	}
+
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Vector3::NEGATIVE_UNIT_Z)
-	  .setPosition((.5f*mSizeZ+mChamferSize)*Vector3::NEGATIVE_UNIT_Z)
+	  .setPosition((.5f*mSizeZ+mChamferSize)*(mOrientation*Vector3::NEGATIVE_UNIT_Z))
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Vector3::UNIT_Z)
-	  .setPosition((.5f*mSizeZ+mChamferSize)*Vector3::UNIT_Z)
+	  .setPosition((.5f*mSizeZ+mChamferSize)*(mOrientation*Vector3::UNIT_Z))
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Vector3::NEGATIVE_UNIT_Y)
-	  .setPosition((.5f*mSizeY+mChamferSize)*Vector3::NEGATIVE_UNIT_Y)
+	  .setPosition((.5f*mSizeY+mChamferSize)*(mOrientation*Vector3::NEGATIVE_UNIT_Y))
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Vector3::UNIT_Y)
-	  .setPosition((.5f*mSizeY+mChamferSize)*Vector3::UNIT_Y)
+	  .setPosition((.5f*mSizeY+mChamferSize)*(mOrientation*Vector3::UNIT_Y))
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Vector3::NEGATIVE_UNIT_X)
-	  .setPosition((.5f*mSizeX+mChamferSize)*Vector3::NEGATIVE_UNIT_X)
+	  .setPosition((.5f*mSizeX+mChamferSize)*(mOrientation*Vector3::NEGATIVE_UNIT_X))
 	  .addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Vector3::UNIT_X)
-	  .setPosition((.5f*mSizeX+mChamferSize)*Vector3::UNIT_X)
+	  .setPosition((.5f*mSizeX+mChamferSize)*(mOrientation*Vector3::UNIT_X))
 	  .addToTriangleBuffer(buffer);
 
 	// Generate the corners
