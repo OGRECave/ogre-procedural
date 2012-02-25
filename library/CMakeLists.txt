@@ -64,7 +64,7 @@ set( SRCS
 		src/ProceduralGeometryHelpers.cpp
 	)
 
-include_directories(${OIS_INCLUDE_DIRS}
+include_directories(SYSTEM ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 )
 
