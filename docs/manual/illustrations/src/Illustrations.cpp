@@ -66,9 +66,14 @@ using namespace Procedural;
 				archName, typeName, secName);
 		}
 	}
-
+	/*
 	if (!mRoot->restoreConfig())
-		mRoot->showConfigDialog();
+		mRoot->showConfigDialog();*/
+	RenderSystem* rs = *mRoot->getAvailableRenderers().begin();
+	rs->setConfigOption("Full Screen", "No");
+	rs->setConfigOption("Video Mode", "800 x 600 @ 32-bit colour");	
+	
+	mRoot->setRenderSystem(rs);	
 		 
 	mWindow = mRoot->initialise(true, ""); 
 	mWindow->resize(256,256);
