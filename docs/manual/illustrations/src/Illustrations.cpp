@@ -284,7 +284,7 @@ void Illustrations::go()
 
 		cameraFront();
 		Shape s3 = CircleShape().setNumSeg(16).realizeShape();
-		MultiShape ms = MultiShape(2, s3.switchSide(), Shape(s3).scale(1.1));
+		MultiShape ms = MultiShape(2, &s3.switchSide(), &Shape(s3).scale(1.1));
 		Path p3 = CatmullRomSpline3().addPoint(0,0,-5).addPoint(0,0,0).addPoint(1,-1,5).realizePath();		
 		mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
 		putMesh(mp);
