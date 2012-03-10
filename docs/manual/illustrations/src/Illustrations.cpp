@@ -75,7 +75,8 @@ using namespace Procedural;
 	
 	mRoot->setRenderSystem(rs);	
 		 
-	mWindow = mRoot->initialise(true, ""); 
+	mWindow = mRoot->initialise(true); 
+	mWindow->setDeactivateOnFocusChange(false);
 	mWindow->resize(256,256);
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
@@ -99,6 +100,8 @@ void Illustrations::next(std::string name, Real size)
 	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
 	// Write scene to png image
+	mRoot->renderOneFrame();
+	mRoot->renderOneFrame();
 	mRoot->renderOneFrame();
 	mWindow->writeContentsToFile(name + ".png");
 
