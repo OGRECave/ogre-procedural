@@ -15,15 +15,29 @@ If you need more detailed information about how to use a specific functionality,
 
 .Precompiled SDK
 
-If you got the precompiled SDK, 
+If you got the precompiled SDK, just set the OgreProcedural_HOME environment variable to your SDK folder.
 
 .Source package
 
-You first have to build
+These are the detailed steps in order to build the SDK :
+- Make sure CMake and the Ogre3d SDK are present on your system.
+- Open CMake, set the source directory as the root directory of Ogre Procedural, choose anything you want for the build directory.
+- Click 'Add Entry'. Add the 'OGRE_HOME' variable (type=PATH), its value being the root folder of Ogre3d SDK.
+- Click 'configure', then 'generate'
+- Your project file is now ready to be used. Build the target 'INSTALL' in order to get a working SDK, which will be in the 'sdk' subfolder.
 
-=== Usage
+=== Use
 
+1. If you don't use CMake in your project
 
+- Setup your IDE to use OgreProcedural's 'include' and 'lib' subdirectories.
+- Copy the dynamic libraries OgreProcedural and OgreProcedural_d to a directory where they can be seen by your main executable.
+
+2. If you use CMake in your project
+
+- Copy FindOgreProcedural.cmake to a location where your CMake can use it.
+- Setup OgreProcedural_HOME (either as system environnement variable or CMake variable) to point to OgreProcedural's SDK folder.
+- When OgreProcedural is found, OgreProcedural_INCLUDE_DIRS and OgreProcedural_LIBRARIES are defined as CMake variables.
 
 == Mesh primitives
 
