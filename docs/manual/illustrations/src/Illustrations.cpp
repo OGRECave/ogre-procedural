@@ -69,7 +69,14 @@ using namespace Procedural;
 	/*
 	if (!mRoot->restoreConfig())
 		mRoot->showConfigDialog();*/
-	RenderSystem* rs = *mRoot->getAvailableRenderers().begin();
+	const RenderSystemList& rsList = mRoot->getAvailableRenderers();
+	RenderSystem* rs = *rsList.begin();
+	for (RenderSystemList::const_iterator it=rsList.begin();it!=rsList.end();it++)
+	{
+		if ((*it)->getName().find("GL") != String::npos)
+			rs = *it;
+	}
+	
 	rs->setConfigOption("Full Screen", "No");
 	rs->setConfigOption("Video Mode", "800 x 600 @ 32-bit colour");	
 	
