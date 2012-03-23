@@ -76,7 +76,11 @@ using namespace Procedural;
 		if ((*it)->getName().find("GL") != String::npos)
 			rs = *it;
 	}
-	
+
+	ConfigOptionMap optionMap = rs->getConfigOptions();
+	String fsaaSetting = optionMap["FSAA"].possibleValues.back();
+	rs->setConfigOption("FSAA", fsaaSetting);
+
 	rs->setConfigOption("Full Screen", "No");
 	rs->setConfigOption("Video Mode", "800 x 600 @ 32-bit colour");	
 	
