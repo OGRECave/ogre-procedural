@@ -42,11 +42,10 @@ find_package(OgreProcedural REQUIRED)
 
 if (NOT DEFINED BOOST_ROOT)
 	message(STATUS "BOOST_ROOT not defined. Searching for it in ogre subdir")
-	if (EXISTS "${OGRE_HOME}/boost_1_44")
-		message(STATUS "setting BOOST_ROOT")
-		set (BOOST_ROOT "${OGRE_HOME}/boost_1_44" CACHE PATH "boost root")
-		message(STATUS "${BOOST_ROOT}")
-		
+	file(GLOB BOOST_POSSIBLE_PATH "${OGRE_HOME}/boost*")
+	if (EXISTS "${BOOST_POSSIBLE_PATH}")
+		message(STATUS "setting BOOST_ROOT=${BOOST_POSSIBLE_PATH}")
+		set (BOOST_ROOT "${BOOST_POSSIBLE_PATH}" CACHE PATH "boost root")
 	endif()
 endif()
 
