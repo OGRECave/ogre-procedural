@@ -19,6 +19,11 @@ elseif (UNIX)
   set(CMAKE_MODULE_PATH "${OGRE_ROOT_DIR}/lib/OGRE/cmake")
 endif ()
 
+# Set a default build type for mingw, as it doesn't like it being empty
+if (MINGW)
+	set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 set(OgreProcedural_VERSION_DASH_SEPARATED "0.2")
 
 set(CMAKE_PREFIX_PATH "${OgreProcedural_ROOT_DIR}")
