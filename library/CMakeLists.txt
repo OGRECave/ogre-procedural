@@ -64,7 +64,7 @@ set( SRCS
 		src/ProceduralGeometryHelpers.cpp
 	)
 
-include_directories(${OIS_INCLUDE_DIRS}
+include_directories(SYSTEM ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 )
 
@@ -76,10 +76,14 @@ else ()
   add_definitions(-DOgreProcedural_SHARED)
 endif ()
 
+option(OgreProcedural_HARDENEDBUILDFLAGS "Hardened build flags" FALSE)
+
+if (OgreProcedural_HARDENEDBUILDFLAGS)
 if(MSVC) # Sort the odd stuff out
     add_definitions("/WX /MP /EHsc")
 else() # Clang/GCC/Mingw
     add_definitions("-Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-but-set-parameter -pedantic -std=c++0x")
+endif()
 endif()
 
 add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})

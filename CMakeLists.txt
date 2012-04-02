@@ -30,10 +30,10 @@ find_package(OGRE REQUIRED)
 
 if (NOT DEFINED BOOST_ROOT)
 	message(STATUS "BOOST_ROOT not defined. Searching for it in ogre subdir")
-	if (EXISTS "${OGRE_HOME}/boost_1_44")
-		message(STATUS "setting BOOST_ROOT")
-		set (BOOST_ROOT "${OGRE_HOME}/boost_1_44" CACHE PATH "boost root")
-		message(STATUS "${BOOST_ROOT}")		
+	file(GLOB BOOST_POSSIBLE_PATH "${OGRE_HOME}/boost*")
+	if (EXISTS "${BOOST_POSSIBLE_PATH}")
+		message(STATUS "setting BOOST_ROOT=${BOOST_POSSIBLE_PATH}")
+		set (BOOST_ROOT "${BOOST_POSSIBLE_PATH}" CACHE PATH "boost root")
 	endif()
 endif()
 
@@ -49,7 +49,7 @@ find_package(Doxygen)
 option(OgreProcedural_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(OgreProcedural_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
 option(OgreProcedural_INSTALL_DOCS "Install documentation." FALSE)
-option(OgreProcedural_STATIC "Static build" TRUE)
+option(OgreProcedural_STATIC "Static build" FALSE)
 option(OgreProcedural_ILLUSTRATIONS "Build illustrations for manual" FALSE)
 
 # Set docs target directory

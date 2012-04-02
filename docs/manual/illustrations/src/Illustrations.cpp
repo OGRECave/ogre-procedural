@@ -66,11 +66,28 @@ using namespace Procedural;
 				archName, typeName, secName);
 		}
 	}
-
+	/*
 	if (!mRoot->restoreConfig())
-		mRoot->showConfigDialog();
+		mRoot->showConfigDialog();*/
+	const RenderSystemList& rsList = mRoot->getAvailableRenderers();
+	RenderSystem* rs = *rsList.begin();
+	for (RenderSystemList::const_iterator it=rsList.begin();it!=rsList.end();it++)
+	{
+		if ((*it)->getName().find("GL") != String::npos)
+			rs = *it;
+	}
+
+	ConfigOptionMap optionMap = rs->getConfigOptions();
+	String fsaaSetting = optionMap["FSAA"].possibleValues.back();
+	rs->setConfigOption("FSAA", fsaaSetting);
+
+	rs->setConfigOption("Full Screen", "No");
+	rs->setConfigOption("Video Mode", "800 x 600 @ 32-bit colour");	
+	
+	mRoot->setRenderSystem(rs);	
 		 
-	mWindow = mRoot->initialise(true, ""); 
+	mWindow = mRoot->initialise(true); 
+	mWindow->setDeactivateOnFocusChange(false);
 	mWindow->resize(256,256);
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
@@ -94,6 +111,8 @@ void Illustrations::next(std::string name, Real size)
 	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
 	// Write scene to png image
+	mRoot->renderOneFrame();
+	mRoot->renderOneFrame();
 	mRoot->renderOneFrame();
 	mWindow->writeContentsToFile(name + ".png");
 
@@ -284,7 +303,7 @@ void Illustrations::go()
 
 		cameraFront();
 		Shape s3 = CircleShape().setNumSeg(16).realizeShape();
-		MultiShape ms = MultiShape(2, s3.switchSide(), Shape(s3).scale(1.1));
+		MultiShape ms = MultiShape(2, &s3.switchSide(), &Shape(s3).scale(1.1));
 		Path p3 = CatmullRomSpline3().addPoint(0,0,-5).addPoint(0,0,0).addPoint(1,-1,5).realizePath();		
 		mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
 		putMesh(mp);

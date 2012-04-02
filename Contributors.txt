@@ -1,11 +1,8 @@
-This file keeps track of contributors on OgreProcedural. Contributors are
-identifier by their username on the ogre forum.
-See also there:
-    http://www.ogre3d.org/forums/viewtopic.php?f=11&t=60773
-    http://www.ogre3d.org/tikiwiki/Ogre+Procedural+Geometry+Library
+This file keeps track of contributors on OgreProcedural. 
+Contributors are identified by their username on the ogre forum.
 
 Maintainers:
-    - Michael Broutin (email):
+    - Michael Broutin (michael.broutin AT gmail.com):
         Original maintainer.
 
 Contributors:

@@ -48,27 +48,27 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	}
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Vector3::NEGATIVE_UNIT_Z)
-	  .setPosition(mPosition+.5f*mSizeZ*Vector3::NEGATIVE_UNIT_Z)
+	  .setPosition(mPosition+.5f*mSizeZ*(mOrientation*Vector3::NEGATIVE_UNIT_Z))
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	  .setNormal(Vector3::UNIT_Z)
-	  .setPosition(mPosition+.5f*mSizeZ*Vector3::UNIT_Z)
+	  .setPosition(mPosition+.5f*mSizeZ*(mOrientation*Vector3::UNIT_Z))
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Vector3::NEGATIVE_UNIT_Y)
-	  .setPosition(mPosition+.5f*mSizeY*Vector3::NEGATIVE_UNIT_Y)
+	  .setPosition(mPosition+.5f*mSizeY*(mOrientation*Vector3::NEGATIVE_UNIT_Y))
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	  .setNormal(Vector3::UNIT_Y)
-	  .setPosition(mPosition+.5f*mSizeY*Vector3::UNIT_Y)
+	  .setPosition(mPosition+.5f*mSizeY*(mOrientation*Vector3::UNIT_Y))
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Vector3::NEGATIVE_UNIT_X)
-	  .setPosition(mPosition+.5f*mSizeX*Vector3::NEGATIVE_UNIT_X)
+	  .setPosition(mPosition+.5f*mSizeX*(mOrientation*Vector3::NEGATIVE_UNIT_X))
 	  .addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	  .setNormal(Vector3::UNIT_X)
-	  .setPosition(mPosition+.5f*mSizeX*Vector3::UNIT_X)
+	  .setPosition(mPosition+.5f*mSizeX*(mOrientation*Vector3::UNIT_X))
 	  .addToTriangleBuffer(buffer);
 }
 }
