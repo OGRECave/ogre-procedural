@@ -44,9 +44,9 @@ void Sample_Extrusion::createScene(void)
 		Procedural::Shape s = Procedural::Shape().addPoint(-1.2f,.2f).addPoint(-1.f,.2f).addPoint(-.9f,.1f).addPoint(.9f,.1f).addPoint(1.f,.2f).addPoint(1.2f,.2f).scale(2).setOutSide(Procedural::SIDE_LEFT);
 		// This is an example use of a shape texture track, 
 		// which specifies how texture coordinates should be mapped relative to the shape points
-		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2).addKeyFrame(3,.8).addKeyFrame(5,1);
+		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2f).addKeyFrame(3,.8f).addKeyFrame(5,1);
 		// The extruder actually creates the road mesh from all parameters
-		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).setShapeTextureTrack(&textureTrack).setUTile(20.).realizeMesh("extrudedMesh");
+		Procedural::Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).setShapeTextureTrack(&textureTrack).setUTile(20.f).realizeMesh("extrudedMesh");
 		putMesh3("extrudedMesh");
 
 		// -- Pillar
@@ -60,12 +60,12 @@ void Sample_Extrusion::createScene(void)
 						Vector2(Math::Cos(i/(float)pillarSegs*Math::TWO_PI), Math::Sin(i/(float)pillarSegs*Math::TWO_PI)));
 		pillarBodyShape.close();
 		// We're also setting up a scale track, as traditionnal pillars are not perfectly straight
-		Procedural::Track pillarTrack = Procedural::CatmullRomSpline2().addPoint(0,1).addPoint(0.5,.95).addPoint(1,.8).realizeShape().convertToTrack(Procedural::Track::AM_RELATIVE_LINEIC);
+		Procedural::Track pillarTrack = Procedural::CatmullRomSpline2().addPoint(0,1).addPoint(0.5f,.95f).addPoint(1,.8f).realizeShape().convertToTrack(Procedural::Track::AM_RELATIVE_LINEIC);
 		// Creation of the pillar body
 		Procedural::TriangleBuffer pillarTB;
 		Procedural::Extruder().setExtrusionPath(&pillarBodyPath).setShapeToExtrude(&pillarBodyShape).setScaleTrack(&pillarTrack).setCapped(false).setPosition(0,1,0).addToTriangleBuffer(pillarTB);
 		// Creation of the top and the bottom of the pillar
-		Procedural::Shape s3 = Procedural::RoundedCornerSpline2().addPoint(-1,-.25).addPoint(-1,.25).addPoint(1,.25).addPoint(1,-.25).close().realizeShape().setOutSide(Procedural::SIDE_LEFT);
+		Procedural::Shape s3 = Procedural::RoundedCornerSpline2().addPoint(-1,-.25f).addPoint(-1,.25f).addPoint(1,.25f).addPoint(1,-.25f).close().realizeShape().setOutSide(Procedural::SIDE_LEFT);
 		Procedural::Path p3;
 		for (int i=0;i<32;i++)
 		{
@@ -94,13 +94,13 @@ void Sample_Extrusion::createScene(void)
 		Procedural::Shape jarreShape = Procedural::CubicHermiteSpline2().addPoint(Ogre::Vector2(0,0), Ogre::Vector2::UNIT_X, Ogre::Vector2::UNIT_X)
 																.addPoint(Ogre::Vector2(2,3))
 																.addPoint(Ogre::Vector2(.5,5), Ogre::Vector2(-1,1).normalisedCopy(), Ogre::Vector2::UNIT_Y)
-																.addPoint(Ogre::Vector2(1,7), Ogre::Vector2(1,1).normalisedCopy()).realizeShape().thicken(.1).getShape(0);
+																.addPoint(Ogre::Vector2(1,7), Ogre::Vector2(1,1).normalisedCopy()).realizeShape().thicken(.1f).getShape(0);
 		Procedural::Lathe().setShapeToExtrude(&jarreShape).addToTriangleBuffer(tb);
 		// Handle 1
-		Procedural::Shape jarreHandleShape = Procedural::CircleShape().setRadius(.2).realizeShape();
-		Procedural::Path jarreHandlePath = Procedural::CatmullRomSpline3().addPoint(Ogre::Vector3(0,6.5,.75))
-																.addPoint(Ogre::Vector3(0,6,1.5))
-																.addPoint(Ogre::Vector3(0,5,.55)).setNumSeg(10).realizePath();					
+		Procedural::Shape jarreHandleShape = Procedural::CircleShape().setRadius(.2f).realizeShape();
+		Procedural::Path jarreHandlePath = Procedural::CatmullRomSpline3().addPoint(Ogre::Vector3(0,6.5f,.75f))
+																.addPoint(Ogre::Vector3(0,6,1.5f))
+																.addPoint(Ogre::Vector3(0,5,.55f)).setNumSeg(10).realizePath();					
 		Procedural::Extruder().setShapeToExtrude(&jarreHandleShape).setExtrusionPath(&jarreHandlePath).addToTriangleBuffer(tb);		
 		// Handle2
 		jarreHandlePath.reflect(Ogre::Vector3::UNIT_Z);
