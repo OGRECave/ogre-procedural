@@ -7,7 +7,7 @@ Ogre Procedural Manual
 
 This manual aims to give a global view over what is possible with Ogre Procedural.
 
-If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc (you can find it here : http://doc.ogreprocedural.org).
+If you need more detailed information about how to use a specific functionality, please refer to the doxygen doc (you can find it here : http://www.ogreprocedural.org/doc).
 
 == How to use
 
@@ -133,11 +133,28 @@ With Cubic Hermite Spline, you can choose the points and the tangents of the cur
 
 image::spline_cubichermite.png[scale="50"]
 
+[source,C++]
+CubicHermiteSpline2().addPoint(Vector2(0,0), AT_CATMULL)
+                     .addPoint(Vector2(1,0), AT_CATMULL)
+                     .addPoint(Vector2(1,1), Vector2(0,2), Vector2(0,-2))
+                     .addPoint(Vector2(2,1), AT_CATMULL)
+                     .addPoint(2,0).addPoint(3,0)
+                     .addPoint(3,1).addPoint(4,1).setNumSeg(16).realizeShape()
+
+You can either define the tangents of your choice, as demonstrated for the 3rd point, or auto-generate them as Catmull-Rom spline, or even straight lines.
+
 .Catmull-Rom Spline
 
 It's a particular case of Cubic Hermite Spline, in which tangents are automatically calculated.
+Note that its the equivalent of _Ogre::SimpleSpline_, and there's even a conversion function between the two.
 
 image::spline_catmull.png[scale="50"]
+
+[source,C++]
+CatmullRomSpline2().addPoint(0,0).addPoint(1,0)
+                   .addPoint(1,1).addPoint(2,1)
+				   .addPoint(2,0).addPoint(3,0)
+				   .addPoint(3,1).addPoint(4,1).realizeShape()
 
 .Kochanek Bartels Spline
 
