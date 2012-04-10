@@ -149,7 +149,7 @@ class Unit_Tests : public BaseApplication
 		void initImpl()
 		{
 			Shape s1 = CircleShape().setNumSeg(16).realizeShape().scale(4,4);
-			Shape s2 = CircleShape().setNumSeg(16).realizeShape().switchSide().scale(1,.3).translate(1.5*Vector2::UNIT_X);
+			Shape s2 = CircleShape().setNumSeg(16).realizeShape().switchSide().scale(1,.3f).translate(1.5f*Vector2::UNIT_X);
 			MultiShape ms = MultiShape().addShape(s1);
 			for (int i=0;i<8;i++)
 			{
@@ -165,30 +165,30 @@ class Unit_Tests : public BaseApplication
 			Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p).realizeMesh("extrudedMesh");
 			putMesh("extrudedMesh",1);
 
-			Shape s = Shape().addPoint(0.2,.9).addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,2).addPoint(2,2).addPoint(2,-1).addPoint(0.,-.2).setOutSide(SIDE_LEFT).close();
+			Shape s = Shape().addPoint(0.2f,.9f).addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,2).addPoint(2,2).addPoint(2,-1).addPoint(0.,-.2f).setOutSide(SIDE_LEFT).close();
 			putMesh(s.realizeMesh(),1);
 			putMesh(Triangulator().setShapeToTriangulate(&s).realizeMesh(),1);
 
 			Shape s3 = CircleShape().setNumSeg(16).realizeShape();
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
-			s3.translate(Vector2(.01,0));
+			s3.translate(Vector2(.01f,0));
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
-			s3.translate(Vector2(.5,0));
+			s3.translate(Vector2(.5f,0));
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
-			s3.translate(Vector2(.1,0));
+			s3.translate(Vector2(.1f,0));
 			putMesh(Triangulator().setShapeToTriangulate(&s3).realizeMesh());
 
 
 			Shape s4;
-			s4.addPointRel(-54.951207,-16.247524).addPointRel(27.24849,0).addPointRel(2.54842,5.29287)
-				 .addPointRel(37.0501,-0.19603).addPointRel(1.56826,-13.13416).addPointRel(5.48891,0)
-				 .addPointRel(2.15635,12.35003).addPointRel(30.58104,-0.19603).addPointRel(2.35239,-4.70477)
-				 .addPointRel(23.13181,0).addPointRel(-0.19604,7.8412902).addPointRel(-131.92973,0)
+			s4.addPointRel(-54.951207f,-16.247524f).addPointRel(27.24849f,0).addPointRel(2.54842f,5.29287f)
+				 .addPointRel(37.0501f,-0.19603f).addPointRel(1.56826f,-13.13416f).addPointRel(5.48891f,0)
+				 .addPointRel(2.15635f,12.35003f).addPointRel(30.58104f,-0.19603f).addPointRel(2.35239f,-4.70477f)
+				 .addPointRel(23.13181f,0).addPointRel(-0.19604f,7.8412902f).addPointRel(-131.92973f,0)
 			     .close()
-			     .scale(.1);
+			     .scale(.1f);
 
 			putMesh(Triangulator().setShapeToTriangulate(&s4).realizeMesh());
 
@@ -200,12 +200,12 @@ class Unit_Tests : public BaseApplication
 			Shape s5 = Shape()
 				.addPoint(1,0)       // 1
 				.addPoint(-1,0)      // 2
-				.addPoint(-1,-0.5)   // 3
-				.addPoint(-0.5,-0.5) // 4
-				.addPoint(-0.5,-0.1) // 5
-				.addPoint(0.5,-0.1)  // 6
-				.addPoint(0.5,-0.5)  // 7
-				.addPoint(1,-0.5)    // 8
+				.addPoint(-1,-0.5f)   // 3
+				.addPoint(-0.5f,-0.5f) // 4
+				.addPoint(-0.5f,-0.1f) // 5
+				.addPoint(0.5f,-0.1f)  // 6
+				.addPoint(0.5f,-0.5f)  // 7
+				.addPoint(1,-0.5f)    // 8
 				.close();
 
 			putMesh(Triangulator().setShapeToTriangulate(&s5)._setDumpToFile("triangulator_bug.yaml").realizeMesh());
@@ -213,7 +213,7 @@ class Unit_Tests : public BaseApplication
 			// Tests for the "shape order bug": if a multishape contains shapes in an order or the opposite, artifacts may happen
 			{
 				Shape s6 = CircleShape().realizeShape();
-				Shape s7 = Shape(s6).scale(.5).switchSide();
+				Shape s7 = Shape(s6).scale(.5f).switchSide();
 				MultiShape ms(2, &s7, &s6);
 				putMesh(Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh());
 
@@ -289,9 +289,9 @@ class Unit_Tests : public BaseApplication
 			putMesh(ms.realizeMesh());
 
 			//Closed shape
-			Shape s2 = CircleShape().setNumSeg(16).realizeShape().translate(Vector2(.8,0)).booleanUnion(CircleShape().setNumSeg(16).realizeShape().translate(Vector2(-.8,0))).getShape(0);
+			Shape s2 = CircleShape().setNumSeg(16).realizeShape().translate(Vector2(.8f,0)).booleanUnion(CircleShape().setNumSeg(16).realizeShape().translate(Vector2(-.8f,0))).getShape(0);
 			putMesh(s2.realizeMesh());
-			MultiShape ms2 = s2.thicken(.1);
+			MultiShape ms2 = s2.thicken(.1f);
 			putMesh(ms2.realizeMesh());
 		}
 	};
@@ -313,9 +313,9 @@ class Unit_Tests : public BaseApplication
 			CatmullRomSpline2 cs;
 			cs.addPoint(0,-1)
 				.addPoint(2,2)
-				.addPoint(1,2.5)
-				.addPoint(0,1.5)
-				.addPoint(-1,2.5)
+				.addPoint(1,2.5f)
+				.addPoint(0,1.5f)
+				.addPoint(-1,2.5f)
 				.addPoint(-2,2)
 				.setNumSeg(8)
 				.close();
@@ -334,7 +334,7 @@ class Unit_Tests : public BaseApplication
 			kbs2.addPoint(Vector2(0,-1),0,0,-1)
 				.addPoint(Vector2(2,2))
 				.addPoint(Vector2(1,3))
-				.addPoint(Vector2(0,1.5),0,0,-1)
+				.addPoint(Vector2(0,1.5f),0,0,-1)
 				.addPoint(Vector2(-1,3))
 				.addPoint(Vector2(-2,2))
 				.setNumSeg(8)
@@ -352,7 +352,7 @@ class Unit_Tests : public BaseApplication
 			putMesh(rcs2.realizeShape().realizeMesh());
 
 			rcs2.addPoint(Vector2(1,-1))
-				.setRadius(.2)
+				.setRadius(.2f)
 				.close();
 			putMesh(rcs2.realizeShape().realizeMesh());
 
@@ -363,16 +363,16 @@ class Unit_Tests : public BaseApplication
 				.addPoint(1,1,1)
 				.addPoint(0,1,1)
 				.addPoint(0,2,1)
-				.setRadius(.2);
+				.setRadius(.2f);
 			putMesh(rcs3.realizePath().realizeMesh());
 
 			// CatmullRomSpline3
 			CatmullRomSpline3 cs3;
 			cs3.addPoint(Vector3(0,-1,0))
 				.addPoint(Vector3(2,2,0))
-				.addPoint(Vector3(1,2.5,0))
-				.addPoint(Vector3(0,1.5,0))
-				.addPoint(Vector3(-1,2.5,0))
+				.addPoint(Vector3(1,2.5f,0))
+				.addPoint(Vector3(0,1.5f,0))
+				.addPoint(Vector3(-1,2.5f,0))
 				.addPoint(Vector3(-2,2,0))
 				.setNumSeg(8)
 				.close();
@@ -390,7 +390,7 @@ class Unit_Tests : public BaseApplication
 			CircleShape circ;
 			Shape s = circ.realizeShape();
 			CatmullRomSpline2 cs2;
-			Track t = cs2.addPoint(0,.8).addPoint(.1,1).addPoint(0.5,0.5).addPoint(1,1).realizeShape().convertToTrack(Track::AM_RELATIVE_LINEIC);
+			Track t = cs2.addPoint(0,.8f).addPoint(.1f,1).addPoint(0.5f,0.5f).addPoint(1,1).realizeShape().convertToTrack(Track::AM_RELATIVE_LINEIC);
 			Path p;
 			p.addPoint(0,0,0).addPoint(1,1,1);
 			Extruder ex;
@@ -442,8 +442,8 @@ class Unit_Tests : public BaseApplication
 			// extrusion with rotation and scale track
 			{
 				Path l = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
-				Track t = Track().addKeyFrame(2,0).addKeyFrame(5,1.5).addKeyFrame(8,0);
-				Track t2 = Track().addKeyFrame(0,.8).addKeyFrame(10,1.2);
+				Track t = Track().addKeyFrame(2,0).addKeyFrame(5,1.5f).addKeyFrame(8,0);
+				Track t2 = Track().addKeyFrame(0,.8f).addKeyFrame(10,1.2f);
 				Shape s = RectangleShape().realizeShape();
 				Extruder ex;
 				putMesh(ex.setShapeToExtrude(&s).setExtrusionPath(&l).setRotationTrack(&t).setScaleTrack(&t2).realizeMesh(),1);
@@ -453,20 +453,20 @@ class Unit_Tests : public BaseApplication
 			{
 				Path l = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
 				Path l2 = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).realizePath();
-				Track t = Track(Track::AM_ABSOLUTE_LINEIC).addKeyFrame(0,1).addKeyFrame(5,1.5).addKeyFrame(8,1);
+				Track t = Track(Track::AM_ABSOLUTE_LINEIC).addKeyFrame(0,1).addKeyFrame(5,1.5f).addKeyFrame(8,1);
 				Shape s = RectangleShape().realizeShape();
 				Extruder ex;
 				// Absolute lineic
 				//putMesh(ex.setShapeToExtrude(&s).setExtrusionPath(&l).setScaleTrack(&t).realizeMesh(),1);
 				putMesh(ex.setShapeToExtrude(&s).setExtrusionPath(&l2).setScaleTrack(&t).realizeMesh(),1);
 				// Relative Lineic
-				Track t2 = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,1).addKeyFrame(0.5,1.5).addKeyFrame(1,1);
+				Track t2 = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,1).addKeyFrame(0.5f,1.5f).addKeyFrame(1,1);
 				//putMesh(ex.setScaleTrack(&t2).realizeMesh(),1);
 				putMesh(ex.setScaleTrack(&t2).realizeMesh(),1);
 				// On path point
 				Extruder ex3;
 				ex3.setShapeToExtrude(&s).setExtrusionPath(&l);
-				Track t3 = Track(Track::AM_POINT).addKeyFrame(0,1).addKeyFrame(3,1.5).addKeyFrame(4,1);
+				Track t3 = Track(Track::AM_POINT).addKeyFrame(0,1).addKeyFrame(3,1.5f).addKeyFrame(4,1);
 				//putMesh(ex3.setScaleTrack(&t3).realizeMesh(),1);
 
 				Path l3 = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
@@ -479,7 +479,7 @@ class Unit_Tests : public BaseApplication
 				putMesh(ex2.setMultiShapeToExtrude(&ms2).setExtrusionPath(&l3).setRotationTrack(&rotation).realizeMesh(),1);
 				putMesh(ex2.setMultiShapeToExtrude(&ms2).setExtrusionPath(&l3).setRotationTrack(&rotation2).realizeMesh(),1);
 
-				Shape unaxed3 = CircleShape().setNumSeg(8).realizeShape().translate(Vector2(.4,0));
+				Shape unaxed3 = CircleShape().setNumSeg(8).realizeShape().translate(Vector2(.4f,0));
 				Track r = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(1,-3*Math::TWO_PI);
 				Track r2 = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(1,3*Math::TWO_PI);
 				putMesh(ex2.setShapeToExtrude(&unaxed3).setExtrusionPath(&l3).setRotationTrack(&r).realizeMesh(),1);
@@ -491,7 +491,7 @@ class Unit_Tests : public BaseApplication
 				Shape circle = CircleShape().setNumSeg(20).realizeShape();
 				//Path line = LinePath().betweenPoints(Vector3(0,10,0),Vector3::ZERO).setNumSeg(20).realizePath();
 				Path line = RoundedCornerSpline3().addPoint(0,0,0).addPoint(0,4,0).addPoint(0,6,2).addPoint(0,10,2).realizePath();
-				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5,0.2).addKeyFrame(1,1);
+				Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(0.5f,0.2f).addKeyFrame(1,1);
 				Extruder ex;
 				putMesh(ex.setShapeToExtrude(&circle).setExtrusionPath(&line).setShapeTextureTrack(&t).realizeMesh(),1);
 
@@ -538,7 +538,7 @@ class Unit_Tests : public BaseApplication
 					q.FromAngleAxis(r1, Vector3::UNIT_Y);
 					p.addPoint(q*v);
 				}
-				Shape s = RectangleShape().setWidth(.1).setHeight(.05).realizeShape();
+				Shape s = RectangleShape().setWidth(.1f).setHeight(.05f).realizeShape();
 				mp = Extruder().setExtrusionPath(&p).setShapeToExtrude(&s).realizeMesh();
 				putMesh(mp,1);
 			}
@@ -585,13 +585,13 @@ class Unit_Tests : public BaseApplication
 			putMesh(l.realizeMesh(),1);
 
 			Procedural::Shape outerCircleShape = Procedural::CircleShape().setRadius(4.f).setNumSeg(50).realizeShape().translate(10,0);
-			Procedural::Shape innerCircleShape = Procedural::CircleShape().setRadius(3.8).setNumSeg(50).realizeShape().translate(10,0);
+			Procedural::Shape innerCircleShape = Procedural::CircleShape().setRadius(3.8f).setNumSeg(50).realizeShape().translate(10,0);
 
 			Procedural::MultiShape tubeMultiShape = outerCircleShape.booleanDifference(innerCircleShape);
 
 			//Procedural::MultiShape tubeMultiShape(2, outerCircleShape, innerCircleShape);
 
-			putMesh(Procedural::Lathe().setMultiShapeToExtrude(&tubeMultiShape).setNumSeg(30).setAngleBegin((Ogre::Radian)0.).setAngleEnd((Ogre::Radian)Ogre::Math::PI).realizeMesh(), 1);
+			putMesh(Procedural::Lathe().setMultiShapeToExtrude(&tubeMultiShape).setNumSeg(30).setAngleBegin((Ogre::Radian)0.f).setAngleEnd((Ogre::Radian)Ogre::Math::PI).realizeMesh(), 1);
 
 
 		}
@@ -683,13 +683,13 @@ protected:
 	{
 		if (arg.key == OIS::KC_K)
 		{
-			mUnitTests[mCurrentTestIndex]->rotate(-.3);
+			mUnitTests[mCurrentTestIndex]->rotate(-.3f);
 			return true;
 		}
 
 		if (arg.key == OIS::KC_L)
 		{
-			mUnitTests[mCurrentTestIndex]->rotate(.3);
+			mUnitTests[mCurrentTestIndex]->rotate(.3f);
 			return true;
 		}
 
