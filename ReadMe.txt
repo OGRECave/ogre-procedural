@@ -6,6 +6,10 @@ Ogre Procedural (http://code.google.com/p/ogre-procedural/) is a C++ library whi
 It is licensed under the MIT license (see MIT.txt), which basically means you can do anything you want with it, including using it in a commercial, closed source program.
 Although not compulsory, it is also considered to be nice if you provide a link to ogre-procedural in your product's credits.
 
+You can find a user manual at http://www.ogreprocedural.org/manual and the full API reference at http://www.ogreprocedural.org/doc
+
+If you have any question or remark, please PM me on ogre3d forum (username : mikachu) or send me an email (webmaster AT ogreprocedural.org).
+
 How to build it?
 --------------
 
