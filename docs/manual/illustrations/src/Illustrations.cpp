@@ -97,7 +97,7 @@ using namespace Procedural;
 	mCamera->setAspectRatio(1.);
 	cameraPerspective();
 	mCamera->setNearClipDistance(1.);
-	mSceneMgr->setAmbientLight(ColourValue(0.5,0.3,0.1));
+	mSceneMgr->setAmbientLight(ColourValue(0.5f,0.3f,0.1f));
 	Light* light = mSceneMgr->createLight();
 	light->setType(Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
@@ -155,35 +155,35 @@ void Illustrations::go()
 	MeshPtr mp;
 	mp = BoxGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_box", 1.1);
+	next("primitive_box", 1.1f);
 
 	mp = RoundedBoxGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_roundedbox", 1.3);
+	next("primitive_roundedbox", 1.3f);
 
 	mp = SphereGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_sphere", 1.4);
+	next("primitive_sphere", 1.4f);
 
 	mp = IcoSphereGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_icosphere", 1.4);
+	next("primitive_icosphere", 1.4f);
 
 	mp = TorusGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_torus", 1.6);
+	next("primitive_torus", 1.6f);
 
 	mp = TorusKnotGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_torusknot", 1.6);
+	next("primitive_torusknot", 1.6f);
 
 	mp = CylinderGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_cylinder", 1.8);
+	next("primitive_cylinder", 1.8f);
 
 	mp = ConeGenerator().realizeMesh();
 	putMesh(mp);
-	next("primitive_cone", 1.4);
+	next("primitive_cone", 1.4f);
 
 	mp = TubeGenerator().realizeMesh();
 	putMesh(mp);
@@ -210,7 +210,7 @@ void Illustrations::go()
 	putMesh(mp,1);
 	next("spline_kochanekbartels", 3);
 
-	mp = RoundedCornerSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).setRadius(0.3).realizeShape().translate(-2,0).realizeMesh();
+	mp = RoundedCornerSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).setRadius(0.3f).realizeShape().translate(-2,0).realizeMesh();
 	putMesh(mp,1);
 	next("spline_roundedcorner", 3);
 
@@ -220,7 +220,7 @@ void Illustrations::go()
 	{
 	Shape s1 = RectangleShape().realizeShape();
 	Shape s2 = s1;
-	s2.translate(.5,.5);
+	s2.translate(.5f,.5f);
 
 	putMesh(s1.realizeMesh(), 1);
 	putMesh(s2.realizeMesh(), 1);
@@ -228,15 +228,15 @@ void Illustrations::go()
 
 	mp = s1.booleanUnion(s2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleanunion", 1.5);
+	next("shape_booleanunion", 1.5f);
 
 	mp = s1.booleanIntersect(s2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleanintersection", 1.5);
+	next("shape_booleanintersection", 1.5f);
 
 	mp = s1.booleanDifference(s2).realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleandifference", 1.5);
+	next("shape_booleandifference", 1.5f);
 	}
 
 	//
@@ -246,11 +246,11 @@ void Illustrations::go()
 	Shape s;
 	mp = s.addPoint(-1,-1).addPoint(0.5,0).addPoint(-0.5,0).addPoint(1,1).realizeMesh();
 	putMesh(mp,1);
-	next("shape_thick1", 1.5);
+	next("shape_thick1", 1.5f);
 
-	mp = s.thicken(.2).realizeMesh();
+	mp = s.thicken(.2f).realizeMesh();
 	putMesh(mp,1);
-	next("shape_thick2", 1.5);
+	next("shape_thick2", 1.5f);
 	}
 
 	//
@@ -261,8 +261,8 @@ void Illustrations::go()
 		MultiShape ms;
 		CircleShape cs;
 		ms.addShape(cs.setRadius(2).realizeShape());
-		ms.addShape(cs.setRadius(.3).realizeShape().translate(-1,.3).switchSide());
-		ms.addShape(cs.realizeShape().translate(1,.3).switchSide());
+		ms.addShape(cs.setRadius(.3f).realizeShape().translate(-1,.3f).switchSide());
+		ms.addShape(cs.realizeShape().translate(1,.3f).switchSide());
 		ms.addShape(cs.realizeShape().switchSide());
 		ms.addShape(cs.realizeShape().scale(2,1).translate(0,-1).switchSide());
 		mp = Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh();
@@ -290,20 +290,20 @@ void Illustrations::go()
 		putMesh(mp);
 		next("extruder_rotationtrack", 7);
 
-		t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,.5).addKeyFrame(.4,.5).addKeyFrame(.5,1.2).addKeyFrame(.8,1).addKeyFrame(1.0,1);
+		t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,.5f).addKeyFrame(.4f,.5f).addKeyFrame(.5f,1.2f).addKeyFrame(.8f,1).addKeyFrame(1.0f,1);
 		mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setScaleTrack(&t).realizeMesh();
 		putMesh(mp);
 		next("extruder_scaletrack", 7);
 
 		Procedural::Shape s4 = Procedural::Shape().addPoint(-1.2f,.2f).addPoint(-1.f,.2f).addPoint(-.9f,.1f).addPoint(.9f,.1f).addPoint(1.f,.2f).addPoint(1.2f,.2f).scale(2).setOutSide(Procedural::SIDE_LEFT);
-		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2).addKeyFrame(3,.8).addKeyFrame(5,1);
+		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2f).addKeyFrame(3,.8f).addKeyFrame(5,1);
 		mp = Extruder().setShapeTextureTrack(&textureTrack).setShapeToExtrude(&s4).setExtrusionPath(&p2).setCapped(false).realizeMesh();
 		putMesh(mp, 2);
 		next("extruder_texturetrack", 7);
 
 		cameraFront();
 		Shape s3 = CircleShape().setNumSeg(16).realizeShape();
-		MultiShape ms = MultiShape(2, &s3.switchSide(), &Shape(s3).scale(1.1));
+		MultiShape ms = MultiShape(2, &s3.switchSide(), &Shape(s3).scale(1.1f));
 		Path p3 = CatmullRomSpline3().addPoint(0,0,-5).addPoint(0,0,0).addPoint(1,-1,5).realizePath();		
 		mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
 		putMesh(mp);
@@ -314,7 +314,7 @@ void Illustrations::go()
 	// Lathe
 	//
 	{
-		Shape s = Shape().addPoint(0,-3).addPoint(1,-3).addPoint(1,0).addPoint(.8,1).addPoint(.8,2).addPoint(1.5,3).addPoint(0,4);
+		Shape s = Shape().addPoint(0,-3).addPoint(1,-3).addPoint(1,0).addPoint(.8f,1).addPoint(.8f,2).addPoint(1.5f,3).addPoint(0,4);
 		mp = Lathe().setShapeToExtrude(&s).realizeMesh();
 		putMesh(mp);
 		next("lathe_generic",5);
