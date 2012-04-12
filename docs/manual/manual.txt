@@ -156,6 +156,12 @@ CatmullRomSpline2().addPoint(0,0).addPoint(1,0)
 				   .addPoint(2,0).addPoint(3,0)
 				   .addPoint(3,1).addPoint(4,1).realizeShape()
 
+[source,C++]
+CatmullRomSpline2().addPoint(0,0).addPoint(1,0)
+                   .addPoint(1,1).addPoint(2,1)
+				   .addPoint(2,0).addPoint(3,0)
+				   .addPoint(3,1).addPoint(4,1).realizeShape()
+
 .Kochanek Bartels Spline
 
 Kochanek-Bartels spline is defined by control points and 3 parameters : tension, bias and continuity.
@@ -190,6 +196,8 @@ There are 3 different addressing modes :
 * AM_RELATIVE_LINEIC : the key represents a relative distance inside the [0;1] segment, 0 being the beginning and 1 the end of the curve.
 * AM_POINT : the key represents the index of a point in the main curve.
 
+[source,C++]
+Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(1.0,-1.0);
 
 === Shape specifics
 
