@@ -52,7 +52,24 @@ That's it.
 It's the minimal use case of OgreProcedural, and it produces a box mesh. 
 You can then instantiate an entity from this mesh, and add it to your scene.
 
-Each class that produces a Mesh derives from MeshGenerator, so you fill it with arguments, and call realizeMesh() at the end to produce an Ogre Mesh.
+=== MeshGenerators, TriangleBuffers and Ogre Meshes
+
+In OgreProcedural, all the classes deriving from _MeshGenerator_ are made to produce Ogre Meshes.
+
+There are two ways of creating a Mesh from a _MeshGenerator_ :
+* Call _realizeMesh() if you want to directly produce Ogre::Mesh.
+* Create a _TriangleBuffer_ and fill it using _MeshGenerator::addToTriangleBuffer()_. When it's ready to be used, call to _TriangleBuffer::transformToMesh()_ will get you an Ogre Mesh with every geometry accumulated from various _MeshGenerator_ as a single batch.
+
+_MeshGenerator_ also have some utility functions to transform produced triangles. This is especially useful if you have several _MeshGenerator_ for one _TriangleBuffer_.
+
+For example :
+[source,C++]
+// Two boxes in one batch
+Procedural::TriangleBuffer tb;
+BoxGenerator b;
+b.setPosition(2,0,0).addToTriangleBuffer(tb);
+b.setPosition(-2,0,0).addToTriangleBuffer(tb);
+tb.transformToMesh("twoBoxes");
 
 == Mesh primitives
 
@@ -153,8 +170,8 @@ image::spline_catmull.png[scale="50"]
 [source,C++]
 CatmullRomSpline2().addPoint(0,0).addPoint(1,0)
                    .addPoint(1,1).addPoint(2,1)
-				   .addPoint(2,0).addPoint(3,0)
-				   .addPoint(3,1).addPoint(4,1).realizeShape()
+                   .addPoint(2,0).addPoint(3,0)
+                   .addPoint(3,1).addPoint(4,1).realizeShape()
 
 .Kochanek Bartels Spline
 
@@ -204,19 +221,33 @@ As an exemple, let's say we have these 2 shapes :
 
 image::shape_booleansetup.png[scale="50"]
 
+[source,C++]
+Shape s1 = RectangleShape().realizeShape();
+Shape s2 = s1;
+s2.translate(.5f,.5f);
+
 Supported boolean operations are :
 
 * Union : the result contains everything inside A plus evertyhing inside B
 
 image::shape_booleanunion.png[scale="50"]
 
+[source,C++]
+s1.booleanUnion(s2)
+
 * Intersection : the result contains everything that is inside A and B
 
 image::shape_booleanintersection.png[scale="50"]
 
+[source,C++]
+s1.booleanIntersection(s2)
+
 * Difference : the result contains everything that is in A but not in B
 
 image::shape_booleandifference.png[scale="50"]
+
+[source,C++]
+s1.booleanDifference(s2)
 
 ==== Thicken
 
@@ -225,14 +256,23 @@ A "thin" shape can be made "thick" by using the thicken operation.
 .before 
 image::shape_thick1.png[scale="50"] 
 
+[source,C++]
+Shape s;
+s.addPoint(-1,-1).addPoint(0.5,0).addPoint(-0.5,0).addPoint(1,1)
+
 .after 
 image::shape_thick2.png[scale="50"]
+
+[source,C++]
+s.thicken(.2f)
 
 === Triangulation
 
 A constrained triangulation can be performed on a shape or a multishape. It means that points from the shape(s) are joined together to form triangles.
 
 The algorithm used is Bowyer-Watson, which is an implementation of a Delaunay triangulation (Delaunay simply means that triangulation is 'best quality', ie has as few thin triangles as possible)
+
+The main use of triangulation in OgreProcedural is just for extrusion tips, but you can use it for your own purposes.
 
 image::shape_triangulation.png[scale="50"] 
 
