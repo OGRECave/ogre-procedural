@@ -1,0 +1,12 @@
+This file keeps track of contributors on OgreProcedural. 
+Contributors are identified by their username on the ogre forum.
+
+Maintainers:
+    - Michael Broutin (michael.broutin AT gmail.com):
+        Original maintainer.
+
+Contributors:
+    - tdev:
+        some things here and there
+	- svenstaro:
+        linux fixes
