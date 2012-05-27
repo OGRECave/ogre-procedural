@@ -227,7 +227,8 @@ namespace Procedural
 		assert((mShapeToExtrude || mMultiShapeToExtrude) && "Either shape or multishape must be defined!");
 
 		// Triangulate the begin and end caps
-		if (!mExtrusionPath->isClosed() && mCapped)
+		bool isShapeClosed = (mShapeToExtrude && mShapeToExtrude->isClosed()) || (mMultiShapeToExtrude && mMultiShapeToExtrude->isClosed());
+		if (!mExtrusionPath->isClosed() && mCapped && isShapeClosed)
 			_extrudeCapImpl(buffer);
 
 		// Extrudes the body

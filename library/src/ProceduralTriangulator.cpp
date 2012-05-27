@@ -384,6 +384,7 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertices) const
 {
 	assert((mShapeToTriangulate || mMultiShapeToTriangulate) && "Either shape or multishape must be defined");
+	assert(((mShapeToTriangulate&&mShapeToTriangulate->isClosed()) || (mMultiShapeToTriangulate&&mMultiShapeToTriangulate->isClosed())) && "Input shape must be closed");
 
 	// Do the Delaunay triangulation
 	if (mShapeToTriangulate)
