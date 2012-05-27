@@ -427,11 +427,8 @@ void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
 				Ogre::Vector2 vp2 = pointList[j];
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;
-
-				Ogre::Vector3 newPoint = vp;
-				buffer.position(newPoint);
-				buffer.normal(normal);
-				buffer.textureCoord(vp2.x, vp2.y);
+								
+				addPoint(buffer, vp, normal, Vector2(vp2.x, vp2.y));
 			}
 
 			for (size_t i=0;i<indexBuffer.size()/3;i++)
@@ -452,10 +449,7 @@ void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
 				Ogre::Vector3 vp(vp2.x, vp2.y, 0);
 				Ogre::Vector3 normal = -Ogre::Vector3::UNIT_Z;
 
-				Ogre::Vector3 newPoint = vp;
-				buffer.position(newPoint);
-				buffer.normal(normal);
-				buffer.textureCoord(vp2.x, vp2.y);
+				addPoint(buffer, vp, normal, Vector2(vp2.x, vp2.y));
 			}
 
 			for (size_t i=0;i<indexBuffer.size()/3;i++)
