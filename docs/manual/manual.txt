@@ -173,6 +173,12 @@ CatmullRomSpline2().addPoint(0,0).addPoint(1,0)
                    .addPoint(2,0).addPoint(3,0)
                    .addPoint(3,1).addPoint(4,1).realizeShape()
 
+[source,C++]
+CatmullRomSpline2().addPoint(0,0).addPoint(1,0)
+                   .addPoint(1,1).addPoint(2,1)
+				   .addPoint(2,0).addPoint(3,0)
+				   .addPoint(3,1).addPoint(4,1).realizeShape()
+
 .Kochanek Bartels Spline
 
 Kochanek-Bartels spline is defined by control points and 3 parameters : tension, bias and continuity.
