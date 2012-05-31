@@ -110,7 +110,7 @@ bool Segment2D::intersects(const Segment2D& other) const
 bool Plane::intersect(const Plane& other, Line& outputLine) const
 	{		
 		//TODO : handle the case where the plane is perpendicular to T
-		Vector3 point1(Ogre::Vector3::ZERO);
+		Vector3 point1(Vector3::ZERO);
 		Vector3 direction = normal.crossProduct(other.normal);
 		if (direction.squaredLength() < 1e-08)
 			return false;
@@ -148,7 +148,7 @@ Vector3 Line::shortestPathToPoint(const Vector3& point) const
 	return vec;
 }
 //-----------------------------------------------------------------------
-bool Line2D::findIntersect(const Line2D& other, Ogre::Vector2& intersection) const
+bool Line2D::findIntersect(const Line2D& other, Vector2& intersection) const
 {
 	const Vector2& p1 = mPoint;
 	//const Vector2& p2 = mPoint+mDirection;
@@ -174,5 +174,146 @@ bool Line2D::findIntersect(const Line2D& other, Ogre::Vector2& intersection) con
 	intersection = Vector2(intersectx, intersecty);
 	return true;
 }
+//-----------------------------------------------------------------------
+
+void isect(Real VV0,Real VV1,Real VV2,Real D0, Real D1,Real D2,Real& isect0,Real&isect1)
+{
+    isect0=VV0+(VV1-VV0)*D0/(D0-D1);
+    isect1=VV0+(VV2-VV0)*D0/(D0-D2);
+}
+
+
+void computeIntervals(Real VV0,Real VV1,Real VV2,Real D0,Real D1,Real D2,Real D0D1,Real D0D2,Real& isect0,Real& isect1) 
+{
+if(D0D1>0.0f)
+  {                                                     
+    /* here we know that D0D2<=0.0 */                   
+    /* that is D0, D1 are on the same side, D2 on the other or on the plane */ 
+    isect(VV2,VV0,VV1,D2,D0,D1,isect0,isect1);          
+  }                                                     
+  else if(D0D2>0.0f)                                    
+  {                                                     
+    /* here we know that d0d1<=0.0 */                   
+    isect(VV1,VV0,VV2,D1,D0,D2,isect0,isect1);            
+  }                                                     
+  else if(D1*D2>0.0f || D0!=0.0f)                       
+  {                                                     
+    /* here we know that d0d1<=0.0 or that D0!=0.0 */   
+    isect(VV0,VV1,VV2,D0,D1,D2,isect0,isect1);          
+  }                                                     
+  else if(D1!=0.0f)                                     
+  {                                                     
+    isect(VV1,VV0,VV2,D1,D0,D2,isect0,isect1);          
+  }                                                     
+  else if(D2!=0.0f)                                     
+  {                                                     
+    isect(VV2,VV0,VV1,D2,D0,D1,isect0,isect1);          
+  }                                                     
+  else                                                  
+  {                                                     
+    /* triangles are coplanar */                        
+    //return coplanar_tri_tri(N1,V0,V1,V2,U0,U1,U2);      
+  }
+}
+
+bool Triangle3D::findIntersect(const Triangle3D& other, Segment3D& intersection) const
+	{
+		// Compute plane equation of first triangle
+		Vector3 e1 = mPoints[1]-mPoints[0];
+		Vector3 e2 = mPoints[2]-mPoints[0];
+		Vector3 n1 = e1.crossProduct(e2);
+		Real d1 = - n1.dotProduct(mPoints[0]);
+
+		// Put second triangle in first plane equation to compute distances to the plane
+		Real du[3];
+		for (short i=0;i<3;i++)
+		{
+			du[i] = n1.dotProduct(other.mPoints[i]) + d1;
+			if (Math::Abs(du[i])<1e-6)
+				du[i]=0.0;
+		}
+
+		Real du0du1=du[0]*du[1];
+		Real du0du2=du[0]*du[2];
+		
+		if(du0du1>0.0f && du0du2>0.0f) /* same sign on all of them + not equal 0 ? */
+			return false;                    /* no intersection occurs */
+
+		// Compute plane equation of first triangle
+		e1 = other.mPoints[1]-other.mPoints[0];
+		e2 = other.mPoints[2]-other.mPoints[0];
+		Vector3 n2 = e1.crossProduct(e2);
+		Real d2 = - n2.dotProduct(other.mPoints[0]);
+
+		// Put first triangle in second plane equation to compute distances to the plane
+		Real dv[3];
+		for (short i=0;i<3;i++)
+		{
+			dv[i] = n2.dotProduct(mPoints[i]) + d2;
+			if (Math::Abs(dv[i])<1e-6)
+				dv[i]=0.0;
+		}
+
+		Real dv0dv1=dv[0]*dv[1];
+		Real dv0dv2=dv[0]*dv[2];
+		
+		if(dv0dv1>0.0f && dv0dv2>0.0f) /* same sign on all of them + not equal 0 ? */
+			return false;                    /* no intersection occurs */
+
+		//Compute the direction of intersection line
+		Vector3 d = n1.crossProduct(n2);
+
+		// Project triangle points onto the intersection line
+
+		/* compute and index to the largest component of D */
+		Real max=Math::Abs(d[0]);
+		int index=0;
+		Real b=Math::Abs(d[1]);
+		Real c=Math::Abs(d[2]);
+		if(b>max) max=b,index=1;
+		if(c>max) max=c,index=2;
+		
+		/* this is the simplified projection onto L*/
+		Real vp0=mPoints[0][index];
+		Real vp1=mPoints[1][index];
+		Real vp2=mPoints[2][index];
+		
+		Real up0=other.mPoints[0][index];
+		Real up1=other.mPoints[1][index];
+		Real up2=other.mPoints[2][index];
+
+		Real isect1[2];
+		Real isect2[2];
+		/* compute interval for triangle 1 */
+		computeIntervals(vp0,vp1,vp2,dv[0],dv[1],dv[2],dv0dv1,dv0dv2,isect1[0],isect1[1]);
+
+		/* compute interval for triangle 2 */
+		computeIntervals(up0,up1,up2,du[0],du[1],du[2],du0du1,du0du2,isect2[0],isect2[1]);
+				
+		if (isect1[0]>isect1[1])
+			std::swap(isect1[0],isect1[1]);
+		if (isect2[0]>isect2[1])
+			std::swap(isect2[0],isect2[1]);
+
+		if(isect1[1]<isect2[0] || isect2[1]<isect1[0]) return false;
+		
+		// Deproject segment onto line
+		Real r1 = std::max(isect1[0], isect2[0]);
+		Real r2 = std::min(isect1[1], isect2[1]);
+				
+		Plane pl1(n1.x, n1.y, n1.z, d1);
+		Plane pl2(n2.x, n2.y, n2.z, d2);
+		Line interLine;
+		pl1.intersect(pl2, interLine);
+		Vector3 p=interLine.mPoint;
+		d.normalise();		
+		Vector3 v1 = p+(r1-p[index]) /d[index] *d;
+		Vector3 v2 = p+(r2-p[index]) /d[index] *d;
+		intersection.mA = v1;
+		intersection.mB = v2;
+
+
+		return true;
+	}
 
 }

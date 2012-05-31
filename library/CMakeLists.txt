@@ -35,6 +35,7 @@ set( HDRS
 	include/ProceduralStableHeaders.h
 	include/ProceduralMultiShape.h	
 	include/ProceduralGeometryHelpers.h
+	include/ProceduralBoolean.h
 	)
 
 set( SRCS
@@ -62,6 +63,7 @@ set( SRCS
 		src/ProceduralPrecompiledHeaders.cpp
 		src/ProceduralMultiShape.cpp
 		src/ProceduralGeometryHelpers.cpp
+		src/ProceduralBoolean.cpp
 	)
 
 include_directories(SYSTEM ${OIS_INCLUDE_DIRS}

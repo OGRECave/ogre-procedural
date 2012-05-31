@@ -110,6 +110,29 @@ public:
 class Unit_Tests : public BaseApplication
 {
 	/* --------------------------------------------------------------------------- */
+	class Test_Boolean : public Unit_Test
+	{
+	public:
+		Test_Boolean(SceneManager* sn) : Unit_Test(sn) {}
+
+		String getDescription()
+		{
+			return "3D CSG";
+		}
+
+		void initImpl()
+		{
+			TriangleBuffer tb1;
+			TriangleBuffer tb2;
+			BoxGenerator().addToTriangleBuffer(tb1);
+			SphereGenerator().setPosition(.5,.1,.1).addToTriangleBuffer(tb2);
+			TriangleBuffer tb;
+			Boolean().setMesh1(&tb1).setMesh2(&tb2).addToTriangleBuffer(tb);
+			
+			putMesh("toto");
+		}
+	};
+	/* --------------------------------------------------------------------------- */
 	class Test_Primitives : public Unit_Test
 	{
 	public:
