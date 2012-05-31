@@ -70,6 +70,8 @@ public:
 	/// Contructor with arguments
 	Plane(const Ogre::Vector3& normal, const Ogre::Vector3& pos) : Ogre::Plane(normal, pos) {}
 
+	Plane(Ogre::Real a, Ogre::Real b, Ogre::Real c, Ogre::Real d) : Ogre::Plane(a,b,c,d) {}
+
 	/**
 	 * Checks whether 2 planes intersect and compute intersecting line if it is the case.
 	 * @arg other the other plane with which to check for intersection
@@ -80,12 +82,11 @@ public:
 };
 //-----------------------------------------------------------------------
 /// Represents a line in 3D
-class Line
+struct Line
 {
 	Ogre::Vector3 mPoint;
 	Ogre::Vector3 mDirection;
 
-public:
 	Line() {}
 	
 	/// Contructor with arguments
@@ -166,6 +167,33 @@ class Segment2D
 
 	/// Tells whether this segments intersects the other segment
 	bool intersects(const Segment2D& other) const;
+};
+//-----------------------------------------------------------------------
+/// Represents a 3D segment
+struct Segment3D
+{
+	Ogre::Vector3 mA;
+	Ogre::Vector3 mB;
+	Segment3D() {}
+		
+	/// Contructor with arguments
+	Segment3D(Ogre::Vector3 a, Ogre::Vector3 b) : mA(a), mB(b) {}
+
+};
+//-----------------------------------------------------------------------
+/// Represents a 3D triangle
+class Triangle3D
+{
+	Ogre::Vector3 mPoints[3];
+public:
+	Triangle3D(const Ogre::Vector3& a,const Ogre::Vector3& b,const Ogre::Vector3& c) 
+	{
+		mPoints[0]=a;
+		mPoints[1]=b;
+		mPoints[2]=c;
+	}
+
+	bool findIntersect(const Triangle3D& other, Segment3D& intersection) const;
 };
 }
 #endif

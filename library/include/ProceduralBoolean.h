@@ -25,31 +25,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_H_INCLUDED
-#define PROCEDURAL_H_INCLUDED
+#include "Ogre.h"
+#include "ProceduralPlatform.h"
+#include "ProceduralMeshGenerator.h"
 
-#include "ProceduralBoxGenerator.h"
-#include "ProceduralCapsuleGenerator.h"
-#include "ProceduralConeGenerator.h"
-#include "ProceduralCylinderGenerator.h"
-#include "ProceduralIcoSphereGenerator.h"
-#include "ProceduralRoundedBoxGenerator.h"
-#include "ProceduralSphereGenerator.h"
-#include "ProceduralTorusGenerator.h"
-#include "ProceduralTorusKnotGenerator.h"
-#include "ProceduralTubeGenerator.h"
-#include "ProceduralPlaneGenerator.h"
-#include "ProceduralRoot.h"
-#include "ProceduralExtruder.h"
-#include "ProceduralLathe.h"
-#include "ProceduralShape.h"
-#include "ProceduralShapeGenerators.h"
-#include "ProceduralMultiShape.h"
-#include "ProceduralPath.h"
-#include "ProceduralPathGenerators.h"
-#include "ProceduralTriangulator.h"
-#include "ProceduralTriangleBuffer.h"
-#include "ProceduralTrack.h"
-#include "ProceduralBoolean.h"
+namespace Procedural
+{
+	class _ProceduralExport Boolean
+	{
+		TriangleBuffer* mMesh1;
+		TriangleBuffer* mMesh2;
+		public:
+			Boolean& setMesh1(TriangleBuffer* tb)
+			{
+				mMesh1 = tb;
+				return *this;
+			}
 
-#endif
+			Boolean& setMesh2(TriangleBuffer* tb)
+			{
+				mMesh2 = tb;
+				return *this;
+			}
+
+			void addToTriangleBuffer(TriangleBuffer& buffer) const;
+	};
+}
