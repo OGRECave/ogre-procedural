@@ -117,4 +117,66 @@ namespace Procedural
 			length+=(mPoints.back()-*mPoints.begin()).length();
 		return length;
 	}
+	
+	void Path::buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vector<Path>& out)
+	{
+		typedef std::multimap<Vector3, Vector3, Vector3Comparator> Vec3MultiMap;
+		Vec3MultiMap segs;
+		for (std::vector<Segment3D>::const_iterator it = segList.begin(); it!=segList.end(); it++)
+		{
+			segs.insert(std::pair<Vector3,Vector3>(it->mA, it->mB));
+			segs.insert(std::pair<Vector3,Vector3>(it->mB, it->mA));
+		}
+		while (!segs.empty())
+		{
+			Ogre::Vector3 headFirst = segs.begin()->first;
+			Ogre::Vector3 headSecond = segs.begin()->second;
+			Path p;
+			p.addPoint(headFirst).addPoint(headSecond);
+			Vec3MultiMap::iterator firstSeg = segs.begin();
+			std::pair<Vec3MultiMap::iterator,Vec3MultiMap::iterator> correspondants2 = segs.equal_range(headSecond);
+			for (Vec3MultiMap::iterator it = correspondants2.first; it!=correspondants2.second;)
+					if ((it->second - firstSeg->first).squaredLength()<1e-8)
+						it = segs.erase(it);
+					else it++;
+			segs.erase(firstSeg);
+			bool foundSomething = true;
+			while (!segs.empty() && foundSomething)
+			{
+			foundSomething = false;
+			Vec3MultiMap::iterator next = segs.find(headSecond);
+			if (next != segs.end())
+			{
+				foundSomething = true;
+				headSecond = next->second;
+				p.addPoint(headSecond);
+				std::pair<Vec3MultiMap::iterator,Vec3MultiMap::iterator> correspondants = segs.equal_range(headSecond);
+				for (Vec3MultiMap::iterator it = correspondants.first; it!=correspondants.second;)
+					if ((it->second - next->first).squaredLength()<1e-8)
+						it = segs.erase(it);
+					else it++;
+				segs.erase(next);
+			}
+			Vec3MultiMap::iterator previous = segs.find(headFirst);
+			if (previous != segs.end())
+			{
+				foundSomething = true;
+				p.insertPoint(0, previous->second);
+				headFirst = previous->second;
+				std::pair<Vec3MultiMap::iterator,Vec3MultiMap::iterator> correspondants = segs.equal_range(headFirst);
+				for (Vec3MultiMap::iterator it = correspondants.first; it!=correspondants.second;)
+					if ((it->second - previous->first).squaredLength() < 1e-8)
+						it = segs.erase(it);
+					else it++;
+				segs.erase(previous);
+			}
+		}
+		if (p.getPoint(0).squaredDistance(p.getPoint(p.getSegCount()+1)) < 1e-6)
+		{
+			p.getPoints().pop_back();
+			p.close();
+		}
+		out.push_back(p);
+	}
+	}
 }

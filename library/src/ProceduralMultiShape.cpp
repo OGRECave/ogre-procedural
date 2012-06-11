@@ -181,5 +181,79 @@ bool MultiShape::isOutsideRealOutside() const
 		shapeSide = SIDE_LEFT;
 	return shapeSide == mShapes[shapeIndex].getOutSide();
 }
+//-----------------------------------------------------------------------
+struct Vector2Comparator
+{
+	bool operator()(const Vector2& one, const Vector2& two) const
+	{
+		if ((one-two).squaredLength()<1e-6)
+			return false;
+		if (Math::Abs(one.x - two.x)>1e-3)
+			return one.x<two.x;
+		return one.y<two.y;
+	}
+};
+
+void MultiShape::buildFromSegmentSoup(const std::vector<Segment2D>& segList)
+{
+	typedef std::multimap<Vector2, Vector2, Vector2Comparator> Vec2MultiMap;
+	Vec2MultiMap segs;
+	for (std::vector<Segment2D>::const_iterator it = segList.begin(); it!=segList.end(); it++)
+	{
+		segs.insert(std::pair<Vector2,Vector2>(it->mA, it->mB));
+		segs.insert(std::pair<Vector2,Vector2>(it->mB, it->mA));
+	}
+	while (!segs.empty())
+	{
+		Ogre::Vector2 headFirst = segs.begin()->first;
+		Ogre::Vector2 headSecond = segs.begin()->second;
+		Shape s;
+		s.addPoint(headFirst).addPoint(headSecond);
+		Vec2MultiMap::iterator firstSeg = segs.begin();
+		std::pair<Vec2MultiMap::iterator,Vec2MultiMap::iterator> correspondants2 = segs.equal_range(headSecond);
+		for (Vec2MultiMap::iterator it = correspondants2.first; it!=correspondants2.second;)
+					if ((it->second - firstSeg->first).squaredLength()<1e-8)
+						it = segs.erase(it);
+					else it++;
+		segs.erase(firstSeg);
+		bool foundSomething = true;
+		while (!segs.empty() && foundSomething)
+		{
+			foundSomething = false;
+			Vec2MultiMap::iterator next = segs.find(headSecond);
+			if (next != segs.end())
+			{
+				foundSomething = true;
+				headSecond = next->second;
+				s.addPoint(headSecond);
+				std::pair<Vec2MultiMap::iterator,Vec2MultiMap::iterator> correspondants = segs.equal_range(headSecond);
+				for (Vec2MultiMap::iterator it = correspondants.first; it!=correspondants.second;)
+					if ((it->second - next->first).squaredLength()<1e-8)
+						it = segs.erase(it);
+					else it++;
+				segs.erase(next);
+			}
+			Vec2MultiMap::iterator previous = segs.find(headFirst);
+			if (previous != segs.end())
+			{
+				foundSomething = true;
+				s.insertPoint(0, previous->second);
+				headFirst = previous->second;
+				std::pair<Vec2MultiMap::iterator,Vec2MultiMap::iterator> correspondants = segs.equal_range(headFirst);
+				for (Vec2MultiMap::iterator it = correspondants.first; it!=correspondants.second;)
+					if ((it->second - previous->first).squaredLength() < 1e-8)
+						it = segs.erase(it);
+					else it++;
+				segs.erase(previous);
+			}
+		}
+		if (s.getPoint(0).squaredDistance(s.getPoint(s.getSegCount()+1)) < 1e-6)
+		{
+			s.getPoints().pop_back();
+			s.close();
+		}
+		addShape(s);
+	}
+}
 
 }

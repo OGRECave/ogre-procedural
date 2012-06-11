@@ -76,20 +76,20 @@ void Shape::_findAllIntersections(const Shape& other, std::vector<IntersectionIn
 			{
 				IntersectionInShape inter(i, j, intersect);
 				// check if intersection is "borderline" : too near to a vertex
-				if (seg1.getA().squaredDistance(intersect)<1e-8)
+				if (seg1.mA.squaredDistance(intersect)<1e-8)
 				{
 					inter.onVertex[0] = true;
 				}
-				if (seg1.getB().squaredDistance(intersect)<1e-8)
+				if (seg1.mB.squaredDistance(intersect)<1e-8)
 				{
 					inter.onVertex[0] = true;
 					inter.index[0]++;
 				}
-				if (seg2.getA().squaredDistance(intersect)<1e-8)
+				if (seg2.mA.squaredDistance(intersect)<1e-8)
 				{
 					inter.onVertex[1] = true;
 				}
-				if (seg2.getB().squaredDistance(intersect)<1e-8)
+				if (seg2.mB.squaredDistance(intersect)<1e-8)
 				{
 					inter.onVertex[1] = true;
 					inter.index[1]++;

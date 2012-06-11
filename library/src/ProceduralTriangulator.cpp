@@ -95,22 +95,30 @@ Triangulator::Triangle::InsideType Triangulator::Triangle::isPointInsideCircumci
 // Triangulation by insertion
 void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer) const
 {
-	// Compute super triangle
-	float maxTriangleSize = 0.f;
-	for (PointList::iterator it = pointList.begin(); it!=pointList.end();it++)
+	// Compute super triangle or insert manual super triangle
+	if (!mManualSuperTriangle)
 	{
-		maxTriangleSize = std::max<float>(maxTriangleSize,Math::Abs(it->x));
-		maxTriangleSize = std::max<float>(maxTriangleSize,Math::Abs(it->y));
+		float maxTriangleSize = 0.f;
+		for (PointList::iterator it = pointList.begin(); it!=pointList.end();it++)
+		{
+			maxTriangleSize = std::max<float>(maxTriangleSize, Math::Abs(it->x));
+			maxTriangleSize = std::max<float>(maxTriangleSize, Math::Abs(it->y));
+		}
+		pointList.push_back(Vector2(-3*maxTriangleSize,-3*maxTriangleSize));
+		pointList.push_back(Vector2(3*maxTriangleSize,-3*maxTriangleSize));
+		pointList.push_back(Vector2(0.,3*maxTriangleSize));
+	} else 
+	{
+		pointList.push_back(mManualSuperTriangle->mPoints[0]);
+		pointList.push_back(mManualSuperTriangle->mPoints[1]);
+		pointList.push_back(mManualSuperTriangle->mPoints[2]);
 	}
-	int maxTriangleIndex=pointList.size();
-	pointList.push_back(Vector2(-3*maxTriangleSize,-3*maxTriangleSize));
-	pointList.push_back(Vector2(3*maxTriangleSize,-3*maxTriangleSize));
-	pointList.push_back(Vector2(0.,3*maxTriangleSize));
+	int maxTriangleIndex=pointList.size()-3;
 	Triangle superTriangle(&pointList);
-	superTriangle.i[0]= maxTriangleIndex;
-	superTriangle.i[1]= maxTriangleIndex+1;
-	superTriangle.i[2]= maxTriangleIndex+2;
-	tbuffer.push_back(superTriangle);
+		superTriangle.i[0] = maxTriangleIndex;
+		superTriangle.i[1] = maxTriangleIndex+1;
+		superTriangle.i[2] = maxTriangleIndex+2;
+		tbuffer.push_back(superTriangle);
 
 	// Point insertion loop
 	for (unsigned short i=0;i<pointList.size()-3;i++)
@@ -213,14 +221,17 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	pointList.pop_back();*/
 }
 //-----------------------------------------------------------------------
-void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer, const PointList& pl) const
+void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointList& pl) const
 {
 	std::vector<DelaunaySegment> segList;
-	size_t shapeOffset = 0;
+	
 	// First, list all the segments that are not already in one of the delaunay triangles
-	for (int k=0;k<multiShape.getShapeCount();k++)
+	if (mMultiShapeToTriangulate)
 	{
-		const Shape& shape = multiShape.getShape(k);
+		size_t shapeOffset = 0;
+	for (int k=0;k<mMultiShapeToTriangulate->getShapeCount();k++)
+	{
+		const Shape& shape = mMultiShapeToTriangulate->getShape(k);
 		// Determine which segments should be added
 		for (size_t i = 0; i<shape.getPoints().size()-1; i++)
 		{
@@ -240,6 +251,28 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 			}
 		}
 		shapeOffset+=shape.getPoints().size();
+	}
+	} 
+	else if (mShapeToTriangulate)
+	{
+		// Determine which segments should be added
+		for (size_t i = 0; i<mShapeToTriangulate->getPoints().size()-1; i++)
+		{
+			bool isAlreadyIn = false;
+			for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
+			{
+				if (it->containsSegment(i,i+1))
+				{
+					isAlreadyIn = true;
+					break;
+				}
+			}
+			// only do something for segments not already in DT
+			if (!isAlreadyIn)
+			{
+				segList.push_back(DelaunaySegment(i, i+1));
+			}
+		}
 	}
 
 	// Re-Triangulate according to the new segments
@@ -317,17 +350,31 @@ void Triangulator::addConstraints(const MultiShape& multiShape, DelaunayTriangle
 		_recursiveTriangulatePolygon(itSeg->inverse(), pointsBelow, tbuffer, pl);
 	}
 	// Clean up segments outside of multishape
-	if (multiShape.isClosed())
+	if (mRemoveOutside)
+	{
+	if (mMultiShapeToTriangulate && mMultiShapeToTriangulate->isClosed())
 	{
 		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();)
 		{
-			bool isTriangleOut = !multiShape.isPointInside(it->getMidPoint());
+			bool isTriangleOut = !mMultiShapeToTriangulate->isPointInside(it->getMidPoint());
 
 			if (isTriangleOut)
 				it = tbuffer.erase(it);
 			 else
 				it++;
 		}
+	} else if (mShapeToTriangulate && mShapeToTriangulate->isClosed())
+	{
+		for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();)
+		{
+			bool isTriangleOut = !mShapeToTriangulate->isPointInside(it->getMidPoint());
+
+			if (isTriangleOut)
+				it = tbuffer.erase(it);
+			 else
+				it++;
+		}
+	}
 	}
 }
 //-----------------------------------------------------------------------
@@ -382,36 +429,38 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 }
 //-----------------------------------------------------------------------
 void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertices) const
-{
+{	
 	assert((mShapeToTriangulate || mMultiShapeToTriangulate) && "Either shape or multishape must be defined");
-	assert(((mShapeToTriangulate&&mShapeToTriangulate->isClosed()) || (mMultiShapeToTriangulate&&mMultiShapeToTriangulate->isClosed())) && "Input shape must be closed");
+	//assert((((mShapeToTriangulate && mShapeToTriangulate->isClosed()) || (mMultiShapeToTriangulate&&mMultiShapeToTriangulate->isClosed()))||(!mRemoveOutside)) && "Input shape must be closed");
 
 	// Do the Delaunay triangulation
 	if (mShapeToTriangulate)
 		outputVertices = mShapeToTriangulate->getPoints();
-	else
+	else if (mMultiShapeToTriangulate)
 		outputVertices = mMultiShapeToTriangulate->getPoints();
+	
 	DelaunayTriangleBuffer dtb;
 	delaunay(outputVertices, dtb);
 
 	// Add contraints
-	if (mMultiShapeToTriangulate)
-		addConstraints(*mMultiShapeToTriangulate, dtb, outputVertices);
-	else
-		addConstraints(*mShapeToTriangulate, dtb, outputVertices);
+	_addConstraints(dtb, outputVertices);
 
 	//Outputs index buffer
 	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
-	{
-		output.push_back(it->i[0]);
-		output.push_back(it->i[1]);
-		output.push_back(it->i[2]);
-	}
+		if (!it->isDegenerate())
+		{		
+			output.push_back(it->i[0]);
+			output.push_back(it->i[1]);
+			output.push_back(it->i[2]);
+		}
 
 	// Remove super triangle
-	outputVertices.pop_back();
-	outputVertices.pop_back();
-	outputVertices.pop_back();
+	if (mRemoveOutside)
+	{
+		outputVertices.pop_back();
+		outputVertices.pop_back();
+		outputVertices.pop_back();
+	}
 }
 //-----------------------------------------------------------------------
 void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const

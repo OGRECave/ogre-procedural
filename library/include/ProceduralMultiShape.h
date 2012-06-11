@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define PROCEDURAL_MULTISHAPE_INCLUDED
 
 #include "ProceduralRoot.h"
+#include "ProceduralGeometryHelpers.h"
 
 namespace Procedural
 {
@@ -120,6 +121,8 @@ class _ProceduralExport MultiShape
 	 * Determines whether the outside as defined by user equals "real" outside
 	 */
 	bool isOutsideRealOutside() const;
+
+	void buildFromSegmentSoup(const std::vector<Segment2D>& segList);
 
 };
 }
