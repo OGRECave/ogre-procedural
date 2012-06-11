@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "ProceduralPlatform.h"
 #include "ProceduralRoot.h"
 #include "ProceduralTrack.h"
+#include "ProceduralGeometryHelpers.h"
 
 namespace Procedural
 {
@@ -315,6 +316,8 @@ public:
 		std::reverse(mPoints.begin(), mPoints.end());
 		return *this;
 	}
+
+	void buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vector<Path>& out);
 };
 
 }

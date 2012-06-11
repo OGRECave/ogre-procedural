@@ -38,6 +38,8 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+	struct Triangle2D;
+
 typedef std::vector<Ogre::Vector2> PointList;
 
 /** Implements a Delaunay Triangulation algorithm.
@@ -109,12 +111,19 @@ struct Triangle
 
 	InsideType isPointInsideCircumcircle(const Ogre::Vector2& point);
 
-	void makeDirectIfNeeded()
+	inline void makeDirectIfNeeded()
 	{
 		if ((p(1)-p(0)).crossProduct(p(2)-p(0))<0)
 		{
 			std::swap(i[0], i[1]);
 		}
+	}
+
+	inline bool isDegenerate()
+	{
+		if ( Ogre::Math::Abs((p(1)-p(0)).crossProduct(p(2)-p(0)))<1e-4)
+			return true;
+		return false;
 	}
 };
 //-----------------------------------------------------------------------
@@ -131,15 +140,17 @@ struct TouchSuperTriangle
 
 	Shape* mShapeToTriangulate;
 	MultiShape* mMultiShapeToTriangulate;
+	Triangle2D* mManualSuperTriangle;
+	bool mRemoveOutside;
 
 	void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer) const;
-	void addConstraints(const MultiShape& multiShape, DelaunayTriangleBuffer& tbuffer, const PointList& pl) const;
+	void _addConstraints(DelaunayTriangleBuffer& tbuffer, const PointList& pl) const;
 	void _recursiveTriangulatePolygon(const DelaunaySegment& cuttingSeg, std::vector<int> inputPoints, DelaunayTriangleBuffer& tbuffer, const PointList&  pl) const;
 
 public:	
 
 	/// Default ctor
-	Triangulator() : mShapeToTriangulate(0), mMultiShapeToTriangulate(0) {}
+	Triangulator() : mShapeToTriangulate(0), mMultiShapeToTriangulate(0), mManualSuperTriangle(0), mRemoveOutside(true) {}
 
 	/// Sets shape to triangulate
 	Triangulator& setShapeToTriangulate(Shape* shape)
@@ -153,6 +164,20 @@ public:
 	Triangulator& setMultiShapeToTriangulate(MultiShape* multiShape)
 	{
 		mMultiShapeToTriangulate = multiShape;
+		return *this;
+	}
+
+	/// Sets manual super triangle (instead of letting Triangulator guessing it)
+	Triangulator& setManualSuperTriangle(Triangle2D* tri)
+	{
+		mManualSuperTriangle = tri;
+		return *this;
+	}
+
+	/// Sets if the outside of sha
+	Triangulator& setRemoveOutside(bool removeOutside)
+	{
+		mRemoveOutside = removeOutside;
 		return *this;
 	}
 	

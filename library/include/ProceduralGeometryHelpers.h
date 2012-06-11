@@ -136,26 +136,15 @@ public:
 };
 //-----------------------------------------------------------------------
 /// Represents a 2D segment
-class Segment2D
+struct Segment2D
 {
 	Ogre::Vector2 mA;
 	Ogre::Vector2 mB;
-	public:
 		
+	Segment2D() {}
+
 	/// Contructor with arguments
 	Segment2D(Ogre::Vector2 a, Ogre::Vector2 b) : mA(a), mB(b) {}
-
-	/// Returns point A
-	Ogre::Vector2 getA()
-	{
-		return mA;	
-	}
-
-	/// Returns point B
-	Ogre::Vector2 getB()
-	{
-		return mB;
-	}
 
 	/**	  
 	 * Computes the interesction between current segment and another segment
@@ -169,6 +158,21 @@ class Segment2D
 	bool intersects(const Segment2D& other) const;
 };
 //-----------------------------------------------------------------------
+// Compares 2 Vector3, with some tolerance
+struct Vector3Comparator
+{
+	bool operator()(const Ogre::Vector3& one, const Ogre::Vector3& two) const
+	{
+		if ((one-two).squaredLength()<1e-6)
+			return false;
+		if (Ogre::Math::Abs(one.x - two.x)>1e-3)
+			return one.x<two.x;
+		if (Ogre::Math::Abs(one.y - two.y)>1e-3)
+			return one.y<two.y;
+		return one.z<two.z;
+	}
+};
+//-----------------------------------------------------------------------
 /// Represents a 3D segment
 struct Segment3D
 {
@@ -179,13 +183,39 @@ struct Segment3D
 	/// Contructor with arguments
 	Segment3D(Ogre::Vector3 a, Ogre::Vector3 b) : mA(a), mB(b) {}
 
+	bool epsilonEquivalent(const Segment3D& other) const
+	{
+		return ((mA.squaredDistance(other.mA) < 1e-8 && mB.squaredDistance(other.mB) < 1e-8) ||
+			(mA.squaredDistance(other.mB) < 1e-8 && mB.squaredDistance(other.mA) < 1e-8));
+	}
+
+	Segment3D orderedCopy() const
+	{
+		if (Vector3Comparator()(mB, mA))
+			return Segment3D(mB,mA);
+		return *this;
+	}
+
+};
+//-----------------------------------------------------------------------
+/// Represents a 2D triangle
+struct Triangle2D
+{
+	Ogre::Vector2 mPoints[3];
+
+	Triangle2D(const Ogre::Vector2& a,const Ogre::Vector2& b,const Ogre::Vector2& c) 
+	{
+		mPoints[0]=a;
+		mPoints[1]=b;
+		mPoints[2]=c;
+	}
 };
 //-----------------------------------------------------------------------
 /// Represents a 3D triangle
-class Triangle3D
+struct Triangle3D
 {
 	Ogre::Vector3 mPoints[3];
-public:
+
 	Triangle3D(const Ogre::Vector3& a,const Ogre::Vector3& b,const Ogre::Vector3& c) 
 	{
 		mPoints[0]=a;

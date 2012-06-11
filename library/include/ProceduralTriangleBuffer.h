@@ -133,6 +133,14 @@ protected:
 	}
 
 	/** Adds a new vertex to the buffer */
+	inline TriangleBuffer& vertex(const Vertex& v)
+	{		
+		mVertices.push_back(v);
+		mCurrentVertex = &mVertices.back();
+		return *this;
+	}
+
+	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& position(const Ogre::Vector3& pos)
 	{
 		Vertex v;
