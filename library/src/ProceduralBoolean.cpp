@@ -178,11 +178,29 @@ namespace Procedural
 		newMesh.rebaseOffset();
 		for (std::vector<int>::iterator it = outIndice.begin(); it!=outIndice.end();it++)
 			newMesh.index(*it);
+		Real x1 = tri.mPoints[0].x;
+		Real y1 = tri.mPoints[0].y;
+		Vector2 uv1 = vec[ind[triIndex*3]].mUV;
+		Real x2 = tri.mPoints[1].x;
+		Real y2 = tri.mPoints[1].y;
+		Vector2 uv2 = vec[ind[triIndex*3+1]].mUV;
+		Real x3 = tri.mPoints[2].x;
+		Real y3 = tri.mPoints[2].y;
+		Vector2 uv3 = vec[ind[triIndex*3+2]].mUV;
+		Real DET = x1*y2-x2*y1+x2*y3-x3*y2+x3*y1-x1*y3;
+		Vector2 A 	= ((y2-y3)*uv1+(y3-y1)*uv2+(y1-y2)*uv3) / DET;
+		Vector2 B 	= ((x3-x2)*uv1+(x1-x3)*uv2+(x2-x1)*uv3) / DET;
+		Vector2 C 	= ((x2*y3-x3*y2)*uv1+(x3*y1-x1*y3)*uv2+(x1*y2-x2*y1)*uv3) / DET;
+		
 		for (std::vector<Vector2>::iterator it= outPointList.begin();it!=outPointList.end();it++)
 		{
+			Vector2 uv 	= A*it->x+B*it->y+C;
 			newMesh.position(deprojectOnAxis(*it, planeOrigin, xAxis, yAxis));
 			newMesh.normal(triNormal);
+			newMesh.textureCoord(uv);
 		}
+
+		
 	}
 	}
 	//-----------------------------------------------------------------------

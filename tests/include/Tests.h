@@ -131,7 +131,7 @@ class Unit_Tests : public BaseApplication
 			TriangleBuffer tb;
 			Boolean().setMesh1(&tb1).setMesh2(&tb2).addToTriangleBuffer(tb);
 			
-			putMesh(tb.transformToMesh("toto"));
+			putMesh(tb.transformToMesh("toto"),1);
 		}
 	};
 	/* --------------------------------------------------------------------------- */
