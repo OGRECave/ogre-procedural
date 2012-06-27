@@ -73,12 +73,26 @@ void _recursiveAddNeighbour(TriangleBuffer& result, const TriangleBuffer& source
     const std::vector<TriangleBuffer::Vertex>& vec = source.getVertices();
     result.rebaseOffset();
     if (inverted)
-        result.triangle(0, 1, 2);
-    else
+	{
         result.triangle(0, 2, 1);
-    result.vertex(vec[ind[triNumber * 3]]);
-    result.vertex(vec[ind[triNumber * 3 + 1]]);
-    result.vertex(vec[ind[triNumber * 3 + 2]]);
+		TriangleBuffer::Vertex v = vec[ind[triNumber * 3]];
+		v.mNormal = -v.mNormal;
+		result.vertex(v);
+		v = vec[ind[triNumber * 3+1]];
+		v.mNormal = -v.mNormal;
+		result.vertex(v);
+		v = vec[ind[triNumber * 3+2]];
+		v.mNormal = -v.mNormal;
+		result.vertex(v);
+	}
+    else
+	{
+        result.triangle(0, 1, 2);
+		result.vertex(vec[ind[triNumber * 3]]);
+		result.vertex(vec[ind[triNumber * 3 + 1]]);
+		result.vertex(vec[ind[triNumber * 3 + 2]]);
+	}
+    
     //Utils::log("vertex " + StringConverter::toString(vec[ind[triNumber*3]].mPosition));
     //Utils::log("vertex " + StringConverter::toString(vec[ind[triNumber*3+1]].mPosition));
     //Utils::log("vertex " + StringConverter::toString(vec[ind[triNumber*3+2]].mPosition));
@@ -113,7 +127,6 @@ void _recursiveAddNeighbour(TriangleBuffer& result, const TriangleBuffer& source
     {
         nextTriangle3 = it->second;
         _removeFromTriLookup(nextTriangle3, lookup);
-        ;
     }
     //Utils::log("add " + StringConverter::toString(nextTriangle1) + " ," + StringConverter::toString(nextTriangle2) + " ,"+StringConverter::toString(nextTriangle3) );
 
@@ -214,8 +227,6 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
             newMesh.normal(triNormal);
             newMesh.textureCoord(uv);
         }
-
-
     }
 }
 //-----------------------------------------------------------------------
@@ -294,34 +305,86 @@ void Boolean::addToTriangleBuffer(TriangleBuffer& buffer) const
     {
         // Find 2 seed triangles for each contour
         Segment3D firstSeg(it->getPoint(0), it->getPoint(1));
-        // Mesh1
-        std::pair<TriLookup::iterator, TriLookup::iterator> it2 = triLookup1.equal_range(firstSeg.orderedCopy());
-        int seed1, seed2;
-        // TODO : check which of seed1 and seed2 must be included (it can be 0, 1 or both)
-        if (it2.first != triLookup1.end())
+
+		std::pair<TriLookup::iterator, TriLookup::iterator> it2mesh1 = triLookup1.equal_range(firstSeg.orderedCopy());
+		std::pair<TriLookup::iterator, TriLookup::iterator> it2mesh2 = triLookup2.equal_range(firstSeg.orderedCopy());
+        int mesh1seed1, mesh1seed2, mesh2seed1, mesh2seed2;
+        
+        if (it2mesh1.first != triLookup1.end() && it2mesh2.first != triLookup2.end())
         {
-            seed1 = it2.second->second;
-            _removeFromTriLookup(seed1, triLookup1);
+			// check which of seed1 and seed2 must be included (it can be 0, 1 or both)
+            mesh1seed1 = (--it2mesh1.second)->second;
+            mesh1seed2 = it2mesh1.first->second;
+			mesh2seed1 = (--it2mesh2.second)->second;
+            mesh2seed2 = it2mesh2.first->second;
+
+			Vector3 vMesh1, nMesh1, vMesh2, nMesh2;
+			for (int i=0;i<3;i++)
+			{
+				const Vector3& pos = newMesh1.getVertices()[newMesh1.getIndices()[mesh1seed1 * 3 + i]].mPosition;
+				if (pos.squaredDistance(firstSeg.mA)>1e-6 && pos.squaredDistance(firstSeg.mB)>1e-6)
+				{
+					vMesh1 = pos;
+					nMesh1 = newMesh1.getVertices()[newMesh1.getIndices()[mesh1seed1 * 3 + i]].mNormal;
+					break;
+				}
+			}
+
+			for (int i=0;i<3;i++)
+			{
+				const Vector3& pos = newMesh2.getVertices()[newMesh2.getIndices()[mesh2seed1 * 3 + i]].mPosition;
+				if (pos.squaredDistance(firstSeg.mA)>1e-6 && pos.squaredDistance(firstSeg.mB)>1e-6)
+				{
+					vMesh2 = pos;
+					nMesh2 = newMesh2.getVertices()[newMesh2.getIndices()[mesh2seed1 * 3 + i]].mNormal;
+					break;
+				}
+			}
+
+			bool M2S1InsideM1 = (nMesh1.dotProduct(vMesh2-firstSeg.mA) < 0);
+			bool M1S1InsideM2 = (nMesh2.dotProduct(vMesh1-firstSeg.mA) < 0);
+
+            _removeFromTriLookup(mesh1seed1, triLookup1);
+			_removeFromTriLookup(mesh2seed1, triLookup2);
+			_removeFromTriLookup(mesh1seed2, triLookup1);
+			_removeFromTriLookup(mesh2seed2, triLookup2);
 
             // Recursively add all neighbours of these triangles
             // Stop when a contour is touched
-            _recursiveAddNeighbour(buffer, newMesh1, seed1, triLookup1, limits, true);
+			switch (mBooleanOperation)
+			{
+			case BT_UNION:
+				if (M1S1InsideM2)
+					_recursiveAddNeighbour(buffer, newMesh1, mesh1seed2, triLookup1, limits, false);
+				else
+					_recursiveAddNeighbour(buffer, newMesh1, mesh1seed1, triLookup1, limits, false);
+				if (M2S1InsideM1)
+					_recursiveAddNeighbour(buffer, newMesh2, mesh2seed2, triLookup2, limits, false);
+				else
+					_recursiveAddNeighbour(buffer, newMesh2, mesh2seed1, triLookup2, limits, false);
+				break;
+			case BT_INTERSECTION:
+				if (M1S1InsideM2)
+					_recursiveAddNeighbour(buffer, newMesh1, mesh1seed1, triLookup1, limits, false);
+				else
+					_recursiveAddNeighbour(buffer, newMesh1, mesh1seed2, triLookup1, limits, false);
+				if (M2S1InsideM1)
+					_recursiveAddNeighbour(buffer, newMesh2, mesh2seed1, triLookup2, limits, false);
+				else
+					_recursiveAddNeighbour(buffer, newMesh2, mesh2seed2, triLookup2, limits, false);					
+				break;
+			case BT_DIFFERENCE:
+				if (M1S1InsideM2)
+					_recursiveAddNeighbour(buffer, newMesh1, mesh1seed2, triLookup1, limits, false);
+				else
+					_recursiveAddNeighbour(buffer, newMesh1, mesh1seed1, triLookup1, limits, false);
+				if (M2S1InsideM1)
+					_recursiveAddNeighbour(buffer, newMesh2, mesh2seed1, triLookup2, limits, true);
+				else
+					_recursiveAddNeighbour(buffer, newMesh2, mesh2seed2, triLookup2, limits, true);
+				break;
+			}
         }
-
-        //Mesh2
-        it2 = triLookup2.equal_range(firstSeg.orderedCopy());
-        // TODO : check which of seed1 and seed2 must be included (it can be 0, 1 or both)
-        if (it2.first != triLookup2.end())
-        {
-            seed1 = it2.second->second;
-            _removeFromTriLookup(seed1, triLookup2);
-
-            // Recursively add all neighbours of these triangles
-            // Stop when a contour is touched
-            _recursiveAddNeighbour(buffer, newMesh2, seed1, triLookup2, limits, false);
-        }
-
-
     }
 }
 }
