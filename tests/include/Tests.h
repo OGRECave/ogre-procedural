@@ -126,12 +126,13 @@ class Unit_Tests : public BaseApplication
 			TriangleBuffer tb2;
 			BoxGenerator().addToTriangleBuffer(tb1);
 			//PlaneGenerator().setSizeX(5.0).setSizeY(5.0).addToTriangleBuffer(tb2);
-			BoxGenerator().setPosition(.1,.12,.11).addToTriangleBuffer(tb2);
+			BoxGenerator().setPosition(.5,.12,.11).addToTriangleBuffer(tb2);
+			//BoxGenerator().setScale(2.0,.2,.2).setPosition(0,.1,.15).addToTriangleBuffer(tb2);
 			//SphereGenerator().setScale(.7).addToTriangleBuffer(tb2);
-			TriangleBuffer tb;
-			Boolean().setMesh1(&tb1).setMesh2(&tb2).addToTriangleBuffer(tb);
-			
-			putMesh(tb.transformToMesh("toto"),1);
+			putMesh(Boolean().setBooleanOperation(Boolean::BT_DIFFERENCE).setMesh1(&tb1).setMesh2(&tb2).realizeMesh(), 1);
+			putMesh(Boolean().setBooleanOperation(Boolean::BT_UNION).setMesh1(&tb1).setMesh2(&tb2).realizeMesh(), 1);
+			putMesh(Boolean().setBooleanOperation(Boolean::BT_INTERSECTION).setMesh1(&tb1).setMesh2(&tb2).realizeMesh(), 1);
+
 		}
 	};
 	/* --------------------------------------------------------------------------- */

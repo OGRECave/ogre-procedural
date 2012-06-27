@@ -24,30 +24,47 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
-*/
+ */
 #include "Ogre.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralMeshGenerator.h"
 
 namespace Procedural
 {
-	class _ProceduralExport Boolean
-	{
-		TriangleBuffer* mMesh1;
-		TriangleBuffer* mMesh2;
-		public:
-			Boolean& setMesh1(TriangleBuffer* tb)
-			{
-				mMesh1 = tb;
-				return *this;
-			}
 
-			Boolean& setMesh2(TriangleBuffer* tb)
-			{
-				mMesh2 = tb;
-				return *this;
-			}
+class _ProceduralExport Boolean : public MeshGenerator<Boolean>
+{
+public:
+    enum BooleanOperation
+    {
+        BT_UNION, BT_INTERSECTION, BT_DIFFERENCE
+    };
+private:
+    BooleanOperation mBooleanOperation;
+    TriangleBuffer* mMesh1;
+    TriangleBuffer* mMesh2;
+public:
 
-			void addToTriangleBuffer(TriangleBuffer& buffer) const;
-	};
+	Boolean() : mMesh1(0), mMesh2(0), mBooleanOperation(BT_UNION) {}
+
+    Boolean& setMesh1(TriangleBuffer* tb)
+    {
+        mMesh1 = tb;
+        return *this;
+    }
+
+    Boolean& setMesh2(TriangleBuffer* tb)
+    {
+        mMesh2 = tb;
+        return *this;
+    }
+
+    Boolean& setBooleanOperation(BooleanOperation op)
+    {
+        mBooleanOperation = op;
+        return *this;
+    }
+
+    void addToTriangleBuffer(TriangleBuffer& buffer) const;
+};
 }
