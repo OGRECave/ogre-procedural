@@ -168,7 +168,7 @@ public:
 	/// Outputs a track, with Key=X and Value=Y
 	Track convertToTrack(Track::AddressingMode addressingMode=Track::AM_RELATIVE_LINEIC) const;
 
-	/// Gets raw vector data of this shape
+	/// Gets a copy of raw vector data of this shape
 	inline std::vector<Ogre::Vector2> getPoints() const
 	{
 		return mPoints;

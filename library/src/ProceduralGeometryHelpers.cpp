@@ -262,6 +262,10 @@ bool Triangle3D::findIntersect(const Triangle3D& other, Segment3D& intersection)
 
 		//Compute the direction of intersection line
 		Vector3 d = n1.crossProduct(n2);
+		
+		// We don't do coplanar triangles
+		if (d.squaredLength()<1e-6)
+			return false;
 
 		// Project triangle points onto the intersection line
 

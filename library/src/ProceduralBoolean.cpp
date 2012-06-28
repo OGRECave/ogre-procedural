@@ -275,23 +275,23 @@ void Boolean::addToTriangleBuffer(TriangleBuffer& buffer) const
     }
     // Remove all intersection segments too small to be relevant
     for (std::vector<Intersect>::iterator it = intersectionList.begin(); it != intersectionList.end();)
-        if ((it->mSeg.mB - it->mSeg.mA).squaredLength() < 1e-6)
+        if ((it->mSeg.mB - it->mSeg.mA).squaredLength() < 1e-8)
             it = intersectionList.erase(it);
         else
             it++;
-
-    // Retriangulate
+	
+	// Retriangulate
     TriangleBuffer newMesh1, newMesh2;
     _retriangulate(newMesh1, *mMesh1, intersectionList, true);
     _retriangulate(newMesh2, *mMesh2, intersectionList, false);
-
+	
     // Trace contours
     std::vector<Path> contours;
     std::vector<Segment3D> segmentSoup;
     for (std::vector<Intersect>::iterator it = intersectionList.begin(); it != intersectionList.end(); it++)
         segmentSoup.push_back(it->mSeg);
     Path().buildFromSegmentSoup(segmentSoup, contours);
-
+	
     // Build a lookup from segment to triangle
     TriLookup triLookup1, triLookup2;
     _buildTriLookup(triLookup1, newMesh1);
@@ -313,11 +313,15 @@ void Boolean::addToTriangleBuffer(TriangleBuffer& buffer) const
         if (it2mesh1.first != triLookup1.end() && it2mesh2.first != triLookup2.end())
         {
 			// check which of seed1 and seed2 must be included (it can be 0, 1 or both)
-            mesh1seed1 = (--it2mesh1.second)->second;
-            mesh1seed2 = it2mesh1.first->second;
-			mesh2seed1 = (--it2mesh2.second)->second;
-            mesh2seed2 = it2mesh2.first->second;
-
+            mesh1seed1 = it2mesh1.first->second;
+			mesh1seed2 = (--it2mesh1.second)->second;            
+			mesh2seed1 = it2mesh2.first->second;
+			mesh2seed2 = (--it2mesh2.second)->second;
+			if (mesh1seed1 == mesh1seed2)
+				mesh1seed2 = -1;
+			if (mesh2seed1 == mesh2seed2)
+				mesh2seed2 = -1;
+            
 			Vector3 vMesh1, nMesh1, vMesh2, nMesh2;
 			for (int i=0;i<3;i++)
 			{
