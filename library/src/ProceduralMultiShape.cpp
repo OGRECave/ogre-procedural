@@ -264,7 +264,7 @@ void MultiShape::buildFromSegmentSoup(const std::vector<Segment2D>& segList)
         }
         if (s.getPoint(0).squaredDistance(s.getPoint(s.getSegCount() + 1)) < 1e-6)
         {
-            s.getPoints().pop_back();
+            s.getPointsReference().pop_back();
             s.close();
         }
         addShape(s);
