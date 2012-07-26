@@ -36,6 +36,8 @@ set( HDRS
 	include/ProceduralMultiShape.h	
 	include/ProceduralGeometryHelpers.h
 	include/ProceduralBoolean.h
+	include/ProceduralSpringGenerator.h
+	include/ProceduralSVG.h
 	)
 
 set( SRCS
@@ -64,6 +66,8 @@ set( SRCS
 		src/ProceduralMultiShape.cpp
 		src/ProceduralGeometryHelpers.cpp
 		src/ProceduralBoolean.cpp
+		src/ProceduralSpringGenerator.cpp
+		src/ProceduralSVG.cpp
 	)
 
 include_directories(SYSTEM ${OIS_INCLUDE_DIRS}

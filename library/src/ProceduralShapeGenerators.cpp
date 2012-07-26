@@ -166,4 +166,58 @@ Shape RoundedCornerSpline2::realizeShape()
 
 	return shape;
 }
+
+//-----------------------------------------------------------------------
+Shape BezierCurve2::realizeShape()
+{
+	assert(mPoints.size() > 1);
+
+	unsigned int* coef = new unsigned int[mPoints.size()];
+	if(mPoints.size() == 2)
+	{
+		coef[0] = 1;
+		coef[1] = 1;
+	}
+	else if(mPoints.size() == 3)
+	{
+		coef[0] = 1;
+		coef[1] = 2;
+		coef[2] = 1;
+	}
+	else if(mPoints.size() == 4)
+	{
+		coef[0] = 1;
+		coef[1] = 3;
+		coef[2] = 3;
+		coef[3] = 1;
+	}
+	else
+	{
+		for(int i = 0; i < mPoints.size(); i++)
+			coef[i] = Utils::binom(mPoints.size() - 1, i);
+	}
+
+	unsigned int div = (mPoints.size() - 1) * mNumSeg + 1;
+	Ogre::Real dt = 1.0f / (Ogre::Real)div;
+
+	Shape shape;
+	Ogre::Real t = 0.0f;
+	while(t < 1.0f)
+	{
+		Ogre::Real x = 0.0f;
+		Ogre::Real y = 0.0f;
+		for(int i = 0; i < mPoints.size(); i++)
+		{
+			Ogre::Real fac = coef[i] * pow(t, i) * pow(1.0f - t, (int)mPoints.size() - 1 - i);
+			x += fac * mPoints[i].x;
+			y += fac * mPoints[i].y;
+		}
+		shape.addPoint(x, y);
+		t += dt;
+	}
+	delete coef;
+
+	return shape;
+}
+
 }

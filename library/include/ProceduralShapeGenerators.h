@@ -308,6 +308,55 @@ class _ProceduralExport CircleShape
 		return s;
 	}
 };
+
+//-----------------------------------------------------------------------
+/**
+ * Builds a ellipse shape
+ */
+class _ProceduralExport EllipseShape
+{
+	Ogre::Real mRadiusX, mRadiusY;
+	unsigned int mNumSeg;
+
+	public:
+	/// Default constructor
+	EllipseShape() : mRadiusX(1.0), mRadiusY(1.0), mNumSeg(8) {}
+
+	/// Sets radius in x direction
+	inline EllipseShape& setRadiusX(Ogre::Real radius)
+	{
+		mRadiusX = radius;
+		return *this;
+	}
+
+	/// Sets radius in y direction
+	inline EllipseShape& setRadiusY(Ogre::Real radius)
+	{
+		mRadiusY = radius;
+		return *this;
+	}
+
+	/// Sets number of segments
+	inline EllipseShape& setNumSeg(unsigned int numSeg)
+	{
+		mNumSeg = numSeg;
+		return *this;
+	}
+
+	/// Builds the shape
+	inline Shape realizeShape()
+	{
+		Shape s;
+		Ogre::Real deltaAngle = Ogre::Math::TWO_PI/(Ogre::Real)mNumSeg;
+		for (unsigned int i = 0; i < mNumSeg; ++i)
+		{
+			s.addPoint(mRadiusX*cosf(i*deltaAngle), mRadiusY*sinf(i*deltaAngle));
+		}
+		s.close();
+		return s;
+	}
+};
+
 //-----------------------------------------------------------------------
 /**
  * Produces a shape from Cubic Hermite control points
@@ -356,6 +405,53 @@ public:
 	Shape realizeShape();
 };
 
+//-----------------------------------------------------------------------
+/**
+ * Builds a shape from a Bezier-Curve.
+ */
+class _ProceduralExport BezierCurve2 : public BaseSpline2<BezierCurve2>
+{	
+	std::vector<Ogre::Vector2> mPoints;
+	unsigned int mNumSeg;
+
+public:
+	/// Default constructor
+	BezierCurve2() : mNumSeg(8) {}
+
+	/// Sets number of segments per two control points
+	inline BezierCurve2& setNumSeg(unsigned int numSeg)
+	{
+		mNumSeg = numSeg;
+		return *this;
+	}
+
+	/// Adds a control point
+	inline BezierCurve2& addPoint(const Ogre::Vector2& pt)
+	{
+		mPoints.push_back(pt);
+		return *this;
+	}
+
+	/// Adds a control point
+	inline BezierCurve2& addPoint(Ogre::Real x, Ogre::Real y)
+	{
+		mPoints.push_back(Ogre::Vector2(x,y));
+		return *this;
+	}
+	
+	/// Safely gets a control point
+	inline const Ogre::Vector2& safeGetPoint(unsigned int i) const
+	{
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+	}
+	
+	/**
+	 * Build a shape from bezier control points
+	 */
+	Shape realizeShape();
+};
 
 }
 

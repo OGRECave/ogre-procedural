@@ -51,5 +51,7 @@ THE SOFTWARE.
 #include "ProceduralTriangleBuffer.h"
 #include "ProceduralTrack.h"
 #include "ProceduralBoolean.h"
+#include "ProceduralSpringGenerator.h"
+#include "ProceduralSVG.h"
 
 #endif

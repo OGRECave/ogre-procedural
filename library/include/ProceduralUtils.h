@@ -179,7 +179,22 @@ public:
 	{
 		return Ogre::Vector3(pos.x, 0, pos.y);
 	}
-	
+
+	/**
+	 * binomial coefficients (a over b)
+	 */
+	static inline unsigned int binom(unsigned int a, unsigned int b)
+	{
+		int tmpA, tmpB;
+		if (( b == 0 ) || (a == b))
+			return 1;
+		else
+		{
+			tmpA = binom(a - 1, b);
+			tmpB = binom(a - 1, b - 1);
+			return tmpA + tmpB;
+		}
+	}	
 };
 }
 #endif

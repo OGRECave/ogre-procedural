@@ -25,33 +25,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURALROOT_H_INCLUDED
-#define PROCEDURALROOT_H_INCLUDED
+#ifndef __Sample_Svg_h_
+#define __Sample_Svg_h_
 
-#include "OgreSceneManager.h"
-#include "ProceduralPlatform.h"
+#include "BaseApplication.h"
+using namespace Ogre;
 
-namespace Procedural
+class Sample_Svg : public BaseApplication
 {
-/** Singleton that holds the general parameters of OgreProcedural.
- *  Unused for now.
- */
-class _ProceduralExport Root
-{
-	static Root* instance;
-	Root()
-	{}
-	public:
-
-	/// Return the singleton pointer of this class
-	static Root* getInstance()
-	{
-		if (!instance)
-			instance = new Root();
-		return instance;
-	}
-
+	virtual bool frameStarted(const FrameEvent& evt);
+protected:
+	virtual void createScene(void);
+	virtual void createCamera(void);
 };
-}
 
-#endif // PROCEDURALROOT_H_INCLUDED
+#endif
