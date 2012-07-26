@@ -8,7 +8,7 @@ set(CMAKE_MODULE_PATH
   "${OgreProcedural_SOURCE_DIR}/CMake/Packages"
 )
 
-set(OgreProcedural_VERSION_DASH_SEPARATED "0.2")
+set(OgreProcedural_VERSION_DASH_SEPARATED "0.3unstable")
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
