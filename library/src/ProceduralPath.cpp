@@ -187,4 +187,19 @@ void Path::buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vect
         out.push_back(p);
     }
 }
+
+//-----------------------------------------------------------------------
+Shape Path::convertToShape() const
+{
+	Shape s;
+	for (std::vector<Ogre::Vector3>::const_iterator it = mPoints.begin();it!=mPoints.end();it++)
+	{
+		s.addPoint(it->x, it->y);
+	}
+	if (mClosed)
+		s.close();
+
+	return s;
+}
+
 }

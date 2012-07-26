@@ -277,5 +277,46 @@ public:
 	Path realizePath();
 };
 
+//-----------------------------------------------------------------------
+/**
+ * Builds a path from a Bezier-Curve.
+ */
+class _ProceduralExport BezierCurve3 : public BaseSpline3<BezierCurve3>
+{	
+	std::vector<Ogre::Vector3> mPoints;
+	unsigned int mNumSeg;
+
+public:
+	/// Default constructor
+	BezierCurve3() : mNumSeg(8) {}
+	
+	/// Adds a control point
+	inline BezierCurve3& addPoint(const Ogre::Vector3& pt)
+	{
+		mPoints.push_back(pt);
+		return *this;
+	}
+
+	/// Adds a control point
+	inline BezierCurve3& addPoint(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+	{
+		mPoints.push_back(Ogre::Vector3(x,y,z));
+		return *this;
+	}
+	
+	/// Safely gets a control point
+	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
+	{
+		if (mClosed)
+			return mPoints[Utils::modulo(i,mPoints.size())];
+		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+	}
+	
+	/**
+	 * Build a path from bezier control points
+	 */
+	Path realizePath();	
+};
+
 }
 #endif

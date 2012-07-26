@@ -26,45 +26,31 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "ProceduralStableHeaders.h"
-#include "Primitives.h"
+#include "Svg.h"
 #include "Procedural.h"
+#include "ProceduralUtils.h"
 
 //-------------------------------------------------------------------------------------
-void Sample_Primitives::createScene(void)
+void Sample_Svg::createScene(void)
 {
-		// Generates every type of primitive
-		Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
-		putMesh2("planeMesh");
-	    Procedural::SphereGenerator().setRadius(2.f).setUTile(5.).setVTile(5.).realizeMesh("sphereMesh");
-		putMesh("sphereMesh", Vector3(0,10,0));
-		Procedural::CylinderGenerator().setHeight(3.f).setRadius(1.f).setUTile(3.).realizeMesh("cylinderMesh");
-		putMesh("cylinderMesh", Vector3(10,10,0));
-		Procedural::TorusGenerator().setRadius(3.f).setSectionRadius(1.f).setUTile(10.).setVTile(5.).realizeMesh("torusMesh");
-		putMesh("torusMesh", Vector3(-10,10,0));
-		Procedural::ConeGenerator().setRadius(2.f).setHeight(3.f).setNumSegBase(36).setNumSegHeight(2).setUTile(3.).realizeMesh("coneMesh");
-		putMesh("coneMesh", Vector3(0,10,-10));
-		Procedural::TubeGenerator().setHeight(3.f).setUTile(3.).realizeMesh("tubeMesh");
-		putMesh("tubeMesh", Vector3(-10,10,-10));
-		Procedural::BoxGenerator().setSizeX(2.0).setSizeY(4.f).setSizeZ(6.f).realizeMesh("boxMesh");
-		putMesh("boxMesh", Vector3(10,10,-10));
-		Procedural::CapsuleGenerator().setHeight(2.f).realizeMesh("capsuleMesh");
-		putMesh("capsuleMesh", Vector3(0,10,10));
-		Procedural::TorusKnotGenerator().setRadius(2.f).setSectionRadius(.5f).setUTile(3.f).setNumSegCircle(64).setNumSegSection(16).realizeMesh("torusKnotMesh");
-		putMesh("torusKnotMesh", Vector3(-10,10,10));
-		Procedural::IcoSphereGenerator().setRadius(2.).setNumIterations(3).setUTile(5.).setVTile(5.).realizeMesh("icoSphereMesh");
-		putMesh("icoSphereMesh", Vector3(10,10,10));
-		Procedural::RoundedBoxGenerator().setSizeX(1.f).setSizeY(5.f).setSizeZ(5.f).setChamferSize(1.f).realizeMesh("roundedBoxMesh");
-		putMesh("roundedBoxMesh", Vector3(20,10,10));
-		Procedural::SpringGenerator().realizeMesh("springMesh");
-		putMesh("springMesh", Vector3(20,10,0));
+		// -- Extrude SVG primitive shapes
+		Procedural::Path p;
+		p.addPoint(0, 0, 0);
+		p.addPoint(0, 10, 0);
+
+		Procedural::MultiShape out;
+		Procedural::SvgLoader svg;
+		svg.parseSvgFile(out, "test.svg", "Essential", 16);
+		Procedural::Extruder().setMultiShapeToExtrude(&out).setExtrusionPath(&p).setScale(.05).realizeMesh("svg");
+		putMesh2("svg");
 }
 //-------------------------------------------------------------------------------------
-void Sample_Primitives::createCamera(void)
+void Sample_Svg::createCamera(void)
 {
 	BaseApplication::createCamera();
 }
 //-------------------------------------------------------------------------------------
-bool Sample_Primitives::frameStarted(const FrameEvent& evt)
+bool Sample_Svg::frameStarted(const FrameEvent& evt)
 {
 	movingLight->setPosition(mCamera->getPosition());
 	return true;
@@ -86,7 +72,7 @@ extern "C" {
 #endif
 	{
 		// Create application object
-		Sample_Primitives app;
+		Sample_Svg app;
 
 		try {
 			app.go();

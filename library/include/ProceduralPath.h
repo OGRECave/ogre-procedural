@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "ProceduralRoot.h"
 #include "ProceduralTrack.h"
 #include "ProceduralGeometryHelpers.h"
+#include "ProceduralShape.h"
 
 namespace Procedural
 {
@@ -318,6 +319,10 @@ public:
 	}
 
 	void buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vector<Path>& out);
+
+	/// Converts the path to a shape, with Y=0
+	Shape convertToShape() const;
+
 };
 
 }
