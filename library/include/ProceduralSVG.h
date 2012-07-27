@@ -33,7 +33,12 @@ THE SOFTWARE.
 #include "ProceduralPlatform.h"
 #include "ProceduralShapeGenerators.h"
 #include <vector>
-#include "rapidxml/rapidxml.hpp"
+
+// Forward declarations
+namespace rapidxml
+{
+    template<class Ch=char> class xml_node;
+}
 
 namespace Procedural
 {
