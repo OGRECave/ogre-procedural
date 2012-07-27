@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "ProceduralShapeGenerators.h"
 #include "ProceduralPath.h"
 #include "ProceduralPathGenerators.h"
+#include "rapidxml/rapidxml.hpp"
 
 using namespace Ogre;
 
