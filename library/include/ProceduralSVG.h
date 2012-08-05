@@ -37,7 +37,7 @@ THE SOFTWARE.
 // Forward declarations
 namespace rapidxml
 {
-    template<class Ch=char> class xml_node;
+template<class Ch> class xml_node;
 }
 
 namespace Procedural
@@ -149,15 +149,15 @@ public:
 	void parseSvgFile(MultiShape& out, const Ogre::String &fileName, const Ogre::String &groupName = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, int segmentsNumber = 8);
 
 private:
-	void parseChildNode(MultiShape& out, rapidxml::xml_node<>* pChild);
-	void parseRect(MultiShape& out, rapidxml::xml_node<>* pRectNode);
-	void parseCircle(MultiShape& out, rapidxml::xml_node<>* pCircleNode);
-	void parseEllipse(MultiShape& out, rapidxml::xml_node<>* pEllipseNode);
-	void parsePolygon(MultiShape& out, rapidxml::xml_node<>* pPolygonNode);
-	void parsePath(MultiShape& out, rapidxml::xml_node<>* pPathNode);
+	void parseChildNode(MultiShape& out, rapidxml::xml_node<char>* pChild);
+	void parseRect(MultiShape& out, rapidxml::xml_node<char>* pRectNode);
+	void parseCircle(MultiShape& out, rapidxml::xml_node<char>* pCircleNode);
+	void parseEllipse(MultiShape& out, rapidxml::xml_node<char>* pEllipseNode);
+	void parsePolygon(MultiShape& out, rapidxml::xml_node<char>* pPolygonNode);
+	void parsePath(MultiShape& out, rapidxml::xml_node<char>* pPathNode);
 
-	Ogre::Real getAttribReal(rapidxml::xml_node<>* pNode, const Ogre::String &attrib, Ogre::Real defaultValue = 0.0f);
-	Ogre::Vector2 getAttribTranslate(rapidxml::xml_node<>* pNode);
+	Ogre::Real getAttribReal(rapidxml::xml_node<char>* pNode, const Ogre::String &attrib, Ogre::Real defaultValue = 0.0f);
+	Ogre::Vector2 getAttribTranslate(rapidxml::xml_node<char>* pNode);
 	std::vector<std::string> split(const std::string& str, const std::string& delimiters, bool removeEmpty = true);
 	std::string xtrim(char* val, char* achar = " .-0123456789", char rchar = ' ');
 };

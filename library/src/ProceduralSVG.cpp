@@ -178,9 +178,9 @@ void SvgLoader::parsePath(MultiShape& out, rapidxml::xml_node<>* pPathNode)
 		Vector2 line = ss.getPoint(1) - ss.getPoint(0);
 		Real deg = line.angleBetween(ss.getPoint(2) - ss.getPoint(0)).valueDegrees();
 		if((0 <= deg && deg <= 180.0f) || (-180.0f <= deg && deg <= 0))
-			ss.setOutSide(Side::SIDE_LEFT);
+			ss.setOutSide(SIDE_LEFT);
 		else
-			ss.setOutSide(Side::SIDE_RIGHT);
+			ss.setOutSide(SIDE_RIGHT);
 
 		//if(pPathNode->first_attribute("id"))
 		//	ss.id = pPathNode->first_attribute("id")->value();
