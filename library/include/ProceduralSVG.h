@@ -34,11 +34,13 @@ THE SOFTWARE.
 #include "ProceduralShapeGenerators.h"
 #include <vector>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 // Forward declarations
 namespace rapidxml
 {
 template<class Ch> class xml_node;
 }
+#endif
 
 namespace Procedural
 {
@@ -159,7 +161,7 @@ private:
 	Ogre::Real getAttribReal(rapidxml::xml_node<char>* pNode, const Ogre::String &attrib, Ogre::Real defaultValue = 0.0f);
 	Ogre::Vector2 getAttribTranslate(rapidxml::xml_node<char>* pNode);
 	std::vector<std::string> split(const std::string& str, const std::string& delimiters, bool removeEmpty = true);
-	std::string xtrim(char* val, char* achar = " .-0123456789", char rchar = ' ');
+	std::string xtrim(const char* val, const char* achar = " .-0123456789", char rchar = ' ');
 };
 
 }

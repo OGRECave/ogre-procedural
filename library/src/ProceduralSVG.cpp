@@ -37,8 +37,8 @@ using namespace Ogre;
 
 namespace Procedural 
 {
-	void SvgLoader::parseSvgFile(MultiShape& out, const String &fileName, const String &groupName, int segmentsNumber)
-	{
+void SvgLoader::parseSvgFile(MultiShape& out, const String &fileName, const String &groupName, int segmentsNumber)
+{
 	mNumSeg = segmentsNumber;
 
 	rapidxml::xml_document<> XMLDoc;    // character type defaults to char
@@ -218,30 +218,20 @@ Vector2 SvgLoader::getAttribTranslate(rapidxml::xml_node<>* pNode)
 {
 	if(pNode->first_attribute("transform"))
 	{
-		Vector2 retVal = Vector2::ZERO;
-		size_t len = pNode->first_attribute("transform")->value_size();
-		if(len == 0) return Vector2::ZERO;
-		char* tmp = new char[len + 1];
-		strcpy(tmp, pNode->first_attribute("transform")->value());
-		tmp[len] = 0;
-		int start = -1;
-		if(strnicmp(tmp, "translate(", 10) == 0) start = 0;
-		for(int i = 0; i < strlen(tmp); i++)
-		{
-			if(start < 0 && i < strlen(tmp) - 13 && strnicmp(tmp + i, "translate(", 10) == 0) start = i + 10;
-			if(start >= 0 && tmp[i] == ')')
-			{
-				tmp[i] = 0;
-				break;
-			}
-		}
-		if(start >= 0)
-		{
-			std::vector<std::string> parts = split(xtrim(tmp + start), std::string(" "));
-			if(parts.size() == 2) retVal = Vector2(StringConverter::parseReal(parts[0]), StringConverter::parseReal(parts[1]));
-		}
-		delete tmp;
-		return retVal;
+		std::string temp(pNode->first_attribute("transform")->value());
+		int begin = temp.find("translate(");
+		if (begin==std::string::npos)
+			return Vector2::ZERO;
+		begin+=10;
+		int end = temp.find(")", begin);
+		if (end == std::string::npos)
+			return Vector2::ZERO;
+		std::string temp2 = temp.substr(begin, end-begin);
+		std::vector<std::string> parts = split(xtrim(temp2.c_str()), std::string(" "));
+		if(parts.size() == 2) 
+			return Vector2(StringConverter::parseReal(parts[0]), StringConverter::parseReal(parts[1]));
+		else
+			return Vector2::ZERO;
 	}
 	else
 		return Vector2::ZERO;
@@ -291,7 +281,7 @@ std::vector<std::string> SvgLoader::split(const std::string& str, const std::str
 }
 
 //-----------------------------------------------------------------------
-std::string SvgLoader::xtrim(char* val, char* achar, char rchar)
+std::string SvgLoader::xtrim(const char* val, const char* achar, char rchar)
 {
 	if(val == NULL) return std::string();
 	size_t len = strlen(val);
