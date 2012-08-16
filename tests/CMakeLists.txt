@@ -18,7 +18,7 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-add_executable(Unit_Tests WIN32 ${HDRS} ${SRCS})
+procedural_add_executable(Unit_Tests WIN32 ${HDRS} ${SRCS})
 
 set_target_properties(Unit_Tests PROPERTIES DEBUG_POSTFIX _d)
 
