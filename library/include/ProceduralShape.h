@@ -28,11 +28,11 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_SHAPE_INCLUDED
 #define PROCEDURAL_SHAPE_INCLUDED
 
-#include "OgreVector2.h"
+#include "OGRE/OgreVector2.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralUtils.h"
-#include "OgreMesh.h"
-#include "OgreManualObject.h"
+#include "OGRE/OgreMesh.h"
+#include "OGRE/OgreManualObject.h"
 #include "ProceduralRoot.h"
 #include "ProceduralMultiShape.h"
 #include "ProceduralTrack.h"

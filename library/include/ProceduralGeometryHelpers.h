@@ -28,13 +28,13 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_GEOMETRYHELPERS_INCLUDED
 #define PROCEDURAL_GEOMETRYHELPERS_INCLUDED
 
-#include "OgrePlane.h"
-#include "OgreVector2.h"
-#include "OgreVector3.h"
+#include "OGRE/OgrePlane.h"
+#include "OGRE/OgreVector2.h"
+#include "OGRE/OgreVector3.h"
 
 namespace Procedural
 {
-	class Line;
+	struct Line;
 //-----------------------------------------------------------------------
 /// Represents a 2D circle
 class Circle

@@ -28,7 +28,7 @@ THE SOFTWARE.
 #ifndef PROCEDURALROOT_H_INCLUDED
 #define PROCEDURALROOT_H_INCLUDED
 
-#include "OgreSceneManager.h"
+#include "OGRE/OgreSceneManager.h"
 #include "ProceduralPlatform.h"
 
 namespace Procedural
