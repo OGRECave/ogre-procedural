@@ -17,23 +17,23 @@ This source file is part of the
 #ifndef __BaseApplication_h_
 #define __BaseApplication_h_
 
-#include <OgreCamera.h>
-#include <OgreEntity.h>
-#include <OgreLogManager.h>
-#include <OgreRoot.h>
-#include <OgreViewport.h>
-#include <OgreSceneManager.h>
-#include <OgreRenderWindow.h>
-#include <OgreConfigFile.h>
+#include <OGRE/OgreCamera.h>
+#include <OGRE/OgreEntity.h>
+#include <OGRE/OgreLogManager.h>
+#include <OGRE/OgreRoot.h>
+#include <OGRE/OgreViewport.h>
+#include <OGRE/OgreSceneManager.h>
+#include <OGRE/OgreRenderWindow.h>
+#include <OGRE/OgreConfigFile.h>
 
-#include <OISEvents.h>
-#include <OISInputManager.h>
-#include <OISKeyboard.h>
-#include <OISMouse.h>
+#include <OIS/OISEvents.h>
+#include <OIS/OISInputManager.h>
+#include <OIS/OISKeyboard.h>
+#include <OIS/OISMouse.h>
 
 #include <SdkTrays.h>
 #include <SdkCameraMan.h>
-#include <OgreVector3.h>
+#include <OGRE/OgreVector3.h>
 
 class BaseApplication : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener, OgreBites::SdkTrayListener
 {

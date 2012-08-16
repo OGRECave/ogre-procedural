@@ -29,7 +29,7 @@ THE SOFTWARE.
 #define PROCEDURAL_TRACK_INCLUDED
 
 #include "ProceduralPlatform.h"
-#include "OgreMath.h"
+#include "OGRE/OgreMath.h"
 
 namespace Procedural
 {

@@ -28,10 +28,10 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_MESH_GENERATOR_INCLUDED
 #define PROCEDURAL_MESH_GENERATOR_INCLUDED
 
-#include "OgreRectangle.h"
-#include "OgreSceneManager.h"
-#include "OgreMesh.h"
-#include "OgreManualObject.h"
+#include "OGRE/OgreRectangle.h"
+#include "OGRE/OgreSceneManager.h"
+#include "OGRE/OgreMesh.h"
+#include "OGRE/OgreManualObject.h"
 #include "ProceduralRoot.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralTriangleBuffer.h"
