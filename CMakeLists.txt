@@ -8,6 +8,8 @@ set(CMAKE_MODULE_PATH
   "${OgreProcedural_SOURCE_DIR}/CMake/Packages"
 )
 
+include(ProceduralAddTargets)
+
 set(OgreProcedural_VERSION_DASH_SEPARATED "0.3unstable")
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
@@ -43,6 +45,12 @@ if (Boost_FOUND)
   include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
   link_directories(${Boost_LIBRARY_DIRS})
 endif ()
+
+# Unity build options
+# A Unity build includes all sources files in just a few actual compilation units
+# to potentially speed up the compilation.
+option(OgreProcedural_UNITY_BUILD "Enable unity build for OgreProcedural." FALSE)
+set(OgreProcedural_UNITY_FILES_PER_UNIT "50" CACHE STRING "Number of files per compilation unit in Unity build.")
 
 find_package(Doxygen)
 

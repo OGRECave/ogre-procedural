@@ -92,7 +92,7 @@ else() # Clang/GCC/Mingw
 endif()
 endif()
 
-add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})
+procedural_add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})
 
 set_target_properties(OgreProcedural PROPERTIES DEBUG_POSTFIX _d)
 

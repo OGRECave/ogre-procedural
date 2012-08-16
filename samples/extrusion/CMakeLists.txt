@@ -18,7 +18,7 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-add_executable(Sample_Extrusion WIN32 ${HDRS} ${SRCS})
+procedural_add_executable(Sample_Extrusion WIN32 ${HDRS} ${SRCS})
 
 set_target_properties(Sample_Extrusion PROPERTIES DEBUG_POSTFIX _d)
 

@@ -35,36 +35,36 @@ namespace Procedural
 class _ProceduralExport Boolean : public MeshGenerator<Boolean>
 {
 public:
-    enum BooleanOperation
-    {
-        BT_UNION, BT_INTERSECTION, BT_DIFFERENCE
-    };
+	enum BooleanOperation
+	{
+		BT_UNION, BT_INTERSECTION, BT_DIFFERENCE
+	};
 private:
-    BooleanOperation mBooleanOperation;
-    TriangleBuffer* mMesh1;
-    TriangleBuffer* mMesh2;
+	BooleanOperation mBooleanOperation;
+	TriangleBuffer* mMesh1;
+	TriangleBuffer* mMesh2;
 public:
 
 	Boolean() : mMesh1(0), mMesh2(0), mBooleanOperation(BT_UNION) {}
 
-    Boolean& setMesh1(TriangleBuffer* tb)
-    {
-        mMesh1 = tb;
-        return *this;
-    }
+	Boolean& setMesh1(TriangleBuffer* tb)
+	{
+		mMesh1 = tb;
+		return *this;
+	}
 
-    Boolean& setMesh2(TriangleBuffer* tb)
-    {
-        mMesh2 = tb;
-        return *this;
-    }
+	Boolean& setMesh2(TriangleBuffer* tb)
+	{
+		mMesh2 = tb;
+		return *this;
+	}
 
-    Boolean& setBooleanOperation(BooleanOperation op)
-    {
-        mBooleanOperation = op;
-        return *this;
-    }
+	Boolean& setBooleanOperation(BooleanOperation op)
+	{
+		mBooleanOperation = op;
+		return *this;
+	}
 
-    void addToTriangleBuffer(TriangleBuffer& buffer) const;
+	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 };
 }
