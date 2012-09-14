@@ -100,6 +100,7 @@ endif()
 
 if (OgreProcedural_BUILD_TESTS)
 	add_subdirectory(tests)
+	add_subdirectory(tests/luatests)
 endif()
 
 # documentation
