@@ -105,11 +105,18 @@ protected:
 
 	static LuaTests* mInstance;
 
+	Entity* mEntity;
+
+	SceneNode* mSceneNode;
+
 public:
 
-	void addMesh(const char* meshName)
+	void addMesh(const char* meshName, const char* materialName="Examples/Rockwall")
 	{
-		mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(mSceneMgr->createEntity(meshName));
+		mEntity = mSceneMgr->createEntity(meshName);
+		mEntity->setMaterialName(materialName);
+		mSceneNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+		mSceneNode->attachObject(mEntity);
 	}
 		
 
@@ -118,7 +125,7 @@ public:
 		return mInstance;
 	}
 
-	LuaTests()
+	LuaTests() : mEntity(0), mSceneNode(0)
 	{
 		mInstance = this;
 	}
