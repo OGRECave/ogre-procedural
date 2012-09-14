@@ -1,0 +1,5 @@
+sg = Procedural.SphereGenerator()
+sg.setRadius(sg,5.0)
+sg.realizeMesh(sg,"toto")
+tests = Procedural.LuaTests_getInstance()
+tests.addMesh(tests, "toto")
