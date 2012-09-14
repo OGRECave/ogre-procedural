@@ -124,8 +124,9 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
  */
 class _ProceduralExport CubicHermiteSpline3 : public BaseSpline3<CubicHermiteSpline3>
 {	
+public:
 	typedef CubicHermiteSplineControlPoint<Ogre::Vector3> ControlPoint;
-
+private:
 	std::vector<ControlPoint> mPoints;
 	
 public:

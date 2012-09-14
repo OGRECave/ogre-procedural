@@ -59,6 +59,18 @@ void LuaTests::reloadScript()
 		L=luaL_newstate();
 		luaopen_base(L);	// load basic libs (eg. print)
 		luaopen_Procedural(L);	// load the wrappered module
+
+		if (mEntity)
+		{
+			MeshManager::getSingletonPtr()->remove(mEntity->getMesh()->getName());
+			mSceneMgr->destroyEntity(mEntity);
+		}
+		if (mSceneNode)
+		{
+			mSceneMgr->destroySceneNode(mSceneNode);
+		}
+
+
 		if (luaL_loadfile(L,"luaTest.lua")==0)
 		{
 			if (lua_pcall(L,0,0,0) ==0)
@@ -71,6 +83,9 @@ void LuaTests::reloadScript()
 				mTextMessage->setCaption(lua_tostring(L,-1));
 				mCamera->getViewport()->setBackgroundColour(ColourValue(0.4f,0.2f,0.2f));
 			}
+		} else
+		{
+			mTextMessage->setCaption(lua_tostring(L,-1));
 		}
 		lua_close(L);
 	}

@@ -84,10 +84,10 @@ public:
  */
 class _ProceduralExport CubicHermiteSpline2 : public BaseSpline2<CubicHermiteSpline2>
 {	
+public:
 	typedef CubicHermiteSplineControlPoint<Ogre::Vector2> ControlPoint;
-
+private:
 	std::vector<ControlPoint> mPoints;	
-	
 public:
 	/// Adds a control point
 	inline CubicHermiteSpline2& addPoint(const Ogre::Vector2& p, const Ogre::Vector2& before, const Ogre::Vector2& after)
@@ -182,8 +182,9 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
  */
 class _ProceduralExport KochanekBartelsSpline2 : public BaseSpline2<KochanekBartelsSpline2>
 {	
+public:
 	typedef KochanekBartelsSplineControlPoint<Ogre::Vector2> ControlPoint;
-	
+private:
 	std::vector<ControlPoint> mPoints;
 	
 public:
