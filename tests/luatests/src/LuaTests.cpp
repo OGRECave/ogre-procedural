@@ -51,27 +51,36 @@ void LuaTests::createScene(void)
 //-------------------------------------------------------------------------------------
 void LuaTests::destroyScene(void)
 {	
+		for (std::vector<Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); entity++)
+		{
+			MeshManager::getSingletonPtr()->remove((*entity)->getMesh()->getName());
+			mSceneMgr->destroyEntity(*entity);
+		}
+		for (std::vector<SceneNode*>::iterator sceneNode = mSceneNodes.begin(); sceneNode != mSceneNodes.end(); sceneNode++)
+		{
+			mSceneMgr->destroySceneNode(*sceneNode);
+		}
+		mSceneNodes.clear();
+		mEntities.clear();
 }
-
+//-------------------------------------------------------------------------------------
 void LuaTests::reloadScript()
 	{
+		ConfigFile cf;
+		cf.load(mResourcesCfg);
+		StringVector sv = cf.getMultiSetting("FileSystem", "Scripts");
+		if (sv.size()<1)
+			return;
+		String path = *sv.begin();
+
 		lua_State *L; 
 		L=luaL_newstate();
 		luaopen_base(L);	// load basic libs (eg. print)
 		luaopen_Procedural(L);	// load the wrappered module
 
-		if (mEntity)
-		{
-			MeshManager::getSingletonPtr()->remove(mEntity->getMesh()->getName());
-			mSceneMgr->destroyEntity(mEntity);
-		}
-		if (mSceneNode)
-		{
-			mSceneMgr->destroySceneNode(mSceneNode);
-		}
+		destroyScene();
 
-
-		if (luaL_loadfile(L,"luaTest.lua")==0)
+		if (luaL_loadfile(L,(path + "/luaTest.lua").c_str())==0)
 		{
 			if (lua_pcall(L,0,0,0) ==0)
 			{
