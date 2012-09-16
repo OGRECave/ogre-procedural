@@ -56,6 +56,7 @@ find_package(Doxygen)
 
 option(OgreProcedural_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(OgreProcedural_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
+option(OgreProcedural_BUILD_LUA_TESTS "Build a lua test bench to prototype stuff with OgreProcedural" FALSE)
 option(OgreProcedural_INSTALL_DOCS "Install documentation." FALSE)
 option(OgreProcedural_STATIC "Static build" FALSE)
 option(OgreProcedural_ILLUSTRATIONS "Build illustrations for manual" FALSE)
@@ -99,7 +100,10 @@ if (OgreProcedural_BUILD_SAMPLES)
 endif()
 
 if (OgreProcedural_BUILD_TESTS)
-	add_subdirectory(tests)
+	add_subdirectory(tests)	
+endif()
+
+if (OgreProcedural_BUILD_LUA_TESTS)
 	add_subdirectory(tests/luatests)
 endif()
 

@@ -1,4 +1,8 @@
-find_package(Lua52)
+find_package(Lua52 REQUIRED)
+
+if (NOT DEFINED SWIG_DIR)
+	message(SEND_ERROR "Please define a variable SWIG_DIR, pointing to SWIG's root directory")
+endif()
 
 set( HDRS
 		../../samples/common/include/BaseApplication.h
@@ -7,7 +11,7 @@ set( HDRS
 
 set( SRCS
 		../../samples/common/src/BaseApplication.cpp
-		"${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"		
+		"${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
 		src/LuaTests.cpp
 	)
 
@@ -18,9 +22,10 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${LUA_INCLUDE_DIR}
 )
 
-add_custom_command(OUTPUT procedural_wrap.cxx
-                     COMMAND ${SWIG_DIR}/swig.exe ARGS -c++ -lua -v -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" procedural.i 1>out.log 2>err.log
-                     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
+                     COMMAND ${SWIG_DIR}/swig.exe ARGS -c++ -lua -v -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" -I"${CMAKE_CURRENT_SOURCE_DIR}/include" procedural.i
+                     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+					 DEPENDS procedural.i)
 
 procedural_add_executable(LuaTests WIN32 ${HDRS} ${SRCS})
 
