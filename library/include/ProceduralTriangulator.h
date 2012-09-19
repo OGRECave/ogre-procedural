@@ -30,8 +30,8 @@ THE SOFTWARE.
 
 #include "ProceduralTriangleBuffer.h"
 #include "ProceduralShape.h"
-#include "OGRE/OgreVector3.h"
-#include "OGRE/OgreMatrix4.h"
+#include "OgreVector3.h"
+#include "OgreMatrix4.h"
 #include "ProceduralUtils.h"
 #include "ProceduralMultiShape.h"
 #include "ProceduralMeshGenerator.h"

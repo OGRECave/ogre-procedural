@@ -28,9 +28,9 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_TRIANGLEBUFFER_INCLUDED
 #define PROCEDURAL_TRIANGLEBUFFER_INCLUDED
 
-#include "OGRE/OgreManualObject.h"
-#include "OGRE/OgreMesh.h"
-#include "OGRE/OgreSceneManager.h"
+#include "OgreManualObject.h"
+#include "OgreMesh.h"
+#include "OgreSceneManager.h"
 #include "ProceduralUtils.h"
 #include "ProceduralRoot.h"
 #include <fstream>

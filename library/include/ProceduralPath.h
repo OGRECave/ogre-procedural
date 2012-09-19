@@ -28,8 +28,8 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_PATH_INCLUDED
 #define PROCEDURAL_PATH_INCLUDED
 
-#include "OGRE/OgreVector3.h"
-#include "OGRE/OgreSimpleSpline.h"
+#include "OgreVector3.h"
+#include "OgreSimpleSpline.h"
 #include "ProceduralUtils.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralRoot.h"

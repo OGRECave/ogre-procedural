@@ -28,7 +28,7 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_SPLINES_INCLUDED
 #define PROCEDURAL_SPLINES_INCLUDED
 
-#include "OGRE/Ogre.h"
+#include "Ogre.h"
 
 namespace Procedural
 {

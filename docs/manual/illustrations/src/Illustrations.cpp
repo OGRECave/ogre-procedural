@@ -26,7 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "ProceduralStableHeaders.h"
-#include "OGRE/Ogre.h"
+#include "Ogre.h"
 #include "Illustrations.h"
 #include "Procedural.h"
 

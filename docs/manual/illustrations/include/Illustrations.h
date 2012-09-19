@@ -28,7 +28,7 @@ THE SOFTWARE.
 #ifndef __Test_h_
 #define __Test_h_
 
-#include "OGRE/Ogre.h"
+#include "Ogre.h"
 #include "Procedural.h"
 using namespace Ogre;
 using namespace Procedural;
