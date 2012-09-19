@@ -18,8 +18,19 @@
  %include "ProceduralTriangleBuffer.h"
  %include "ProceduralMeshGenerator.h"
  %include "LuaTests.h"
+ %include "ProceduralShapeGeneratorsBase.h"
+ %include "ProceduralPathGeneratorsBase.h"
+ %template(bs1) Procedural::BaseSpline2< Procedural::CubicHermiteSpline2>;
+ %template(bs2) Procedural::BaseSpline2< Procedural::CatmullRomSpline2>;
+ %template(bs3) Procedural::BaseSpline2< Procedural::KochanekBartelsSpline2>;
+ %template(bs4) Procedural::BaseSpline2< Procedural::RoundedCornerSpline2>;
+ %template(bs5) Procedural::BaseSpline2< Procedural::BezierCurve2>;
+ %template(bs6) Procedural::BaseSpline3< Procedural::CubicHermiteSpline3>;
+ %template(bs7) Procedural::BaseSpline3< Procedural::CatmullRomSpline3>;
+ %template(bs8) Procedural::BaseSpline3< Procedural::RoundedCornerSpline3>;
+ %template(bs9) Procedural::BaseSpline3< Procedural::BezierCurve3>; 
  %include "ProceduralShapeGenerators.h"
- %include "ProceduralPathGenerators.h"
+ %include "ProceduralPathGenerators.h" 
  %template (mg1) Procedural::MeshGenerator<Procedural::SphereGenerator>;
  %template (mg2) Procedural::MeshGenerator<Procedural::BoxGenerator>;
  %template (mg3) Procedural::MeshGenerator<Procedural::CapsuleGenerator>;
@@ -36,16 +47,6 @@
  %template (mg14) Procedural::MeshGenerator<Procedural::Triangulator>;
  %template (mg15) Procedural::MeshGenerator<Procedural::Boolean>;
  %template (mg16) Procedural::MeshGenerator<Procedural::SpringGenerator>;
- %template(bs1) Procedural::BaseSpline2< CubicHermiteSpline2>;
- %template(bs2) Procedural::BaseSpline2< CatmullRomSpline2>;
- %template(bs3) Procedural::BaseSpline2< KochanekBartelsSpline2>;
- %template(bs4) Procedural::BaseSpline2< RoundedCornerSpline2>;
- %template(bs5) Procedural::BaseSpline2< BezierCurve2>;
- %template(bs6) Procedural::BaseSpline3< CubicHermiteSpline3>;
- %template(bs7) Procedural::BaseSpline3< CatmullRomSpline3>;
- %template(bs8) Procedural::BaseSpline3< RoundedCornerSpline3>;
- %template(bs9) Procedural::BaseSpline3< BezierCurve3>;
- 
  %include "ProceduralSphereGenerator.h"
  %include "ProceduralBoxGenerator.h"
  %include "ProceduralCapsuleGenerator.h"
