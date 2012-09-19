@@ -72,8 +72,7 @@ set( SRCS
 		src/ProceduralSVG.cpp
 	)
 
-include_directories(SYSTEM ${OIS_INCLUDE_DIRS}
-	${OGRE_INCLUDE_DIRS}
+include_directories(SYSTEM ${OGRE_INCLUDE_DIRS}
 )
 
 # should we build static libs?
