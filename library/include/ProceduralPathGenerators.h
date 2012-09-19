@@ -30,37 +30,10 @@ THE SOFTWARE.
 
 #include "ProceduralPath.h"
 #include "ProceduralSplines.h"
+#include "ProceduralPathGeneratorsBase.h"
 
 namespace Procedural
 {
-//-----------------------------------------------------------------------
-/// Base class for Path generators
-template<class T>
-class BaseSpline3
-{
-protected:
-	/// The number of segments between 2 control points
-	unsigned int mNumSeg;
-	/// Tells if the spline is closed or not
-	bool mClosed;
-public:
-	BaseSpline3() : mNumSeg(4), mClosed(false) {}	
-
-	/// Sets the number of segments between 2 control points
-	inline T& setNumSeg(int numSeg)
-	{
-		assert(numSeg>=1);
-		mNumSeg = numSeg;
-		return (T&)*this;
-	}
-	
-	/// Closes the spline
-	inline T& close()
-	{
-		mClosed = true;
-		return (T&)*this;
-	}
-};
 //-----------------------------------------------------------------------
 /**
  * Builds a path from a Catmull-Rom Spline.

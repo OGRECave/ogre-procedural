@@ -30,54 +30,10 @@ THE SOFTWARE.
 
 #include "ProceduralShape.h"
 #include "ProceduralSplines.h"
+#include "ProceduralShapeGeneratorsBase.h"
 
 namespace Procedural
 {
-//-----------------------------------------------------------------------
-/// Base class for Shape generators
-template<class T>
-class BaseSpline2
-{
-protected:
-	/// The number of segments between 2 control points
-	unsigned int mNumSeg;
-	/// Whether the shape will be closed or not
-	bool mClosed;
-	/// The "out" side of the shape
-	Side mOutSide;
-public:
-	/// Default constructor
-	BaseSpline2() : mNumSeg(4), mClosed(false), mOutSide(SIDE_RIGHT) {}
-	
-	/// Sets the out side of the shape
-	inline T& setOutSide(Side outSide)
-	{
-		mOutSide = outSide;
-		return (T&)*this;
-	}
-
-	/// Gets the out side of the shape
-	inline Side getOutSide() const
-	{
-		return mOutSide;
-	}
-
-	/// Sets the number of segments between 2 control points
-	inline T& setNumSeg(unsigned int numSeg)
-	{
-		assert(numSeg>=1);
-		mNumSeg = numSeg;
-		return (T&)*this;
-	}
-
-	/// Closes the spline
-	inline T& close()
-	{
-		mClosed = true;
-		return (T&)*this;
-	}
-};
-
 //-----------------------------------------------------------------------
 /**
  * Produces a shape from Cubic Hermite control points

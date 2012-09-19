@@ -26,8 +26,10 @@ set( HDRS
 	include/ProceduralLathe.h
 	include/ProceduralShape.h	
 	include/ProceduralShapeGenerators.h
+	include/ProceduralShapeGeneratorsBase.h
 	include/ProceduralPath.h
 	include/ProceduralPathGenerators.h
+	include/ProceduralPathGeneratorsBase.h
 	include/ProceduralTrack.h
 	include/ProceduralSplines.h
 	include/ProceduralTriangulator.h
