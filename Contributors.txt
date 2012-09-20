@@ -8,3 +8,4 @@ Contributors:
 Thomas Fischer ( tdev )
 ( svenstaro )
 ( Transporter )
+Joel Lamotte( Klaim)
