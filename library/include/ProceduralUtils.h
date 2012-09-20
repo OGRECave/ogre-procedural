@@ -86,7 +86,7 @@ public:
 			return aabb;
 		aabb.setMinimum(points[0]);
 		aabb.setMaximum(points[0]);
-		for (std::vector<Ogre::Vector3>::iterator it = points.begin(); it!=points.end();it++)
+		for (std::vector<Ogre::Vector3>::iterator it = points.begin(); it!=points.end();++it)
 		{
 			aabb.setMinimum(min(aabb.getMinimum(), *it));
 			aabb.setMaximum(max(aabb.getMaximum(), *it));

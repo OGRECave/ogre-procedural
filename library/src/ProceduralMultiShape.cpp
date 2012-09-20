@@ -40,7 +40,7 @@ MeshPtr MultiShape::realizeMesh(const std::string& name)
     Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
     ManualObject * manual = smgr->createManualObject(name);
 
-    for (std::vector<Shape>::iterator it = mShapes.begin(); it != mShapes.end(); it++)
+    for (std::vector<Shape>::iterator it = mShapes.begin(); it != mShapes.end(); ++it)
     {
         manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
         it->_appendToManualObject(manual);
@@ -141,7 +141,7 @@ bool MultiShape::isPointInside(const Vector2& point) const
 
 bool MultiShape::isClosed() const
 {
-    for (std::vector<Shape>::const_iterator it = mShapes.begin(); it != mShapes.end(); it++)
+    for (std::vector<Shape>::const_iterator it = mShapes.begin(); it != mShapes.end(); ++it)
     {
         if (!it->isClosed())
             return false;
@@ -152,7 +152,7 @@ bool MultiShape::isClosed() const
 
 void MultiShape::close()
 {
-    for (std::vector<Shape>::iterator it = mShapes.begin(); it != mShapes.end(); it++)
+    for (std::vector<Shape>::iterator it = mShapes.begin(); it != mShapes.end(); ++it)
     {
         it->close();
     }
@@ -207,7 +207,7 @@ void MultiShape::buildFromSegmentSoup(const std::vector<Segment2D>& segList)
 {
     typedef std::multimap<Vector2, Vector2, Vector2Comparator> Vec2MultiMap;
     Vec2MultiMap segs;
-    for (std::vector<Segment2D>::const_iterator it = segList.begin(); it != segList.end(); it++)
+    for (std::vector<Segment2D>::const_iterator it = segList.begin(); it != segList.end(); ++it)
     {
         segs.insert(std::pair<Vector2, Vector2 > (it->mA, it->mB));
         segs.insert(std::pair<Vector2, Vector2 > (it->mB, it->mA));
@@ -222,7 +222,7 @@ void MultiShape::buildFromSegmentSoup(const std::vector<Segment2D>& segList)
         std::pair<Vec2MultiMap::iterator, Vec2MultiMap::iterator> correspondants2 = segs.equal_range(headSecond);
         for (Vec2MultiMap::iterator it = correspondants2.first; it != correspondants2.second;)
         {
-            Vec2MultiMap::iterator removeIt = it++;
+            Vec2MultiMap::iterator removeIt = ++it;
             if ((removeIt->second - firstSeg->first).squaredLength() < 1e-8)
                 segs.erase(removeIt);
         }
@@ -240,7 +240,7 @@ void MultiShape::buildFromSegmentSoup(const std::vector<Segment2D>& segList)
                 std::pair<Vec2MultiMap::iterator, Vec2MultiMap::iterator> correspondants = segs.equal_range(headSecond);
                 for (Vec2MultiMap::iterator it = correspondants.first; it != correspondants.second;)
                 {
-                    Vec2MultiMap::iterator removeIt = it++;
+                    Vec2MultiMap::iterator removeIt = ++it;
                     if ((removeIt->second - next->first).squaredLength() < 1e-8)
                         segs.erase(removeIt);
                 }
@@ -255,7 +255,7 @@ void MultiShape::buildFromSegmentSoup(const std::vector<Segment2D>& segList)
                 std::pair<Vec2MultiMap::iterator, Vec2MultiMap::iterator> correspondants = segs.equal_range(headFirst);
                 for (Vec2MultiMap::iterator it = correspondants.first; it != correspondants.second;)
                 {
-                    Vec2MultiMap::iterator removeIt = it++;
+                    Vec2MultiMap::iterator removeIt = ++it;
                     if ((removeIt->second - previous->first).squaredLength() < 1e-8)
                         segs.erase(removeIt);
                 }

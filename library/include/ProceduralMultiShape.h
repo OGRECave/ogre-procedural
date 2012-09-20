@@ -91,7 +91,7 @@ class _ProceduralExport MultiShape
 	/// Append every shape of an other multishape to the current multiShape
 	void addMultiShape(const MultiShape& other)
 	{
-		for (std::vector<Shape>::const_iterator it = other.mShapes.begin(); it!=other.mShapes.end(); it++)
+		for (std::vector<Shape>::const_iterator it = other.mShapes.begin(); it!=other.mShapes.end(); ++it)
 		{
 			mShapes.push_back(*it);
 		}

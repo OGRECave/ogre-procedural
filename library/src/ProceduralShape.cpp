@@ -320,7 +320,7 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 			unsigned int nextPoint = currentSegment+ (isIncreasing==1?1:0);
 			bool nextPointIsOnIntersection = false;
 
-			for (std::vector<IntersectionInShape>::iterator it = intersections.begin(); it != intersections.end(); it++)
+			for (std::vector<IntersectionInShape>::iterator it = intersections.begin(); it != intersections.end(); ++it)
 			{
 				if (currentSegment == it->index[shapeSelector])
 				{
@@ -483,7 +483,7 @@ MultiShape Shape::thicken(Real amount)
 Path Shape::convertToPath() const
 {
 	Path p;
-	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();it++)
+	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();++it)
 	{
 		p.addPoint(it->x, 0, it->y);
 	}
@@ -496,7 +496,7 @@ Path Shape::convertToPath() const
 Track Shape::convertToTrack(Track::AddressingMode addressingMode) const
 {
 	Track t(addressingMode);
-	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();it++)
+	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();++it)
 	{
 		t.addKeyFrame(it->x, it->y);
 	}

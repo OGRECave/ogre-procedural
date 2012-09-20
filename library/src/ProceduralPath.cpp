@@ -124,7 +124,7 @@ void Path::buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vect
 {
     typedef std::multimap<Vector3, Vector3, Vector3Comparator> Vec3MultiMap;
     Vec3MultiMap segs;
-    for (std::vector<Segment3D>::const_iterator it = segList.begin(); it != segList.end(); it++)
+    for (std::vector<Segment3D>::const_iterator it = segList.begin(); it != segList.end(); ++it)
     {
         segs.insert(std::pair<Vector3, Vector3 > (it->mA, it->mB));
         segs.insert(std::pair<Vector3, Vector3 > (it->mB, it->mA));
@@ -139,7 +139,7 @@ void Path::buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vect
         std::pair<Vec3MultiMap::iterator, Vec3MultiMap::iterator> correspondants2 = segs.equal_range(headSecond);
         for (Vec3MultiMap::iterator it = correspondants2.first; it != correspondants2.second;)
         {
-            Vec3MultiMap::iterator removeIt = it++;
+            Vec3MultiMap::iterator removeIt = ++it;
             if ((removeIt->second - firstSeg->first).squaredLength() < 1e-8)
                 segs.erase(removeIt);
         }
@@ -157,7 +157,7 @@ void Path::buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vect
                 std::pair<Vec3MultiMap::iterator, Vec3MultiMap::iterator> correspondants = segs.equal_range(headSecond);
                 for (Vec3MultiMap::iterator it = correspondants.first; it != correspondants.second;)
                 {
-                    Vec3MultiMap::iterator removeIt = it++;
+                    Vec3MultiMap::iterator removeIt = ++it;
                     if ((removeIt->second - next->first).squaredLength() < 1e-8)
                         segs.erase(removeIt);
                 }
@@ -172,7 +172,7 @@ void Path::buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vect
                 std::pair<Vec3MultiMap::iterator, Vec3MultiMap::iterator> correspondants = segs.equal_range(headFirst);
                 for (Vec3MultiMap::iterator it = correspondants.first; it != correspondants.second;)
                 {
-                    Vec3MultiMap::iterator removeIt = it++;
+                    Vec3MultiMap::iterator removeIt = ++it;
                     if ((removeIt->second - previous->first).squaredLength() < 1e-8)
                         segs.erase(removeIt);
                 }
@@ -192,7 +192,7 @@ void Path::buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vect
 Shape Path::convertToShape() const
 {
 	Shape s;
-	for (std::vector<Ogre::Vector3>::const_iterator it = mPoints.begin();it!=mPoints.end();it++)
+	for (std::vector<Ogre::Vector3>::const_iterator it = mPoints.begin();it!=mPoints.end();++it)
 	{
 		s.addPoint(it->x, it->y);
 	}
