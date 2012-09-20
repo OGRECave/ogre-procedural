@@ -125,7 +125,7 @@ public:
 		{
 			Ogre::Vector2 refVector = *(mPoints.end()-1);
 			std::vector<Ogre::Vector2> pointList(other.mPoints.begin(), other.mPoints.end());
-			for (std::vector<Ogre::Vector2>::iterator it = pointList.begin(); it!=pointList.end(); it++)
+			for (std::vector<Ogre::Vector2>::iterator it = pointList.begin(); it!=pointList.end(); ++it)
 				*it +=refVector;
 			mPoints.insert(mPoints.end(), pointList.begin(), pointList.end());
 		}
@@ -360,7 +360,7 @@ public:
 	 */
 	Shape& translate(const Ogre::Vector2& translation)
 	{
-		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 			*it+=translation;
 		return *this;
 	}
@@ -385,7 +385,7 @@ public:
 	{
 		Ogre::Real c = Ogre::Math::Cos(angle.valueRadians());
 		Ogre::Real s = Ogre::Math::Sin(angle.valueRadians());
-		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 		{
 			Ogre::Real x = it->x;
 			Ogre::Real y = it->y;
@@ -413,7 +413,7 @@ public:
 	 */	
 	Shape& scale(Ogre::Real scaleX, Ogre::Real scaleY)
 	{
-		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 		{
 			it->x *= scaleX;
 			it->y *= scaleY;
@@ -437,7 +437,7 @@ public:
 	 */
 	Shape& reflect(const Ogre::Vector2& normal)
 	{
-		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 		{
 			*it = it->reflect(normal);
 		}

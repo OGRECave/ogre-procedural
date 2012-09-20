@@ -143,7 +143,7 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
     // Triangulate
     //  Group intersections by triangle indice
     std::map<int, std::vector<Segment3D> > meshIntersects;
-    for (std::vector<Intersect>::const_iterator it = intersectionList.begin(); it != intersectionList.end(); it++)
+    for (std::vector<Intersect>::const_iterator it = intersectionList.begin(); it != intersectionList.end(); ++it)
     {
         std::map<int, std::vector<Segment3D> >::iterator it2;
         if (first)
@@ -163,13 +163,13 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
         }
     }
     // Build a new TriangleBuffer holding non-intersected triangles and retriangulated-intersected triangles
-    for (std::vector<TriangleBuffer::Vertex>::const_iterator it = vec.begin(); it != vec.end(); it++)
+    for (std::vector<TriangleBuffer::Vertex>::const_iterator it = vec.begin(); it != vec.end(); ++it)
         newMesh.vertex(*it);
     for (int i = 0; i < ind.size() / 3; i++)
         if (meshIntersects.find(i) == meshIntersects.end())
             newMesh.triangle(ind[i * 3], ind[i * 3 + 1], ind[i * 3 + 2]);
     int numNonIntersected1 = newMesh.getIndices().size();
-    for (std::map<int, std::vector<Segment3D> >::iterator it = meshIntersects.begin(); it != meshIntersects.end(); it++)
+    for (std::map<int, std::vector<Segment3D> >::iterator it = meshIntersects.begin(); it != meshIntersects.end(); ++it)
     {
         std::vector<Segment3D>& segments = it->second;
         int triIndex = it->first;
@@ -204,7 +204,7 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
 
         // Deproject and add to triangleBuffer
         newMesh.rebaseOffset();
-        for (std::vector<int>::iterator it = outIndice.begin(); it != outIndice.end(); it++)
+        for (std::vector<int>::iterator it = outIndice.begin(); it != outIndice.end(); ++it)
             newMesh.index(*it);
         Real x1 = tri.mPoints[0].x;
         Real y1 = tri.mPoints[0].y;
@@ -220,7 +220,7 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
         Vector2 B = ((x3 - x2) * uv1 + (x1 - x3) * uv2 + (x2 - x1) * uv3) / DET;
         Vector2 C = ((x2 * y3 - x3 * y2) * uv1 + (x3 * y1 - x1 * y3) * uv2 + (x1 * y2 - x2 * y1) * uv3) / DET;
 
-        for (std::vector<Vector2>::iterator it = outPointList.begin(); it != outPointList.end(); it++)
+        for (std::vector<Vector2>::iterator it = outPointList.begin(); it != outPointList.end(); ++it)
         {
             Vector2 uv = A * it->x + B * it->y + C;
             newMesh.position(deprojectOnAxis(*it, planeOrigin, xAxis, yAxis));
@@ -259,7 +259,7 @@ void Boolean::addToTriangleBuffer(TriangleBuffer& buffer) const
     int idx1 = 0;
     for (std::vector<int>::const_iterator it = ind1.begin(); it != ind1.end(); idx1++)
     {
-        Triangle3D t1(vec1[*it++].mPosition, vec1[*it++].mPosition, vec1[*it++].mPosition);
+        Triangle3D t1(vec1[*++it].mPosition, vec1[*++it].mPosition, vec1[*++it].mPosition);
 
         int idx2 = 0;
         for (std::vector<int>::const_iterator it2 = ind2.begin(); it2 != ind2.end(); idx2++)
@@ -278,7 +278,7 @@ void Boolean::addToTriangleBuffer(TriangleBuffer& buffer) const
         if ((it->mSeg.mB - it->mSeg.mA).squaredLength() < 1e-8)
             it = intersectionList.erase(it);
         else
-            it++;
+            ++it;
 	
 	// Retriangulate
     TriangleBuffer newMesh1, newMesh2;
@@ -288,7 +288,7 @@ void Boolean::addToTriangleBuffer(TriangleBuffer& buffer) const
     // Trace contours
     std::vector<Path> contours;
     std::vector<Segment3D> segmentSoup;
-    for (std::vector<Intersect>::iterator it = intersectionList.begin(); it != intersectionList.end(); it++)
+    for (std::vector<Intersect>::iterator it = intersectionList.begin(); it != intersectionList.end(); ++it)
         segmentSoup.push_back(it->mSeg);
     Path().buildFromSegmentSoup(segmentSoup, contours);
 	
@@ -298,10 +298,10 @@ void Boolean::addToTriangleBuffer(TriangleBuffer& buffer) const
     _buildTriLookup(triLookup2, newMesh2);
 
     std::set<Segment3D, Seg3Comparator> limits;
-    for (std::vector<Segment3D>::iterator it = segmentSoup.begin(); it != segmentSoup.end(); it++)
+    for (std::vector<Segment3D>::iterator it = segmentSoup.begin(); it != segmentSoup.end(); ++it)
         limits.insert(it->orderedCopy());
     // Build resulting mesh
-    for (std::vector<Path>::iterator it = contours.begin(); it != contours.end(); it++)
+    for (std::vector<Path>::iterator it = contours.begin(); it != contours.end(); ++it)
     {
         // Find 2 seed triangles for each contour
         Segment3D firstSeg(it->getPoint(0), it->getPoint(1));

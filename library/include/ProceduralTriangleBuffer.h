@@ -108,13 +108,13 @@ protected:
 		Ogre::ManualObject * manual = sceneMgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it != mVertices.end();it++)
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it != mVertices.end();++it)
 		{
 			manual->position(it->mPosition);
 			manual->textureCoord(it->mUV);
 			manual->normal(it->mNormal);
 		}
-		for (std::vector<int>::iterator it = mIndices.begin(); it!=mIndices.end();it++)
+		for (std::vector<int>::iterator it = mIndices.begin(); it!=mIndices.end();++it)
 		{
 			manual->index(*it);
 		}
@@ -206,7 +206,7 @@ protected:
 	/// Applies a matrix to transform all vertices inside the triangle buffer
 	TriangleBuffer& applyTransform(const Ogre::Matrix4& matrix)
 	{
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); ++it)
 		{
 			it->mPosition = matrix * it->mPosition;
 			it->mNormal = matrix * it->mNormal;
@@ -219,7 +219,7 @@ protected:
 	/// @arg amount translation vector
 	TriangleBuffer& translate(const Ogre::Vector3& amount)
 	{
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); ++it)
 		{
 			it->mPosition += amount;
 		}
@@ -236,7 +236,7 @@ protected:
 	/// @arg quat the rotation quaternion to apply
 	TriangleBuffer& rotate(Ogre::Quaternion quat)
 	{
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); ++it)
 		{
 			it->mPosition = quat * it->mPosition;
 			it->mNormal = quat * it->mNormal;
@@ -249,7 +249,7 @@ protected:
 	/// @arg scale Scale vector
 	TriangleBuffer& scale(const Ogre::Vector3& scale)
 	{
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); it++)
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); ++it)
 		{
 			it->mPosition = scale * it->mPosition;
 		}
@@ -268,7 +268,7 @@ protected:
 	/// Applies normal inversion on the triangle buffer
 	TriangleBuffer& invertNormals()
 	{
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end();it++)
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end();++it)
 		{
 			it->mNormal = -it->mNormal;
 		}
@@ -313,7 +313,7 @@ protected:
 		outFile<< "Number of vertices : "<< Ogre::StringConverter::toString(mVertices.size()) <<std::endl;
 		outFile<< "Estimated number of vertices : "<< Ogre::StringConverter::toString(mEstimatedVertexCount) <<std::endl;
 		outFile<< "Vertices :"<<std::endl;
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end();it++)
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end();++it)
 		{
 			outFile<<" - {";
 			outFile<<" Position: ["<<Ogre::StringConverter::toString(it->mPosition.x)<<", "<<Ogre::StringConverter::toString(it->mPosition.y)<<", "<<Ogre::StringConverter::toString(it->mPosition.z)<<"]";

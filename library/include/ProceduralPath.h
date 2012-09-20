@@ -100,7 +100,7 @@ public:
 		{
 			Ogre::Vector3 refVector = *(mPoints.end()-1);
 			std::vector<Ogre::Vector3> pointList(other.mPoints.begin(), other.mPoints.end());
-			for (std::vector<Ogre::Vector3>::iterator it = pointList.begin(); it!=pointList.end(); it++)
+			for (std::vector<Ogre::Vector3>::iterator it = pointList.begin(); it!=pointList.end(); ++it)
 				*it += refVector;
 			mPoints.insert(mPoints.end(), pointList.begin(), pointList.end());
 		}
@@ -230,7 +230,7 @@ public:
 	 */
 	Path& translate(const Ogre::Vector3& translation)
 	{
-		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 			*it+=translation;
 		return *this;
 	}
@@ -266,7 +266,7 @@ public:
 	 */	
 	Path& scale(Ogre::Real scaleX, Ogre::Real scaleY, Ogre::Real scaleZ)
 	{
-		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 		{
 			it->x *= scaleX;
 			it->y *= scaleY;			
@@ -291,7 +291,7 @@ public:
 	 */
 	Path& reflect(const Ogre::Vector3& normal)
 	{
-		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); it++)
+		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 		{
 			*it = it->reflect(normal);
 		}

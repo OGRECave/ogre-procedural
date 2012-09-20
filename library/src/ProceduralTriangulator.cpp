@@ -99,7 +99,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	if (!mManualSuperTriangle)
 	{
 		float maxTriangleSize = 0.f;
-		for (PointList::iterator it = pointList.begin(); it!=pointList.end();it++)
+		for (PointList::iterator it = pointList.begin(); it!=pointList.end();++it)
 		{
 			maxTriangleSize = std::max<float>(maxTriangleSize, Math::Abs(it->x));
 			maxTriangleSize = std::max<float>(maxTriangleSize, Math::Abs(it->y));
@@ -147,11 +147,11 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 			else if (isInside == Triangle::IT_BORDERLINEOUTSIDE)
 			{
 				borderlineTriangles.push_back(it);
-				it++;
+				++it;
 			}
 			else
 			{
-				it++;
+				++it;
 			}
 		}
 
@@ -162,7 +162,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 		for (std::list<std::list<Triangle>::iterator>::iterator itpTri = borderlineTriangles.begin(); itpTri!=borderlineTriangles.end();itpTri++ ) {
 			DelaunayTriangleBuffer::iterator itTri = *itpTri;
 			bool triRemoved = false;
-			for (std::set<DelaunaySegment>::iterator it = copySegment.begin(); it!=copySegment.end() && !triRemoved;it++)
+			for (std::set<DelaunaySegment>::iterator it = copySegment.begin(); it!=copySegment.end() && !triRemoved;++it)
 			{
 			bool isTriangleIntersected = false;
 			for (int k=0;k<2;k++)
@@ -202,7 +202,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 		}
 
 		// Find all the non-interior edges
-		for (std::set<DelaunaySegment>::iterator it = segments.begin(); it!=segments.end();it++)
+		for (std::set<DelaunaySegment>::iterator it = segments.begin(); it!=segments.end();++it)
 		{
 			Triangle dt(&pointList);
 			dt.setVertices(it->i1, it->i2, i);
@@ -236,7 +236,7 @@ void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointL
 		for (size_t i = 0; i<shape.getPoints().size()-1; i++)
 		{
 			bool isAlreadyIn = false;
-			for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
+			for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();++it)
 			{
 				if (it->containsSegment(shapeOffset+i,shapeOffset+i+1))
 				{
@@ -259,7 +259,7 @@ void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointL
 		for (size_t i = 0; i<mShapeToTriangulate->getPoints().size()-1; i++)
 		{
 			bool isAlreadyIn = false;
-			for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
+			for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();++it)
 			{
 				if (it->containsSegment(i,i+1))
 				{
@@ -322,7 +322,7 @@ void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointL
 		while (segments.size()>0)
 		{
 		//find next point
-		for (std::set<DelaunaySegment>::iterator it = segments.begin(); it!=segments.end();it++)
+		for (std::set<DelaunaySegment>::iterator it = segments.begin(); it!=segments.end();++it)
 		{
 			if (it->i1==pt || it->i2==pt)
 			{
@@ -361,7 +361,7 @@ void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointL
 			if (isTriangleOut)
 				it = tbuffer.erase(it);
 			 else
-				it++;
+				++it;
 		}
 	} else if (mShapeToTriangulate && mShapeToTriangulate->isClosed())
 	{
@@ -372,7 +372,7 @@ void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointL
 			if (isTriangleOut)
 				it = tbuffer.erase(it);
 			 else
-				it++;
+				++it;
 		}
 	}
 	}
@@ -397,7 +397,7 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 	{
 		bool isDelaunay = true;
 		Circle c(pointList[*currentPoint], pointList[cuttingSeg.i1], pointList[cuttingSeg.i2]);
-		for (std::vector<int>::iterator it = inputPoints.begin();it!=inputPoints.end();it++)
+		for (std::vector<int>::iterator it = inputPoints.begin();it!=inputPoints.end();++it)
 		{
 			if (c.isPointInside(pointList[*it]) && (*it != *currentPoint))
 			{
@@ -446,7 +446,7 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 	_addConstraints(dtb, outputVertices);
 
 	//Outputs index buffer
-	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();it++)
+	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();++it)
 		if (!it->isDegenerate())
 		{		
 			output.push_back(it->i[0]);
