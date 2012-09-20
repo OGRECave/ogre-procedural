@@ -185,7 +185,7 @@ Path BezierCurve3::realizePath()
 			Ogre::Real fac = coef[i] * pow(t, i) * pow(1.0f - t, (int)mPoints.size() - 1 - i);
 			x += fac * mPoints[i].x;
 			y += fac * mPoints[i].y;
-			z += fac * mPoints[i].y;
+			z += fac * mPoints[i].z;
 		}
 		path.addPoint(x, y, z);
 		t += dt;
