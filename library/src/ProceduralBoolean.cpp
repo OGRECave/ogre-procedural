@@ -259,7 +259,7 @@ void Boolean::addToTriangleBuffer(TriangleBuffer& buffer) const
     int idx1 = 0;
     for (std::vector<int>::const_iterator it = ind1.begin(); it != ind1.end(); idx1++)
     {
-        Triangle3D t1(vec1[*++it].mPosition, vec1[*++it].mPosition, vec1[*++it].mPosition);
+        Triangle3D t1(vec1[*it++].mPosition, vec1[*it++].mPosition, vec1[*it++].mPosition);
 
         int idx2 = 0;
         for (std::vector<int>::const_iterator it2 = ind2.begin(); it2 != ind2.end(); idx2++)
