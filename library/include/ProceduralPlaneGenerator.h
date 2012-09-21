@@ -34,6 +34,9 @@ THE SOFTWARE.
 namespace Procedural
 {
 /// Builds a plane mesh
+/// Note that X and Y values in that generator are not global X and Y,
+/// but are computed to be : X = normal x global X
+///                          Y = normal x X
 class _ProceduralExport PlaneGenerator : public MeshGenerator<PlaneGenerator>
 {
 	int mNumSegX;
