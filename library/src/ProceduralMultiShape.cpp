@@ -116,11 +116,8 @@ bool MultiShape::isPointInside(const Vector2& point) const
     {
         int edgePoint = -1;
         if (closestSegmentIntersection.squaredDistance(closestSegmentShape->getPoint(closestSegmentIndex)) < 1e-8)
-            //return (closestSegmentShape->getAvgNormal(closestSegmentIndex).x * (point.x-closestSegmentIntersection.x)<0);
             edgePoint = closestSegmentIndex;
-        else
-            if (closestSegmentIntersection.squaredDistance(closestSegmentShape->getPoint(closestSegmentIndex + 1)) < 1e-8)
-            //return (closestSegmentShape->getAvgNormal(closestSegmentIndex+1).x * (point.x-closestSegmentIntersection.x)<0);
+        else if (closestSegmentIntersection.squaredDistance(closestSegmentShape->getPoint(closestSegmentIndex + 1)) < 1e-8)
             edgePoint = closestSegmentIndex + 1;
         if (edgePoint>-1)
         {
