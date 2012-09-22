@@ -40,6 +40,7 @@ set( HDRS
 	include/ProceduralBoolean.h
 	include/ProceduralSpringGenerator.h
 	include/ProceduralSVG.h
+	include/ProceduralDebugRendering.h
 	)
 
 set( SRCS
@@ -70,6 +71,7 @@ set( SRCS
 		src/ProceduralBoolean.cpp
 		src/ProceduralSpringGenerator.cpp
 		src/ProceduralSVG.cpp
+		src/ProceduralDebugRendering.cpp
 	)
 
 include_directories(SYSTEM ${OGRE_INCLUDE_DIRS}
