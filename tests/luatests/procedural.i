@@ -68,3 +68,4 @@
  %include "ProceduralBoolean.h"
  %include "ProceduralSpringGenerator.h"
  %include "ProceduralSVG.h"
+ %include "ProceduralDebugRendering.h" 
