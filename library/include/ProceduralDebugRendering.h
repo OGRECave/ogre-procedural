@@ -48,7 +48,7 @@ namespace Procedural
 
 		TriangleBuffer* mTriangleBuffer;
 
-		Real mSize;
+		Ogre::Real mSize;
 	public:
 		ShowNormalsGenerator() : mTriangleBuffer(0), mSize(1.0), mVisualStyle(VS_LINE) {}
 
@@ -60,7 +60,7 @@ namespace Procedural
 		}
 
 		/// Sets the size of the normals representation (default = 1.0)
-		ShowNormalsGenerator& setSize(Real size)
+		ShowNormalsGenerator& setSize(Ogre::Real size)
 		{
 			mSize = size;
 			return *this;
