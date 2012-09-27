@@ -1,7 +1,7 @@
 Ogre Procedural Manual
 ======================
 
-:Revision: Ogre Procedural 0.2 branch
+:Revision: Ogre Procedural 0.3unstable
 
 == About this manual
 
