@@ -34,7 +34,7 @@ using namespace Ogre;
 using namespace Procedural;
 
 class Illustrations
-{	
+{
 	Ogre::Root* mRoot;
 	RenderWindow* mWindow;
 	Viewport* mViewPort;
@@ -43,6 +43,23 @@ class Illustrations
 
 	std::vector<Entity*> mEntities;
 	std::vector<SceneNode*> mSceneNodes;
+
+	RaySceneQuery* mRaySceneQuery;
+	PixelBox* mRenderWindowPixelBox;
+
+	void GetMeshInformation(Entity *entity, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, Ogre::uint32* &indices, const Ogre::Vector3 &position, const Ogre::Quaternion &orient, const Ogre::Vector3 &scale);
+
+	struct SVGPATH
+	{
+		std::vector<Vector2> points;
+		bool closed;
+		Real lineWidth;
+		Real distance;
+		ColourValue color;
+
+		bool operator<(SVGPATH rhs) { return distance > rhs.distance; }
+		bool operator>(SVGPATH rhs) { return distance < rhs.distance; }
+	};
 
 
 public:
@@ -53,7 +70,7 @@ public:
 
 	void init();
 	void go();
-	void next(std::string name, Real size);
+	void next(std::string name, Real size, Shape* pShape1 = NULL, Shape* pShape2 = NULL, Path* pPath = NULL);
 	void putMesh(MeshPtr mesh, int materialIndex=0);
 
 	void cameraPerspective()
