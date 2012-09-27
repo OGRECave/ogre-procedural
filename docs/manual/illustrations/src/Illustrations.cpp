@@ -498,7 +498,7 @@ void Illustrations::go()
 	mp = BoxGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_box", 1.1f);
-	//return;
+
 	mp = RoundedBoxGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_roundedbox", 1.3f);
