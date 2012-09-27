@@ -26,4 +26,11 @@ endif()
 
 if(OgreProcedural_ILLUSTRATIONS)
 	add_subdirectory(manual/illustrations)
+	file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/manual/temp.txt "This file should be deleted before installation. It is only here to force the creation of the api folder")
+	file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/manual/temp.txt)
+	
+	add_custom_target(manual
+					COMMAND python.exe "${ASCIIDOC_DIR}/a2x.py" -L --format=chunked --destination-dir="${CMAKE_CURRENT_BINARY_DIR}/manual" --resource="${OgreProcedural_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/manual/manual.txt"
+					WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/manual"
+					DEPENDS manual/manual.txt)
 endif()
