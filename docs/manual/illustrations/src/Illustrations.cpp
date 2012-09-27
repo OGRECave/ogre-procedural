@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "Ogre.h"
 #include "Illustrations.h"
 #include "Procedural.h"
+#include <iostream>
+#include <fstream>
 
 using namespace Procedural;
 
@@ -88,7 +90,7 @@ using namespace Procedural;
 		 
 	mWindow = mRoot->initialise(true); 
 	mWindow->setDeactivateOnFocusChange(false);
-	mWindow->resize(256,256);
+	mWindow->resize(256, 256);
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
 	mCamera = mSceneMgr->createCamera("SimpleCamera");  
@@ -102,9 +104,158 @@ using namespace Procedural;
 	light->setType(Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
 	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
+
+	mRaySceneQuery = mSceneMgr->createRayQuery(Ogre::Ray(), Ogre::SceneManager::WORLD_GEOMETRY_TYPE_MASK);
+    if (mRaySceneQuery == NULL)
+		return;
+    mRaySceneQuery->setSortByDistance(true);
+	mRenderWindowPixelBox = new PixelBox (mWindow->getWidth(), mWindow->getHeight(), 1, PF_R8G8B8);
+	mRenderWindowPixelBox->data = new BYTE[mRenderWindowPixelBox->getConsecutiveSize()];
 }
 
-void Illustrations::next(std::string name, Real size)
+void Illustrations::GetMeshInformation(Entity *entity,
+									size_t &vertex_count,
+									Ogre::Vector3* &vertices,
+									size_t &index_count,
+									Ogre::uint32* &indices,
+									const Ogre::Vector3 &position,
+									const Ogre::Quaternion &orient,
+									const Ogre::Vector3 &scale)
+{
+	bool added_shared = false;
+	size_t current_offset = 0;
+	size_t shared_offset = 0;
+	size_t next_offset = 0;
+	size_t index_offset = 0;
+	vertex_count = index_count = 0;
+ 
+	Ogre::MeshPtr mesh = entity->getMesh();
+ 
+ 
+	bool useSoftwareBlendingVertices = entity->hasSkeleton();
+ 
+	if (useSoftwareBlendingVertices)
+	{
+	  entity->_updateAnimation();
+	}
+ 
+	// Calculate how many vertices and indices we're going to need
+	for (unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
+	{
+		Ogre::SubMesh* submesh = mesh->getSubMesh( i );
+ 
+		// We only need to add the shared vertices once
+		if(submesh->useSharedVertices)
+		{
+			if( !added_shared )
+			{
+				vertex_count += mesh->sharedVertexData->vertexCount;
+				added_shared = true;
+			}
+		}
+		else
+		{
+			vertex_count += submesh->vertexData->vertexCount;
+		}
+ 
+		// Add the indices
+		index_count += submesh->indexData->indexCount;
+	}
+ 
+ 
+	// Allocate space for the vertices and indices
+	vertices = new Ogre::Vector3[vertex_count];
+	indices = new Ogre::uint32[index_count];
+ 
+	added_shared = false;
+ 
+	// Run through the submeshes again, adding the data into the arrays
+	for ( unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
+	{
+		Ogre::SubMesh* submesh = mesh->getSubMesh(i);
+ 
+		//----------------------------------------------------------------
+		// GET VERTEXDATA
+		//----------------------------------------------------------------
+		Ogre::VertexData* vertex_data;
+ 
+		//When there is animation:
+		if(useSoftwareBlendingVertices)
+			vertex_data = submesh->useSharedVertices ? entity->_getSkelAnimVertexData() : entity->getSubEntity(i)->_getSkelAnimVertexData();
+		else
+			vertex_data = submesh->useSharedVertices ? mesh->sharedVertexData : submesh->vertexData;
+ 
+ 
+		if((!submesh->useSharedVertices)||(submesh->useSharedVertices && !added_shared))
+		{
+			if(submesh->useSharedVertices)
+			{
+				added_shared = true;
+				shared_offset = current_offset;
+			}
+ 
+			const Ogre::VertexElement* posElem =
+				vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION);
+ 
+			Ogre::HardwareVertexBufferSharedPtr vbuf =
+				vertex_data->vertexBufferBinding->getBuffer(posElem->getSource());
+ 
+			unsigned char* vertex =
+				static_cast<unsigned char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+ 
+			// There is _no_ baseVertexPointerToElement() which takes an Ogre::Real or a double
+			//  as second argument. So make it float, to avoid trouble when Ogre::Real will
+			//  be comiled/typedefed as double:
+			//      Ogre::Real* pReal;
+			float* pReal;
+ 
+			for( size_t j = 0; j < vertex_data->vertexCount; ++j, vertex += vbuf->getVertexSize())
+			{
+				posElem->baseVertexPointerToElement(vertex, &pReal);
+ 
+				Ogre::Vector3 pt(pReal[0], pReal[1], pReal[2]);
+ 
+				vertices[current_offset + j] = (orient * (pt * scale)) + position;
+			}
+ 
+			vbuf->unlock();
+			next_offset += vertex_data->vertexCount;
+		}
+ 
+ 
+		Ogre::IndexData* index_data = submesh->indexData;
+		size_t numTris = index_data->indexCount / 3;
+		Ogre::HardwareIndexBufferSharedPtr ibuf = index_data->indexBuffer;
+ 
+		bool use32bitindexes = (ibuf->getType() == Ogre::HardwareIndexBuffer::IT_32BIT);
+ 
+		void* hwBuf = ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY);
+ 
+		size_t offset = (submesh->useSharedVertices)? shared_offset : current_offset;
+		size_t index_start = index_data->indexStart;
+		size_t last_index = numTris*3 + index_start;
+ 
+		if (use32bitindexes) {
+			Ogre::uint32* hwBuf32 = static_cast<Ogre::uint32*>(hwBuf);
+			for (size_t k = index_start; k < last_index; ++k)
+			{
+				indices[index_offset++] = hwBuf32[k] + static_cast<Ogre::uint32>( offset );
+			}
+		} else {
+			Ogre::uint16* hwBuf16 = static_cast<Ogre::uint16*>(hwBuf);
+			for (size_t k = index_start; k < last_index; ++k)
+			{
+				indices[ index_offset++ ] = static_cast<Ogre::uint32>( hwBuf16[k] ) +
+					static_cast<Ogre::uint32>( offset );
+			}
+		}
+ 
+		ibuf->unlock();
+		current_offset = next_offset;
+	}
+}
+
+void Illustrations::next(std::string name, Real size, Shape* pShape1, Shape* pShape2, Path* pPath)
 {
 	// Optimise camera placing
 	Real distance = 2*size/Math::Tan(mCamera->getFOVy());
@@ -115,6 +266,197 @@ void Illustrations::next(std::string name, Real size)
 	mRoot->renderOneFrame();
 	mRoot->renderOneFrame();
 	mWindow->writeContentsToFile(name + ".png");
+
+	// Create SVG
+	unsigned int height = mWindow->getHeight();
+	unsigned int width = mWindow->getWidth();
+	Real fw = 0.5f * width;
+	Real fh = -0.5f * height;
+	Real tw = (Real)width;
+	Real th = (Real)height;
+	std::vector<SVGPATH> pathList;
+	std::ofstream svgfile;
+	if(pShape1 == NULL && pShape2 == NULL && pPath == NULL)
+	{
+		// Render
+		Real dx = 1.0f / (Real)width;
+		Real dy = 1.0f / (Real)height;
+		mWindow->copyContentsToMemory(*mRenderWindowPixelBox);
+		Ogre::Image img;
+		img.loadDynamicImage(static_cast<Ogre::uchar*>(mRenderWindowPixelBox->data),width, height, PF_R8G8B8);
+		img.flipAroundX();
+
+		Ray ray;
+		RaySceneQueryResult query_result;
+		Real closest_distance = -1.0f;
+		size_t vertex_count;
+		size_t index_count;
+		Vector3 *vertices=0;
+		Vector3 eyeSpacePos[3];
+		uint32 *indices=0;
+
+		for(Real x = 0.0f; x <= 1.0f; x += dx)
+			for(Real y = 0.0f; y <= 1.0f; y += dy)
+			{
+				mCamera->getCameraToViewportRay(x, y, &ray);
+				mRaySceneQuery->setRay(ray);
+				if (mRaySceneQuery->execute().size() <= 0) continue;
+
+				SVGPATH closest_result;
+				closest_result.lineWidth = 0.5f;
+				closest_result.closed = true;
+				closest_distance = -1.0f;
+				query_result = mRaySceneQuery->getLastResults();
+
+				for (size_t qr_idx = 0; qr_idx < query_result.size(); qr_idx++)
+				{
+					if ((closest_distance >= 0.0f) && (closest_distance < query_result[qr_idx].distance))
+						break;
+ 
+					if ((query_result[qr_idx].movable != NULL) && (query_result[qr_idx].movable->getMovableType().compare("Entity") == 0))
+					{
+						Ogre::Entity *pentity = static_cast<Ogre::Entity*>(query_result[qr_idx].movable);           
+ 
+						if (!indices && !vertices)
+						GetMeshInformation( pentity, vertex_count, vertices, index_count, indices,
+									   pentity->getParentNode()->_getDerivedPosition(),
+									   pentity->getParentNode()->_getDerivedOrientation(),
+									   pentity->getParentNode()->_getDerivedScale());
+
+						bool new_closest_found = false;
+						for (int i = 0; i < static_cast<int>(index_count); i += 3)
+						{
+							std::pair<bool, Ogre::Real> hit = Ogre::Math::intersects(ray, vertices[indices[i]], vertices[indices[i+1]], vertices[indices[i+2]], true, false);
+ 
+							if (hit.first)
+							{
+								if ((closest_distance < 0.0f) || (hit.second < closest_distance))
+								{
+									closest_distance = hit.second;
+									closest_result.points.clear();
+									for(int j = 0; j < 3; j++)
+									{
+										eyeSpacePos[j] = mCamera->getViewMatrix(true) * vertices[indices[i+j]];
+										Vector3 p = mCamera->getProjectionMatrix() * eyeSpacePos[j];
+										closest_result.points.push_back(Vector2(p.x * fw, p.y * fh));
+									}
+									closest_result.distance = closest_distance;
+									
+									// Bugfix needed
+									// closest_result.color = img.getColourAt((size_t)(x * (Real)width), (size_t)(x * (Real)width), 0);
+									closest_result.color = ColourValue::White;
+
+									// Check is result is in front of the camera
+									new_closest_found = (eyeSpacePos[0].z < 0.0f && eyeSpacePos[1].z < 0.0f && eyeSpacePos[2].z < 0.0f && closest_result.color.r > 0.4f && closest_result.color.g > 0.4f && closest_result.color.b > 0.4f);
+								}
+							}
+						}				
+ 
+						if (new_closest_found && closest_distance >= 0.0f)
+						{
+							bool inlist = false;
+							for(std::vector<SVGPATH>::iterator iter = pathList.begin(); iter != pathList.end(); iter++)
+								if((*iter).points[0] == closest_result.points[0] && (*iter).points[1] == closest_result.points[1] && (*iter).points[2] == closest_result.points[2])
+								{
+									inlist = true;
+									break;
+								}
+							if(!inlist)
+							{
+								pathList.push_back(closest_result);
+								for(int j = 0; j < 3; j++)
+								{
+									tw = std::min(tw, closest_result.points[j].x);
+									th = std::min(th, closest_result.points[j].y);
+								}
+							}
+						}
+					}
+				}
+			}
+
+		delete[] vertices;
+		delete[] indices;
+		std::sort(pathList.begin(), pathList.end());
+		tw = -1.0f * tw + 15.0f; // Create a translation in x direction with a border
+		th = -1.0f * th + 15.0f; // Create a translation in y direction with a border
+	}
+	else
+	{
+		SVGPATH sp;
+		sp.lineWidth = 1.0f;
+		sp.distance = 0.0f;
+		sp.color = ColourValue::White;
+		if(pPath != NULL)
+		{
+			// Path
+			std::vector<Vector3> pl = pPath->getPoints();
+			std::vector<Vector3> pl1;
+			for(std::vector<Vector3>::iterator iter = pl.begin(); iter != pl.end(); iter++)
+			{
+				Vector3 eyeSpacePos = mCamera->getViewMatrix(true) * (*iter);
+				Vector3 screenSpacePos = mCamera->getProjectionMatrix() * eyeSpacePos;
+				screenSpacePos.x *= fw;
+				screenSpacePos.y = screenSpacePos.z * fh;
+				tw = std::min(tw, screenSpacePos.x);
+				th = std::min(th, screenSpacePos.y);
+				sp.points.push_back(Vector2(screenSpacePos.x, screenSpacePos.y));
+			}
+			tw = -1.0f * tw + 15.0f;
+			th = -1.0f * th + 15.0f;
+		}
+		else
+		{
+			// Shape(s)
+			tw = 0.0f;
+			th = 0.0f;
+			Real fMin = -5.0f;
+			Real fMax = 5.0f;
+			fw = (Real)width / (fMax - fMin);
+			fh = (Real)height / (fMax - fMin);
+
+			sp.points.clear();
+			std::vector<Vector2> pl = pShape1->getPoints();
+			for(std::vector<Vector2>::iterator iter = pl.begin(); iter != pl.end(); iter++)
+				sp.points.push_back(Vector2((iter->x + fMin * -1.0f) * fw, (fMax - iter->y) * fh));
+			sp.closed = pShape1->isClosed();
+			pathList.push_back(sp);
+
+			if(pShape2 != NULL)
+			{
+				sp.points.clear();
+				std::vector<Vector2> pl = pShape2->getPoints();
+				for(std::vector<Vector2>::iterator iter = pl.begin(); iter != pl.end(); iter++)
+					sp.points.push_back(Vector2((iter->x + fMin * -1.0f) * fw, (fMax - iter->y) * fh));
+				sp.closed = pShape2->isClosed();
+				pathList.push_back(sp);
+			}
+		}
+	}
+	if(pathList.size() > 0)
+	{
+		svgfile.open(name + ".svg");
+		svgfile << "<?xml version=\"1.0\" standalone=\"no\"?>" << std::endl;
+		svgfile << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" << width << "\" height=\"" << height << "\">" << std::endl;
+		svgfile << "  <g style=\"stroke:" << ((pShape1 == NULL && pShape2 == NULL && pPath == NULL) ? "black" : "red") << ";stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\">" << std::endl;
+		char color[8];
+		for(std::vector<SVGPATH>::iterator iter = pathList.begin(); iter != pathList.end(); iter++)
+		{
+#if _MSC_VER > 1310
+			sprintf_s(color, 8,
+#else
+			sprintf(color,
+#endif
+				"#%02x%02x%02x", (BYTE)(iter->color.r * 255.0f), (BYTE)(iter->color.g * 255.0f), (BYTE)(iter->color.b * 255.0f));
+			svgfile << "    <path style=\"fill:" << color << ";stroke-width:" << iter->lineWidth << "px\" d=\"M";
+			for(std::vector<Vector2>::iterator pt = iter->points.begin(); pt != iter->points.end(); pt++)
+				svgfile << " " << (pt->x + tw) << "," << (pt->y + th);
+			if(iter->closed) svgfile << " z";
+			svgfile << "\" />" << std::endl;
+		}
+		svgfile << "  </g>" << std::endl;
+		svgfile << "</svg>" << std::endl;
+	}
 
 	// Clear the scene
 	for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it != mSceneNodes.end(); it++) 
@@ -156,7 +498,7 @@ void Illustrations::go()
 	mp = BoxGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_box", 1.1f);
-
+	//return;
 	mp = RoundedBoxGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_roundedbox", 1.3f);
@@ -192,31 +534,53 @@ void Illustrations::go()
 	mp = CapsuleGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_capsule", 2);
+
+	mCamera->setPosition(mCamera->getPosition() + Vector3(0.0f, 1.5f, 0.0f));
+	mp = SpringGenerator().setNumRound(3).realizeMesh();
+	putMesh(mp);
+	next("primitive_spring", 3);
+
 	//
 	// Operations on shapes and splines
 	//
 
 	cameraBack();
 
-	mp = CatmullRomSpline2().addPoint(0,0).addPoint(1,0).addPoint(1,1).addPoint(2,1).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).realizeShape().translate(-2, 0).realizeMesh();
+	Shape s = CatmullRomSpline2().addPoint(0,0).addPoint(1,0).addPoint(1,1).addPoint(2,1).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).realizeShape().translate(-2, 0);
+	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("spline_catmull", 3);
+	next("spline_catmull", 3, &s);
 
-	mp = CubicHermiteSpline2().addPoint(Vector2(0,0), AT_CATMULL).addPoint(Vector2(1,0), AT_CATMULL).addPoint(Vector2(1,1), Vector2(0,2), Vector2(0,-2)).addPoint(Vector2(2,1), AT_CATMULL).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).setNumSeg(16).realizeShape().translate(-2,0).realizeMesh();
+	s = CubicHermiteSpline2().addPoint(Vector2(0,0), AT_CATMULL).addPoint(Vector2(1,0), AT_CATMULL).addPoint(Vector2(1,1), Vector2(0,2), Vector2(0,-2)).addPoint(Vector2(2,1), AT_CATMULL).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).setNumSeg(16).realizeShape().translate(-2,0);
+	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("spline_cubichermite", 3);
+	next("spline_cubichermite", 3, &s);
 
-	mp = KochanekBartelsSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0),1,0,0).addPoint(Vector2(1,1),-1,0,0).addPoint(Vector2(2,1),0,1,0).addPoint(Vector2(2,0),0,-1,0).addPoint(Vector2(3,0),0,0,1).addPoint(Vector2(3,1),0,0,-1).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).realizeShape().translate(-2,0).realizeMesh();
+	s = KochanekBartelsSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0),1,0,0).addPoint(Vector2(1,1),-1,0,0).addPoint(Vector2(2,1),0,1,0).addPoint(Vector2(2,0),0,-1,0).addPoint(Vector2(3,0),0,0,1).addPoint(Vector2(3,1),0,0,-1).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).realizeShape().translate(-2,0);
+	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("spline_kochanekbartels", 3);
+	next("spline_kochanekbartels", 3, &s);
 
-	mp = RoundedCornerSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).setRadius(0.3f).realizeShape().translate(-2,0).realizeMesh();
+	s = RoundedCornerSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).setRadius(0.3f).realizeShape().translate(-2,0);
+	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("spline_roundedcorner", 3);
+	next("spline_roundedcorner", 3, &s);
+
+	s = BezierCurve2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).realizeShape().translate(-2,0);
+	mp = s.realizeMesh();
+	putMesh(mp,1);
+	next("spline_beziercurve", 3, &s);
+
+	cameraPerspective();
+	Path p = HelixPath().setNumSegPath(64).setNumRound(3).setHeight(1.5f).realizePath().translate(0.0f, -2.2f, 0.0f);
+	mp = p.realizeMesh();
+	putMesh(mp,1);
+	next("spline_helix", 3, NULL, NULL, &p);
 
 	//
 	// Boolean operations
 	//
+	cameraBack();
 	{
 	Shape s1 = RectangleShape().realizeShape();
 	Shape s2 = s1;
@@ -224,33 +588,37 @@ void Illustrations::go()
 
 	putMesh(s1.realizeMesh(), 1);
 	putMesh(s2.realizeMesh(), 1);
-	next("shape_booleansetup", 1.5);
+	next("shape_booleansetup", 1.5, &s1, &s2);
 
-	mp = s1.booleanUnion(s2).realizeMesh();
+	s = s1.booleanUnion(s2).getShape(0);
+	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleanunion", 1.5f);
+	next("shape_booleanunion", 1.5f, &s);
 
-	mp = s1.booleanIntersect(s2).realizeMesh();
+	s = s1.booleanIntersect(s2).getShape(0);
+	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleanintersection", 1.5f);
+	next("shape_booleanintersection", 1.5f, &s);
 
-	mp = s1.booleanDifference(s2).realizeMesh();
+	s = s1.booleanDifference(s2).getShape(0);
+	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleandifference", 1.5f);
+	next("shape_booleandifference", 1.5f, &s);
 	}
 
 	//
 	// Thicken
 	//
 	{
-	Shape s;
-	mp = s.addPoint(-1,-1).addPoint(0.5,0).addPoint(-0.5,0).addPoint(1,1).realizeMesh();
+	s = Shape().addPoint(-1,-1).addPoint(0.5,0).addPoint(-0.5,0).addPoint(1,1);
+	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_thick1", 1.5f);
+	next("shape_thick1", 1.5f, &s);
 
-	mp = s.thicken(.2f).realizeMesh();
+	s = s.thicken(.2f).getShape(0);
+	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_thick2", 1.5f);
+	next("shape_thick2", 1.5f, &s);
 	}
 
 	//
