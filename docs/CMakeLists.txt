@@ -30,7 +30,7 @@ if(OgreProcedural_ILLUSTRATIONS)
 	file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/manual/temp.txt)
 	
 	add_custom_target(manual
-					COMMAND python.exe "${ASCIIDOC_DIR}/a2x.py" -L --format=chunked --destination-dir="${CMAKE_CURRENT_BINARY_DIR}/manual" --resource="${OgreProcedural_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/manual/manual.txt"
+					COMMAND python "${ASCIIDOC_DIR}/a2x.py" -L --format=chunked --destination-dir="${CMAKE_CURRENT_BINARY_DIR}/manual" --resource="${OgreProcedural_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/manual/manual.txt"
 					WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/manual"
 					DEPENDS manual/manual.txt)
 endif()

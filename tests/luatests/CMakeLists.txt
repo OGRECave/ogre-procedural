@@ -23,7 +23,7 @@ include_directories( ${OIS_INCLUDE_DIRS}
 )
 
 add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
-                     COMMAND ${SWIG_DIR}/swig.exe ARGS -c++ -lua -v -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" -I"${CMAKE_CURRENT_SOURCE_DIR}/include" procedural.i
+                     COMMAND ${SWIG_DIR}/swig ARGS -c++ -lua -v -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" -I"${CMAKE_CURRENT_SOURCE_DIR}/include" procedural.i
                      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 					 DEPENDS procedural.i)
 
