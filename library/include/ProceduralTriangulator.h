@@ -125,6 +125,14 @@ struct Triangle
 			return true;
 		return false;
 	}
+
+	std::string debugDescription()
+	{
+		return "("+Ogre::StringConverter::toString(i[0])+","
+			+Ogre::StringConverter::toString(i[1])+","+Ogre::StringConverter::toString(i[2])+") <"
+			"("+Ogre::StringConverter::toString(p(0))+","
+			+Ogre::StringConverter::toString(p(1))+","+Ogre::StringConverter::toString(p(2))+">";
+	}
 };
 //-----------------------------------------------------------------------
 struct TouchSuperTriangle
@@ -141,16 +149,17 @@ struct TouchSuperTriangle
 	Shape* mShapeToTriangulate;
 	MultiShape* mMultiShapeToTriangulate;
 	Triangle2D* mManualSuperTriangle;
+	std::vector<Segment2D>* mSegmentListToTriangulate;	
 	bool mRemoveOutside;
 
 	void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer) const;
-	void _addConstraints(DelaunayTriangleBuffer& tbuffer, const PointList& pl) const;
+	void _addConstraints(DelaunayTriangleBuffer& tbuffer, const PointList& pl, const std::vector<int>& segmentListIndices) const;
 	void _recursiveTriangulatePolygon(const DelaunaySegment& cuttingSeg, std::vector<int> inputPoints, DelaunayTriangleBuffer& tbuffer, const PointList&  pl) const;
 
 public:	
 
 	/// Default ctor
-	Triangulator() : mShapeToTriangulate(0), mMultiShapeToTriangulate(0), mManualSuperTriangle(0), mRemoveOutside(true) {}
+	Triangulator() : mShapeToTriangulate(0), mMultiShapeToTriangulate(0), mManualSuperTriangle(0), mRemoveOutside(true), mSegmentListToTriangulate(0) {}
 
 	/// Sets shape to triangulate
 	Triangulator& setShapeToTriangulate(Shape* shape)
@@ -167,6 +176,13 @@ public:
 		return *this;
 	}
 
+	/// Sets segment list to triangulate
+	Triangulator& setSegmentListToTriangulate(std::vector<Segment2D>* segList)
+	{
+		mSegmentListToTriangulate = segList;
+		return *this;
+	}
+
 	/// Sets manual super triangle (instead of letting Triangulator guessing it)
 	Triangulator& setManualSuperTriangle(Triangle2D* tri)
 	{
@@ -174,7 +190,7 @@ public:
 		return *this;
 	}
 
-	/// Sets if the outside of sha
+	/// Sets if the outside of shape must be removed
 	Triangulator& setRemoveOutside(bool removeOutside)
 	{
 		mRemoveOutside = removeOutside;

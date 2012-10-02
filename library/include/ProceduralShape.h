@@ -189,11 +189,16 @@ public:
 	/**
 	 * Bounds-safe method to get a point : it will allow you to go beyond the bounds
 	 */
-	inline const Ogre::Vector2& getPoint(unsigned int i) const
+	inline const Ogre::Vector2& getPoint(int i) const
+	{
+		return mPoints[getBoundedIndex(i)];
+	}
+
+	inline unsigned int getBoundedIndex(int i) const
 	{
 		if (mClosed)
-			return mPoints[Utils::modulo(i,mPoints.size())];
-		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+			return Utils::modulo(i,mPoints.size());
+		return Utils::cap(i,0,mPoints.size()-1);
 	}
 
 	/**
