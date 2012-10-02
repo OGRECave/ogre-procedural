@@ -186,20 +186,6 @@ bool MultiShape::isOutsideRealOutside() const
     return shapeSide == mShapes[shapeIndex].getOutSide();
 }
 //-----------------------------------------------------------------------
-
-struct Vector2Comparator
-{
-
-    bool operator()(const Vector2& one, const Vector2 & two) const
-    {
-        if ((one - two).squaredLength() < 1e-6)
-            return false;
-        if (Math::Abs(one.x - two.x) > 1e-3)
-            return one.x < two.x;
-        return one.y < two.y;
-    }
-};
-
 void MultiShape::buildFromSegmentSoup(const std::vector<Segment2D>& segList)
 {
     typedef std::multimap<Vector2, Vector2, Vector2Comparator> Vec2MultiMap;

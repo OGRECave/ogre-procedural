@@ -158,6 +158,19 @@ struct Segment2D
 	bool intersects(const Segment2D& other) const;
 };
 //-----------------------------------------------------------------------
+// Compares 2 Vector2, with some tolerance
+struct Vector2Comparator
+{
+	bool operator()(const Ogre::Vector2& one, const Ogre::Vector2 & two) const
+	{
+		if ((one - two).squaredLength() < 1e-6)
+			return false;
+		if (Ogre::Math::Abs(one.x - two.x) > 1e-3)
+			return one.x < two.x;
+		return one.y < two.y;
+	}
+};
+//-----------------------------------------------------------------------
 // Compares 2 Vector3, with some tolerance
 struct Vector3Comparator
 {

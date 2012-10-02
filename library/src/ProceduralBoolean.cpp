@@ -208,7 +208,7 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
         Vector3 planeOrigin = vec[ind[triIndex * 3]].mPosition;
 
         // Project intersection segments onto triangle plane
-        MultiShape multiShapeToTriangulate;
+        //MultiShape multiShapeToTriangulate;
         std::vector<Segment2D> segments2;
 
         for (std::vector<Segment3D>::iterator it2 = segments.begin(); it2 != segments.end(); it2++)
@@ -218,7 +218,7 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
                 it2 = segments2.erase(it2);
             else
                 it2++;
-        multiShapeToTriangulate.buildFromSegmentSoup(segments2);
+        //multiShapeToTriangulate.buildFromSegmentSoup(segments2);
 
         // Triangulate
         Triangulator t;
@@ -227,7 +227,7 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
                        projectOnAxis(vec[ind[triIndex * 3 + 2]].mPosition, planeOrigin, xAxis, yAxis));
         PointList outPointList;
         std::vector<int> outIndice;
-        t.setManualSuperTriangle(&tri).setRemoveOutside(false).setMultiShapeToTriangulate(&multiShapeToTriangulate).triangulate(outIndice, outPointList);
+        t.setManualSuperTriangle(&tri).setRemoveOutside(false).setSegmentListToTriangulate(&segments2).triangulate(outIndice, outPointList);
 
         // Deproject and add to triangleBuffer
         newMesh.rebaseOffset();
