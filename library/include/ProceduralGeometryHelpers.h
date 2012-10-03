@@ -31,13 +31,14 @@ THE SOFTWARE.
 #include "OgrePlane.h"
 #include "OgreVector2.h"
 #include "OgreVector3.h"
+#include "ProceduralPlatform.h"
 
 namespace Procedural
 {
 	struct Line;
 //-----------------------------------------------------------------------
 /// Represents a 2D circle
-class Circle
+class _ProceduralExport Circle
 {
 	private:
 	Ogre::Vector2 mCenter;
@@ -62,7 +63,7 @@ class Circle
 };
 //-----------------------------------------------------------------------
 /// Extends the Ogre::Plane class to be able to compute the intersection between 2 planes
-class Plane : public Ogre::Plane
+class _ProceduralExport Plane : public Ogre::Plane
 {
 public:
 	Plane() : Ogre::Plane() {}
@@ -82,7 +83,7 @@ public:
 };
 //-----------------------------------------------------------------------
 /// Represents a line in 3D
-struct Line
+struct _ProceduralExport Line
 {
 	Ogre::Vector3 mPoint;
 	Ogre::Vector3 mDirection;
@@ -106,7 +107,7 @@ struct Line
 };
 //-----------------------------------------------------------------------
 /// Represents a line in 2D
-class Line2D
+class _ProceduralExport Line2D
 {
 	Ogre::Vector2 mPoint;
 	Ogre::Vector2 mDirection;
@@ -136,7 +137,7 @@ public:
 };
 //-----------------------------------------------------------------------
 /// Represents a 2D segment
-struct Segment2D
+struct _ProceduralExport Segment2D
 {
 	Ogre::Vector2 mA;
 	Ogre::Vector2 mB;
@@ -159,7 +160,7 @@ struct Segment2D
 };
 //-----------------------------------------------------------------------
 // Compares 2 Vector2, with some tolerance
-struct Vector2Comparator
+struct _ProceduralExport Vector2Comparator
 {
 	bool operator()(const Ogre::Vector2& one, const Ogre::Vector2 & two) const
 	{
@@ -172,7 +173,7 @@ struct Vector2Comparator
 };
 //-----------------------------------------------------------------------
 // Compares 2 Vector3, with some tolerance
-struct Vector3Comparator
+struct _ProceduralExport Vector3Comparator
 {
 	bool operator()(const Ogre::Vector3& one, const Ogre::Vector3& two) const
 	{
@@ -187,7 +188,7 @@ struct Vector3Comparator
 };
 //-----------------------------------------------------------------------
 /// Represents a 3D segment
-struct Segment3D
+struct _ProceduralExport Segment3D
 {
 	Ogre::Vector3 mA;
 	Ogre::Vector3 mB;
@@ -212,7 +213,7 @@ struct Segment3D
 };
 //-----------------------------------------------------------------------
 /// Represents a 2D triangle
-struct Triangle2D
+struct _ProceduralExport Triangle2D
 {
 	Ogre::Vector2 mPoints[3];
 
@@ -225,7 +226,7 @@ struct Triangle2D
 };
 //-----------------------------------------------------------------------
 /// Represents a 3D triangle
-struct Triangle3D
+struct _ProceduralExport Triangle3D
 {
 	Ogre::Vector3 mPoints[3];
 

@@ -69,3 +69,4 @@
  %include "ProceduralSpringGenerator.h"
  %include "ProceduralSVG.h"
  %include "ProceduralDebugRendering.h" 
+ %include "ProceduralGeometryHelpers.h"
