@@ -15,6 +15,10 @@ set( SRCS
 		src/LuaTests.cpp
 	)
 
+set( EXTRA
+	procedural.i
+	)
+
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	../../samples/common/include
@@ -27,7 +31,7 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
                      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 					 DEPENDS procedural.i)
 
-procedural_add_executable(LuaTests WIN32 ${HDRS} ${SRCS})
+procedural_add_executable(LuaTests WIN32 ${HDRS} ${SRCS} ${EXTRA})
 
 set_target_properties(LuaTests PROPERTIES DEBUG_POSTFIX _d)
 
