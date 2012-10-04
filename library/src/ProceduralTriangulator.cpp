@@ -499,7 +499,7 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 			{
 				outputVertices.push_back(mManualSuperTriangle->mPoints[i]);
 				backMap[mManualSuperTriangle->mPoints[i]] = outputVertices.size()-1;
-				superTriangle.i[i] = i;
+				superTriangle.i[i] = outputVertices.size()-1;
 			}
 			
 			dtb.push_back(superTriangle);
