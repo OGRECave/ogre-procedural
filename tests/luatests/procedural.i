@@ -1,6 +1,7 @@
  %module Procedural
  %include "std_map.i"
- %include "std_string.i" 
+ %include "std_string.i"
+ %include "std_vector.i"
  %{ 
  #include "Ogre.h"
  #include "Procedural.h"
@@ -68,5 +69,6 @@
  %include "ProceduralBoolean.h"
  %include "ProceduralSpringGenerator.h"
  %include "ProceduralSVG.h"
- %include "ProceduralDebugRendering.h" 
+ %include "ProceduralDebugRendering.h"
+ %template(vectorSeg2) std::vector< Procedural::Segment2D>;
  %include "ProceduralGeometryHelpers.h"
