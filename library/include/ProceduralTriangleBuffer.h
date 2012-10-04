@@ -121,12 +121,6 @@ protected:
 		manual->end();
 		Ogre::MeshPtr mesh = manual->convertToMesh(name, group);
 
-		unsigned short src, dest;
-		if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
-		{
-			mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
-		}
-
 		sceneMgr->destroyManualObject(manual);
 
 		return mesh;
