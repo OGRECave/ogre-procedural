@@ -66,6 +66,19 @@ protected:
 	TriangleBuffer() : globalOffset(0), mEstimatedVertexCount(0), mEstimatedIndexCount(0), mCurrentVertex(0)
 	{}
 
+	void append(const TriangleBuffer& other)
+	{
+		rebaseOffset();
+		for (std::vector<int>::const_iterator it = other.mIndices.begin(); it != other.mIndices.end(); ++it)
+		{
+			mIndices.push_back(*it);
+		}
+		for (std::vector<Vertex>::const_iterator it = other.mVertices.begin(); it != other.mVertices.end(); ++it)
+		{
+			mVertices.push_back(*it);
+		}
+	}
+
 	/// Gets a modifiable reference to vertices
 	std::vector<Vertex>& getVertices()
 	{
