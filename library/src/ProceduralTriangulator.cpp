@@ -432,6 +432,8 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 	assert((mShapeToTriangulate || mMultiShapeToTriangulate || mSegmentListToTriangulate) && "Either shape or multishape or segment list must be defined");
 	//assert((((mShapeToTriangulate && mShapeToTriangulate->isClosed()) || (mMultiShapeToTriangulate&&mMultiShapeToTriangulate->isClosed()))||(!mRemoveOutside)) && "Input shape must be closed");
 
+	Ogre::Timer mTimer;
+	mTimer.reset();
 	DelaunayTriangleBuffer dtb;
 	// Do the Delaunay triangulation
 	std::vector<int> segmentListIndices;
@@ -497,20 +499,29 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 			Triangle superTriangle(&outputVertices);
 			for (int i=0;i<3;i++)
 			{
-				outputVertices.push_back(mManualSuperTriangle->mPoints[i]);
-				backMap[mManualSuperTriangle->mPoints[i]] = outputVertices.size()-1;
-				superTriangle.i[i] = outputVertices.size()-1;
+				std::map<Vector2, int, Vector2Comparator>::iterator it = backMap.find(mManualSuperTriangle->mPoints[i]);
+				if (it != backMap.end())
+				{
+					//segmentListIndices.push_back(it->second);
+					superTriangle.i[i] = it->second;
+				} else
+				{
+					backMap[mManualSuperTriangle->mPoints[i]] = outputVertices.size();
+					//segmentListIndices.push_back(outputVertices.size());
+					superTriangle.i[i] = outputVertices.size();
+					outputVertices.push_back(mManualSuperTriangle->mPoints[i]);
+				}
 			}
 			
 			dtb.push_back(superTriangle);
 		}
 	}
-		
+	Utils::log("Triangulator preparation : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
 	delaunay(outputVertices, dtb);
-
+	Utils::log("Triangulator delaunay : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
 	// Add contraints
 	_addConstraints(dtb, outputVertices, segmentListIndices);
-
+	Utils::log("Triangulator constraints : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
 	//Outputs index buffer
 	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();++it)
 		if (!it->isDegenerate())
@@ -527,6 +538,7 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 		outputVertices.pop_back();
 		outputVertices.pop_back();
 	}
+	Utils::log("Triangulator output : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
 }
 //-----------------------------------------------------------------------
 void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
