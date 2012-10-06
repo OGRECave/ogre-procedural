@@ -271,7 +271,12 @@ protected:
 		else
 			buffer.position(position);
 		if (mEnableNormals)
-			buffer.normal(normal);
+		{
+			if (mTransform)
+				buffer.normal(mOrientation * normal);
+			else
+				buffer.normal(normal);
+		}
 		if (mSwitchUV)
 			for (unsigned char i=0;i<mNumTexCoordSet;i++)
 				buffer.textureCoord(mUVOrigin.x + uv.y*mUTile, mUVOrigin.y+uv.x*mVTile);
