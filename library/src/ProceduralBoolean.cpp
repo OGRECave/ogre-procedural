@@ -200,15 +200,15 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
     {
         std::vector<Segment3D>& segments = it->second;
         int triIndex = it->first;
-        Vector3 triNormal = vec[ind[triIndex * 3]].mNormal;
-        Vector3 xAxis = Vector3::UNIT_Z.crossProduct(triNormal);
-        if (Math::Abs(triNormal.z) > .9)
-            xAxis = Vector3::UNIT_X.crossProduct(triNormal);
+		Vector3 v1 = vec[ind[triIndex * 3]].mPosition;
+		Vector3 v2 = vec[ind[triIndex * 3+1]].mPosition;
+		Vector3 v3 = vec[ind[triIndex * 3+2]].mPosition;
+		Vector3 triNormal = ((v2-v1).crossProduct(v3-v1)).normalisedCopy();
+		Vector3 xAxis = triNormal.perpendicular();
         Vector3 yAxis = triNormal.crossProduct(xAxis);
         Vector3 planeOrigin = vec[ind[triIndex * 3]].mPosition;
 
         // Project intersection segments onto triangle plane
-        //MultiShape multiShapeToTriangulate;
         std::vector<Segment2D> segments2;
 
         for (std::vector<Segment3D>::iterator it2 = segments.begin(); it2 != segments.end(); it2++)
@@ -218,10 +218,9 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
                 it2 = segments2.erase(it2);
             else
                 it2++;
-        //multiShapeToTriangulate.buildFromSegmentSoup(segments2);
 
         // Triangulate
-        Triangulator t;
+        Triangulator t;		
         Triangle2D tri(projectOnAxis(vec[ind[triIndex * 3]].mPosition, planeOrigin, xAxis, yAxis),
                        projectOnAxis(vec[ind[triIndex * 3 + 1]].mPosition, planeOrigin, xAxis, yAxis),
                        projectOnAxis(vec[ind[triIndex * 3 + 2]].mPosition, planeOrigin, xAxis, yAxis));
@@ -311,7 +310,11 @@ void Boolean::addToTriangleBuffer(TriangleBuffer& buffer) const
     TriangleBuffer newMesh1, newMesh2;
     _retriangulate(newMesh1, *mMesh1, intersectionList, true);
     _retriangulate(newMesh2, *mMesh2, intersectionList, false);
-	
+
+	//buffer.append(newMesh1);
+	//buffer.append(newMesh2);
+	//return;
+		
     // Trace contours
     std::vector<Path> contours;
     std::vector<Segment3D> segmentSoup;
