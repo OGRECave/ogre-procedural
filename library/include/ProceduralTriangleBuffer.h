@@ -71,7 +71,7 @@ protected:
 		rebaseOffset();
 		for (std::vector<int>::const_iterator it = other.mIndices.begin(); it != other.mIndices.end(); ++it)
 		{
-			mIndices.push_back(*it);
+			mIndices.push_back(globalOffset+ (*it));
 		}
 		for (std::vector<Vertex>::const_iterator it = other.mVertices.begin(); it != other.mVertices.end(); ++it)
 		{
