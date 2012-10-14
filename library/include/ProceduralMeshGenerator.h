@@ -125,6 +125,16 @@ public:
 	}
 
 	/**
+	 * Outputs a triangleBuffer
+	 */
+	TriangleBuffer buildTriangleBuffer() const
+	{
+		TriangleBuffer tbuffer;
+		addToTriangleBuffer(tbuffer);
+		return tbuffer;
+	}
+
+	/**
 	 * Overloaded by each generator to implement the specifics
 	 */
 	virtual void addToTriangleBuffer(TriangleBuffer& buffer) const=0;
