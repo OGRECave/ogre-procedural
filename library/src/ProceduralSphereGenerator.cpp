@@ -61,16 +61,18 @@ void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 							 Vector3(x0, y0, z0).normalisedCopy(),
 							 Vector2((Real) seg / (Real) mNumSegments, (Real) ring / (Real) mNumRings));
 
-			if (ring != mNumRings) {
-				// each vertex (except the last) has six indices pointing to it
-				buffer.index(offset + mNumSegments + 1);
-				buffer.index(offset);
-				buffer.index(offset + mNumSegments);
-				buffer.index(offset + mNumSegments + 1);
-				buffer.index(offset + 1);
-				buffer.index(offset);
-				offset ++;
+			if (ring != mNumRings ) 
+			{
+				if (seg != mNumSegments)
+				{
+					// each vertex (except the last) has six indices pointing to it
+					if (ring != mNumRings-1)
+						buffer.triangle(offset + mNumSegments + 2, offset, offset + mNumSegments + 1);
+					if (ring != 0)
+						buffer.triangle(offset + mNumSegments + 2, offset + 1, offset);				
 				}
+				offset ++;
+			}
 		}; // end for seg
 	} // end for ring
 }
