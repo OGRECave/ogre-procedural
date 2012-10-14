@@ -80,11 +80,13 @@ void LuaTests::reloadScript()
 
 		destroyScene();
 
+		Timer timer;		
 		if (luaL_loadfile(L,(path + "/luaTest.lua").c_str())==0)
 		{
+			timer.reset();
 			if (lua_pcall(L,0,0,0) ==0)
-			{
-				mTextMessage->setCaption("OK");
+			{				
+				mTextMessage->setCaption("OK (loaded in " + StringConverter::toString(timer.getMilliseconds()) + " milliseconds)");
 				mCamera->getViewport()->setBackgroundColour(ColourValue(0.2f,0.4f,0.2f));
 			}
 			else
@@ -95,6 +97,7 @@ void LuaTests::reloadScript()
 		} else
 		{
 			mTextMessage->setCaption(lua_tostring(L,-1));
+			mCamera->getViewport()->setBackgroundColour(ColourValue(.4f,.2f,.2f));
 		}
 		lua_close(L);
 	}
