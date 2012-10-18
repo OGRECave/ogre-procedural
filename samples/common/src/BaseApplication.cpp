@@ -35,6 +35,9 @@ BaseApplication::BaseApplication(void)
 	mInputManager(0),
 	mMouse(0),
 	mKeyboard(0)
+	#ifdef OGRE_EXTERNAL_OVERLAY
+	,mOverlaySystem(0)
+	#endif
 {
 }
 
@@ -42,6 +45,9 @@ BaseApplication::BaseApplication(void)
 BaseApplication::~BaseApplication(void)
 {
 	if (mTrayMgr) delete mTrayMgr;
+	#ifdef OGRE_EXTERNAL_OVERLAY
+	if (mOverlaySystem) delete mOverlaySystem;
+	#endif
 	if (mCameraMan) delete mCameraMan;
 
 	//Remove ourself as a Window listener
@@ -138,7 +144,17 @@ void BaseApplication::createFrameListener(void)
 	//Register as a Window listener
 	WindowEventUtilities::addWindowEventListener(mWindow, this);
 
+#ifdef OGRE_EXTERNAL_OVERLAY
+	OgreBites::InputContext input;
+	input.mAccelerometer = NULL;
+	input.mKeyboard = mKeyboard;
+	input.mMouse = mMouse;
+	input.mMultiTouch = NULL;
+
+	mTrayMgr = new OgreBites::SdkTrayManager("InterfaceName", mWindow, input, this);
+#else
 	mTrayMgr = new OgreBites::SdkTrayManager("InterfaceName", mWindow, mMouse, this);
+#endif
 	mTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
 	mTrayMgr->showLogo(OgreBites::TL_BOTTOMRIGHT);
 	mTrayMgr->hideCursor();
@@ -163,10 +179,16 @@ void BaseApplication::createFrameListener(void)
 	mDetailsPanel->hide();
 
 	mRoot->addFrameListener(this);
+#ifdef OGRE_EXTERNAL_OVERLAY
+	mSceneMgr->addRenderQueueListener(mOverlaySystem);
+#endif
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::destroyScene(void)
 {
+#ifdef OGRE_EXTERNAL_OVERLAY
+	mSceneMgr->removeRenderQueueListener(mOverlaySystem);
+#endif
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::createViewports(void)

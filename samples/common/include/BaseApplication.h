@@ -35,6 +35,10 @@ This source file is part of the
 #include <SdkCameraMan.h>
 #include <OGRE/OgreVector3.h>
 
+#if OGRE_VERSION > ((1 << 16) | (8 << 8) | 1)
+#define OGRE_EXTERNAL_OVERLAY
+#endif
+
 class BaseApplication : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener, OgreBites::SdkTrayListener
 {
 public:
@@ -86,6 +90,9 @@ protected:
 	Ogre::String mPluginsCfg;
 
 	// OgreBites
+	#ifdef OGRE_EXTERNAL_OVERLAY
+	Ogre::OverlaySystem* mOverlaySystem;       // Overlay system
+	#endif
 	OgreBites::SdkTrayManager* mTrayMgr;
 	OgreBites::SdkCameraMan* mCameraMan;       // basic camera controller
 	OgreBites::ParamsPanel* mDetailsPanel;     // sample details panel
