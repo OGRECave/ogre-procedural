@@ -55,7 +55,7 @@ void Sample_Primitives::createScene(void)
 		putMesh("icoSphereMesh", Vector3(10,10,10));
 		Procedural::RoundedBoxGenerator().setSizeX(1.f).setSizeY(5.f).setSizeZ(5.f).setChamferSize(1.f).realizeMesh("roundedBoxMesh");
 		putMesh("roundedBoxMesh", Vector3(20,10,10));
-		Procedural::SpringGenerator().realizeMesh("springMesh");
+		Procedural::SpringGenerator().setNumSegCircle(32).setNumSegPath(30).realizeMesh("springMesh");
 		putMesh("springMesh", Vector3(20,10,0));
 }
 //-------------------------------------------------------------------------------------
