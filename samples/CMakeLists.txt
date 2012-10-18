@@ -1,3 +1,9 @@
+if(${OGRE_VERSION} VERSION_GREATER "1.8.1")
+	include_directories(${OGRE_Overlay_INCLUDE_DIR})
+	target_link_libraries(Sample_Primitives ${OGRE_Overlay_LIBRARIES})
+endif()
+
+
 add_subdirectory(primitives)
 
 add_subdirectory(extrusion)
