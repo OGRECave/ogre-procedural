@@ -25,3 +25,8 @@ set_target_properties(Sample_SVG PROPERTIES DEBUG_POSTFIX _d)
 target_link_libraries(Sample_SVG ${OgreProcedural_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
 procedural_create_vcproj_userfile(Sample_SVG)
+
+if ((${OGRE_VERSION} VERSION_EQUALS "1.9.0") OR (${OGRE_VERSION} VERSION_GREATER "1.9.0"))
+	include_directories(${OGRE_Overlay_INCLUDE_DIR})
+	target_link_libraries(Sample_SVG ${OGRE_Overlay_LIBRARIES})
+endif()
