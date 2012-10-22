@@ -81,13 +81,15 @@ option(OgreProcedural_UNITY_BUILD "Enable unity build for OgreProcedural." FALSE
 set(OgreProcedural_UNITY_FILES_PER_UNIT "50" CACHE STRING "Number of files per compilation unit in Unity build.")
 
 find_package(Doxygen)
+find_package(PythonInterp)
 
 option(OgreProcedural_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(OgreProcedural_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
 option(OgreProcedural_BUILD_LUA_TESTS "Build a lua test bench to prototype stuff with OgreProcedural" FALSE)
 option(OgreProcedural_INSTALL_DOCS "Install documentation." FALSE)
 option(OgreProcedural_STATIC "Static build" FALSE)
-option(OgreProcedural_ILLUSTRATIONS "Build illustrations for manual" FALSE)
+# option(OgreProcedural_ILLUSTRATIONS "Build illustrations for manual" FALSE)
+set(OgreProcedural_ILLUSTRATIONS_PATH "${OgreProcedural_BINARY_DIR}/image")
 
 # Set docs target directory
 if (WIN32 OR APPLE)
