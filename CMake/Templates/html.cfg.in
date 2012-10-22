@@ -738,21 +738,22 @@ EXAMPLE_PATH           = ${OgreProcedural_SOURCE_DIR}/samples/
 # and *.h) to filter out the source-files in the directories. If left
 # blank all files are included.
 
-EXAMPLE_PATTERNS       =
+EXAMPLE_PATTERNS       = *.cpp
 
 # If the EXAMPLE_RECURSIVE tag is set to YES then subdirectories will be
 # searched for input files to be used with the \include or \dontinclude
 # commands irrespective of the value of the RECURSIVE tag.
 # Possible values are YES and NO. If left blank NO is used.
 
-EXAMPLE_RECURSIVE      = NO
+EXAMPLE_RECURSIVE      = YES
 
 # The IMAGE_PATH tag can be used to specify one or more files or
 # directories that contain image that are included in the documentation (see
 # the \image command).
 
 IMAGE_PATH             = ${OgreProcedural_SOURCE_DIR}/samples/media/ \
-                         ${OgreProcedural_SOURCE_DIR}/docs/images/
+                         ${OgreProcedural_SOURCE_DIR}/docs/images/ \
+                         ${OgreProcedural_ILLUSTRATIONS_PATH}
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -888,7 +889,7 @@ HTML_OUTPUT            = html
 # each generated HTML page (for example: .htm,.php,.asp). If it is left blank
 # doxygen will generate files with .html extension.
 
-HTML_FILE_EXTENSION    = .xhtml
+HTML_FILE_EXTENSION    = .html
 
 # The HTML_HEADER tag can be used to specify a personal HTML header for
 # each generated HTML page. If it is left blank doxygen will generate a
@@ -1536,7 +1537,9 @@ INCLUDE_FILE_PATTERNS  =
 # undefined via #undef or recursively expanded use the := operator
 # instead of the = operator.
 
-PREDEFINED             = DOXYGEN_SHOULD_SKIP_THIS
+PREDEFINED             = DOXYGEN_SHOULD_SKIP_THIS \
+						 PROCEDURAL_SVG_HELPER_INCLUDED \
+						 PROCEDURAL_MATERIAL_GENERATOR_HELPER_INCLUDED
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then
 # this tag can be used to specify a list of macro names that should be expanded.
@@ -1742,7 +1745,7 @@ DIRECTORY_GRAPH        = YES
 # HTML_FILE_EXTENSION to xhtml in order to make the SVG files
 # visible in IE 9+ (other browsers do not have this requirement).
 
-DOT_IMAGE_FORMAT       = svg
+DOT_IMAGE_FORMAT       = png
 
 # If DOT_IMAGE_FORMAT is set to svg, then this option can be set to YES to
 # enable generation of interactive SVG images that allow zooming and panning.
@@ -1762,7 +1765,9 @@ DOT_PATH               = ${DOXYGEN_DOT_PATH}
 # contain dot files that are included in the documentation (see the
 # \dotfile command).
 
-DOTFILE_DIRS           =
+DOTFILE_DIRS           = ${OgreProcedural_SOURCE_DIR}/samples/media/ \
+                         ${OgreProcedural_SOURCE_DIR}/docs/images/ \
+                         ${OgreProcedural_ILLUSTRATIONS_PATH}
 
 # The MSCFILE_DIRS tag can be used to specify one or more directories that
 # contain msc files that are included in the documentation (see the
@@ -1803,7 +1808,7 @@ DOT_TRANSPARENT        = YES
 # makes dot run faster, but since only newer versions of dot (>1.8.10)
 # support this, this feature is disabled by default.
 
-DOT_MULTI_TARGETS      = NO
+DOT_MULTI_TARGETS      = YES
 
 # If the GENERATE_LEGEND tag is set to YES (the default) Doxygen will
 # generate a legend page explaining the meaning of the various boxes and

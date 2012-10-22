@@ -17,6 +17,9 @@ include_directories( ${OIS_INCLUDE_DIRS}
 
 procedural_add_executable(Illustrations WIN32 ${HDRS} ${SRCS})
 
+file(WRITE ${OgreProcedural_ILLUSTRATIONS_PATH}/temp.txt "This file should be deleted before installation. It is only here to force the creation of the image folder")
+file(REMOVE ${OgreProcedural_ILLUSTRATIONS_PATH}/temp.txt)
+
 set_target_properties(Illustrations PROPERTIES DEBUG_POSTFIX _d)
 
 target_link_libraries(Illustrations ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${OgreProcedural_LIBRARIES})
@@ -28,3 +31,7 @@ use_precompiled_header(Illustrations
   "../../../library/include/ProceduralStableHeaders.h"
   "../../../library/src/ProceduralPrecompiledHeaders.cpp"
 )
+
+get_target_property(Illustrations_EXE Illustrations LOCATION)
+get_filename_component(Illustrations_DIR "${Illustrations_EXE}" PATH)
+add_custom_command(TARGET Illustrations POST_BUILD COMMAND Illustrations ARGS "${OgreProcedural_ILLUSTRATIONS_PATH}" WORKING_DIRECTORY ${Illustrations_DIR})
