@@ -33,14 +33,16 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/// Builds a plane mesh
-/// Note that X and Y values in that generator are not global X and Y,
-/// but are computed to be : X = normal x global X
-///                          Y = normal x X
+/**
+ * Builds a plane mesh
+ * \image html primitive_plane.png
+ * \note Note that X and Y values in that generator are not global X and Y,
+ * but are computed to be : X = normal x global X and Y = normal x X
+ */
 class _ProceduralExport PlaneGenerator : public MeshGenerator<PlaneGenerator>
 {
-	int mNumSegX;
-	int mNumSegY;
+	unsigned int mNumSegX;
+	unsigned int mNumSegY;
 	Ogre::Vector3 mNormal;
 	Ogre::Real mSizeX;
 	Ogre::Real mSizeY;
@@ -58,14 +60,14 @@ public:
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	/** Sets the number of segements along local X axis */
-	inline PlaneGenerator & setNumSegX(int numSegX)
+	inline PlaneGenerator & setNumSegX(unsigned int numSegX)
 	{
 		mNumSegX = numSegX;
 		return *this;
 	}
 
 	/** Sets the number of segments along local Y axis */
-	inline PlaneGenerator & setNumSegY(int numSegY)
+	inline PlaneGenerator & setNumSegY(unsigned int numSegY)
 	{
 		mNumSegY = numSegY;
 		return *this;

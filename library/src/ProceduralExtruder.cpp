@@ -236,7 +236,7 @@ namespace Procedural
 			_extrudeBodyImpl(buffer, mShapeToExtrude);
 		else 
 		{
-			for (int i=0; i<mMultiShapeToExtrude->getShapeCount();i++)			
+			for (unsigned int i=0; i<mMultiShapeToExtrude->getShapeCount();i++)			
 				_extrudeBodyImpl(buffer, &mMultiShapeToExtrude->getShape(i));
 		}
 	}

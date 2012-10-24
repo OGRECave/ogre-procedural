@@ -33,18 +33,21 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/// Builds an Y-axis tube mesh, i.e. an emptied cylinder
+/**
+ * Builds an Y-axis tube mesh, i.e. an emptied cylinder
+ * \image html primitive_tube.png
+ */
 class _ProceduralExport TubeGenerator : public MeshGenerator<TubeGenerator>
 {
-	int mNumSegBase;
-	int mNumSegHeight;
+	unsigned int mNumSegBase;
+	unsigned int mNumSegHeight;
 	Ogre::Real mOuterRadius;
 	Ogre::Real mInnerRadius;
 	Ogre::Real mHeight;
 
 public:
 	/// Constructor with arguments
-	TubeGenerator(Ogre::Real outerRadius=2.f, Ogre::Real innerRadius=1.f, Ogre::Real height=1.f, int numSegBase=16, int numSegHeight=1) : 
+	TubeGenerator(Ogre::Real outerRadius=2.f, Ogre::Real innerRadius=1.f, Ogre::Real height=1.f, unsigned int numSegBase=16, unsigned int numSegHeight=1) : 
 	    mNumSegBase(numSegBase),
 		mNumSegHeight(numSegHeight),
 		mOuterRadius(outerRadius),
@@ -58,14 +61,14 @@ public:
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	/** Sets the number of segments when rotating around the tube's axis (default=16) */	
-	inline TubeGenerator & setNumSegBase(int numSegBase)
+	inline TubeGenerator & setNumSegBase(unsigned int numSegBase)
 	{
 		mNumSegBase = numSegBase;
 		return *this;
 	}
 
 	/** Sets the number of segments along the height of the cylinder (default=1) */
-	inline TubeGenerator & setNumSegHeight(int numSegHeight)
+	inline TubeGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
 		mNumSegHeight = numSegHeight;
 		return *this;

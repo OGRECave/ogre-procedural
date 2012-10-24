@@ -46,8 +46,8 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	Real deltaHeight = mHeight/(Real)mNumSegHeight;
 	int offset = 0;
 
-	for (int i = 0; i <=mNumSegHeight; i++)
-		for (int j = 0; j<=mNumSegBase; j++)
+	for (unsigned int i = 0; i <=mNumSegHeight; i++)
+		for (unsigned int j = 0; j<=mNumSegBase; j++)
 		{
 			Real x0 = mOuterRadius * cosf(j*deltaAngle);
 			Real z0 = mOuterRadius * sinf(j*deltaAngle);
@@ -67,8 +67,8 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			offset ++;
 		}
 
-	for (int i = 0; i <=mNumSegHeight; i++)
-		for (int j = 0; j<=mNumSegBase; j++)
+	for (unsigned int i = 0; i <=mNumSegHeight; i++)
+		for (unsigned int j = 0; j<=mNumSegBase; j++)
 		{
 			Real x0 = mInnerRadius * cosf(j*deltaAngle);
 			Real z0 = mInnerRadius * sinf(j*deltaAngle);
@@ -90,7 +90,7 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 
 		//low cap
-		for (int j=0;j<=mNumSegBase;j++)
+		for (unsigned int j=0;j<=mNumSegBase;j++)
 		{
 			Real x0 = mInnerRadius * cosf(j*deltaAngle);
 			Real z0 = mInnerRadius * sinf(j*deltaAngle);
@@ -120,7 +120,7 @@ void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 
 		//high cap
-		for (int j=0;j<=mNumSegBase;j++)
+		for (unsigned int j=0;j<=mNumSegBase;j++)
 		{
 			Real x0 = mInnerRadius * cosf(j*deltaAngle);
 			Real z0 = mInnerRadius * sinf(j*deltaAngle);

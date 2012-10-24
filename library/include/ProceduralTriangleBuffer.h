@@ -223,7 +223,7 @@ protected:
 	}
 
 	/// Applies the translation immediately to all the points contained in that triangle buffer
-	/// @arg amount translation vector
+	/// @param amount translation vector
 	TriangleBuffer& translate(const Ogre::Vector3& amount)
 	{
 		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); ++it)
@@ -240,7 +240,7 @@ protected:
 	}
 
 	/// Applies the rotation immediately to all the points contained in that triangle buffer
-	/// @arg quat the rotation quaternion to apply
+	/// @param quat the rotation quaternion to apply
 	TriangleBuffer& rotate(Ogre::Quaternion quat)
 	{
 		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); ++it)
@@ -253,7 +253,7 @@ protected:
 	}
 
 	/// Applies an immediate scale operation to that triangle buffer
-	/// @arg scale Scale vector
+	/// @param scale Scale vector
 	TriangleBuffer& scale(const Ogre::Vector3& scale)
 	{
 		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); ++it)
@@ -264,9 +264,9 @@ protected:
 	}
 
 	/// Applies an immediate scale operation to that triangle buffer
-	/// @arg x X scale component
-	/// @arg y Y scale component
-	/// @arg z Z scale component
+	/// @param x X scale component
+	/// @param y Y scale component
+	/// @param z Z scale component
 	TriangleBuffer& scale(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
 		return scale(Ogre::Vector3(x,y,z));

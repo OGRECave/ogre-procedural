@@ -37,6 +37,7 @@ namespace Procedural
 //-----------------------------------------------------------------------
 /**
  * Produces a shape from Cubic Hermite control points
+ * \image html spline_cubichermite.png
  */
 class _ProceduralExport CubicHermiteSpline2 : public BaseSpline2<CubicHermiteSpline2>
 {	
@@ -97,6 +98,7 @@ public:
 /**
  * Builds a shape from a Catmull-Rom Spline.
  * A catmull-rom smoothly interpolates position between control points
+ * \image html spline_catmull.png
  */
 class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2>
 {	
@@ -133,7 +135,7 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
 //-----------------------------------------------------------------------
 /**
  * Builds a shape from a Kochanek Bartels spline.
- *
+ * \image html spline_kochanekbartels.png
  * More details here : http://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
  */
 class _ProceduralExport KochanekBartelsSpline2 : public BaseSpline2<KochanekBartelsSpline2>
@@ -168,10 +170,10 @@ public:
 
 	/**
 	 * Adds a control point to the spline
-	 * @arg p Point position
-	 * @arg t Tension    +1 = Tight            -1 = Round
-	 * @arg b Bias       +1 = Post-shoot       -1 = Pre-shoot
-	 * @arg c Continuity +1 = Inverted Corners -1 = Box Corners
+	 * @param p Point position
+	 * @param t Tension    +1 = Tight            -1 = Round
+	 * @param b Bias       +1 = Post-shoot       -1 = Pre-shoot
+	 * @param c Continuity +1 = Inverted Corners -1 = Box Corners
 	 */
 	inline KochanekBartelsSpline2& addPoint(Ogre::Vector2 p, Ogre::Real t, Ogre::Real b, Ogre::Real c)
 	{
@@ -317,6 +319,7 @@ class _ProceduralExport EllipseShape
 //-----------------------------------------------------------------------
 /**
  * Produces a shape from Cubic Hermite control points
+ * \image html spline_roundedcorner.png
  */
 class _ProceduralExport RoundedCornerSpline2 : public BaseSpline2<RoundedCornerSpline2>
 {		
@@ -365,6 +368,7 @@ public:
 //-----------------------------------------------------------------------
 /**
  * Builds a shape from a Bezier-Curve.
+ * \image html spline_beziercurve.png
  */
 class _ProceduralExport BezierCurve2 : public BaseSpline2<BezierCurve2>
 {	

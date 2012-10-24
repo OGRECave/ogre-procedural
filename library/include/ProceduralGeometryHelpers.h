@@ -75,8 +75,8 @@ public:
 
 	/**
 	 * Checks whether 2 planes intersect and compute intersecting line if it is the case.
-	 * @arg other the other plane with which to check for intersection
-	 * @arg outputLine the intersecting line, if planes actually intersect
+	 * @param other the other plane with which to check for intersection
+	 * @param outputLine the intersecting line, if planes actually intersect
 	 * @returns true if planes intersect, false otherwise
 	 */
 	bool intersect(const Plane& other, Line& outputLine) const;
@@ -91,8 +91,8 @@ struct _ProceduralExport Line
 	Line() {}
 	
 	/// Contructor with arguments
-	/// @arg point a point on the line
-	/// @arg direction a normalized vector representing the direction of that line
+	/// @param point a point on the line
+	/// @param direction a normalized vector representing the direction of that line
 	Line(Ogre::Vector3 point, Ogre::Vector3 direction) : mPoint(point), mDirection(direction.normalisedCopy()) {}
 
 	/// Builds the line between 2 points
@@ -116,8 +116,8 @@ public:
 	Line2D() {}
 	
 	/// Contructor with arguments
-	/// @arg point a point on the line
-	/// @arg direction a normalized vector representing the direction of that line
+	/// @param point a point on the line
+	/// @param direction a normalized vector representing the direction of that line
 	Line2D(Ogre::Vector2 point, Ogre::Vector2 direction) : mPoint(point), mDirection(direction.normalisedCopy()) {}
 
 	/// Builds the line between 2 points
@@ -129,8 +129,8 @@ public:
 
 	/**	  
 	 * Computes the interesction between current segment and another segment
-	 * @arg the other segment
-	 * @arg intersection the point of intersection if outputed there if it exists
+	 * @param other the other segment
+	 * @param intersection the point of intersection if outputed there if it exists
 	 * @return true if segments intersect, false otherwise
 	 */
 	bool findIntersect(const Line2D& other, Ogre::Vector2& intersection) const;
@@ -149,8 +149,8 @@ struct _ProceduralExport Segment2D
 
 	/**	  
 	 * Computes the interesction between current segment and another segment
-	 * @arg the other segment
-	 * @arg intersection the point of intersection if outputed there if it exists
+	 * @param other the other segment
+	 * @param intersection the point of intersection if outputed there if it exists
 	 * @return true if segments intersect, false otherwise
 	 */
 	bool findIntersect(const Segment2D& other, Ogre::Vector2& intersection) const;

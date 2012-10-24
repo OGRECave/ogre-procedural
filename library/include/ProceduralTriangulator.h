@@ -42,8 +42,10 @@ namespace Procedural
 
 typedef std::vector<Ogre::Vector2> PointList;
 
-/** Implements a Delaunay Triangulation algorithm.
+/**
+ * Implements a Delaunay Triangulation algorithm.
  * It works on Shapes to build Triangle Buffers
+ * \image html shape_triangulation.png
  */
 class _ProceduralExport Triangulator : public MeshGenerator<Triangulator>
 {	
@@ -199,7 +201,7 @@ public:
 	
 	/**
 	 * Executes the Constrained Delaunay Triangulation algorithm
-	 * @arg ouput A vector of index where is outputed the resulting triangle indexes
+	 * @param ouput A vector of index where is outputed the resulting triangle indexes
 	 */
 	void triangulate(std::vector<int>& output, PointList& outputVertices) const;
 	

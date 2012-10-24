@@ -71,9 +71,9 @@ public:
 	}
 
 	/// Inserts a point to the shape
-	/// @arg index the index before the inserted point
-	/// @arg x new point's x coordinate
-	/// @arg y new point's y coordinate
+	/// @param index the index before the inserted point
+	/// @param x new point's x coordinate
+	/// @param y new point's y coordinate
 	inline Shape& insertPoint(size_t index, Ogre::Real x, Ogre::Real y)
 	{
 		mPoints.insert(mPoints.begin()+index, Ogre::Vector2(x, y));
@@ -81,8 +81,8 @@ public:
 	}
 
 	/// Inserts a point to the shape
-	/// @arg index the index before the inserted point
-	/// @arg pt new point's position
+	/// @param index the index before the inserted point
+	/// @param pt new point's position
 	inline Shape& insertPoint(size_t index, const Ogre::Vector2& pt)
 	{
 		mPoints.insert(mPoints.begin()+index, pt);
@@ -133,8 +133,8 @@ public:
 	}
 
 	/// Extracts a part of the shape as a new shape
-	/// @arg first first index to be in the new shape
-	/// @arg last last index to be in the new shape
+	/// @param first first index to be in the new shape
+	/// @param last last index to be in the new shape
 	inline Shape extractSubShape(unsigned int first, unsigned int last)
 	{
 		Shape s;
@@ -316,7 +316,7 @@ public:
 
 	/**
 	 * Tells whether a point is inside a shape or not
-	 * @arg point The point to check
+	 * @param point The point to check
 	 * @return true if the point is inside this shape, false otherwise
 	 */
 	bool isPointInside(const Ogre::Vector2& point) const;
@@ -324,7 +324,8 @@ public:
 	/**
 	 * Computes the intersection between this shape and another one.
 	 * Both shapes must be closed.
-	 * @arg other The shape against which the intersection is computed
+	 * <table border="0" width="100%"><tr><td>\image html shape_booleansetup.png "Start shapes"</td><td>\image html shape_booleanintersection.png "Intersection of the two shapes"</td></tr></table>
+	 * @param other The shape against which the intersection is computed
 	 * @return The intersection of two shapes, as a new shape
 	 */
 	MultiShape booleanIntersect(const Shape& other) const;
@@ -332,12 +333,18 @@ public:
 	/**
 	 * Computes the union between this shape and another one.
 	 * Both shapes must be closed.
+	 * <table border="0" width="100%"><tr><td>\image html shape_booleansetup.png "Start shapes"</td><td>\image html shape_booleanunion.png "Union of the two shapes"</td></tr></table>
+	 * @param other The shape against which the union is computed
+	 * @return The union of two shapes, as a new shape
 	 */
 	MultiShape booleanUnion(const Shape& other) const;
 	 
 	/**
 	 * Computes the difference between this shape and another one.
 	 * Both shapes must be closed.
+	 * <table border="0" width="100%"><tr><td>\image html shape_booleansetup.png "Start shapes"</td><td>\image html shape_booleandifference.png "Difference of the two shapes"</td></tr></table>
+	 * @param other The shape against which the diffenrence is computed
+	 * @return The difference of two shapes, as a new shape
 	 */
 	MultiShape booleanDifference(const Shape& other) const;
 	 
@@ -354,7 +361,7 @@ public:
 	bool isOutsideRealOutside() const;
 	
 	/// Creates a shape with the keys of this shape and extra keys coming from a track
-	/// @arg track the track to merge keys with
+	/// @param track the track to merge keys with
 	/// @return a new Shape coming from the merge between original shape and the track
 	Shape mergeKeysWithTrack(const Track& track) const;
 
@@ -438,7 +445,7 @@ public:
 		
 	/**
 	 * Reflect all points in this shape against a zero-origined line with a given normal
-	 * @param the normal
+	 * @param normal the normal
 	 */
 	Shape& reflect(const Ogre::Vector2& normal)
 	{
@@ -461,8 +468,8 @@ public:
 	}
 
 	/// Gets a position on the shape with index of the point and a percentage of position on the segment
-	/// @arg i index of the segment
-	/// @arg coord a number between 0 and 1 meaning the percentage of position on the segment
+	/// @param i index of the segment
+	/// @param coord a number between 0 and 1 meaning the percentage of position on the segment
 	inline Ogre::Vector2 getPosition(unsigned int i, Ogre::Real coord) const
 	{
 		assert(mClosed || (i < mPoints.size() - 1 && "Out of Bounds"));
@@ -473,7 +480,7 @@ public:
 	}
 	
 	/// Gets a position on the shape from lineic coordinate
-	/// @arg coord lineic coordinate
+	/// @param coord lineic coordinate
 	inline Ogre::Vector2 getPosition(Ogre::Real coord) const
 	{
 		assert(mPoints.size()>=2 && "The shape must at least contain 2 points");
@@ -500,7 +507,10 @@ public:
 		return Ogre::Math::Sqrt(sqRadius);
 	}
 		
-	/// Applies a "thickness" to a shape, ie a bit like the extruder, but in 2D
+	/**
+	 * Applies a "thickness" to a shape, ie a bit like the extruder, but in 2D
+	 * <table border="0" width="100%"><tr><td>\image html shape_thick1.png "Start shape (before thicken)"</td><td>\image html shape_thick2.png "Result (after thicken)"</td></tr></table>
+	 */
 	MultiShape thicken(Ogre::Real amount);
 
 	private:

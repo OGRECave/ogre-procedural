@@ -33,16 +33,19 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/// Generates a cone mesh along Y-axis
+/** 
+ * Generates a cone mesh along Y-axis
+ * \image html primitive_cone.png
+ */
 class _ProceduralExport ConeGenerator : public MeshGenerator<ConeGenerator>
 {
-	int mNumSegBase;
-	int mNumSegHeight;
+	unsigned int mNumSegBase;
+	unsigned int mNumSegHeight;
 	Ogre::Real mRadius;
 	Ogre::Real mHeight;
 public:	
 	/// Contructor with arguments
-	ConeGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, int numSegBase = 16, int numSegHeight = 1) :
+	ConeGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, unsigned int numSegBase = 16, unsigned int numSegHeight = 1) :
 		mNumSegBase(numSegBase),
 		mNumSegHeight(numSegHeight),
 		mRadius(radius),
@@ -56,14 +59,14 @@ public:
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	/** Sets the number of segments on the side of the base (default=16)*/
-	inline ConeGenerator & setNumSegBase(int numSegBase)
+	inline ConeGenerator & setNumSegBase(unsigned int numSegBase)
 	{
 		mNumSegBase = numSegBase;
 		return *this;
 	}
 
 	/** Sets the number of segments on the height (default=1) */
-	inline ConeGenerator & setNumSegHeight(int numSegHeight)
+	inline ConeGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
 		mNumSegHeight = numSegHeight;
 		return *this;

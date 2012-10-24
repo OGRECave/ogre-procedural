@@ -36,6 +36,7 @@ namespace Procedural
 /** 
  * Builds a rounded box.
  * You can choose the size of the rounded borders to get a sharper or smoother look.
+ * \image html primitive_roundedbox.png
  */
 class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGenerator>
 {

@@ -192,7 +192,7 @@ void _retriangulate(TriangleBuffer& newMesh, const TriangleBuffer& inputMesh, co
     // Build a new TriangleBuffer holding non-intersected triangles and retriangulated-intersected triangles
     for (std::vector<TriangleBuffer::Vertex>::const_iterator it = vec.begin(); it != vec.end(); ++it)
         newMesh.vertex(*it);
-    for (int i = 0; i < ind.size() / 3; i++)
+    for (int i = 0; i < (int)ind.size() / 3; i++)
         if (meshIntersects.find(i) == meshIntersects.end())
             newMesh.triangle(ind[i * 3], ind[i * 3 + 1], ind[i * 3 + 2]);
     int numNonIntersected1 = newMesh.getIndices().size();
@@ -262,7 +262,7 @@ void _buildTriLookup(TriLookup& lookup, const TriangleBuffer& newMesh)
 {
     const std::vector<TriangleBuffer::Vertex>& nvec = newMesh.getVertices();
     const std::vector<int>& nind = newMesh.getIndices();
-    for (int i = 0; i < nind.size() / 3; i++)
+    for (int i = 0; i < (int)nind.size() / 3; i++)
     {
         lookup.insert(std::pair<Segment3D, int>(Segment3D(nvec[nind[i * 3]].mPosition, nvec[nind[i * 3 + 1]].mPosition).orderedCopy(), i));
         lookup.insert(std::pair<Segment3D, int>(Segment3D(nvec[nind[i * 3]].mPosition, nvec[nind[i * 3 + 2]].mPosition).orderedCopy(), i));

@@ -56,8 +56,8 @@ class _ProceduralExport MultiShape
 	}
 
 	/// Constructor from a variable number of shapes
-	/// @arg count the number of shapes to add
-	/// @arg pointer to the shapes to add
+	/// @param count the number of shapes to add
+	/// @param ... pointer to the shapes to add
 	MultiShape(int count, ...);
 
 	/// Adds a shape to the list of shapes
@@ -68,13 +68,13 @@ class _ProceduralExport MultiShape
 	}
 
 	/// Returns the i-th shape
-	const Shape& getShape(int i) const
+	const Shape& getShape(unsigned int i) const
 	{
 		return mShapes[i];
 	}
 
 	/// Returns the i-th shape
-	Shape& getShape(int i)
+	Shape& getShape(unsigned int i)
 	{
 		return mShapes[i];
 	}
@@ -83,7 +83,7 @@ class _ProceduralExport MultiShape
 	std::vector<Ogre::Vector2> getPoints() const;
 
 	/// Returns the number of shapes in that MultiShape
-	int getShapeCount() const
+	unsigned int getShapeCount() const
 	{
 		return mShapes.size();
 	}
