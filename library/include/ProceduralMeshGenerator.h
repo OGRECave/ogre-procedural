@@ -270,10 +270,10 @@ public:
 
 protected:
 	/// Adds a new point to a triangle buffer, using the format defined for that MeshGenerator
-	/// @arg buffer the triangle buffer to update
-	/// @arg position the position of the new point
-	/// @arg normal the normal of the new point
-	/// @arg uv the uv texcoord of the new point
+	/// @param buffer the triangle buffer to update
+	/// @param position the position of the new point
+	/// @param normal the normal of the new point
+	/// @param uv the uv texcoord of the new point
 	inline void addPoint(TriangleBuffer& buffer, const Ogre::Vector3& position, const Ogre::Vector3& normal, const Ogre::Vector2& uv) const
 	{
 		if (mTransform)

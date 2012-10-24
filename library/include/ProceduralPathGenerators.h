@@ -264,6 +264,13 @@ public:
 	/// Default constructor
 	BezierCurve3() : mNumSeg(8) {}
 	
+	/// Sets number of segments per two control points
+	inline BezierCurve3& setNumSeg(unsigned int numSeg)
+	{
+		mNumSeg = numSeg;
+		return *this;
+	}
+
 	/// Adds a control point
 	inline BezierCurve3& addPoint(const Ogre::Vector3& pt)
 	{

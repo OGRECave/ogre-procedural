@@ -50,16 +50,16 @@ namespace Procedural
 				Vector3 axis3 = it->mNormal.crossProduct(axis2);
 
 				manual->position(it->mPosition + it->mNormal * mSize);
-				manual->position(it->mPosition + (.8 * it->mNormal  + .1 * axis2) * mSize);
+				manual->position(it->mPosition + (.8f * it->mNormal  + .1f * axis2) * mSize);
 
 				manual->position(it->mPosition + it->mNormal * mSize);
-				manual->position(it->mPosition + .8 * (it->mNormal  - .1 * axis2) * mSize);
+				manual->position(it->mPosition + .8f * (it->mNormal  - .1f * axis2) * mSize);
 
 				manual->position(it->mPosition + it->mNormal * mSize);
-				manual->position(it->mPosition + .8 * ( it->mNormal + .1 * axis3)* mSize);
+				manual->position(it->mPosition + .8f * ( it->mNormal + .1f * axis3)* mSize);
 
 				manual->position(it->mPosition + it->mNormal * mSize);
-				manual->position(it->mPosition + .8 * (it->mNormal - .1 * axis3)* mSize);
+				manual->position(it->mPosition + .8f * (it->mNormal - .1f * axis3)* mSize);
 			}
 		}
 		manual->end();

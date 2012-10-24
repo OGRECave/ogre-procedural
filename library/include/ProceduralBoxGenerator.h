@@ -36,14 +36,15 @@ namespace Procedural
 /** 
  * Generates a box mesh centered on the origin.
  * Default size is 1.0 with 1 quad per face.
+ * \image html primitive_box.png
  */
 class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
 {
 	Ogre::Real mSizeX,mSizeY,mSizeZ;
-	int mNumSegX,mNumSegY,mNumSegZ;
+	unsigned int mNumSegX,mNumSegY,mNumSegZ;
 public:
 	/// Contructor with arguments
-	BoxGenerator(Ogre::Real sizeX=1.f, Ogre::Real sizeY=1.f, Ogre::Real sizeZ=1.f, int numSegX=1, int numSegY=1, int numSegZ=1) : 
+	BoxGenerator(Ogre::Real sizeX=1.f, Ogre::Real sizeY=1.f, Ogre::Real sizeZ=1.f, unsigned int numSegX=1, unsigned int numSegY=1, unsigned int numSegZ=1) : 
 	  mSizeX(sizeX), mSizeY(sizeY), mSizeZ(sizeZ), mNumSegX(numSegX), mNumSegY(numSegY), mNumSegZ(numSegZ) {}
 
 	/** Sets size along X axis (default=1) */
@@ -77,21 +78,21 @@ public:
 	}
 
 	/** Sets the number of segments along X axis (default=1) */
-	BoxGenerator& setNumSegX(int numSegX)
+	BoxGenerator& setNumSegX(unsigned int numSegX)
 	{
 		mNumSegX = numSegX;
 		return *this;
 	}
 
 	/** Sets the number of segments along Y axis (default=1) */
-	BoxGenerator& setNumSegY(int numSegY)
+	BoxGenerator& setNumSegY(unsigned int numSegY)
 	{
 		mNumSegY = numSegY;
 		return *this;
 	}
 
 	/** Sets the number of segments along Z axis (default=1) */
-	BoxGenerator& setNumSegZ(int numSegZ)
+	BoxGenerator& setNumSegZ(unsigned int numSegZ)
 	{
 		mNumSegZ = numSegZ;
 		return *this;

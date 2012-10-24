@@ -65,10 +65,10 @@ public:
 	}
 
 	/// Inserts a point to the path
-	/// @arg index the index before the inserted point
-	/// @arg x new point's x coordinate
-	/// @arg y new point's y coordinate
-	/// @arg z new point's z coordinate
+	/// @param index the index before the inserted point
+	/// @param x new point's x coordinate
+	/// @param y new point's y coordinate
+	/// @param z new point's z coordinate
 	inline Path& insertPoint(size_t index, Ogre::Real x, Ogre::Real y, Ogre::Real z)
 	{
 		mPoints.insert(mPoints.begin()+index, Ogre::Vector3(x, y, z));
@@ -76,8 +76,8 @@ public:
 	}
 
 	/// Inserts a point to the path
-	/// @arg index the index before the inserted point
-	/// @arg pt new point's position
+	/// @param index the index before the inserted point
+	/// @param pt new point's position
 	inline Path& insertPoint(size_t index, const Ogre::Vector3& pt)
 	{
 		mPoints.insert(mPoints.begin()+index, pt);
@@ -199,8 +199,8 @@ public:
 	Ogre::Real getTotalLength() const;
 
 	/// Gets a position on the shape with index of the point and a percentage of position on the segment
-	/// @arg i index of the segment
-	/// @arg coord a number between 0 and 1 meaning the percentage of position on the segment
+	/// @param i index of the segment
+	/// @param coord a number between 0 and 1 meaning the percentage of position on the segment
 	inline Ogre::Vector3 getPosition(unsigned int i, Ogre::Real coord) const
 	{
 		assert(mClosed || (i < mPoints.size() - 1 && "Out of Bounds"));
@@ -211,7 +211,7 @@ public:
 	}
 	
 	/// Gets a position on the shape from lineic coordinate
-	/// @arg coord lineic coordinate
+	/// @param coord lineic coordinate
 	 Ogre::Vector3 getPosition(Ogre::Real coord) const;
 
 	/**
@@ -287,7 +287,7 @@ public:
 
 	/**
 	 * Reflect all points in this path against a zero-origined plane with a given normal
-	 * @param the normal
+	 * @param normal the normal
 	 */
 	Path& reflect(const Ogre::Vector3& normal)
 	{
@@ -299,8 +299,8 @@ public:
 	}
 
 	/// Extracts a part of the shape as a new path
-	/// @arg first first index to be in the new path
-	/// @arg last last index to be in the new path
+	/// @param first first index to be in the new path
+	/// @param last last index to be in the new path
 	inline Path extractSubPath(unsigned int first, unsigned int last)
 	{
 		Path p;

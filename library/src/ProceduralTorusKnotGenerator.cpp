@@ -45,7 +45,7 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	int offset = 0;
 
-	for (int i = 0; i <= mNumSegCircle * mP;i++)
+	for (unsigned int i = 0; i <= mNumSegCircle * mP;i++)
 	{
 		Real phi = Math::TWO_PI * i/(Real)mNumSegCircle;
 		Real x0 = mRadius*(2 + cos(mQ*phi/(Real)mP)) * cos(phi) / 3.f;
@@ -63,7 +63,7 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 				
 		Quaternion q = Utils::_computeQuaternion(direction);
 
-		for (int j =0;j<=mNumSegSection;j++)
+		for (unsigned int j =0;j<=mNumSegSection;j++)
 		{
 			Real alpha = Math::TWO_PI *j/mNumSegSection;
 			Vector3 vp = mSectionRadius*(q * Vector3(cos(alpha), sin(alpha),0));

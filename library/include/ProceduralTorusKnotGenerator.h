@@ -33,19 +33,21 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** Builds a torus knot mesh
+/**
+ * Builds a torus knot mesh
+ * \image html primitive_torusknot.png
  */
 class _ProceduralExport TorusKnotGenerator : public MeshGenerator<TorusKnotGenerator>
 {
-	int mNumSegSection;
-	int mNumSegCircle;
+	unsigned int mNumSegSection;
+	unsigned int mNumSegCircle;
 	Ogre::Real mRadius;
 	Ogre::Real mSectionRadius;
 	int mP;
 	int mQ;
 public:
 	/// Constructor with arguments
-	TorusKnotGenerator(Ogre::Real radius=1.f, Ogre::Real sectionRadius=.2f, int p=2, int q=3, int numSegSection=8, int numSegCircle=16) :
+	TorusKnotGenerator(Ogre::Real radius=1.f, Ogre::Real sectionRadius=.2f, int p=2, int q=3, unsigned int numSegSection=8, unsigned int numSegCircle=16) :
 		mNumSegSection(numSegSection),
 		mNumSegCircle(numSegCircle),
 		mRadius(radius),
@@ -60,14 +62,14 @@ public:
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	/** Sets the number of segments along the section (default=8) */
-	inline TorusKnotGenerator & setNumSegSection(int numSegSection)
+	inline TorusKnotGenerator & setNumSegSection(unsigned int numSegSection)
 	{
 		mNumSegSection = numSegSection;
 		return *this;
 	}
 
 	/** Sets the number of segments along the circle (default=16) */
-	inline TorusKnotGenerator & setNumSegCircle(int numSegCircle)
+	inline TorusKnotGenerator & setNumSegCircle(unsigned int numSegCircle)
 	{
 		mNumSegCircle = numSegCircle;
 		return *this;

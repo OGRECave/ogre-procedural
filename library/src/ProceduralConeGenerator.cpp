@@ -49,15 +49,15 @@ void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	Vector3 refNormal = Vector3(mRadius, mHeight, 0.f).normalisedCopy();
 	Quaternion q;
 
-	for (int i = 0; i <=mNumSegHeight; i++)
+	for (unsigned int i = 0; i <=mNumSegHeight; i++)
 	{
 		Real r0 = mRadius * (1 - i / (Real)mNumSegHeight);
-		for (int j = 0; j<=mNumSegBase; j++)
+		for (unsigned int j = 0; j<=mNumSegBase; j++)
 		{
 			Real x0 = r0* cosf(j*deltaAngle);
 			Real z0 = r0 * sinf(j*deltaAngle);
 
-			q.FromAngleAxis(Radian(-j*deltaAngle), Vector3::UNIT_Y);
+			q.FromAngleAxis(Radian(-deltaAngle*j), Vector3::UNIT_Y);
 
 			addPoint(buffer, Vector3(x0, i*deltaHeight, z0),
 							q*refNormal,
@@ -83,7 +83,7 @@ void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 					Vector3::NEGATIVE_UNIT_Y,
 					Vector2::UNIT_Y);
 	offset++;
-	for (int j=0; j<=mNumSegBase; j++)
+	for (unsigned int j=0; j<=mNumSegBase; j++)
 	{
 		Real x0 = mRadius * cosf(j*deltaAngle);
 		Real z0 = mRadius * sinf(j*deltaAngle);

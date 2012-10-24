@@ -441,7 +441,7 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 	if (mShapeToTriangulate)
 	{
 		outputVertices = mShapeToTriangulate->getPoints();
-		for (int i=0;i<mShapeToTriangulate->getSegCount(); ++i)
+		for (unsigned int i=0;i<mShapeToTriangulate->getSegCount(); ++i)
 		{
 			segmentListIndices.push_back(i);
 			segmentListIndices.push_back(mShapeToTriangulate->getBoundedIndex(i+1));

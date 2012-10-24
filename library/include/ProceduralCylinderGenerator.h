@@ -33,18 +33,21 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/// Generates a cylinder mesh along Y-axis
+/**
+ * Generates a cylinder mesh along Y-axis
+ * \image html primitive_cylinder.png
+ */
 class _ProceduralExport CylinderGenerator : public MeshGenerator<CylinderGenerator>
 {
-	int mNumSegBase;
-	int mNumSegHeight;
+	unsigned int mNumSegBase;
+	unsigned int mNumSegHeight;
 	bool mCapped;
 	Ogre::Real mRadius;
 	Ogre::Real mHeight;
 
 public:	
 	/// Contructor with arguments
-	CylinderGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, int numSegBase = 16, int numSegHeight = 1, bool capped = true) : 
+	CylinderGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, unsigned int numSegBase = 16, unsigned int numSegHeight = 1, bool capped = true) : 
 	    mNumSegBase(numSegBase),
 		mNumSegHeight(numSegHeight),
 		mCapped(capped),
@@ -59,14 +62,14 @@ public:
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	/** Sets the number of segments when rotating around the cylinder's axis (default=16) */
-	inline CylinderGenerator & setNumSegBase(int numSegBase)
+	inline CylinderGenerator & setNumSegBase(unsigned int numSegBase)
 	{
 		mNumSegBase = numSegBase;
 		return *this;
 	}
 
 	/** Sets the number of segments along the height of the cylinder (default=1) */
-	inline CylinderGenerator & setNumSegHeight(int numSegHeight)
+	inline CylinderGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
 		mNumSegHeight = numSegHeight;
 		return *this;

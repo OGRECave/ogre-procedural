@@ -166,7 +166,7 @@ Path BezierCurve3::realizePath()
 	}
 	else
 	{
-		for(int i = 0; i < mPoints.size(); i++)
+		for(int i = 0; i < (int)mPoints.size(); i++)
 			coef[i] = Utils::binom(mPoints.size() - 1, i);
 	}
 
@@ -180,7 +180,7 @@ Path BezierCurve3::realizePath()
 		Ogre::Real x = 0.0f;
 		Ogre::Real y = 0.0f;
 		Ogre::Real z = 0.0f;
-		for(int i = 0; i < mPoints.size(); i++)
+		for(int i = 0; i < (int)mPoints.size(); i++)
 		{
 			Ogre::Real fac = coef[i] * pow(t, i) * pow(1.0f - t, (int)mPoints.size() - 1 - i);
 			x += fac * mPoints[i].x;

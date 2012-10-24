@@ -33,7 +33,10 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/// Generates a capsule mesh, i.e. a sphere-terminated cylinder 
+/**
+ * Generates a capsule mesh, i.e. a sphere-terminated cylinder
+ * \image html primitive_capsule.png
+ */
 class _ProceduralExport CapsuleGenerator : public MeshGenerator<CapsuleGenerator>
 {
 	///Radius of the spheric part

@@ -753,7 +753,8 @@ EXAMPLE_RECURSIVE      = YES
 
 IMAGE_PATH             = ${OgreProcedural_SOURCE_DIR}/samples/media/ \
                          ${OgreProcedural_SOURCE_DIR}/docs/images/ \
-                         ${OgreProcedural_ILLUSTRATIONS_PATH}
+                         ${OgreProcedural_ILLUSTRATIONS_PATH} \
+						 ${OgreProcedural_BINARY_DIR}
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program

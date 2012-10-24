@@ -37,10 +37,16 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/// Extrudes a 2D shape along a path to build an extruded mesh.
-/// Can be used to build things such as pipelines, roads...
-///  
-/// Note : Concerning UV texCoords, U is along the path and V along the shape. 
+/**
+ * Extrudes a 2D shape along a path to build an extruded mesh.
+ * Can be used to build things such as pipelines, roads...
+ * <table border="0" width="100%"><tr><td>\image html extruder_generic.png "Generic extrusion"</td>
+ * <td>\image html extruder_rotationtrack.png "Extrusion with rotation track"</td></tr>
+ * <tr><td>\image html extruder_scaletrack.png "Extrusion with scale track"</td>
+ * <td>\image html extruder_texturetrack.png "Extrusion with texture track"</td></tr>
+ * <tr><td>\image html extruder_multishape.png "Multishape extrusion"</td><td>&nbsp;</td></tr></table>
+ * \note Concerning UV texCoords, U is along the path and V along the shape.
+ */
 class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 {
 	Shape* mShapeToExtrude;

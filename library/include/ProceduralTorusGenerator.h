@@ -33,17 +33,19 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** Builds a torus mesh whose axis is Y
+/**
+ * Builds a torus mesh whose axis is Y
+ * \image html primitive_torus.png
  */
 class _ProceduralExport TorusGenerator : public MeshGenerator<TorusGenerator>
 {
-	int mNumSegSection;
-	int mNumSegCircle;
+	unsigned int mNumSegSection;
+	unsigned int mNumSegCircle;
 	Ogre::Real mRadius;
 	Ogre::Real mSectionRadius;
 public:
 	/// Constructor with arguments
-	TorusGenerator(Ogre::Real radius=1.f, Ogre::Real sectionRadius=.2f, int numSegSection=16, int numSegCircle=16) : 
+	TorusGenerator(Ogre::Real radius=1.f, Ogre::Real sectionRadius=.2f, unsigned int numSegSection=16, unsigned int numSegCircle=16) : 
 		mNumSegSection(numSegSection),
 		mNumSegCircle(numSegCircle),
 		mRadius(radius),
@@ -56,14 +58,14 @@ public:
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 	
 	/** Sets the number of segments on the section circle */
-	inline TorusGenerator & setNumSegSection(int numSegSection)
+	inline TorusGenerator & setNumSegSection(unsigned int numSegSection)
 	{
 		mNumSegSection = numSegSection;
 		return *this;
 	}
 
 	/** Sets the number of segments along the guiding circle */
-	inline TorusGenerator & setNumSegCircle(int numSegCircle)
+	inline TorusGenerator & setNumSegCircle(unsigned int numSegCircle)
 	{
 		mNumSegCircle = numSegCircle;
 		return *this;

@@ -46,8 +46,8 @@ void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	Real deltaCircle = (Math::TWO_PI / mNumSegCircle);
 	int offset = 0;
 
-	for (int i = 0; i <=mNumSegCircle; i++)
-		for (int j = 0; j<=mNumSegSection; j++)
+	for (unsigned int i = 0; i <=mNumSegCircle; i++)
+		for (unsigned int j = 0; j<=mNumSegSection; j++)
 		{
 			Vector3 c0(mRadius, 0.0, 0.0);
 			Vector3 v0(mRadius+mSectionRadius * cosf(j*deltaSection),mSectionRadius * sinf(j*deltaSection),0.0);

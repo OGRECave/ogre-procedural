@@ -54,8 +54,8 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	Real deltaHeight = mHeight/(Real)mNumSegHeight;
 	int offset = 0;
 
-	for (int i = 0; i <=mNumSegHeight; i++)
-		for (int j = 0; j<=mNumSegBase; j++)
+	for (unsigned int i = 0; i <=mNumSegHeight; i++)
+		for (unsigned int j = 0; j<=mNumSegBase; j++)
 		{
 			Real x0 = mRadius * cosf(j*deltaAngle);
 			Real z0 = mRadius * sinf(j*deltaAngle);
@@ -83,7 +83,7 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 						 Vector3::NEGATIVE_UNIT_Y,
 						 Vector2::UNIT_Y);
 		offset++;
-		for (int j=0;j<=mNumSegBase;j++)
+		for (unsigned int j=0;j<=mNumSegBase;j++)
 		{
 			Real x0 = mRadius * cosf(j*deltaAngle);
 			Real z0 = mRadius * sinf(j*deltaAngle);
@@ -105,7 +105,7 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 						 Vector3::UNIT_Y,
 						 Vector2::ZERO);
 		offset++;
-		for (int j=0;j<=mNumSegBase;j++)
+		for (unsigned int j=0;j<=mNumSegBase;j++)
 		{
 			Real x0 = mRadius * cosf(j*deltaAngle);
 			Real z0 = mRadius * sinf(j*deltaAngle);

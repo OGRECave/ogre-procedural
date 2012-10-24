@@ -33,7 +33,9 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** Builds an icosphere mesh, ie a sphere built with equally sized triangles
+/**
+ * Builds an icosphere mesh, ie a sphere built with equally sized triangles
+ * \image html primitive_icosphere.png
  */
 class _ProceduralExport IcoSphereGenerator : public MeshGenerator<IcoSphereGenerator>
 {

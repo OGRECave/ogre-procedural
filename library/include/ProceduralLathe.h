@@ -34,14 +34,16 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** Builds a mesh by rotating a shape 360 degrees around Y-axis.
+/**
+ * Builds a mesh by rotating a shape 360 degrees around Y-axis.
  * The shape is assumed to be defined in the X>=0 half-plane
+ * <table border="0" width="100%"><tr><td>\image html lathe_generic.png "Generic lathe (360 degree)"</td><td>\image html lathe_anglerange.png "Lathe with a specific angle"</td></tr></table>
  */
 class _ProceduralExport Lathe : public MeshGenerator<Lathe>
 {
 	Shape* mShapeToExtrude;	
 	MultiShape* mMultiShapeToExtrude;
-	int mNumSeg;
+	unsigned int mNumSeg;
 	Ogre::Radian mAngleBegin;
 	Ogre::Radian mAngleEnd;	
 	bool mClosed;	
@@ -52,12 +54,12 @@ class _ProceduralExport Lathe : public MeshGenerator<Lathe>
 
 public:	
 	/// Contructor with arguments
-	Lathe(Shape* shapeToExtrude = 0, int numSeg = 16) : mShapeToExtrude(shapeToExtrude), mMultiShapeToExtrude(0), 
+	Lathe(Shape* shapeToExtrude = 0, unsigned int numSeg = 16) : mShapeToExtrude(shapeToExtrude), mMultiShapeToExtrude(0), 
 														mNumSeg(numSeg), mAngleBegin(0), mAngleEnd((Ogre::Radian)Ogre::Math::TWO_PI), mClosed(true), mCapped(true)
 	{}
 
 	/** Sets the number of segments when rotating around the axis (default=16)*/
-	inline Lathe& setNumSeg(int numSeg)
+	inline Lathe& setNumSeg(unsigned int numSeg)
 	{
 		mNumSeg = numSeg;
 		return *this;

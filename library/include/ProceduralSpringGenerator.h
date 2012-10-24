@@ -38,11 +38,12 @@ namespace Procedural
 //-----------------------------------------------------------------------
 /**
  * Produces a helix path
+ * \image html spline_helix.png
  */
 class _ProceduralExport HelixPath
 {		
 	Ogre::Real mHeight, mRadius;
-	int mNumSegPath;
+	unsigned int mNumSegPath;
 	Ogre::Real mNumRound;
 	
 public:
@@ -86,6 +87,7 @@ public:
 //-----------------------------------------------------------------------
 /**
  * Generates a spring mesh centered on the origin.
+ * \image html primitive_spring.png
  */
 class _ProceduralExport SpringGenerator : public MeshGenerator<SpringGenerator>
 {
