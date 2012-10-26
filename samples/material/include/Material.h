@@ -25,35 +25,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_H_INCLUDED
-#define PROCEDURAL_H_INCLUDED
+#ifndef __Sample_Svg_h_
+#define __Sample_Svg_h_
 
-#include "ProceduralBoxGenerator.h"
-#include "ProceduralCapsuleGenerator.h"
-#include "ProceduralConeGenerator.h"
-#include "ProceduralCylinderGenerator.h"
-#include "ProceduralIcoSphereGenerator.h"
-#include "ProceduralRoundedBoxGenerator.h"
-#include "ProceduralSphereGenerator.h"
-#include "ProceduralTorusGenerator.h"
-#include "ProceduralTorusKnotGenerator.h"
-#include "ProceduralTubeGenerator.h"
-#include "ProceduralPlaneGenerator.h"
-#include "ProceduralRoot.h"
-#include "ProceduralExtruder.h"
-#include "ProceduralLathe.h"
-#include "ProceduralShape.h"
-#include "ProceduralShapeGenerators.h"
-#include "ProceduralMultiShape.h"
-#include "ProceduralPath.h"
-#include "ProceduralPathGenerators.h"
-#include "ProceduralTriangulator.h"
-#include "ProceduralTriangleBuffer.h"
-#include "ProceduralTrack.h"
-#include "ProceduralBoolean.h"
-#include "ProceduralSpringGenerator.h"
-#include "ProceduralSVG.h"
-#include "ProceduralDebugRendering.h"
-#include "ProceduralTextureGenerator.h"
+#include "BaseApplication.h"
+using namespace Ogre;
+
+class Sample_Material : public BaseApplication
+{
+	virtual bool frameStarted(const FrameEvent& evt);
+protected:
+	virtual void createScene(void);
+	virtual void createCamera(void);
+};
 
 #endif

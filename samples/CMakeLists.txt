@@ -4,6 +4,8 @@ add_subdirectory(extrusion)
 
 add_subdirectory(svg)
 
+add_subdirectory(material)
+
 # Install sample sources
 if (OgreProcedural_INSTALL_SAMPLES_SOURCE)
   if (WIN32 OR APPLE)
