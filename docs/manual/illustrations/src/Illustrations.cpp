@@ -31,6 +31,14 @@ THE SOFTWARE.
 #include "Procedural.h"
 #include <iostream>
 #include <fstream>
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <direct.h>
+#define chdir(p) _chdir(p)
+#else
+#include <unistd.h>
+#endif
 
 using namespace Procedural;
 
@@ -104,158 +112,9 @@ using namespace Procedural;
 	light->setType(Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
 	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
-
-	mRaySceneQuery = mSceneMgr->createRayQuery(Ogre::Ray(), Ogre::SceneManager::WORLD_GEOMETRY_TYPE_MASK);
-    if (mRaySceneQuery == NULL)
-		return;
-    mRaySceneQuery->setSortByDistance(true);
-	mRenderWindowPixelBox = new PixelBox (mWindow->getWidth(), mWindow->getHeight(), 1, PF_R8G8B8);
-	mRenderWindowPixelBox->data = new BYTE[mRenderWindowPixelBox->getConsecutiveSize()];
 }
 
-void Illustrations::GetMeshInformation(Entity *entity,
-									size_t &vertex_count,
-									Ogre::Vector3* &vertices,
-									size_t &index_count,
-									Ogre::uint32* &indices,
-									const Ogre::Vector3 &position,
-									const Ogre::Quaternion &orient,
-									const Ogre::Vector3 &scale)
-{
-	bool added_shared = false;
-	size_t current_offset = 0;
-	size_t shared_offset = 0;
-	size_t next_offset = 0;
-	size_t index_offset = 0;
-	vertex_count = index_count = 0;
- 
-	Ogre::MeshPtr mesh = entity->getMesh();
- 
- 
-	bool useSoftwareBlendingVertices = entity->hasSkeleton();
- 
-	if (useSoftwareBlendingVertices)
-	{
-	  entity->_updateAnimation();
-	}
- 
-	// Calculate how many vertices and indices we're going to need
-	for (unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
-	{
-		Ogre::SubMesh* submesh = mesh->getSubMesh( i );
- 
-		// We only need to add the shared vertices once
-		if(submesh->useSharedVertices)
-		{
-			if( !added_shared )
-			{
-				vertex_count += mesh->sharedVertexData->vertexCount;
-				added_shared = true;
-			}
-		}
-		else
-		{
-			vertex_count += submesh->vertexData->vertexCount;
-		}
- 
-		// Add the indices
-		index_count += submesh->indexData->indexCount;
-	}
- 
- 
-	// Allocate space for the vertices and indices
-	vertices = new Ogre::Vector3[vertex_count];
-	indices = new Ogre::uint32[index_count];
- 
-	added_shared = false;
- 
-	// Run through the submeshes again, adding the data into the arrays
-	for ( unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
-	{
-		Ogre::SubMesh* submesh = mesh->getSubMesh(i);
- 
-		//----------------------------------------------------------------
-		// GET VERTEXDATA
-		//----------------------------------------------------------------
-		Ogre::VertexData* vertex_data;
- 
-		//When there is animation:
-		if(useSoftwareBlendingVertices)
-			vertex_data = submesh->useSharedVertices ? entity->_getSkelAnimVertexData() : entity->getSubEntity(i)->_getSkelAnimVertexData();
-		else
-			vertex_data = submesh->useSharedVertices ? mesh->sharedVertexData : submesh->vertexData;
- 
- 
-		if((!submesh->useSharedVertices)||(submesh->useSharedVertices && !added_shared))
-		{
-			if(submesh->useSharedVertices)
-			{
-				added_shared = true;
-				shared_offset = current_offset;
-			}
- 
-			const Ogre::VertexElement* posElem =
-				vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION);
- 
-			Ogre::HardwareVertexBufferSharedPtr vbuf =
-				vertex_data->vertexBufferBinding->getBuffer(posElem->getSource());
- 
-			unsigned char* vertex =
-				static_cast<unsigned char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
- 
-			// There is _no_ baseVertexPointerToElement() which takes an Ogre::Real or a double
-			//  as second argument. So make it float, to avoid trouble when Ogre::Real will
-			//  be comiled/typedefed as double:
-			//      Ogre::Real* pReal;
-			float* pReal;
- 
-			for( size_t j = 0; j < vertex_data->vertexCount; ++j, vertex += vbuf->getVertexSize())
-			{
-				posElem->baseVertexPointerToElement(vertex, &pReal);
- 
-				Ogre::Vector3 pt(pReal[0], pReal[1], pReal[2]);
- 
-				vertices[current_offset + j] = (orient * (pt * scale)) + position;
-			}
- 
-			vbuf->unlock();
-			next_offset += vertex_data->vertexCount;
-		}
- 
- 
-		Ogre::IndexData* index_data = submesh->indexData;
-		size_t numTris = index_data->indexCount / 3;
-		Ogre::HardwareIndexBufferSharedPtr ibuf = index_data->indexBuffer;
- 
-		bool use32bitindexes = (ibuf->getType() == Ogre::HardwareIndexBuffer::IT_32BIT);
- 
-		void* hwBuf = ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY);
- 
-		size_t offset = (submesh->useSharedVertices)? shared_offset : current_offset;
-		size_t index_start = index_data->indexStart;
-		size_t last_index = numTris*3 + index_start;
- 
-		if (use32bitindexes) {
-			Ogre::uint32* hwBuf32 = static_cast<Ogre::uint32*>(hwBuf);
-			for (size_t k = index_start; k < last_index; ++k)
-			{
-				indices[index_offset++] = hwBuf32[k] + static_cast<Ogre::uint32>( offset );
-			}
-		} else {
-			Ogre::uint16* hwBuf16 = static_cast<Ogre::uint16*>(hwBuf);
-			for (size_t k = index_start; k < last_index; ++k)
-			{
-				indices[ index_offset++ ] = static_cast<Ogre::uint32>( hwBuf16[k] ) +
-					static_cast<Ogre::uint32>( offset );
-			}
-		}
- 
-		ibuf->unlock();
-		current_offset = next_offset;
-	}
-}
-
-void Illustrations::next(std::string name, Real size, Shape* pShape1, Shape* pShape2, Path* pPath)
+void Illustrations::next(std::string name, Real size)
 {
 	// Optimise camera placing
 	Real distance = 2*size/Math::Tan(mCamera->getFOVy());
@@ -266,197 +125,6 @@ void Illustrations::next(std::string name, Real size, Shape* pShape1, Shape* pSh
 	mRoot->renderOneFrame();
 	mRoot->renderOneFrame();
 	mWindow->writeContentsToFile(name + ".png");
-
-	// Create SVG
-	unsigned int height = mWindow->getHeight();
-	unsigned int width = mWindow->getWidth();
-	Real fw = 0.5f * width;
-	Real fh = -0.5f * height;
-	Real tw = (Real)width;
-	Real th = (Real)height;
-	std::vector<SVGPATH> pathList;
-	std::ofstream svgfile;
-	if(pShape1 == NULL && pShape2 == NULL && pPath == NULL)
-	{
-		// Render
-		Real dx = 1.0f / (Real)width;
-		Real dy = 1.0f / (Real)height;
-		mWindow->copyContentsToMemory(*mRenderWindowPixelBox);
-		Ogre::Image img;
-		img.loadDynamicImage(static_cast<Ogre::uchar*>(mRenderWindowPixelBox->data),width, height, PF_R8G8B8);
-		img.flipAroundX();
-
-		Ray ray;
-		RaySceneQueryResult query_result;
-		Real closest_distance = -1.0f;
-		size_t vertex_count;
-		size_t index_count;
-		Vector3 *vertices=0;
-		Vector3 eyeSpacePos[3];
-		uint32 *indices=0;
-
-		for(Real x = 0.0f; x <= 1.0f; x += dx)
-			for(Real y = 0.0f; y <= 1.0f; y += dy)
-			{
-				mCamera->getCameraToViewportRay(x, y, &ray);
-				mRaySceneQuery->setRay(ray);
-				if (mRaySceneQuery->execute().size() <= 0) continue;
-
-				SVGPATH closest_result;
-				closest_result.lineWidth = 0.5f;
-				closest_result.closed = true;
-				closest_distance = -1.0f;
-				query_result = mRaySceneQuery->getLastResults();
-
-				for (size_t qr_idx = 0; qr_idx < query_result.size(); qr_idx++)
-				{
-					if ((closest_distance >= 0.0f) && (closest_distance < query_result[qr_idx].distance))
-						break;
- 
-					if ((query_result[qr_idx].movable != NULL) && (query_result[qr_idx].movable->getMovableType().compare("Entity") == 0))
-					{
-						Ogre::Entity *pentity = static_cast<Ogre::Entity*>(query_result[qr_idx].movable);           
- 
-						if (!indices && !vertices)
-						GetMeshInformation( pentity, vertex_count, vertices, index_count, indices,
-									   pentity->getParentNode()->_getDerivedPosition(),
-									   pentity->getParentNode()->_getDerivedOrientation(),
-									   pentity->getParentNode()->_getDerivedScale());
-
-						bool new_closest_found = false;
-						for (int i = 0; i < static_cast<int>(index_count); i += 3)
-						{
-							std::pair<bool, Ogre::Real> hit = Ogre::Math::intersects(ray, vertices[indices[i]], vertices[indices[i+1]], vertices[indices[i+2]], true, false);
- 
-							if (hit.first)
-							{
-								if ((closest_distance < 0.0f) || (hit.second < closest_distance))
-								{
-									closest_distance = hit.second;
-									closest_result.points.clear();
-									for(int j = 0; j < 3; j++)
-									{
-										eyeSpacePos[j] = mCamera->getViewMatrix(true) * vertices[indices[i+j]];
-										Vector3 p = mCamera->getProjectionMatrix() * eyeSpacePos[j];
-										closest_result.points.push_back(Vector2(p.x * fw, p.y * fh));
-									}
-									closest_result.distance = closest_distance;
-									
-									// Bugfix needed
-									// closest_result.color = img.getColourAt((size_t)(x * (Real)width), (size_t)(x * (Real)width), 0);
-									closest_result.color = ColourValue::White;
-
-									// Check is result is in front of the camera
-									new_closest_found = (eyeSpacePos[0].z < 0.0f && eyeSpacePos[1].z < 0.0f && eyeSpacePos[2].z < 0.0f && closest_result.color.r > 0.4f && closest_result.color.g > 0.4f && closest_result.color.b > 0.4f);
-								}
-							}
-						}				
- 
-						if (new_closest_found && closest_distance >= 0.0f)
-						{
-							bool inlist = false;
-							for(std::vector<SVGPATH>::iterator iter = pathList.begin(); iter != pathList.end(); iter++)
-								if((*iter).points[0] == closest_result.points[0] && (*iter).points[1] == closest_result.points[1] && (*iter).points[2] == closest_result.points[2])
-								{
-									inlist = true;
-									break;
-								}
-							if(!inlist)
-							{
-								pathList.push_back(closest_result);
-								for(int j = 0; j < 3; j++)
-								{
-									tw = std::min(tw, closest_result.points[j].x);
-									th = std::min(th, closest_result.points[j].y);
-								}
-							}
-						}
-					}
-				}
-			}
-
-		delete[] vertices;
-		delete[] indices;
-		std::sort(pathList.begin(), pathList.end());
-		tw = -1.0f * tw + 15.0f; // Create a translation in x direction with a border
-		th = -1.0f * th + 15.0f; // Create a translation in y direction with a border
-	}
-	else
-	{
-		SVGPATH sp;
-		sp.lineWidth = 1.0f;
-		sp.distance = 0.0f;
-		sp.color = ColourValue::White;
-		if(pPath != NULL)
-		{
-			// Path
-			std::vector<Vector3> pl = pPath->getPoints();
-			std::vector<Vector3> pl1;
-			for(std::vector<Vector3>::iterator iter = pl.begin(); iter != pl.end(); iter++)
-			{
-				Vector3 eyeSpacePos = mCamera->getViewMatrix(true) * (*iter);
-				Vector3 screenSpacePos = mCamera->getProjectionMatrix() * eyeSpacePos;
-				screenSpacePos.x *= fw;
-				screenSpacePos.y = screenSpacePos.z * fh;
-				tw = std::min(tw, screenSpacePos.x);
-				th = std::min(th, screenSpacePos.y);
-				sp.points.push_back(Vector2(screenSpacePos.x, screenSpacePos.y));
-			}
-			tw = -1.0f * tw + 15.0f;
-			th = -1.0f * th + 15.0f;
-		}
-		else
-		{
-			// Shape(s)
-			tw = 0.0f;
-			th = 0.0f;
-			Real fMin = -5.0f;
-			Real fMax = 5.0f;
-			fw = (Real)width / (fMax - fMin);
-			fh = (Real)height / (fMax - fMin);
-
-			sp.points.clear();
-			std::vector<Vector2> pl = pShape1->getPoints();
-			for(std::vector<Vector2>::iterator iter = pl.begin(); iter != pl.end(); iter++)
-				sp.points.push_back(Vector2((iter->x + fMin * -1.0f) * fw, (fMax - iter->y) * fh));
-			sp.closed = pShape1->isClosed();
-			pathList.push_back(sp);
-
-			if(pShape2 != NULL)
-			{
-				sp.points.clear();
-				std::vector<Vector2> pl = pShape2->getPoints();
-				for(std::vector<Vector2>::iterator iter = pl.begin(); iter != pl.end(); iter++)
-					sp.points.push_back(Vector2((iter->x + fMin * -1.0f) * fw, (fMax - iter->y) * fh));
-				sp.closed = pShape2->isClosed();
-				pathList.push_back(sp);
-			}
-		}
-	}
-	if(pathList.size() > 0)
-	{
-		svgfile.open(name + ".svg");
-		svgfile << "<?xml version=\"1.0\" standalone=\"no\"?>" << std::endl;
-		svgfile << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" << width << "\" height=\"" << height << "\">" << std::endl;
-		svgfile << "  <g style=\"stroke:" << ((pShape1 == NULL && pShape2 == NULL && pPath == NULL) ? "black" : "red") << ";stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\">" << std::endl;
-		char color[8];
-		for(std::vector<SVGPATH>::iterator iter = pathList.begin(); iter != pathList.end(); iter++)
-		{
-#if _MSC_VER > 1310
-			sprintf_s(color, 8,
-#else
-			sprintf(color,
-#endif
-				"#%02x%02x%02x", (BYTE)(iter->color.r * 255.0f), (BYTE)(iter->color.g * 255.0f), (BYTE)(iter->color.b * 255.0f));
-			svgfile << "    <path style=\"fill:" << color << ";stroke-width:" << iter->lineWidth << "px\" d=\"M";
-			for(std::vector<Vector2>::iterator pt = iter->points.begin(); pt != iter->points.end(); pt++)
-				svgfile << " " << (pt->x + tw) << "," << (pt->y + th);
-			if(iter->closed) svgfile << " z";
-			svgfile << "\" />" << std::endl;
-		}
-		svgfile << "  </g>" << std::endl;
-		svgfile << "</svg>" << std::endl;
-	}
 
 	// Clear the scene
 	for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it != mSceneNodes.end(); it++) 
@@ -488,8 +156,45 @@ void Illustrations::putMesh(MeshPtr mesh, int materialIndex)
 	mSceneNodes.push_back(sn);
 }
 
+void Illustrations::exportImage(std::string name, Procedural::Texture::TextureBufferPtr buffer, bool reset)
+{
+	size_t border = 32;
+	size_t w = buffer->getWidth() + 2 * border;
+	size_t h = buffer->getWidth() + 2 * border;
+	Ogre::Image* pImgData = buffer->getImage();
+	Ogre::uchar* pixelBuffer = new Ogre::uchar[h * w * 4];
+	Ogre::Image* image = new Ogre::Image();
+	for(size_t y = 0; y < h; y++)
+	{
+		for(size_t x = 0; x < w; x++)
+		{
+			Ogre::ColourValue pixel = Ogre::ColourValue::White;
+			if(x >= border && x < (w - border) && y >= border && y < (h - border)) pixel = pImgData->getColourAt(x - border, y - border, 0);
+#if OGRE_ENDIAN == OGRE_ENDIAN_LITTLE
+			pixelBuffer[y * w * 4 + x * 4 + 3] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.r * 255.0f, 0.0f), 255.0f);
+			pixelBuffer[y * w * 4 + x * 4 + 2] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.g * 255.0f, 0.0f), 255.0f);
+			pixelBuffer[y * w * 4 + x * 4 + 1] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.b * 255.0f, 0.0f), 255.0f);
+			pixelBuffer[y * w * 4 + x * 4 + 0] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.a * 255.0f, 0.0f), 255.0f);
+#else
+			pixelBuffer[y * w * 4 + x * 4 + 0] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.r * 255.0f, 0.0f), 255.0f);
+			pixelBuffer[y * w * 4 + x * 4 + 1] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.g * 255.0f, 0.0f), 255.0f);
+			pixelBuffer[y * w * 4 + x * 4 + 2] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.b * 255.0f, 0.0f), 255.0f);
+			pixelBuffer[y * w * 4 + x * 4 + 3] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.a * 255.0f, 0.0f), 255.0f);
+#endif
+		}
+	}
+	image->loadDynamicImage(pixelBuffer, w, h, 1, PF_R8G8B8A8);
+	image->save(name + ".png");
+	delete image;
+	delete pixelBuffer;
+	delete pImgData;
+	if(reset) Procedural::Texture::Solid(buffer).setColour(Ogre::ColourValue::Black);
+}
+
 void Illustrations::go()
-{	
+{
+	chdir(mOutputPath.c_str());
+
 	//
 	// Primitives
 	//
@@ -535,6 +240,10 @@ void Illustrations::go()
 	putMesh(mp);
 	next("primitive_capsule", 2);
 
+	mp = PlaneGenerator().realizeMesh();
+	putMesh(mp);
+	next("primitive_plane", 1);
+
 	mCamera->setPosition(mCamera->getPosition() + Vector3(0.0f, 1.5f, 0.0f));
 	mp = SpringGenerator().setNumRound(3).realizeMesh();
 	putMesh(mp);
@@ -549,154 +258,539 @@ void Illustrations::go()
 	Shape s = CatmullRomSpline2().addPoint(0,0).addPoint(1,0).addPoint(1,1).addPoint(2,1).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).realizeShape().translate(-2, 0);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("spline_catmull", 3, &s);
+	next("spline_catmull", 3);
 
 	s = CubicHermiteSpline2().addPoint(Vector2(0,0), AT_CATMULL).addPoint(Vector2(1,0), AT_CATMULL).addPoint(Vector2(1,1), Vector2(0,2), Vector2(0,-2)).addPoint(Vector2(2,1), AT_CATMULL).addPoint(2,0).addPoint(3,0).addPoint(3,1).addPoint(4,1).setNumSeg(16).realizeShape().translate(-2,0);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("spline_cubichermite", 3, &s);
+	next("spline_cubichermite", 3);
 
 	s = KochanekBartelsSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0),1,0,0).addPoint(Vector2(1,1),-1,0,0).addPoint(Vector2(2,1),0,1,0).addPoint(Vector2(2,0),0,-1,0).addPoint(Vector2(3,0),0,0,1).addPoint(Vector2(3,1),0,0,-1).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).realizeShape().translate(-2,0);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("spline_kochanekbartels", 3, &s);
+	next("spline_kochanekbartels", 3);
 
 	s = RoundedCornerSpline2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).setRadius(0.3f).realizeShape().translate(-2,0);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("spline_roundedcorner", 3, &s);
+	next("spline_roundedcorner", 3);
 
 	s = BezierCurve2().addPoint(Vector2(0,0)).addPoint(Vector2(1,0)).addPoint(Vector2(1,1)).addPoint(Vector2(2,1)).addPoint(Vector2(2,0)).addPoint(Vector2(3,0)).addPoint(Vector2(3,1)).addPoint(Vector2(4,1)).addPoint(Vector2(4,0)).realizeShape().translate(-2,0);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("spline_beziercurve", 3, &s);
+	next("spline_beziercurve", 3);
 
 	cameraPerspective();
 	Path p = HelixPath().setNumSegPath(64).setNumRound(3).setHeight(1.5f).realizePath().translate(0.0f, -2.2f, 0.0f);
 	mp = p.realizeMesh();
 	putMesh(mp,1);
-	next("spline_helix", 3, NULL, NULL, &p);
+	next("spline_helix", 3);
 
 	//
 	// Boolean operations
 	//
 	cameraBack();
-	{
+
 	Shape s1 = RectangleShape().realizeShape();
 	Shape s2 = s1;
 	s2.translate(.5f,.5f);
 
 	putMesh(s1.realizeMesh(), 1);
 	putMesh(s2.realizeMesh(), 1);
-	next("shape_booleansetup", 1.5, &s1, &s2);
+	next("shape_booleansetup", 1.5);
 
 	s = s1.booleanUnion(s2).getShape(0);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleanunion", 1.5f, &s);
+	next("shape_booleanunion", 1.5f);
 
 	s = s1.booleanIntersect(s2).getShape(0);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleanintersection", 1.5f, &s);
+	next("shape_booleanintersection", 1.5f);
 
 	s = s1.booleanDifference(s2).getShape(0);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_booleandifference", 1.5f, &s);
-	}
+	next("shape_booleandifference", 1.5f);
 
 	//
 	// Thicken
 	//
-	{
 	s = Shape().addPoint(-1,-1).addPoint(0.5,0).addPoint(-0.5,0).addPoint(1,1);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_thick1", 1.5f, &s);
+	next("shape_thick1", 1.5f);
 
 	s = s.thicken(.2f).getShape(0);
 	mp = s.realizeMesh();
 	putMesh(mp,1);
-	next("shape_thick2", 1.5f, &s);
-	}
+	next("shape_thick2", 1.5f);
 
 	//
 	// Delaunay
 	//
-	{
-		cameraFront();
-		MultiShape ms;
-		CircleShape cs;
-		ms.addShape(cs.setRadius(2).realizeShape());
-		ms.addShape(cs.setRadius(.3f).realizeShape().translate(-1,.3f).switchSide());
-		ms.addShape(cs.realizeShape().translate(1,.3f).switchSide());
-		ms.addShape(cs.realizeShape().switchSide());
-		ms.addShape(cs.realizeShape().scale(2,1).translate(0,-1).switchSide());
-		mp = Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh();
-		putMesh(mp);
-		next("shape_triangulation", 3);
-	}
+	cameraFront();
+
+	MultiShape ms;
+	CircleShape cs;
+	ms.addShape(cs.setRadius(2).realizeShape());
+	ms.addShape(cs.setRadius(.3f).realizeShape().translate(-1,.3f).switchSide());
+	ms.addShape(cs.realizeShape().translate(1,.3f).switchSide());
+	ms.addShape(cs.realizeShape().switchSide());
+	ms.addShape(cs.realizeShape().scale(2,1).translate(0,-1).switchSide());
+	mp = Triangulator().setMultiShapeToTriangulate(&ms).realizeMesh();
+	putMesh(mp);
+	next("shape_triangulation", 3);
 
 	//
 	// Extrusion
 	//
-	{
-		cameraPerspective();
-		//Shape s = RoundedCornerSpline2().addPoint(-1,0).addPoint(0,1).addPoint(1,0).addPoint(0,2).close().realizeShape();
-		//Shape s = CircleShape().realizeShape();
-		Shape s = Shape().addPoint(-1,-1).addPoint(1,-1).addPoint(1,1).addPoint(0,0).addPoint(-1,1).close();
-		Path p = RoundedCornerSpline3().addPoint(-6,2.5,-2.5).addPoint(-5,0,-2.5).addPoint(0,0,2.5).addPoint(5,0,-2.5).setRadius(1.).realizePath();
-		mp = Extruder().setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh();
-		putMesh(mp);
-		next("extruder_generic", 10);
+	cameraPerspective();
 
-		Shape s2 = RectangleShape().setHeight(.5).realizeShape();
-		Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(1.0,-1.0);
-		Path p2 = LinePath().betweenPoints(Vector3(-5,0,0),Vector3(5,0,0)).setNumSeg(10).realizePath();
-		mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setRotationTrack(&t).realizeMesh();
-		putMesh(mp);
-		next("extruder_rotationtrack", 7);
+	s = Shape().addPoint(-1,-1).addPoint(1,-1).addPoint(1,1).addPoint(0,0).addPoint(-1,1).close();
+	p = RoundedCornerSpline3().addPoint(-6,2.5,-2.5).addPoint(-5,0,-2.5).addPoint(0,0,2.5).addPoint(5,0,-2.5).setRadius(1.).realizePath();
+	mp = Extruder().setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh();
+	putMesh(mp);
+	next("extruder_generic", 10);
 
-		t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,.5f).addKeyFrame(.4f,.5f).addKeyFrame(.5f,1.2f).addKeyFrame(.8f,1).addKeyFrame(1.0f,1);
-		mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setScaleTrack(&t).realizeMesh();
-		putMesh(mp);
-		next("extruder_scaletrack", 7);
+	s2 = RectangleShape().setHeight(.5).realizeShape();
+	Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(1.0,-1.0);
+	Path p2 = LinePath().betweenPoints(Vector3(-5,0,0),Vector3(5,0,0)).setNumSeg(10).realizePath();
+	mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setRotationTrack(&t).realizeMesh();
+	putMesh(mp);
+	next("extruder_rotationtrack", 7);
 
-		Procedural::Shape s4 = Procedural::Shape().addPoint(-1.2f,.2f).addPoint(-1.f,.2f).addPoint(-.9f,.1f).addPoint(.9f,.1f).addPoint(1.f,.2f).addPoint(1.2f,.2f).scale(2).setOutSide(Procedural::SIDE_LEFT);
-		Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2f).addKeyFrame(3,.8f).addKeyFrame(5,1);
-		mp = Extruder().setShapeTextureTrack(&textureTrack).setShapeToExtrude(&s4).setExtrusionPath(&p2).setCapped(false).realizeMesh();
-		putMesh(mp, 2);
-		next("extruder_texturetrack", 7);
+	t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,.5f).addKeyFrame(.4f,.5f).addKeyFrame(.5f,1.2f).addKeyFrame(.8f,1).addKeyFrame(1.0f,1);
+	mp = Extruder().setShapeToExtrude(&s2).setExtrusionPath(&p2).setScaleTrack(&t).realizeMesh();
+	putMesh(mp);
+	next("extruder_scaletrack", 7);
 
-		cameraFront();
-		Shape s3 = CircleShape().setNumSeg(16).realizeShape();
-		MultiShape ms = MultiShape(2, &s3.switchSide(), &Shape(s3).scale(1.1f));
-		Path p3 = CatmullRomSpline3().addPoint(0,0,-5).addPoint(0,0,0).addPoint(1,-1,5).realizePath();		
-		mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
-		putMesh(mp);
-		next("extruder_multishape", 4);	
-	}
+	Procedural::Shape s4 = Procedural::Shape().addPoint(-1.2f,.2f).addPoint(-1.f,.2f).addPoint(-.9f,.1f).addPoint(.9f,.1f).addPoint(1.f,.2f).addPoint(1.2f,.2f).scale(2).setOutSide(Procedural::SIDE_LEFT);
+	Procedural::Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2f).addKeyFrame(3,.8f).addKeyFrame(5,1);
+	mp = Extruder().setShapeTextureTrack(&textureTrack).setShapeToExtrude(&s4).setExtrusionPath(&p2).setCapped(false).realizeMesh();
+	putMesh(mp, 2);
+	next("extruder_texturetrack", 7);
+
+	cameraFront();
+
+	Shape s3 = CircleShape().setNumSeg(16).realizeShape();
+	ms = MultiShape(2, &s3.switchSide(), &Shape(s3).scale(1.1f));
+	Path p3 = CatmullRomSpline3().addPoint(0,0,-5).addPoint(0,0,0).addPoint(1,-1,5).realizePath();		
+	mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
+	putMesh(mp);
+	next("extruder_multishape", 4);	
 
 	//
 	// Lathe
 	//
+	s = Shape().addPoint(0,-3).addPoint(1,-3).addPoint(1,0).addPoint(.8f,1).addPoint(.8f,2).addPoint(1.5f,3).addPoint(0,4);
+	mp = Lathe().setShapeToExtrude(&s).realizeMesh();
+	putMesh(mp);
+	next("lathe_generic",5);
+
+	mp = Lathe().setShapeToExtrude(&s).setAngleBegin((Radian)2).setAngleEnd((Radian)0).realizeMesh();
+	putMesh(mp);
+	next("lathe_anglerange",5);
+
+	//
+	// Texture
+	//
+	int bufSize = 128;
+
+	// Render
+	Procedural::Texture::TextureBuffer bufferSolid(bufSize);
+	Procedural::Texture::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+	exportImage("texture_solid", &bufferSolid);
+
+	Procedural::Texture::TextureBuffer bufferGradient(bufSize);
+	Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	exportImage("texture_gradient", &bufferGradient);
+
+	Procedural::Texture::TextureBuffer bufferCellNormal(bufSize);
+	Procedural::Texture::Cell(&bufferCellNormal).setDensity(4).process();
+	exportImage("texture_cell_default", &bufferCellNormal);
+	Procedural::Texture::TextureBuffer bufferCellChessCone(bufSize);
+	Procedural::Texture::Cell(&bufferCellChessCone).setDensity(4).setMode(Procedural::Texture::Cell::MODE_CHESSBOARD).setPattern(Procedural::Texture::Cell::PATTERN_CONE).process();
+	exportImage("texture_cell_chess", &bufferCellChessCone);
+	Procedural::Texture::TextureBuffer bufferCellGridCross(bufSize);
+	Procedural::Texture::Cell(&bufferCellGridCross).setDensity(4).setMode(Procedural::Texture::Cell::MODE_GRID).setPattern(Procedural::Texture::Cell::PATTERN_CROSS).process();
+	exportImage("texture_cell_grid", &bufferCellGridCross);
+
+	Procedural::Texture::TextureBuffer bufferNoiseWhite(bufSize);
+	Procedural::Texture::Noise(&bufferNoiseWhite).setType(Procedural::Texture::Noise::NOISE_WHITE).process();
+	exportImage("texture_noise_white", &bufferNoiseWhite);
+	Procedural::Texture::TextureBuffer bufferNoisePerlin(bufSize);
+	Procedural::Texture::Noise(&bufferNoisePerlin).setType(Procedural::Texture::Noise::NOISE_PERLIN).process();
+	exportImage("texture_noise_perlin", &bufferNoisePerlin);
+
+	Procedural::Texture::TextureBuffer bufferMarble(bufSize);
+	Procedural::Texture::Marble(&bufferMarble).process();
+	exportImage("texture_marble", &bufferMarble);
+
+	Procedural::Texture::TextureBuffer bufferWood(bufSize);
+	Procedural::Texture::Wood(&bufferWood).setRings(5).process();
+	exportImage("texture_wood", &bufferWood);
+
+	Procedural::Texture::TextureBuffer bufferCloud(bufSize);
+	Procedural::Texture::Cloud(&bufferCloud).process();
+	exportImage("texture_cloud", &bufferCloud);
+
+	Procedural::Texture::TextureBuffer bufferLabyrinth(bufSize);
+	Procedural::Texture::Labyrinth(&bufferLabyrinth).process();
+	exportImage("texture_labyrinth", &bufferLabyrinth);
+
+	Procedural::Texture::TextureBuffer bufferTextile(bufSize);
+	Procedural::Texture::Textile(&bufferTextile).process();
+	exportImage("texture_textile", &bufferTextile);
+
+	Procedural::Texture::TextureBuffer bufferImage(bufSize);
+	Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
+	exportImage("texture_image", &bufferImage);
+
+	// Manipulation
+	Procedural::Texture::TextureBuffer buffer(bufSize);
+	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::Texture::Cell(&bufferCellNormal).setDensity(4).setRegularity(234).process();
+	exportImage("texture_cell_smooth", &bufferCellNormal);
+	Procedural::Texture::Abnormals(&buffer).setParameterImage(&bufferCellNormal).process();
+	exportImage("texture_abnormals", &buffer, true);
+	dotFile dotfile(mOutputPath, "texture_02", "Abnormals_Demo");
+	dotfile.set("Gradient", "texture_gradient", "Cell", "texture_cell_smooth", "Abnormals", "texture_abnormals");
+	dotfile.save();
+
+	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Texture::Alpha(&buffer).process();
+	exportImage("texture_alpha", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_03", "Alpha_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Alpha", "texture_alpha");
+	dotfile.save();
+
+	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::Texture::AlphaMask(&buffer).setParameterImage(&bufferCellNormal).process();
+	exportImage("texture_alphamask", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_04", "AlphaMask_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Gradient", "texture_gradient", "AlphaMask", "texture_alphamask");
+	dotfile.save();
+
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Blur(&buffer).setType(Procedural::Texture::Blur::BLUR_MEAN).process();
+	exportImage("texture_blur_1", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_05a", "Blur_Mean_Demo");
+	dotfile.set("Image", "texture_image", "Blur", "texture_blur_1");
+	dotfile.save();
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Blur(&buffer).setType(Procedural::Texture::Blur::BLUR_GAUSSIAN).process();
+	exportImage("texture_blur_2", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_05b", "Blur_Gaussian_Demo");
+	dotfile.set("Image", "texture_image", "Blur", "texture_blur_2");
+	dotfile.save();
+
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Channel(&buffer).setSelection(Procedural::Texture::Channel::SELECT_BLUE).process();
+	exportImage("texture_channel_1", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_06a", "Channel_blue_Demo");
+	dotfile.set("Image", "texture_image", "Channel", "texture_channel_1");
+	dotfile.save();
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Channel(&buffer).setSelection(Procedural::Texture::Channel::SELECT_GRAY).process();
+	exportImage("texture_channel_2", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_06b", "Channel_gray_Demo");
+	dotfile.set("Image", "texture_image", "Channel", "texture_channel_2");
+	dotfile.save();
+
+	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::Texture::Colours(&buffer).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
+	exportImage("texture_colours", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_07", "Colours_Demo");
+	dotfile.set("Gradient", "texture_gradient", "Colours", "texture_colours");
+	dotfile.save();
+
+	Procedural::Texture::Cloud(&buffer).process();
+	Procedural::Texture::Combine(&buffer).addImage(&bufferGradient, Procedural::Texture::Combine::METHOD_ADD_CLAMP).process();
+	exportImage("texture_combine", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_08", "Combine_Demo");
+	dotfile.set("Cloud", "texture_cloud", "Gradient", "texture_gradient", "Combine", "texture_combine");
+	dotfile.save();
+
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Convolution(&buffer).setKernel(Ogre::Matrix3(10.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -10.0f)).process();
+	exportImage("texture_convolution", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_09", "Convolution_Demo");
+	dotfile.set("Image", "texture_image", "Kernel matrix", "", "Convolution", "texture_convolution");
+	dotfile.save();
+
+	Procedural::Texture::Cloud(&buffer).process();
+	Procedural::Texture::Crack(&buffer).setParameterImage(&bufferGradient).process();
+	exportImage("texture_crack", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_10", "Crack_Demo");
+	dotfile.set("Cloud", "texture_cloud", "Gradient", "texture_gradient", "Crack", "texture_crack");
+	dotfile.save();
+
+	Procedural::Texture::Cloud(&buffer).process();
+	Procedural::Texture::Dilate(&buffer).process();
+	exportImage("texture_dilate", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_11", "Dilate_Demo");
+	dotfile.set("Cloud", "texture_cloud", "Dilate", "texture_dilate");
+	dotfile.save();
+
+	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::Texture::Distort(&buffer).setParameterImage(&bufferCellNormal).setPower(255).process();
+	exportImage("texture_distort", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_12", "Distort_Demo");
+	dotfile.set("Gradient", "texture_gradient", "Cell", "texture_cell_smooth", "Distort", "texture_distort");
+	dotfile.save();
+
+	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Texture::EdgeDetection(&buffer).setType(Procedural::Texture::EdgeDetection::DETECTION_SOBEL).process();
+	exportImage("texture_edgedetection", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_13", "EdgeDetection_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "EdgeDetection", "texture_edgedetection");
+	dotfile.save();
+
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Flip(&buffer).setAxis(Procedural::Texture::Flip::FLIP_POINT).process();
+	exportImage("texture_flip_1", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_14a", "Flip_point_Demo");
+	dotfile.set("Image", "texture_image", "Flip", "texture_flip_1");
+	dotfile.save();
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Flip(&buffer).setAxis(Procedural::Texture::Flip::FLIP_VERTICAL).process();
+	exportImage("texture_flip_2", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_14b", "Flip_vertical_Demo");
+	dotfile.set("Image", "texture_image", "Flip", "texture_flip_2");
+	dotfile.save();
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Flip(&buffer).setAxis(Procedural::Texture::Flip::FLIP_HORIZONTAL).process();
+	exportImage("texture_flip_3", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_14c", "Flip_horizontal_Demo");
+	dotfile.set("Image", "texture_image", "Flip", "texture_flip_3");
+	dotfile.save();
+
+	Procedural::Texture::Gradient(&buffer).process();
+	Procedural::Texture::Glow(&buffer).process();
+	exportImage("texture_glow", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_15", "Glow_Demo");
+	dotfile.set("Gradient", "texture_gradient", "Glow", "texture_glow");
+	dotfile.save();
+
+	Procedural::Texture::Gradient(&buffer).process();
+	Procedural::Texture::Invert(&buffer).process();
+	exportImage("texture_invert", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_16", "Invert_Demo");
+	dotfile.set("Gradient", "texture_gradient", "Invert", "texture_invert");
+	dotfile.save();
+
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Jitter(&buffer).process();
+	exportImage("texture_jitter", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_17", "Jitter_Demo");
+	dotfile.set("Image", "texture_image", "Jitter", "texture_jitter");
+	dotfile.save();
+
+	Procedural::Texture::Cloud(&buffer).process();
+	Procedural::Texture::Lerp(&buffer).setImageA(&bufferGradient).setImageB(&bufferCellNormal).process();
+	exportImage("texture_lerp", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_18", "Lerp_Demo");
+	dotfile.set("Cloud", "texture_cloud", "Gradient", "texture_gradient", "Lerp", "texture_lerp");
+	dotfile.add("Cell", "texture_cell_smooth");
+	dotfile.bind(4, 3);
+	dotfile.save();
+
+	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Texture::Light(&buffer).setColourAmbient((Ogre::uchar)127, (Ogre::uchar)60, (Ogre::uchar)0, (Ogre::uchar)0).setColourDiffuse((Ogre::uchar)60, (Ogre::uchar)25, (Ogre::uchar)0, (Ogre::uchar)0).setBumpPower(255).process();
+	exportImage("texture_light", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_19a", "Light_1_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Light", "texture_light", dotFile::CONNECTION::ROW);
+	dotfile.bind(1, 3);
+	dotfile.save();
+	dotfile = dotFile(mOutputPath, "texture_19b", "Light_2_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Light", "texture_light");
+	dotfile.save();
+
+	Procedural::Texture::Gradient(&buffer).process();
+	Procedural::Texture::Lookup(&bufferGradient).setParameterImage(&bufferCellNormal).process();
+	exportImage("texture_lookup", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_20", "Lookup_Demo");
+	dotfile.set("Gradient", "texture_gradient", "Cell", "texture_cell_smooth", "Lookup", "texture_lookup");
+	dotfile.save();
+
+	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Texture::Normals(&buffer).process();
+	exportImage("texture_normals", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_21a", "Normals_1_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals");
+	dotfile.save();
+	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Texture::Colours(&buffer).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
+	exportImage("texture_normals_tip", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_21b", "Normals_2_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Colours", "texture_normals_tip", dotFile::CONNECTION::SPLIT);
+	dotfile.save();
+
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::OilPaint(&buffer).setRadius(5).process();
+	exportImage("texture_oilpaint", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_22", "OilPaint_Demo");
+	dotfile.set("Image", "texture_image", "OilPaint", "texture_oilpaint");
+	dotfile.save();
+
+	Procedural::Texture::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+	Procedural::Texture::RandomPixels(&buffer).setColour(Ogre::ColourValue::Red).setCount(200).process();
+	exportImage("texture_randompixels", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_23", "RandomPixels_Demo");
+	dotfile.set("Solid", "texture_solid", "RandomPixels", "texture_randompixels");
+	dotfile.save();
+
+	Procedural::Texture::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+	Procedural::Texture::Rectangle(&buffer).setColour(Ogre::ColourValue::Red).setRectangle(0.25f, 0.25f, 0.75f, 0.75f).process();
+	exportImage("texture_rectangle", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_24", "Rectangle_Demo");
+	dotfile.set("Solid", "texture_solid", "Rectangle", "texture_rectangle");
+	dotfile.save();
+
+	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::Texture::RotationZoom(&buffer).setRotation(0.125f).process();
+	exportImage("texture_rotationzoom", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_25", "RotationZoom_Demo");
+	dotfile.set("Gradient", "texture_gradient", "RotationZoom", "texture_rotationzoom");
+	dotfile.save();
+
+	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Texture::Segment(&buffer).setColourSource(&bufferGradient).process();
+	exportImage("texture_segment", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_26", "Segment_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Gradient", "texture_gradient", "Segment", "texture_segment");
+	dotfile.save();
+
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Sharpen(&buffer).setType(Procedural::Texture::Sharpen::SHARP_BASIC).process();
+	exportImage("texture_sharpen_1", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_27a", "Sharpen_basic_Demo");
+	dotfile.set("Image", "texture_image", "Sharpen", "texture_sharpen_1");
+	dotfile.save();
+	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Texture::Sharpen(&buffer).setType(Procedural::Texture::Sharpen::SHARP_GAUSSIAN).process();
+	exportImage("texture_sharpen_2", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_27b", "Sharpen_gaussian_Demo");
+	dotfile.set("Image", "texture_image", "Sharpen", "texture_sharpen_2");
+	dotfile.save();
+
+	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Texture::Threshold(&buffer).process();
+	exportImage("texture_threshold", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_28", "Threshold_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Threshold", "texture_threshold");
+	dotfile.save();
+
+	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Texture::Vortex(&buffer).process();
+	exportImage("texture_vortex", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_29", "Vortex_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Vortex", "texture_vortex");
+	dotfile.save();
+
+	// Example
+	dotfile = dotFile(mOutputPath, "texture_01", "Material_Example");
+	int pxPerBrick = 32;
+	int brickLines = bufSize / pxPerBrick;
+	Procedural::Texture::TextureBuffer bricks(brickLines * pxPerBrick);
+	Procedural::Texture::Cell(&bricks).setRegularity(233).setDensity(brickLines).process();
+	exportImage("texture_example_cell", &bricks);
+	int s01 = dotfile.add("Cell", "texture_example_cell");
+	Procedural::Texture::Colours(&bricks).setBrithness(174).setContrast(198).process();
+	exportImage("texture_example_colours_1", &bricks);
+	int s02 = dotfile.add("Colours", "texture_example_colours_1");
+	dotfile.bind(s01, s02);
+	Procedural::Texture::TextureBuffer distort(brickLines * pxPerBrick);
+	Procedural::Texture::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
+	exportImage("texture_example_solid", &distort);
+	int s03x = dotfile.add("Solid", "texture_example_solid");
+	Procedural::Texture::Rectangle rectDraw(&distort);
+	for(size_t i = 1; i < brickLines; i++)
 	{
-		Shape s = Shape().addPoint(0,-3).addPoint(1,-3).addPoint(1,0).addPoint(.8f,1).addPoint(.8f,2).addPoint(1.5f,3).addPoint(0,4);
-		mp = Lathe().setShapeToExtrude(&s).realizeMesh();
-		putMesh(mp);
-		next("lathe_generic",5);
-
-		mp = Lathe().setShapeToExtrude(&s).setAngleBegin((Radian)2).setAngleEnd((Radian)0).realizeMesh();
-		putMesh(mp);
-		next("lathe_anglerange",5);
+		Ogre::ColourValue rc = Ogre::ColourValue((i % 2 == 0) ? Ogre::Math::RangeRandom(0.4f, 0.6f) : Ogre::Math::RangeRandom(0.0f, 0.2f), 0.52f, 1.0f);
+		rc.a = 1.0f;
+		rectDraw.setRectangle(0, i * pxPerBrick, brickLines * pxPerBrick, i * pxPerBrick + pxPerBrick).setColour(rc).process();
+		exportImage("texture_example_rectangle_" + Ogre::StringConverter::toString(i), &distort);
+		int s03y = dotfile.add("Rectangle", "texture_example_rectangle_" + Ogre::StringConverter::toString(i));
+		dotfile.bind(s03x, s03y);
+		s03x = s03y;
 	}
+	Procedural::Texture::Distort(&bricks).setParameterImage(&distort).setPower(50).process();
+	exportImage("texture_example_distort_1", &bricks);
+	int s07 = dotfile.add("Distort", "texture_example_distort_1");
+	dotfile.bind(s02, s07);
+	dotfile.bind(s03x, s07);
+	Procedural::Texture::Cloud(&distort).process();
+	exportImage("texture_example_cloud_1", &distort);
+	int s08 = dotfile.add("Cloud", "texture_example_cloud_1");
+	Procedural::Texture::Normals(&distort).process();
+	exportImage("texture_example_normals_1", &distort);
+	int s09 = dotfile.add("Normals", "texture_example_normals_1");
+	dotfile.bind(s08, s09);
+	Procedural::Texture::Distort(&bricks).setParameterImage(&distort).setPower(8).process();
+	exportImage("texture_example_distort_2", &bricks);
+	int s10 = dotfile.add("Distort", "texture_example_distort_2");
+	dotfile.bind(s07, s10);
+	dotfile.bind(s09, s10);
+	Procedural::Texture::TextureBuffer normal(&bricks);
+	Procedural::Texture::TextureBuffer light(&bricks);
+	Procedural::Texture::Colours(&light).setColourBase(0.325f, 0.0f, 0.0f, 0.0f).setColourPercent(0.78f, 0.443f, 0.333f, 1.0f).process();
+	exportImage("texture_example_colours_2", &light);
+	int s11 = dotfile.add("Colours", "texture_example_colours_2");
+	dotfile.bind(s10, s11);
+	Procedural::Texture::Normals(&normal).process();
+	exportImage("texture_example_normals_2", &normal);
+	int s12 = dotfile.add("Normals", "texture_example_normals_2");
+	dotfile.bind(s10, s12);
+	Procedural::Texture::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
+	exportImage("texture_example_light", &light);
+	int s13 = dotfile.add("Light", "texture_example_light");
+	dotfile.bind(s11, s13);
+	dotfile.bind(s12, s13);
+	Procedural::Texture::TextureBuffer joint(&bricks);
+	Procedural::Texture::Invert(&joint).process();
+	exportImage("texture_example_invert", &joint);
+	int s14 = dotfile.add("Invert", "texture_example_invert");
+	dotfile.bind(s10, s14);
+	Procedural::Texture::Threshold(&joint).setThreshold(200).setRatio(255).process();
+	exportImage("texture_example_threshold_1", &joint);
+	int s15 = dotfile.add("Threshold", "texture_example_threshold_1");
+	dotfile.bind(s14, s15);
+	Procedural::Texture::Colours(&joint).setColourBase(0.215f, 0.207f, 0.137f, 0.0f).setColourPercent(0.294f, 0.266f, 0.345f, 1.0f).setBrithness(110).setContrast(153).process();
+	exportImage("texture_example_colours_3", &joint);
+	int s16 = dotfile.add("Colours", "texture_example_colours_3");
+	dotfile.bind(s15, s16);
+	Procedural::Texture::TextureBuffer colourcloud(&bricks);
+	Procedural::Texture::Threshold(&colourcloud).process();
+	exportImage("texture_example_threshold_2", &colourcloud);
+	int s17 = dotfile.add("Threshold", "texture_example_threshold_2");
+	dotfile.bind(s10, s17);
+	Procedural::Texture::TextureBuffer cloud(&bricks);
+	Procedural::Texture::Cloud(&cloud).process();
+	exportImage("texture_example_cloud_2", &cloud);
+	int s18 = dotfile.add("Cloud", "texture_example_cloud_2");
+	Procedural::Texture::Combine(&colourcloud).addImage(&cloud, Procedural::Texture::Combine::METHOD_MULTIPLY).process();
+	exportImage("texture_example_combine_1", &colourcloud);
+	int s19 = dotfile.add("Combine", "texture_example_combine_1");
+	dotfile.bind(s17, s19);
+	dotfile.bind(s18, s19);
+	Procedural::Texture::Colours(&colourcloud).setColourBase(0.329f, 0.141f, 0.0f, 0.0f).setColourPercent(0.95f, 0.949f, 0.862f, 1.0f).setBrithness(30).process();
+	exportImage("texture_example_colours_4", &colourcloud);
+	int s20 = dotfile.add("Colours", "texture_example_colours_4");
+	dotfile.bind(s19, s20);
+	Procedural::Texture::Combine(&light)
+		.addImage(&joint, Procedural::Texture::Combine::METHOD_ADD_CLAMP)
+		.addImage(&colourcloud, Procedural::Texture::Combine::METHOD_ADD_CLAMP)
+		.process();
+	exportImage("texture_example_combine_2_finish", &light);
+	int s21 = dotfile.add("Combine", "texture_example_combine_2_finish");
+	dotfile.bind(s13, s21);
+	dotfile.bind(s16, s21);
+	dotfile.bind(s20, s21);
+	dotfile.save();
 }
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -710,6 +804,12 @@ extern "C" {
 	{
 		// Create application object
 		Illustrations app;
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+		app.mOutputPath = strCmdLine;
+#else
+		app.mOutputPath = (argc > 1) ? argv[1] : getcwd();
+#endif
 
 		try {
 			app.go();

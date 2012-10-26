@@ -44,25 +44,118 @@ class Illustrations
 	std::vector<Entity*> mEntities;
 	std::vector<SceneNode*> mSceneNodes;
 
-	RaySceneQuery* mRaySceneQuery;
-	PixelBox* mRenderWindowPixelBox;
-
-	void GetMeshInformation(Entity *entity, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, Ogre::uint32* &indices, const Ogre::Vector3 &position, const Ogre::Quaternion &orient, const Ogre::Vector3 &scale);
-
-	struct SVGPATH
+	class dotFile
 	{
-		std::vector<Vector2> points;
-		bool closed;
-		Real lineWidth;
-		Real distance;
-		ColourValue color;
+	public:
+	enum CONNECTION { JOIN, SPLIT, ROW };
 
-		bool operator<(SVGPATH rhs) { return distance > rhs.distance; }
-		bool operator>(SVGPATH rhs) { return distance < rhs.distance; }
+	private:
+		struct sItem
+		{
+			std::string mName;
+			std::string mFile;
+		};
+		std::map<int, sItem> mList;
+		struct sPair
+		{
+			int mFrom;
+			int mTo;
+		};
+		std::vector<sPair> mBinding;
+		sItem mThis;
+		std::string mPath;
+
+	public:
+		dotFile(std::string path, std::string file, std::string name = "")
+		{
+			mPath = path;
+			mThis.mFile = file;
+			mThis.mName = (name.length() > 0) ? name : file;
+		}
+
+		int add(std::string name, std::string file = "")
+		{
+			if(name.size() < 3) return -1;
+			int retVal = mList.size() + 1;
+			sItem item;
+			item.mName = name;
+			item.mFile = file;
+			mList[retVal] = item;
+			return retVal;
+		}
+
+		void bind(int from, int to)
+		{
+			if(mList.find(from) == mList.end() || mList.find(to) == mList.end()) return;
+			sPair pair;
+			pair.mFrom = from;
+			pair.mTo = to;
+			mBinding.push_back(pair);
+		}
+
+		bool save()
+		{
+			std::ofstream dotfile(mThis.mFile + ".gv");
+			if(dotfile.is_open())
+			{
+				dotfile << "digraph " << mThis.mName << " {" << std::endl;
+				dotfile << "\tratio = \"auto\";" << std::endl << "\tmincross = 2.0;" << std::endl << std::endl;
+				for(std::map<int, sItem>::iterator iter = mList.begin(); iter != mList.end(); iter++)
+				{
+					if(iter->second.mFile.length() > 3)
+						dotfile << "\tIMG" << StringConverter::toString(iter->first) << " [shape=box,label=\"" << iter->second.mName << "\",image=\"" << mPath << "/" << iter->second.mFile << ".png\",labelloc=b];" << std::endl;
+					else
+						dotfile << "\tIMG" << StringConverter::toString(iter->first) << " [shape=circle,label=\"" << iter->second.mName << "\"];" << std::endl;
+
+				}
+				dotfile << std::endl;
+				for(std::vector<sPair>::iterator iter = mBinding.begin(); iter != mBinding.end(); iter++)
+				{
+					dotfile << "\tIMG" << StringConverter::toString(iter->mFrom) << "->IMG" << StringConverter::toString(iter->mTo) << ";" << std::endl;
+				}
+				dotfile << "}" << std::endl;
+				dotfile.close();
+				return true;
+			}
+			else
+				return false;
+		}
+
+		void set(std::string img1_name, std::string img1_file, std::string img2_name, std::string img2_file)
+		{
+			int a1 = add(img1_name, img1_file);
+			int a2 = add(img2_name, img2_file);
+			bind(a2, a2);
+		}
+		
+		void set(std::string img1_name, std::string img1_file, std::string img2_name, std::string img2_file, std::string img3_name, std::string img3_file, CONNECTION cn = JOIN)
+		{
+			int a1 = add(img1_name, img1_file);
+			int a2 = add(img2_name, img2_file);
+			int a3 = add(img3_name, img3_file);
+			switch(cn)
+			{
+				default:
+				case JOIN:
+					bind(a1, a3);
+					bind(a2, a3);
+					break;
+
+				case SPLIT:
+					bind(a1, a2);
+					bind(a1, a3);
+					break;
+
+				case ROW:
+					bind(a1, a2);
+					bind(a2, a3);
+			}
+		}
 	};
 
-
 public:
+	String mOutputPath;
+
 	Illustrations()
 	{
 		init();
@@ -70,8 +163,9 @@ public:
 
 	void init();
 	void go();
-	void next(std::string name, Real size, Shape* pShape1 = NULL, Shape* pShape2 = NULL, Path* pPath = NULL);
+	void next(std::string name, Real size);
 	void putMesh(MeshPtr mesh, int materialIndex=0);
+	void exportImage(std::string name, Procedural::Texture::TextureBufferPtr buffer, bool reset = false);
 
 	void cameraPerspective()
 	{
