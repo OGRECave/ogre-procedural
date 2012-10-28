@@ -33,53 +33,11 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/**
-Contains all classes to create and manipulate images/textures
-\example material/src/Material.cpp
-*/
 
 class TextureBuffer;
-class Cell;
-class Cloud;
-class Gradient;
-class Image;
-class Labyrinth;
-class Marble;
-class Noise;
-class Solid;
-class Textile;
-class Wood;
-class Abnormals;
-class Alpha;
-class AlphaMask;
-class Blur;
-class Channel;
-class Colours;
-class Combine;
-class Convolution;
-class Crack;
-class Dilate;
-class Distort;
-class EdgeDetection;
-class Flip;
-class Glow;
-class Invert;
-class Jitter;
-class Lerp;
-class Light;
-class Lookup;
-class Normals;
-class OilPaint;
-class RandomPixels;
-class Rectangle;
-class RotationZoom;
-class Segment;
-class Sharpen;
-class Threshold;
-class Vortex;
-
 //! Type for a TextureBuffer pointer
 typedef TextureBuffer* TextureBufferPtr;
+
 
 /**
 \brief class to store image data while processing
@@ -88,51 +46,12 @@ typedef TextureBuffer* TextureBufferPtr;
 */
 class _ProceduralExport TextureBuffer
 {
-	friend class Cell;
-	friend class Cloud;
-	friend class Gradient;
-	friend class Image;
-	friend class Labyrinth;
-	friend class Marble;
-	friend class Noise;
-	friend class Solid;
-	friend class Textile;
-	friend class Wood;
-	friend class Abnormals;
-	friend class Alpha;
-	friend class AlphaMask;
-	friend class Blur;
-	friend class Channel;
-	friend class Colours;
-	friend class Combine;
-	friend class Convolution;
-	friend class Crack;
-	friend class Dilate;
-	friend class Distort;
-	friend class EdgeDetection;
-	friend class Flip;
-	friend class Glow;
-	friend class Invert;
-	friend class Jitter;
-	friend class Lerp;
-	friend class Light;
-	friend class Lookup;
-	friend class Normals;
-	friend class OilPaint;
-	friend class RandomPixels;
-	friend class Rectangle;
-	friend class RotationZoom;
-	friend class Segment;
-	friend class Sharpen;
-	friend class Threshold;
-	friend class Vortex;
-
 private:
 	Ogre::uchar* mPixels;
 	Ogre::uint mWidth;
 	Ogre::uint mHeight;
 
-private:
+public:
 	void setPixel(size_t x, size_t y, Ogre::ColourValue colour);
 	void setPixel(size_t x, size_t y, Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
 	void setPixel(size_t x, size_t y, Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
@@ -155,6 +74,17 @@ private:
 	Ogre::Real getPixelGreenReal(size_t x, size_t y);
 	Ogre::Real getPixelBlueReal(size_t x, size_t y);
 	Ogre::Real getPixelAlphaReal(size_t x, size_t y);
+	
+	inline Ogre::uint getWidth() const
+	{
+		return mWidth;
+	}
+
+	inline Ogre::uint getHeight() const
+	{
+		return mHeight;
+	}
+
 	TextureBufferPtr clone();
 
 public:
