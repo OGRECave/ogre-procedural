@@ -37,8 +37,6 @@ namespace Procedural
 Contains all classes to create and manipulate images/textures
 \example material/src/Material.cpp
 */
-namespace Texture
-{
 
 class TextureBuffer;
 class Cell;
@@ -3222,7 +3220,5 @@ public:
 	*/
 	TextureBufferPtr process();
 };
-
-}
 }
 #endif

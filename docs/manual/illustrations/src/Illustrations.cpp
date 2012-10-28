@@ -108,8 +108,8 @@ using namespace Procedural;
 	cameraPerspective();
 	mCamera->setNearClipDistance(1.);
 	mSceneMgr->setAmbientLight(ColourValue(0.5f,0.3f,0.1f));
-	Light* light = mSceneMgr->createLight();
-	light->setType(Light::LT_DIRECTIONAL);
+	Ogre::Light* light = mSceneMgr->createLight();
+	light->setType(Ogre::Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
 	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
 }
@@ -156,7 +156,7 @@ void Illustrations::putMesh(MeshPtr mesh, int materialIndex)
 	mSceneNodes.push_back(sn);
 }
 
-void Illustrations::exportImage(std::string name, Procedural::Texture::TextureBufferPtr buffer, bool reset)
+void Illustrations::exportImage(std::string name, Procedural::TextureBufferPtr buffer, bool reset)
 {
 	size_t border = 32;
 	size_t w = buffer->getWidth() + 2 * border;
@@ -188,7 +188,7 @@ void Illustrations::exportImage(std::string name, Procedural::Texture::TextureBu
 	delete image;
 	delete pixelBuffer;
 	delete pImgData;
-	if(reset) Procedural::Texture::Solid(buffer).setColour(Ogre::ColourValue::Black);
+	if(reset) Procedural::Solid(buffer).setColour(Ogre::ColourValue::Black);
 }
 
 void Illustrations::go()
@@ -399,197 +399,197 @@ void Illustrations::go()
 	int bufSize = 128;
 
 	// Render
-	Procedural::Texture::TextureBuffer bufferSolid(bufSize);
-	Procedural::Texture::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+	Procedural::TextureBuffer bufferSolid(bufSize);
+	Procedural::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
 	exportImage("texture_solid", &bufferSolid);
 
-	Procedural::Texture::TextureBuffer bufferGradient(bufSize);
-	Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::TextureBuffer bufferGradient(bufSize);
+	Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
 	exportImage("texture_gradient", &bufferGradient);
 
-	Procedural::Texture::TextureBuffer bufferCellNormal(bufSize);
-	Procedural::Texture::Cell(&bufferCellNormal).setDensity(4).process();
+	Procedural::TextureBuffer bufferCellNormal(bufSize);
+	Procedural::Cell(&bufferCellNormal).setDensity(4).process();
 	exportImage("texture_cell_default", &bufferCellNormal);
-	Procedural::Texture::TextureBuffer bufferCellChessCone(bufSize);
-	Procedural::Texture::Cell(&bufferCellChessCone).setDensity(4).setMode(Procedural::Texture::Cell::MODE_CHESSBOARD).setPattern(Procedural::Texture::Cell::PATTERN_CONE).process();
+	Procedural::TextureBuffer bufferCellChessCone(bufSize);
+	Procedural::Cell(&bufferCellChessCone).setDensity(4).setMode(Procedural::Cell::MODE_CHESSBOARD).setPattern(Procedural::Cell::PATTERN_CONE).process();
 	exportImage("texture_cell_chess", &bufferCellChessCone);
-	Procedural::Texture::TextureBuffer bufferCellGridCross(bufSize);
-	Procedural::Texture::Cell(&bufferCellGridCross).setDensity(4).setMode(Procedural::Texture::Cell::MODE_GRID).setPattern(Procedural::Texture::Cell::PATTERN_CROSS).process();
+	Procedural::TextureBuffer bufferCellGridCross(bufSize);
+	Procedural::Cell(&bufferCellGridCross).setDensity(4).setMode(Procedural::Cell::MODE_GRID).setPattern(Procedural::Cell::PATTERN_CROSS).process();
 	exportImage("texture_cell_grid", &bufferCellGridCross);
 
-	Procedural::Texture::TextureBuffer bufferNoiseWhite(bufSize);
-	Procedural::Texture::Noise(&bufferNoiseWhite).setType(Procedural::Texture::Noise::NOISE_WHITE).process();
+	Procedural::TextureBuffer bufferNoiseWhite(bufSize);
+	Procedural::Noise(&bufferNoiseWhite).setType(Procedural::Noise::NOISE_WHITE).process();
 	exportImage("texture_noise_white", &bufferNoiseWhite);
-	Procedural::Texture::TextureBuffer bufferNoisePerlin(bufSize);
-	Procedural::Texture::Noise(&bufferNoisePerlin).setType(Procedural::Texture::Noise::NOISE_PERLIN).process();
+	Procedural::TextureBuffer bufferNoisePerlin(bufSize);
+	Procedural::Noise(&bufferNoisePerlin).setType(Procedural::Noise::NOISE_PERLIN).process();
 	exportImage("texture_noise_perlin", &bufferNoisePerlin);
 
-	Procedural::Texture::TextureBuffer bufferMarble(bufSize);
-	Procedural::Texture::Marble(&bufferMarble).process();
+	Procedural::TextureBuffer bufferMarble(bufSize);
+	Procedural::Marble(&bufferMarble).process();
 	exportImage("texture_marble", &bufferMarble);
 
-	Procedural::Texture::TextureBuffer bufferWood(bufSize);
-	Procedural::Texture::Wood(&bufferWood).setRings(5).process();
+	Procedural::TextureBuffer bufferWood(bufSize);
+	Procedural::Wood(&bufferWood).setRings(5).process();
 	exportImage("texture_wood", &bufferWood);
 
-	Procedural::Texture::TextureBuffer bufferCloud(bufSize);
-	Procedural::Texture::Cloud(&bufferCloud).process();
+	Procedural::TextureBuffer bufferCloud(bufSize);
+	Procedural::Cloud(&bufferCloud).process();
 	exportImage("texture_cloud", &bufferCloud);
 
-	Procedural::Texture::TextureBuffer bufferLabyrinth(bufSize);
-	Procedural::Texture::Labyrinth(&bufferLabyrinth).process();
+	Procedural::TextureBuffer bufferLabyrinth(bufSize);
+	Procedural::Labyrinth(&bufferLabyrinth).process();
 	exportImage("texture_labyrinth", &bufferLabyrinth);
 
-	Procedural::Texture::TextureBuffer bufferTextile(bufSize);
-	Procedural::Texture::Textile(&bufferTextile).process();
+	Procedural::TextureBuffer bufferTextile(bufSize);
+	Procedural::Textile(&bufferTextile).process();
 	exportImage("texture_textile", &bufferTextile);
 
-	Procedural::Texture::TextureBuffer bufferImage(bufSize);
-	Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
+	Procedural::TextureBuffer bufferImage(bufSize);
+	Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
 	exportImage("texture_image", &bufferImage);
 
 	// Manipulation
-	Procedural::Texture::TextureBuffer buffer(bufSize);
-	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
-	Procedural::Texture::Cell(&bufferCellNormal).setDensity(4).setRegularity(234).process();
+	Procedural::TextureBuffer buffer(bufSize);
+	Procedural::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::Cell(&bufferCellNormal).setDensity(4).setRegularity(234).process();
 	exportImage("texture_cell_smooth", &bufferCellNormal);
-	Procedural::Texture::Abnormals(&buffer).setParameterImage(&bufferCellNormal).process();
+	Procedural::Abnormals(&buffer).setParameterImage(&bufferCellNormal).process();
 	exportImage("texture_abnormals", &buffer, true);
 	dotFile dotfile(mOutputPath, "texture_02", "Abnormals_Demo");
 	dotfile.set("Gradient", "texture_gradient", "Cell", "texture_cell_smooth", "Abnormals", "texture_abnormals");
 	dotfile.save();
 
-	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Texture::Alpha(&buffer).process();
+	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Alpha(&buffer).process();
 	exportImage("texture_alpha", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_03", "Alpha_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Alpha", "texture_alpha");
 	dotfile.save();
 
-	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
-	Procedural::Texture::AlphaMask(&buffer).setParameterImage(&bufferCellNormal).process();
+	Procedural::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::AlphaMask(&buffer).setParameterImage(&bufferCellNormal).process();
 	exportImage("texture_alphamask", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_04", "AlphaMask_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Gradient", "texture_gradient", "AlphaMask", "texture_alphamask");
 	dotfile.save();
 
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Blur(&buffer).setType(Procedural::Texture::Blur::BLUR_MEAN).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Blur(&buffer).setType(Procedural::Blur::BLUR_MEAN).process();
 	exportImage("texture_blur_1", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_05a", "Blur_Mean_Demo");
 	dotfile.set("Image", "texture_image", "Blur", "texture_blur_1");
 	dotfile.save();
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Blur(&buffer).setType(Procedural::Texture::Blur::BLUR_GAUSSIAN).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Blur(&buffer).setType(Procedural::Blur::BLUR_GAUSSIAN).process();
 	exportImage("texture_blur_2", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_05b", "Blur_Gaussian_Demo");
 	dotfile.set("Image", "texture_image", "Blur", "texture_blur_2");
 	dotfile.save();
 
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Channel(&buffer).setSelection(Procedural::Texture::Channel::SELECT_BLUE).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Channel(&buffer).setSelection(Procedural::Channel::SELECT_BLUE).process();
 	exportImage("texture_channel_1", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_06a", "Channel_blue_Demo");
 	dotfile.set("Image", "texture_image", "Channel", "texture_channel_1");
 	dotfile.save();
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Channel(&buffer).setSelection(Procedural::Texture::Channel::SELECT_GRAY).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Channel(&buffer).setSelection(Procedural::Channel::SELECT_GRAY).process();
 	exportImage("texture_channel_2", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_06b", "Channel_gray_Demo");
 	dotfile.set("Image", "texture_image", "Channel", "texture_channel_2");
 	dotfile.save();
 
-	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
-	Procedural::Texture::Colours(&buffer).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
+	Procedural::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::Colours(&buffer).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
 	exportImage("texture_colours", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_07", "Colours_Demo");
 	dotfile.set("Gradient", "texture_gradient", "Colours", "texture_colours");
 	dotfile.save();
 
-	Procedural::Texture::Cloud(&buffer).process();
-	Procedural::Texture::Combine(&buffer).addImage(&bufferGradient, Procedural::Texture::Combine::METHOD_ADD_CLAMP).process();
+	Procedural::Cloud(&buffer).process();
+	Procedural::Combine(&buffer).addImage(&bufferGradient, Procedural::Combine::METHOD_ADD_CLAMP).process();
 	exportImage("texture_combine", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_08", "Combine_Demo");
 	dotfile.set("Cloud", "texture_cloud", "Gradient", "texture_gradient", "Combine", "texture_combine");
 	dotfile.save();
 
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Convolution(&buffer).setKernel(Ogre::Matrix3(10.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -10.0f)).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Convolution(&buffer).setKernel(Ogre::Matrix3(10.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -10.0f)).process();
 	exportImage("texture_convolution", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_09", "Convolution_Demo");
 	dotfile.set("Image", "texture_image", "Kernel matrix", "", "Convolution", "texture_convolution");
 	dotfile.save();
 
-	Procedural::Texture::Cloud(&buffer).process();
-	Procedural::Texture::Crack(&buffer).setParameterImage(&bufferGradient).process();
+	Procedural::Cloud(&buffer).process();
+	Procedural::Crack(&buffer).setParameterImage(&bufferGradient).process();
 	exportImage("texture_crack", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_10", "Crack_Demo");
 	dotfile.set("Cloud", "texture_cloud", "Gradient", "texture_gradient", "Crack", "texture_crack");
 	dotfile.save();
 
-	Procedural::Texture::Cloud(&buffer).process();
-	Procedural::Texture::Dilate(&buffer).process();
+	Procedural::Cloud(&buffer).process();
+	Procedural::Dilate(&buffer).process();
 	exportImage("texture_dilate", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_11", "Dilate_Demo");
 	dotfile.set("Cloud", "texture_cloud", "Dilate", "texture_dilate");
 	dotfile.save();
 
-	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
-	Procedural::Texture::Distort(&buffer).setParameterImage(&bufferCellNormal).setPower(255).process();
+	Procedural::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::Distort(&buffer).setParameterImage(&bufferCellNormal).setPower(255).process();
 	exportImage("texture_distort", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_12", "Distort_Demo");
 	dotfile.set("Gradient", "texture_gradient", "Cell", "texture_cell_smooth", "Distort", "texture_distort");
 	dotfile.save();
 
-	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Texture::EdgeDetection(&buffer).setType(Procedural::Texture::EdgeDetection::DETECTION_SOBEL).process();
+	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::EdgeDetection(&buffer).setType(Procedural::EdgeDetection::DETECTION_SOBEL).process();
 	exportImage("texture_edgedetection", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_13", "EdgeDetection_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "EdgeDetection", "texture_edgedetection");
 	dotfile.save();
 
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Flip(&buffer).setAxis(Procedural::Texture::Flip::FLIP_POINT).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Flip(&buffer).setAxis(Procedural::Flip::FLIP_POINT).process();
 	exportImage("texture_flip_1", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_14a", "Flip_point_Demo");
 	dotfile.set("Image", "texture_image", "Flip", "texture_flip_1");
 	dotfile.save();
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Flip(&buffer).setAxis(Procedural::Texture::Flip::FLIP_VERTICAL).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Flip(&buffer).setAxis(Procedural::Flip::FLIP_VERTICAL).process();
 	exportImage("texture_flip_2", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_14b", "Flip_vertical_Demo");
 	dotfile.set("Image", "texture_image", "Flip", "texture_flip_2");
 	dotfile.save();
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Flip(&buffer).setAxis(Procedural::Texture::Flip::FLIP_HORIZONTAL).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Flip(&buffer).setAxis(Procedural::Flip::FLIP_HORIZONTAL).process();
 	exportImage("texture_flip_3", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_14c", "Flip_horizontal_Demo");
 	dotfile.set("Image", "texture_image", "Flip", "texture_flip_3");
 	dotfile.save();
 
-	Procedural::Texture::Gradient(&buffer).process();
-	Procedural::Texture::Glow(&buffer).process();
+	Procedural::Gradient(&buffer).process();
+	Procedural::Glow(&buffer).process();
 	exportImage("texture_glow", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_15", "Glow_Demo");
 	dotfile.set("Gradient", "texture_gradient", "Glow", "texture_glow");
 	dotfile.save();
 
-	Procedural::Texture::Gradient(&buffer).process();
-	Procedural::Texture::Invert(&buffer).process();
+	Procedural::Gradient(&buffer).process();
+	Procedural::Invert(&buffer).process();
 	exportImage("texture_invert", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_16", "Invert_Demo");
 	dotfile.set("Gradient", "texture_gradient", "Invert", "texture_invert");
 	dotfile.save();
 
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Jitter(&buffer).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Jitter(&buffer).process();
 	exportImage("texture_jitter", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_17", "Jitter_Demo");
 	dotfile.set("Image", "texture_image", "Jitter", "texture_jitter");
 	dotfile.save();
 
-	Procedural::Texture::Cloud(&buffer).process();
-	Procedural::Texture::Lerp(&buffer).setImageA(&bufferGradient).setImageB(&bufferCellNormal).process();
+	Procedural::Cloud(&buffer).process();
+	Procedural::Lerp(&buffer).setImageA(&bufferGradient).setImageB(&bufferCellNormal).process();
 	exportImage("texture_lerp", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_18", "Lerp_Demo");
 	dotfile.set("Cloud", "texture_cloud", "Gradient", "texture_gradient", "Lerp", "texture_lerp");
@@ -597,8 +597,8 @@ void Illustrations::go()
 	dotfile.bind(4, 3);
 	dotfile.save();
 
-	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Texture::Light(&buffer).setColourAmbient((Ogre::uchar)127, (Ogre::uchar)60, (Ogre::uchar)0, (Ogre::uchar)0).setColourDiffuse((Ogre::uchar)60, (Ogre::uchar)25, (Ogre::uchar)0, (Ogre::uchar)0).setBumpPower(255).process();
+	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Light(&buffer).setColourAmbient((Ogre::uchar)127, (Ogre::uchar)60, (Ogre::uchar)0, (Ogre::uchar)0).setColourDiffuse((Ogre::uchar)60, (Ogre::uchar)25, (Ogre::uchar)0, (Ogre::uchar)0).setBumpPower(255).process();
 	exportImage("texture_light", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_19a", "Light_1_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Light", "texture_light", dotFile::CONNECTION::ROW);
@@ -608,83 +608,83 @@ void Illustrations::go()
 	dotfile.set("Cell", "texture_cell_smooth", "Light", "texture_light");
 	dotfile.save();
 
-	Procedural::Texture::Gradient(&buffer).process();
-	Procedural::Texture::Lookup(&bufferGradient).setParameterImage(&bufferCellNormal).process();
+	Procedural::Gradient(&buffer).process();
+	Procedural::Lookup(&bufferGradient).setParameterImage(&bufferCellNormal).process();
 	exportImage("texture_lookup", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_20", "Lookup_Demo");
 	dotfile.set("Gradient", "texture_gradient", "Cell", "texture_cell_smooth", "Lookup", "texture_lookup");
 	dotfile.save();
 
-	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Texture::Normals(&buffer).process();
+	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Normals(&buffer).process();
 	exportImage("texture_normals", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_21a", "Normals_1_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals");
 	dotfile.save();
-	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Texture::Colours(&buffer).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
+	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Colours(&buffer).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
 	exportImage("texture_normals_tip", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_21b", "Normals_2_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Colours", "texture_normals_tip", dotFile::CONNECTION::SPLIT);
 	dotfile.save();
 
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::OilPaint(&buffer).setRadius(5).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::OilPaint(&buffer).setRadius(5).process();
 	exportImage("texture_oilpaint", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_22", "OilPaint_Demo");
 	dotfile.set("Image", "texture_image", "OilPaint", "texture_oilpaint");
 	dotfile.save();
 
-	Procedural::Texture::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
-	Procedural::Texture::RandomPixels(&buffer).setColour(Ogre::ColourValue::Red).setCount(200).process();
+	Procedural::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+	Procedural::RandomPixels(&buffer).setColour(Ogre::ColourValue::Red).setCount(200).process();
 	exportImage("texture_randompixels", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_23", "RandomPixels_Demo");
 	dotfile.set("Solid", "texture_solid", "RandomPixels", "texture_randompixels");
 	dotfile.save();
 
-	Procedural::Texture::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
-	Procedural::Texture::Rectangle(&buffer).setColour(Ogre::ColourValue::Red).setRectangle(0.25f, 0.25f, 0.75f, 0.75f).process();
+	Procedural::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+	Procedural::Rectangle(&buffer).setColour(Ogre::ColourValue::Red).setRectangle(0.25f, 0.25f, 0.75f, 0.75f).process();
 	exportImage("texture_rectangle", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_24", "Rectangle_Demo");
 	dotfile.set("Solid", "texture_solid", "Rectangle", "texture_rectangle");
 	dotfile.save();
 
-	Procedural::Texture::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
-	Procedural::Texture::RotationZoom(&buffer).setRotation(0.125f).process();
+	Procedural::Gradient(&buffer).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+	Procedural::RotationZoom(&buffer).setRotation(0.125f).process();
 	exportImage("texture_rotationzoom", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_25", "RotationZoom_Demo");
 	dotfile.set("Gradient", "texture_gradient", "RotationZoom", "texture_rotationzoom");
 	dotfile.save();
 
-	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Texture::Segment(&buffer).setColourSource(&bufferGradient).process();
+	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Segment(&buffer).setColourSource(&bufferGradient).process();
 	exportImage("texture_segment", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_26", "Segment_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Gradient", "texture_gradient", "Segment", "texture_segment");
 	dotfile.save();
 
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Sharpen(&buffer).setType(Procedural::Texture::Sharpen::SHARP_BASIC).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Sharpen(&buffer).setType(Procedural::Sharpen::SHARP_BASIC).process();
 	exportImage("texture_sharpen_1", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_27a", "Sharpen_basic_Demo");
 	dotfile.set("Image", "texture_image", "Sharpen", "texture_sharpen_1");
 	dotfile.save();
-	Procedural::Texture::Image(&buffer).setFile("red_brick.jpg").process();
-	Procedural::Texture::Sharpen(&buffer).setType(Procedural::Texture::Sharpen::SHARP_GAUSSIAN).process();
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Sharpen(&buffer).setType(Procedural::Sharpen::SHARP_GAUSSIAN).process();
 	exportImage("texture_sharpen_2", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_27b", "Sharpen_gaussian_Demo");
 	dotfile.set("Image", "texture_image", "Sharpen", "texture_sharpen_2");
 	dotfile.save();
 
-	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Texture::Threshold(&buffer).process();
+	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Threshold(&buffer).process();
 	exportImage("texture_threshold", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_28", "Threshold_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Threshold", "texture_threshold");
 	dotfile.save();
 
-	Procedural::Texture::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Texture::Vortex(&buffer).process();
+	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::Vortex(&buffer).process();
 	exportImage("texture_vortex", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_29", "Vortex_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Vortex", "texture_vortex");
@@ -694,19 +694,19 @@ void Illustrations::go()
 	dotfile = dotFile(mOutputPath, "texture_01", "Material_Example");
 	int pxPerBrick = 32;
 	int brickLines = bufSize / pxPerBrick;
-	Procedural::Texture::TextureBuffer bricks(brickLines * pxPerBrick);
-	Procedural::Texture::Cell(&bricks).setRegularity(233).setDensity(brickLines).process();
+	Procedural::TextureBuffer bricks(brickLines * pxPerBrick);
+	Procedural::Cell(&bricks).setRegularity(233).setDensity(brickLines).process();
 	exportImage("texture_example_cell", &bricks);
 	int s01 = dotfile.add("Cell", "texture_example_cell");
-	Procedural::Texture::Colours(&bricks).setBrithness(174).setContrast(198).process();
+	Procedural::Colours(&bricks).setBrithness(174).setContrast(198).process();
 	exportImage("texture_example_colours_1", &bricks);
 	int s02 = dotfile.add("Colours", "texture_example_colours_1");
 	dotfile.bind(s01, s02);
-	Procedural::Texture::TextureBuffer distort(brickLines * pxPerBrick);
-	Procedural::Texture::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
+	Procedural::TextureBuffer distort(brickLines * pxPerBrick);
+	Procedural::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
 	exportImage("texture_example_solid", &distort);
 	int s03x = dotfile.add("Solid", "texture_example_solid");
-	Procedural::Texture::Rectangle rectDraw(&distort);
+	Procedural::Rectangle rectDraw(&distort);
 	for(size_t i = 1; i < brickLines; i++)
 	{
 		Ogre::ColourValue rc = Ogre::ColourValue((i % 2 == 0) ? Ogre::Math::RangeRandom(0.4f, 0.6f) : Ogre::Math::RangeRandom(0.0f, 0.2f), 0.52f, 1.0f);
@@ -717,72 +717,72 @@ void Illustrations::go()
 		dotfile.bind(s03x, s03y);
 		s03x = s03y;
 	}
-	Procedural::Texture::Distort(&bricks).setParameterImage(&distort).setPower(50).process();
+	Procedural::Distort(&bricks).setParameterImage(&distort).setPower(50).process();
 	exportImage("texture_example_distort_1", &bricks);
 	int s07 = dotfile.add("Distort", "texture_example_distort_1");
 	dotfile.bind(s02, s07);
 	dotfile.bind(s03x, s07);
-	Procedural::Texture::Cloud(&distort).process();
+	Procedural::Cloud(&distort).process();
 	exportImage("texture_example_cloud_1", &distort);
 	int s08 = dotfile.add("Cloud", "texture_example_cloud_1");
-	Procedural::Texture::Normals(&distort).process();
+	Procedural::Normals(&distort).process();
 	exportImage("texture_example_normals_1", &distort);
 	int s09 = dotfile.add("Normals", "texture_example_normals_1");
 	dotfile.bind(s08, s09);
-	Procedural::Texture::Distort(&bricks).setParameterImage(&distort).setPower(8).process();
+	Procedural::Distort(&bricks).setParameterImage(&distort).setPower(8).process();
 	exportImage("texture_example_distort_2", &bricks);
 	int s10 = dotfile.add("Distort", "texture_example_distort_2");
 	dotfile.bind(s07, s10);
 	dotfile.bind(s09, s10);
-	Procedural::Texture::TextureBuffer normal(&bricks);
-	Procedural::Texture::TextureBuffer light(&bricks);
-	Procedural::Texture::Colours(&light).setColourBase(0.325f, 0.0f, 0.0f, 0.0f).setColourPercent(0.78f, 0.443f, 0.333f, 1.0f).process();
+	Procedural::TextureBuffer normal(&bricks);
+	Procedural::TextureBuffer light(&bricks);
+	Procedural::Colours(&light).setColourBase(0.325f, 0.0f, 0.0f, 0.0f).setColourPercent(0.78f, 0.443f, 0.333f, 1.0f).process();
 	exportImage("texture_example_colours_2", &light);
 	int s11 = dotfile.add("Colours", "texture_example_colours_2");
 	dotfile.bind(s10, s11);
-	Procedural::Texture::Normals(&normal).process();
+	Procedural::Normals(&normal).process();
 	exportImage("texture_example_normals_2", &normal);
 	int s12 = dotfile.add("Normals", "texture_example_normals_2");
 	dotfile.bind(s10, s12);
-	Procedural::Texture::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
+	Procedural::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
 	exportImage("texture_example_light", &light);
 	int s13 = dotfile.add("Light", "texture_example_light");
 	dotfile.bind(s11, s13);
 	dotfile.bind(s12, s13);
-	Procedural::Texture::TextureBuffer joint(&bricks);
-	Procedural::Texture::Invert(&joint).process();
+	Procedural::TextureBuffer joint(&bricks);
+	Procedural::Invert(&joint).process();
 	exportImage("texture_example_invert", &joint);
 	int s14 = dotfile.add("Invert", "texture_example_invert");
 	dotfile.bind(s10, s14);
-	Procedural::Texture::Threshold(&joint).setThreshold(200).setRatio(255).process();
+	Procedural::Threshold(&joint).setThreshold(200).setRatio(255).process();
 	exportImage("texture_example_threshold_1", &joint);
 	int s15 = dotfile.add("Threshold", "texture_example_threshold_1");
 	dotfile.bind(s14, s15);
-	Procedural::Texture::Colours(&joint).setColourBase(0.215f, 0.207f, 0.137f, 0.0f).setColourPercent(0.294f, 0.266f, 0.345f, 1.0f).setBrithness(110).setContrast(153).process();
+	Procedural::Colours(&joint).setColourBase(0.215f, 0.207f, 0.137f, 0.0f).setColourPercent(0.294f, 0.266f, 0.345f, 1.0f).setBrithness(110).setContrast(153).process();
 	exportImage("texture_example_colours_3", &joint);
 	int s16 = dotfile.add("Colours", "texture_example_colours_3");
 	dotfile.bind(s15, s16);
-	Procedural::Texture::TextureBuffer colourcloud(&bricks);
-	Procedural::Texture::Threshold(&colourcloud).process();
+	Procedural::TextureBuffer colourcloud(&bricks);
+	Procedural::Threshold(&colourcloud).process();
 	exportImage("texture_example_threshold_2", &colourcloud);
 	int s17 = dotfile.add("Threshold", "texture_example_threshold_2");
 	dotfile.bind(s10, s17);
-	Procedural::Texture::TextureBuffer cloud(&bricks);
-	Procedural::Texture::Cloud(&cloud).process();
+	Procedural::TextureBuffer cloud(&bricks);
+	Procedural::Cloud(&cloud).process();
 	exportImage("texture_example_cloud_2", &cloud);
 	int s18 = dotfile.add("Cloud", "texture_example_cloud_2");
-	Procedural::Texture::Combine(&colourcloud).addImage(&cloud, Procedural::Texture::Combine::METHOD_MULTIPLY).process();
+	Procedural::Combine(&colourcloud).addImage(&cloud, Procedural::Combine::METHOD_MULTIPLY).process();
 	exportImage("texture_example_combine_1", &colourcloud);
 	int s19 = dotfile.add("Combine", "texture_example_combine_1");
 	dotfile.bind(s17, s19);
 	dotfile.bind(s18, s19);
-	Procedural::Texture::Colours(&colourcloud).setColourBase(0.329f, 0.141f, 0.0f, 0.0f).setColourPercent(0.95f, 0.949f, 0.862f, 1.0f).setBrithness(30).process();
+	Procedural::Colours(&colourcloud).setColourBase(0.329f, 0.141f, 0.0f, 0.0f).setColourPercent(0.95f, 0.949f, 0.862f, 1.0f).setBrithness(30).process();
 	exportImage("texture_example_colours_4", &colourcloud);
 	int s20 = dotfile.add("Colours", "texture_example_colours_4");
 	dotfile.bind(s19, s20);
-	Procedural::Texture::Combine(&light)
-		.addImage(&joint, Procedural::Texture::Combine::METHOD_ADD_CLAMP)
-		.addImage(&colourcloud, Procedural::Texture::Combine::METHOD_ADD_CLAMP)
+	Procedural::Combine(&light)
+		.addImage(&joint, Procedural::Combine::METHOD_ADD_CLAMP)
+		.addImage(&colourcloud, Procedural::Combine::METHOD_ADD_CLAMP)
 		.process();
 	exportImage("texture_example_combine_2_finish", &light);
 	int s21 = dotfile.add("Combine", "texture_example_combine_2_finish");

@@ -3,8 +3,6 @@
 
 namespace Procedural
 {
-namespace Texture
-{
 
 PerlinNoise::PerlinNoise(Ogre::uint octaves, Ogre::Real persistence, Ogre::Real frequency, Ogre::Real amplitude)
 	: mFrequency(frequency), mAmplitude(amplitude), mPersistance(persistence), mOctaves(octaves)
@@ -112,7 +110,5 @@ double PerlinNoise::interpolate(double x1, double x2, double a)
 {
     double f = (1 - Ogre::Math::Cos((Ogre::Real)a * Ogre::Math::PI)) * 0.5;
     return x1 * (1 - f) + x2 * f;
-}
-
 }
 }

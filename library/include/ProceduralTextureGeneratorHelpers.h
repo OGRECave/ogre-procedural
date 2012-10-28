@@ -33,8 +33,6 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-namespace Texture
-{
 
 #if PROCEDURAL_PLATFORM != PROCEDURAL_PLATFORM_WIN32
 typedef struct tagPOINT
@@ -136,7 +134,5 @@ private:
 	double smoothedNoise(double x, double y);
 	double interpolate(double x1, double x2, double a);
 };
-
-}
 }
 #endif
