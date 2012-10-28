@@ -50,8 +50,8 @@ namespace Procedural
 TextureBuffer::TextureBuffer(TextureBufferPtr tocopy)
 {
 	assert(tocopy != NULL);
-	mWidth = tocopy->mWidth;
-	mHeight = tocopy->mHeight;
+	mWidth = tocopy->getWidth();
+	mHeight = tocopy->getHeight();
 
 	mPixels = new Ogre::uchar[mWidth * mHeight * 4];
 	memcpy(mPixels, tocopy->mPixels, mWidth * mHeight * 4 * sizeof(Ogre::uchar));
@@ -152,7 +152,7 @@ void TextureBuffer::setData(size_t width, size_t height, Ogre::uchar* data)
 void TextureBuffer::setData(TextureBufferPtr buffer)
 {
 	if(buffer == NULL) return;
-	if(buffer->mWidth != mWidth || buffer->mHeight != mHeight) return;
+	if(buffer->getWidth() != mWidth || buffer->getHeight() != mHeight) return;
 	memcpy(mPixels, buffer->mPixels, mWidth * mHeight * 4 * sizeof(Ogre::uchar));
 }
 
@@ -339,35 +339,35 @@ TextureBufferPtr Cell::process()
 		{
 			Ogre::Real rand1 = (Ogre::Real)rand() / 65536.0f;
 			Ogre::Real rand2 = (Ogre::Real)rand() / 65536.0f;
-			cellPoints[x + y * mDensity].x = (x + 0.5f + (rand1 - 0.5f) * (1 - regularity)) / mDensity - 1.f / mBuffer->mWidth;
-			cellPoints[x + y * mDensity].y = (y + 0.5f + (rand2 - 0.5f) * (1 - regularity)) / mDensity - 1.f / mBuffer->mHeight;
+			cellPoints[x + y * mDensity].x = (x + 0.5f + (rand1 - 0.5f) * (1 - regularity)) / mDensity - 1.f / mBuffer->getWidth();
+			cellPoints[x + y * mDensity].y = (y + 0.5f + (rand2 - 0.5f) * (1 - regularity)) / mDensity - 1.f / mBuffer->getHeight();
 			cellPoints[x + y * mDensity].z = 0;
 		}
 	}
 
-	for(size_t y = 0; y < mBuffer->mHeight; ++y)
+	for(size_t y = 0; y < mBuffer->getHeight(); ++y)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; ++x)
+		for(size_t x = 0; x < mBuffer->getWidth(); ++x)
 		{
 			Ogre::Vector3 pixelPos;
-			pixelPos.x = (Ogre::Real)x / (Ogre::Real)mBuffer->mWidth,
-			pixelPos.y = (Ogre::Real)y / (Ogre::Real)mBuffer->mHeight;
+			pixelPos.x = (Ogre::Real)x / (Ogre::Real)mBuffer->getWidth(),
+			pixelPos.y = (Ogre::Real)y / (Ogre::Real)mBuffer->getHeight();
 			pixelPos.z = 0.0f;
 
 			Ogre::Real minDist = 10;
 			Ogre::Real nextMinDist = minDist;
-			int xo = x * mDensity / mBuffer->mWidth;
-			int yo = y * mDensity / mBuffer->mHeight;
+			int xo = x * mDensity / mBuffer->getWidth();
+			int yo = y * mDensity / mBuffer->getHeight();
 			for(long v = -1; v < 2; ++v)
 			{
 				int vo = ((yo + mDensity + v) % mDensity) * mDensity;
 				for (long u = -1; u < 2; ++u)
 				{
 					Ogre::Vector3 cellPos = cellPoints[((xo + mDensity + u) % mDensity) + vo];
-					if(u == -1 && x * mDensity < mBuffer->mWidth) cellPos.x -= 1;
-					if(v == -1 && y * mDensity < mBuffer->mHeight) cellPos.y -= 1;
-					if(u == 1 && x * mDensity >= mBuffer->mWidth * (mDensity - 1)) cellPos.x += 1;
-					if(v == 1 && y * mDensity >= mBuffer->mHeight * (mDensity - 1)) cellPos.y += 1;
+					if(u == -1 && x * mDensity < mBuffer->getWidth()) cellPos.x -= 1;
+					if(v == -1 && y * mDensity < mBuffer->getHeight()) cellPos.y -= 1;
+					if(u == 1 && x * mDensity >= mBuffer->getWidth() * (mDensity - 1)) cellPos.x += 1;
+					if(v == 1 && y * mDensity >= mBuffer->getHeight() * (mDensity - 1)) cellPos.y += 1;
 					Ogre::Vector3 tmp = pixelPos - cellPos;
 					float norm = tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z;
 					if(norm > 0.0f) norm = sqrtf(norm);
@@ -461,9 +461,9 @@ TextureBufferPtr Cloud::process()
 	Ogre::Real filterLevel = 0.7f;
 	Ogre::Real preserveLevel = 0.3f;
 
-	for(size_t y = 0; y < mBuffer->mHeight; y++)
+	for(size_t y = 0; y < mBuffer->getHeight(); y++)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; x++)
+		for(size_t x = 0; x < mBuffer->getWidth(); x++)
 		{
 			Ogre::Real noiseVal = std::max(0.0f, std::min(1.0f, noise.function2D(x + r, y + r) * 0.5f + 0.5f));
 			mBuffer->setRed(x, y, (Ogre::uchar)std::min<Ogre::Real>(preserveLevel * mColour.r * 255.0f + filterLevel * mColour.r * 255.0f * noiseVal, 255.0f));
@@ -562,14 +562,14 @@ Gradient & Gradient::setColours(Ogre::ColourValue colourA, Ogre::ColourValue col
 
 TextureBufferPtr Gradient::process()
 {
-	float finv_WH = 1.0f / (float)(mBuffer->mWidth * mBuffer->mHeight);
-	for(size_t y = 0; y < mBuffer->mHeight; y++)
+	float finv_WH = 1.0f / (float)(mBuffer->getWidth() * mBuffer->getHeight());
+	for(size_t y = 0; y < mBuffer->getHeight(); y++)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; x++)
+		for(size_t x = 0; x < mBuffer->getWidth(); x++)
 		{
-			float a = (float)((mBuffer->mWidth - x) * (mBuffer->mHeight - y)) * finv_WH;
-			float b = (float)((                  x) * (mBuffer->mHeight - y)) * finv_WH;
-			float c = (float)((mBuffer->mWidth - x) * (                   y)) * finv_WH;
+			float a = (float)((mBuffer->getWidth() - x) * (mBuffer->getHeight() - y)) * finv_WH;
+			float b = (float)((                  x) * (mBuffer->getHeight() - y)) * finv_WH;
+			float c = (float)((mBuffer->getWidth() - x) * (                   y)) * finv_WH;
 			float d = (float)((                  x) * (                   y)) * finv_WH;
 
 			mBuffer->setRed(x, y, (Ogre::uchar)(((mColourA.r * a) + (mColourB.r * b) + (mColourC.r * c) + (mColourD.r * d)) * 255.0f));
@@ -598,9 +598,9 @@ TextureBufferPtr Image::process()
 	img.load(mFile, mGroup);
 	if(img.getHeight() < mBuffer->getHeight() || img.getWidth() < mBuffer->getWidth()) return mBuffer;
 
-	for(size_t y = 0; y < mBuffer->mHeight; y++)
+	for(size_t y = 0; y < mBuffer->getHeight(); y++)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; x++)
+		for(size_t x = 0; x < mBuffer->getWidth(); x++)
 		{
 			mBuffer->setPixel(x, y, img.getColourAt(x, y, 0));
 		}
@@ -644,9 +644,9 @@ TextureBufferPtr Labyrinth::process()
 	Ogre::Real filterLevel = 0.7f;
 	Ogre::Real preserveLevel = 0.3f;
 
-	for(size_t y = 0; y < mBuffer->mHeight; y++)
+	for(size_t y = 0; y < mBuffer->getHeight(); y++)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; x++)
+		for(size_t x = 0; x < mBuffer->getWidth(); x++)
 		{
 			Ogre::Real noiseVal = std::min(1.0f, std::abs(noise.function2D(x + r, y + r)));
 			mBuffer->setRed(x, y, (Ogre::uchar)std::min<Ogre::Real>(preserveLevel * mColour.r * 255.0f + filterLevel * mColour.r * 255.0f * noiseVal, 255.0f));
@@ -696,9 +696,9 @@ TextureBuffer* Marble::process()
 	Ogre::Real filterLevel = 0.7f;
 	Ogre::Real preserveLevel = 0.3f;
 
-	for(size_t y = 0; y < mBuffer->mHeight; y++)
+	for(size_t y = 0; y < mBuffer->getHeight(); y++)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; x++)
+		for(size_t x = 0; x < mBuffer->getWidth(); x++)
 		{
 			Ogre::Real noiseVal = std::min(1.0f, Ogre::Math::Abs(Ogre::Math::Sin(x * xFact + y * yFact + noise.function2D(x + r, y + r)) * Ogre::Math::PI));
 			mBuffer->setRed(x, y, (Ogre::uchar)std::min<Ogre::Real>(preserveLevel * mColour.r * 255.0f + filterLevel * mColour.r * 255.0f * noiseVal, 255.0f));
@@ -759,12 +759,12 @@ TextureBufferPtr Noise::process()
 			break;
 	}
 
-	Ogre::uchar* field = noiseGen->field2D(mBuffer->mWidth, mBuffer->mHeight);
-	for(size_t y = 0; y < mBuffer->mHeight; ++y)
+	Ogre::uchar* field = noiseGen->field2D(mBuffer->getWidth(), mBuffer->getHeight());
+	for(size_t y = 0; y < mBuffer->getHeight(); ++y)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; ++x)
+		for(size_t x = 0; x < mBuffer->getWidth(); ++x)
 		{
-			Ogre::Real noiseVal = (Ogre::Real)field[y * mBuffer->mWidth + x];
+			Ogre::Real noiseVal = (Ogre::Real)field[y * mBuffer->getWidth() + x];
 			mBuffer->setRed(x, y, (Ogre::uchar)(noiseVal * mColour.r));
 			mBuffer->setGreen(x, y, (Ogre::uchar)(noiseVal * mColour.g));
 			mBuffer->setBlue(x, y, (Ogre::uchar)(noiseVal * mColour.b));
@@ -846,9 +846,9 @@ TextureBufferPtr Textile::process()
 	Ogre::Real filterLevel = 0.7f;
 	Ogre::Real preserveLevel = 0.3f;
 
-	for(size_t y = 0; y < mBuffer->mHeight; y++)
+	for(size_t y = 0; y < mBuffer->getHeight(); y++)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; x++)
+		for(size_t x = 0; x < mBuffer->getWidth(); x++)
 		{
 			Ogre::Real noiseVal = std::max(0.0f, std::min(1.0f, (Ogre::Math::Sin(x + noise.function2D(x + r, y + r )) + Ogre::Math::Sin(y + noise.function2D(x + r, y + r))) * 0.25f + 0.5f));
 			mBuffer->setRed(x, y, (Ogre::uchar)std::min<Ogre::Real>(preserveLevel * mColour.r * 255.0f + filterLevel * mColour.r * 255.0f * noiseVal, 255.0f));
@@ -903,15 +903,15 @@ TextureBufferPtr Wood::process()
 	Ogre::Real preserveLevel = 0.3f;
 
 	PerlinNoise noise(8, 0.5f, 1.0f / 32.0f, 0.05f);
-	long w2 = mBuffer->mWidth / 2;
-	long h2 = mBuffer->mHeight / 2;
+	long w2 = mBuffer->getWidth() / 2;
+	long h2 = mBuffer->getHeight() / 2;
 
-	for(long y = 0; y < (long)mBuffer->mHeight; y++)
+	for(long y = 0; y < (long)mBuffer->getHeight(); y++)
 	{
-		for(long x = 0; x < (long)mBuffer->mWidth; x++)
+		for(long x = 0; x < (long)mBuffer->getWidth(); x++)
 		{
-			Ogre::Real xv = ((Ogre::Real)(x - w2)) / (Ogre::Real)mBuffer->mWidth;
-			Ogre::Real yv = ((Ogre::Real)(y - h2)) / (Ogre::Real)mBuffer->mHeight;
+			Ogre::Real xv = ((Ogre::Real)(x - w2)) / (Ogre::Real)mBuffer->getWidth();
+			Ogre::Real yv = ((Ogre::Real)(y - h2)) / (Ogre::Real)mBuffer->getHeight();
 			Ogre::Real noiseVal = std::min(1.0f, Ogre::Math::Abs(Ogre::Math::Sin((sqrt(xv * xv + yv * yv) + noise.function2D(x + r, y + r)) * Ogre::Math::PI * 2 * mRings)));
 			mBuffer->setRed(x, y, (Ogre::uchar)std::min<Ogre::Real>(preserveLevel * mColour.r * 255.0f + filterLevel * mColour.r * 255.0f * noiseVal, 255.0f));
 			mBuffer->setGreen(x, y, (Ogre::uchar)std::min<Ogre::Real>(preserveLevel * mColour.g * 255.0f + filterLevel * mColour.g * 255.0f * noiseVal, 255.0f));
@@ -1224,9 +1224,9 @@ Channel & Channel::setSelection(CANNEL_SELECTION selection)
 
 TextureBufferPtr Channel::process()
 {
-	for(size_t y = 0; y < mBuffer->mHeight; y++)
+	for(size_t y = 0; y < mBuffer->getHeight(); y++)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; x++)
+		for(size_t x = 0; x < mBuffer->getWidth(); x++)
 		{
 			if(mSelection == SELECT_GRAY)
 			{
@@ -1654,9 +1654,9 @@ TextureBufferPtr Convolution::process()
     int radius = ((int)mKernelSize) >> 1;
 	TextureBufferPtr tmpBuffer = mBuffer->clone();
 
-	for(long y = 0; y < (long)mBuffer->mWidth; y++)
+	for(long y = 0; y < (long)mBuffer->getWidth(); y++)
     {
-		for(long x = 0; x < (long)mBuffer->mHeight; x++)
+		for(long x = 0; x < (long)mBuffer->getHeight(); x++)
         {
 			long r = 0;
 			long g = 0;
@@ -1671,7 +1671,7 @@ TextureBufferPtr Convolution::process()
 
                 if((y + ir) < 0)
                     continue;
-                if((y + ir) >= (long)mBuffer->mHeight)
+                if((y + ir) >= (long)mBuffer->getHeight())
                     break;
 
                 for(int j = 0; j < (int)mKernelSize; j++)
@@ -1680,7 +1680,7 @@ TextureBufferPtr Convolution::process()
 
                     if((x + jr) < 0)
                         continue;
-                    if((x + jr) < (long)mBuffer->mWidth)
+                    if((x + jr) < (long)mBuffer->getWidth())
                     {
                         Ogre::Real k = mKernelData[i * mKernelSize + j];
 						Ogre::ColourValue pixel = mBuffer->getPixel(y + ir, x + jr);
@@ -2417,8 +2417,8 @@ Ogre::Vector3* EdgeDetection::getBlock(long x, long y)
 		{
 			block[(j + 1) * 3 + (i + 1)] = Ogre::Vector3(pixel.r, pixel.g, pixel.b);
 			if(j == 0 && i == 0) continue;
-			if((x + i) < 0 || (x + i) >= (long)mBuffer->mWidth) continue;
-			if((y + j) < 0 || (y + j) >= (long)mBuffer->mHeight) continue;
+			if((x + i) < 0 || (x + i) >= (long)mBuffer->getWidth()) continue;
+			if((y + j) < 0 || (y + j) >= (long)mBuffer->getHeight()) continue;
 			block[(j + 1) * 3 + (i + 1)] = Ogre::Vector3((Ogre::Real)mBuffer->getPixelRedReal((size_t)(x + i), (size_t)(y + j)),
 														 (Ogre::Real)mBuffer->getPixelGreenReal((size_t)(x + i), (size_t)(y + j)),
 														 (Ogre::Real)mBuffer->getPixelBlueReal((size_t)(x + i), (size_t)(y + j)));
@@ -2438,23 +2438,23 @@ Flip & Flip::setAxis(FLIP_AXIS axis)
 TextureBufferPtr Flip::process()
 {
 	TextureBufferPtr tmpBuffer = mBuffer->clone();
-	for(size_t y = 0; y < mBuffer->mHeight; y++)
+	for(size_t y = 0; y < mBuffer->getHeight(); y++)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; x++)
+		for(size_t x = 0; x < mBuffer->getWidth(); x++)
 		{
 			switch(mAxis)
 			{
 				case FLIP_HORIZONTAL:
-					tmpBuffer->setPixel(x, mBuffer->mHeight - 1 - y, mBuffer->getPixel(x, y));
+					tmpBuffer->setPixel(x, mBuffer->getHeight() - 1 - y, mBuffer->getPixel(x, y));
 					break;
 
 				default:
 				case FLIP_VERTICAL:
-					tmpBuffer->setPixel(mBuffer->mWidth - 1 - x, y, mBuffer->getPixel(x, y));
+					tmpBuffer->setPixel(mBuffer->getWidth() - 1 - x, y, mBuffer->getPixel(x, y));
 					break;
 
 				case FLIP_POINT:
-					tmpBuffer->setPixel(mBuffer->mWidth - 1 - x, mBuffer->mHeight - 1 - y, mBuffer->getPixel(x, y));
+					tmpBuffer->setPixel(mBuffer->getWidth() - 1 - x, mBuffer->getHeight() - 1 - y, mBuffer->getPixel(x, y));
 					break;
 			}
 		}
@@ -2600,14 +2600,14 @@ TextureBufferPtr Jitter::process()
 	srand(mSeed);
 	int radius = (int)(1.0f + (9.0f / 255.0f) * ((Ogre::Real)mRadius - 1.0f));
 	int max = radius * 2 + 1;
-    for(long y = 0; y < (long)mBuffer->mHeight; y++)
+    for(long y = 0; y < (long)mBuffer->getHeight(); y++)
     {
-        for(long x = 0; x < (long)mBuffer->mWidth; x++)
+        for(long x = 0; x < (long)mBuffer->getWidth(); x++)
         {
             long rx = x + (rand() % (radius * 2 + 1)) - radius;
             long ry = y + (rand() % (radius * 2 + 1)) - radius;
 
-            if(rx >= 0 && rx < (long)mBuffer->mWidth && ry >= 0 && ry < (long)mBuffer->mHeight)
+            if(rx >= 0 && rx < (long)mBuffer->getWidth() && ry >= 0 && ry < (long)mBuffer->getHeight())
 				tmpBuffer->setPixel((size_t)rx, (size_t)ry, mBuffer->getPixel((size_t)x, (size_t)y));
         }
     }
@@ -2634,9 +2634,9 @@ Lerp & Lerp::setImageB(TextureBufferPtr image2)
 
 TextureBufferPtr Lerp::process()
 {
-	for(size_t y = 0; y < mBuffer->mHeight; y++)
+	for(size_t y = 0; y < mBuffer->getHeight(); y++)
 	{
-		for(size_t x = 0; x < mBuffer->mWidth; x++)
+		for(size_t x = 0; x < mBuffer->getWidth(); x++)
 		{
 			Ogre::ColourValue pixelA = mBufferA->getPixel(x, y);
 			Ogre::ColourValue pixelB = mBufferB->getPixel(x, y);
@@ -2936,9 +2936,9 @@ TextureBufferPtr OilPaint::process()
 	int green[256];
 	int blue[256];
 	
-	for(int y = mRadius; y < (int)(mBuffer->mHeight - mRadius); y++)
+	for(int y = mRadius; y < (int)(mBuffer->getHeight() - mRadius); y++)
     {
-		for(int x = mRadius; x < (int)(mBuffer->mWidth - mRadius); x++)
+		for(int x = mRadius; x < (int)(mBuffer->getWidth() - mRadius); x++)
 		{
 			memset(intensities, 0, 256 * sizeof(int));
 			memset(red, 0, sizeof(red));
@@ -3292,11 +3292,11 @@ TextureBufferPtr RotationZoom::process()
 	Ogre::Real ys = s * -th2;
 	Ogre::Real yc = c * -th2;
 
-	for(unsigned long y = 0; y < mBuffer->mHeight; y++)
+	for(unsigned long y = 0; y < mBuffer->getHeight(); y++)
 	{
 		Ogre::Real u = (((c * -tw2) - ys) * fZoomX) + (mCenterX * (Ogre::Real)tw);
 		Ogre::Real v = (((s * -tw2) + yc) * fZoomY) + (mCenterY * (Ogre::Real)th);
-		for(unsigned long x = 0; x < mBuffer->mWidth; x++)
+		for(unsigned long x = 0; x < mBuffer->getWidth(); x++)
 		{
 			Ogre::Real uf = (u >= 0) ? (u - (long)u) : 1 + (u - (long)u);
 			Ogre::Real vf = (v >= 0) ? (v - (long)v) : 1 + (v - (long)v);
