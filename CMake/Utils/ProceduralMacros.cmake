@@ -74,6 +74,8 @@ endif()
 if(WIN32)
 	copy_release(OgreMain.dll)	
 	copy_debug(OgreMain_d.dll)
+	copy_release(OgreRTShaderSystem.dll)	
+	copy_debug(OgreRTShaderSystem_d.dll)
 	
 	copy_release(RenderSystem_Direct3D9.dll)	
 	copy_debug(RenderSystem_Direct3D9_d.dll)

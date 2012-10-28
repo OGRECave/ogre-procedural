@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "Material.h"
 #include "Procedural.h"
 #include "ProceduralUtils.h"
+#include "RTShaderSystem\OgreRTShaderSystem.h"
 
 //-------------------------------------------------------------------------------------
 void Sample_Material::createScene(void)
@@ -62,8 +63,8 @@ void Sample_Material::createScene(void)
 	Procedural::TextureBuffer light(&bricks);
 	Procedural::Colours(&light).setColourBase(0.325f, 0.0f, 0.0f, 0.0f).setColourPercent(0.78f, 0.443f, 0.333f, 1.0f).process();
 	Procedural::Normals(&normal).process();
-	Procedural::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
-
+	//Procedural::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
+	
 	// Joint
 	Procedural::TextureBuffer joint(&bricks);
 	Procedural::Invert(&joint).process();
@@ -85,14 +86,37 @@ void Sample_Material::createScene(void)
 		.process();
 
 	Ogre::TexturePtr demoTexture = light.createTexture("proceduralTexture");
-	//Ogre::TexturePtr demoTextureNormal = normal.createTexture("proceduralTextureNormal");
+	Ogre::TexturePtr demoTextureNormal = normal.createTexture("proceduralTextureNormal");
 
-	Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create("proceduralMaterial", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create("proceduralMaterial", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);	
+	demoMaterial->getTechnique(0)->getPass(0)->setShininess(50);
+	demoMaterial->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue::White);
+	demoMaterial->getTechnique(0)->getPass(0)->setSpecular(Ogre::ColourValue(1.0f,1.0f,0.9f));
 	demoMaterial->getTechnique(0)->getPass(0)->createTextureUnitState("proceduralTexture");
-	demoMaterial->getTechnique(0)->getPass(0)->setSceneBlending(Ogre::SceneBlendType::SBT_TRANSPARENT_ALPHA);
+
+	if (Ogre::RTShader::ShaderGenerator::initialize())
+	{
+		Ogre::RTShader::ShaderGenerator* mShaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
+		mShaderGenerator->setShaderCachePath(".");		
+		mShaderGenerator->addSceneManager(mSceneMgr);
+		RTShader::RenderState* pMainRenderState = mShaderGenerator->createOrRetrieveRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME).first;
+		pMainRenderState->reset();
+
+		RTShader::SubRenderState* subRenderState = mShaderGenerator->createSubRenderState(RTShader::NormalMapLighting::Type);
+		RTShader::NormalMapLighting* normalMapSubRS = static_cast<RTShader::NormalMapLighting*>(subRenderState);					
+		normalMapSubRS->setNormalMapSpace(RTShader::NormalMapLighting::NMS_TANGENT);	
+		normalMapSubRS->setNormalMapTextureName("proceduralTextureNormal");
+
+		pMainRenderState->addTemplateSubRenderState(normalMapSubRS);
+		mShaderGenerator->createShaderBasedTechnique("proceduralMaterial", Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		mCamera->getViewport()->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+	}
 
 	// -- Test plane
-	Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
+	Ogre::MeshPtr mesh = Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
+	unsigned short src, dest;
+	if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
+		mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
 	Entity* ent2 = mSceneMgr->createEntity("planeMesh");
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	sn->attachObject(ent2);
@@ -102,7 +126,7 @@ void Sample_Material::createScene(void)
 //-------------------------------------------------------------------------------------
 void Sample_Material::createCamera(void)
 {
-	BaseApplication::createCamera();
+	BaseApplication::createCamera();	
 }
 //-------------------------------------------------------------------------------------
 bool Sample_Material::frameStarted(const FrameEvent& evt)
