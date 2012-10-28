@@ -34,8 +34,6 @@ using namespace Ogre;
 
 namespace Procedural
 {
-namespace Texture
-{
 
 #if OGRE_ENDIAN == OGRE_ENDIAN_LITTLE
 #define PROCEDURAL_RED 3
@@ -3714,7 +3712,5 @@ TextureBufferPtr Vortex::process()
 
 	logMsg("Modify texture with vortex filter : " + StringConverter::toString(mTwist.valueDegrees()));
 	return mBuffer;
-}
-
 }
 }

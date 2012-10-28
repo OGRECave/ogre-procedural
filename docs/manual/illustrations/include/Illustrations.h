@@ -25,13 +25,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __Test_h_
-#define __Test_h_
+#ifndef __Illustrations_h_
+#define __Illustrations_h_
 
 #include "Ogre.h"
 #include "Procedural.h"
+
 using namespace Ogre;
-using namespace Procedural;
+
 
 class Illustrations
 {
@@ -165,7 +166,7 @@ public:
 	void go();
 	void next(std::string name, Real size);
 	void putMesh(MeshPtr mesh, int materialIndex=0);
-	void exportImage(std::string name, Procedural::Texture::TextureBufferPtr buffer, bool reset = false);
+	void exportImage(std::string name, Procedural::TextureBufferPtr buffer, bool reset = false);
 
 	void cameraPerspective()
 	{

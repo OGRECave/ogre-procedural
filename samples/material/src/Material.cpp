@@ -37,51 +37,51 @@ void Sample_Material::createScene(void)
 	int brickLines = 4;
 	int pxPerBrick = 32;
 
-	Procedural::Texture::TextureBuffer bricks(brickLines * pxPerBrick);
+	Procedural::TextureBuffer bricks(brickLines * pxPerBrick);
 	
 	// Basic structure
-	Procedural::Texture::Cell(&bricks).setRegularity(233).setDensity(brickLines).process();
-	Procedural::Texture::Colours(&bricks).setBrithness(174).setContrast(198).process();
-	Procedural::Texture::TextureBuffer distort(brickLines * pxPerBrick);
-	Procedural::Texture::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
-	Procedural::Texture::Rectangle rectDraw(&distort);
+	Procedural::Cell(&bricks).setRegularity(233).setDensity(brickLines).process();
+	Procedural::Colours(&bricks).setBrithness(174).setContrast(198).process();
+	Procedural::TextureBuffer distort(brickLines * pxPerBrick);
+	Procedural::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
+	Procedural::Rectangle rectDraw(&distort);
 	for(size_t i = 1; i < brickLines; i++)
 	{
 		Ogre::ColourValue rc = Ogre::ColourValue((i % 2 == 0) ? Ogre::Math::RangeRandom(0.4f, 0.6f) : Ogre::Math::RangeRandom(0.0f, 0.2f), 0.52f, 1.0f);
 		rc.a = 1.0f;
 		rectDraw.setRectangle(0, i * pxPerBrick, brickLines * pxPerBrick, i * pxPerBrick + pxPerBrick).setColour(rc).process();
 	}
-	Procedural::Texture::Distort(&bricks).setParameterImage(&distort).setPower(50).process();
-	Procedural::Texture::Cloud(&distort).process();
-	Procedural::Texture::Normals(&distort).process();
-	Procedural::Texture::Distort(&bricks).setParameterImage(&distort).setPower(8).process();
+	Procedural::Distort(&bricks).setParameterImage(&distort).setPower(50).process();
+	Procedural::Cloud(&distort).process();
+	Procedural::Normals(&distort).process();
+	Procedural::Distort(&bricks).setParameterImage(&distort).setPower(8).process();
 
-	Procedural::Texture::TextureBuffer normal(&bricks);
+	Procedural::TextureBuffer normal(&bricks);
 
 	// Normal map & lightning
-	Procedural::Texture::TextureBuffer light(&bricks);
-	Procedural::Texture::Colours(&light).setColourBase(0.325f, 0.0f, 0.0f, 0.0f).setColourPercent(0.78f, 0.443f, 0.333f, 1.0f).process();
-	Procedural::Texture::Normals(&normal).process();
-	Procedural::Texture::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
+	Procedural::TextureBuffer light(&bricks);
+	Procedural::Colours(&light).setColourBase(0.325f, 0.0f, 0.0f, 0.0f).setColourPercent(0.78f, 0.443f, 0.333f, 1.0f).process();
+	Procedural::Normals(&normal).process();
+	Procedural::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
 
 	// Joint
-	Procedural::Texture::TextureBuffer joint(&bricks);
-	Procedural::Texture::Invert(&joint).process();
-	Procedural::Texture::Threshold(&joint).setThreshold(200).setRatio(255).process();
-	Procedural::Texture::Colours(&joint).setColourBase(0.215f, 0.207f, 0.137f, 0.0f).setColourPercent(0.294f, 0.266f, 0.345f, 1.0f).setBrithness(110).setContrast(153).process();
+	Procedural::TextureBuffer joint(&bricks);
+	Procedural::Invert(&joint).process();
+	Procedural::Threshold(&joint).setThreshold(200).setRatio(255).process();
+	Procedural::Colours(&joint).setColourBase(0.215f, 0.207f, 0.137f, 0.0f).setColourPercent(0.294f, 0.266f, 0.345f, 1.0f).setBrithness(110).setContrast(153).process();
 
 	// Additional structure
-	Procedural::Texture::TextureBuffer colourcloud(&bricks);
-	Procedural::Texture::Threshold(&colourcloud).process();
-	Procedural::Texture::TextureBuffer cloud(&bricks);
-	Procedural::Texture::Cloud(&cloud).process();
-	Procedural::Texture::Combine(&colourcloud).addImage(&cloud, Procedural::Texture::Combine::METHOD_MULTIPLY).process();
-	Procedural::Texture::Colours(&colourcloud).setColourBase(0.329f, 0.141f, 0.0f, 0.0f).setColourPercent(0.95f, 0.949f, 0.862f, 1.0f).setBrithness(30).process();
+	Procedural::TextureBuffer colourcloud(&bricks);
+	Procedural::Threshold(&colourcloud).process();
+	Procedural::TextureBuffer cloud(&bricks);
+	Procedural::Cloud(&cloud).process();
+	Procedural::Combine(&colourcloud).addImage(&cloud, Procedural::Combine::METHOD_MULTIPLY).process();
+	Procedural::Colours(&colourcloud).setColourBase(0.329f, 0.141f, 0.0f, 0.0f).setColourPercent(0.95f, 0.949f, 0.862f, 1.0f).setBrithness(30).process();
 
 	// Finish texture
-	Procedural::Texture::Combine(&light)
-		.addImage(&joint, Procedural::Texture::Combine::METHOD_ADD_CLAMP)
-		.addImage(&colourcloud, Procedural::Texture::Combine::METHOD_ADD_CLAMP)
+	Procedural::Combine(&light)
+		.addImage(&joint, Procedural::Combine::METHOD_ADD_CLAMP)
+		.addImage(&colourcloud, Procedural::Combine::METHOD_ADD_CLAMP)
 		.process();
 
 	Ogre::TexturePtr demoTexture = light.createTexture("proceduralTexture");
