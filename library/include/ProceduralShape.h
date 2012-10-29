@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "ProceduralUtils.h"
 #include "OgreMesh.h"
 #include "OgreManualObject.h"
-#include "ProceduralRoot.h"
 #include "ProceduralMultiShape.h"
 #include "ProceduralTrack.h"
 

@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreMesh.h"
 #include "OgreManualObject.h"
-#include "ProceduralRoot.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralTriangleBuffer.h"
 

@@ -39,7 +39,6 @@ THE SOFTWARE.
 #include "ProceduralTorusKnotGenerator.h"
 #include "ProceduralTubeGenerator.h"
 #include "ProceduralPlaneGenerator.h"
-#include "ProceduralRoot.h"
 #include "ProceduralExtruder.h"
 #include "ProceduralLathe.h"
 #include "ProceduralShape.h"
