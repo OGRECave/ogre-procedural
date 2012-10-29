@@ -28,7 +28,6 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_MULTISHAPE_INCLUDED
 #define PROCEDURAL_MULTISHAPE_INCLUDED
 
-#include "ProceduralRoot.h"
 #include "ProceduralGeometryHelpers.h"
 
 namespace Procedural

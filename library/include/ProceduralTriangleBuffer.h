@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include "OgreMesh.h"
 #include "OgreSceneManager.h"
 #include "ProceduralUtils.h"
-#include "ProceduralRoot.h"
 #include <fstream>
 
 namespace Procedural

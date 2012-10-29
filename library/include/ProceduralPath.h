@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include "OgreSimpleSpline.h"
 #include "ProceduralUtils.h"
 #include "ProceduralPlatform.h"
-#include "ProceduralRoot.h"
 #include "ProceduralTrack.h"
 #include "ProceduralGeometryHelpers.h"
 #include "ProceduralShape.h"
