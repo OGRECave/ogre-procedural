@@ -2,7 +2,7 @@
 -----------------------------------------------------------------------------
 This source file is part of ogre-procedural
 
-For the latest info, see http://code.google.com/p/ogre-procedural/
+For the latest info, see http://www.ogreprocedural.org
 
 Copyright (c) 2012 Michael Broutin
 
