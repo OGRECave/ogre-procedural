@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
+ * \ingroup objgengrp
  * Builds a torus knot mesh
  * \image html primitive_torusknot.png
  */

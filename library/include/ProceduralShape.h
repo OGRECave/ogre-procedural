@@ -40,9 +40,18 @@ namespace Procedural
 {
 	class Path;
 
+/**
+\defgroup shapegrp Shape
+Elements for shape generation and shape primitives.
+@{
+*/
 enum Side {SIDE_LEFT, SIDE_RIGHT};
 
-/** Describes a succession of interconnected 2D points.
+/** @} */
+
+/**
+ * \ingroup shapegrp
+ * Describes a succession of interconnected 2D points.
  * It can be closed or not, and there's always an outside and an inside
  */
 class _ProceduralExport Shape

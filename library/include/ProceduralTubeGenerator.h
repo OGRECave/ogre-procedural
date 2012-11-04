@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
+ * \ingroup objgengrp
  * Builds an Y-axis tube mesh, i.e. an emptied cylinder
  * \image html primitive_tube.png
  */

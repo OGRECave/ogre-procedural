@@ -38,7 +38,16 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** Succession of points in 3D space.
+/**
+\defgroup pathgrp Path
+Elements for path generation.
+@{
+@}
+*/
+
+/**
+ * \ingroup pathgrp
+ * Succession of points in 3D space.
  * Can be closed or not.
  */
 class _ProceduralExport Path

@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
+ * \ingroup objgengrp
  * Builds a torus mesh whose axis is Y
  * \image html primitive_torus.png
  */

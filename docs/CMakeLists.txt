@@ -36,7 +36,7 @@ if(PYTHONINTERP_FOUND)
 	file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/manual/temp.txt)
 	configure_file(${OgreProcedural_TEMPLATES_DIR}/a2x.cfg.in ${OgreProcedural_BINARY_DIR}/a2x.cfg)
 	add_custom_target(manual
-					COMMAND ${PYTHON_EXECUTABLE} "${ASCIIDOC_DIR}/a2x.py" -L -v --format=chunked --conf-file="${OgreProcedural_BINARY_DIR}/a2x.cfg" --destination-dir="${CMAKE_CURRENT_BINARY_DIR}/manual" --resource="${OgreProcedural_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/manual/manual.txt"
+					COMMAND ${PYTHON_EXECUTABLE} "${ASCIIDOC_DIR}/a2x.py" -L -v --format=chunked --conf-file="${OgreProcedural_BINARY_DIR}/a2x.cfg" --destination-dir="${CMAKE_CURRENT_BINARY_DIR}/manual" --resource="${OgreProcedural_ILLUSTRATIONS_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/manual/manual.txt"
 					WORKING_DIRECTORY "${ASCIIDOC_DIR}"
 					DEPENDS manual/manual.txt Illustrations
 					COMMENT "Building manual")

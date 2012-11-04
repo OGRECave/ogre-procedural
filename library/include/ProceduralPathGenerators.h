@@ -34,6 +34,10 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * \addtogroup shapegrp
+ * @{
+ */
 //-----------------------------------------------------------------------
 /**
  * Builds a path from a Catmull-Rom Spline.
@@ -298,6 +302,6 @@ public:
 	 */
 	Path realizePath();	
 };
-
+/** @} */
 }
 #endif

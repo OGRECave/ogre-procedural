@@ -34,6 +34,11 @@ THE SOFTWARE.
 namespace Procedural
 {
 
+/** \addtogroup texturegrp Textures
+Elements for procedural texture creation.
+@{
+*/
+
 class TextureBuffer;
 //! Type for a TextureBuffer pointer
 typedef TextureBuffer* TextureBufferPtr;
@@ -168,22 +173,22 @@ Examples:
 
 \b Default (MODE_GRID + PATTERN_BOTH)
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCellDefault(256);
-Procedural::Texture::Cell(&bufferCellDefault).setDensity(4).process();
+Procedural::TextureBuffer bufferCellDefault(256);
+Procedural::Cell(&bufferCellDefault).setDensity(4).process();
 \endcode
 \image html texture_cell_default.png
 
 \b MODE_CHESSBOARD + PATTERN_CONE
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCellChessCone(256);
-Procedural::Texture::Cell(&bufferCellChessCone).setDensity(4).setMode(Procedural::Texture::Cell::MODE_CHESSBOARD).setPattern(Procedural::Texture::Cell::PATTERN_CONE).process();
+Procedural::TextureBuffer bufferCellChessCone(256);
+Procedural::Cell(&bufferCellChessCone).setDensity(4).setMode(Procedural::Cell::MODE_CHESSBOARD).setPattern(Procedural::Cell::PATTERN_CONE).process();
 \endcode
 \image html texture_cell_chess.png
 
 \b MODE_GRID + PATTERN_CROSS
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCellGridCross(256);
-Procedural::Texture::Cell(&bufferCellGridCross).setDensity(4).setMode(Procedural::Texture::Cell::MODE_GRID).setPattern(Procedural::Texture::Cell::PATTERN_CROSS).process();
+Procedural::TextureBuffer bufferCellGridCross(256);
+Procedural::Cell(&bufferCellGridCross).setDensity(4).setMode(Procedural::Cell::MODE_GRID).setPattern(Procedural::Cell::PATTERN_CROSS).process();
 \endcode
 \image html texture_cell_grid.png
 */
@@ -294,8 +299,8 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCloud(256);
-Procedural::Texture::Cloud(&bufferCloud).process();
+Procedural::TextureBuffer bufferCloud(256);
+Procedural::Cloud(&bufferCloud).process();
 \endcode
 \image html texture_cloud.png
 */
@@ -358,8 +363,8 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
 \endcode
 \image html texture_gradient.png
 */
@@ -499,8 +504,8 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
 \endcode
 \image html texture_image.png
 */
@@ -540,8 +545,8 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferLabyrinth(256);
-Procedural::Texture::Labyrinth(&bufferLabyrinth).process();
+Procedural::TextureBuffer bufferLabyrinth(256);
+Procedural::Labyrinth(&bufferLabyrinth).process();
 \endcode
 \image html texture_labyrinth.png
 */
@@ -604,8 +609,8 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferMarble(256);
-Procedural::Texture::Marble(&bufferMarble).process();
+Procedural::TextureBuffer bufferMarble(256);
+Procedural::Marble(&bufferMarble).process();
 \endcode
 \image html texture_marble.png
 */
@@ -669,15 +674,15 @@ public:
 Examples:
 \b White noise (default)
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferNoiseWhite(256);
-Procedural::Texture::Noise(&bufferNoiseWhite).setType(Procedural::Texture::Noise::NOISE_WHITE).process();
+Procedural::TextureBuffer bufferNoiseWhite(256);
+Procedural::Noise(&bufferNoiseWhite).setType(Procedural::Noise::NOISE_WHITE).process();
 \endcode
 \image html texture_noise_white.png
 
 \b Perlin noise
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferNoisePerlin(256);
-Procedural::Texture::Noise(&bufferNoisePerlin).setType(Procedural::Texture::Noise::NOISE_PERLIN).process();
+Procedural::TextureBuffer bufferNoisePerlin(256);
+Procedural::Noise(&bufferNoisePerlin).setType(Procedural::Noise::NOISE_PERLIN).process();
 \endcode
 \image html texture_noise_perlin.png
 */
@@ -755,8 +760,8 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferSolid(256);
-Procedural::Texture::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+Procedural::TextureBuffer bufferSolid(256);
+Procedural::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
 \endcode
 \image html texture_solid.png
 */
@@ -812,8 +817,8 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferTextile(256);
-Procedural::Texture::Textile(&bufferTextile).process();
+Procedural::TextureBuffer bufferTextile(256);
+Procedural::Textile(&bufferTextile).process();
 \endcode
 \image html texture_textile.png
 */
@@ -876,8 +881,8 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferWood(256);
-Procedural::Texture::Wood(&bufferWood).setRings(5).process();
+Procedural::TextureBuffer bufferWood(256);
+Procedural::Wood(&bufferWood).setRings(5).process();
 \endcode
 \image html texture_wood.png
 */
@@ -964,15 +969,15 @@ public:
 Example:
 \code{.cpp}
 // Image colour
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
 
 // Image structure
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
 
 // Filter
-Procedural::Texture::Abnormals(&bufferGradient).setParameterImage(&bufferCell).process();
+Procedural::Abnormals(&bufferGradient).setParameterImage(&bufferCell).process();
 \endcode
 \dotfile texture_02.gv
 \todo Need bugfix
@@ -1085,9 +1090,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
-Procedural::Texture::Alpha(&bufferCell).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::Alpha(&bufferCell).process();
 \endcode
 \dotfile texture_03.gv
 */
@@ -1143,13 +1148,13 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
 
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
 
-Procedural::Texture::AlphaMask(&bufferGradient).setParameterImage(&bufferCell).process();
+Procedural::AlphaMask(&bufferGradient).setParameterImage(&bufferCell).process();
 \endcode
 \dotfile texture_04.gv
 */
@@ -1196,17 +1201,17 @@ public:
 Examples:
 \b BLUR_MEAN (default)
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Blur(&bufferImage).setType(Procedural::Texture::Blur::BLUR_MEAN).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Blur(&bufferImage).setType(Procedural::Blur::BLUR_MEAN).process();
 \endcode
 \dotfile texture_05a.gv
 
 \b BLUR_GAUSSIAN
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Blur(&bufferImage).setType(Procedural::Texture::Blur::BLUR_GAUSSIAN).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Blur(&bufferImage).setType(Procedural::Blur::BLUR_GAUSSIAN).process();
 \endcode
 \dotfile texture_05b.gv
 */
@@ -1268,17 +1273,17 @@ public:
 Examples:
 \b SELECT_BLUE
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Channel(&bufferImage).setSelection(Procedural::Texture::Channel::SELECT_BLUE).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Channel(&bufferImage).setSelection(Procedural::Channel::SELECT_BLUE).process();
 \endcode
 \dotfile texture_06a.gv
 
 \b SELECT_GRAY
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Channel(&bufferImage).setSelection(Procedural::Texture::Channel::SELECT_GRAY).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Channel(&bufferImage).setSelection(Procedural::Channel::SELECT_GRAY).process();
 \endcode
 \dotfile texture_06b.gv
 */
@@ -1326,9 +1331,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
-Procedural::Texture::Colours(&bufferGradient).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::Colours(&bufferGradient).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
 \endcode
 \dotfile texture_07.gv
 */
@@ -1438,15 +1443,15 @@ public:
 Example:
 \code{.cpp}
 // Image input
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
 
 // Image structure
-Procedural::Texture::TextureBuffer bufferCloud(256);
-Procedural::Texture::Cloud(&bufferCloud).process();
+Procedural::TextureBuffer bufferCloud(256);
+Procedural::Cloud(&bufferCloud).process();
 
 // Filter
-Procedural::Texture::Combine(&bufferCloud).addImage(&bufferGradient, Procedural::Texture::Combine::METHOD_ADD_CLAMP).process();
+Procedural::Combine(&bufferCloud).addImage(&bufferGradient, Procedural::Combine::METHOD_ADD_CLAMP).process();
 \endcode
 \dotfile texture_08.gv
 */
@@ -1533,9 +1538,9 @@ private:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Convolution(&bufferImage).setKernel(
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Convolution(&bufferImage).setKernel(
 	Ogre::Matrix3(10.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -10.0f)
 	).process();
 \endcode
@@ -1649,15 +1654,15 @@ public:
 Example:
 \code{.cpp}
 // Image input
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
 
 // Image structure
-Procedural::Texture::TextureBuffer bufferCloud(256);
-Procedural::Texture::Cloud(&bufferCloud).process();
+Procedural::TextureBuffer bufferCloud(256);
+Procedural::Cloud(&bufferCloud).process();
 
 // Filter
-Procedural::Texture::Crack(&bufferCloud).setParameterImage(&bufferGradient).process();
+Procedural::Crack(&bufferCloud).setParameterImage(&bufferGradient).process();
 \endcode
 \dotfile texture_10.gv
 */
@@ -1780,9 +1785,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCloud(256);
-Procedural::Texture::Cloud(&bufferCloud).process();
-Procedural::Texture::Dilate(&bufferCloud).process();
+Procedural::TextureBuffer bufferCloud(256);
+Procedural::Cloud(&bufferCloud).process();
+Procedural::Dilate(&bufferCloud).process();
 \endcode
 \dotfile texture_11.gv
 */
@@ -1819,15 +1824,15 @@ public:
 \details Example:
 \code{.cpp}
 // Image colour
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
 
 // Image structure
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
 
 // Filter
-Procedural::Texture::Distort(&bufferGradient).setParameterImage(&bufferCell).setPower(255).process();
+Procedural::Distort(&bufferGradient).setParameterImage(&bufferCell).setPower(255).process();
 \endcode
 \dotfile texture_12.gv
 */
@@ -1873,9 +1878,9 @@ public:
 
 Example (Sobel):
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
-Procedural::Texture::EdgeDetection(&bufferCell).setType(Procedural::Texture::EdgeDetection::DETECTION_SOBEL).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::EdgeDetection(&bufferCell).setType(Procedural::EdgeDetection::DETECTION_SOBEL).process();
 \endcode
 \dotfile texture_13.gv
 */
@@ -1948,25 +1953,25 @@ private:
 Examples:
 \b FLIP_POINT
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Flip(&bufferImage).setAxis(Procedural::Texture::Flip::FLIP_POINT).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Flip(&bufferImage).setAxis(Procedural::Flip::FLIP_POINT).process();
 \endcode
 \dotfile texture_14a.gv
 
 \b FLIP_VERTICAL
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Flip(&bufferImage).setAxis(Procedural::Texture::Flip::FLIP_VERTICAL).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Flip(&bufferImage).setAxis(Procedural::Flip::FLIP_VERTICAL).process();
 \endcode
 \dotfile texture_14b.gv
 
 \b FLIP_HORIZONTAL
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Flip(&bufferImage).setAxis(Procedural::Texture::Flip::FLIP_HORIZONTAL).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Flip(&bufferImage).setAxis(Procedural::Flip::FLIP_HORIZONTAL).process();
 \endcode
 \dotfile texture_14c.gv
 */
@@ -2013,9 +2018,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).process();
-Procedural::Texture::Glow(&bufferGradient).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).process();
+Procedural::Glow(&bufferGradient).process();
 \endcode
 \dotfile texture_15.gv
 */
@@ -2113,9 +2118,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
-Procedural::Texture::Invert(&bufferGradient).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::Invert(&bufferGradient).process();
 \endcode
 \dotfile texture_16.gv
 */
@@ -2144,9 +2149,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Jitter(&bufferImage).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Jitter(&bufferImage).process();
 \endcode
 \dotfile texture_17.gv
 */
@@ -2192,19 +2197,19 @@ public:
 Example:
 \code{.cpp}
 // Image C
-Procedural::Texture::TextureBuffer bufferCloud(256);
-Procedural::Texture::Cloud(&bufferCloud).process();
+Procedural::TextureBuffer bufferCloud(256);
+Procedural::Cloud(&bufferCloud).process();
 
 // Image A
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).process();
 
 // Image B
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(233).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(233).process();
 
 // Filter
-Procedural::Texture::Lerp(&bufferCloud).setImageA(&bufferGradient).setImageB(&bufferCell).process();
+Procedural::Lerp(&bufferCloud).setImageA(&bufferGradient).setImageB(&bufferCell).process();
 \endcode
 \dotfile texture_18.gv
 */
@@ -2251,14 +2256,14 @@ public:
 Example:
 \code{.cpp}
 // Generate structure
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
 
 // Create normal map
-Procedural::Texture::TextureBufferPtr bufferNormalMap = bufferColour.clone();
-Procedural::Texture::Normals(bufferNormalMap).process();
+Procedural::TextureBufferPtr bufferNormalMap = bufferColour.clone();
+Procedural::Normals(bufferNormalMap).process();
 
-Procedural::Texture::Light(&bufferCell).setNormalMap(bufferNormalMap).setColourAmbient(127, 60, 0, 0).setColourDiffuse(60, 25, 0, 0).setBumpPower(255).process();
+Procedural::Light(&bufferCell).setNormalMap(bufferNormalMap).setColourAmbient(127, 60, 0, 0).setColourDiffuse(60, 25, 0, 0).setBumpPower(255).process();
 delete bufferNormalMap;
 \endcode
 \dotfile texture_19a.gv
@@ -2412,15 +2417,15 @@ public:
 Example:
 \code{.cpp}
 // Image colour
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
 
 // Image structure
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
 
 // Filter
-Procedural::Texture::Lookup(&bufferGradient).setParameterImage(&bufferCell).process();
+Procedural::Lookup(&bufferGradient).setParameterImage(&bufferCell).process();
 \endcode
 \dotfile texture_20.gv
 */
@@ -2459,24 +2464,24 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
-Procedural::Texture::Normals(&bufferCell).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::Normals(&bufferCell).process();
 \endcode
 \dotfile texture_21a.gv
 \par Tip
 Create a copy of your working TextureBuffer for normal mapping before you colour it:
 \code{.cpp}
 // Generate structure
-Procedural::Texture::TextureBuffer bufferColour(256);
-Procedural::Texture::Cell(&bufferColour).setDensity(4).setRegularity(234).process();
+Procedural::TextureBuffer bufferColour(256);
+Procedural::Cell(&bufferColour).setDensity(4).setRegularity(234).process();
 
 // Create normal map
-Procedural::Texture::TextureBufferPtr bufferNormalMap = bufferColour.clone();
-Procedural::Texture::Normals(bufferNormalMap).process();
+Procedural::TextureBufferPtr bufferNormalMap = bufferColour.clone();
+Procedural::Normals(bufferNormalMap).process();
 
 // Colourize structure
-Procedural::Texture::Colours(&bufferColour).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
+Procedural::Colours(&bufferColour).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
 delete bufferNormalMap;
 \endcode
 \dotfile texture_21b.gv
@@ -2515,9 +2520,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::OilPaint(&bufferImage).setRadius(5).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::OilPaint(&bufferImage).setRadius(5).process();
 \endcode
 \dotfile texture_22.gv
 */
@@ -2562,9 +2567,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferSolid(256);
-Procedural::Texture::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
-Procedural::Texture::RandomPixels(&bufferSolid).setColour(Ogre::ColourValue::Red).setCount(200).process();
+Procedural::TextureBuffer bufferSolid(256);
+Procedural::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+Procedural::RandomPixels(&bufferSolid).setColour(Ogre::ColourValue::Red).setCount(200).process();
 \endcode
 \dotfile texture_23.gv
 */
@@ -2635,9 +2640,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferSolid(256);
-Procedural::Texture::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
-Procedural::Texture::Rectangle(&bufferSolid).setColour(Ogre::ColourValue::Red).setRectangle(0.25f, 0.25f, 0.75f, 0.75f).process();
+Procedural::TextureBuffer bufferSolid(256);
+Procedural::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+Procedural::Rectangle(&bufferSolid).setColour(Ogre::ColourValue::Red).setRectangle(0.25f, 0.25f, 0.75f, 0.75f).process();
 \endcode
 \dotfile texture_24.gv
 */
@@ -2801,9 +2806,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
-Procedural::Texture::RotationZoom(&bufferGradient).setRotation(0.125f).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::RotationZoom(&bufferGradient).setRotation(0.125f).process();
 \endcode
 \dotfile texture_25.gv
 */
@@ -2889,15 +2894,15 @@ public:
 Example:
 \code{.cpp}
 // Image colour
-Procedural::Texture::TextureBuffer bufferGradient(256);
-Procedural::Texture::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
 
 // Image structure
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
 
 // Filter
-Procedural::Texture::Segment(&bufferCell).setColourSource(&bufferGradient).process();
+Procedural::Segment(&bufferCell).setColourSource(&bufferGradient).process();
 \endcode
 \dotfile texture_26.gv
 */
@@ -2943,17 +2948,17 @@ public:
 Examples:
 \b SHARP_BASIC
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Sharpen(&bufferImage).setType(Procedural::Texture::Sharpen::SHARP_BASIC).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Sharpen(&bufferImage).setType(Procedural::Sharpen::SHARP_BASIC).process();
 \endcode
 \dotfile texture_27a.gv
 
 \b SHARP_GAUSSIAN
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferImage(256);
-Procedural::Texture::Image(&bufferImage).setFile("red_brick.jpg").process();
-Procedural::Texture::Sharpen(&bufferImage).setType(Procedural::Texture::Sharpen::SHARP_GAUSSIAN).process();
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+Procedural::Sharpen(&bufferImage).setType(Procedural::Sharpen::SHARP_GAUSSIAN).process();
 \endcode
 \dotfile texture_27b.gv
 */
@@ -3013,9 +3018,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
-Procedural::Texture::Threshold(&bufferCell).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::Threshold(&bufferCell).process();
 \endcode
 \dotfile texture_28.gv
 */
@@ -3077,9 +3082,9 @@ public:
 
 Example:
 \code{.cpp}
-Procedural::Texture::TextureBuffer bufferCell(256);
-Procedural::Texture::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
-Procedural::Texture::Vortex(&bufferCell).process();
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::Vortex(&bufferCell).process();
 \endcode
 \dotfile texture_29.gv
 */
@@ -3150,5 +3155,6 @@ public:
 	*/
 	TextureBufferPtr process();
 };
+/** @} */
 }
 #endif

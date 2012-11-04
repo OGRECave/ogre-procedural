@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
+ * \ingroup objgengrp
  * Generates a capsule mesh, i.e. a sphere-terminated cylinder
  * \image html primitive_capsule.png
  */

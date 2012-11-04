@@ -34,7 +34,10 @@ THE SOFTWARE.
 namespace Procedural
 {
 //-----------------------------------------------------------------------
-/// Base class for Path generators
+/**
+ * \ingroup pathgrp
+ * Base class for Path generators
+ */
 template<class T>
 class BaseSpline3
 {

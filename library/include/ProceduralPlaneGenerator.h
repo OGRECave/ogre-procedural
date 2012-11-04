@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
+ * \ingroup objgengrp
  * Builds a plane mesh
  * \image html primitive_plane.png
  * \note Note that X and Y values in that generator are not global X and Y,

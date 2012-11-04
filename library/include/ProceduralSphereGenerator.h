@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
+ * \ingroup objgengrp
  * Builds an UV sphere mesh
  * \image html primitive_sphere.png
  */
