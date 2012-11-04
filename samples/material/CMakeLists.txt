@@ -24,7 +24,7 @@ set_target_properties(Sample_Material PROPERTIES DEBUG_POSTFIX _d)
 
 target_link_libraries(Sample_Material ${OgreProcedural_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARY})
 
-if(${OGRE_VERSION} VERSION_GREATER "1.8.1")
+if ((${OGRE_VERSION} VERSION_EQUAL "1.9.0") OR (${OGRE_VERSION} VERSION_GREATER "1.9.0"))
 	include_directories(${OGRE_Overlay_INCLUDE_DIR})
 	target_link_libraries(Sample_Material ${OGRE_Overlay_LIBRARIES})
 endif()
