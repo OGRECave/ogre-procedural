@@ -455,6 +455,75 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Create a symetric copy at the origin point.
+	 * @parm flip \c true if function should start mirroring with the last point in list (default \c false)
+	 */
+	Shape& mirror(bool flip = false)
+	{
+		return mirrorAroundPoint(Ogre::Vector2::ZERO, flip);
+	}
+
+	/**
+	 * Create a symetric copy at a given point.
+	 * @param x x coordinate of point where to mirror
+	 * @param y y coordinate of point where to mirror
+	 * @parm flip \c true if function should start mirroring with the last point in list (default \c false)
+	 */
+	Shape& mirror(Ogre::Real x, Ogre::Real y, bool flip = false)
+	{
+		return mirrorAroundPoint(Ogre::Vector2(x, y), flip);
+	}
+
+	/**
+	 * Create a symetric copy at a given point.
+	 * @param point Point where to mirror
+	 * @parm flip \c true if function should start mirroring with the last point in list (default \c false)
+	 */
+	Shape& mirrorAroundPoint(Ogre::Vector2 point, bool flip = false)
+	{
+		int l = (int)mPoints.size();
+		if(flip)
+			for(int i = l - 1; i >= 0; i--)
+			{
+				Ogre::Vector2 pos = mPoints.at(i) - point;
+				mPoints.push_back(-1.0 * pos + point);
+			}
+		else
+			for(int i = 0; i < l; i++)
+			{
+				Ogre::Vector2 pos = mPoints.at(i) - point;
+				mPoints.push_back(-1.0 * pos + point);
+			}
+		return *this;
+	}
+		
+	/**
+	 * Create a symetric copy at a given axis.
+	 * @param axis Axis where to mirror
+	 * @parm flip \c true if function should start mirroring with the first point in list (default \c false)
+	 */
+	Shape& mirrorAroundAxis(const Ogre::Vector2& axis, bool flip = false)
+	{
+		int l = (int)mPoints.size();
+		Ogre::Vector2 normal = axis.perpendicular().normalisedCopy();
+		if(flip)
+			for(int i = 0; i < l; i++)
+			{
+				Ogre::Vector2 pos = mPoints.at(i);
+				pos = pos.reflect(normal);
+				if(pos != mPoints.at(i)) mPoints.push_back(pos);
+			}
+		else
+			for(int i = l - 1; i >= 0; i--)
+			{
+				Ogre::Vector2 pos = mPoints.at(i);
+				pos = pos.reflect(normal);
+				if(pos != mPoints.at(i)) mPoints.push_back(pos);
+			}
+		return *this;
+	}
+
 	/// Returns the total lineic length of that shape
 	Ogre::Real getTotalLength() const
 	{
