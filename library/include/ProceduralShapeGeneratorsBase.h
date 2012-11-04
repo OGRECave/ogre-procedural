@@ -34,7 +34,10 @@ THE SOFTWARE.
 namespace Procedural
 {
 //-----------------------------------------------------------------------
-/// Base class for Shape generators
+/**
+\ingroup shapegrp
+Base class for Shape generators
+*/
 template<class T>
 class BaseSpline2
 {

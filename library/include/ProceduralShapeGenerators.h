@@ -34,6 +34,10 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+/**
+ * \addtogroup shapegrp
+ * @{
+ */
 //-----------------------------------------------------------------------
 /**
  * Produces a shape from Cubic Hermite control points
@@ -191,6 +195,7 @@ public:
 //-----------------------------------------------------------------------
 /**
  * Builds a rectangular shape
+ * \image html shape_rectangle.png
  */
 class _ProceduralExport RectangleShape
 {
@@ -230,6 +235,7 @@ class _ProceduralExport RectangleShape
 //-----------------------------------------------------------------------
 /**
  * Builds a circular shape
+ * \image html shape_circle.png
  */
 class _ProceduralExport CircleShape
 {
@@ -271,6 +277,7 @@ class _ProceduralExport CircleShape
 //-----------------------------------------------------------------------
 /**
  * Builds a ellipse shape
+ * \image html shape_ellipse.png
  */
 class _ProceduralExport EllipseShape
 {
@@ -465,7 +472,7 @@ public:
 	 */
 	Shape realizeShape();
 };
-
+/** @} */
 }
 
 #endif

@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /** 
+ * \ingroup objgengrp
  * Builds a rounded box.
  * You can choose the size of the rounded borders to get a sharper or smoother look.
  * \image html primitive_roundedbox.png

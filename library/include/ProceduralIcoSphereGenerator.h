@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
+ * \ingroup objgengrp
  * Builds an icosphere mesh, ie a sphere built with equally sized triangles
  * \image html primitive_icosphere.png
  */

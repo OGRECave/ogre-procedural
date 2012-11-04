@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /** 
+ * \ingroup objgengrp
  * Generates a box mesh centered on the origin.
  * Default size is 1.0 with 1 quad per face.
  * \image html primitive_box.png

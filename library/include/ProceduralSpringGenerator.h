@@ -37,6 +37,7 @@ namespace Procedural
 {
 //-----------------------------------------------------------------------
 /**
+ * \ingroup pathgrp
  * Produces a helix path
  * \image html spline_helix.png
  */
@@ -86,6 +87,7 @@ public:
 
 //-----------------------------------------------------------------------
 /**
+ * \ingroup objgengrp
  * Generates a spring mesh centered on the origin.
  * \image html primitive_spring.png
  */

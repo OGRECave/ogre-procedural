@@ -660,7 +660,7 @@ void Illustrations::go()
 	Procedural::Light(&buffer).setColourAmbient((Ogre::uchar)127, (Ogre::uchar)60, (Ogre::uchar)0, (Ogre::uchar)0).setColourDiffuse((Ogre::uchar)60, (Ogre::uchar)25, (Ogre::uchar)0, (Ogre::uchar)0).setBumpPower(255).process();
 	exportImage("texture_light", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_19a", "Light_1_Demo");
-	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Light", "texture_light", dotFile::CONNECTION::ROW);
+	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Light", "texture_light", dotFile::ROW);
 	dotfile.bind(1, 3);
 	dotfile.save();
 	dotfile = dotFile(mOutputPath, "texture_19b", "Light_2_Demo");
@@ -684,7 +684,7 @@ void Illustrations::go()
 	Procedural::Colours(&buffer).setColourBase(Ogre::ColourValue::Red).setColourPercent(Ogre::ColourValue::Blue).process();
 	exportImage("texture_normals_tip", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_21b", "Normals_2_Demo");
-	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Colours", "texture_normals_tip", dotFile::CONNECTION::SPLIT);
+	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Colours", "texture_normals_tip", dotFile::SPLIT);
 	dotfile.save();
 
 	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
@@ -766,7 +766,7 @@ void Illustrations::go()
 	exportImage("texture_example_solid", &distort);
 	int s03x = dotfile.add("Solid", "texture_example_solid");
 	Procedural::Rectangle rectDraw(&distort);
-	for(size_t i = 1; i < brickLines; i++)
+	for(size_t i = 1; i < (size_t)brickLines; i++)
 	{
 		Ogre::ColourValue rc = Ogre::ColourValue((i % 2 == 0) ? Ogre::Math::RangeRandom(0.4f, 0.6f) : Ogre::Math::RangeRandom(0.0f, 0.2f), 0.52f, 1.0f);
 		rc.a = 1.0f;

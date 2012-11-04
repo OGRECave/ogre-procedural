@@ -37,7 +37,16 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** Superclass of everything that builds meshes
+/**
+\defgroup objgengrp Object generators
+Elements for procedural mesh generation of various objects.
+@{
+@}
+*/
+
+/**
+\ingroup objgengrp
+Superclass of everything that builds meshes
  */
 template <typename T>
 class MeshGenerator

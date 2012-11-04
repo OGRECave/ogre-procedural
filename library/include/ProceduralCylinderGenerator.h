@@ -34,6 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 /**
+ * \ingroup objgengrp
  * Generates a cylinder mesh along Y-axis
  * \image html primitive_cylinder.png
  */
