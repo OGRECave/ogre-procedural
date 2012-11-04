@@ -318,6 +318,58 @@ class _ProceduralExport EllipseShape
 
 //-----------------------------------------------------------------------
 /**
+ * Builds a triangele shape
+ * \image html shape_triangle.png
+ */
+class _ProceduralExport TriangleShape
+{
+	Ogre::Real mLengthA, mLengthB, mLengthC;
+
+	public:
+	/// Default constructor
+	TriangleShape() : mLengthA(1.0), mLengthB(1.0), mLengthC(1.0) {}
+
+	/// Sets length of edge A
+	inline TriangleShape& setLengthA(Ogre::Real length)
+	{
+		mLengthA = length;
+		return *this;
+	}
+
+	/// Sets length of edge B
+	inline TriangleShape& setLengthB(Ogre::Real length)
+	{
+		mLengthB = length;
+		return *this;
+	}
+
+	/// Sets length of edge C
+	inline TriangleShape& setLengthC(Ogre::Real length)
+	{
+		mLengthC = length;
+		return *this;
+	}
+
+	/// Builds the shape
+	inline Shape realizeShape()
+	{
+		assert(mLengthA>0 && mLengthB>0 && mLengthC>0 && "Length of triangle edge must be longer than 0!");
+		assert(mLengthA< (mLengthB+mLengthC) && "Length of triangle edge A must be shorter or equal than B+C!");
+		Ogre::Radian alpha = Ogre::Math::ACos((mLengthB * mLengthB + mLengthC * mLengthC - mLengthA * mLengthA) / (2 * mLengthB * mLengthC));
+
+		Shape s;
+		s.addPoint(0.0f, 0.0f);
+		s.addPoint(Ogre::Math::Cos(alpha) * mLengthB, Ogre::Math::Sin(alpha) * mLengthB);
+		s.addPoint(mLengthC, 0.0f);
+		s.close();
+		s.translate((Ogre::Math::Cos(alpha) * mLengthB + mLengthC) / -3.0f, mLengthB / -3.0f);
+		
+		return s;
+	}
+};
+
+//-----------------------------------------------------------------------
+/**
  * Produces a shape from Cubic Hermite control points
  * \image html spline_roundedcorner.png
  */

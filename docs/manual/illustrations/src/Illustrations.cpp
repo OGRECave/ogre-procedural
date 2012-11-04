@@ -286,11 +286,31 @@ void Illustrations::go()
 	putMesh(mp,1);
 	next("spline_helix", 3);
 
+	cameraBack();
+
+	s = RectangleShape().setHeight(2).setWidth(4).realizeShape();
+	mp = s.realizeMesh();
+	putMesh(mp,1);
+	next("shape_rectangle", 3);
+
+	s = CircleShape().setNumSeg(64).setRadius(2).realizeShape();
+	mp = s.realizeMesh();
+	putMesh(mp,1);
+	next("shape_circle", 3);
+
+	s = EllipseShape().setNumSeg(64).setRadiusX(2.25f).setRadiusY(1.25f).realizeShape();
+	mp = s.realizeMesh();
+	putMesh(mp,1);
+	next("shape_ellipse", 3);
+
+	s = TriangleShape().setLengthA(3).setLengthB(3).setLengthC(3).realizeShape();
+	mp = s.realizeMesh();
+	putMesh(mp,1);
+	next("shape_triangle", 3);
+
 	//
 	// Boolean operations
 	//
-	cameraBack();
-
 	Shape s1 = RectangleShape().realizeShape();
 	Shape s2 = s1;
 	s2.translate(.5f,.5f);
@@ -313,6 +333,45 @@ void Illustrations::go()
 	mp = s.realizeMesh();
 	putMesh(mp,1);
 	next("shape_booleandifference", 1.5f);
+
+	//
+	// Geometric operations
+	//
+	s = Shape().addPoint(0.0f, 0.0f).addPoint(-0.5f, -1.0f).addPoint(-0.75f, 1.0f).addPoint(0.0f, 0.5f);
+	mp = s.realizeMesh();
+	putMesh(mp,1);
+	next("shape_geometricsetup", 2.5);
+
+	s.translate(0.5f, 1.0f);
+	mp = s.realizeMesh();
+	putMesh(mp,1);
+	next("shape_geometrictranslate", 2.5);
+	s.translate(-0.5f, -1.0f);
+
+	s.scale(2.0f, 2.0f);
+	mp = s.realizeMesh();
+	putMesh(mp,1);
+	next("shape_geometricscale", 2.5);
+	s.scale(0.5f, 0.5f);
+
+	s.rotate(Ogre::Degree(45));
+	mp = s.realizeMesh();
+	putMesh(mp,1);
+	next("shape_geometricrotate", 2.5);
+	s.rotate(Ogre::Degree(-45));
+
+	s1 = s;
+	s1.mirror(0.5f, 0.5f);
+	mp = s1.realizeMesh();
+	putMesh(mp,1);
+	next("shape_geometricmirror_point", 2.5);
+
+	s2 = s;
+	s2.mirrorAroundAxis(Vector2::UNIT_Y);
+	s2.close();
+	mp = s2.realizeMesh();
+	putMesh(mp,1);
+	next("shape_geometricmirror_yaxis", 2.5);
 
 	//
 	// Thicken
