@@ -31,10 +31,6 @@ endif(WIN32 OR APPLE)
 if (IS_DIRECTORY "${OgreProcedural_SOURCE_DIR}/Dependencies")
 	message(STATUS "Found a directory named Dependencies...")
 	set(OgreProcedural_DEPENDENCIES_DIR "${OgreProcedural_SOURCE_DIR}/Dependencies")
-	if (EXISTS "${OgreProcedural_DEPENDENCIES_DIR}/asciidoc")
-		message(STATUS "Found asciidoc")
-		set(ASCIIDOC_DIR "${OgreProcedural_DEPENDENCIES_DIR}/asciidoc")
-	endif()	
 	if (IS_DIRECTORY "${OgreProcedural_DEPENDENCIES_DIR}/doxygen")
 		message(STATUS "Found doxygen")
 		set(DOXYGEN_DIR "${OgreProcedural_DEPENDENCIES_DIR}/doxygen")
@@ -107,7 +103,6 @@ option(OgreProcedural_UNITY_BUILD "Enable unity build for OgreProcedural." FALSE
 set(OgreProcedural_UNITY_FILES_PER_UNIT "50" CACHE STRING "Number of files per compilation unit in Unity build.")
 
 find_package(Doxygen)
-find_package(PythonInterp)
 
 option(OgreProcedural_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(OgreProcedural_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
