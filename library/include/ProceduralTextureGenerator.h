@@ -1779,6 +1779,161 @@ public:
 	TextureBufferPtr process();
 };
 
+/** 
+\brief Draw a cycloid.
+\details Draw a cycloid on top of previous content.
+
+Example:
+\code{.cpp}
+Procedural::TextureBuffer bufferSolid(256);
+Procedural::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+Procedural::Cycloid(&bufferSolid).setColour(Ogre::ColourValue::Red).setPenSize(2).setType(Procedural::Cycloid::HYPOTROCHOID).process();
+\endcode
+\dotfile texture_30.gv
+
+\par Cycloid types
+<table><tr><th>%CYCLOID_TYPE</th><th>Name</th><th>%Image</th></tr>
+<tr><td><tt>HYPOCYCLOID</tt></td><td><b>Hypocycloid</b><p><a href="http://en.wikipedia.org/wiki/Hypocycloid" target="_blank">http://en.wikipedia.org/wiki/Hypocycloid</a></p></td><td>\image html texture_cycloid_hypocycloid.png</td></tr>
+<tr><td><tt>HYPOTROCHOID</tt></td><td><b>Hypotrochoid</b><p><a href="http://en.wikipedia.org/wiki/Hypotrochoid" target="_blank">http://en.wikipedia.org/wiki/Hypotrochoid</a></p></td><td>\image html texture_cycloid_hypotrochoid.png</td></tr>
+<tr><td><tt>EPICYCLOID</tt></td><td><b>Epicycloid</b><p><a href="http://en.wikipedia.org/wiki/Epicycloid" target="_blank">http://en.wikipedia.org/wiki/Epicycloid</a></p></td><td>\image html texture_cycloid_epicycloid.png</td></tr>
+<tr><td><tt>EPITROCHOID</tt></td><td><b>Epitrochoid</b><p><a href="http://en.wikipedia.org/wiki/Epitrochoid" target="_blank">http://en.wikipedia.org/wiki/Epitrochoid</a></p></td><td>\image html texture_cycloid_epitrochoid.png</td></tr>
+<tr><td><tt>ROSE_CURVE</tt></td><td><b>Rose curve</b><p><a href="http://en.wikipedia.org/wiki/Rose_curve" target="_blank">http://en.wikipedia.org/wiki/Rose_curve</a></p></td><td>\image html texture_cycloid_rose.png</td></tr>
+<tr><td><tt>LISSAJOUS_CURVE</tt></td><td><b>Lissajous curve</b><p><a href="http://en.wikipedia.org/wiki/Lissajous_curve" target="_blank">http://en.wikipedia.org/wiki/Lissajous_curve</a></p></td><td>\image html texture_cycloid_lissajous.png</td></tr></table>
+
+\anchor cycloiddefaultparameter
+\par Default parameters
+<table><tr><th>Name</th><th>Parameter <em>R</em></th><th>Parameter <em>r</em></th><th>Parameter <em>d</em></th><th>Parameter <em>e</em></th><th colspan="2">Parameter <em>k</em></th></tr>
+<tr><td>Hypocycloid</td><td>3/6 * Size</td><td>1/6 * Size</td><td align="center"><em>unsused</em></td><td align="center" rowspan="5"><em>unsused</em><td rowspan="4">k = R / r</td><td>3</td></tr>
+<tr><td>Hypotrochoid</td><td>5/14 * Size</td><td>3/14 * Size</td><td>5/14 * Size</td><td>2</td></tr>
+<tr><td>Epicycloid</td><td>3/10 * Size</td><td>1/10 * Size</td><td align="center"><em>unsused</em><td>3</td></tr>
+<tr><td>Epitrochoid</td><td>3/10 * Size</td><td>1/10 * Size</td><td>1/20 * Size</td><td>3</td></tr>
+<tr><td>Rose curve</td><td>1/2 * Size</td><td>4</td><td>1</td><td rowspan="2">k = r / d</td><td>4</td></tr>
+<tr><td>Lissajous curve</td><td>1/2 * Size</td><td>5</td><td>4</td><td>&pi;/2</td><td>5/4</td></tr></table>
+*/
+class _ProceduralExport Cycloid : public TextureProcessing
+{
+public:
+	/**
+	Which type of cycloid should be painted.
+	*/
+	enum CYCLOID_TYPE
+	{
+		HYPOCYCLOID,	//!< Draw a Hypocycloid.
+		HYPOTROCHOID,	//!< Draw a Hypotrochoid.
+		EPICYCLOID,		//!< Draw a Epicycloid.
+		EPITROCHOID,	//!< Draw a Epitrochoid.
+		ROSE_CURVE,		//!< Draw a Rose curve.
+		LISSAJOUS_CURVE	//!< Draw a Lissajous curve.
+	};
+
+	/**
+	Which parameter should be set.
+	*/
+	enum CYCLOID_PARAMETER
+	{
+		PARAMETER_R,	//!< Set parameter R.
+		PARAMETER_r,	//!< Set parameter r.
+		PARAMETER_d,	//!< Set parameter d.
+		PARAMETER_e,	//!< Set parameter e.
+		PARAMETER_k		//!< Set parameter k.
+	};
+
+private:
+	CYCLOID_TYPE mType;
+	Ogre::ColourValue mColour;
+	Ogre::Real mCenterX;
+	Ogre::Real mCenterY;
+	Ogre::Real mParam_R;
+	Ogre::Real mParam_r;
+	Ogre::Real mParam_d;
+	Ogre::Real mParam_e;
+	Ogre::uint mPenSize;
+
+public:
+	/**
+	Default constructor.
+	\param pBuffer Image buffer where to modify the image.
+	*/
+	Cycloid(TextureBufferPtr pBuffer)
+		: TextureProcessing(pBuffer, "Cycloid"), mColour(Ogre::ColourValue::White), mCenterX(0.5f), mCenterY(0.5f), mPenSize(1)
+	{
+		setType(HYPOCYCLOID);
+	}
+
+	/**
+	Set the algorithm to for drawing.
+	\param type New algorithm to draw (default HYPOCYCLOID)
+	\note Call this function on first place! setType resets all numerical parameter to special defaults according on used algorithm.
+	*/
+	Cycloid & setType(CYCLOID_TYPE type);
+
+	/**
+	Set the drawing colour for cycloid structure.
+	\param colour New colour for drawing (default Ogre::ColourValue::White)
+	*/
+	Cycloid & setColour(Ogre::ColourValue colour);
+
+	/**
+	Set the drawing colour for cycloid structure.
+	\param red Red value of drawing colour [0, 255] (default 255)
+	\param green Green value of drawing colour [0, 255] (default 255)
+	\param blue Blue value of drawing colour [0, 255] (default 255)
+	\param alpha %Alpha value of drawing colour [0, 255] (default 255)
+	*/
+	Cycloid & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
+
+	/**
+	Set the drawing colour for cycloid structure.
+	\param red Red value of drawing colour [0.0, 1.0] \(default 1.0)
+	\param green Green value of drawing colour [0.0, 1.0] \(default 1.0)
+	\param blue Blue value of drawing colour [0.0, 1.0] \(default 1.0)
+	\param alpha %Alpha value of drawing colour [0.0, 1.0] \(default 1.0)
+	*/
+	Cycloid & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+
+	/**
+	Set the relative center position of the cycloid main circle on x axis.
+	\param centerx New relative center of the cycloid main circle [0.0, 1.0] \(default 0.5)
+	*/
+	Cycloid & setCenterX(Ogre::Real centerx);
+
+	/**
+	Set the relative center position of the cycloid main circle on y axis.
+	\param centery New relative center of the cycloid main circle [0.0, 1.0] \(default 0.5)
+	*/
+	Cycloid & setCenterY(Ogre::Real centery);
+
+	/**
+	Set the parameter value.
+	\param paramType Selection which parameter should be set
+	\param value New value for selected parameter
+	\see \ref cycloiddefaultparameter "Default parameters" for default values
+	\note Unsused paramerters will be ignored. Setting <em>k</em> parameter calculates the first used parameter. For example <tt>k = R / r</tt> will calculate <em>R</em> by <tt>R = k * r</tt> (also <em>r</em> from <tt>r = k * d</tt>).
+	*/
+	Cycloid & setParameter(CYCLOID_PARAMETER paramType, Ogre::Real value);
+
+	/**
+	Set the size for the pen to draw.
+	\param size New size for the drawing pen (default 1)
+	*/
+	Cycloid & setPenSize(Ogre::uint size);
+
+	/**
+	Run image manipulation
+	\return Pointer to image buffer which has been set in the constructor.
+	*/
+	TextureBufferPtr process();
+
+private:
+	void _process_hypocycloid(long x, long y, Ogre::Real step);
+	void _process_hypotrochoid(long x, long y, Ogre::Real step);
+	void _process_epicycloid(long x, long y, Ogre::Real step);
+	void _process_epitrochoid(long x, long y, Ogre::Real step);
+	void _process_rose_curve(long x, long y, Ogre::Real step);
+	void _process_lissajous_curve(long x, long y, Ogre::Real step);
+	void _process_paint(long x, long y, Ogre::Real step);
+};
+
 /**
 \brief Expands bright areas over darker areas.
 \details This filter dilate mid range area of the input image.

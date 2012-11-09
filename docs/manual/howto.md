@@ -4,7 +4,7 @@ How to build {#howto}
 These are the detailed steps in order to build the SDK :
 
 - Make sure CMake and the Ogre3d SDK are present on your system.
-- Open CMake, set the source directory as the root directory of Ogre Procedural, choose anything you want for the build directory.
+- Open CMake, set the source directory as the root directory of Ogre %Procedural, choose anything you want for the build directory.
 - Click 'Add Entry'. Add the 'OGRE_HOME' variable (type=PATH), its value being the root folder of Ogre3d SDK.
 - Click 'configure', then 'generate'
 - Your project file is now ready to be used. Build the target 'INSTALL' in order to get a working SDK, which will be in the 'sdk' subfolder.

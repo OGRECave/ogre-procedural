@@ -17,31 +17,31 @@ See Procedural::Cell
 
 ### Cloud
 
-![Cloud](texture_cloud.png)
+![Figure 2. Cloud](texture_cloud.png)
 
 See Procedural::Cloud
 
 ### Gradient
 
-![Gradient](texture_gradient.png)
+![Figure 3. Gradient](texture_gradient.png)
 
 See Procedural::Gradient
 
 ### Image
 
-![Image](texture_image.png)
+![Figure 4. Image](texture_image.png)
 
 See Procedural::Image
 
 ### Labyrinth
 
-![Labyrinth](texture_labyrinth.png)
+![Figure 5. Labyrinth](texture_labyrinth.png)
 
 See Procedural::Labyrinth
 
 ### Marble
 
-![Marble](texture_marble.png)
+![Figure 6. Marble](texture_marble.png)
 
 See Procedural::Marble
 
@@ -53,19 +53,19 @@ See Procedural::Noise
 
 ### Solid
 
-![Solid](texture_solid.png)
+![Figure 8. Solid](texture_solid.png)
 
 See Procedural::Solid
 
 ### Textile
 
-![Textile](texture_textile.png)
+![Figure 9. Textile](texture_textile.png)
 
 See Procedural::Textile
 
 ### Wood
 
-![Wood](texture_wood.png)
+![Figure 10. Wood](texture_wood.png)
 
 See Procedural::Wood
 
@@ -73,19 +73,19 @@ See Procedural::Wood
 
 ### Abnormals
 
-![Abnormals](texture_abnormals.png)
+![Figure 1. Abnormals](texture_abnormals.png)
 
 See Procedural::Abnormals
 
 ### Alpha
 
-![Alpha](texture_alpha.png)
+![Figure 2. Alpha](texture_alpha.png)
 
 See Procedural::Alpha
 
 ### AlphaMask
 
-![AlphaMask](texture_alphamask.png)
+![Figure 3. AlphaMask](texture_alphamask.png)
 
 See Procedural::AlphaMask
 
@@ -103,137 +103,145 @@ See Procedural::Channel
 
 ### Colours
 
-![Colours](texture_colours.png)
+![Figure 6. Colours](texture_colours.png)
 
 See Procedural::Colours
 
 ### Combine
 
-![Combine](texture_combine.png)
+![Figure 7. Combine](texture_combine.png)
 
 See Procedural::Combine
 
 ### Convolution
 
-![Convolution](texture_convolution.png)
+![Figure 8. Convolution](texture_convolution.png)
 
 See Procedural::Convolution
 
 ### Crack
 
-![Crack](texture_crack.png)
+![Figure 9. Crack](texture_crack.png)
 
 See Procedural::Crack
 
+### Cycloid
+
+<table border="0" width="100%"><tr><td>\image html texture_cycloid_hypocycloid.png "Figure 10a. Cycloid: Hypocycloid"</td><td>\image html texture_cycloid_hypotrochoid.png "Figure 10b. Cycloid: Hypotrochoid"</td></tr>
+<tr><td>\image html texture_cycloid_epicycloid.png "Figure 10c. Cycloid: Epicycloid"</td><td>\image html texture_cycloid_epitrochoid.png "Figure 10d. Cycloid: Epitrochoid"</td></tr>
+<tr><td>\image html texture_cycloid_rose.png "Figure 10e. Cycloid: Rose curve"</td><td>\image html texture_cycloid_lissajous.png "Figure 10f. Cycloid: Lissajous curve"</td></tr></table>
+
+See Procedural::Cycloid
+
 ### Dilate
 
-![Dilate](texture_dilate.png)
+![Figure 11. Dilate](texture_dilate.png)
 
 See Procedural::Dilate
 
 ### Distort
 
-![Distort](texture_distort.png)
+![Figure 12. Distort](texture_distort.png)
 
 See Procedural::Distort
 
 ### EdgeDetection
 
-![EdgeDetection](texture_edgedetection.png)
+![Figure 13. EdgeDetection](texture_edgedetection.png)
 
 See Procedural::EdgeDetection
 
 ### Flip
 
-<table border="0" width="100%"><tr><td>\image html texture_flip_1.png "Figure 13a. Flip: point"</td><td>\image html texture_flip_2.png "Figure 13b. Flip: vertical"</td><td>\image html texture_flip_3.png "Figure 13b. Flip: horizontal"</td></tr></table>
+<table border="0" width="100%"><tr><td>\image html texture_flip_1.png "Figure 14a. Flip: point"</td><td>\image html texture_flip_2.png "Figure 14b. Flip: vertical"</td><td>\image html texture_flip_3.png "Figure 14c. Flip: horizontal"</td></tr></table>
 
 See Procedural::Flip
 
 ### Glow
 
-![Glow](texture_glow.png)
+![Figure 15. Glow](texture_glow.png)
 See Procedural::Glow
 
 ### Invert
 
-![Invert](texture_invert.png)
+![Figure 16. Invert](texture_invert.png)
 
 See Procedural::Invert
 
 ### Jitter
 
-![Jitter](texture_jitter.png)
+![Figure 17. Jitter](texture_jitter.png)
 
 See Procedural::Jitter
 
 ### Lerp
 
-![Lerp](texture_lerp.png)
+![Figure 18. Lerp](texture_lerp.png)
 
 See Procedural::Lerp
 
 ### Light
 
-![Light](texture_light.png)
+![Figure 19. Light](texture_light.png)
 
 See Procedural::Light
 
 ### Lookup
 
-![Lookup](texture_lookup.png)
+![Figure 20. Lookup](texture_lookup.png)
 
 See Procedural::Lookup
 ### Normals
 
-![Normals](texture_normals.png)
+![Figure 21. Normals](texture_normals.png)
 
 See Procedural::Normals
 
 ### OilPaint
 
-![OilPaint](texture_oilpaint.png)
+![Figure 22. OilPaint](texture_oilpaint.png)
 
 See Procedural::OilPaint
 
 ### RandomPixels
 
-![RandomPixels](texture_randompixels.png)
+![Figure 23. RandomPixels](texture_randompixels.png)
 
 See Procedural::RandomPixels
 
 ### Rectangle
 
-![Rectangle](texture_rectangle.png)
+![Figure 24. Rectangle](texture_rectangle.png)
 
 See Procedural::Rectangle
 
 ### RotationZoom
 
-![RotationZoom](texture_rotationzoom.png)
+![Figure 25. RotationZoom](texture_rotationzoom.png)
 
 See Procedural::RotationZoom
 
 ### Segment
 
-![Segment](texture_segment.png)
+![Figure 26. Segment](texture_segment.png)
 
 See Procedural::Segment
 
 ### Sharpen
 
-<table border="0" width="100%"><tr><td>\image html texture_sharpen_1.png "Figure 26a. Sharpen: basic"</td><td>\image html texture_sharpen_2.png "Figure 26b. Sharpen: gaussian"</td></tr></table>
+<table border="0" width="100%"><tr><td>\image html texture_sharpen_1.png "Figure 27a. Sharpen: basic"</td><td>\image html texture_sharpen_2.png "Figure 27b. Sharpen: gaussian"</td></tr></table>
 
 See Procedural::Sharpen
 
 ### Threshold
 
-![Threshold](texture_threshold.png)
+![Figure 28. Threshold](texture_threshold.png)
 
 See Procedural::Threshold
 
 ### Vortex
 
-![Vortex](texture_vortex.png)
+![Figure 29. Vortex](texture_vortex.png)
 
 See Procedural::Vortex
 

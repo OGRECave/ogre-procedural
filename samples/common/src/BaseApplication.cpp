@@ -259,6 +259,9 @@ void BaseApplication::go(void)
 bool BaseApplication::setup(void)
 {
 	mRoot = new Root(mPluginsCfg);
+#ifdef OGRE_EXTERNAL_OVERLAY
+	mOverlaySystem = new Ogre::OverlaySystem();
+#endif
 
 	setupResources();
 

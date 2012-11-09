@@ -33,16 +33,16 @@ THE SOFTWARE.
 //-------------------------------------------------------------------------------------
 void Sample_Svg::createScene(void)
 {
-		// -- Extrude SVG primitive shapes
-		Procedural::Path p;
-		p.addPoint(0, 0, 0);
-		p.addPoint(0, 10, 0);
+	// -- Extrude SVG primitive shapes
+	Procedural::Path p;
+	p.addPoint(0, 0, 0);
+	p.addPoint(0, 10, 0);
 
-		Procedural::MultiShape out;
-		Procedural::SvgLoader svg;
-		svg.parseSvgFile(out, "test.svg", "Essential", 16);
-		Procedural::Extruder().setMultiShapeToExtrude(&out).setExtrusionPath(&p).setScale(.05).realizeMesh("svg");
-		putMesh2("svg");
+	Procedural::MultiShape out;
+	Procedural::SvgLoader svg;
+	svg.parseSvgFile(out, "test.svg", "Essential", 16);
+	Procedural::Extruder().setMultiShapeToExtrude(&out).setExtrusionPath(&p).setScale(.05).realizeMesh("svg");
+	putMesh2("svg");
 }
 //-------------------------------------------------------------------------------------
 void Sample_Svg::createCamera(void)
