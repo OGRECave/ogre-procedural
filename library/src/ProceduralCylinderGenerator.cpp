@@ -81,16 +81,16 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		int centerIndex = offset;
 		addPoint(buffer, Vector3::ZERO,
 						 Vector3::NEGATIVE_UNIT_Y,
-						 Vector2::UNIT_Y);
+						 Vector2::ZERO);
 		offset++;
 		for (unsigned int j=0;j<=mNumSegBase;j++)
 		{
-			Real x0 = mRadius * cosf(j*deltaAngle);
-			Real z0 = mRadius * sinf(j*deltaAngle);
+			Real x0 =  cosf(j*deltaAngle);
+			Real z0 =  sinf(j*deltaAngle);
 
-			addPoint(buffer, Vector3(x0, 0.0f, z0),
+			addPoint(buffer, Vector3(mRadius*x0, 0.0f, mRadius*z0),
 							Vector3::NEGATIVE_UNIT_Y,
-							Vector2(j/(Real)mNumSegBase,0.0));
+							Vector2(x0, z0));
 			if (j!=mNumSegBase)
 			{
 				buffer.index(centerIndex);
@@ -107,12 +107,12 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		offset++;
 		for (unsigned int j=0;j<=mNumSegBase;j++)
 		{
-			Real x0 = mRadius * cosf(j*deltaAngle);
-			Real z0 = mRadius * sinf(j*deltaAngle);
+			Real x0 = cosf(j*deltaAngle);
+			Real z0 = sinf(j*deltaAngle);
 
-			addPoint(buffer, Vector3(x0, mHeight, z0),
+			addPoint(buffer, Vector3(x0 * mRadius, mHeight, mRadius * z0),
 							 Vector3::UNIT_Y,
-							 Vector2(j/(Real)mNumSegBase,1.));
+							 Vector2(x0, z0));
 			if (j!=mNumSegBase)
 			{
 				buffer.index(centerIndex);
