@@ -41,6 +41,7 @@ set( HDRS
 	include/ProceduralSVG.h
 	include/ProceduralDebugRendering.h
 	include/ProceduralTextureGenerator.h
+	include/ProceduralMeshModifiers.h
 	)
 
 set( SRCS
@@ -73,6 +74,7 @@ set( SRCS
 		src/ProceduralDebugRendering.cpp
 		src/ProceduralTextureGenerator.cpp
 		src/ProceduralTextureGeneratorHelpers.cpp
+		src/ProceduralMeshModifiers.cpp
 	)
 
 include_directories(SYSTEM ${OGRE_INCLUDE_DIRS}

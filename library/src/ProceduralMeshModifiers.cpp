@@ -25,35 +25,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef PROCEDURAL_H_INCLUDED
-#define PROCEDURAL_H_INCLUDED
-
-#include "ProceduralBoxGenerator.h"
-#include "ProceduralCapsuleGenerator.h"
-#include "ProceduralConeGenerator.h"
-#include "ProceduralCylinderGenerator.h"
-#include "ProceduralIcoSphereGenerator.h"
-#include "ProceduralRoundedBoxGenerator.h"
-#include "ProceduralSphereGenerator.h"
-#include "ProceduralTorusGenerator.h"
-#include "ProceduralTorusKnotGenerator.h"
-#include "ProceduralTubeGenerator.h"
-#include "ProceduralPlaneGenerator.h"
-#include "ProceduralExtruder.h"
-#include "ProceduralLathe.h"
-#include "ProceduralShape.h"
-#include "ProceduralShapeGenerators.h"
-#include "ProceduralMultiShape.h"
-#include "ProceduralPath.h"
-#include "ProceduralPathGenerators.h"
-#include "ProceduralTriangulator.h"
-#include "ProceduralTriangleBuffer.h"
-#include "ProceduralTrack.h"
-#include "ProceduralBoolean.h"
-#include "ProceduralSpringGenerator.h"
-#include "ProceduralSVG.h"
-#include "ProceduralDebugRendering.h"
-#include "ProceduralTextureGenerator.h"
+#include "ProceduralStableHeaders.h"
 #include "ProceduralMeshModifiers.h"
 
-#endif
+namespace Procedural
+{
+void SpherifyModifier::modify()
+{
+	assert(mInputTriangleBuffer && "Input triangle buffer must not be null");
+	
+	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it!=mInputTriangleBuffer->getVertices().end(); ++it)
+	{
+		Ogre::Real l = it->mPosition.length();
+		if (l>1e-6)
+			it->mNormal = it->mPosition = it->mPosition / l;
+	}
+}
+}
