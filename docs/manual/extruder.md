@@ -1,38 +1,48 @@
 Extrusion operations {#extruder}
 ====================
 
+[TOC]
+
 ## Extruder
 
 Extrusion is an operation that consists in creating a mesh from a shape moved along a path.
 
 That operation is particularly well suited for roads, pipelines, pillars...
 
-![Extrusion](extruder_generic.png)
+![Figure 1. Generic extrusion](extruder_generic.png)
 
 Extrusion can also be applied to a multishape.
 
-![Extrusion of a multishape](extruder_multishape.png)
+![Figure 2. Extrusion of a multishape](extruder_multishape.png)
 
 Special options are available to influence the way the mesh is created :
 
 * Rotation Track
 
-![](extruder_rotationtrack.png)
+![Figure 3a. Rotation Track](extruder_rotationtrack.png)
 
 * Scale Track
 
-![](extruder_scaletrack.png)
+![Figure 3b. Scale Track](extruder_scaletrack.png)
 
 * Shape Texture Track
 
-![](extruder_texturetrack.png)
+![Figure 3c. Shape Texture Track](extruder_texturetrack.png)
 
 ## Lathe
 
 Lathe is an operation that takes a shape and rotates it around Y-axis to produce a mesh.
 
-![](lathe_generic.png)
+![Figure 4. Generic Lathe](lathe_generic.png)
 
 Lathe can also be restricted to a given angle range.
 
-![](lathe_anglerange.png)
+![Figure 5. Lathe by a given angle range](lathe_anglerange.png)
+
+## Example
+
+The Sample_Extrusion project demonstrates how to extrude various shapes.
+
+Here is the code to build it :
+
+\include Extrusion.cpp

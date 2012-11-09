@@ -1927,6 +1927,306 @@ TextureBufferPtr Crack::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+Cycloid & Cycloid::setType(Cycloid::CYCLOID_TYPE type)
+{
+	mType = type;
+	Ogre::Real size = (Ogre::Real)std::min<Ogre::uint>(mBuffer->getHeight(), mBuffer->getWidth());
+	switch(mType)
+	{
+		default:
+		case HYPOCYCLOID:
+			mParam_R = 3.0f / 6.0f * size;
+			mParam_r = 1.0f / 6.0f * size;
+			mParam_d = 0.0f;
+			mParam_e = 0.0f;
+			break;
+		case HYPOTROCHOID:
+			mParam_R = 5.0f / 14.0f * size;
+			mParam_r = 3.0f / 14.0f * size;
+			mParam_d = 5.0f / 14.0f * size;
+			mParam_e = 0.0f;
+			break;
+		case EPICYCLOID:
+			mParam_R = 3.0f / 10.0f * size;
+			mParam_r = 1.0f / 10.0f * size;
+			mParam_d = 0.0f;
+			mParam_e = 0.0f;
+			break;
+		case EPITROCHOID:
+			mParam_R = 3.0f / 10.0f * size;
+			mParam_r = 1.0f / 10.0f * size;
+			mParam_d = 1.0f / 20.0f * size;
+			mParam_e = 0.0f;
+			break;
+		case ROSE_CURVE:
+			mParam_R = 0.5f * size;
+			mParam_r = 4.0f;
+			mParam_d = 1.0f;
+			mParam_e = 0.0f;
+			break;
+		case LISSAJOUS_CURVE:
+			mParam_R = 0.5f * size;
+			mParam_r = 5.0f;
+			mParam_d = 4.0f;
+			mParam_e = Ogre::Math::HALF_PI;
+			break;
+	}
+	return *this;
+}
+
+Cycloid & Cycloid::setColour(Ogre::ColourValue colour)
+{
+	mColour = colour;
+	return *this;
+}
+
+Cycloid & Cycloid::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
+{
+	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
+	return *this;
+}
+
+Cycloid & Cycloid::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+{
+	mColour = Ogre::ColourValue(red, green, blue, alpha);
+	return *this;
+}
+
+Cycloid & Cycloid::setCenterX(Ogre::Real centerx)
+{
+	mCenterX = centerx;
+	return *this;
+}
+
+Cycloid & Cycloid::setCenterY(Ogre::Real centery)
+{
+	mCenterY = centery;
+	return *this;
+}
+
+Cycloid & Cycloid::setParameter(Cycloid::CYCLOID_PARAMETER paramType, Ogre::Real value)
+{
+	switch(paramType)
+	{
+		case PARAMETER_R: mParam_R = value; break;
+		case PARAMETER_r: mParam_r = value; break;
+		case PARAMETER_d: mParam_d = value; break;
+		case PARAMETER_e: mParam_e = value; break;
+		case PARAMETER_k:
+			switch(mType)
+			{
+				default:
+				case HYPOCYCLOID:
+				case HYPOTROCHOID:
+				case EPICYCLOID:
+				case EPITROCHOID:
+					mParam_R = value * mParam_r;
+					break;
+				case ROSE_CURVE:
+				case LISSAJOUS_CURVE:
+					mParam_r = value * mParam_d;
+					break;
+			}
+			break;
+		default: break;
+	}
+	return *this;
+}
+
+Cycloid & Cycloid::setPenSize(Ogre::uint size)
+{
+	mPenSize = size;
+	return *this;
+}
+
+TextureBufferPtr Cycloid::process()
+{
+	if(mPenSize == 0) return mBuffer;
+	long xpos = (long)((Ogre::Real)mBuffer->getWidth() * mCenterX);
+	long ypos = (long)((Ogre::Real)mBuffer->getHeight() * mCenterY);
+	Ogre::Real step = Ogre::Math::PI / (Ogre::Real)std::min<Ogre::uint>(mBuffer->getHeight(), mBuffer->getWidth());
+	switch(mType)
+	{
+		default: break;
+		case HYPOCYCLOID: _process_hypocycloid(xpos, ypos, step); break;
+		case HYPOTROCHOID: _process_hypotrochoid(xpos, ypos, step); break;
+		case EPICYCLOID: _process_epicycloid(xpos, ypos, step); break;
+		case EPITROCHOID: _process_epitrochoid(xpos, ypos, step); break;
+		case ROSE_CURVE: _process_rose_curve(xpos, ypos, step); break;
+		case LISSAJOUS_CURVE: _process_lissajous_curve(xpos, ypos, step); break;
+	}
+	return mBuffer;
+}
+
+void Cycloid::_process_hypocycloid(long x, long y, Ogre::Real step)
+{
+	long px = 0;
+	long py = 0;
+	Ogre::Real phi = 0;
+
+	long sx = x + (long)Ogre::Math::Floor(mParam_R + 0.5f);
+	long sy = y;
+	do
+	{
+		Ogre::Real dx = (mParam_R - mParam_r) * Ogre::Math::Cos(phi) + mParam_r * Ogre::Math::Cos(((mParam_R - mParam_r) / mParam_r) * phi);
+		Ogre::Real dy = (mParam_R - mParam_r) * Ogre::Math::Sin(phi) - mParam_r * Ogre::Math::Sin(((mParam_R - mParam_r) / mParam_r) * phi);
+		
+		px = x + (long)Ogre::Math::Floor(dx + 0.5f);
+		py = y - (long)Ogre::Math::Floor(dy + 0.5f);
+		_process_paint(px, py, step);
+
+		phi += step;
+	}
+	while(!(sx == px && sy == py && phi < 100.0f * Ogre::Math::PI) || phi < Ogre::Math::TWO_PI);
+	logMsg("Modify texture with hypocycloid drawing");
+}
+
+void Cycloid::_process_hypotrochoid(long x, long y, Ogre::Real step)
+{
+	long px = 0;
+	long py = 0;
+	Ogre::Real phi = 0;
+
+	long sx = x + (long)Ogre::Math::Floor((mParam_R - mParam_r) + mParam_d + 0.5f);
+	long sy = y;
+	do
+	{
+		Ogre::Real dx = (mParam_R - mParam_r) * Ogre::Math::Cos(phi) + mParam_d * Ogre::Math::Cos(((mParam_R - mParam_r) / mParam_r) * phi);
+		Ogre::Real dy = (mParam_R - mParam_r) * Ogre::Math::Sin(phi) - mParam_d * Ogre::Math::Sin(((mParam_R - mParam_r) / mParam_r) * phi);
+		
+		px = x + (long)Ogre::Math::Floor(dx + 0.5f);
+		py = y - (long)Ogre::Math::Floor(dy + 0.5f);
+		_process_paint(px, py, step);
+
+		phi += step;
+	}
+	while(!(sx == px && sy == py && phi < 100.0f * Ogre::Math::PI) || phi < Ogre::Math::TWO_PI);
+	logMsg("Modify texture with hypotrochid drawing");
+}
+
+void Cycloid::_process_epicycloid(long x, long y, Ogre::Real step)
+{
+	long px = 0;
+	long py = 0;
+	Ogre::Real phi = 0;
+
+	long sx = x + (long)Ogre::Math::Floor((mParam_R + mParam_r) - mParam_r + 0.5f);
+	long sy = y;
+	do
+	{
+		Ogre::Real dx = (mParam_R + mParam_r) * Ogre::Math::Cos(phi) - mParam_r * Ogre::Math::Cos(((mParam_R + mParam_r) / mParam_r) * phi);
+		Ogre::Real dy = (mParam_R + mParam_r) * Ogre::Math::Sin(phi) - mParam_r * Ogre::Math::Sin(((mParam_R + mParam_r) / mParam_r) * phi);
+		
+		px = x + (long)Ogre::Math::Floor(dx + 0.5f);
+		py = y - (long)Ogre::Math::Floor(dy + 0.5f);
+		_process_paint(px, py, step);
+
+		phi += step;
+	}
+	while(!(sx == px && sy == py && phi < 100.0f * Ogre::Math::PI) || phi < Ogre::Math::TWO_PI);
+	logMsg("Modify texture with epicycloid drawing");
+}
+
+void Cycloid::_process_epitrochoid(long x, long y, Ogre::Real step)
+{
+	long px = 0;
+	long py = 0;
+	Ogre::Real phi = 0;
+
+	long sx = x + (long)Ogre::Math::Floor((mParam_R + mParam_r) - mParam_d + 0.5f);
+	long sy = y;
+	do
+	{
+		Ogre::Real dx = (mParam_R + mParam_r) * Ogre::Math::Cos(phi) - mParam_d * Ogre::Math::Cos(((mParam_R + mParam_r) / mParam_r) * phi);
+		Ogre::Real dy = (mParam_R + mParam_r) * Ogre::Math::Sin(phi) - mParam_d * Ogre::Math::Sin(((mParam_R + mParam_r) / mParam_r) * phi);
+		
+		px = x + (long)Ogre::Math::Floor(dx + 0.5f);
+		py = y - (long)Ogre::Math::Floor(dy + 0.5f);
+		_process_paint(px, py, step);
+
+		phi += step;
+	}
+	while(!(sx == px && sy == py && phi < 100.0f * Ogre::Math::PI) || phi < Ogre::Math::TWO_PI);
+	logMsg("Modify texture with epitrochoid drawing");
+}
+
+void Cycloid::_process_rose_curve(long x, long y, Ogre::Real step)
+{
+	long px = 0;
+	long py = 0;
+	Ogre::Real t = 0;
+	Ogre::Real k = mParam_r / mParam_d;
+
+	step = step / 10.0f;
+
+	long sx = x;
+	long sy = y;
+	do
+	{
+		Ogre::Real dx = mParam_R * Ogre::Math::Cos(k * t) * Ogre::Math::Sin(t);
+		Ogre::Real dy = mParam_R * Ogre::Math::Cos(k * t) * Ogre::Math::Cos(t);
+		
+		px = x + (long)Ogre::Math::Floor(dx + 0.5f);
+		py = y - (long)Ogre::Math::Floor(dy + 0.5f);
+		_process_paint(px, py, step);
+
+		t += step;
+	}
+	while(t <= Ogre::Math::TWO_PI);
+	logMsg("Modify texture with rose curve drawing");
+}
+
+void Cycloid::_process_lissajous_curve(long x, long y, Ogre::Real step)
+{
+	long px = 0;
+	long py = 0;
+	Ogre::Real t = 0;
+
+	step = step / 10.0f;
+
+	long sx = x;
+	long sy = y;
+	do
+	{
+		Ogre::Real dx = mParam_R * Ogre::Math::Sin(mParam_r * t + mParam_e);
+		Ogre::Real dy = mParam_R * Ogre::Math::Cos(mParam_d * t + mParam_e);
+		
+		px = x + (long)Ogre::Math::Floor(dx + 0.5f);
+		py = y - (long)Ogre::Math::Floor(dy + 0.5f);
+		_process_paint(px, py, step);
+
+		t += step;
+	}
+	while(t <= Ogre::Math::TWO_PI);
+	logMsg("Modify texture with lissajous curve drawing");
+}
+
+void Cycloid::_process_paint(long x, long y, Ogre::Real step)
+{
+	if(mPenSize == 1)
+	{
+		if(x < 0 || y < 0 || x >= (long)mBuffer->getWidth() || y >= (long)mBuffer->getHeight()) return;
+		mBuffer->setPixel(x, y, mColour);
+	}
+	else
+	{
+		for(Ogre::Real phi = 0; phi <= Ogre::Math::TWO_PI; phi += step)
+		{
+			Ogre::Real dx = Ogre::Math::Cos(phi);
+			Ogre::Real dy = Ogre::Math::Sin(phi);
+			for(Ogre::uint r = 0; r < mPenSize; r++)
+			{
+				long px = x + (long)Ogre::Math::Floor((Ogre::Real)r * dx + 0.5f);
+				long py = y - (long)Ogre::Math::Floor((Ogre::Real)r * dy + 0.5f);
+				if(px >= 0 && py >= 0 && px < (long)mBuffer->getWidth() && py < (long)mBuffer->getHeight())
+					mBuffer->setPixel(px, py, mColour);
+			}
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Dilate & Dilate::setIterations(Ogre::uchar iterations)
 {
 	mIterations = iterations;

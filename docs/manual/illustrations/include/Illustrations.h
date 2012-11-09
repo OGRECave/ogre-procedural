@@ -126,7 +126,7 @@ class Illustrations
 		{
 			int a1 = add(img1_name, img1_file);
 			int a2 = add(img2_name, img2_file);
-			bind(a2, a2);
+			bind(a1, a2);
 		}
 		
 		void set(std::string img1_name, std::string img1_file, std::string img2_name, std::string img2_file, std::string img3_name, std::string img3_file, CONNECTION cn = JOIN)
