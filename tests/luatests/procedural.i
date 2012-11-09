@@ -64,4 +64,5 @@
  %include "ProceduralSVG.h"
  %include "ProceduralDebugRendering.h"
  %template(vectorSeg2) std::vector< Procedural::Segment2D>;
- %include "ProceduralGeometryHelpers.h"
+ %include "ProceduralGeometryHelpers.h" 
+%include "ProceduralMeshModifiers.h"
