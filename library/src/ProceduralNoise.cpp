@@ -26,7 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "ProceduralStableHeaders.h"
-#include "ProceduralTextureGeneratorHelpers.h"
+#include "ProceduralNoise.h"
 
 namespace Procedural
 {

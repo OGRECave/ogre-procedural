@@ -54,6 +54,9 @@ THE SOFTWARE.
 #include "ProceduralSVG.h"
 #include "ProceduralDebugRendering.h"
 #include "ProceduralTextureGenerator.h"
+#include "ProceduralTextureModifiers.h"
+#include "ProceduralNoise.h"
 #include "ProceduralMeshModifiers.h"
+
 
 #endif
