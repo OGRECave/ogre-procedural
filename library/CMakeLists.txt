@@ -41,6 +41,8 @@ set( HDRS
 	include/ProceduralSVG.h
 	include/ProceduralDebugRendering.h
 	include/ProceduralTextureGenerator.h
+	include/ProceduralTextureModifiers.h
+	include/ProceduralNoise.h
 	include/ProceduralMeshModifiers.h
 	)
 
@@ -73,7 +75,8 @@ set( SRCS
 		src/ProceduralSVG.cpp
 		src/ProceduralDebugRendering.cpp
 		src/ProceduralTextureGenerator.cpp
-		src/ProceduralTextureGeneratorHelpers.cpp
+		src/ProceduralTextureModifiers.cpp
+		src/ProceduralNoise.cpp
 		src/ProceduralMeshModifiers.cpp
 	)
 
