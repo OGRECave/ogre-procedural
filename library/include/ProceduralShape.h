@@ -335,6 +335,8 @@ public:
 	 * <table border="0" width="100%"><tr><td>\image html shape_booleansetup.png "Start shapes"</td><td>\image html shape_booleanintersection.png "Intersection of the two shapes"</td></tr></table>
 	 * @param other The shape against which the intersection is computed
 	 * @return The intersection of two shapes, as a new shape
+	 * @exception Ogre::InvalidStateException Current shapes must be closed and has to contain at least 2 points!
+	 * @exception Ogre::InvalidParametersException Other shapes must be closed and has to contain at least 2 points!
 	 */
 	MultiShape booleanIntersect(const Shape& other) const;
 	 
@@ -344,6 +346,8 @@ public:
 	 * <table border="0" width="100%"><tr><td>\image html shape_booleansetup.png "Start shapes"</td><td>\image html shape_booleanunion.png "Union of the two shapes"</td></tr></table>
 	 * @param other The shape against which the union is computed
 	 * @return The union of two shapes, as a new shape
+	 * @exception Ogre::InvalidStateException Current shapes must be closed and has to contain at least 2 points!
+	 * @exception Ogre::InvalidParametersException Other shapes must be closed and has to contain at least 2 points!
 	 */
 	MultiShape booleanUnion(const Shape& other) const;
 	 
@@ -353,6 +357,8 @@ public:
 	 * <table border="0" width="100%"><tr><td>\image html shape_booleansetup.png "Start shapes"</td><td>\image html shape_booleandifference.png "Difference of the two shapes"</td></tr></table>
 	 * @param other The shape against which the diffenrence is computed
 	 * @return The difference of two shapes, as a new shape
+	 * @exception Ogre::InvalidStateException Current shapes must be closed and has to contain at least 2 points!
+	 * @exception Ogre::InvalidParametersException Other shapes must be closed and has to contain at least 2 points!
 	 */
 	MultiShape booleanDifference(const Shape& other) const;
 	 
@@ -547,10 +553,14 @@ public:
 	/// Gets a position on the shape with index of the point and a percentage of position on the segment
 	/// @param i index of the segment
 	/// @param coord a number between 0 and 1 meaning the percentage of position on the segment
+	/// @exception Ogre::InvalidParametersException i is out of bounds
+	/// @exception Ogre::InvalidParametersException coord must be comprised between 0 and 1
 	inline Ogre::Vector2 getPosition(unsigned int i, Ogre::Real coord) const
 	{
-		assert(mClosed || (i < mPoints.size() - 1 && "Out of Bounds"));
-		assert(coord>=0. && coord<=1. && "Coord must be comprised between 0 and 1");
+		if(!mClosed || i >= mPoints.size())
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Out of Bounds", "Procedural::Path::getPosition(unsigned int, Ogre::Real)");
+		if(coord < 0.0f || coord > 1.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Coord must be comprised between 0 and 1", "Procedural::Path::getPosition(unsigned int, Ogre::Real)");
 		Ogre::Vector2 A = getPoint(i);
 		Ogre::Vector2 B = getPoint(i+1);
 		return A + coord*(B-A);
@@ -558,9 +568,11 @@ public:
 	
 	/// Gets a position on the shape from lineic coordinate
 	/// @param coord lineic coordinate
+	/// @exception Ogre::InvalidStateException The shape must at least contain 2 points
 	inline Ogre::Vector2 getPosition(Ogre::Real coord) const
 	{
-		assert(mPoints.size()>=2 && "The shape must at least contain 2 points");
+		if(mPoints.size() < 2)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The shape must at least contain 2 points", "Procedural::Shape::getPosition(Ogre::Real)");
 		unsigned int i=0;
 		while(true)
 		{

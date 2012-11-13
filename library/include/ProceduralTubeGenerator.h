@@ -61,37 +61,68 @@ public:
 	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
-	/** Sets the number of segments when rotating around the tube's axis (default=16) */	
+	/**
+	Sets the number of segments when rotating around the tube's axis (default=16)
+	\exception Ogre::InvalidParametersException Minimum of numSegBase is 1
+	*/
 	inline TubeGenerator & setNumSegBase(unsigned int numSegBase)
 	{
+		if(numSegBase == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TubeGenerator::setNumSegBase(unsigned int)");
 		mNumSegBase = numSegBase;
 		return *this;
 	}
 
-	/** Sets the number of segments along the height of the cylinder (default=1) */
+	/**
+	Sets the number of segments along the height of the cylinder (default=1)
+	\exception Ogre::InvalidParametersException Minimum of numSegHeight is 1
+	*/
 	inline TubeGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
+		if(numSegHeight == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TubeGenerator::setNumSegHeight(unsigned int)");
 		mNumSegHeight = numSegHeight;
 		return *this;
 	}
 
-	/** Sets the outer radius of the tube (default=2)*/
+	/**
+	Sets the outer radius of the tube (default=2)
+	\exception Ogre::InvalidParametersException Radius must be larger than 0!
+	\exception Ogre::InvalidParametersException Outer radius must be bigger than inner radius
+	*/
 	inline TubeGenerator & setOuterRadius(Ogre::Real outerRadius)
 	{
+		if(outerRadius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TubeGenerator::setOuterRadius(Ogre::Real)");
+		if(outerRadius < mInnerRadius)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Outer radius must be bigger than inner radius!", "Procedural::TubeGenerator::setOuterRadius(Ogre::Real)");
 		mOuterRadius = outerRadius;
 		return *this;
 	}
 
-	/** Sets the inner radius of the tube (default=1)*/
+	/**
+	Sets the inner radius of the tube (default=1)
+	\exception Ogre::InvalidParametersException Radius must be larger than 0!
+	\exception Ogre::InvalidParametersException Outer radius must be bigger than inner radius
+	*/
 	inline TubeGenerator & setInnerRadius(Ogre::Real innerRadius)
 	{
+		if(innerRadius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TubeGenerator::setInnerRadius(Ogre::Real)");
+		if(mOuterRadius < innerRadius)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Outer radius must be bigger than inner radius!", "Procedural::TubeGenerator::setInnerRadius(Ogre::Real)");
 		mInnerRadius = innerRadius;
 		return *this;
 	}
 
-	/** Sets the height of the tube (default=1) */
+	/**
+	Sets the height of the tube (default=1)
+	\exception Ogre::InvalidParametersException Height must be larger than 0!
+	*/
 	inline TubeGenerator & setHeight(Ogre::Real height)
 	{
+		if(height <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::TubeGenerator::setHeight(Ogre::Real)");
 		mHeight = height;
 		return *this;
 	}

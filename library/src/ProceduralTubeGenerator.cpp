@@ -34,10 +34,6 @@ using namespace Ogre;
 namespace Procedural {
 void TubeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mHeight>0. && mOuterRadius>0. && mInnerRadius>0. && "Height and radius must be positive");
-	assert(mInnerRadius<=mOuterRadius && "Outer radius must be bigger than inner radius");
-	assert(mNumSegBase>0 && mNumSegHeight>0 && "Num seg must be positive integers");
-
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1)*2+(mNumSegBase+1)*4);
 	buffer.estimateIndexCount(6*(mNumSegBase+1)*mNumSegHeight*2+6*mNumSegBase*2);

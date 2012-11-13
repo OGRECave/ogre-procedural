@@ -35,9 +35,6 @@ namespace Procedural
 {
 void CapsuleGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mNumRings>0 && mNumSegments>0 && mNumSegHeight>0 && "Num seg must be positive integers");
-	assert(mHeight>0. && mRadius>0. && "mHeight and radius must be positive");
-
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((2*mNumRings+2)*(mNumSegments+1) + (mNumSegHeight-1)*(mNumSegments+1));
 	buffer.estimateIndexCount((2*mNumRings+1)*(mNumSegments+1)*6 + (mNumSegHeight-1)*(mNumSegments+1)*6);

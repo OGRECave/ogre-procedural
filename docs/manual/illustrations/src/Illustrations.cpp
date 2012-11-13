@@ -303,7 +303,7 @@ void Illustrations::go()
 	putMesh(mp,1);
 	next("shape_ellipse", 3);
 
-	s = TriangleShape().setLengthA(3).setLengthB(3).setLengthC(3).realizeShape();
+	s = TriangleShape().setLength(3).realizeShape();
 	mp = s.realizeMesh();
 	putMesh(mp,1);
 	next("shape_triangle", 3);

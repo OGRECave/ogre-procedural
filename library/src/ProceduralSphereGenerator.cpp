@@ -35,9 +35,6 @@ namespace Procedural
 {
 void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mNumRings>0 && mNumSegments>0 && "Num seg must be positive");
-	assert(mRadius>0 && "Radius must be positive");
-
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((mNumRings+1)*(mNumSegments+1));
 	buffer.estimateIndexCount(mNumRings*(mNumSegments+1)*6);

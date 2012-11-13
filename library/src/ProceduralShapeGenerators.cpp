@@ -116,7 +116,8 @@ Shape CatmullRomSpline2::realizeShape()
 //-----------------------------------------------------------------------
 Shape RoundedCornerSpline2::realizeShape()
 {
-	assert(!mPoints.empty());
+	if(mPoints.empty())
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The shape contains no points", "Procedural::RoundedCornerSpline2::realizePath()");
 
 	Shape shape;
 	unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 2);
@@ -170,7 +171,8 @@ Shape RoundedCornerSpline2::realizeShape()
 //-----------------------------------------------------------------------
 Shape BezierCurve2::realizeShape()
 {
-	assert(mPoints.size() > 1);
+	if(mPoints.size() < 2)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The curve must at least contain 2 points", "Procedural::BezierCurve2::realizePath()");
 
 	unsigned int* coef = new unsigned int[mPoints.size()];
 	if(mPoints.size() == 2)

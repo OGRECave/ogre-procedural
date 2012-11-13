@@ -291,7 +291,7 @@ std::string SvgLoader::xtrim(const char* val, const char* achar, char rchar)
 	for(size_t i = 0; i < len; i++)
 	{
 		bool valid = false;
-		for(int j = 0; j < strlen(achar); j++)
+		for(Ogre::uint j = 0; j < strlen(achar); j++)
 		{
 			valid = (tmp[i] == achar[j]);
 			if(valid) break;
@@ -507,8 +507,8 @@ SvgLoader::SvgLoaderPath::SvgLoaderPath(std::vector<std::string> p, unsigned int
 			Real sinPhi = sin(x_axis_rotation * RadiansPerDegree);
 			Real cosPhi = cos(x_axis_rotation * RadiansPerDegree);
 
-			Real x1dash = cosPhi * (point.x - epx) / 2.0 + sinPhi * (point.y - epy) / 2.0;
-			Real y1dash = -sinPhi * (point.x - epx) / 2.0 + cosPhi * (point.y - epy) / 2.0;
+			Real x1dash = cosPhi * (point.x - epx) / 2.0f + sinPhi * (point.y - epy) / 2.0f;
+			Real y1dash = -sinPhi * (point.x - epx) / 2.0f + cosPhi * (point.y - epy) / 2.0f;
 
 			Real root;
 			Real numerator = rx * rx * ry * ry - rx * rx * y1dash * y1dash - ry * ry * x1dash * x1dash;
@@ -523,26 +523,26 @@ SvgLoader::SvgLoaderPath::SvgLoaderPath(std::vector<std::string> p, unsigned int
 			}
 			else
 			{
-				root = ((largeArc && clockwise) || (!largeArc && !clockwise) ? -1.0 : 1.0) * sqrt(numerator / (rx * rx * y1dash * y1dash + ry * ry * x1dash * x1dash));
+				root = ((largeArc && clockwise) || (!largeArc && !clockwise) ? -1.0f : 1.0f) * sqrt(numerator / (rx * rx * y1dash * y1dash + ry * ry * x1dash * x1dash));
 			}
 
 			Real cxdash = root * rx * y1dash / ry;
 			Real cydash = -root * ry * x1dash / rx;
 
-			Real cx = cosPhi * cxdash - sinPhi * cydash + (point.x + epx) / 2.0;
-			Real cy = sinPhi * cxdash + cosPhi * cydash + (point.y + epy) / 2.0;
+			Real cx = cosPhi * cxdash - sinPhi * cydash + (point.x + epx) / 2.0f;
+			Real cy = sinPhi * cxdash + cosPhi * cydash + (point.y + epy) / 2.0f;
 
 			Real theta1 = CalculateVectorAngle(1.0, 0.0, (x1dash - cxdash) / rx, (y1dash - cydash) / ry);
 			Real dtheta = CalculateVectorAngle((x1dash - cxdash) / rx, (y1dash - cydash) / ry, (-x1dash - cxdash) / rx, (-y1dash - cydash) / ry);
 
 			if (!clockwise && dtheta > 0)
-				dtheta -= 2.0 * Math::PI;
+				dtheta -= 2.0f * Math::PI;
 			else if (clockwise && dtheta < 0)
-				dtheta += 2.0 * Math::PI;
+				dtheta += 2.0f * Math::PI;
 
-			int segments = (int)ceil((double)abs(dtheta / (Math::PI / 2.0)));
+			int segments = (int)ceil((double)abs(dtheta / (Math::PI / 2.0f)));
 			Real delta = dtheta / segments;
-			Real t = 8.0 / 3.0 * sin(delta / 4.0) * sin(delta / 4.0) / sin(delta / 2.0);
+			Real t = 8.0f / 3.0f * sin(delta / 4.0f) * sin(delta / 4.0f) / sin(delta / 2.0f);
 
 			Real startX = point.x;
 			Real startY = point.y;

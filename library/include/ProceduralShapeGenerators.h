@@ -199,22 +199,28 @@ public:
  */
 class _ProceduralExport RectangleShape
 {
-	Ogre::Real mWidth,mHeight;
+	Ogre::Real mWidth, mHeight;
 
 	public:
 	/// Default constructor
 	RectangleShape() : mWidth(1.0), mHeight(1.0) {}
 
 	/// Sets width
+	/// \exception Ogre::InvalidParametersException Width must be larger than 0!
 	inline RectangleShape& setWidth(Ogre::Real width)
 	{
+		if(width <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Width must be larger than 0!", "Procedural::RectangleShape::setWidth(Ogre::Real)");
 		mWidth = width;
 		return *this;
 	}
 
 	/// Sets height
+	/// \exception Ogre::InvalidParametersException Height must be larger than 0!
 	inline RectangleShape& setHeight(Ogre::Real height)
 	{
+		if(height <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::RectangleShape::setHeight(Ogre::Real)");
 		mHeight = height;
 		return *this;
 	}
@@ -247,15 +253,21 @@ class _ProceduralExport CircleShape
 	CircleShape() : mRadius(1.0), mNumSeg(8) {}
 
 	/// Sets radius
+	/// \exception Ogre::InvalidParametersException Radius must be larger than 0!
 	inline CircleShape& setRadius(Ogre::Real radius)
 	{
+		if(radius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::CircleShape::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
 	}
 
 	/// Sets number of segments
+	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline CircleShape& setNumSeg(unsigned int numSeg)
 	{
+		if(numSeg == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CircleShape::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
 	}
@@ -289,22 +301,31 @@ class _ProceduralExport EllipseShape
 	EllipseShape() : mRadiusX(1.0), mRadiusY(1.0), mNumSeg(8) {}
 
 	/// Sets radius in x direction
+	/// \exception Ogre::InvalidParametersException Radius must be larger than 0!
 	inline EllipseShape& setRadiusX(Ogre::Real radius)
 	{
+		if(radius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::EllipseShape::setRadiusX(Ogre::Real)");
 		mRadiusX = radius;
 		return *this;
 	}
 
 	/// Sets radius in y direction
+	/// \exception Ogre::InvalidParametersException Radius must be larger than 0!
 	inline EllipseShape& setRadiusY(Ogre::Real radius)
 	{
+		if(radius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::EllipseShape::setRadiusY(Ogre::Real)");
 		mRadiusY = radius;
 		return *this;
 	}
 
 	/// Sets number of segments
+	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline EllipseShape& setNumSeg(unsigned int numSeg)
 	{
+		if(numSeg == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::EllipseShape::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
 	}
@@ -332,27 +353,57 @@ class _ProceduralExport TriangleShape
 {
 	Ogre::Real mLengthA, mLengthB, mLengthC;
 
-	public:
+public:
 	/// Default constructor
 	TriangleShape() : mLengthA(1.0), mLengthB(1.0), mLengthC(1.0) {}
 
+	/// Creates an equilateral triangle
+	/// \exception Ogre::InvalidStateException Length of triangle edges must be longer than 0!
+	inline TriangleShape& setLength(Ogre::Real length)
+	{
+		if(length <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge must be longer than 0!", "Procedural::TriangleShape::setLengthA(Ogre::Real)");
+		mLengthA = length;
+		mLengthB = length;
+		mLengthC = length;
+		return *this;
+	}
+
 	/// Sets length of edge A
+	/// \exception Ogre::InvalidStateException Length of triangle edge must be longer than 0!
+	/// \exception Ogre::InvalidStateException Length of triangle edge A must be shorter or equal than B+C!
 	inline TriangleShape& setLengthA(Ogre::Real length)
 	{
+		if(length <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge must be longer than 0!", "Procedural::TriangleShape::setLengthA(Ogre::Real)");
+		if(length > (mLengthB + mLengthC))
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge A must be shorter or equal than B+C!", "Procedural::TriangleShape::setLengthA(Ogre::Real)");
 		mLengthA = length;
 		return *this;
 	}
 
 	/// Sets length of edge B
+	/// \exception Ogre::InvalidStateException Length of triangle edge must be longer than 0!
+	/// \exception Ogre::InvalidStateException Length of triangle edge A must be shorter or equal than B+C!
 	inline TriangleShape& setLengthB(Ogre::Real length)
 	{
+		if(length <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge must be longer than 0!", "Procedural::TriangleShape::setLengthB(Ogre::Real)");
+		if(mLengthA > (length + mLengthC))
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge A must be shorter or equal than B+C!", "Procedural::TriangleShape::setLengthB(Ogre::Real)");
 		mLengthB = length;
 		return *this;
 	}
 
 	/// Sets length of edge C
+	/// \exception Ogre::InvalidStateException Length of triangle edge must be longer than 0!
+	/// \exception Ogre::InvalidStateException Length of triangle edge A must be shorter or equal than B+C!
 	inline TriangleShape& setLengthC(Ogre::Real length)
 	{
+		if(length <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge must be longer than 0!", "Procedural::TriangleShape::setLengthC(Ogre::Real)");
+		if(mLengthA > (mLengthB + length))
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge A must be shorter or equal than B+C!", "Procedural::TriangleShape::setLengthC(Ogre::Real)");
 		mLengthC = length;
 		return *this;
 	}
@@ -360,8 +411,6 @@ class _ProceduralExport TriangleShape
 	/// Builds the shape
 	inline Shape realizeShape()
 	{
-		assert(mLengthA>0 && mLengthB>0 && mLengthC>0 && "Length of triangle edge must be longer than 0!");
-		assert(mLengthA< (mLengthB+mLengthC) && "Length of triangle edge A must be shorter or equal than B+C!");
 		Ogre::Radian alpha = Ogre::Math::ACos((mLengthB * mLengthB + mLengthC * mLengthC - mLengthA * mLengthA) / (2 * mLengthB * mLengthC));
 
 		Shape s;
@@ -420,6 +469,7 @@ public:
 
 	/**
 	 * Builds a shape from control points
+	 * \exception Ogre::InvalidStateException The path contains no points
 	 */
 	Shape realizeShape();
 };
@@ -439,8 +489,11 @@ public:
 	BezierCurve2() : mNumSeg(8) {}
 
 	/// Sets number of segments per two control points
+	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline BezierCurve2& setNumSeg(unsigned int numSeg)
 	{
+		if(numSeg == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BezierCurve2::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
 	}
@@ -469,6 +522,7 @@ public:
 	
 	/**
 	 * Build a shape from bezier control points
+	 * @exception Ogre::InvalidStateException The curve must at least contain 2 points
 	 */
 	Shape realizeShape();
 };

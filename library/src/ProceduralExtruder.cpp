@@ -37,10 +37,14 @@ namespace Procedural
 	//-----------------------------------------------------------------------
 	void Extruder::_extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
 	{
-		assert(mExtrusionPath && shapeToExtrude && "Shape and Path must not be null!");
+		if(mExtrusionPath == NULL || shapeToExtrude == NULL)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Shape and Path must not be null!", "Procedural::Extruder::_extrudeBodyImpl(Procedural::TriangleBuffer&, const Procedural::Shape*)");
+
 		unsigned int numSegPath = mExtrusionPath->getSegCount();
 		unsigned int numSegShape = shapeToExtrude->getSegCount();
-		assert(numSegPath>0 && numSegShape>0 && "Shape and path must contain at least two points");
+
+		if(numSegPath == 0 || numSegShape == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Shape and path must contain at least two points", "Procedural::Extruder::_extrudeBodyImpl(Procedural::TriangleBuffer&, const Procedural::Shape*)");
 				
 		Real totalPathLength = mExtrusionPath->getTotalLength();
 		Real totalShapeLength = shapeToExtrude->getTotalLength();
@@ -224,7 +228,8 @@ namespace Procedural
 	//-----------------------------------------------------------------------
 	void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
-		assert((mShapeToExtrude || mMultiShapeToExtrude) && "Either shape or multishape must be defined!");
+		if(mShapeToExtrude == NULL && mMultiShapeToExtrude == NULL)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Either shape or multishape must be defined!", "Procedural::Extruder::addToTriangleBuffer(Procedural::TriangleBuffer)");
 
 		// Triangulate the begin and end caps
 		bool isShapeClosed = (mShapeToExtrude && mShapeToExtrude->isClosed()) || (mMultiShapeToExtrude && mMultiShapeToExtrude->isClosed());

@@ -87,7 +87,8 @@ Path CubicHermiteSpline3::realizePath()
 //-----------------------------------------------------------------------
 Path RoundedCornerSpline3::realizePath()
 {
-	assert(!mPoints.empty());
+	if(mPoints.empty())
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The path contains no points", "Procedural::RoundedCornerSpline3::realizePath()");
 
 	Path path;
 	unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 2);
@@ -143,7 +144,8 @@ Path RoundedCornerSpline3::realizePath()
 //-----------------------------------------------------------------------
 Path BezierCurve3::realizePath()
 {
-	assert(mPoints.size() > 1);
+	if(mPoints.size() < 2)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The curve must at least contain 2 points", "Procedural::BezierCurve3::realizePath()");
 
 	unsigned int* coef = new unsigned int[mPoints.size()];
 	if(mPoints.size() == 2)

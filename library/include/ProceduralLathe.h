@@ -58,9 +58,14 @@ public:
 														mNumSeg(numSeg), mAngleBegin(0), mAngleEnd((Ogre::Radian)Ogre::Math::TWO_PI), mClosed(true), mCapped(true)
 	{}
 
-	/** Sets the number of segments when rotating around the axis (default=16)*/
+	/**
+	Sets the number of segments when rotating around the axis (default=16)
+	\exception Ogre::InvalidParametersException Minimum of numSeg is 1
+	*/
 	inline Lathe& setNumSeg(unsigned int numSeg)
 	{
+		if(numSeg == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::Lathe::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
 	}
@@ -123,6 +128,8 @@ public:
 	/**
 	 * Builds the mesh into the given TriangleBuffer
 	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 * @exception Ogre::InvalidStateException Either shape or multishape must be defined!
+	 * @exception Ogre::InvalidStateException Required parameter is zero!
 	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 };

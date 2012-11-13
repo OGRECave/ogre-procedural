@@ -95,7 +95,8 @@ Ogre::MeshPtr Path::realizeMesh(const std::string& name)
 
 Ogre::Vector3 Path::getPosition(Ogre::Real coord) const
 {
-    assert(mPoints.size() >= 2 && "The path must at least contain 2 points");
+	if(mPoints.size() < 2)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The path must at least contain 2 points", "Procedural::Path::getPosition(Ogre::Real)");
     unsigned int i = 0;
     while (true)
     {

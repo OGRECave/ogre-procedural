@@ -36,9 +36,6 @@ namespace Procedural
 
 void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mHeight>0. && mRadius>0. && "height and radius must be positive");
-	assert(mNumSegBase>0 && mNumSegHeight>0 && "Num seg must be positive integers");
-
 	buffer.rebaseOffset();
 	if (mCapped)
 	{

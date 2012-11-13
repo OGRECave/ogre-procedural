@@ -122,10 +122,14 @@ public:
 		return *this;
 	}
 
-	/** Define the path as being closed. Almost the same as adding a last point on the first point position */
+	/**
+	Define the path as being closed. Almost the same as adding a last point on the first point position
+	\exception Ogre::InvalidStateException Cannot close an empty path
+	*/
 	Path& close()
 	{
-		assert(mPoints.size()>0 && "Cannot close an empty path");
+		if(mPoints.empty())
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Cannot close an empty path", "Procedural::Path::close()");
 		mClosed = true;
 		return *this;
 	}
@@ -209,10 +213,14 @@ public:
 	/// Gets a position on the shape with index of the point and a percentage of position on the segment
 	/// @param i index of the segment
 	/// @param coord a number between 0 and 1 meaning the percentage of position on the segment
+	/// @exception Ogre::InvalidParametersException i is out of bounds
+	/// @exception Ogre::InvalidParametersException coord must be comprised between 0 and 1
 	inline Ogre::Vector3 getPosition(unsigned int i, Ogre::Real coord) const
 	{
-		assert(mClosed || (i < mPoints.size() - 1 && "Out of Bounds"));
-		assert(coord>=0. && coord<=1. && "Coord must be comprised between 0 and 1");
+		if(i >= mPoints.size())
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Out of Bounds", "Procedural::Path::getPosition(unsigned int, Ogre::Real)");
+		if(coord < 0.0f || coord > 1.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Coord must be comprised between 0 and 1", "Procedural::Path::getPosition(unsigned int, Ogre::Real)");
 		Ogre::Vector3 A = getPoint(i);
 		Ogre::Vector3 B = getPoint(i+1);
 		return A + coord*(B-A);
@@ -220,6 +228,7 @@ public:
 	
 	/// Gets a position on the shape from lineic coordinate
 	/// @param coord lineic coordinate
+	/// @exception Ogre::InvalidStateException The path must at least contain 2 points
 	 Ogre::Vector3 getPosition(Ogre::Real coord) const;
 
 	/**

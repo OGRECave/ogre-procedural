@@ -119,9 +119,9 @@ private:
 			double tb = atan2(vy, vx);
 
 			if (tb >= ta)
-				return tb - ta;
+				return (Ogre::Real)(tb - ta);
 
-			return Ogre::Math::TWO_PI - (ta - tb);
+			return Ogre::Math::TWO_PI - (Ogre::Real)(ta - tb);
 		}
 
 		void parseArcTo(bool rel, bool next);

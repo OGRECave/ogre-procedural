@@ -35,9 +35,6 @@ namespace Procedural
 {
 void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mNumSegSection>0 && mNumSegCircle>0 && "Num seg must be positive");
-	assert(mRadius>0. && mSectionRadius>0. && "Radius must be positive");
-
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((mNumSegCircle+1)*(mNumSegSection+1));
 	buffer.estimateIndexCount((mNumSegCircle)*(mNumSegSection+1)*6);

@@ -34,8 +34,11 @@ namespace Procedural
 {
 	ManualObject* ShowNormalsGenerator::buildManualObject() const
 	{
-		assert(mTriangleBuffer && "The input triangle buffer must not be null");
+		if(mTriangleBuffer == NULL)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The input triangle buffer must not be null", "Procedural::ShowNormalsGenerator::buildManualObject()");
 		SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
+		if(sceneMgr == NULL)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::ShowNormalsGenerator::buildManualObject()");
 		ManualObject * manual = sceneMgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_LIST);
 		const std::vector<TriangleBuffer::Vertex>& vertices = mTriangleBuffer->getVertices();
