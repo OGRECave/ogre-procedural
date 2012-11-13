@@ -230,8 +230,10 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 //-----------------------------------------------------------------------
 MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opType) const
 {
-	assert(mClosed && other.mClosed);
-	assert(mPoints.size()>1 && other.mPoints.size()>1);
+	if(!mClosed || mPoints.size() < 2)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Current shapes must be closed and has to contain at least 2 points!", "Procedural::Shape::_booleanOperation(const Procedural::Shape&, Procedural::BooleanOperationType)");
+	if(!other.mClosed || other.mPoints.size() < 2)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Other shapes must be closed and has to contain at least 2 points!", "Procedural::Shape::_booleanOperation(const Procedural::Shape&, Procedural::BooleanOperationType)");
 
 	// Compute the intersection between the 2 shapes
 	std::vector<IntersectionInShape> intersections;
@@ -362,7 +364,7 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 				bool result = _findWhereToGo(inputShapes, opType, currentIntersection, shapeSelector, isIncreasing, currentSegment);
 				if (!result)
 				{
-					assert(false && "we should not be here!");
+					OGRE_EXCEPT(Ogre::Exception::ERR_INTERNAL_ERROR, "We should not be here!", "Procedural::Shape::_booleanOperation(const Procedural::Shape&, Procedural::BooleanOperationType)");
 				}
 			}
 			else

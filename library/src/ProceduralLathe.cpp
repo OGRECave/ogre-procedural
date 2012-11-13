@@ -36,8 +36,11 @@ namespace Procedural
 //-----------------------------------------------------------------------
 void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
 {
+	if(shapeToExtrude == NULL)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Shape must not be null!", "Procedural::Lathe::_latheBodyImpl(Procedural::TriangleBuffer&, const Procedural::Shape*)");
 	int numSegShape = shapeToExtrude->getSegCount();
-	assert(numSegShape>1 && "Shape must contain at least two points");
+	if(numSegShape < 2)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Shape must contain at least two points", "Procedural::Lathe::_latheBodyImpl(Procedural::TriangleBuffer&, const Procedural::Shape*)");
 	int offset =0;
 
 	//int numSeg = mClosed?mNumSeg+1:mNumSeg;
@@ -165,7 +168,8 @@ void Lathe::_latheCapImpl(TriangleBuffer& buffer) const
 //-----------------------------------------------------------------------
 void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert((mShapeToExtrude || mMultiShapeToExtrude) && "Either shape or multishape must be defined!");
+	if(mShapeToExtrude == NULL && mMultiShapeToExtrude == NULL)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Either shape or multishape must be defined!", "Procedural::Lathe::addToTriangleBuffer(Procedural::TriangleBuffer)");
 	
 	// Triangulate the begin and end caps
 	if (!mClosed && mCapped)

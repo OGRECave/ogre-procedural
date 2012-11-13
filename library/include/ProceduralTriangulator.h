@@ -53,100 +53,100 @@ class _ProceduralExport Triangulator : public MeshGenerator<Triangulator>
 	struct DelaunaySegment;
 	typedef std::list<Triangle> DelaunayTriangleBuffer;	
 	
-//-----------------------------------------------------------------------
-struct DelaunaySegment
-{
-	int i1, i2;
-	DelaunaySegment(int _i1, int _i2) : i1(_i1), i2(_i2) {}
-	bool operator<(const DelaunaySegment& other) const
-	{
-		if (i1!=other.i1)
-			return i1<other.i1;
-		else
-			return i2<other.i2;
-	}
-	DelaunaySegment inverse()
-	{
-		return DelaunaySegment(i2, i1);
-	}
-};	
-
 	//-----------------------------------------------------------------------
-struct Triangle
-{
-	const PointList* pl;
-	int i[3];
-	Triangle(const PointList* pl)
-	{	this->pl = pl;
-	}
-
-	inline Ogre::Vector2 p(int k) const
+	struct DelaunaySegment
 	{
-		return (*pl)[i[k]];
-	}
-
-	bool operator==(const Triangle& other) const
-	{
-		return i[0]==other.i[0] && i[1]==other.i[1] && i[2]==other.i[2];
-	}
-
-	inline Ogre::Vector2 getMidPoint() const
-	{
-		return 1.f/3.f * (p(0)+p(1)+p(2));
-	}
-	
-	void setVertices(int i0, int i1, int i2);
-
-	int findSegNumber(int i0, int i1) const;
-
-	bool isPointInside(const Ogre::Vector2& point);
-	
-	bool containsSegment(int i0, int i1) const
-	{		
-		return ((i0==i[0] || i0==i[1] || i0==i[2])&&(i1==i[0] || i1==i[1] || i1==i[2]));
-	}
-
-	enum InsideType
-	{
-		IT_INSIDE, IT_OUTSIDE, IT_BORDERLINEOUTSIDE
-	};
-
-	InsideType isPointInsideCircumcircle(const Ogre::Vector2& point);
-
-	inline void makeDirectIfNeeded()
-	{
-		if ((p(1)-p(0)).crossProduct(p(2)-p(0))<0)
+		int i1, i2;
+		DelaunaySegment(int _i1, int _i2) : i1(_i1), i2(_i2) {}
+		bool operator<(const DelaunaySegment& other) const
 		{
-			std::swap(i[0], i[1]);
+			if (i1!=other.i1)
+				return i1<other.i1;
+			else
+				return i2<other.i2;
 		}
-	}
+		DelaunaySegment inverse()
+		{
+			return DelaunaySegment(i2, i1);
+		}
+	};	
 
-	inline bool isDegenerate()
+		//-----------------------------------------------------------------------
+	struct Triangle
 	{
-		if ( Ogre::Math::Abs((p(1)-p(0)).crossProduct(p(2)-p(0)))<1e-4)
-			return true;
-		return false;
-	}
+		const PointList* pl;
+		int i[3];
+		Triangle(const PointList* pl)
+		{	this->pl = pl;
+		}
 
-	std::string debugDescription()
+		inline Ogre::Vector2 p(int k) const
+		{
+			return (*pl)[i[k]];
+		}
+
+		bool operator==(const Triangle& other) const
+		{
+			return i[0]==other.i[0] && i[1]==other.i[1] && i[2]==other.i[2];
+		}
+
+		inline Ogre::Vector2 getMidPoint() const
+		{
+			return 1.f/3.f * (p(0)+p(1)+p(2));
+		}
+	
+		void setVertices(int i0, int i1, int i2);
+
+		int findSegNumber(int i0, int i1) const;
+
+		bool isPointInside(const Ogre::Vector2& point);
+	
+		bool containsSegment(int i0, int i1) const
+		{		
+			return ((i0==i[0] || i0==i[1] || i0==i[2])&&(i1==i[0] || i1==i[1] || i1==i[2]));
+		}
+
+		enum InsideType
+		{
+			IT_INSIDE, IT_OUTSIDE, IT_BORDERLINEOUTSIDE
+		};
+
+		InsideType isPointInsideCircumcircle(const Ogre::Vector2& point);
+
+		inline void makeDirectIfNeeded()
+		{
+			if ((p(1)-p(0)).crossProduct(p(2)-p(0))<0)
+			{
+				std::swap(i[0], i[1]);
+			}
+		}
+
+		inline bool isDegenerate()
+		{
+			if ( Ogre::Math::Abs((p(1)-p(0)).crossProduct(p(2)-p(0)))<1e-4)
+				return true;
+			return false;
+		}
+
+		std::string debugDescription()
+		{
+			return "("+Ogre::StringConverter::toString(i[0])+","
+				+Ogre::StringConverter::toString(i[1])+","+Ogre::StringConverter::toString(i[2])+") <"
+				"("+Ogre::StringConverter::toString(p(0))+","
+				+Ogre::StringConverter::toString(p(1))+","+Ogre::StringConverter::toString(p(2))+">";
+		}
+	};
+	//-----------------------------------------------------------------------
+	struct TouchSuperTriangle
 	{
-		return "("+Ogre::StringConverter::toString(i[0])+","
-			+Ogre::StringConverter::toString(i[1])+","+Ogre::StringConverter::toString(i[2])+") <"
-			"("+Ogre::StringConverter::toString(p(0))+","
-			+Ogre::StringConverter::toString(p(1))+","+Ogre::StringConverter::toString(p(2))+">";
-	}
-};
-//-----------------------------------------------------------------------
-struct TouchSuperTriangle
-{
-	int i0,i1,i2;
-	TouchSuperTriangle(int i, int j, int k) : i0(i), i1(j), i2(k) {}
-	bool operator()(const Triangulator::Triangle& tri)
-	{
-		for (int k=0;k<3;k++) if (tri.i[k]==i0 || tri.i[k]==i1 ||tri.i[k]==i2) return true;
-		return false;
-	}
-};
+		int i0,i1,i2;
+		TouchSuperTriangle(int i, int j, int k) : i0(i), i1(j), i2(k) {}
+		bool operator()(const Triangulator::Triangle& tri)
+		{
+			for (int k=0;k<3;k++) if (tri.i[k]==i0 || tri.i[k]==i1 ||tri.i[k]==i2) return true;
+			return false;
+		}
+	};
 
 	Shape* mShapeToTriangulate;
 	MultiShape* mMultiShapeToTriangulate;
@@ -202,6 +202,7 @@ public:
 	/**
 	 * Executes the Constrained Delaunay Triangulation algorithm
 	 * @param ouput A vector of index where is outputed the resulting triangle indexes
+	 * @exception Ogre::InvalidStateException Either shape or multishape or segment list must be defined
 	 */
 	void triangulate(std::vector<int>& output, PointList& outputVertices) const;
 	

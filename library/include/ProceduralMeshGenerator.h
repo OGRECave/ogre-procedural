@@ -95,6 +95,7 @@ protected:
 
 public:
 	/// Default constructor
+	/// \exception Ogre::InvalidStateException Scene Manager is not set in OGRE root object
 	MeshGenerator() : mUTile(1.f),
 					  mVTile(1.f),
 					  mEnableNormals(true),
@@ -109,7 +110,8 @@ public:
 					  mEnableDumpToFile(false)
 	{
 		mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-		assert(mSceneMgr && "Scene Manager must be set in Root");
+		if(mSceneMgr == NULL)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::MeshGenerator::MeshGenerator()");
 	}
 
 	/**

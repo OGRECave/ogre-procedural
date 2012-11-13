@@ -62,44 +62,74 @@ public:
 	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
-	/** Sets the number of segments along the section (default=8) */
+	/**
+	Sets the number of segments along the section (default=8)
+	\exception Ogre::InvalidParametersException Minimum of numSegCircle is 1
+	*/
 	inline TorusKnotGenerator & setNumSegSection(unsigned int numSegSection)
 	{
+		if(numSegSection == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TorusKnotGenerator::setNumSegSection(unsigned int)");
 		mNumSegSection = numSegSection;
 		return *this;
 	}
 
-	/** Sets the number of segments along the circle (default=16) */
+	/**
+	Sets the number of segments along the circle (default=16)
+	\exception Ogre::InvalidParametersException Minimum of numSegCircle is 1
+	*/
 	inline TorusKnotGenerator & setNumSegCircle(unsigned int numSegCircle)
 	{
+		if(numSegCircle == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TorusKnotGenerator::setNumSegCircle(unsigned int)");
 		mNumSegCircle = numSegCircle;
 		return *this;
 	}
 
-	/** Sets the main radius of the knot (default=1) */
+	/**
+	Sets the main radius of the knot (default=1)
+	\exception Ogre::InvalidParametersException Radius must be larger than 0!
+	*/
 	inline TorusKnotGenerator & setRadius(Ogre::Real radius)
 	{
+		if(radius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TorusKnotGenerator::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
 	}
 
-	/** Sets the section radius (default=0.2) */
+	/**
+	Sets the section radius (default=0.2)
+	\exception Ogre::InvalidParametersException Radius must be larger than 0!
+	*/
 	inline TorusKnotGenerator & setSectionRadius(Ogre::Real sectionRadius)
 	{
+		if(sectionRadius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TorusKnotGenerator::setSectionRadius(Ogre::Real)");
 		mSectionRadius = sectionRadius;
 		return *this;
 	}
 
-	/** Sets the p parameter of the knot (default=2) */
+	/**
+	Sets the p parameter of the knot (default=2)
+	\exception Ogre::InvalidParametersException Parameter p must be larger than 0!
+	*/
 	inline TorusKnotGenerator & setP(int p)
 	{
+		if(p <= 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Parameter p must be larger than 0!", "Procedural::TorusKnotGenerator::setP(int)");
 		mP = p;
 		return *this;
 	}
 
-	/** Sets the q parameter of the knot (default=3) */
+	/**
+	Sets the q parameter of the knot (default=3)
+	\exception Ogre::InvalidParametersException Parameter q must be larger than 0!
+	*/
 	inline TorusKnotGenerator & setQ(int q)
 	{
+		if(q <= 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Parameter q must be larger than 0!", "Procedural::TorusKnotGenerator::setQ(int)");
 		mQ = q;
 		return *this;
 	}

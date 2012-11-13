@@ -35,9 +35,6 @@ namespace Procedural
 {
 void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mRadius>0. && "Radius must me positive");
-	assert(mNumIterations>0 && "numIterations must be positive");
-
 	std::vector<Vector3> vertices;
 	int offset = 0;
 

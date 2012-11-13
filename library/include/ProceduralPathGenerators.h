@@ -179,8 +179,11 @@ public:
 	}
 	
 	/// Sets the number of segments for this line
+	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline LinePath& setNumSeg(unsigned int numSeg)
 	{
+		if(numSeg == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::LinePath::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
 	}
@@ -196,7 +199,6 @@ public:
 	/// Outputs a path
 	Path realizePath()
 	{
-		assert(mNumSeg > 0);
 		Path p;
 		for (unsigned int i = 0; i <= mNumSeg; ++i)
 		{
@@ -251,6 +253,7 @@ public:
 
 	/**
 	 * Builds a shape from control points
+	 * \exception Ogre::InvalidStateException The path contains no points
 	 */
 	Path realizePath();
 };
@@ -269,8 +272,11 @@ public:
 	BezierCurve3() : mNumSeg(8) {}
 	
 	/// Sets number of segments per two control points
+	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline BezierCurve3& setNumSeg(unsigned int numSeg)
 	{
+		if(numSeg == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BezierCurve3::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
 	}
@@ -299,6 +305,7 @@ public:
 	
 	/**
 	 * Build a path from bezier control points
+	 * @exception Ogre::InvalidStateException The curve must at least contain 2 points
 	 */
 	Path realizePath();	
 };

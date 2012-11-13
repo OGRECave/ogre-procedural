@@ -35,9 +35,6 @@ namespace Procedural
 {
 void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mHeight>0. && mRadius>0. && "Height and radius must be positive");
-	assert(mNumSegBase>0 && mNumSegHeight>0 && "Num seg must be positive integers");
-
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1)+mNumSegBase+2);
 	buffer.estimateIndexCount(mNumSegHeight*mNumSegBase*6+3*mNumSegBase);

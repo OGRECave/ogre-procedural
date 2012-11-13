@@ -40,17 +40,12 @@ namespace Procedural
 //-----------------------------------------------------------------------
 Path HelixPath::realizePath()
 {
-	assert(mNumSegPath>0 && "Num seg must be positive integers");
-	assert(mHeight>0. && "Sizes must be positive");
-	assert(mNumRound>0. && "number of rounds must be positive");
-	assert(mRadius>0. && "Radius must be positive");
-
 	Path helix;
 	Real angleStep = Math::TWO_PI / static_cast<Real>(mNumSegPath);
 	Real heightStep = mHeight / static_cast<Real>(mNumSegPath);
+
 	for (size_t i=0;i<mNumRound*mNumSegPath;i++)
 	{
-
 		helix.addPoint(mRadius * Math::Cos(angleStep * i), heightStep * i, mRadius * Math::Sin(angleStep * i));
 	}
 
@@ -60,11 +55,6 @@ Path HelixPath::realizePath()
 //-----------------------------------------------------------------------
 void SpringGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mNumSegPath>0 && mNumSegCircle>0 && "Num seg must be positive integers");
-	assert(mHeight>0. && "Sizes must be positive");
-	assert(mNumRound>0. && "number of rounds must be positive");
-	assert(mRadiusHelix>0. && mRadiusCircle>0. && "Radians must be positive");
-
 	Path p = HelixPath().setHeight(mHeight).setNumRound(mNumRound).setNumSegPath(mNumSegPath).setRadius(mRadiusHelix).realizePath();
 
 	Shape s = CircleShape().setRadius(mRadiusCircle).setNumSeg(mNumSegCircle).realizeShape();

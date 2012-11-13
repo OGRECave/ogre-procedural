@@ -46,11 +46,11 @@ void Sample_Material::createScene(void)
 	Procedural::TextureBuffer distort(brickLines * pxPerBrick);
 	Procedural::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
 	Procedural::Rectangle rectDraw(&distort);
-	for(size_t i = 1; i < brickLines; i++)
+	for(int i = 1; i < brickLines; i++)
 	{
 		Ogre::ColourValue rc = Ogre::ColourValue((i % 2 == 0) ? Ogre::Math::RangeRandom(0.4f, 0.6f) : Ogre::Math::RangeRandom(0.0f, 0.2f), 0.52f, 1.0f);
 		rc.a = 1.0f;
-		rectDraw.setRectangle(0, i * pxPerBrick, brickLines * pxPerBrick, i * pxPerBrick + pxPerBrick).setColour(rc).process();
+		rectDraw.setRectangle((size_t)0, (size_t)(i * pxPerBrick), (size_t)(brickLines * pxPerBrick), (size_t)(i * pxPerBrick + pxPerBrick)).setColour(rc).process();
 	}
 	Procedural::Distort(&bricks).setParameterImage(&distort).setPower(50).process();
 	Procedural::Cloud(&distort).process();

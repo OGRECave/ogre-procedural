@@ -32,7 +32,8 @@ namespace Procedural
 {
 void SpherifyModifier::modify()
 {
-	assert(mInputTriangleBuffer && "Input triangle buffer must not be null");
+	if(mInputTriangleBuffer == NULL)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", "Procedural::SpherifyModifier::modify()");
 	
 	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it!=mInputTriangleBuffer->getVertices().end(); ++it)
 	{

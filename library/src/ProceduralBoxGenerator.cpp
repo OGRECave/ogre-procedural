@@ -36,9 +36,6 @@ namespace Procedural
 {
 void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mNumSegX>0 && mNumSegY>0 && mNumSegZ>0 && "Num seg must be positive integers");
-	assert(mSizeX>0. && mSizeY>0. && mSizeZ>0. && "Sizes must be positive");
-
 	PlaneGenerator pg;
 	pg.setUTile(mUTile).setVTile(mVTile);
 	if (mTransform)

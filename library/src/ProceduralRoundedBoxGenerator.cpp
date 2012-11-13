@@ -37,8 +37,6 @@ namespace Procedural
 
 void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, bool isYPositive, bool isZPositive) const
 {
-	assert(mNumSegX>0 && mNumSegY>0 && mNumSegZ>0 && mChamferNumSeg>0 && "Num seg must be positive integers");
-	assert(mSizeX>0. && mSizeY>0. && mSizeZ>0. && mChamferSize>0. && "Sizes must be positive");
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((mChamferNumSeg+1)*(mChamferNumSeg+1));
 	buffer.estimateIndexCount(mChamferNumSeg*mChamferNumSeg*6);

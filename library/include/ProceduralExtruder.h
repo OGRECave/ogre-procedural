@@ -70,6 +70,8 @@ public:
 	/**
 	 * Builds the mesh into the given TriangleBuffer
 	 * @param buffer The TriangleBuffer on where to append the mesh.
+	 * @exception Ogre::InvalidStateException Either shape or multishape must be defined!
+	 * @exception Ogre::InvalidStateException Required parameter is zero!
 	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 

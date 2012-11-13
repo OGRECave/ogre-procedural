@@ -35,10 +35,6 @@ namespace Procedural
 {
 void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	assert(mNumSegX>0 && mNumSegY>0 && "Num seg must be positive");
-	assert(!mNormal.isZeroLength() && "Normal must not be null");
-	assert(mSizeX>0. && mSizeY>0. && "Size must be positive");
-	
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((mNumSegX+1)*(mNumSegY+1));
 	buffer.estimateIndexCount(mNumSegX*mNumSegY*6);

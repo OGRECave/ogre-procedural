@@ -56,9 +56,14 @@ public:
 	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
-	/** Sets the radius of the sphere (default=1) */
+	/**
+	Sets the radius of the sphere (default=1)
+	\exception Ogre::InvalidParametersException Radius must be larger than 0!
+	*/
 	inline IcoSphereGenerator & setRadius(Ogre::Real radius)
 	{
+		if(radius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::IcoSphereGenerator::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
 	}
@@ -67,9 +72,12 @@ public:
 		First iteration corresponds to a 20 face sphere.
 		Each iteration has 3 more faces than the previous.
 		(default=2)
+	\exception Ogre::InvalidParametersException Minimum of numIterations is 1
 	*/
 	inline IcoSphereGenerator & setNumIterations(unsigned int numIterations)
 	{
+		if(numIterations == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 iterations", "Procedural::IcoSphereGenerator::setNumRings(unsigned int)");
 		mNumIterations = numIterations;
 		return *this;
 	}

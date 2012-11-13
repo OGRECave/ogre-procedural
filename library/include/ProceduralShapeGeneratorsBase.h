@@ -66,9 +66,11 @@ public:
 	}
 
 	/// Sets the number of segments between 2 control points
+	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline T& setNumSeg(unsigned int numSeg)
 	{
-		assert(numSeg>=1);
+		if(numSeg == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BaseSpline2::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return (T&)*this;
 	}

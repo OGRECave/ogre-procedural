@@ -429,8 +429,8 @@ void Triangulator::_recursiveTriangulatePolygon(const DelaunaySegment& cuttingSe
 //-----------------------------------------------------------------------
 void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertices) const
 {	
-	assert((mShapeToTriangulate || mMultiShapeToTriangulate || mSegmentListToTriangulate) && "Either shape or multishape or segment list must be defined");
-	//assert((((mShapeToTriangulate && mShapeToTriangulate->isClosed()) || (mMultiShapeToTriangulate&&mMultiShapeToTriangulate->isClosed()))||(!mRemoveOutside)) && "Input shape must be closed");
+	if(mShapeToTriangulate == NULL && mMultiShapeToTriangulate == NULL && mSegmentListToTriangulate == NULL)
+		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Either shape or multishape or segment list must be defined!", "Procedural::Triangulator::triangulate(std::vector<int>&, PointList&)");
 
 	Ogre::Timer mTimer;
 	mTimer.reset();

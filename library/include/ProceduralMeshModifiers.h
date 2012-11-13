@@ -42,12 +42,16 @@ namespace Procedural
 		
 		SpherifyModifier() : mInputTriangleBuffer(0) {}
 		
+		/// \exception Ogre::InvalidParametersException Input triangle buffer must not be null
 		SpherifyModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
 		{
+			if(inputTriangleBuffer == NULL)
+				OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Input triangle buffer must not be null", "Procedural::SpherifyModifier::setInputTriangleBuffer(Procedural::TriangleBuffer*)");
 			mInputTriangleBuffer = inputTriangleBuffer;
 			return *this;
 		}
 		
+		/// \exception Ogre::InvalidStateException Input triangle buffer must be set
 		void modify();
 	};
 

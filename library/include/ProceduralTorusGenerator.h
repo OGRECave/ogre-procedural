@@ -58,30 +58,50 @@ public:
 	 */
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 	
-	/** Sets the number of segments on the section circle */
+	/**
+	Sets the number of segments on the section circle
+	\exception Ogre::InvalidParametersException Minimum of numSegSection is 1
+	*/
 	inline TorusGenerator & setNumSegSection(unsigned int numSegSection)
 	{
+		if(mNumSegSection == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TorusGenerator::setNumSegSection(unsigned int)");
 		mNumSegSection = numSegSection;
 		return *this;
 	}
 
-	/** Sets the number of segments along the guiding circle */
+	/**
+	Sets the number of segments along the guiding circle
+	\exception Ogre::InvalidParametersException Minimum of numSegCircle is 1
+	*/
 	inline TorusGenerator & setNumSegCircle(unsigned int numSegCircle)
 	{
+		if(numSegCircle == 0)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TorusGenerator::setNumSegCircle(unsigned int)");
 		mNumSegCircle = numSegCircle;
 		return *this;
 	}
 
-	/** Sets the radius of the guiding circle */
+	/**
+	Sets the radius of the guiding circle
+	\exception Ogre::InvalidParametersException Radius must be larger than 0!
+	*/
 	inline TorusGenerator & setRadius(Ogre::Real radius)
 	{
+		if(radius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TorusGenerator::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
 	}
 
-	/** Sets the radius of the section circle */
+	/**
+	Sets the radius of the section circle
+	\exception Ogre::InvalidParametersException Radius must be larger than 0!
+	*/
 	inline TorusGenerator & setSectionRadius(Ogre::Real sectionRadius)
 	{
+		if(sectionRadius <= 0.0f)
+			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TorusGenerator::setSectionRadius(Ogre::Real)");
 		mSectionRadius = sectionRadius;
 		return *this;
 	}
