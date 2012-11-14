@@ -45,8 +45,8 @@ typedef struct tagPOINT
 class NoiseBase
 {
 public:
-	virtual Ogre::Real function1D(size_t x) abstract;
-	virtual Ogre::Real function2D(size_t x, size_t y) abstract;
+	virtual Ogre::Real function1D(size_t x) = 0;
+	virtual Ogre::Real function2D(size_t x, size_t y) = 0;
 
 	virtual Ogre::uchar* field1D(size_t wx)
 	{

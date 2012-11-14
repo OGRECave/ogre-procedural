@@ -96,7 +96,7 @@ class Illustrations
 
 		bool save()
 		{
-			std::ofstream dotfile(mThis.mFile + ".gv");
+			std::ofstream dotfile((mThis.mFile + ".gv").c_str());
 			if(dotfile.is_open())
 			{
 				dotfile << "digraph " << mThis.mName << " {" << std::endl;
@@ -128,7 +128,7 @@ class Illustrations
 			int a2 = add(img2_name, img2_file);
 			bind(a1, a2);
 		}
-		
+
 		void set(std::string img1_name, std::string img1_file, std::string img2_name, std::string img2_file, std::string img3_name, std::string img3_file, CONNECTION cn = JOIN)
 		{
 			int a1 = add(img1_name, img1_file);
@@ -185,7 +185,7 @@ public:
 		mCamera->setPosition(0,0,-5);
 		mCamera->lookAt(0,0,0);
 	}
-	
+
 };
 
 #endif // #ifndef __TutorialApplication_h_
