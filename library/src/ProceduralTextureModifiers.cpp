@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 #include "ProceduralStableHeaders.h"
 #include "ProceduralTextureModifiers.h"
-
+#include "ProceduralTextureGenerator.h"
 
 using namespace Ogre;
 

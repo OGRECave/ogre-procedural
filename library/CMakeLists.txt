@@ -44,6 +44,7 @@ set( HDRS
 	include/ProceduralTextureModifiers.h
 	include/ProceduralNoise.h
 	include/ProceduralMeshModifiers.h
+	include/ProceduralTextureBuffer.h
 	)
 
 set( SRCS
@@ -78,6 +79,7 @@ set( SRCS
 		src/ProceduralTextureModifiers.cpp
 		src/ProceduralNoise.cpp
 		src/ProceduralMeshModifiers.cpp
+		src/ProceduralTextureBuffer.cpp
 	)
 
 include_directories(SYSTEM ${OGRE_INCLUDE_DIRS}

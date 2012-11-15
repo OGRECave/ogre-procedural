@@ -57,6 +57,6 @@ THE SOFTWARE.
 #include "ProceduralTextureModifiers.h"
 #include "ProceduralNoise.h"
 #include "ProceduralMeshModifiers.h"
-
+#include "ProceduralTextureBuffer.h"
 
 #endif
