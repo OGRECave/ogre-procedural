@@ -702,7 +702,7 @@ void Illustrations::go()
 	dotfile.save();
 
 	Procedural::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
-	Procedural::Rectangle(&buffer).setColour(Ogre::ColourValue::Red).setRectangle(0.25f, 0.25f, 0.75f, 0.75f).process();
+	Procedural::RectangleTexture(&buffer).setColour(Ogre::ColourValue::Red).setRectangle(0.25f, 0.25f, 0.75f, 0.75f).process();
 	exportImage("texture_rectangle", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_24", "Rectangle_Demo");
 	dotfile.set("Solid", "texture_solid", "Rectangle", "texture_rectangle");
@@ -787,7 +787,7 @@ void Illustrations::go()
 	Procedural::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
 	exportImage("texture_example_solid", &distort);
 	int s03x = dotfile.add("Solid", "texture_example_solid");
-	Procedural::Rectangle rectDraw(&distort);
+	Procedural::RectangleTexture rectDraw(&distort);
 	for(size_t i = 1; i < (size_t)brickLines; i++)
 	{
 		Ogre::ColourValue rc = Ogre::ColourValue((i % 2 == 0) ? Ogre::Math::RangeRandom(0.4f, 0.6f) : Ogre::Math::RangeRandom(0.0f, 0.2f), 0.52f, 1.0f);
