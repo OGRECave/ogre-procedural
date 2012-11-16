@@ -60,8 +60,14 @@ void LuaTests::destroyScene(void)
 		{
 			mSceneMgr->destroySceneNode(*sceneNode);
 		}
+		for (std::vector<MaterialPtr>::iterator it = mMaterials.begin(); it!=mMaterials.end(); it++)
+		{
+			TextureManager::getSingletonPtr()->remove((*it)->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName());
+			MaterialManager::getSingletonPtr()->remove((*it)->getName());
+		}
 		mSceneNodes.clear();
 		mEntities.clear();
+		mMaterials.clear();
 }
 //-------------------------------------------------------------------------------------
 void LuaTests::reloadScript()

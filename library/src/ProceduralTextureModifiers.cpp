@@ -2432,7 +2432,7 @@ TextureBufferPtr RandomPixels::process()
 	srand(mSeed);
 	size_t area = mBuffer->getWidth() * mBuffer->getHeight();
 	if(mCount == area)
-		Rectangle(mBuffer).setColour(mColour).process();
+		RectangleTexture(mBuffer).setColour(mColour).process();
 	else
 	{
 		while(list.size() != mCount)
@@ -2462,73 +2462,73 @@ TextureBufferPtr RandomPixels::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Rectangle & Rectangle::setColour(Ogre::ColourValue colour)
+RectangleTexture & RectangleTexture::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
 	return *this;
 }
 
-Rectangle & Rectangle::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
+RectangleTexture & RectangleTexture::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
 {
 	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
-Rectangle & Rectangle::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+RectangleTexture & RectangleTexture::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Rectangle & Rectangle::setX1(size_t x1)
+RectangleTexture & RectangleTexture::setX1(size_t x1)
 {
 	mX1 = std::min<size_t>(x1, mBuffer->getWidth());
 	return *this;
 }
 
-Rectangle & Rectangle::setX1(Ogre::Real x1)
+RectangleTexture & RectangleTexture::setX1(Ogre::Real x1)
 {
 	mX1 = (size_t)((Ogre::Real)mBuffer->getWidth() * std::min<Ogre::Real>(x1, 1.0f));
 	return *this;
 }
 
-Rectangle & Rectangle::setY1(size_t y1)
+RectangleTexture & RectangleTexture::setY1(size_t y1)
 {
 	mY1 = std::min<size_t>(y1, mBuffer->getHeight());
 	return *this;
 }
 
-Rectangle & Rectangle::setY1(Ogre::Real y1)
+RectangleTexture & RectangleTexture::setY1(Ogre::Real y1)
 {
 	mY1 = (size_t)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(y1, 1.0f));
 	return *this;
 }
 
-Rectangle & Rectangle::setX2(size_t x2)
+RectangleTexture & RectangleTexture::setX2(size_t x2)
 {
 	mX2 = std::min<size_t>(x2, mBuffer->getWidth());
 	return *this;
 }
 
-Rectangle & Rectangle::setX2(Ogre::Real x2)
+RectangleTexture & RectangleTexture::setX2(Ogre::Real x2)
 {
 	mX2 = (size_t)((Ogre::Real)mBuffer->getWidth() * std::min<Ogre::Real>(x2, 1.0f));
 	return *this;
 }
 
-Rectangle & Rectangle::setY2(size_t y2)
+RectangleTexture & RectangleTexture::setY2(size_t y2)
 {
 	mY2 = std::min<size_t>(y2, mBuffer->getHeight());
 	return *this;
 }
 
-Rectangle & Rectangle::setY2(Ogre::Real y2)
+RectangleTexture & RectangleTexture::setY2(Ogre::Real y2)
 {
 	mY2 = (size_t)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(y2, 1.0f));
 	return *this;
 }
 
-Rectangle & Rectangle::setRectangle(Ogre::RealRect rect, bool relative)
+RectangleTexture & RectangleTexture::setRectangle(Ogre::RealRect rect, bool relative)
 {
 	if(relative)
 	{
@@ -2547,7 +2547,7 @@ Rectangle & Rectangle::setRectangle(Ogre::RealRect rect, bool relative)
 	return *this;
 }
 
-Rectangle & Rectangle::setRectangle(Ogre::Rect rect)
+RectangleTexture & RectangleTexture::setRectangle(Ogre::Rect rect)
 {
 	mX1 = std::min<size_t>(rect.left, mBuffer->getWidth());
 	mY1 = std::min<size_t>(rect.top, mBuffer->getHeight());
@@ -2556,7 +2556,7 @@ Rectangle & Rectangle::setRectangle(Ogre::Rect rect)
 	return *this;
 }
 
-Rectangle & Rectangle::setRectangle(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative)
+RectangleTexture & RectangleTexture::setRectangle(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative)
 {
 	if(relative)
 	{
@@ -2575,7 +2575,7 @@ Rectangle & Rectangle::setRectangle(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool
 	return *this;
 }
 
-Rectangle & Rectangle::setRectangle(size_t x1, size_t y1, size_t x2, size_t y2)
+RectangleTexture & RectangleTexture::setRectangle(size_t x1, size_t y1, size_t x2, size_t y2)
 {
 	mX1 = std::min<size_t>(x1, mBuffer->getWidth());
 	mY1 = std::min<size_t>(y1, mBuffer->getHeight());
@@ -2584,7 +2584,7 @@ Rectangle & Rectangle::setRectangle(size_t x1, size_t y1, size_t x2, size_t y2)
 	return *this;
 }
 
-Rectangle & Rectangle::setRectangle(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2)
+RectangleTexture & RectangleTexture::setRectangle(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2)
 {
 	mX1 = (size_t)((Ogre::Real)mBuffer->getWidth() * std::min<Ogre::Real>(x1, 1.0f));
 	mY1 = (size_t)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(y1, 1.0f));
@@ -2594,7 +2594,7 @@ Rectangle & Rectangle::setRectangle(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2,
 }
 
 #if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-Rectangle & Rectangle::setRectangle(POINT pos1, POINT pos2)
+RectangleTexture & RectangleTexture::setRectangle(POINT pos1, POINT pos2)
 {
 	mX1 = std::min<size_t>(pos1.x, mBuffer->getWidth());
 	mY1 = std::min<size_t>(pos1.y, mBuffer->getHeight());
@@ -2603,7 +2603,7 @@ Rectangle & Rectangle::setRectangle(POINT pos1, POINT pos2)
 	return *this;
 }
 
-Rectangle & Rectangle::setRectangle(RECT rect)
+RectangleTexture & RectangleTexture::setRectangle(RECT rect)
 {
 	mX1 = std::min<size_t>(rect.left, mBuffer->getWidth());
 	mY1 = std::min<size_t>(rect.top, mBuffer->getHeight());
@@ -2613,7 +2613,7 @@ Rectangle & Rectangle::setRectangle(RECT rect)
 }
 #endif
 
-TextureBufferPtr Rectangle::process()
+TextureBufferPtr RectangleTexture::process()
 {
 	size_t xStart = std::min<size_t>(mX1, mX2);
 	size_t yStart = std::min<size_t>(mY1, mY2);

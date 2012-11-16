@@ -1,3 +1,7 @@
 tests = Procedural.LuaTests_getInstance()
+tb = Procedural.TextureBuffer(256)
+Procedural.Cell(tb):setRegularity(233):setDensity(10):process()
+tb:createTexture("proceduralTexture")
 Procedural.SphereGenerator():setNumRings(8):setRadius(4.0):realizeMesh("sphere")
-tests:addMesh("sphere")
+tests:addMaterial("proceduralTexture", "sphereMat")
+tests:addMesh("sphere", "sphereMat")

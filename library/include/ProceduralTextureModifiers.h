@@ -1892,7 +1892,7 @@ Procedural::Rectangle(&bufferSolid).setColour(Ogre::ColourValue::Red).setRectang
 \endcode
 \dotfile texture_24.gv
 */
-class _ProceduralExport Rectangle : public TextureProcessing
+class _ProceduralExport RectangleTexture : public TextureProcessing
 {
 private:
 	Ogre::ColourValue mColour;
@@ -1906,7 +1906,7 @@ public:
 	Default constructor.
 	\param pBuffer Image buffer where to modify the image.
 	*/
-	Rectangle(TextureBufferPtr pBuffer)
+	RectangleTexture(TextureBufferPtr pBuffer)
 		: TextureProcessing(pBuffer, "Rectangle"), mColour(Ogre::ColourValue::White), mX1(0), mY1(0)
 	{
 		mX2 = pBuffer->getWidth();
@@ -1917,7 +1917,7 @@ public:
 	Set the fill colour of the rectangle.
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
-	Rectangle & setColour(Ogre::ColourValue colour);
+	RectangleTexture & setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the fill colour of the rectangle.
@@ -1926,7 +1926,7 @@ public:
 	\param blue Blue value of the fill colour [0, 255] (default 255)
 	\param alpha %Alpha value of the fill colour [0, 255] (default 255)
 	*/
-	Rectangle & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
+	RectangleTexture & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
 
 	/**
 	Set the fill colour of the rectangle.
@@ -1935,68 +1935,68 @@ public:
 	\param blue Blue value of the fill colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of the fill colour [0.0, 1.0] \(default 1.0)
 	*/
-	Rectangle & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	RectangleTexture & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set absolute x position of top left start point of the rectangle in px
 	\param x1 New absolute x position of rectangle start (default 0)
 	*/
-	Rectangle & setX1(size_t x1);
+	RectangleTexture & setX1(size_t x1);
 
 	/**
 	Set relative x position of top left start point of the rectangle as Real
 	\param x1 New relative x position of rectangle start [0.0, 1.0] \(default 0.0)
 	*/
-	Rectangle & setX1(Ogre::Real x1);
+	RectangleTexture & setX1(Ogre::Real x1);
 
 	/**
 	Set absolute y position of top left start point of the rectangle in px
 	\param y1 New absolute x position of rectangle start (default 0)
 	*/
-	Rectangle & setY1(size_t y1);
+	RectangleTexture & setY1(size_t y1);
 
 	/**
 	Set relative y position of top left start point of the rectangle as Real
 	\param y1 New relative y position of rectangle start [0.0, 1.0] \(default 0.0)
 	*/
-	Rectangle & setY1(Ogre::Real y1);
+	RectangleTexture & setY1(Ogre::Real y1);
 
 	/**
 	Set absolute x position of bottom right end point of the rectangle in px
 	\param x2 New absolute x position of rectangle end (default: image width)
 	*/
-	Rectangle & setX2(size_t x2);
+	RectangleTexture & setX2(size_t x2);
 
 	/**
 	Set relative x position of bottom right end point of the rectangle as Real
 	\param x2 New relative x position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
-	Rectangle & setX2(Ogre::Real x2);
+	RectangleTexture & setX2(Ogre::Real x2);
 
 	/**
 	Set absolute y position of bottom right end point of the rectangle in px
 	\param y2 New absolute x position of rectangle end (default: image height)
 	*/
-	Rectangle & setY2(size_t y2);
+	RectangleTexture & setY2(size_t y2);
 
 	/**
 	Set relative y position of bottom right end point of the rectangle as Real
 	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
-	Rectangle & setY2(Ogre::Real y2);
+	RectangleTexture & setY2(Ogre::Real y2);
 
 	/**
 	Set the full rectangle coordinates.
 	\param rect Full rectangle description (default: left=0.0, top=0.0, right=1.0, bottom=1.0)
 	\param relative If this is set to true (default) the rectangle data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	Rectangle & setRectangle(Ogre::RealRect rect, bool relative = true);
+	RectangleTexture & setRectangle(Ogre::RealRect rect, bool relative = true);
 
 	/**
 	Set the full rectangle coordinates.
 	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
 	*/
-	Rectangle & setRectangle(Ogre::Rect rect);
+	RectangleTexture & setRectangle(Ogre::Rect rect);
 
 	/**
 	Set the full rectangle coordinates.
@@ -2004,7 +2004,7 @@ public:
 	\param pos2 Vector to bottom right end point of the rectangle (default: x=1.0, y=1.0)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	Rectangle & setRectangle(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
+	RectangleTexture & setRectangle(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
 
 	/**
 	Set the full rectangle coordinates.
@@ -2013,7 +2013,7 @@ public:
 	\param x2 New absolute x position of rectangle end (default: image width)
 	\param y2 New absolute y position of rectangle end (default: image height)
 	*/
-	Rectangle & setRectangle(size_t x1, size_t y1, size_t x2, size_t y2);
+	RectangleTexture & setRectangle(size_t x1, size_t y1, size_t x2, size_t y2);
 
 	/**
 	Set the full rectangle coordinates.
@@ -2022,7 +2022,7 @@ public:
 	\param x2 New relative x position of rectangle end [0.0, 1.0] \(default 1.0)
 	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
-	Rectangle & setRectangle(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
+	RectangleTexture & setRectangle(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
 
 #if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
 	/**
@@ -2030,13 +2030,13 @@ public:
 	\param pos1 New absolute coordinates of the rectangle start point (default: x=0, y=0)
 	\param pos2 New absolute coordinates of the rectangle end point (default: x=image width, y=image height)
 	*/
-	Rectangle & setRectangle(POINT pos1, POINT pos2);
+	RectangleTexture & setRectangle(POINT pos1, POINT pos2);
 
 	/**
 	Set the full rectangle coordinates.
 	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
 	*/
-	Rectangle & setRectangle(RECT rect);
+	RectangleTexture & setRectangle(RECT rect);
 #endif
 
 	/**

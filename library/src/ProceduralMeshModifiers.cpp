@@ -37,9 +37,12 @@ void SpherifyModifier::modify()
 	
 	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it!=mInputTriangleBuffer->getVertices().end(); ++it)
 	{
-		Ogre::Real l = it->mPosition.length();
+		Ogre::Real l = (it->mPosition - mCenter).length();
 		if (l>1e-6)
-			it->mNormal = it->mPosition = it->mPosition / l;
+		{
+			it->mNormal = (it->mPosition - mCenter) / l;
+			it->mPosition = mCenter + mRadius * it->mNormal;
+		}			
 	}
 }
 }

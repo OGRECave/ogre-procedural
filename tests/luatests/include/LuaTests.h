@@ -106,7 +106,7 @@ protected:
 	static LuaTests* mInstance;
 
 	std::vector<Entity*> mEntities;
-
+	std::vector<MaterialPtr> mMaterials;
 	std::vector<SceneNode*> mSceneNodes;
 
 public:
@@ -119,6 +119,14 @@ public:
 		sceneNode->attachObject(entity);
 		mSceneNodes.push_back(sceneNode);
 		mEntities.push_back(entity);
+	}
+
+	void addMaterial(const char* textureName, const char* materialName)
+	{
+		Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create(std::string(materialName), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);			
+		demoMaterial->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue::White);
+		demoMaterial->getTechnique(0)->getPass(0)->createTextureUnitState(std::string(textureName));
+		mMaterials.push_back(demoMaterial);
 	}
 		
 
