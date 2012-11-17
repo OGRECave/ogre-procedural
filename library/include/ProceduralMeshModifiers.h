@@ -33,15 +33,20 @@ THE SOFTWARE.
 
 namespace Procedural
 {
+	/**
+	\brief Projects all TriangleBufferVertices on a sphere
+	*/
 	class _ProceduralExport SpherifyModifier
 	{
 		private:
 		TriangleBuffer* mInputTriangleBuffer;
-		
+		Ogre::Vector3 mCenter;
+		Ogre::Real mRadius;
+
 		public:
-		
-		SpherifyModifier() : mInputTriangleBuffer(0) {}
-		
+
+		SpherifyModifier() : mInputTriangleBuffer(0), mCenter(Ogre::Vector3::ZERO), mRadius(1) {}
+
 		/// \exception Ogre::InvalidParametersException Input triangle buffer must not be null
 		SpherifyModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
 		{
@@ -50,11 +55,46 @@ namespace Procedural
 			mInputTriangleBuffer = inputTriangleBuffer;
 			return *this;
 		}
-		
+
+		SpherifyModifier& setRadius(Ogre::Real radius)
+		{
+			if (mRadius<=0)
+				OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be positive", "Procedural::SpherifyModifier::setInputTriangleBuffer(Procedural::TriangleBuffer*)");
+			mRadius = radius;
+			return *this;
+		}
+
+		SpherifyModifier& setCenter(Ogre::Vector3 center)
+		{
+			mCenter = center;
+			return *this;
+		}
+
 		/// \exception Ogre::InvalidStateException Input triangle buffer must be set
 		void modify();
 	};
 
+	//--------------------------------------------------------------
+/* TODO
+
+	class _ProceduralExport CalculateNormalsModifier
+	{
+	public:
+		enum NormalComputeMode
+		{
+			NCM_VERTEX, NCM_TRIANGLE
+		};
+
+		NormalComputeMode mComputeMode;
+
+		CalculateNormalsModifier& setComputeMode(NormalComputeMode computeMode)
+		{
+			mComputeMode = computeMode;
+			return *this;
+		}
+
+		void modify();
+	};*/
 }
 
 #endif
