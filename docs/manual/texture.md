@@ -209,11 +209,11 @@ See Procedural::OilPaint
 
 See Procedural::RandomPixels
 
-### Rectangle
+### RectangleTexture
 
-![Figure 24. Rectangle](texture_rectangle.png)
+![Figure 24. RectangleTexture](texture_rectangle.png)
 
-See Procedural::Rectangle
+See Procedural::RectangleTexture
 
 ### RotationZoom
 
