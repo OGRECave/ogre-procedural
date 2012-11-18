@@ -46,7 +46,7 @@ class _ProceduralExport Circle
 	
 	public:
 
-	Circle() {}
+	Circle() : mCenter(Ogre::Vector2::ZERO), mRadius(1) {}
 	
 	/// Contructor with arguments
 	Circle(Ogre::Vector2 center, Ogre::Real radius) : mCenter(center), mRadius(radius)
