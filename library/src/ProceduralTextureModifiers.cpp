@@ -33,6 +33,23 @@ using namespace Ogre;
 
 namespace Procedural
 {
+
+TextureBufferPtr Blit::process()
+{	
+	for(size_t y = mOutputRect.top; y < mOutputRect.bottom; y++)
+	{
+		for(size_t x = mOutputRect.left; x < mOutputRect.right; x++)
+		{
+			size_t x0 = (x-mOutputRect.left)/static_cast<float>(mOutputRect.width())*mInputRect.width() + mInputRect.left;
+			size_t y0 = (y-mOutputRect.top)/static_cast<float>(mOutputRect.height())*mInputRect.height() + mInputRect.top;		
+			mBuffer->setPixel(x, y, mInputBuffer->getPixel(x0,y0));
+		}
+	}
+	return mBuffer;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Abnormals & Abnormals::setParameterImage(TextureBufferPtr image)
 {
 	mParam = image;

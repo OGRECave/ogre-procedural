@@ -42,6 +42,91 @@ Elements for procedural texture creation.
 */
 
 /**
+\brief copies the input buffer towards the current buffer
+
+*/
+class _ProceduralExport Blit : public TextureProcessing
+{
+	TextureBufferPtr mInputBuffer;
+	Ogre::Rect mInputRect;
+	Ogre::Rect mOutputRect;
+public:
+	/**
+	Default constructor.
+	\param pBuffer Image buffer where to modify the image.
+	*/
+	Blit(TextureBufferPtr pBuffer)
+		: TextureProcessing(pBuffer, "Blit"), mInputBuffer(0)
+	{
+		mOutputRect.left = 0;
+		mOutputRect.top = 0;
+		mOutputRect.right = pBuffer->getWidth();
+		mOutputRect.bottom = pBuffer->getHeight();
+	}
+
+	/**
+	Sets the texture buffer that must be copied towards the current texture buffer
+	*/
+	Blit& setInputBuffer(TextureBufferPtr inputBuffer)
+	{
+		mInputBuffer = inputBuffer;
+		mInputRect.left = 0;
+		mInputRect.top = 0;
+		mInputRect.right = inputBuffer->getWidth();
+		mInputRect.bottom = inputBuffer->getHeight();
+		return *this;
+	}
+
+	/**
+	Sets the part of the input buffer to copy
+	*/
+	Blit& setInputRect(const Ogre::Rect& inputRect)
+	{
+		mInputRect = inputRect;
+		return *this;
+	}
+
+	/**
+	Sets the part of the input buffer to copy
+	*/
+	Blit& setInputRectRelative(const Ogre::RealRect& inputRect)
+	{
+		mInputRect.left = inputRect.left*mInputBuffer->getWidth();
+		mInputRect.right = inputRect.right*mInputBuffer->getWidth();
+		mInputRect.top = inputRect.top*mInputBuffer->getHeight();
+		mInputRect.bottom = inputRect.bottom*mInputBuffer->getHeight();
+		return *this;
+	}
+
+	/**
+	Sets the part of the output buffer where the input is copied to
+	*/
+	Blit& setOutputRect(const Ogre::Rect& outputRect)
+	{
+		mOutputRect = outputRect;
+		return *this;
+	}
+
+	/**
+	Sets the part of the output buffer to copy
+	*/
+	Blit& setOutputRectRelative(const Ogre::RealRect& outputRect)
+	{
+		mOutputRect.left = outputRect.left*mBuffer->getWidth();
+		mOutputRect.right = outputRect.right*mBuffer->getWidth();
+		mOutputRect.top = outputRect.top*mBuffer->getHeight();
+		mOutputRect.bottom = outputRect.bottom*mBuffer->getHeight();
+		return *this;
+	}
+
+	/**
+	Run image manipulation
+	\return Pointer to image buffer which has been set in the constructor.
+	*/
+	TextureBufferPtr process();
+};
+
+/**
 \brief Use alpha channel as an mask for an other image.
 \details Can take normal, height or quaternion map as second input.
 
