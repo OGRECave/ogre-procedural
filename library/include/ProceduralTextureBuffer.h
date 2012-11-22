@@ -53,8 +53,9 @@ private:
 	Ogre::uchar* mPixels;
 	Ogre::uint mWidth;
 	Ogre::uint mHeight;
-
+	
 public:
+	
 	/**
 	\brief Set colour of a specified pixel
 	\param x X position of pixel to paint on (0 <= x < width)
@@ -258,22 +259,6 @@ public:
 	Ogre::Real getPixelAlphaReal(size_t x, size_t y);
 	
 	/**
-	\brief Get the texture image width.
-	*/
-	inline Ogre::uint getWidth() const
-	{
-		return mWidth;
-	}
-
-	/**
-	\brief Get the texture image height.
-	*/
-	inline Ogre::uint getHeight() const
-	{
-		return mHeight;
-	}
-
-	/**
 	\brief Create a copy of the current texture image buffer
 	\note You have to delete cloned object by yourself!
 	*/
@@ -297,10 +282,10 @@ public:
 	~TextureBuffer();
 
 	/// Get the width of the stored image in px
-	Ogre::uint getWidth() { return mWidth; }
+	inline Ogre::uint getWidth() const { return mWidth; }
 
 	/// Get the height of the stored image in px
-	Ogre::uint getHeight() { return mHeight; }
+	inline Ogre::uint getHeight() const { return mHeight; }
 
 	/// Create a new image from buffer.
 	Ogre::Image* getImage();
