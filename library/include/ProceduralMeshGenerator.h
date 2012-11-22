@@ -170,7 +170,7 @@ public:
 	/**
 	 * Sets the texture rectangle
 	 */
-	inline T & setTextureRectangle(Ogre::Rectangle textureRectangle)
+	inline T & setTextureRectangle(const Ogre::RealRect& textureRectangle)
 	{
 		mUVOrigin = Ogre::Vector2(textureRectangle.top, textureRectangle.left);
 		mUTile = textureRectangle.right-textureRectangle.left;
