@@ -35,7 +35,7 @@ This source file is part of the
 #include <SdkCameraMan.h>
 #include <OGRE/OgreVector3.h>
 
-#if OGRE_VERSION > ((1 << 16) | (8 << 8) | 1)
+#if OGRE_VERSION >= ((1 << 16) | (9 << 8) | 0)
 #define OGRE_EXTERNAL_OVERLAY
 #endif
 
