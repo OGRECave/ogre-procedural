@@ -81,7 +81,6 @@ void LuaTests::reloadScript()
 
 		lua_State *L; 
 		L=luaL_newstate();
-		luaopen_base(L);	// load basic libs (eg. print)
 		luaopen_Procedural(L);	// load the wrappered module
 
 		destroyScene();
