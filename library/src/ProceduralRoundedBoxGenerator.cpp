@@ -107,15 +107,16 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 	Vector3 offsetPosition= centerPosition -.5f*height*vy0;
 	int numSegHeight=1;
 
-	Real deltaAngle = (Math::HALF_PI / mChamferNumSeg);
-	Real deltaHeight = height/(Real)numSegHeight;
-
 	if (xPos==0)
 		numSegHeight = mNumSegX;
 	else if (yPos==0)
 		numSegHeight = mNumSegY;
 	else if (zPos==0)
 		numSegHeight = mNumSegZ;
+
+	Real deltaAngle = (Math::HALF_PI / mChamferNumSeg);
+	Real deltaHeight = height/(Real)numSegHeight;
+
 
 	buffer.rebaseOffset();
 	buffer.estimateIndexCount(6*numSegHeight*mChamferNumSeg);
