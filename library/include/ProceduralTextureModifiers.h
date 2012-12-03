@@ -42,91 +42,6 @@ Elements for procedural texture creation.
 */
 
 /**
-\brief copies the input buffer towards the current buffer
-
-*/
-class _ProceduralExport Blit : public TextureProcessing
-{
-	TextureBufferPtr mInputBuffer;
-	Ogre::Rect mInputRect;
-	Ogre::Rect mOutputRect;
-public:
-	/**
-	Default constructor.
-	\param pBuffer Image buffer where to modify the image.
-	*/
-	Blit(TextureBufferPtr pBuffer)
-		: TextureProcessing(pBuffer, "Blit"), mInputBuffer(0)
-	{
-		mOutputRect.left = 0;
-		mOutputRect.top = 0;
-		mOutputRect.right = pBuffer->getWidth();
-		mOutputRect.bottom = pBuffer->getHeight();
-	}
-
-	/**
-	Sets the texture buffer that must be copied towards the current texture buffer
-	*/
-	Blit& setInputBuffer(TextureBufferPtr inputBuffer)
-	{
-		mInputBuffer = inputBuffer;
-		mInputRect.left = 0;
-		mInputRect.top = 0;
-		mInputRect.right = inputBuffer->getWidth();
-		mInputRect.bottom = inputBuffer->getHeight();
-		return *this;
-	}
-
-	/**
-	Sets the part of the input buffer to copy
-	*/
-	Blit& setInputRect(const Ogre::Rect& inputRect)
-	{
-		mInputRect = inputRect;
-		return *this;
-	}
-
-	/**
-	Sets the part of the input buffer to copy
-	*/
-	Blit& setInputRectRelative(const Ogre::RealRect& inputRect)
-	{
-		mInputRect.left = inputRect.left*mInputBuffer->getWidth();
-		mInputRect.right = inputRect.right*mInputBuffer->getWidth();
-		mInputRect.top = inputRect.top*mInputBuffer->getHeight();
-		mInputRect.bottom = inputRect.bottom*mInputBuffer->getHeight();
-		return *this;
-	}
-
-	/**
-	Sets the part of the output buffer where the input is copied to
-	*/
-	Blit& setOutputRect(const Ogre::Rect& outputRect)
-	{
-		mOutputRect = outputRect;
-		return *this;
-	}
-
-	/**
-	Sets the part of the output buffer to copy
-	*/
-	Blit& setOutputRectRelative(const Ogre::RealRect& outputRect)
-	{
-		mOutputRect.left = outputRect.left*mBuffer->getWidth();
-		mOutputRect.right = outputRect.right*mBuffer->getWidth();
-		mOutputRect.top = outputRect.top*mBuffer->getHeight();
-		mOutputRect.bottom = outputRect.bottom*mBuffer->getHeight();
-		return *this;
-	}
-
-	/**
-	Run image manipulation
-	\return Pointer to image buffer which has been set in the constructor.
-	*/
-	TextureBufferPtr process();
-};
-
-/**
 \brief Use alpha channel as an mask for an other image.
 \details Can take normal, height or quaternion map as second input.
 
@@ -371,6 +286,162 @@ public:
 };
 
 /**
+\brief copies a part of the input buffer towards the current buffer.
+
+Example:
+\code{.cpp}
+Procedural::TextureBuffer bufferImage(256);
+Procedural::Image(&bufferImage).setFile("red_brick.jpg").process();
+
+Procedural::TextureBuffer bufferGradient(256);
+Procedural::Gradient(&bufferGradient).setColours(Ogre::ColourValue::Black, Ogre::ColourValue::Red, Ogre::ColourValue::Green, Ogre::ColourValue::Blue).process();
+
+Procedural::Blit(&bufferImage).setInputBuffer(&bufferGradient).setInputRect(0.0f, 0.0f, 0.5f, 0.5f).setOutputRect(0.25f, 0.25f, 0.75f, 0.75f).process();
+\endcode
+\dotfile texture_31.gv
+*/
+class _ProceduralExport Blit : public TextureProcessing
+{
+	TextureBufferPtr mInputBuffer;
+	Ogre::Rect mInputRect;
+	Ogre::Rect mOutputRect;
+
+public:
+	/**
+	Default constructor.
+	\param pBuffer Image buffer where to modify the image.
+	*/
+	Blit(TextureBufferPtr pBuffer)
+		: TextureProcessing(pBuffer, "Blit"), mInputBuffer(0)
+	{
+		mOutputRect.left = 0;
+		mOutputRect.top = 0;
+		mOutputRect.right = pBuffer->getWidth();
+		mOutputRect.bottom = pBuffer->getHeight();
+	}
+
+	/**
+	Sets the texture buffer that must be copied towards the current texture buffer
+	\param image Pointer on image where to copy from
+	*/
+	Blit & setInputBuffer(TextureBufferPtr inputBuffer);
+
+	/**
+	Set the full rectangle coordinates of the input buffer to copy.
+	\param rect Full rectangle description (default: left=0.0, top=0.0, right=1.0, bottom=1.0)
+	\param relative If this is set to true (default) the rectangle data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	Blit & setInputRect(Ogre::RealRect rect, bool relative = true);
+
+	/**
+	Set the full rectangle coordinates of the input buffer to copy.
+	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
+	*/
+	Blit & setInputRect(Ogre::Rect rect);
+
+	/**
+	Set the full rectangle coordinates of the input buffer to copy.
+	\param pos1 Vector to top left start point of the rectangle (default: x=0.0, y=0.0)
+	\param pos2 Vector to bottom right end point of the rectangle (default: x=1.0, y=1.0)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	Blit & setInputRect(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
+
+	/**
+	Set the full rectangle coordinates of the input buffer to copy.
+	\param x1 New absolute x position of rectangle start (default 0)
+	\param y1 New absolute y position of rectangle start (default 0)
+	\param x2 New absolute x position of rectangle end (default: image width)
+	\param y2 New absolute y position of rectangle end (default: image height)
+	*/
+	Blit & setInputRect(size_t x1, size_t y1, size_t x2, size_t y2);
+
+	/**
+	Set the full rectangle coordinates of the input buffer to copy.
+	\param x1 New relative x position of rectangle start [0.0, 1.0] \(default 0.0)
+	\param y1 New relative y position of rectangle start [0.0, 1.0] \(default 0.0)
+	\param x2 New relative x position of rectangle end [0.0, 1.0] \(default 1.0)
+	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
+	*/
+	Blit & setInputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+	/**
+	Set the full rectangle coordinates of the input buffer to copy.
+	\param pos1 New absolute coordinates of the rectangle start point (default: x=0, y=0)
+	\param pos2 New absolute coordinates of the rectangle end point (default: x=image width, y=image height)
+	*/
+	Blit & setInputRect(POINT pos1, POINT pos2);
+
+	/**
+	Set the full rectangle coordinates of the input buffer to copy.
+	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
+	*/
+	Blit & setInputRect(RECT rect);
+#endif
+
+	/**
+	Set the full rectangle coordinates of the output buffer where the input is copied to.
+	\param rect Full rectangle description (default: left=0.0, top=0.0, right=1.0, bottom=1.0)
+	\param relative If this is set to true (default) the rectangle data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	Blit & setOutputRect(Ogre::RealRect rect, bool relative = true);
+
+	/**
+	Set the full rectangle coordinates of the output buffer where the input is copied to.
+	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
+	*/
+	Blit & setOutputRect(Ogre::Rect rect);
+
+	/**
+	Set the full rectangle coordinates of the output buffer where the input is copied to.
+	\param pos1 Vector to top left start point of the rectangle (default: x=0.0, y=0.0)
+	\param pos2 Vector to bottom right end point of the rectangle (default: x=1.0, y=1.0)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	Blit & setOutputRect(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
+
+	/**
+	Set the full rectangle coordinates of the output buffer where the input is copied to.
+	\param x1 New absolute x position of rectangle start (default 0)
+	\param y1 New absolute y position of rectangle start (default 0)
+	\param x2 New absolute x position of rectangle end (default: image width)
+	\param y2 New absolute y position of rectangle end (default: image height)
+	*/
+	Blit & setOutputRect(size_t x1, size_t y1, size_t x2, size_t y2);
+
+	/**
+	Set the full rectangle coordinates of the output buffer where the input is copied to.
+	\param x1 New relative x position of rectangle start [0.0, 1.0] \(default 0.0)
+	\param y1 New relative y position of rectangle start [0.0, 1.0] \(default 0.0)
+	\param x2 New relative x position of rectangle end [0.0, 1.0] \(default 1.0)
+	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
+	*/
+	Blit & setOutputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+	/**
+	Set the full rectangle coordinates of the output buffer where the input is copied to.
+	\param pos1 New absolute coordinates of the rectangle start point (default: x=0, y=0)
+	\param pos2 New absolute coordinates of the rectangle end point (default: x=image width, y=image height)
+	*/
+	Blit & setOutputRect(POINT pos1, POINT pos2);
+
+	/**
+	Set the full rectangle coordinates of the output buffer where the input is copied to.
+	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
+	*/
+	Blit & setOutputRect(RECT rect);
+#endif
+
+	/**
+	Run image manipulation
+	\return Pointer to image buffer which has been set in the constructor.
+	*/
+	TextureBufferPtr process();
+};
+
+/**
 \brief Reduce sharpness on input image.
 \details Blurs the input image by a specified algorithm.
 
@@ -499,6 +570,139 @@ public:
 	\return Pointer to image buffer which has been set in the constructor.
 	*/
 	TextureBufferPtr process();
+};
+
+/** 
+\brief Draw a circle.
+\details Draw a filled circle on top of previous content.
+
+Example:
+\code{.cpp}
+Procedural::TextureBuffer bufferSolid(256);
+Procedural::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+Procedural::CircleTexture(&bufferSolid).setColour(Ogre::ColourValue::Red).setRadius(0.3f).process();
+\endcode
+\dotfile texture_32.gv
+*/
+class _ProceduralExport CircleTexture : public TextureProcessing
+{
+private:
+	Ogre::ColourValue mColour;
+	size_t mX;
+	size_t mY;
+	size_t mRadius;
+
+public:
+	/**
+	Default constructor.
+	\param pBuffer Image buffer where to modify the image.
+	*/
+	CircleTexture(TextureBufferPtr pBuffer)
+		: TextureProcessing(pBuffer, "CircleTexture"), mColour(Ogre::ColourValue::White)
+	{
+		mRadius = std::min<size_t>(pBuffer->getWidth(), pBuffer->getHeight()) / 2;
+		mX = mRadius;
+		mY = mRadius;
+	}
+
+	/**
+	Set the fill colour of the circle.
+	\param colour New colour for processing (default Ogre::ColourValue::White)
+	*/
+	CircleTexture & setColour(Ogre::ColourValue colour);
+
+	/**
+	Set the fill colour of the circle.
+	\param red Red value of the fill colour [0, 255] (default 255)
+	\param green Green value of the fill colour [0, 255] (default 255)
+	\param blue Blue value of the fill colour [0, 255] (default 255)
+	\param alpha %Alpha value of the fill colour [0, 255] (default 255)
+	*/
+	CircleTexture & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
+
+	/**
+	Set the fill colour of the circle.
+	\param red Red value of the fill colour [0.0, 1.0] \(default 1.0)
+	\param green Green value of the fill colour [0.0, 1.0] \(default 1.0)
+	\param blue Blue value of the fill colour [0.0, 1.0] \(default 1.0)
+	\param alpha %Alpha value of the fill colour [0.0, 1.0] \(default 1.0)
+	*/
+	CircleTexture & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+
+	/**
+	Set the absolute radius of the circle.
+	\param radius New absolute radius of the circle in px (default 1/2 * image width)
+	*/
+	CircleTexture & setRadius(size_t radius);
+
+	/**
+	Set the relative radius of the circle.
+	\param radius New relative radius of the circle [0.0, 1.0] \(default 0.5)
+	*/
+	CircleTexture & setRadius(Ogre::Real radius);
+
+	/**
+	Set absolute x position of circle center point in px
+	\param x New absolute x position of circle center (default 1/2 * image width)
+	*/
+	CircleTexture & setCenterX(size_t x);
+
+	/**
+	Set relative x position of circle center point as Real
+	\param x New relative x position of circle center [0.0, 1.0] \(default 0.5)
+	*/
+	CircleTexture & setCenterX(Ogre::Real x);
+
+	/**
+	Set absolute y position of circle center point in px
+	\param y New absolute y position of circle center (default 1/2 * image width)
+	*/
+	CircleTexture & setCenterY(size_t y);
+
+	/**
+	Set relative y position of circle center point as Real
+	\param y New relative y position of circle center [0.0, 1.0] \(default 0.5)
+	*/
+	CircleTexture & setCenterY(Ogre::Real y);
+
+	/**
+	Set the position of circle center point.
+	\param pos Vector to the center point of the circle (default: x=0.5, y=0.5)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	CircleTexture & setCenter(Ogre::Vector2 pos, bool relative = true);
+
+	/**
+	Set the position of circle center point.
+	\param x New absolute x position of circle center (default 1/2 * image width)
+	\param y New absolute y position of circle center (default 1/2 * image width)
+	*/
+	CircleTexture & setCenter(size_t x, size_t y);
+
+	/**
+	Set the position of circle center point.
+	\param x New relative x position of circle center [0.0, 1.0] \(default 0.5)
+	\param y New relative y position of circle center [0.0, 1.0] \(default 0.5)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	CircleTexture & setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+	/**
+	Set the position of circle center point.
+	\param pos Absolute center point of the circle (default: x=1/2 * image width, y=1/2 * image width)
+	*/
+	CircleTexture & setCenter(POINT pos);
+#endif
+
+	/**
+	Run image manipulation
+	\return Pointer to image buffer which has been set in the constructor.
+	*/
+	TextureBufferPtr process();
+
+private:
+	void _putpixel(long dx, long dy);
 };
 
 /**
@@ -1278,6 +1482,167 @@ private:
 };
 
 /** 
+\brief Draw an ellipse.
+\details Draw a filled ellipse on top of previous content.
+
+Example:
+\code{.cpp}
+Procedural::TextureBuffer bufferSolid(256);
+Procedural::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+Procedural::EllipseTexture(&bufferSolid).setColour(Ogre::ColourValue::Red).setRadiusX(0.4f).setRadiusY(0.2f).process();
+\endcode
+\dotfile texture_33.gv
+*/
+class _ProceduralExport EllipseTexture : public TextureProcessing
+{
+private:
+	Ogre::ColourValue mColour;
+	size_t mX;
+	size_t mY;
+	size_t mRadiusX;
+	size_t mRadiusY;
+
+public:
+	/**
+	Default constructor.
+	\param pBuffer Image buffer where to modify the image.
+	*/
+	EllipseTexture(TextureBufferPtr pBuffer)
+		: TextureProcessing(pBuffer, "EllipseTexture"), mColour(Ogre::ColourValue::White)
+	{
+		mRadiusX = pBuffer->getWidth() / 2;
+		mX = mRadiusX;
+		mRadiusY = pBuffer->getHeight() / 2;
+		mY = mRadiusY;
+	}
+
+	/**
+	Set the fill colour of the ellipse.
+	\param colour New colour for processing (default Ogre::ColourValue::White)
+	*/
+	EllipseTexture & setColour(Ogre::ColourValue colour);
+
+	/**
+	Set the fill colour of the ellipse.
+	\param red Red value of the fill colour [0, 255] (default 255)
+	\param green Green value of the fill colour [0, 255] (default 255)
+	\param blue Blue value of the fill colour [0, 255] (default 255)
+	\param alpha %Alpha value of the fill colour [0, 255] (default 255)
+	*/
+	EllipseTexture & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
+
+	/**
+	Set the fill colour of the ellipse.
+	\param red Red value of the fill colour [0.0, 1.0] \(default 1.0)
+	\param green Green value of the fill colour [0.0, 1.0] \(default 1.0)
+	\param blue Blue value of the fill colour [0.0, 1.0] \(default 1.0)
+	\param alpha %Alpha value of the fill colour [0.0, 1.0] \(default 1.0)
+	*/
+	EllipseTexture & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+
+	/**
+	Set the absolute radius of the ellipse on x axis.
+	\param radiusx New absolute radius of the ellipse on x axis in px (default 1/2 * image width)
+	*/
+	EllipseTexture & setRadiusX(size_t radiusx);
+
+	/**
+	Set the relative radius of the ellipse on x axis.
+	\param radiusx New relative radius of the ellipse on x axis [0.0, 1.0] \(default 0.5)
+	*/
+	EllipseTexture & setRadiusX(Ogre::Real radiusx);
+
+	/**
+	Set the absolute radius of the ellipse on y axis.
+	\param radiusy New absolute radius of the ellipse on y axis in px (default 1/2 * image width)
+	*/
+	EllipseTexture & setRadiusY(size_t radiusy);
+
+	/**
+	Set the relative radius of the ellipse on y axis.
+	\param radiusy New relative radius of the ellipse on y axis [0.0, 1.0] \(default 0.5)
+	*/
+	EllipseTexture & setRadiusY(Ogre::Real radiusy);
+
+	/**
+	Set the absolute radius of the ellipse.
+	\param radiusx New absolute radius of the ellipse on x axis in px (default 1/2 * image width)
+	\param radiusy New absolute radius of the ellipse on y axis in px (default 1/2 * image width)
+	*/
+	EllipseTexture & setRadius(size_t radiusx, size_t radiusy);
+
+	/**
+	Set the relative radius of the ellipse.
+	\param radiusx New relative radius of the ellipse on x axis [0.0, 1.0] \(default 0.5)
+	\param radiusy New relative radius of the ellipse on y axis [0.0, 1.0] \(default 0.5)
+	*/
+	EllipseTexture & setRadius(Ogre::Real radiusx, Ogre::Real radiusy);
+
+	/**
+	Set absolute x position of ellipse center point in px
+	\param x New absolute x position of ellipse center (default 1/2 * image width)
+	*/
+	EllipseTexture & setCenterX(size_t x);
+
+	/**
+	Set relative x position of ellipse center point as Real
+	\param x New relative x position of ellipse center [0.0, 1.0] \(default 0.5)
+	*/
+	EllipseTexture & setCenterX(Ogre::Real x);
+
+	/**
+	Set absolute y position of ellipse center point in px
+	\param y New absolute y position of ellipse center (default 1/2 * image width)
+	*/
+	EllipseTexture & setCenterY(size_t y);
+
+	/**
+	Set relative y position of ellipse center point as Real
+	\param y New relative y position of ellipse center [0.0, 1.0] \(default 0.5)
+	*/
+	EllipseTexture & setCenterY(Ogre::Real y);
+
+	/**
+	Set the position of ellipse center point.
+	\param pos Vector to the center point of the ellipse (default: x=0.5, y=0.5)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	EllipseTexture & setCenter(Ogre::Vector2 pos, bool relative = true);
+
+	/**
+	Set the position of ellipse center point.
+	\param x New absolute x position of ellipse center (default 1/2 * image width)
+	\param y New absolute y position of ellipse center (default 1/2 * image width)
+	*/
+	EllipseTexture & setCenter(size_t x, size_t y);
+
+	/**
+	Set the position of ellipse center point.
+	\param x New relative x position of ellipse center [0.0, 1.0] \(default 0.5)
+	\param y New relative y position of ellipse center [0.0, 1.0] \(default 0.5)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	EllipseTexture & setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+	/**
+	Set the position of ellipse center point.
+	\param pos Absolute center point of the ellipse (default: x=1/2 * image width, y=1/2 * image width)
+	*/
+	EllipseTexture & setCenter(POINT pos);
+#endif
+
+	/**
+	Run image manipulation
+	\return Pointer to image buffer which has been set in the constructor.
+	*/
+	TextureBufferPtr process();
+
+private:
+	void _putpixel(long dx, long dy);
+};
+
+/** 
 \brief %Flip the image.
 \details Flip the input image on different axis.
 
@@ -1973,7 +2338,7 @@ Example:
 \code{.cpp}
 Procedural::TextureBuffer bufferSolid(256);
 Procedural::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
-Procedural::Rectangle(&bufferSolid).setColour(Ogre::ColourValue::Red).setRectangle(0.25f, 0.25f, 0.75f, 0.75f).process();
+Procedural::RectangleTexture(&bufferSolid).setColour(Ogre::ColourValue::Red).setRectangle(0.25f, 0.25f, 0.75f, 0.75f).process();
 \endcode
 \dotfile texture_24.gv
 */
@@ -1992,7 +2357,7 @@ public:
 	\param pBuffer Image buffer where to modify the image.
 	*/
 	RectangleTexture(TextureBufferPtr pBuffer)
-		: TextureProcessing(pBuffer, "Rectangle"), mColour(Ogre::ColourValue::White), mX1(0), mY1(0)
+		: TextureProcessing(pBuffer, "RectangleTexture"), mColour(Ogre::ColourValue::White), mX1(0), mY1(0)
 	{
 		mX2 = pBuffer->getWidth();
 		mY2 = pBuffer->getHeight();

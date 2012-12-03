@@ -668,7 +668,7 @@ void Illustrations::go()
 	dotfile.save();
 
 	Procedural::Gradient(&buffer).process();
-	Procedural::Lookup(&bufferGradient).setParameterImage(&bufferCellNormal).process();
+	Procedural::Lookup(&buffer).setParameterImage(&bufferCellNormal).process();
 	exportImage("texture_lookup", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_20", "Lookup_Demo");
 	dotfile.set("Gradient", "texture_gradient", "Cell", "texture_cell_smooth", "Lookup", "texture_lookup");
@@ -769,6 +769,27 @@ void Illustrations::go()
 	exportImage("texture_cycloid_lissajous", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_30", "Cycloid_Demo");
 	dotfile.set("Solid", "texture_solid", "Hypocycloid", "texture_cycloid_hypocycloid");
+	dotfile.save();
+
+	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
+	Procedural::Blit(&buffer).setInputBuffer(&bufferGradient).setInputRect(0.0f, 0.0f, 0.5f, 0.5f).setOutputRect(0.25f, 0.25f, 0.75f, 0.75f).process();
+	exportImage("texture_blit", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_31", "Blit_Demo");
+	dotfile.set("Image", "texture_image", "Gradient", "texture_gradient", "Blit", "texture_blit");
+	dotfile.save();
+
+	Procedural::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+	Procedural::CircleTexture(&buffer).setColour(Ogre::ColourValue::Red).setRadius(0.3f).process();
+	exportImage("texture_circle", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_32", "Circle_Demo");
+	dotfile.set("Solid", "texture_solid", "Circle", "texture_circle");
+	dotfile.save();
+
+	Procedural::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+	Procedural::EllipseTexture(&buffer).setColour(Ogre::ColourValue::Red).setRadiusX(0.4f).setRadiusY(0.2f).process();
+	exportImage("texture_ellipse", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_33", "Ellipse_Demo");
+	dotfile.set("Solid", "texture_solid", "Ellipse", "texture_ellipse");
 	dotfile.save();
 
 	// Example

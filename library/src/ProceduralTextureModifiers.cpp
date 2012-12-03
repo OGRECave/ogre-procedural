@@ -34,20 +34,6 @@ using namespace Ogre;
 namespace Procedural
 {
 
-TextureBufferPtr Blit::process()
-{	
-	for(size_t y = mOutputRect.top; y < mOutputRect.bottom; y++)
-	{
-		for(size_t x = mOutputRect.left; x < mOutputRect.right; x++)
-		{
-			size_t x0 = (x-mOutputRect.left)/static_cast<float>(mOutputRect.width())*mInputRect.width() + mInputRect.left;
-			size_t y0 = (y-mOutputRect.top)/static_cast<float>(mOutputRect.height())*mInputRect.height() + mInputRect.top;		
-			mBuffer->setPixel(x, y, mInputBuffer->getPixel(x0,y0));
-		}
-	}
-	return mBuffer;
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Abnormals & Abnormals::setParameterImage(TextureBufferPtr image)
@@ -273,6 +259,215 @@ TextureBufferPtr AlphaMask::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+Blit & Blit::setInputBuffer(TextureBufferPtr inputBuffer)
+{
+	if(inputBuffer != NULL)
+		if(inputBuffer->getHeight() >= mBuffer->getHeight() && inputBuffer->getWidth() >= mBuffer->getWidth())
+		{
+			mInputBuffer = inputBuffer;
+			mInputRect.left = 0;
+			mInputRect.top = 0;
+			mInputRect.right = inputBuffer->getWidth();
+			mInputRect.bottom = inputBuffer->getHeight();
+		}
+	return *this;
+}
+
+Blit & Blit::setInputRect(Ogre::RealRect rect, bool relative)
+{
+	if(mInputBuffer == NULL) return *this;
+	if(relative)
+	{
+		mInputRect.left = (long)((Ogre::Real)mInputBuffer->getWidth() * std::min<Ogre::Real>(rect.left, 1.0f));
+		mInputRect.top = (long)((Ogre::Real)mInputBuffer->getHeight() * std::min<Ogre::Real>(rect.top, 1.0f));
+		mInputRect.right = (long)((Ogre::Real)mInputBuffer->getWidth() * std::min<Ogre::Real>(rect.right, 1.0f));
+		mInputRect.bottom = (long)((Ogre::Real)mInputBuffer->getHeight() * std::min<Ogre::Real>(rect.bottom, 1.0f));
+	}
+	else
+	{
+		mInputRect.left = std::min<long>((long)rect.left, mInputBuffer->getWidth());
+		mInputRect.top = std::min<long>((long)rect.top, mInputBuffer->getHeight());
+		mInputRect.right = std::min<long>((long)rect.right, mInputBuffer->getWidth());
+		mInputRect.bottom = std::min<long>((long)rect.bottom, mInputBuffer->getHeight());
+	}
+	return *this;
+}
+
+Blit & Blit::setInputRect(Ogre::Rect rect)
+{
+	if(mInputBuffer == NULL) return *this;
+	mInputRect.left = std::min<long>(rect.left, mInputBuffer->getWidth());
+	mInputRect.top = std::min<long>(rect.top, mInputBuffer->getHeight());
+	mInputRect.right = std::min<long>(rect.right, mInputBuffer->getWidth());
+	mInputRect.bottom = std::min<long>(rect.bottom, mInputBuffer->getHeight());
+	return *this;
+}
+
+Blit & Blit::setInputRect(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative)
+{
+	if(mInputBuffer == NULL) return *this;
+	if(relative)
+	{
+		mInputRect.left = (long)((Ogre::Real)mInputBuffer->getWidth() * std::min<Ogre::Real>(pos1.x, 1.0f));
+		mInputRect.top = (long)((Ogre::Real)mInputBuffer->getHeight() * std::min<Ogre::Real>(pos1.y, 1.0f));
+		mInputRect.right = (long)((Ogre::Real)mInputBuffer->getWidth() * std::min<Ogre::Real>(pos2.x, 1.0f));
+		mInputRect.bottom = (long)((Ogre::Real)mInputBuffer->getHeight() * std::min<Ogre::Real>(pos2.y, 1.0f));
+	}
+	else
+	{
+		mInputRect.left = std::min<long>((long)pos1.x, mInputBuffer->getWidth());
+		mInputRect.top = std::min<long>((long)pos1.y, mInputBuffer->getHeight());
+		mInputRect.right = std::min<long>((long)pos2.x, mInputBuffer->getWidth());
+		mInputRect.bottom = std::min<long>((long)pos2.y, mInputBuffer->getHeight());
+	}
+	return *this;
+}
+
+Blit & Blit::setInputRect(size_t x1, size_t y1, size_t x2, size_t y2)
+{
+	if(mInputBuffer == NULL) return *this;
+	mInputRect.left = std::min<long>(x1, mInputBuffer->getWidth());
+	mInputRect.top = std::min<long>(y1, mInputBuffer->getHeight());
+	mInputRect.right = std::min<long>(x2, mInputBuffer->getWidth());
+	mInputRect.bottom = std::min<long>(y2, mInputBuffer->getHeight());
+	return *this;
+}
+
+Blit & Blit::setInputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2)
+{
+	if(mInputBuffer == NULL) return *this;
+	mInputRect.left = (long)((Ogre::Real)mInputBuffer->getWidth() * std::min<Ogre::Real>(x1, 1.0f));
+	mInputRect.top = (long)((Ogre::Real)mInputBuffer->getHeight() * std::min<Ogre::Real>(y1, 1.0f));
+	mInputRect.right = (long)((Ogre::Real)mInputBuffer->getWidth() * std::min<Ogre::Real>(x2, 1.0f));
+	mInputRect.bottom = (long)((Ogre::Real)mInputBuffer->getHeight() * std::min<Ogre::Real>(y2, 1.0f));
+	return *this;
+}
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+Blit & Blit::setInputRect(POINT pos1, POINT pos2)
+{
+	if(mInputBuffer == NULL) return *this;
+	mInputRect.left = std::min<long>(pos1.x, mInputBuffer->getWidth());
+	mInputRect.top = std::min<long>(pos1.y, mInputBuffer->getHeight());
+	mInputRect.right = std::min<long>(pos2.x, mInputBuffer->getWidth());
+	mInputRect.bottom = std::min<long>(pos2.y, mInputBuffer->getHeight());
+	return *this;
+}
+
+Blit & Blit::setInputRect(RECT rect)
+{
+	if(mInputBuffer == NULL) return *this;
+	mInputRect.left = std::min<long>(rect.left, mInputBuffer->getWidth());
+	mInputRect.top = std::min<long>(rect.top, mInputBuffer->getHeight());
+	mInputRect.right = std::min<long>(rect.right, mInputBuffer->getWidth());
+	mInputRect.bottom = std::min<long>(rect.bottom, mInputBuffer->getHeight());
+	return *this;
+}
+#endif
+
+Blit & Blit::setOutputRect(Ogre::RealRect rect, bool relative)
+{
+	if(relative)
+	{
+		mOutputRect.left = (long)((Ogre::Real)mBuffer->getWidth() * std::min<Ogre::Real>(rect.left, 1.0f));
+		mOutputRect.top = (long)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(rect.top, 1.0f));
+		mOutputRect.right = (long)((Ogre::Real)mBuffer->getWidth() * std::min<Ogre::Real>(rect.right, 1.0f));
+		mOutputRect.bottom = (long)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(rect.bottom, 1.0f));
+	}
+	else
+	{
+		mOutputRect.left = std::min<long>((long)rect.left, mBuffer->getWidth());
+		mOutputRect.top = std::min<long>((long)rect.top, mBuffer->getHeight());
+		mOutputRect.right = std::min<long>((long)rect.right, mBuffer->getWidth());
+		mOutputRect.bottom = std::min<long>((long)rect.bottom, mBuffer->getHeight());
+	}
+	return *this;
+}
+
+Blit & Blit::setOutputRect(Ogre::Rect rect)
+{
+	mOutputRect.left = std::min<long>(rect.left, mBuffer->getWidth());
+	mOutputRect.top = std::min<long>(rect.top, mBuffer->getHeight());
+	mOutputRect.right = std::min<long>(rect.right, mBuffer->getWidth());
+	mOutputRect.bottom = std::min<long>(rect.bottom, mBuffer->getHeight());
+	return *this;
+}
+
+Blit & Blit::setOutputRect(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative)
+{
+	if(relative)
+	{
+		mOutputRect.left = (long)((Ogre::Real)mBuffer->getWidth() * std::min<Ogre::Real>(pos1.x, 1.0f));
+		mOutputRect.top = (long)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(pos1.y, 1.0f));
+		mOutputRect.right = (long)((Ogre::Real)mBuffer->getWidth() * std::min<Ogre::Real>(pos2.x, 1.0f));
+		mOutputRect.bottom = (long)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(pos2.y, 1.0f));
+	}
+	else
+	{
+		mOutputRect.left = std::min<long>((long)pos1.x, mBuffer->getWidth());
+		mOutputRect.top = std::min<long>((long)pos1.y, mBuffer->getHeight());
+		mOutputRect.right = std::min<long>((long)pos2.x, mBuffer->getWidth());
+		mOutputRect.bottom = std::min<long>((long)pos2.y, mBuffer->getHeight());
+	}
+	return *this;
+}
+
+Blit & Blit::setOutputRect(size_t x1, size_t y1, size_t x2, size_t y2)
+{
+	mOutputRect.left = std::min<long>(x1, mBuffer->getWidth());
+	mOutputRect.top = std::min<long>(y1, mBuffer->getHeight());
+	mOutputRect.right = std::min<long>(x2, mBuffer->getWidth());
+	mOutputRect.bottom = std::min<long>(y2, mBuffer->getHeight());
+	return *this;
+}
+
+Blit & Blit::setOutputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2)
+{
+	mOutputRect.left = (long)((Ogre::Real)mBuffer->getWidth() * std::min<Ogre::Real>(x1, 1.0f));
+	mOutputRect.top = (long)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(y1, 1.0f));
+	mOutputRect.right = (long)((Ogre::Real)mBuffer->getWidth() * std::min<Ogre::Real>(x2, 1.0f));
+	mOutputRect.bottom = (long)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(y2, 1.0f));
+	return *this;
+}
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+Blit & Blit::setOutputRect(POINT pos1, POINT pos2)
+{
+	mOutputRect.left = std::min<long>(pos1.x, mBuffer->getWidth());
+	mOutputRect.top = std::min<long>(pos1.y, mBuffer->getHeight());
+	mOutputRect.right = std::min<long>(pos2.x, mBuffer->getWidth());
+	mOutputRect.bottom = std::min<long>(pos2.y, mBuffer->getHeight());
+	return *this;
+}
+
+Blit & Blit::setOutputRect(RECT rect)
+{
+	mOutputRect.left = std::min<long>(rect.left, mBuffer->getWidth());
+	mOutputRect.top = std::min<long>(rect.top, mBuffer->getHeight());
+	mOutputRect.right = std::min<long>(rect.right, mBuffer->getWidth());
+	mOutputRect.bottom = std::min<long>(rect.bottom, mBuffer->getHeight());
+	return *this;
+}
+#endif
+
+TextureBufferPtr Blit::process()
+{
+	if(mInputBuffer == NULL) return mBuffer;
+	for(long y = mOutputRect.top; y < mOutputRect.bottom; y++)
+	{
+		for(long x = mOutputRect.left; x < mOutputRect.right; x++)
+		{
+			size_t x0 = static_cast<size_t>(static_cast<Ogre::Real>(x - mOutputRect.left) / static_cast<Ogre::Real>(mOutputRect.width()) * static_cast<Ogre::Real>(mInputRect.width()) + static_cast<Ogre::Real>(mInputRect.left));
+			size_t y0 = static_cast<size_t>(static_cast<Ogre::Real>(y - mOutputRect.top) / static_cast<Ogre::Real>(mOutputRect.height()) * static_cast<Ogre::Real>(mInputRect.height()) + static_cast<Ogre::Real>(mInputRect.top));
+			mBuffer->setPixel(x, y, mInputBuffer->getPixel(x0, y0));
+		}
+	}
+	logMsg("Modify texture with blit filter");
+	return mBuffer;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Blur & Blur::setSize(Ogre::uchar size)
 {
 	mSize = size;
@@ -368,6 +563,131 @@ TextureBufferPtr Channel::process()
 
 	logMsg("Modify texture with channel filter : " + StringConverter::toString(mSelection));
 	return mBuffer;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CircleTexture & CircleTexture::setColour(Ogre::ColourValue colour)
+{
+	mColour = colour;
+	return *this;
+}
+
+CircleTexture & CircleTexture::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
+{
+	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
+	return *this;
+}
+
+CircleTexture & CircleTexture::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+{
+	mColour = Ogre::ColourValue(red, green, blue, alpha);
+	return *this;
+}
+
+CircleTexture & CircleTexture::setRadius(size_t radius)
+{
+	mRadius = radius;
+	return *this;
+}
+
+CircleTexture & CircleTexture::setRadius(Ogre::Real radius)
+{
+	mRadius = (size_t)((Ogre::Real)std::min<Ogre::uint>(mBuffer->getWidth(), mBuffer->getHeight()) * Ogre::Math::Abs(radius));
+	return *this;
+}
+
+CircleTexture & CircleTexture::setCenterX(size_t x)
+{
+	mX = std::min<size_t>(x, mBuffer->getWidth() - 1);
+	return *this;
+}
+
+CircleTexture & CircleTexture::setCenterX(Ogre::Real x)
+{
+	mX = std::min<size_t>((size_t)(x * (Ogre::Real)mBuffer->getWidth()), mBuffer->getWidth() - 1);
+	return *this;
+}
+
+CircleTexture & CircleTexture::setCenterY(size_t y)
+{
+	mY = std::min<size_t>(y, mBuffer->getHeight() - 1);
+	return *this;
+}
+
+CircleTexture & CircleTexture::setCenterY(Ogre::Real y)
+{
+	mY = std::min<size_t>((size_t)(y * (Ogre::Real)mBuffer->getHeight()), mBuffer->getHeight() - 1);
+	return *this;
+}
+
+CircleTexture & CircleTexture::setCenter(Ogre::Vector2 pos, bool relative)
+{
+	setCenter(pos.x, pos.y, relative);
+	return *this;
+}
+
+CircleTexture & CircleTexture::setCenter(size_t x, size_t y)
+{
+	setCenterX(x);
+	setCenterY(y);
+	return *this;
+}
+
+CircleTexture & CircleTexture::setCenter(Ogre::Real x, Ogre::Real y, bool relative)
+{
+	if(relative)
+	{
+		setCenterX(x);
+		setCenterY(y);
+	}
+	else
+	{
+		setCenterX((size_t)x);
+		setCenterY((size_t)y);
+	}
+	return *this;
+}
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+CircleTexture & CircleTexture::setCenter(POINT pos)
+{
+	setCenter((size_t)pos.x, (size_t)pos.y);
+	return *this;
+}
+#endif
+
+TextureBufferPtr CircleTexture::process()
+{
+	long x = 0;
+	long y = mRadius;
+	long p = 3 - 2 * mRadius;
+	while (x <= y)
+	{
+		for(long dy = -y; dy <= y; dy++)
+		{
+			_putpixel(+x, dy);
+			_putpixel(-x, dy);
+		}
+		for(long dx = -x; dx <= x; dx++)
+		{
+			_putpixel(+y, dx);
+			_putpixel(-y, dx);
+		}
+		if (p < 0)
+			p += 4 * x++ + 6;
+		else
+			p += 4 * (x++ - y--) + 10;
+	}
+	logMsg("Modify texture with circle filter : x = " + StringConverter::toString(mX) + ", y = " + StringConverter::toString(mY) + ", Radius = " + StringConverter::toString(mRadius));
+	return mBuffer;
+}
+
+void CircleTexture::_putpixel(long dx, long dy)
+{
+	if(mX + dx < 0 || mX + dx >= mBuffer->getWidth()) return;
+	if(mY + dy < 0 || mY + dy >= mBuffer->getHeight()) return;
+	mBuffer->setPixel(mX + dx, mY + dy, mColour);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -773,13 +1093,13 @@ Convolution & Convolution::setIncludeAlphaChannel(bool usealpha)
 
 TextureBufferPtr Convolution::process()
 {
-    int radius = ((int)mKernelSize) >> 1;
+	int radius = ((int)mKernelSize) >> 1;
 	TextureBufferPtr tmpBuffer = mBuffer->clone();
 
 	for(long y = 0; y < (long)mBuffer->getWidth(); y++)
-    {
+	{
 		for(long x = 0; x < (long)mBuffer->getHeight(); x++)
-        {
+		{
 			long r = 0;
 			long g = 0;
 			long b = 0;
@@ -787,55 +1107,55 @@ TextureBufferPtr Convolution::process()
 			long div = 0;
 			int processedKernelSize = 0;
 
-            for(int i = 0; i < mKernelSize; i++)
-            {
-                int ir = i - radius;
+			for(int i = 0; i < mKernelSize; i++)
+			{
+				int ir = i - radius;
 
-                if((y + ir) < 0)
-                    continue;
-                if((y + ir) >= (long)mBuffer->getHeight())
-                    break;
+				if((y + ir) < 0)
+					continue;
+				if((y + ir) >= (long)mBuffer->getHeight())
+					break;
 
-                for(int j = 0; j < (int)mKernelSize; j++)
-                {
-                    int jr = j - radius;
+				for(int j = 0; j < (int)mKernelSize; j++)
+				{
+					int jr = j - radius;
 
-                    if((x + jr) < 0)
-                        continue;
-                    if((x + jr) < (long)mBuffer->getWidth())
-                    {
-                        Ogre::Real k = mKernelData[i * mKernelSize + j];
+					if((x + jr) < 0)
+						continue;
+					if((x + jr) < (long)mBuffer->getWidth())
+					{
+						Ogre::Real k = mKernelData[i * mKernelSize + j];
 						Ogre::ColourValue pixel = mBuffer->getPixel(y + ir, x + jr);
-                        div += (long)k;
+						div += (long)k;
 						k *= 255.0f;
-                        r += (long)(k * pixel.r);
-                        g += (long)(k * pixel.g);
-                        b += (long)(k * pixel.b);
-                        a += (long)(k * pixel.a);
+						r += (long)(k * pixel.r);
+						g += (long)(k * pixel.g);
+						b += (long)(k * pixel.b);
+						a += (long)(k * pixel.a);
 
-                        processedKernelSize++;
-                    }
-                }
-            }
+						processedKernelSize++;
+					}
+				}
+			}
 
-            if(processedKernelSize == (mKernelSize * mKernelSize))
-                div = (long)mDivisor;
-            else
-            {
-                if(!mCalculateEdgeDivisor)
+			if(processedKernelSize == (mKernelSize * mKernelSize))
+				div = (long)mDivisor;
+			else
+			{
+				if(!mCalculateEdgeDivisor)
 					div = (long)mDivisor;
-            }
+			}
 
-            if(div != 0)
-            {
-                r /= div;
-                g /= div;
-                b /= div;
-                a /= div;
-            }
-            r += ((long)mThreshold - 128);
-            g += ((long)mThreshold - 128);
-            b += ((long)mThreshold - 128);
+			if(div != 0)
+			{
+				r /= div;
+				g /= div;
+				b /= div;
+				a /= div;
+			}
+			r += ((long)mThreshold - 128);
+			g += ((long)mThreshold - 128);
+			b += ((long)mThreshold - 128);
 			if(mIncludeAlphaChannel)
 				a += ((long)mThreshold - 128);
 			else
@@ -846,8 +1166,8 @@ TextureBufferPtr Convolution::process()
 				(Ogre::uchar)((g > 255) ? 255 : ((g < 0) ? 0 : g)),
 				(Ogre::uchar)((b > 255) ? 255 : ((b < 0) ? 0 : b)),
 				(Ogre::uchar)((a > 255) ? 255 : ((a < 0) ? 0 : a)));
-        }
-    }
+		}
+	}
 
 	mBuffer->setData(tmpBuffer);
 	delete tmpBuffer;
@@ -1442,8 +1762,8 @@ TextureBufferPtr Distort::process()
 			n.normalise();
 			Ogre::Real u = fmod((Ogre::Real)(x + (n.x * fPower)), (Ogre::Real)w);
 			Ogre::Real v = fmod((Ogre::Real)(y + (n.y * fPower)), (Ogre::Real)h);
-            Ogre::Real uf = (u >= 0) ? (u - (long)u) : 1 + (u - (long)u);
-            Ogre::Real vf = (v >= 0) ? (v - (long)v) : 1 + (v - (long)v);
+			Ogre::Real uf = (u >= 0) ? (u - (long)u) : 1 + (u - (long)u);
+			Ogre::Real vf = (v >= 0) ? (v - (long)v) : 1 + (v - (long)v);
 			unsigned long ut = (u >= 0) ? (unsigned long)u : (unsigned long)u - 1;
 			unsigned long vt = (v >= 0) ? (unsigned long)v : (unsigned long)v - 1;
 			Ogre::ColourValue texel = mBuffer->getPixel(vt % h, ut % w) * (1.0f - uf) * (1.0f - vf);
@@ -1508,10 +1828,10 @@ TextureBufferPtr EdgeDetection::process()
 		default:
 		case DETECTION_SOBEL:
 			//n = Ogre::Vector3::ZERO;
-            for(long y = 0; y < h; y++)
-            {
-                for(long x = 0; x < w; x++)
-                {
+			for(long y = 0; y < h; y++)
+			{
+				for(long x = 0; x < w; x++)
+				{
 					pixel = mBuffer->getPixel((size_t)x, (size_t)y);
 					block = getBlock(x, y);
 					d = block[0] + 2.0f * block[1] + block[2] - block[6] - 2.0f * block[7] - block[8];
@@ -1530,10 +1850,10 @@ TextureBufferPtr EdgeDetection::process()
 			break;
 
 		case DETECTION_DIFFERENCE:
-            for(long y = 0; y < h; y++)
-            {
-                for(long x = 0; x < w; x++)
-                {
+			for(long y = 0; y < h; y++)
+			{
+				for(long x = 0; x < w; x++)
+				{
 					pixel = mBuffer->getPixel((size_t)x, (size_t)y);
 					block = getBlock(x, y);
 					n = Ogre::Vector3::ZERO;
@@ -1551,15 +1871,15 @@ TextureBufferPtr EdgeDetection::process()
 					delete block;
 
 					tmpBuffer->setPixel((size_t)x, (size_t)y, n.x, n.y, n.z, pixel.a);
-                }
-            }
+				}
+			}
 			break;
 
 		case DETECTION_HOMOGENITY:
-            for(long y = 0; y < h; y++)
-            {
-                for(long x = 0; x < w; x++)
-                {
+			for(long y = 0; y < h; y++)
+			{
+				for(long x = 0; x < w; x++)
+				{
 					pixel = mBuffer->getPixel((size_t)x, (size_t)y);
 					block = getBlock(x, y);
 					v = block[4];
@@ -1577,8 +1897,8 @@ TextureBufferPtr EdgeDetection::process()
 					}
 					delete block;
 					tmpBuffer->setPixel((size_t)x, (size_t)y, n.x, n.y, n.z, pixel.a);
-                }
-            }
+				}
+			}
 			break;
 
 		case DETECTION_CANNY:
@@ -1589,10 +1909,10 @@ TextureBufferPtr EdgeDetection::process()
 			orientation = new Ogre::Vector3[w * h];
 			gradients = new Ogre::Vector3[w * h];
 			n = Ogre::Vector3(-std::numeric_limits<Ogre::Real>::infinity(), -std::numeric_limits<Ogre::Real>::infinity(), -std::numeric_limits<Ogre::Real>::infinity());
-            for(long y = 0; y < h; y++)
-            {
-                for(long x = 0; x < w; x++)
-                {
+			for(long y = 0; y < h; y++)
+			{
+				for(long x = 0; x < w; x++)
+				{
 					pixel = mBuffer->getPixel((size_t)x, (size_t)y);
 					block = getBlock(x, y);
 					d = block[2] + block[8] - block[0] - block[6] + 2.0f * (block[5] - block[3]);
@@ -1611,19 +1931,19 @@ TextureBufferPtr EdgeDetection::process()
 					{
 						div = v.x / d.x;
 						if(div < 0.0f)
-                            orientation[y * w + x].x = 180.0f - Ogre::Math::ATan(-div).valueDegrees();
+							orientation[y * w + x].x = 180.0f - Ogre::Math::ATan(-div).valueDegrees();
 						else
 							orientation[y * w + x].x = Ogre::Math::ATan(div).valueDegrees();
 
-                        if(orientation[y * w + x].x < 22.5f)
-                            orientation[y * w + x].x = 0.0f;
-                        else if(orientation[y * w + x].x < 67.5f)
-                            orientation[y * w + x].x = 45.0f;
-                        else if(orientation[y * w + x].x < 112.5f)
-                            orientation[y * w + x].x = 90.0f;
-                        else if(orientation[y * w + x].x < 157.5f)
-                            orientation[y * w + x].x = 135.0f;
-                        else
+						if(orientation[y * w + x].x < 22.5f)
+							orientation[y * w + x].x = 0.0f;
+						else if(orientation[y * w + x].x < 67.5f)
+							orientation[y * w + x].x = 45.0f;
+						else if(orientation[y * w + x].x < 112.5f)
+							orientation[y * w + x].x = 90.0f;
+						else if(orientation[y * w + x].x < 157.5f)
+							orientation[y * w + x].x = 135.0f;
+						else
 							orientation[y * w + x].x = 0.0f;
 					}
 					if(d.y == 0.0f)
@@ -1634,19 +1954,19 @@ TextureBufferPtr EdgeDetection::process()
 					{
 						div = v.y / d.y;
 						if(div < 0.0f)
-                            orientation[y * w + x].y = 180.0f - Ogre::Math::ATan(-div).valueDegrees();
+							orientation[y * w + x].y = 180.0f - Ogre::Math::ATan(-div).valueDegrees();
 						else
 							orientation[y * w + x].y = Ogre::Math::ATan(div).valueDegrees();
 
-                        if(orientation[y * w + x].y < 22.5f)
-                            orientation[y * w + x].y = 0.0f;
-                        else if(orientation[y * w + x].y < 67.5f)
-                            orientation[y * w + x].y = 45.0f;
-                        else if(orientation[y * w + x].y < 112.5f)
-                            orientation[y * w + x].y = 90.0f;
-                        else if(orientation[y * w + x].y < 157.5f)
-                            orientation[y * w + x].y = 135.0f;
-                        else
+						if(orientation[y * w + x].y < 22.5f)
+							orientation[y * w + x].y = 0.0f;
+						else if(orientation[y * w + x].y < 67.5f)
+							orientation[y * w + x].y = 45.0f;
+						else if(orientation[y * w + x].y < 112.5f)
+							orientation[y * w + x].y = 90.0f;
+						else if(orientation[y * w + x].y < 157.5f)
+							orientation[y * w + x].y = 135.0f;
+						else
 							orientation[y * w + x].y = 0.0f;
 					}
 					if(d.z == 0.0f)
@@ -1657,29 +1977,29 @@ TextureBufferPtr EdgeDetection::process()
 					{
 						div = v.z / d.z;
 						if(div < 0.0f)
-                            orientation[y * w + x].z = 180.0f - Ogre::Math::ATan(-div).valueDegrees();
+							orientation[y * w + x].z = 180.0f - Ogre::Math::ATan(-div).valueDegrees();
 						else
 							orientation[y * w + x].z = Ogre::Math::ATan(div).valueDegrees();
 
-                        if(orientation[y * w + x].z < 22.5f)
-                            orientation[y * w + x].z = 0.0f;
-                        else if(orientation[y * w + x].z < 67.5f)
-                            orientation[y * w + x].z = 45.0f;
-                        else if(orientation[y * w + x].z < 112.5f)
-                            orientation[y * w + x].z = 90.0f;
-                        else if(orientation[y * w + x].z < 157.5f)
-                            orientation[y * w + x].z = 135.0f;
-                        else
+						if(orientation[y * w + x].z < 22.5f)
+							orientation[y * w + x].z = 0.0f;
+						else if(orientation[y * w + x].z < 67.5f)
+							orientation[y * w + x].z = 45.0f;
+						else if(orientation[y * w + x].z < 112.5f)
+							orientation[y * w + x].z = 90.0f;
+						else if(orientation[y * w + x].z < 157.5f)
+							orientation[y * w + x].z = 135.0f;
+						else
 							orientation[y * w + x].z = 0.0f;
 					}
 				}
 			}
 			
 			// STEP 3 - suppres non maximums
-            for(long y = 1; y < (h - 1); y++)
-            {
-                for(long x = 1; x < (w - 1); x++)
-                {
+			for(long y = 1; y < (h - 1); y++)
+			{
+				for(long x = 1; x < (w - 1); x++)
+				{
 					div = gradients[y * w + x].x / n.x;
 					switch(((int)orientation[y * w + x].x))
 					{
@@ -1752,10 +2072,10 @@ TextureBufferPtr EdgeDetection::process()
 			// STEP 4 - hysteresis
 			mBuffer->setData(tmpBuffer);
 			div = (Ogre::Real)mThreshshouldHigh / 255.0f;
-            for(long y = 1; y < (h - 1); y++)
-            {
-                for(long x = 1; x < (w - 1); x++)
-                {
+			for(long y = 1; y < (h - 1); y++)
+			{
+				for(long x = 1; x < (w - 1); x++)
+				{
 					pixel = mBuffer->getPixel((size_t)x, (size_t)y);
 					if(pixel.r < div)
 					{
@@ -1771,9 +2091,9 @@ TextureBufferPtr EdgeDetection::process()
 								(mBuffer->getPixelRedReal((size_t)(x - 1), (size_t)(y + 1)) < div) &&
 								(mBuffer->getPixelRedReal((size_t)(x    ), (size_t)(y + 1)) < div) &&
 								(mBuffer->getPixelRedReal((size_t)(x + 1), (size_t)(y + 1)) < div))
-                            {
-                                tmpBuffer->setRed((size_t)x, (size_t)y, 0.0f);
-                            }
+							{
+								tmpBuffer->setRed((size_t)x, (size_t)y, 0.0f);
+							}
 						}
 					}
 					if(pixel.g < div)
@@ -1790,9 +2110,9 @@ TextureBufferPtr EdgeDetection::process()
 								(mBuffer->getPixelGreenReal((size_t)(x - 1), (size_t)(y + 1)) < div) &&
 								(mBuffer->getPixelGreenReal((size_t)(x    ), (size_t)(y + 1)) < div) &&
 								(mBuffer->getPixelGreenReal((size_t)(x + 1), (size_t)(y + 1)) < div))
-                            {
-                                tmpBuffer->setGreen((size_t)x, (size_t)y, 0.0f);
-                            }
+							{
+								tmpBuffer->setGreen((size_t)x, (size_t)y, 0.0f);
+							}
 						}
 					}
 					if(pixel.b < div)
@@ -1809,9 +2129,9 @@ TextureBufferPtr EdgeDetection::process()
 								(mBuffer->getPixelBlueReal((size_t)(x - 1), (size_t)(y + 1)) < div) &&
 								(mBuffer->getPixelBlueReal((size_t)(x    ), (size_t)(y + 1)) < div) &&
 								(mBuffer->getPixelBlueReal((size_t)(x + 1), (size_t)(y + 1)) < div))
-                            {
-                                tmpBuffer->setBlue((size_t)x, (size_t)y, 0.0f);
-                            }
+							{
+								tmpBuffer->setBlue((size_t)x, (size_t)y, 0.0f);
+							}
 						}
 					}
 				}
@@ -1847,6 +2167,164 @@ Ogre::Vector3* EdgeDetection::getBlock(long x, long y)
 		}
 	}
 	return block;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+EllipseTexture & EllipseTexture::setColour(Ogre::ColourValue colour)
+{
+	mColour = colour;
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
+{
+	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+{
+	mColour = Ogre::ColourValue(red, green, blue, alpha);
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setRadiusX(size_t radiusx)
+{
+	mRadiusX = radiusx;
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setRadiusX(Ogre::Real radiusx)
+{
+	mRadiusX = (size_t)((Ogre::Real)std::min<Ogre::uint>(mBuffer->getWidth(), mBuffer->getHeight()) * Ogre::Math::Abs(radiusx));
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setRadiusY(size_t radiusy)
+{
+	mRadiusY = radiusy;
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setRadiusY(Ogre::Real radiusy)
+{
+	mRadiusY = (size_t)((Ogre::Real)std::min<Ogre::uint>(mBuffer->getWidth(), mBuffer->getHeight()) * Ogre::Math::Abs(radiusy));
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setRadius(size_t radiusx, size_t radiusy)
+{
+	mRadiusX = radiusx;
+	mRadiusY = radiusy;
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setRadius(Ogre::Real radiusx, Ogre::Real radiusy)
+{
+	mRadiusX = (size_t)((Ogre::Real)std::min<Ogre::uint>(mBuffer->getWidth(), mBuffer->getHeight()) * Ogre::Math::Abs(radiusx));
+	mRadiusY = (size_t)((Ogre::Real)std::min<Ogre::uint>(mBuffer->getWidth(), mBuffer->getHeight()) * Ogre::Math::Abs(radiusy));
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setCenterX(size_t x)
+{
+	mX = std::min<size_t>(x, mBuffer->getWidth() - 1);
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setCenterX(Ogre::Real x)
+{
+	mX = std::min<size_t>((size_t)(x * (Ogre::Real)mBuffer->getWidth()), mBuffer->getWidth() - 1);
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setCenterY(size_t y)
+{
+	mY = std::min<size_t>(y, mBuffer->getHeight() - 1);
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setCenterY(Ogre::Real y)
+{
+	mY = std::min<size_t>((size_t)(y * (Ogre::Real)mBuffer->getHeight()), mBuffer->getHeight() - 1);
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setCenter(Ogre::Vector2 pos, bool relative)
+{
+	setCenter(pos.x, pos.y, relative);
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setCenter(size_t x, size_t y)
+{
+	setCenterX(x);
+	setCenterY(y);
+	return *this;
+}
+
+EllipseTexture & EllipseTexture::setCenter(Ogre::Real x, Ogre::Real y, bool relative)
+{
+	if(relative)
+	{
+		setCenterX(x);
+		setCenterY(y);
+	}
+	else
+	{
+		setCenterX((size_t)x);
+		setCenterY((size_t)y);
+	}
+	return *this;
+}
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+EllipseTexture & EllipseTexture::setCenter(POINT pos)
+{
+	setCenter((size_t)pos.x, (size_t)pos.y);
+	return *this;
+}
+#endif
+
+TextureBufferPtr EllipseTexture::process()
+{
+	long dx = 0;
+	long dy = mRadiusY;
+	long rx2 = mRadiusX * mRadiusX;
+	long ry2 = mRadiusY * mRadiusY;
+	long err = ry2 - (2 * mRadiusY - 1)* rx2;
+	long e2 = 0;
+ 
+	do
+	{
+		for(long qy = -dy; qy <= dy; qy++)
+		{
+			_putpixel(+dx, qy);
+			_putpixel(-dx, qy);
+		}
+ 
+		e2 = 2*err;
+		if(e2 <  (2 * dx + 1) * ry2) { dx++; err += (2 * dx + 1) * ry2; }
+		if(e2 > -(2 * dy - 1) * rx2) { dy--; err -= (2 * dy - 1) * rx2; }
+	}
+	while(dy >= 0);
+ 
+	while(dx++ < mRadiusX)
+	{
+		_putpixel(+dx, 0);
+		_putpixel(-dx, 0);
+	}
+
+	logMsg("Modify texture with ellipse filter : x = " + StringConverter::toString(mX) + ", y = " + StringConverter::toString(mY) + ", Radius x = " + StringConverter::toString(mRadiusX) + ", Radius y = " + StringConverter::toString(mRadiusY));
+	return mBuffer;
+}
+
+void EllipseTexture::_putpixel(long dx, long dy)
+{
+	if(mX + dx < 0 || mX + dx >= mBuffer->getWidth()) return;
+	if(mY + dy < 0 || mY + dy >= mBuffer->getHeight()) return;
+	mBuffer->setPixel(mX + dx, mY + dy, mColour);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2022,17 +2500,17 @@ TextureBufferPtr Jitter::process()
 	srand(mSeed);
 	int radius = (int)(1.0f + (9.0f / 255.0f) * ((Ogre::Real)mRadius - 1.0f));
 	int max = radius * 2 + 1;
-    for(long y = 0; y < (long)mBuffer->getHeight(); y++)
-    {
-        for(long x = 0; x < (long)mBuffer->getWidth(); x++)
-        {
-            long rx = x + (rand() % (radius * 2 + 1)) - radius;
-            long ry = y + (rand() % (radius * 2 + 1)) - radius;
+	for(long y = 0; y < (long)mBuffer->getHeight(); y++)
+	{
+		for(long x = 0; x < (long)mBuffer->getWidth(); x++)
+		{
+			long rx = x + (rand() % (radius * 2 + 1)) - radius;
+			long ry = y + (rand() % (radius * 2 + 1)) - radius;
 
-            if(rx >= 0 && rx < (long)mBuffer->getWidth() && ry >= 0 && ry < (long)mBuffer->getHeight())
+			if(rx >= 0 && rx < (long)mBuffer->getWidth() && ry >= 0 && ry < (long)mBuffer->getHeight())
 				tmpBuffer->setPixel((size_t)rx, (size_t)ry, mBuffer->getPixel((size_t)x, (size_t)y));
-        }
-    }
+		}
+	}
 	mBuffer->setData(tmpBuffer);
 	delete tmpBuffer;
 
@@ -2359,7 +2837,7 @@ TextureBufferPtr OilPaint::process()
 	int blue[256];
 	
 	for(int y = mRadius; y < (int)(mBuffer->getHeight() - mRadius); y++)
-    {
+	{
 		for(int x = mRadius; x < (int)(mBuffer->getWidth() - mRadius); x++)
 		{
 			memset(intensities, 0, 256 * sizeof(int));
@@ -2376,8 +2854,8 @@ TextureBufferPtr OilPaint::process()
 					int b = mBuffer->getPixelBlueByte((size_t)(x + i), (size_t)(y + j));
 
 					int curr =  (int)((((Ogre::Real)(r + g + b) / 3.0f) * mIntensity) / 255.0f);
-                    if(curr > 255) curr = 255;
-                    intensities[curr]++;
+					if(curr > 255) curr = 255;
+					intensities[curr]++;
 
 					red[curr] += r;
 					green[curr] += g;
