@@ -89,159 +89,177 @@ See Procedural::Alpha
 
 See Procedural::AlphaMask
 
+### Blit
+
+![Figure 4. Blit](texture_blit.png)
+
+See Procedural::Blit
+
 ### Blur
 
-<table border="0" width="100%"><tr><td>\image html texture_blur_1.png "Figure 4a. Blur: Mean"</td><td>\image html texture_blur_2.png "Figure 4b. Blur: Gauss"</td></tr></table>
+<table border="0" width="100%"><tr><td>\image html texture_blur_1.png "Figure 5a. Blur: Mean"</td><td>\image html texture_blur_2.png "Figure 5b. Blur: Gauss"</td></tr></table>
 
 See Procedural::Blur
 
 ### Channel
 
-<table border="0" width="100%"><tr><td>\image html texture_channel_1.png "Figure 5a. Channel: blue"</td><td>\image html texture_channel_2.png "Figure 5b. Channel: gray"</td></tr></table>
+<table border="0" width="100%"><tr><td>\image html texture_channel_1.png "Figure 6a. Channel: blue"</td><td>\image html texture_channel_2.png "Figure 6b. Channel: gray"</td></tr></table>
 
 See Procedural::Channel
 
+### CircleTexture
+
+![Figure 7. CircleTexture](texture_circle.png)
+
+See Procedural::CircleTexture
+
 ### Colours
 
-![Figure 6. Colours](texture_colours.png)
+![Figure 8. Colours](texture_colours.png)
 
 See Procedural::Colours
 
 ### Combine
 
-![Figure 7. Combine](texture_combine.png)
+![Figure 9. Combine](texture_combine.png)
 
 See Procedural::Combine
 
 ### Convolution
 
-![Figure 8. Convolution](texture_convolution.png)
+![Figure 10. Convolution](texture_convolution.png)
 
 See Procedural::Convolution
 
 ### Crack
 
-![Figure 9. Crack](texture_crack.png)
+![Figure 11. Crack](texture_crack.png)
 
 See Procedural::Crack
 
 ### Cycloid
 
-<table border="0" width="100%"><tr><td>\image html texture_cycloid_hypocycloid.png "Figure 10a. Cycloid: Hypocycloid"</td><td>\image html texture_cycloid_hypotrochoid.png "Figure 10b. Cycloid: Hypotrochoid"</td></tr>
-<tr><td>\image html texture_cycloid_epicycloid.png "Figure 10c. Cycloid: Epicycloid"</td><td>\image html texture_cycloid_epitrochoid.png "Figure 10d. Cycloid: Epitrochoid"</td></tr>
-<tr><td>\image html texture_cycloid_rose.png "Figure 10e. Cycloid: Rose curve"</td><td>\image html texture_cycloid_lissajous.png "Figure 10f. Cycloid: Lissajous curve"</td></tr></table>
+<table border="0" width="100%"><tr><td>\image html texture_cycloid_hypocycloid.png "Figure 12a. Cycloid: Hypocycloid"</td><td>\image html texture_cycloid_hypotrochoid.png "Figure 12b. Cycloid: Hypotrochoid"</td></tr>
+<tr><td>\image html texture_cycloid_epicycloid.png "Figure 12c. Cycloid: Epicycloid"</td><td>\image html texture_cycloid_epitrochoid.png "Figure 12d. Cycloid: Epitrochoid"</td></tr>
+<tr><td>\image html texture_cycloid_rose.png "Figure 12e. Cycloid: Rose curve"</td><td>\image html texture_cycloid_lissajous.png "Figure 12f. Cycloid: Lissajous curve"</td></tr></table>
 
 See Procedural::Cycloid
 
 ### Dilate
 
-![Figure 11. Dilate](texture_dilate.png)
+![Figure 13. Dilate](texture_dilate.png)
 
 See Procedural::Dilate
 
 ### Distort
 
-![Figure 12. Distort](texture_distort.png)
+![Figure 14. Distort](texture_distort.png)
 
 See Procedural::Distort
 
 ### EdgeDetection
 
-![Figure 13. EdgeDetection](texture_edgedetection.png)
+![Figure 15. EdgeDetection](texture_edgedetection.png)
 
 See Procedural::EdgeDetection
 
+### EllipseTexture
+
+![Figure 16. EllipseTexture](texture_ellipse.png)
+
+See Procedural::EllipseTexture
+
 ### Flip
 
-<table border="0" width="100%"><tr><td>\image html texture_flip_1.png "Figure 14a. Flip: point"</td><td>\image html texture_flip_2.png "Figure 14b. Flip: vertical"</td><td>\image html texture_flip_3.png "Figure 14c. Flip: horizontal"</td></tr></table>
+<table border="0" width="100%"><tr><td>\image html texture_flip_1.png "Figure 17a. Flip: point"</td><td>\image html texture_flip_2.png "Figure 17b. Flip: vertical"</td><td>\image html texture_flip_3.png "Figure 17c. Flip: horizontal"</td></tr></table>
 
 See Procedural::Flip
 
 ### Glow
 
-![Figure 15. Glow](texture_glow.png)
+![Figure 18. Glow](texture_glow.png)
 See Procedural::Glow
 
 ### Invert
 
-![Figure 16. Invert](texture_invert.png)
+![Figure 19. Invert](texture_invert.png)
 
 See Procedural::Invert
 
 ### Jitter
 
-![Figure 17. Jitter](texture_jitter.png)
+![Figure 20. Jitter](texture_jitter.png)
 
 See Procedural::Jitter
 
 ### Lerp
 
-![Figure 18. Lerp](texture_lerp.png)
+![Figure 21. Lerp](texture_lerp.png)
 
 See Procedural::Lerp
 
 ### Light
 
-![Figure 19. Light](texture_light.png)
+![Figure 22. Light](texture_light.png)
 
 See Procedural::Light
 
 ### Lookup
 
-![Figure 20. Lookup](texture_lookup.png)
+![Figure 23. Lookup](texture_lookup.png)
 
 See Procedural::Lookup
 ### Normals
 
-![Figure 21. Normals](texture_normals.png)
+![Figure 24. Normals](texture_normals.png)
 
 See Procedural::Normals
 
 ### OilPaint
 
-![Figure 22. OilPaint](texture_oilpaint.png)
+![Figure 25. OilPaint](texture_oilpaint.png)
 
 See Procedural::OilPaint
 
 ### RandomPixels
 
-![Figure 23. RandomPixels](texture_randompixels.png)
+![Figure 26. RandomPixels](texture_randompixels.png)
 
 See Procedural::RandomPixels
 
 ### RectangleTexture
 
-![Figure 24. RectangleTexture](texture_rectangle.png)
+![Figure 27. RectangleTexture](texture_rectangle.png)
 
 See Procedural::RectangleTexture
 
 ### RotationZoom
 
-![Figure 25. RotationZoom](texture_rotationzoom.png)
+![Figure 28. RotationZoom](texture_rotationzoom.png)
 
 See Procedural::RotationZoom
 
 ### Segment
 
-![Figure 26. Segment](texture_segment.png)
+![Figure 29. Segment](texture_segment.png)
 
 See Procedural::Segment
 
 ### Sharpen
 
-<table border="0" width="100%"><tr><td>\image html texture_sharpen_1.png "Figure 27a. Sharpen: basic"</td><td>\image html texture_sharpen_2.png "Figure 27b. Sharpen: gaussian"</td></tr></table>
+<table border="0" width="100%"><tr><td>\image html texture_sharpen_1.png "Figure 30a. Sharpen: basic"</td><td>\image html texture_sharpen_2.png "Figure 30b. Sharpen: gaussian"</td></tr></table>
 
 See Procedural::Sharpen
 
 ### Threshold
 
-![Figure 28. Threshold](texture_threshold.png)
+![Figure 31. Threshold](texture_threshold.png)
 
 See Procedural::Threshold
 
 ### Vortex
 
-![Figure 29. Vortex](texture_vortex.png)
+![Figure 32. Vortex](texture_vortex.png)
 
 See Procedural::Vortex
 
