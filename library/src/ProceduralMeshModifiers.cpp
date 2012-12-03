@@ -99,19 +99,25 @@ void CylinderUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
 		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", "Procedural::CylindricalUVsModifier::modify()");
+	if (mHeight <=0)
+			OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Height must be strictly positive", "Procedural::CylindricalUVsModifier::modify()");
+	if (mRadius <= 0)
+			OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Radius must be strictly positive", "Procedural::CylindricalUVsModifier::modify()");
+
+	Real angleThreshold = Math::ATan(mHeight / mRadius).valueRadians();
 	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it != mInputTriangleBuffer->getVertices().end(); ++it)
 	{
 		Vector2 nxz(it->mNormal.x, it->mNormal.z);
 		Real alpha = (Math::ATan(it->mNormal.y / nxz.length()).valueRadians() + Math::HALF_PI);
-		if (Math::Abs(alpha) > Math::HALF_PI / 2)
+		if (Math::Abs(alpha) > angleThreshold)
 		{
 			Vector2 vxz(it->mPosition.x, it->mPosition.z);
-			it->mUV = vxz;
+			it->mUV = vxz / mRadius;
 		} else
 		{
 			Vector2 vxz(it->mPosition.x, it->mPosition.z);
 			it->mUV.x = Vector2::UNIT_X.angleTo(vxz).valueRadians()/Math::TWO_PI;
-			it->mUV.y = it->mPosition.y - 0.5;
+			it->mUV.y = it->mPosition.y/mHeight - 0.5;
 		}
 	}
 }

@@ -148,6 +148,7 @@ public:
 class _ProceduralExport SphereUVModifier
 {
 	TriangleBuffer* mInputTriangleBuffer;
+
 public:
 	void modify();
 
@@ -186,11 +187,13 @@ public:
 class _ProceduralExport CylinderUVModifier
 {
 	TriangleBuffer* mInputTriangleBuffer;
+	Ogre::Real mHeight;
+	Ogre::Real mRadius;
 public:
 	void modify();
 
 	CylinderUVModifier() :
-			mInputTriangleBuffer(0)
+			mInputTriangleBuffer(0), mRadius(1.0), mHeight(1.0)
 	{
 	}
 
@@ -200,15 +203,27 @@ public:
 		return *this;
 	}
 
+	CylinderUVModifier& setRadius(Ogre::Real radius)
+	{
+		mRadius = radius;
+		return *this;
+	}
+
+	CylinderUVModifier& setHeight(Ogre::Real height)
+		{
+			mHeight = height;
+			return *this;
+		}
+
 };
 //--------------------------------------------------------------
 class _ProceduralExport BoxUVModifier
 {
 public:
 	enum MappingType
-		{
-			MT_FULL, MT_CROSS, MT_PACKED
-		};
+	{
+		MT_FULL, MT_CROSS, MT_PACKED
+	};
 private:
 	TriangleBuffer* mInputTriangleBuffer;
 	MappingType mMappingType;
