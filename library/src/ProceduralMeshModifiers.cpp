@@ -47,7 +47,7 @@ void SpherifyModifier::modify()
 		}
 	}
 }
-
+//--------------------------------------------------------------
 void PlaneUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
@@ -61,7 +61,7 @@ void PlaneUVModifier::modify()
 		it->mUV.y = v.dotProduct(yvec);
 	}
 }
-
+//--------------------------------------------------------------
 void SphereUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
@@ -74,7 +74,7 @@ void SphereUVModifier::modify()
 		it->mUV.y = (Math::ATan(v.y / vxz.length()).valueRadians() + Math::HALF_PI) / Math::PI;
 	}
 }
-
+//--------------------------------------------------------------
 void HemisphereUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
@@ -91,10 +91,14 @@ void HemisphereUVModifier::modify()
 		Vector2 v2(input.x, input.z);
 		v2.normalise();
 		Vector2 uv = Vector2(.5, .5) + .5 * (r / Math::HALF_PI).valueRadians() * v2;
-		it->mUV = uv;
+		
+		if (input.y > 0)
+			it->mUV = Utils::reframe(mTextureRectangleTop, uv);
+		else
+			it->mUV = Utils::reframe(mTextureRectangleBottom, uv);
 	}
 }
-
+//--------------------------------------------------------------
 void CylinderUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
@@ -121,7 +125,7 @@ void CylinderUVModifier::modify()
 		}
 	}
 }
-
+//--------------------------------------------------------------
 void BoxUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
@@ -148,9 +152,17 @@ void BoxUVModifier::modify()
 		}
 		Vector3 vX = directions[principalAxis].perpendicular();
 		Vector3 vY = directions[principalAxis].crossProduct(vX);
+		Vector2 uv(vX.dotProduct(v), vX.dotProduct(v));
+		if (mMappingType == MT_FULL)
+		{
+			it->mUV = uv;
+		} else if (mMappingType == MT_CROSS)
+		{
+		} else if (mMappingType == MT_PACKED)
+		{
+			it->mUV = Vector2((uv.x + principalAxis%3)/3, (uv.y + principalAxis/3)/2);
+		}
 
-		it->mUV.x = vX.dotProduct(v);
-		it->mUV.y = vY.dotProduct(v);
 	}
 }
 }
