@@ -194,7 +194,13 @@ public:
 			tmpB = binom(a - 1, b - 1);
 			return tmpA + tmpB;
 		}
-	}	
+	}
+
+	/// Transforms an input vector expressed in the 0,0->1,1 rect towards another rect
+	static inline Ogre::Vector2 reframe(const Ogre::RealRect& rect, const Ogre::Vector2& input)
+	{
+		return Ogre::Vector2(rect.left + input.x*rect.width(), rect.top + input.y*rect.height());
+	}
 };
 }
 #endif

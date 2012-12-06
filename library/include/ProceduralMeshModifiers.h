@@ -162,23 +162,36 @@ public:
 		mInputTriangleBuffer = inputTriangleBuffer;
 		return *this;
 	}
-
 };
 //--------------------------------------------------------------
 class _ProceduralExport HemisphereUVModifier
 {
 	TriangleBuffer* mInputTriangleBuffer;
+	Ogre::RealRect mTextureRectangleTop;
+	Ogre::RealRect mTextureRectangleBottom;
 public:
 	void modify();
 
 	HemisphereUVModifier() :
-			mInputTriangleBuffer(0)
+		mInputTriangleBuffer(0), mTextureRectangleTop(0,0,1,1), mTextureRectangleBottom(0,0,1,1)
 	{
 	}
 
 	HemisphereUVModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
 	{
 		mInputTriangleBuffer = inputTriangleBuffer;
+		return *this;
+	}
+
+	HemisphereUVModifier& setTextureRectangleTop(const Ogre::RealRect& textureRectangleTop)
+	{
+		mTextureRectangleTop = textureRectangleTop;
+		return *this;
+	}
+
+	HemisphereUVModifier& setTextureRectangleBottom(const Ogre::RealRect& textureRectangleBottom)
+	{
+		mTextureRectangleBottom = textureRectangleBottom;
 		return *this;
 	}
 
@@ -241,6 +254,24 @@ public:
 	BoxUVModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
 	{
 		mInputTriangleBuffer = inputTriangleBuffer;
+		return *this;
+	}
+
+	BoxUVModifier& setBoxSize(const Vector3& boxSize)
+	{
+		mBoxSize = boxSize;
+		return *this;
+	}
+
+	BoxUVModifier& setBoxCenter(const Vector3& boxCenter)
+	{
+		mBoxCenter = boxCenter;
+		return *this;
+	}
+
+	BoxUVModifier& setMappingType(MappingType mappingType)
+	{
+		mMappingType = mappingType;
 		return *this;
 	}
 };
