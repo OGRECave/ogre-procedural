@@ -43,10 +43,9 @@ void LuaTests::createScene(void)
 	cont->addChild(mTextMessage);
 	mTextMessage->setCaption("Ogre program");
 	mTextMessage->setParameter("font_name","SdkTrays/Caption");
-	o->show();
-
-	// Init first test
-	reloadScript();
+	o->show();	
+	
+	peekFirstScript();
 }
 //-------------------------------------------------------------------------------------
 void LuaTests::destroyScene(void)
@@ -78,7 +77,7 @@ void LuaTests::reloadScript()
 		if (sv.size()<1)
 			return;
 		String path = *sv.begin();
-
+		
 		lua_State *L; 
 		L=luaL_newstate();
 		luaopen_Procedural(L);	// load the wrappered module
@@ -86,7 +85,7 @@ void LuaTests::reloadScript()
 		destroyScene();
 
 		Timer timer;		
-		if (luaL_loadfile(L,(path + "/luaTest.lua").c_str())==0)
+		if (luaL_loadfile(L,(path + "/" + mCurrentScriptName).c_str())==0)
 		{
 			timer.reset();
 			if (lua_pcall(L,0,0,0) ==0)
@@ -107,6 +106,23 @@ void LuaTests::reloadScript()
 		lua_close(L);
 	}
 //-------------------------------------------------------------------------------------
+void LuaTests::checkScriptModified()
+{
+	time_t newTime = ResourceGroupManager::getSingleton().resourceModifiedTime("Scripts", mCurrentScriptName);
+	if (newTime > mCurrentScriptReloadTime)
+	{
+		reloadScript();
+		mCurrentScriptReloadTime = newTime;
+	}
+}
+//-------------------------------------------------------------------------------------
+void LuaTests::peekFirstScript()
+{
+	StringVectorPtr scripts = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua");
+	mCurrentScriptName = *scripts->begin();
+	mCurrentScriptReloadTime=0;
+}
+//-------------------------------------------------------------------------------------
 void LuaTests::createCamera(void)
 {
 	BaseApplication::createCamera();
@@ -126,21 +142,18 @@ void LuaTests::createViewports(void)
 bool LuaTests::frameStarted(const FrameEvent& evt)
 {
 	movingLight->setPosition(mCamera->getPosition());
+	checkScriptModified();
 	return true;
 }
 //-------------------------------------------------------------------------------------
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#endif
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	#define WIN32_LEAN_AND_MEAN
+	#include "windows.h"
 	INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
 #else
 	int main(int argc, char *argv[])
 #endif
-	{
-		// Create application object
+	{		
 		LuaTests app;
 
 		try {
