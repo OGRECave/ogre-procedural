@@ -63,7 +63,10 @@ public:
 	\param colour New colour of pixel
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	void setPixel(size_t x, size_t y, Ogre::ColourValue colour);
+	inline void setPixel(size_t x, size_t y, Ogre::ColourValue colour)
+	{
+		setPixel(x, y, colour.r, colour.g, colour.b, colour.a);
+	}
 
 	/**
 	\brief Set colour of a specified pixel
@@ -184,7 +187,7 @@ public:
 	\return Return colour value as an Ogre::ColourValue object.
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	Ogre::ColourValue getPixel(size_t x, size_t y);
+	Ogre::ColourValue getPixel(size_t x, size_t y) const;
 
 	/**
 	\brief Get red colour value of a specified pixel
@@ -193,7 +196,7 @@ public:
 	\return Return red colour value as a byte [0, 255].
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	Ogre::uchar getPixelRedByte(size_t x, size_t y);
+	Ogre::uchar getPixelRedByte(size_t x, size_t y) const;
 
 	/**
 	\brief Get green colour value of a specified pixel
@@ -202,7 +205,7 @@ public:
 	\return Return green colour value as a byte [0, 255].
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	Ogre::uchar getPixelGreenByte(size_t x, size_t y);
+	Ogre::uchar getPixelGreenByte(size_t x, size_t y) const;
 
 	/**
 	\brief Get blue colour value of a specified pixel
@@ -211,7 +214,7 @@ public:
 	\return Return blue colour value as a byte [0, 255].
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	Ogre::uchar getPixelBlueByte(size_t x, size_t y);
+	Ogre::uchar getPixelBlueByte(size_t x, size_t y) const;
 
 	/**
 	\brief Get alpha colour value of a specified pixel
@@ -220,7 +223,7 @@ public:
 	\return Return alpha colour value as a byte [0, 255].
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	Ogre::uchar getPixelAlphaByte(size_t x, size_t y);
+	Ogre::uchar getPixelAlphaByte(size_t x, size_t y) const;
 
 	/**
 	\brief Get red colour value of a specified pixel
@@ -229,7 +232,7 @@ public:
 	\return Return red colour value as a Ogre::Real [0.0, 1.0].
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	Ogre::Real getPixelRedReal(size_t x, size_t y);
+	Ogre::Real getPixelRedReal(size_t x, size_t y) const;
 
 	/**
 	\brief Get green colour value of a specified pixel
@@ -238,7 +241,7 @@ public:
 	\return Return green colour value as a Ogre::Real [0.0, 1.0].
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	Ogre::Real getPixelGreenReal(size_t x, size_t y);
+	Ogre::Real getPixelGreenReal(size_t x, size_t y) const;
 
 	/**
 	\brief Get blue colour value of a specified pixel
@@ -247,7 +250,7 @@ public:
 	\return Return blue colour value as a Ogre::Real [0.0, 1.0].
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	Ogre::Real getPixelBlueReal(size_t x, size_t y);
+	Ogre::Real getPixelBlueReal(size_t x, size_t y) const;
 
 	/**
 	\brief Get alpha colour value of a specified pixel
@@ -256,13 +259,13 @@ public:
 	\return Return alpha colour value as a Ogre::Real [0.0, 1.0].
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
-	Ogre::Real getPixelAlphaReal(size_t x, size_t y);
+	Ogre::Real getPixelAlphaReal(size_t x, size_t y) const;
 	
 	/**
 	\brief Create a copy of the current texture image buffer
 	\note You have to delete cloned object by yourself!
 	*/
-	TextureBufferPtr clone();
+	TextureBufferPtr clone() const;
 
 	/**
 	\brief Standard constructor which copy a given image
@@ -288,20 +291,20 @@ public:
 	inline Ogre::uint getHeight() const { return mHeight; }
 
 	/// Create a new image from buffer.
-	Ogre::Image* getImage();
+	Ogre::Image* getImage() const;
 
 	/**
 	\brief Save the image from the buffer to a file.
 	\param filename Name (and path) of the image file where to save the buffer.
 	*/
-	void saveImage(Ogre::String filename);
+	void saveImage(Ogre::String filename) const;
 
 	/**
 	\brief Creates an OGRE texture and add it to current TextureManager instance.
 	\param name Name of the texture
 	\param group Name of the resource group where to list the texture
 	*/
-	Ogre::TexturePtr createTexture(Ogre::String name, Ogre::String group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	Ogre::TexturePtr createTexture(Ogre::String name, Ogre::String group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME) const;
 };
 
 /**

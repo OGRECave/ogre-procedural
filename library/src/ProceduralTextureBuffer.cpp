@@ -83,10 +83,7 @@ TextureBuffer::~TextureBuffer()
 	delete mPixels;
 }
 
-void TextureBuffer::setPixel(size_t x, size_t y, Ogre::ColourValue colour)
-{
-	setPixel(x, y, colour.r, colour.g, colour.b, colour.a);
-}
+
 
 void TextureBuffer::setPixel(size_t x, size_t y, Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
 {
@@ -182,7 +179,7 @@ void TextureBuffer::setData(TextureBufferPtr buffer)
 	memcpy(mPixels, buffer->mPixels, mWidth * mHeight * 4 * sizeof(Ogre::uchar));
 }
 
-Ogre::ColourValue TextureBuffer::getPixel(size_t x, size_t y)
+Ogre::ColourValue TextureBuffer::getPixel(size_t x, size_t y) const
 {
 	if(x >= mWidth || y >= mHeight)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixel(size_t, size_t)");
@@ -190,7 +187,7 @@ Ogre::ColourValue TextureBuffer::getPixel(size_t x, size_t y)
 	return Ogre::ColourValue(getPixelRedReal(x, y), getPixelGreenReal(x, y), getPixelBlueReal(x, y), getPixelAlphaReal(x, y));
 }
 
-Ogre::uchar TextureBuffer::getPixelRedByte(size_t x, size_t y)
+Ogre::uchar TextureBuffer::getPixelRedByte(size_t x, size_t y) const
 {
 	if(x >= mWidth || y >= mHeight)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelRedByte(size_t, size_t)");
@@ -198,7 +195,7 @@ Ogre::uchar TextureBuffer::getPixelRedByte(size_t x, size_t y)
 	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED];
 }
 
-Ogre::uchar TextureBuffer::getPixelGreenByte(size_t x, size_t y)
+Ogre::uchar TextureBuffer::getPixelGreenByte(size_t x, size_t y) const
 {
 	if(x >= mWidth || y >= mHeight)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelGreenByte(size_t, size_t)");
@@ -206,7 +203,7 @@ Ogre::uchar TextureBuffer::getPixelGreenByte(size_t x, size_t y)
 	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN];
 }
 
-Ogre::uchar TextureBuffer::getPixelBlueByte(size_t x, size_t y)
+Ogre::uchar TextureBuffer::getPixelBlueByte(size_t x, size_t y) const
 {
 	if(x >= mWidth || y >= mHeight)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelBlueByte(size_t, size_t)");
@@ -214,7 +211,7 @@ Ogre::uchar TextureBuffer::getPixelBlueByte(size_t x, size_t y)
 	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE];
 }
 
-Ogre::uchar TextureBuffer::getPixelAlphaByte(size_t x, size_t y)
+Ogre::uchar TextureBuffer::getPixelAlphaByte(size_t x, size_t y) const
 {
 	if(x >= mWidth || y >= mHeight)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelAlphaByte(size_t, size_t)");
@@ -222,7 +219,7 @@ Ogre::uchar TextureBuffer::getPixelAlphaByte(size_t x, size_t y)
 	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA];
 }
 
-Ogre::Real TextureBuffer::getPixelRedReal(size_t x, size_t y)
+Ogre::Real TextureBuffer::getPixelRedReal(size_t x, size_t y) const
 {
 	if(x >= mWidth || y >= mHeight)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelRedReal(size_t, size_t)");
@@ -230,7 +227,7 @@ Ogre::Real TextureBuffer::getPixelRedReal(size_t x, size_t y)
 	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED]) / 255.0f;
 }
 
-Ogre::Real TextureBuffer::getPixelGreenReal(size_t x, size_t y)
+Ogre::Real TextureBuffer::getPixelGreenReal(size_t x, size_t y) const
 {
 	if(x >= mWidth || y >= mHeight)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelGreenReal(size_t, size_t)");
@@ -238,7 +235,7 @@ Ogre::Real TextureBuffer::getPixelGreenReal(size_t x, size_t y)
 	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN]) / 255.0f;
 }
 
-Ogre::Real TextureBuffer::getPixelBlueReal(size_t x, size_t y)
+Ogre::Real TextureBuffer::getPixelBlueReal(size_t x, size_t y) const
 {
 	if(x >= mWidth || y >= mHeight)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelBlueReal(size_t, size_t)");
@@ -246,7 +243,7 @@ Ogre::Real TextureBuffer::getPixelBlueReal(size_t x, size_t y)
 	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE]) / 255.0f;
 }
 
-Ogre::Real TextureBuffer::getPixelAlphaReal(size_t x, size_t y)
+Ogre::Real TextureBuffer::getPixelAlphaReal(size_t x, size_t y) const
 {
 	if(x >= mWidth || y >= mHeight)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelAlphaReal(size_t, size_t)");
@@ -254,28 +251,28 @@ Ogre::Real TextureBuffer::getPixelAlphaReal(size_t x, size_t y)
 	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA]) / 255.0f;
 }
 
-TextureBufferPtr TextureBuffer::clone()
+TextureBufferPtr TextureBuffer::clone() const
 {
 	TextureBufferPtr clon = new TextureBuffer(mWidth);
 	memcpy(clon->mPixels, mPixels, mWidth * mHeight * 4 * sizeof(Ogre::uchar));
 	return clon;
 }
 
-Ogre::Image* TextureBuffer::getImage()
+Ogre::Image* TextureBuffer::getImage() const
 {
 	Ogre::Image* image = new Ogre::Image();
 	image->loadDynamicImage(mPixels, mWidth, mHeight, 1, PF_R8G8B8A8);
 	return image;
 }
 
-void TextureBuffer::saveImage(Ogre::String filename)
+void TextureBuffer::saveImage(Ogre::String filename) const
 {
 	Ogre::Image* image = getImage();
 	image->save(filename);
 	delete image;
 }
 
-Ogre::TexturePtr TextureBuffer::createTexture(Ogre::String name, Ogre::String group)
+Ogre::TexturePtr TextureBuffer::createTexture(Ogre::String name, Ogre::String group) const
 {
 	Ogre::TexturePtr texture = Ogre::TextureManager::getSingletonPtr()->createManual(
 		name,

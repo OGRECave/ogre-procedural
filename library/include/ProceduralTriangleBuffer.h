@@ -114,19 +114,19 @@ protected:
 	 * Builds an Ogre Mesh from this buffer.
 	 */
 	Ogre::MeshPtr transformToMesh(const std::string& name,
-		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
+		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME) const
 	{
 		Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		Ogre::ManualObject * manual = sceneMgr->createManualObject();
 		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it != mVertices.end();++it)
+		for (std::vector<Vertex>::const_iterator it = mVertices.begin(); it != mVertices.end();++it)
 		{
 			manual->position(it->mPosition);
 			manual->textureCoord(it->mUV);
 			manual->normal(it->mNormal);
 		}
-		for (std::vector<int>::iterator it = mIndices.begin(); it!=mIndices.end();++it)
+		for (std::vector<int>::const_iterator it = mIndices.begin(); it!=mIndices.end();++it)
 		{
 			manual->index(*it);
 		}
