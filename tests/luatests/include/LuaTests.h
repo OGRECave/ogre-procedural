@@ -42,21 +42,29 @@ extern "C"
 #include "lauxlib.h"
 }
 
-
-
 class LuaTests : public BaseApplication
 {
-
 	Ogre::OverlayElement* mTextMessage;
 	
 	void reloadScript();
 	void checkScriptModified();
-	void peekFirstScript();
-
 protected:
-
 	bool keyReleased( const OIS::KeyEvent &arg )
 	{
+		if (arg.key == OIS::KC_M || arg.key == OIS::KC_ADD || arg.key == OIS::KC_PGDOWN)
+		{
+			size_t scriptCount = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua")->size();
+			mCurrentScriptIndex = Utils::modulo(mCurrentScriptIndex+1, scriptCount);
+			mCurrentScriptReloadTime=0;
+			return true;
+		}
+		if (arg.key == OIS::KC_N || arg.key == OIS::KC_SUBTRACT || arg.key == OIS::KC_PGUP)
+		{
+			size_t scriptCount = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua")->size();
+			mCurrentScriptIndex = Utils::modulo(mCurrentScriptIndex-1, scriptCount);
+			mCurrentScriptReloadTime=0;
+			return true;
+		}
 		if (arg.key == OIS::KC_F5)
 		{
 			reloadScript();
@@ -87,6 +95,7 @@ protected:
 
 	Ogre::String mCurrentScriptName;
 	time_t mCurrentScriptReloadTime;
+	size_t mCurrentScriptIndex;
 
 public:
 
@@ -135,6 +144,8 @@ public:
 	LuaTests()
 	{
 		mInstance = this;
+		mCurrentScriptIndex = 0;
+		mCurrentScriptReloadTime = 0;
 	}
 
 };

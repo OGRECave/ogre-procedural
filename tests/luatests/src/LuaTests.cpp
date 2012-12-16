@@ -35,7 +35,6 @@ LuaTests* LuaTests::mInstance = 0;
 //-------------------------------------------------------------------------------------
 void LuaTests::createScene(void)
 {
-	
 	Ogre::Overlay* o = Ogre::OverlayManager::getSingleton().create("myOverlay");	
 	Ogre::OverlayContainer* cont = (Ogre::OverlayContainer*)OverlayManager::getSingleton().createOverlayElement("Panel","myCont");
 	o->add2D(cont);
@@ -44,8 +43,7 @@ void LuaTests::createScene(void)
 	mTextMessage->setCaption("Ogre program");
 	mTextMessage->setParameter("font_name","SdkTrays/Caption");
 	o->show();	
-	
-	peekFirstScript();
+	reloadScript();
 }
 //-------------------------------------------------------------------------------------
 void LuaTests::destroyScene(void)
@@ -71,6 +69,8 @@ void LuaTests::destroyScene(void)
 //-------------------------------------------------------------------------------------
 void LuaTests::reloadScript()
 	{
+		StringVectorPtr scripts = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua");
+		mCurrentScriptName= (*scripts)[mCurrentScriptIndex];
 		String path = *ResourceGroupManager::getSingleton().findResourceLocation("Scripts", "*")->begin();
 		
 		lua_State *L; 
@@ -85,7 +85,7 @@ void LuaTests::reloadScript()
 			timer.reset();
 			if (lua_pcall(L,0,0,0) ==0)
 			{				
-				mTextMessage->setCaption("OK (loaded in " + StringConverter::toString(timer.getMilliseconds()) + " milliseconds)");
+				mTextMessage->setCaption("OK (loaded " + mCurrentScriptName + " in " + StringConverter::toString(timer.getMilliseconds()) + " milliseconds)");
 				mCamera->getViewport()->setBackgroundColour(ColourValue(0.2f,0.4f,0.2f));
 			}
 			else
@@ -109,13 +109,6 @@ void LuaTests::checkScriptModified()
 		reloadScript();
 		mCurrentScriptReloadTime = newTime;
 	}
-}
-//-------------------------------------------------------------------------------------
-void LuaTests::peekFirstScript()
-{
-	StringVectorPtr scripts = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua");
-	mCurrentScriptName = *scripts->begin();
-	mCurrentScriptReloadTime=0;
 }
 //-------------------------------------------------------------------------------------
 void LuaTests::createCamera(void)
