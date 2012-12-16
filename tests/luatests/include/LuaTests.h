@@ -90,6 +90,24 @@ protected:
 
 public:
 
+	void addTriangleBuffer(const TriangleBuffer* tb)
+	{
+		std::string s = Utils::getName();
+		tb->transformToMesh(s);
+		addMesh(s.c_str());
+	}
+
+	void addTriangleTextureBuffer(const TriangleBuffer* tb, const TextureBuffer* texb)
+	{
+		std::string meshId = Utils::getName();
+		std::string texId = Utils::getName();
+		std::string matId = Utils::getName();
+		tb->transformToMesh(meshId);
+		texb->createTexture(texId);
+		addMaterial(texId.c_str(), matId.c_str());
+		addMesh(meshId.c_str(), matId.c_str());
+	}
+
 	void addMesh(const char* meshName, const char* materialName="Examples/Rockwall")
 	{
 		Entity* entity = mSceneMgr->createEntity(meshName);
