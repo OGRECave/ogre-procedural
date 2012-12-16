@@ -71,12 +71,7 @@ void LuaTests::destroyScene(void)
 //-------------------------------------------------------------------------------------
 void LuaTests::reloadScript()
 	{
-		ConfigFile cf;
-		cf.load(mResourcesCfg);
-		StringVector sv = cf.getMultiSetting("FileSystem", "Scripts");
-		if (sv.size()<1)
-			return;
-		String path = *sv.begin();
+		String path = *ResourceGroupManager::getSingleton().findResourceLocation("Scripts", "*")->begin();
 		
 		lua_State *L; 
 		L=luaL_newstate();
