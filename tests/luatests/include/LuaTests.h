@@ -48,34 +48,10 @@ class LuaTests : public BaseApplication
 {
 
 	Ogre::OverlayElement* mTextMessage;
-	/* --------------------------------------------------------------------------- */
-	/*void switchToTest(int index)
-	{
-		if (index == mCurrentTestIndex)
-			return;
 	
-		String test_description = mUnitTests[index]->getDescription();
-
-		// update text here:
-		String txt = "[OgreProcedural Unit Tests] (Use key N/M to switch between tests)\n";
-		txt += "[" + StringConverter::toString(index+1) + "/" + StringConverter::toString(mUnitTests.size()) + "] ";
-
-		// and add the description
-		txt += test_description;
-
-		// properly print the time ...
-		char time_str[255] = {0};
-		sprintf(time_str, " (loaded in %6.6f ms)", time);
-		txt += String(time_str);
-
-		// and finally set it
-		OverlayManager::getSingleton().getOverlayElement("myText")->setCaption(txt);
-
-
-		mCurrentTestIndex = index;
-	}*/
-
 	void reloadScript();
+	void checkScriptModified();
+	void peekFirstScript();
 
 protected:
 
@@ -108,6 +84,9 @@ protected:
 	std::vector<Entity*> mEntities;
 	std::vector<MaterialPtr> mMaterials;
 	std::vector<SceneNode*> mSceneNodes;
+
+	Ogre::String mCurrentScriptName;
+	time_t mCurrentScriptReloadTime;
 
 public:
 
