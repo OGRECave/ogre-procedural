@@ -76,7 +76,7 @@ void LuaTests::reloadScript()
 		lua_State *L; 
 		L=luaL_newstate();
 		luaopen_Procedural(L);	// load the wrappered module
-
+		luaL_dostring(L, "tests = Procedural.LuaTests_getInstance()");
 		destroyScene();
 
 		Timer timer;		
