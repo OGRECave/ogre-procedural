@@ -257,13 +257,13 @@ public:
 		return *this;
 	}
 
-	BoxUVModifier& setBoxSize(const Vector3& boxSize)
+	BoxUVModifier& setBoxSize(const Ogre::Vector3& boxSize)
 	{
 		mBoxSize = boxSize;
 		return *this;
 	}
 
-	BoxUVModifier& setBoxCenter(const Vector3& boxCenter)
+	BoxUVModifier& setBoxCenter(const Ogre::Vector3& boxCenter)
 	{
 		mBoxCenter = boxCenter;
 		return *this;
