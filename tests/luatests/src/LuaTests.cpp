@@ -28,8 +28,10 @@ THE SOFTWARE.
 #include "LuaTests.h"
 #include "Procedural.h"
 
+extern "C"
+{
 extern int luaopen_Procedural(lua_State* L); // declare the wrapped module
-
+}
 LuaTests* LuaTests::mInstance = 0;
 
 //-------------------------------------------------------------------------------------
