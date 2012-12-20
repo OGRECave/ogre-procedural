@@ -130,7 +130,7 @@ endif(UNIX AND NOT APPLE)
 set(OgreProcedural_MEDIA_DIR "${OgreProcedural_SOURCE_DIR}/samples/media")
 
 configure_release_dir(resources.cfg ${OgreProcedural_TEMPLATES_DIR})
-configure_debug_dir(resources_d.cfg ${OgreProcedural_TEMPLATES_DIR})
+configure_debug_dir(resources.cfg ${OgreProcedural_TEMPLATES_DIR})
 
 configure_release_dir(plugins.cfg ${OgreProcedural_TEMPLATES_DIR})
 configure_debug_dir(plugins_d.cfg ${OgreProcedural_TEMPLATES_DIR})
