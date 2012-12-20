@@ -227,11 +227,6 @@ void BaseApplication::setupResources(void)
 	}
 }
 //-------------------------------------------------------------------------------------
-void BaseApplication::createResourceListener(void)
-{
-
-}
-//-------------------------------------------------------------------------------------
 void BaseApplication::loadResources(void)
 {
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
@@ -239,13 +234,12 @@ void BaseApplication::loadResources(void)
 //-------------------------------------------------------------------------------------
 void BaseApplication::go(void)
 {
-#if PROCEDURAL_DEBUG_MODE == 1
-	mResourcesCfg = "resources_d.cfg";
+#if PROCEDURAL_DEBUG_MODE == 1	
 	mPluginsCfg = "plugins_d.cfg";
-#else
-	mResourcesCfg = "resources.cfg";
+#else	
 	mPluginsCfg = "plugins.cfg";
 #endif
+	mResourcesCfg = "resources.cfg";
 
 	if (!setup())
 		return;
@@ -258,7 +252,10 @@ void BaseApplication::go(void)
 //-------------------------------------------------------------------------------------
 bool BaseApplication::setup(void)
 {
+	createLogManager();
+
 	mRoot = new Root(mPluginsCfg);
+	
 #ifdef OGRE_EXTERNAL_OVERLAY
 	mOverlaySystem = new Ogre::OverlaySystem();
 #endif
@@ -275,8 +272,6 @@ bool BaseApplication::setup(void)
 	// Set default mipmap level (NB some APIs ignore this)
 	TextureManager::getSingleton().setDefaultNumMipmaps(5);
 
-	// Create any resource listeners (for loading screens)
-	createResourceListener();
 	// Load resources
 	loadResources();
 
@@ -473,6 +468,10 @@ bool BaseApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButto
 	if (mTrayMgr->injectMouseUp(arg, id)) return true;
 	mCameraMan->injectMouseUp(arg, id);
 	return true;
+}
+
+void BaseApplication::createLogManager(void)
+{
 }
 
 //Adjust mouse clipping area

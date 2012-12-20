@@ -48,29 +48,23 @@ class LuaTests : public BaseApplication
 	
 	void reloadScript();
 	void checkScriptModified();
-protected:
-	bool keyReleased( const OIS::KeyEvent &arg )
+
+	enum ScriptSourceMode
 	{
-		if (arg.key == OIS::KC_M || arg.key == OIS::KC_ADD || arg.key == OIS::KC_PGDOWN)
-		{
-			size_t scriptCount = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua")->size();
-			mCurrentScriptIndex = Utils::modulo(mCurrentScriptIndex+1, scriptCount);
-			mCurrentScriptReloadTime=0;
-			return true;
-		}
-		if (arg.key == OIS::KC_N || arg.key == OIS::KC_SUBTRACT || arg.key == OIS::KC_PGUP)
-		{
-			size_t scriptCount = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua")->size();
-			mCurrentScriptIndex = Utils::modulo(mCurrentScriptIndex-1, scriptCount);
-			mCurrentScriptReloadTime=0;
-			return true;
-		}
-		if (arg.key == OIS::KC_F5)
-		{
-			reloadScript();
-		}
-		return BaseApplication::keyReleased(arg);
-	}
+		SSM_RESOURCES, SSM_SCRIPTDIR, SSM_SCRIPTFILE
+	};
+
+	ScriptSourceMode mScriptSourceMode;
+
+	std::string mScriptFileName;
+	std::string mScriptDir;
+	bool mBatchMode;
+	bool mWriteToDisk;
+
+	void writeEveythingToDisk();
+
+protected:
+	bool keyReleased( const OIS::KeyEvent &arg );
 
 	bool keyPressed(const OIS::KeyEvent &arg)
 	{
@@ -87,17 +81,21 @@ protected:
 
 	virtual void destroyScene(void);
 
+	virtual void createLogManager(void);
+
 	static LuaTests* mInstance;
 
 	std::vector<Entity*> mEntities;
 	std::vector<MaterialPtr> mMaterials;
 	std::vector<SceneNode*> mSceneNodes;
+	std::vector<TexturePtr> mTextures;
 
 	Ogre::String mCurrentScriptName;
 	time_t mCurrentScriptReloadTime;
 	size_t mCurrentScriptIndex;
 
 public:
+	bool processInput(int argc, char *argv[]);
 
 	void addTriangleBuffer(const TriangleBuffer* tb)
 	{
@@ -133,6 +131,8 @@ public:
 		demoMaterial->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue::White);
 		demoMaterial->getTechnique(0)->getPass(0)->createTextureUnitState(std::string(textureName));
 		mMaterials.push_back(demoMaterial);
+		TexturePtr tex = TextureManager::getSingleton().getByName(textureName);
+		mTextures.push_back(tex);
 	}
 		
 

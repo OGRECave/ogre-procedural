@@ -57,8 +57,8 @@ protected:
 	virtual void destroyScene(void);
 	virtual void createViewports(void);
 	virtual void setupResources(void);
-	virtual void createResourceListener(void);
 	virtual void loadResources(void);
+	virtual void createLogManager(void);
 
 	// Ogre::FrameListener
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
