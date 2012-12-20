@@ -133,31 +133,39 @@ void ScriptInterpreter::reloadScript()
 		destroyScene();
 
 		Timer timer;		
+		std::string message;
+		bool success;
 		if (luaL_loadfile(L,(path + "/" + mCurrentScriptName).c_str())==0)
 		{
 			timer.reset();
 			if (lua_pcall(L,0,0,0) ==0)
 			{				
-				std::string message = "loaded " + mCurrentScriptName + " in " + StringConverter::toString(timer.getMilliseconds()) + " milliseconds";
-				mTextMessage->setCaption("OK (" + message + ")");
-				cout<<message<<endl;
-				Utils::log(message);
-				mCamera->getViewport()->setBackgroundColour(ColourValue(0.2f,0.4f,0.2f));
+				message = "loaded " + mCurrentScriptName + " in " + StringConverter::toString(timer.getMilliseconds()) + " milliseconds";
+				success = true;
 				if (mWriteToDisk)
-				{
 					writeEveythingToDisk();						
-				}
 			}
 			else
 			{
-				mTextMessage->setCaption(lua_tostring(L,-1));
-				mCamera->getViewport()->setBackgroundColour(ColourValue(0.4f,0.2f,0.2f));
+				message = lua_tostring(L,-1);
+				success = false;
 			}
 		} else
 		{
-			mTextMessage->setCaption(lua_tostring(L,-1));
-			mCamera->getViewport()->setBackgroundColour(ColourValue(.4f,.2f,.2f));
+			message = lua_tostring(L,-1);
+			success = false;
 		}
+		if (success)
+			mTextMessage->setCaption("OK (" + message + ")");
+		else
+			mTextMessage->setCaption("KO (" + message + ")");
+		if (success)
+			mCamera->getViewport()->setBackgroundColour(ColourValue(0.2f,0.4f,0.2f));
+		else
+			mCamera->getViewport()->setBackgroundColour(ColourValue(0.4f,0.2f,0.2f));
+		cout<<message<<endl;
+		Utils::log(message);
+		
 		lua_close(L);
 	}
 //-------------------------------------------------------------------------------------
