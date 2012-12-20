@@ -47,13 +47,12 @@ using namespace Procedural;
 	{	
 	
 	String resourcesCfg, pluginsCfg;
-	#ifdef _DEBUG
-	resourcesCfg = "resources_d.cfg";
+	#ifdef _DEBUG	
 	pluginsCfg = "plugins_d.cfg";
-	#else
-	resourcesCfg = "resources.cfg";
+	#else	
 	pluginsCfg = "plugins.cfg";
 	#endif
+	resourcesCfg = "resources.cfg";
 
 	mRoot = new Ogre::Root(pluginsCfg); 
   
