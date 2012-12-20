@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#include "LuaTests.h"
+#include "ScriptInterpreter.h"
 #include "Procedural.h"
 
 using namespace Ogre;
@@ -35,10 +35,10 @@ extern "C"
 {
 extern int luaopen_Procedural(lua_State* L); // declare the wrapped module
 }
-LuaTests* LuaTests::mInstance = 0;
+ScriptInterpreter* ScriptInterpreter::mInstance = 0;
 
 //-------------------------------------------------------------------------------------
-void LuaTests::createScene(void)
+void ScriptInterpreter::createScene(void)
 {	
 	if (mScriptSourceMode == SSM_SCRIPTDIR)
 	{
@@ -57,13 +57,13 @@ void LuaTests::createScene(void)
 	checkScriptModified();
 }
 //-------------------------------------------------------------------------------------
-void LuaTests::createLogManager(void)
+void ScriptInterpreter::createLogManager(void)
 {
 	LogManager* logManager = OGRE_NEW LogManager();
 	logManager->createLog("Ogre.log", true, false, false);
 }
 //-------------------------------------------------------------------------------------
-void LuaTests::destroyScene(void)
+void ScriptInterpreter::destroyScene(void)
 {	
 		for (std::vector<Entity*>::iterator entity = mEntities.begin(); entity != mEntities.end(); entity++)
 		{
@@ -85,7 +85,7 @@ void LuaTests::destroyScene(void)
 		mTextures.clear();
 }
 //-------------------------------------------------------------------------------------
-void LuaTests::writeEveythingToDisk()
+void ScriptInterpreter::writeEveythingToDisk()
 {
 	MeshSerializer serializer;
 	int meshCounter = 0;
@@ -120,7 +120,7 @@ void LuaTests::writeEveythingToDisk()
 	}
 }
 //-------------------------------------------------------------------------------------
-void LuaTests::reloadScript()
+void ScriptInterpreter::reloadScript()
 	{
 		StringVectorPtr scripts = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua");
 		mCurrentScriptName= (*scripts)[mCurrentScriptIndex];
@@ -129,7 +129,7 @@ void LuaTests::reloadScript()
 		lua_State *L; 
 		L=luaL_newstate();
 		luaopen_Procedural(L);	// load the wrappered module
-		luaL_dostring(L, "tests = Procedural.LuaTests_getInstance()");
+		luaL_dostring(L, "tests = Procedural.ScriptInterpreter_getInstance()");
 		destroyScene();
 
 		Timer timer;		
@@ -161,7 +161,7 @@ void LuaTests::reloadScript()
 		lua_close(L);
 	}
 //-------------------------------------------------------------------------------------
-void LuaTests::checkScriptModified()
+void ScriptInterpreter::checkScriptModified()
 {
 	time_t newTime = ResourceGroupManager::getSingleton().resourceModifiedTime("Scripts", mCurrentScriptName);
 	if (newTime > mCurrentScriptReloadTime || newTime == 0)
@@ -173,7 +173,7 @@ void LuaTests::checkScriptModified()
 	}
 }
 //-------------------------------------------------------------------------------------
-void LuaTests::createCamera(void)
+void ScriptInterpreter::createCamera(void)
 {
 	BaseApplication::createCamera();
 	
@@ -183,13 +183,13 @@ void LuaTests::createCamera(void)
 	mCamera->lookAt(0,0,0);
 }
 //-------------------------------------------------------------------------------------
-void LuaTests::createViewports(void)
+void ScriptInterpreter::createViewports(void)
 {
 	BaseApplication::createViewports();
 	mCamera->getViewport()->setBackgroundColour(ColourValue(0.2f,0.4f,0.2f));
 }
 //-------------------------------------------------------------------------------------
-bool LuaTests::frameStarted(const FrameEvent& evt)
+bool ScriptInterpreter::frameStarted(const FrameEvent& evt)
 {
 	movingLight->setPosition(mCamera->getPosition());
 	if (mBatchMode)
@@ -204,7 +204,7 @@ bool LuaTests::frameStarted(const FrameEvent& evt)
 	return true;
 }
 //-------------------------------------------------------------------------------------
-bool LuaTests::keyReleased( const OIS::KeyEvent &arg )
+bool ScriptInterpreter::keyReleased( const OIS::KeyEvent &arg )
 {
 	if (!mBatchMode)
 	{
@@ -230,7 +230,7 @@ bool LuaTests::keyReleased( const OIS::KeyEvent &arg )
 	return BaseApplication::keyReleased(arg);
 }
 //-------------------------------------------------------------------------------------
-bool LuaTests::processInput(int argc, char *argv[])
+bool ScriptInterpreter::processInput(int argc, char *argv[])
 {
 	mBatchMode = false;
 	mScriptSourceMode = SSM_RESOURCES;
@@ -286,7 +286,7 @@ bool LuaTests::processInput(int argc, char *argv[])
 #endif
 	{
 		
-		LuaTests app;
+		ScriptInterpreter app;
 
 		if (!app.processInput(argc, argv))
 			return 0;

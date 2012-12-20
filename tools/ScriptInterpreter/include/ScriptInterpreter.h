@@ -26,8 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef LUATESTS_H
-#define LUATESTS_H
+#ifndef SCRIPTINTERPRETER_H
+#define SCRIPTINTERPRETER_H
 
 #include "BaseApplication.h"
 #include "Procedural.h"
@@ -42,7 +42,7 @@ extern "C"
 #include "lauxlib.h"
 }
 
-class LuaTests : public BaseApplication
+class ScriptInterpreter : public BaseApplication
 {
 	Ogre::OverlayElement* mTextMessage;
 	
@@ -83,7 +83,7 @@ protected:
 
 	virtual void createLogManager(void);
 
-	static LuaTests* mInstance;
+	static ScriptInterpreter* mInstance;
 
 	std::vector<Entity*> mEntities;
 	std::vector<MaterialPtr> mMaterials;
@@ -136,12 +136,12 @@ public:
 	}
 		
 
-	static LuaTests* getInstance()
+	static ScriptInterpreter* getInstance()
 	{
 		return mInstance;
 	}
 
-	LuaTests()
+	ScriptInterpreter()
 	{
 		mInstance = this;
 		mCurrentScriptIndex = 0;

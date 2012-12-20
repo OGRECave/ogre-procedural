@@ -5,13 +5,13 @@
  %include "Ogre.i"
  %{ 
  #include "Procedural.h"
- #include "LuaTests.h"
+ #include "ScriptInterpreter.h"
  using namespace Procedural;
  %}
  %include "ProceduralPlatform.h"
  %include "ProceduralTriangleBuffer.h"
  %include "ProceduralMeshGenerator.h"
- %include "LuaTests.h"
+ %include "ScriptInterpreter.h"
  %include "ProceduralShapeGeneratorsBase.h"
  %include "ProceduralPathGeneratorsBase.h"
  %template(bs1) Procedural::BaseSpline2< Procedural::CubicHermiteSpline2>;

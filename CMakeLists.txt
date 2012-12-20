@@ -106,7 +106,7 @@ find_package(Doxygen)
 
 option(OgreProcedural_BUILD_SAMPLES "Build OgreProcedural samples." TRUE)
 option(OgreProcedural_BUILD_TESTS "Build OgreProcedural test cases." FALSE)
-option(OgreProcedural_BUILD_LUA_TESTS "Build a lua test bench to prototype stuff with OgreProcedural." FALSE)
+option(OgreProcedural_BUILD_SCRIPT_INTERPRETER "Build a lua test bench to prototype stuff with OgreProcedural." FALSE)
 option(OgreProcedural_BUILD_OGITOR_PLUGIN "Build Ogitor Plugin." FALSE)
 option(OgreProcedural_INSTALL_DOCS "Install documentation." FALSE)
 option(OgreProcedural_STATIC "Static build." FALSE)
@@ -155,8 +155,8 @@ if (OgreProcedural_BUILD_TESTS)
 	add_subdirectory(tests)	
 endif()
 
-if (OgreProcedural_BUILD_LUA_TESTS)
-	add_subdirectory(tests/luatests)
+if (OgreProcedural_BUILD_SCRIPT_INTERPRETER)
+	add_subdirectory(tools/ScriptInterpreter)
 endif()
 
 # documentation
@@ -164,10 +164,6 @@ add_subdirectory(docs)
 
 # Install CMake modules
 add_subdirectory(CMake)
-
-if (OgreProcedural_BUILD_OGITOR_PLUGIN)
-	add_subdirectory(ogitorPlugin)
-endif()
 
 # and CPack
 # cpack
