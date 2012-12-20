@@ -6,13 +6,13 @@ endif()
 
 set( HDRS
 		../../samples/common/include/BaseApplication.h
-		include/LuaTests.h
+		include/ScriptInterpreter.h
 	)
 
 set( SRCS
 		../../samples/common/src/BaseApplication.cpp
 		"${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
-		src/LuaTests.cpp
+		src/ScriptInterpreter.cpp
 	)
 
 set( EXTRA
@@ -32,10 +32,10 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
                      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 					 DEPENDS procedural.i ogre.i)
 
-procedural_add_executable(LuaTests ${HDRS} ${SRCS} ${EXTRA})
+procedural_add_executable(ScriptInterpreter ${HDRS} ${SRCS} ${EXTRA})
 
-set_target_properties(LuaTests PROPERTIES DEBUG_POSTFIX _d)
+set_target_properties(ScriptInterpreter PROPERTIES DEBUG_POSTFIX _d)
 
-target_link_libraries(LuaTests ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${OgreProcedural_LIBRARIES} ${LUA_LIBRARIES})
+target_link_libraries(ScriptInterpreter ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${OgreProcedural_LIBRARIES} ${LUA_LIBRARIES})
 
-procedural_create_vcproj_userfile(LuaTests)
+procedural_create_vcproj_userfile(ScriptInterpreter)
