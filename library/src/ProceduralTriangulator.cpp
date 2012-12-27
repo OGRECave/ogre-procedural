@@ -49,7 +49,7 @@ int Triangulator::Triangle::findSegNumber(int i0, int i1) const
 			return 0;
 		if ((i0==i[2] && i1==i[0])||(i0==i[0] && i1==i[2]))
 			return 1;
-		throw std::runtime_error("we should not be here!");
+		//throw std::exception("we should not be here!");
 	}
 //-----------------------------------------------------------------------
 bool Triangulator::Triangle::isPointInside(const Vector2& point)

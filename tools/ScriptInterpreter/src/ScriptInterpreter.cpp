@@ -97,7 +97,7 @@ void ScriptInterpreter::writeEveythingToDisk()
 			fileName = mCurrentScriptName.substr(0, mCurrentScriptName.find_last_of(".")) + "_" + StringConverter::toString(meshCounter);
 		else
 			fileName = mCurrentScriptName.substr(0, mCurrentScriptName.find_last_of("."));
-		serializer.exportMesh((*it)->getMesh().getPointer(), fileName + ".mesh", MeshVersion::MESH_VERSION_LATEST);
+		serializer.exportMesh((*it)->getMesh().getPointer(), fileName + ".mesh", MESH_VERSION_LATEST);
 	}
 					/*MaterialSerializer matSer;
 					int matCounter = 0;
