@@ -32,6 +32,7 @@ BaseApplication::BaseApplication(void)
 	mDetailsPanel(0),
 	mCursorWasVisible(false),
 	mShutDown(false),
+	mNonExclusiveMouse(false),
 	mInputManager(0),
 	mMouse(0),
 	mKeyboard(0)
@@ -67,6 +68,7 @@ bool BaseApplication::configure(void)
 		// If returned true, user clicked OK so initialise
 		// Here we choose to let the system create a default rendering window by passing 'true'
 		mWindow = mRoot->initialise(true, "Ogre Procedural example");
+		mWindow->setDeactivateOnFocusChange(false);
 
 		return true;
 	}
@@ -129,6 +131,17 @@ void BaseApplication::createFrameListener(void)
 	mWindow->getCustomAttribute("WINDOW", &windowHnd);
 	windowHndStr << windowHnd;
 	pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+	if (mNonExclusiveMouse)
+	{
+		#if defined OIS_WIN32_PLATFORM
+		pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
+		pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));	
+		#elif defined OIS_LINUX_PLATFORM
+		pl.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
+		pl.insert(std::make_pair(std::string("x11_mouse_hide"), std::string("false")));	
+		pl.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
+		#endif
+	}
 
 	mInputManager = OIS::InputManager::createInputSystem( pl );
 
@@ -452,7 +465,8 @@ bool BaseApplication::keyReleased( const OIS::KeyEvent &arg )
 bool BaseApplication::mouseMoved( const OIS::MouseEvent &arg )
 {
 	if (mTrayMgr->injectMouseMove(arg)) return true;
-	mCameraMan->injectMouseMove(arg);
+	if (!mNonExclusiveMouse || mMouse->getMouseState().buttonDown(OIS::MB_Left))
+		mCameraMan->injectMouseMove(arg);
 	return true;
 }
 

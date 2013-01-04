@@ -88,7 +88,7 @@ protected:
 	Ogre::RenderWindow* mWindow;
 	Ogre::String mResourcesCfg;
 	Ogre::String mPluginsCfg;
-
+	
 	// OgreBites
 	#ifdef OGRE_EXTERNAL_OVERLAY
 	Ogre::OverlaySystem* mOverlaySystem;       // Overlay system
@@ -100,6 +100,7 @@ protected:
 	bool mShutDown;
 
 	//OIS Input devices
+	bool mNonExclusiveMouse;
 	OIS::InputManager* mInputManager;
 	OIS::Mouse*    mMouse;
 	OIS::Keyboard* mKeyboard;

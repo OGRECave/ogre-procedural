@@ -266,7 +266,6 @@ void ScriptInterpreter::writePerformanceFile()
 //-------------------------------------------------------------------------------------
 bool ScriptInterpreter::processInput(int argc, char *argv[])
 {
-
 	mBatchMode = false;
 	mScriptSourceMode = SSM_RESOURCES;
 	mWriteToDisk = false;
@@ -322,9 +321,7 @@ bool ScriptInterpreter::processInput(int argc, char *argv[])
 #endif
 	int main(int argc, char *argv[])
 	{
-
 		ScriptInterpreter app;
-
 
 		if (!app.processInput(argc, argv))
 			return 0;
