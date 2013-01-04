@@ -424,7 +424,7 @@ bool Shape::isPointInside(const Vector2& point) const
 		return true;
 }
 //-----------------------------------------------------------------------
-MeshPtr Shape::realizeMesh(const std::string& name)
+MeshPtr Shape::realizeMesh(const std::string& name) const
 {
 	Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 	ManualObject * manual = smgr->createManualObject();
@@ -442,9 +442,9 @@ MeshPtr Shape::realizeMesh(const std::string& name)
 	return mesh;
 }
 //-----------------------------------------------------------------------
-void Shape::_appendToManualObject(ManualObject* manual)
+void Shape::_appendToManualObject(ManualObject* manual) const
 {
-	for (std::vector<Vector2>::iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)
+	for (std::vector<Vector2>::const_iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)
 		manual->position(Vector3(itPos->x, itPos->y, 0.f));
 	if (mClosed)
 		manual->position(Vector3(mPoints.begin()->x, mPoints.begin()->y, 0.f));

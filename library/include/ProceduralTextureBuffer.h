@@ -338,6 +338,8 @@ public:
 	*/
 	void setLog(bool enable = true);
 
+	virtual ~TextureProcessing() {}
+
 protected:
 	void logMsg(Ogre::String msg);
 };
