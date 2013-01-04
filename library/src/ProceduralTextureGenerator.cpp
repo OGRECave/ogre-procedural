@@ -128,9 +128,8 @@ TextureBufferPtr Cell::process()
 					if(v == -1 && y * mDensity < mBuffer->getHeight()) cellPos.y -= 1;
 					if(u == 1 && x * mDensity >= mBuffer->getWidth() * (mDensity - 1)) cellPos.x += 1;
 					if(v == 1 && y * mDensity >= mBuffer->getHeight() * (mDensity - 1)) cellPos.y += 1;
-					Ogre::Vector3 tmp = pixelPos - cellPos;
-					float norm = tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z;
-					if(norm > 0.0f) norm = sqrtf(norm);
+
+					Real norm = pixelPos.distance(cellPos);
 					if (norm < minDist)
 					{
 						nextMinDist = minDist;
