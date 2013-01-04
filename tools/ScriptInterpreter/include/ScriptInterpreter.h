@@ -54,14 +54,26 @@ class ScriptInterpreter : public BaseApplication
 		SSM_RESOURCES, SSM_SCRIPTDIR, SSM_SCRIPTFILE
 	};
 
+	std::map<std::string, long> mExecutionTimes;
+
 	ScriptSourceMode mScriptSourceMode;
 
 	std::string mScriptFileName;
 	std::string mScriptDir;
 	bool mBatchMode;
+	bool mPerformanceMode;
 	bool mWriteToDisk;
+	int mCurrentPerformanceIndex;
 
 	void writeEveythingToDisk();
+
+	void writePerformanceFile();
+
+	void reloadScriptNameFromIndex()
+	{
+		StringVectorPtr scripts = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua");
+		mCurrentScriptName= (*scripts)[mCurrentScriptIndex];
+	}
 
 protected:
 	bool keyReleased( const OIS::KeyEvent &arg );
@@ -90,12 +102,19 @@ protected:
 	std::vector<SceneNode*> mSceneNodes;
 	std::vector<TexturePtr> mTextures;
 
+	TriangleBuffer mDefaultTriangleBuffer;
+
 	Ogre::String mCurrentScriptName;
 	time_t mCurrentScriptReloadTime;
 	size_t mCurrentScriptIndex;
 
 public:
 	bool processInput(int argc, char *argv[]);
+
+	void addTextureBuffer(const TextureBuffer* tb)
+	{
+		addTriangleTextureBuffer(&mDefaultTriangleBuffer, tb);
+	}
 
 	void addTriangleBuffer(const TriangleBuffer* tb)
 	{
@@ -113,6 +132,13 @@ public:
 		texb->createTexture(texId);
 		addMaterial(texId.c_str(), matId.c_str());
 		addMesh(meshId.c_str(), matId.c_str());
+	}
+
+	void addShape(const Shape* shape)
+	{
+		std::string meshId = Utils::getName();
+		shape->realizeMesh(meshId);
+		addMesh(meshId.c_str());
 	}
 
 	void addMesh(const char* meshName, const char* materialName="Examples/Rockwall")
@@ -146,6 +172,8 @@ public:
 		mInstance = this;
 		mCurrentScriptIndex = 0;
 		mCurrentScriptReloadTime = 0;
+		mPerformanceMode = false;
+		mCurrentPerformanceIndex = 0;
 	}
 
 };
