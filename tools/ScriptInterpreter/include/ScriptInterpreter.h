@@ -174,6 +174,7 @@ public:
 		mCurrentScriptReloadTime = 0;
 		mPerformanceMode = false;
 		mCurrentPerformanceIndex = 0;
+		mNonExclusiveMouse = true;
 	}
 
 };
