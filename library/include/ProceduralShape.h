@@ -315,12 +315,12 @@ public:
 	 * Outputs a mesh representing the shape.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name="");
+	Ogre::MeshPtr realizeMesh(const std::string& name="") const;
 	
 	/**
 	 * Appends the shape vertices to a manual object being edited
 	 */
-	void _appendToManualObject(Ogre::ManualObject* manual);
+	void _appendToManualObject(Ogre::ManualObject* manual) const;
 
 	/**
 	 * Tells whether a point is inside a shape or not
