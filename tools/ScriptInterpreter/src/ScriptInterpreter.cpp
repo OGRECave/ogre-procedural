@@ -36,7 +36,6 @@ extern "C"
 extern int luaopen_Procedural(lua_State* L); // declare the wrapped module
 }
 ScriptInterpreter* ScriptInterpreter::mInstance = 0;
-
 //-------------------------------------------------------------------------------------
 void ScriptInterpreter::createScene(void)
 {	
@@ -46,6 +45,7 @@ void ScriptInterpreter::createScene(void)
 		ResourceGroupManager::getSingleton().createResourceGroup("Scripts");
 		ResourceGroupManager::getSingleton().addResourceLocation(mScriptDir, "FileSystem", "Scripts");
 	}
+	mDefaultTriangleBuffer = PlaneGenerator().buildTriangleBuffer();
 	Overlay* o = OverlayManager::getSingleton().create("myOverlay");	
 	OverlayContainer* cont = (OverlayContainer*)OverlayManager::getSingleton().createOverlayElement("Panel","myCont");
 	o->add2D(cont);
@@ -54,7 +54,8 @@ void ScriptInterpreter::createScene(void)
 	mTextMessage->setCaption("Ogre program");
 	mTextMessage->setParameter("font_name","SdkTrays/Caption");
 	o->show();	
-	checkScriptModified();
+
+	checkScriptModified();	
 }
 //-------------------------------------------------------------------------------------
 void ScriptInterpreter::createLogManager(void)
@@ -119,15 +120,16 @@ void ScriptInterpreter::writeEveythingToDisk()
 		im.save(mCurrentScriptName.substr(0, mCurrentScriptName.find_last_of(".")) + ".png");
 	}
 }
+
 //-------------------------------------------------------------------------------------
 void ScriptInterpreter::reloadScript()
 	{
-		StringVectorPtr scripts = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua");
-		mCurrentScriptName= (*scripts)[mCurrentScriptIndex];
+		reloadScriptNameFromIndex();
 		String path = *ResourceGroupManager::getSingleton().findResourceLocation("Scripts", "*")->begin();
 		
 		lua_State *L; 
 		L=luaL_newstate();
+		luaL_openlibs(L);
 		luaopen_Procedural(L);	// load the wrappered module
 		luaL_dostring(L, "tests = Procedural.ScriptInterpreter_getInstance()");
 		destroyScene();
@@ -137,15 +139,22 @@ void ScriptInterpreter::reloadScript()
 		{
 			timer.reset();
 			if (lua_pcall(L,0,0,0) ==0)
-			{				
-				std::string message = "loaded " + mCurrentScriptName + " in " + StringConverter::toString(timer.getMilliseconds()) + " milliseconds";
+			{
+				long timeSpent = timer.getMilliseconds();
+				std::string message = "loaded " + mCurrentScriptName + " in " + StringConverter::toString(timeSpent) + " milliseconds";
 				mTextMessage->setCaption("OK (" + message + ")");
 				cout<<message<<endl;
 				Utils::log(message);
 				mCamera->getViewport()->setBackgroundColour(ColourValue(0.2f,0.4f,0.2f));
 				if (mWriteToDisk)
 				{
-					writeEveythingToDisk();						
+					writeEveythingToDisk();
+				}
+				if (mBatchMode)
+				{
+					if (mExecutionTimes.find(mCurrentScriptName) == mExecutionTimes.end())
+						mExecutionTimes[mCurrentScriptName] = 0;
+					mExecutionTimes[mCurrentScriptName] += timeSpent;
 				}
 			}
 			else
@@ -160,10 +169,11 @@ void ScriptInterpreter::reloadScript()
 		}
 		lua_close(L);
 	}
+
 //-------------------------------------------------------------------------------------
 void ScriptInterpreter::checkScriptModified()
 {
-	time_t newTime = ResourceGroupManager::getSingleton().resourceModifiedTime("Scripts", mCurrentScriptName);
+	time_t newTime = ResourceGroupManager::getSingleton().resourceModifiedTime("Scripts", mCurrentScriptName);	
 	if (newTime > mCurrentScriptReloadTime || newTime == 0)
 	{
 		reloadScript();
@@ -180,7 +190,7 @@ void ScriptInterpreter::createCamera(void)
 	// Setup camera and light
 	mCamera->setNearClipDistance(.5);
 	mCamera->setPosition(0,10,-50);
-	mCamera->lookAt(0,0,0);
+	mCamera->lookAt(0,0,0);	
 }
 //-------------------------------------------------------------------------------------
 void ScriptInterpreter::createViewports(void)
@@ -195,10 +205,19 @@ bool ScriptInterpreter::frameStarted(const FrameEvent& evt)
 	if (mBatchMode)
 	{
 		size_t scriptCount = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua")->size();
-		mCurrentScriptIndex++;
-		if (mCurrentScriptIndex>=scriptCount)
+		if (mCurrentPerformanceIndex>=5 || !mPerformanceMode)
+		{			
+			mCurrentScriptIndex++;
+			mCurrentPerformanceIndex = 0;
+		}		
+		if (mCurrentScriptIndex >= scriptCount)
+		{
+			writePerformanceFile();
 			return false;
+		}
+		reloadScriptNameFromIndex();
 		mCurrentScriptReloadTime=0;
+		mCurrentPerformanceIndex++;
 	}
 	checkScriptModified();
 	return true;
@@ -212,6 +231,7 @@ bool ScriptInterpreter::keyReleased( const OIS::KeyEvent &arg )
 		{
 			size_t scriptCount = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua")->size();
 			mCurrentScriptIndex = Utils::modulo(mCurrentScriptIndex+1, scriptCount);
+			reloadScriptNameFromIndex();
 			mCurrentScriptReloadTime=0;
 			return true;
 		}
@@ -219,6 +239,7 @@ bool ScriptInterpreter::keyReleased( const OIS::KeyEvent &arg )
 		{
 			size_t scriptCount = ResourceGroupManager::getSingleton().findResourceNames("Scripts", "*.lua")->size();
 			mCurrentScriptIndex = Utils::modulo(mCurrentScriptIndex-1, scriptCount);
+			reloadScriptNameFromIndex();
 			mCurrentScriptReloadTime=0;
 			return true;
 		}		
@@ -230,8 +251,22 @@ bool ScriptInterpreter::keyReleased( const OIS::KeyEvent &arg )
 	return BaseApplication::keyReleased(arg);
 }
 //-------------------------------------------------------------------------------------
+void ScriptInterpreter::writePerformanceFile()
+{
+	std::ofstream perfFile;
+	perfFile.open("perf.csv");
+	for (std::map<std::string, long>::iterator it = mExecutionTimes.begin(); it != mExecutionTimes.end(); it++)
+		perfFile<<it->first<<";";
+	perfFile<<std::endl;
+	for (std::map<std::string, long>::iterator it = mExecutionTimes.begin(); it != mExecutionTimes.end(); it++)
+		perfFile<<(it->second/5)<<";";
+	perfFile<<std::endl;
+	perfFile.close();
+}
+//-------------------------------------------------------------------------------------
 bool ScriptInterpreter::processInput(int argc, char *argv[])
 {
+
 	mBatchMode = false;
 	mScriptSourceMode = SSM_RESOURCES;
 	mWriteToDisk = false;
@@ -247,7 +282,8 @@ bool ScriptInterpreter::processInput(int argc, char *argv[])
 		if (string(argv[1]) == "-help")
 		{
 			cout<<"Additional arguments :"<<endl;
-			cout<<"-batch               run all scripts in a sequence, and exit when done"<<endl;				
+			cout<<"-batch               runs all scripts in a sequence, and exit when done"<<endl;
+			cout<<"-performance         runs all the scripts 5 times, outputing the time spent for each one (batch mode only)"<<endl;
 			cout<<"-todisk              all output meshes and textures will be written in the current directory"<<endl;
 			//cout<<"-script <scriptname> runs only that script"<<endl;
 			cout<<"-scriptdir <path>    runs all the scripts contained in the path"<<endl;
@@ -271,6 +307,9 @@ bool ScriptInterpreter::processInput(int argc, char *argv[])
 				{
 					mScriptSourceMode = SSM_SCRIPTDIR;
 					mScriptDir = string(argv[++i]);					
+				} else if (param == "-performance")
+				{
+					mPerformanceMode = true;
 				}
 			}
 		}
@@ -280,17 +319,15 @@ bool ScriptInterpreter::processInput(int argc, char *argv[])
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	#define WIN32_LEAN_AND_MEAN
 	#include "windows.h"	
-	int main(int argc, char *argv[])
-#else
-	int main(int argc, char *argv[])
 #endif
+	int main(int argc, char *argv[])
 	{
-		
+
 		ScriptInterpreter app;
+
 
 		if (!app.processInput(argc, argv))
 			return 0;
-		
 		try {
 			app.go();
 		} catch( Exception& e ) {
