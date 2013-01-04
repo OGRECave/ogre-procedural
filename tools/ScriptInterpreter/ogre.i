@@ -17,3 +17,4 @@
  %include "OgreCommon.h" 
  %template(Rect) Ogre::TRect<long>;
 %template(RealRect) Ogre::TRect<Ogre::Real>;
+%include "OgreColourValue.h"
