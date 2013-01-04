@@ -119,7 +119,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 	// Point insertion loop
 	for (unsigned short i=0;i<pointList.size()-3;i++)
 	{
-		Utils::log("insert point " + StringConverter::toString(i));
+		//Utils::log("insert point " + StringConverter::toString(i));
 		std::list<std::list<Triangle>::iterator> borderlineTriangles;
 		// Insert 1 point, find all triangles for which the point is in circumcircle
 		Vector2& p = pointList[i];
@@ -131,7 +131,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 			{
 				if (!it->isDegenerate())
 				{
-				Utils::log("tri insie" + it->debugDescription());
+				//Utils::log("tri insie" + it->debugDescription());
 				for (int k=0;k<3;k++)
 				{
 					DelaunaySegment d1(it->i[k], it->i[(k+1)%3]);
@@ -147,7 +147,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 			}
 			else if (isInside == Triangle::IT_BORDERLINEOUTSIDE)
 			{
-				Utils::log("tri borer " + it->debugDescription());
+				//Utils::log("tri borer " + it->debugDescription());
 				borderlineTriangles.push_back(it);
 				++it;
 			}
@@ -189,7 +189,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 			if (isTriangleIntersected) {
 				if (!itTri->isDegenerate())
 				{
-				Utils::log("tri inside" + itTri->debugDescription());
+				//Utils::log("tri inside" + itTri->debugDescription());
 				for (int m=0;m<3;m++)
 				{
 					DelaunaySegment d1(itTri->i[m], itTri->i[(m+1)%3]);
@@ -213,7 +213,7 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 			Triangle dt(&pointList);
 			dt.setVertices(it->i1, it->i2, i);
 			dt.makeDirectIfNeeded();
-			Utils::log("Add tri " + dt.debugDescription());
+			//Utils::log("Add tri " + dt.debugDescription());
 			tbuffer.push_back(dt);
 
 		}
@@ -231,9 +231,9 @@ void Triangulator::delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffe
 void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointList& pl, const std::vector<int>& segmentListIndices) const
 {
 	std::vector<DelaunaySegment> segList;
-	Utils::log("a co");
-	for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
-		Utils::log(it->debugDescription());
+	//Utils::log("a co");
+	//for (DelaunayTriangleBuffer::iterator it = tbuffer.begin(); it!=tbuffer.end();it++)
+	//	Utils::log(it->debugDescription());
 	
 	// First, list all the segments that are not already in one of the delaunay triangles
 	for (std::vector<int>::const_iterator it2 = segmentListIndices.begin(); it2 != segmentListIndices.end();it2++)
@@ -258,7 +258,7 @@ void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointL
 	// Re-Triangulate according to the new segments
 	for (std::vector<DelaunaySegment>::iterator itSeg=segList.begin();itSeg!=segList.end();itSeg++)
 	{
-		Utils::log("itseg " + StringConverter::toString(itSeg->i1) + "," + StringConverter::toString(itSeg->i2) + " " + StringConverter::toString(pl[itSeg->i1]) + "," + StringConverter::toString(pl[itSeg->i2]));
+		//Utils::log("itseg " + StringConverter::toString(itSeg->i1) + "," + StringConverter::toString(itSeg->i2) + " " + StringConverter::toString(pl[itSeg->i1]) + "," + StringConverter::toString(pl[itSeg->i2]));
 		// Remove all triangles intersecting the segment and keep a list of outside edges
 		std::set<DelaunaySegment> segments;
 		Segment2D seg1(pl[itSeg->i1], pl[itSeg->i2]);
@@ -293,8 +293,8 @@ void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointL
 			}
 			if (isTriangleIntersected)
 			{
-				if (isDegenerate)
-					Utils::log("degen " + itTri->debugDescription());				
+				//if (isDegenerate)
+					//Utils::log("degen " + itTri->debugDescription());				
 				for (int k=0;k<3;k++)
 				{
 					DelaunaySegment d1(itTri->i[k], itTri->i[(k+1)%3]);
@@ -323,7 +323,7 @@ void Triangulator::_addConstraints(DelaunayTriangleBuffer& tbuffer, const PointL
 		{
 			if (it->i1==pt || it->i2==pt)
 			{
-				Utils::log("next " + StringConverter::toString(pt));
+				//Utils::log("next " + StringConverter::toString(pt));
 
 				if (it->i1==pt)
 					pt = it->i2;
@@ -516,12 +516,12 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 			dtb.push_back(superTriangle);
 		}
 	}
-	Utils::log("Triangulator preparation : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
+	//Utils::log("Triangulator preparation : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
 	delaunay(outputVertices, dtb);
-	Utils::log("Triangulator delaunay : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
+	//Utils::log("Triangulator delaunay : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
 	// Add contraints
 	_addConstraints(dtb, outputVertices, segmentListIndices);
-	Utils::log("Triangulator constraints : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
+	//Utils::log("Triangulator constraints : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
 	//Outputs index buffer
 	for (DelaunayTriangleBuffer::iterator it = dtb.begin(); it!=dtb.end();++it)
 		if (!it->isDegenerate())
@@ -538,7 +538,7 @@ void Triangulator::triangulate(std::vector<int>& output, PointList& outputVertic
 		outputVertices.pop_back();
 		outputVertices.pop_back();
 	}
-	Utils::log("Triangulator output : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
+	//Utils::log("Triangulator output : " + StringConverter::toString(mTimer.getMicroseconds() / 1000.0f) + " ms");
 }
 //-----------------------------------------------------------------------
 void Triangulator::addToTriangleBuffer(TriangleBuffer& buffer) const
