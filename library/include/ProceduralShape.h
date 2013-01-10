@@ -516,7 +516,7 @@ public:
 	/**
 	 * Create a symetric copy at a given axis.
 	 * @param axis Axis where to mirror
-	 * @parm flip \c true if function should start mirroring with the first point in list (default \c false)
+	 * @param flip \c true if function should start mirroring with the first point in list (default \c false)
 	 */
 	Shape& mirrorAroundAxis(const Ogre::Vector2& axis, bool flip = false)
 	{

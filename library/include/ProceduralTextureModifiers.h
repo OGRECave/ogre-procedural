@@ -322,7 +322,7 @@ public:
 
 	/**
 	Sets the texture buffer that must be copied towards the current texture buffer
-	\param image Pointer on image where to copy from
+	\param inputBuffer Pointer on image where to copy from
 	*/
 	Blit & setInputBuffer(TextureBufferPtr inputBuffer);
 
@@ -2707,6 +2707,150 @@ public:
 	*/
 	TextureBufferPtr process();
 };
+
+#ifdef OgreProcedural_USE_FREETYPE
+/**
+\brief Draw text on Texture.
+\details Draw a given text on texture.
+
+Example:
+\code{.cpp}
+Procedural::TextureBuffer bufferCell(256);
+Procedural::Cell(&bufferCell).setDensity(4).setRegularity(234).process();
+Procedural::TextTexture(&bufferCell).setFont("Arial", 30).setColour(Ogre::ColourValue::Red).setPosition((size_t)20, (size_t)20).setText("OGRE").process();
+Procedural::TextTexture(&bufferCell).setFont("Arial", 20).setColour(Ogre::ColourValue::Green).setPosition((size_t)10, (size_t)60).setText("Procedural").process();
+
+\endcode
+\dotfile texture_34.gv
+*/
+class _ProceduralExport TextTexture : public TextureProcessing
+{
+private:
+	Ogre::String mText;
+	Ogre::String mFontName;
+	Ogre::uchar mFontSize;
+	Ogre::ColourValue mColour;
+	size_t mX;
+	size_t mY;
+
+public:
+	/**
+	Default constructor.
+	\param pBuffer Image buffer where to modify the image.
+	*/
+	TextTexture(TextureBufferPtr pBuffer)
+		: TextureProcessing(pBuffer, "TextTexture"), mText("OgreProcedural"), mFontName(), mFontSize(12), mColour(Ogre::ColourValue::Black)
+	{
+		mX = pBuffer->getWidth() / 2;
+		mY = pBuffer->getHeight() / 2;
+	}
+
+	/**
+	Set the text content.
+	\param text New text for processing (default "OgreProcedural")
+	*/
+	TextTexture & setText(Ogre::String text);
+
+	/**
+	Set absolute x position where to start painting the text in px
+	\param x New absolute x position of text start (default 1/2 * image width)
+	*/
+	TextTexture & setPositionX(size_t x);
+
+	/**
+	Set relative x position where to start painting the text as Real
+	\param x New relative x position of text start [0.0, 1.0] \(default 0.5)
+	*/
+	TextTexture & setPositionX(Ogre::Real x);
+
+	/**
+	Set absolute y position where to start painting the text in px
+	\param y New absolute y position of text start (default 1/2 * image width)
+	*/
+	TextTexture & setPositionY(size_t y);
+
+	/**
+	Set relative y position where to start painting the text as Real
+	\param y New relative y position of text start [0.0, 1.0] \(default 0.5)
+	*/
+	TextTexture & setPositionY(Ogre::Real y);
+
+	/**
+	Set the position of text start point.
+	\param pos Vector to the start point where to draw the text (default: x=0.5, y=0.5)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	TextTexture & setPosition(Ogre::Vector2 pos, bool relative = true);
+
+	/**
+	Set the position of text start point.
+	\param x New absolute x position of text start (default 1/2 * image width)
+	\param y New absolute y position of text start (default 1/2 * image width)
+	*/
+	TextTexture & setPosition(size_t x, size_t y);
+
+	/**
+	Set the position of text start point.
+	\param x New relative x position of text start [0.0, 1.0] \(default 0.5)
+	\param y New relative y position of text start [0.0, 1.0] \(default 0.5)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	TextTexture & setPosition(Ogre::Real x, Ogre::Real y, bool relative = true);
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+	/**
+	Set the position of text start point.
+	\param pos Absolute center point of the text (default: x=1/2 * image width, y=1/2 * image width)
+	*/
+	TextTexture & setPosition(POINT pos);
+#endif
+
+	/**
+	Set the font for the text.
+	\param fontName Filenpath of a font or name of font (only on windows desktops)
+	\param fontSize Size of font [px] (default 12)
+	\todo Add search for font names on non windows systems.
+	*/
+	TextTexture & setFont(Ogre::String fontName, Ogre::uchar fontSize);
+
+	/**
+	Set the drawing colour of the text.
+	\param colour New colour for processing (default Ogre::ColourValue::Black)
+	*/
+	TextTexture & setColour(Ogre::ColourValue colour);
+
+	/**
+	Set the drawing colour of the text.
+	\param red Red value of the fill colour [0, 255] (default 0)
+	\param green Green value of the fill colour [0, 255] (default 0)
+	\param blue Blue value of the fill colour [0, 255] (default 0)
+	\param alpha %Alpha value of the fill colour [0, 255] (default 255)
+	*/
+	TextTexture & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
+
+	/**
+	Set the drawing colour of the text.
+	\param red Red value of the fill colour [0.0, 1.0] \(default 0.0)
+	\param green Green value of the fill colour [0.0, 1.0] \(default 0.0)
+	\param blue Blue value of the fill colour [0.0, 1.0] \(default 0.0)
+	\param alpha %Alpha value of the fill colour [0.0, 1.0] \(default 1.0)
+	*/
+	TextTexture & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+
+	/**
+	Run image manipulation
+	\return Pointer to image buffer which has been set in the constructor.
+	*/
+	TextureBufferPtr process();
+
+private:
+	Ogre::String getFontFileByName();
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+	bool getFontFile(Ogre::String fontName, Ogre::String& displayName, Ogre::String& filePath);
+#endif
+};
+#endif // OgreProcedural_USE_FREETYPE
 
 /**
 \brief Simple threshold filter.

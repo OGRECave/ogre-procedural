@@ -28,6 +28,11 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralTextureModifiers.h"
 #include "ProceduralTextureGenerator.h"
+#ifdef OgreProcedural_USE_FREETYPE
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_GLYPH_H
+#endif // OgreProcedural_USE_FREETYPE
 
 using namespace Ogre;
 
@@ -3379,6 +3384,228 @@ TextureBufferPtr Sharpen::process()
 	logMsg("Modify texture with sharpen filter : " + StringConverter::toString(mType));
 	return mBuffer;
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef OgreProcedural_USE_FREETYPE
+
+TextTexture & TextTexture::setText(Ogre::String text)
+{
+	mText = text;
+	return *this;
+}
+
+TextTexture & TextTexture::setPositionX(size_t x)
+{
+	mX = std::min<size_t>(x, mBuffer->getWidth() - 1);
+	return *this;
+}
+
+TextTexture & TextTexture::setPositionX(Ogre::Real x)
+{
+	mX = std::min<size_t>((size_t)(x * (Ogre::Real)mBuffer->getWidth()), mBuffer->getWidth() - 1);
+	return *this;
+}
+
+TextTexture & TextTexture::setPositionY(size_t y)
+{
+	mY = std::min<size_t>(y, mBuffer->getHeight() - 1);
+	return *this;
+}
+
+TextTexture & TextTexture::setPositionY(Ogre::Real y)
+{
+	mY = std::min<size_t>((size_t)(y * (Ogre::Real)mBuffer->getHeight()), mBuffer->getHeight() - 1);
+	return *this;
+}
+
+TextTexture & TextTexture::setPosition(Ogre::Vector2 pos, bool relative)
+{
+	setPosition(pos.x, pos.y, relative);
+	return *this;
+}
+
+TextTexture & TextTexture::setPosition(size_t x, size_t y)
+{
+	setPositionX(x);
+	setPositionY(y);
+	return *this;
+}
+
+TextTexture & TextTexture::setPosition(Ogre::Real x, Ogre::Real y, bool relative)
+{
+	if(relative)
+	{
+		setPositionX(x);
+		setPositionY(y);
+	}
+	else
+	{
+		setPositionX((size_t)x);
+		setPositionY((size_t)y);
+	}
+	return *this;
+}
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+TextTexture & TextTexture::setPosition(POINT pos)
+{
+	setPosition((size_t)pos.x, (size_t)pos.y);
+	return *this;
+}
+#endif
+
+TextTexture & TextTexture::setFont(Ogre::String fontName, Ogre::uchar fontSize)
+{
+	if(fontName.empty() || fontSize < 4) return *this;
+	mFontName = fontName;
+	mFontSize = fontSize;
+	return *this;
+}
+
+TextTexture & TextTexture::setColour(Ogre::ColourValue colour)
+{
+	mColour = colour;
+	return *this;
+}
+
+TextTexture & TextTexture::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
+{
+	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
+	return *this;
+}
+
+TextTexture & TextTexture::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+{
+	mColour = Ogre::ColourValue(red, green, blue, alpha);
+	return *this;
+}
+
+TextureBufferPtr TextTexture::process()
+{
+	FT_Library ftlib;
+	FT_Face face;
+	FT_GlyphSlot slot;
+
+	FT_Error error = FT_Init_FreeType(&ftlib);
+	if(error == 0)
+	{
+		error = FT_New_Face(ftlib, getFontFileByName().c_str(), 0, &face);
+		if(error == FT_Err_Unknown_File_Format)
+			logMsg("FreeType ERROR: FT_Err_Unknown_File_Format");
+		else if(error)
+			logMsg("FreeType ERROR: FT_New_Face - " + Ogre::StringConverter::toString(error));
+		else
+		{
+			FT_Set_Pixel_Sizes(face, 0, mFontSize);
+			
+			size_t px = (size_t)mX;
+			size_t py = (size_t)mY;
+			slot = face->glyph;
+
+			for(size_t n = 0; n < mText.length(); n++)
+			{
+				error = FT_Load_Char(face, mText[n], FT_LOAD_RENDER);
+				if(error) continue;
+				
+				for(size_t i = 0; i < slot->bitmap.width; i++)
+				{
+					for(size_t j = 0; j < slot->bitmap.rows; j++)
+					{
+						if(slot->bitmap.buffer[j * slot->bitmap.width + i] > 127)
+							mBuffer->setPixel(px + i, py + j, mColour);
+					}
+				}
+
+				px += slot->advance.x >> 6;
+				py += slot->advance.y >> 6;
+			}
+			FT_Done_Face(face);
+			logMsg("Modify texture with text processing : " + mText);
+		}
+		FT_Done_FreeType(ftlib);
+	}
+	else
+		logMsg("FreeType ERROR: FT_Init_FreeType");
+	return mBuffer;
+}
+
+Ogre::String TextTexture::getFontFileByName()
+{
+	Ogre::String ff;
+	Ogre::String tmp;
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+	char windows[MAX_PATH];
+	GetWindowsDirectory(windows, MAX_PATH);
+
+	bool result = getFontFile(mFontName, tmp, ff);
+	if(!result) return mFontName;
+	if(!(ff[0] == '\\' && ff[1] == '\\') && !(ff[1] == ':' && ff[2] == '\\'))
+		return Ogre::String(windows) + "\\fonts\\" + ff;
+	else
+		return ff;
+#else
+	return mFontName;
+#endif
+}
+
+#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
+bool TextTexture::getFontFile(Ogre::String fontName, Ogre::String& displayName, Ogre::String& filePath)
+{
+	if(fontName.empty()) return false;
+
+	if((fontName[0] == '\\' && fontName[1] == '\\') || (fontName[1] == ':' && fontName[2] == '\\'))
+	{
+		displayName = fontName;
+		filePath = fontName;
+		return true;
+	}
+
+	char name[2 * MAX_PATH];
+	char data[2 * MAX_PATH];
+	filePath.empty();
+
+	HKEY hkFont;
+	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", 0, KEY_READ, &hkFont) == ERROR_SUCCESS)
+	{
+		char cname[MAX_PATH];
+		DWORD icname = 0;
+		DWORD isubkeys = 0;
+		DWORD imaxsubkey = 0;
+		DWORD imaxclass = 0;
+		DWORD ivalues = 0;
+		DWORD imaxvalues = 0;
+		DWORD imaxnamevalues = 0;
+		DWORD isecurity = 0;
+		FILETIME dtlast;
+
+		DWORD retCode = RegQueryInfoKey(hkFont, cname, &icname, NULL, &isubkeys, &imaxsubkey, &imaxclass, &ivalues, &imaxnamevalues, &imaxvalues, &isecurity, &dtlast);
+		if(ivalues)
+		{
+			for(DWORD i = 0; i < ivalues; i++)
+			{
+				retCode = ERROR_SUCCESS;
+				DWORD nsize = MAX_PATH - 1;
+				DWORD dsize = MAX_PATH - 1;
+				name[0] = 0;
+				data[0] = 0;
+				retCode = RegEnumValue(hkFont, i, name, &nsize, NULL, NULL, (LPBYTE)data, &dsize);
+				if(retCode == ERROR_SUCCESS)
+					if(strnicmp(name, fontName.c_str(), std::min<size_t>(strlen(name), fontName.length())) == 0)
+					{
+						displayName = name;
+						filePath = data;
+						break;
+					}
+			}
+		}
+	}
+	RegCloseKey(hkFont);
+}
+#endif
+
+#endif // OgreProcedural_USE_FREETYPE
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

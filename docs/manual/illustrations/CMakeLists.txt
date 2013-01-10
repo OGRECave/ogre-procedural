@@ -15,6 +15,11 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
+find_package(Freetype)
+if(FREETYPE_FOUND)
+  add_definitions(-DOgreProcedural_USE_FREETYPE)
+endif ()
+
 procedural_add_executable(Illustrations WIN32 ${HDRS} ${SRCS})
 
 file(WRITE ${OgreProcedural_ILLUSTRATIONS_PATH}/temp.txt "This file should be deleted before installation. It is only here to force the creation of the image folder")

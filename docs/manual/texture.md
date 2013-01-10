@@ -251,15 +251,21 @@ See Procedural::Segment
 
 See Procedural::Sharpen
 
+### TextTexture
+
+![Figure 31. TextTexture](texture_text.png)
+
+See Procedural::TextTexture
+
 ### Threshold
 
-![Figure 31. Threshold](texture_threshold.png)
+![Figure 32. Threshold](texture_threshold.png)
 
 See Procedural::Threshold
 
 ### Vortex
 
-![Figure 32. Vortex](texture_vortex.png)
+![Figure 33. Vortex](texture_vortex.png)
 
 See Procedural::Vortex
 

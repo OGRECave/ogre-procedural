@@ -791,6 +791,16 @@ void Illustrations::go()
 	dotfile.set("Solid", "texture_solid", "Ellipse", "texture_ellipse");
 	dotfile.save();
 
+#ifdef OgreProcedural_USE_FREETYPE
+	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
+	Procedural::TextTexture(&buffer).setFont("Arial", 30).setColour(Ogre::ColourValue::Red).setPosition((size_t)20, (size_t)20).setText("OGRE").process();
+	Procedural::TextTexture(&buffer).setFont("Arial", 20).setColour(Ogre::ColourValue::Green).setPosition((size_t)10, (size_t)60).setText("Procedural").process();
+	exportImage("texture_text", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_34", "Text_Demo");
+	dotfile.set("Cell", "texture_cell_smooth", "Text", "texture_text");
+	dotfile.save();
+#endif
+
 	// Example
 	dotfile = dotFile(mOutputPath, "texture_01", "Material_Example");
 	int pxPerBrick = 32;
