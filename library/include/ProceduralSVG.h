@@ -144,9 +144,10 @@ public:
 
 	/**
 	Parses a SVG file
+	@param out MultiShape object where to store shapes from svg file
 	@param fileName Filename of svg file
 	@param groupName Resource group where svg file is listed
-	@param segments_number Number of segments for curves
+	@param segmentsNumber Number of segments for curves
 	*/
 	void parseSvgFile(MultiShape& out, const Ogre::String &fileName, const Ogre::String &groupName = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, int segmentsNumber = 8);
 

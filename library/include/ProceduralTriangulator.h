@@ -202,6 +202,7 @@ public:
 	/**
 	 * Executes the Constrained Delaunay Triangulation algorithm
 	 * @param ouput A vector of index where is outputed the resulting triangle indexes
+	 * @param outputVertices A vector of vertices where is outputed the resulting triangle vertices
 	 * @exception Ogre::InvalidStateException Either shape or multishape or segment list must be defined
 	 */
 	void triangulate(std::vector<int>& output, PointList& outputVertices) const;

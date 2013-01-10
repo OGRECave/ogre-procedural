@@ -105,6 +105,13 @@ endif()
 
 procedural_add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})
 
+find_package(Freetype)
+if(FREETYPE_FOUND)
+  include_directories(OgreProcedural ${FREETYPE_INCLUDE_DIRS})
+  target_link_libraries(OgreProcedural ${FREETYPE_LIBRARIES})
+  add_definitions(-DOgreProcedural_USE_FREETYPE)
+endif ()
+
 set_target_properties(OgreProcedural PROPERTIES DEBUG_POSTFIX _d)
 
 if (NOT OgreProcedural_STATIC)
