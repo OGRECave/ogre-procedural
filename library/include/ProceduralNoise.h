@@ -34,14 +34,6 @@ THE SOFTWARE.
 namespace Procedural
 {
 
-#if PROCEDURAL_PLATFORM != PROCEDURAL_PLATFORM_WIN32
-typedef struct tagPOINT
-{
-    size_t x;
-    size_t y;
-} POINT;
-#endif
-
 class NoiseBase
 {
 public:

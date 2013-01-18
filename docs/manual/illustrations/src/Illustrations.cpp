@@ -98,6 +98,7 @@ using namespace Procedural;
 	mWindow = mRoot->initialise(true); 
 	mWindow->setDeactivateOnFocusChange(false);
 	mWindow->resize(256, 256);
+	mWindow->windowMovedOrResized();
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
 	mCamera = mSceneMgr->createCamera("SimpleCamera");  
@@ -120,8 +121,11 @@ void Illustrations::next(std::string name, Real size)
 	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
 	// Write scene to png image
+	WindowEventUtilities::messagePump();
 	mRoot->renderOneFrame();
+	WindowEventUtilities::messagePump();
 	mRoot->renderOneFrame();
+	WindowEventUtilities::messagePump();
 	mRoot->renderOneFrame();
 	mWindow->writeContentsToFile(name + ".png");
 
@@ -919,7 +923,9 @@ extern "C" {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		app.mOutputPath = strCmdLine;
 #else
-		app.mOutputPath = (argc > 1) ? argv[1] : getcwd();
+		 size_t size=_PC_PATH_MAX;
+		 char path[size];
+		 app.mOutputPath = (argc > 1) ? argv[1] : getcwd(path,size);
 #endif
 
 		try {
