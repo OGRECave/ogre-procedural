@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "Material.h"
 #include "Procedural.h"
 #include "ProceduralUtils.h"
-#include "RTShaderSystem\OgreRTShaderSystem.h"
+#include "RTShaderSystem/OgreRTShaderSystem.h"
 
 //-------------------------------------------------------------------------------------
 void Sample_Material::createScene(void)

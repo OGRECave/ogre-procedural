@@ -239,5 +239,9 @@ struct _ProceduralExport Triangle3D
 
 	bool findIntersect(const Triangle3D& other, Segment3D& intersection) const;
 };
+//-----------------------------------------------------------------------
+struct _ProceduralExport IntVector2 {
+  size_t x, y;
+};
 }
 #endif

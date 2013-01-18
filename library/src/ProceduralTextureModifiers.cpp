@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 #endif // OgreProcedural_USE_FREETYPE
+#include "ProceduralGeometryHelpers.h"
 
 using namespace Ogre;
 
@@ -2926,8 +2927,8 @@ RandomPixels & RandomPixels::setCount(Ogre::uint count)
 
 TextureBufferPtr RandomPixels::process()
 {
-	POINT pt;
-	std::vector<POINT> list;
+	IntVector2 pt;
+	std::vector<IntVector2> list;
 
 	srand(mSeed);
 	size_t area = mBuffer->getWidth() * mBuffer->getHeight();
@@ -2941,7 +2942,7 @@ TextureBufferPtr RandomPixels::process()
 			pt.y = rand() % mBuffer->getHeight();
 
 			bool bInList = false;
-			for(std::vector<POINT>::iterator iter = list.begin(); iter != list.end(); iter++)
+			for(std::vector<IntVector2>::iterator iter = list.begin(); iter != list.end(); iter++)
 				if(iter->x == pt.x && iter->y == pt.y)
 				{
 					bInList = true;
@@ -3252,7 +3253,7 @@ TextureBufferPtr Segment::process()
 
 	Ogre::uchar* pCoverage = new Ogre::uchar[w * h];
 	memset(pCoverage, 0, w * h);
-	POINT* pStack = new POINT[w * h * 4];
+	IntVector2* pStack = new IntVector2[w * h * 4];
 	TextureBufferPtr tmpBuffer = mBuffer->clone();
 
 	size_t stackPtr = 0;
@@ -3272,7 +3273,7 @@ TextureBufferPtr Segment::process()
 
 			while(stackPtr > 0)
 			{
-				POINT current = pStack[--stackPtr];
+				IntVector2 current = pStack[--stackPtr];
 				if(pCoverage[current.x + current.y * w] != 0)
 					continue;
 
