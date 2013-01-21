@@ -34,7 +34,7 @@ THE SOFTWARE.
 namespace Procedural
 {
 
-class NoiseBase
+class _ProceduralExport NoiseBase
 {
 public:
 	virtual Ogre::Real function1D(size_t x) = 0;
@@ -91,7 +91,7 @@ public:
 
 typedef NoiseBase* NoiseBasePtr;
 
-class WhiteNoise : public NoiseBase
+class _ProceduralExport WhiteNoise : public NoiseBase
 {
 public:
 	WhiteNoise(Ogre::uint seed = 5120) { srand(seed); }
@@ -100,7 +100,7 @@ public:
 	virtual Ogre::Real function2D(size_t x, size_t y) { return function1D(x * y); }
 };
 
-class PerlinNoise : public NoiseBase
+class _ProceduralExport PerlinNoise : public NoiseBase
 {
 private:
 	Ogre::Real mFrequency;

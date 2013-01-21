@@ -156,12 +156,12 @@ void ScriptInterpreter::reloadScript()
 			}
 			else
 			{
-				message = lua_tostring(L,-1);
+				message = "Failed to load " + mCurrentScriptName + " :" + lua_tostring(L,-1);
 				success = false;
 			}
 		} else
 		{
-			message = lua_tostring(L,-1);
+			message = "Failed to load " + mCurrentScriptName + " :" + lua_tostring(L,-1);
 			success = false;
 		}
 		if (success)

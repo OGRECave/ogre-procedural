@@ -9,9 +9,15 @@
  using namespace Procedural;
  %}
  %include "ProceduralPlatform.h"
+ %copyctor TriangleBuffer;
+ %copyctor TextureBuffer;
+ %copyctor Shape;
+ %copyctor Path;
+ %copyctor Track;
  %include "ProceduralTriangleBuffer.h"
  %include "ProceduralMeshGenerator.h"
  %include "ScriptInterpreter.h"
+ %include "ProceduralSplines.h"
  %include "ProceduralShapeGeneratorsBase.h"
  %include "ProceduralPathGeneratorsBase.h"
  %template(bs1) Procedural::BaseSpline2< Procedural::CubicHermiteSpline2>;
@@ -66,6 +72,7 @@
  %template(vectorSeg2) std::vector< Procedural::Segment2D>;
  %include "ProceduralGeometryHelpers.h" 
  %include "ProceduralMeshModifiers.h"
+ %include "ProceduralNoise.h"
  %include "ProceduralTextureBuffer.h"
  %include "ProceduralTextureGenerator.h"
  %include "ProceduralTextureModifiers.h"
