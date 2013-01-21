@@ -11,9 +11,12 @@ set( HDRS
 
 set( SRCS
 		../../samples/common/src/BaseApplication.cpp
-		"${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
 		src/ScriptInterpreter.cpp
 	)
+set( SRCS2
+		"${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
+	)
+	
 
 set( EXTRA
 	procedural.i
@@ -32,7 +35,7 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
                      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 					 DEPENDS procedural.i ogre.i)
 
-procedural_add_executable(ScriptInterpreter ${HDRS} ${SRCS} ${EXTRA})
+procedural_add_executable(ScriptInterpreter ${HDRS} ${SRCS} ${EXTRA} SEPARATE ${SRCS2})
 
 set_target_properties(ScriptInterpreter PROPERTIES DEBUG_POSTFIX _d)
 

@@ -79,7 +79,8 @@ set( SRCS
 		src/ProceduralTextureModifiers.cpp
 		src/ProceduralNoise.cpp
 		src/ProceduralMeshModifiers.cpp
-		src/ProceduralTextureBuffer.cpp
+		src/ProceduralTextureBuffer.cpp		
+		src/ProceduralTriangleBuffer.cpp
 	)
 
 include_directories(SYSTEM ${OGRE_INCLUDE_DIRS}

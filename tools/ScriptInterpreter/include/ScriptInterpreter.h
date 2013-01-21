@@ -141,6 +141,13 @@ public:
 		addMesh(meshId.c_str());
 	}
 
+	void addPath(const Path* path)
+	{
+		std::string meshId = Utils::getName();
+		path->realizeMesh(meshId);
+		addMesh(meshId.c_str());
+	}
+
 	void addMesh(const char* meshName, const char* materialName="Examples/Rockwall")
 	{
 		Entity* entity = mSceneMgr->createEntity(meshName);
