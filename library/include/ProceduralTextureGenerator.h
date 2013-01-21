@@ -112,15 +112,6 @@ public:
 
 	/**
 	Set the colour of the cell top.
-	\param red Red value of the cell top colour [0, 255] (default 255)
-	\param green Green value of the cell top colour [0, 255] (default 255)
-	\param blue Blue value of the cell top colour [0, 255] (default 255)
-	\param alpha %Alpha value of the cell top colour [0, 255] (default 255)
-	*/
-	Cell & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
-	/**
-	Set the colour of the cell top.
 	\param red Red value of the cell top colour [0.0, 1.0] \(default 1.0)
 	\param green Green value of the cell top colour [0.0, 1.0] \(default 1.0)
 	\param blue Blue value of the cell top colour [0.0, 1.0] \(default 1.0)
@@ -201,16 +192,7 @@ public:
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
 	Cloud & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the colour of the background.
-	\param red Red value of background colour [0, 255] (default 255)
-	\param green Green value of background colour [0, 255] (default 255)
-	\param blue Blue value of background colour [0, 255] (default 255)
-	\param alpha %Alpha value of background colour [0, 255] (default 255)
-	*/
-	Cloud & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Sets the colour of the background
 	\param red Red value of background colour [0.0, 1.0] \(default 1.0)
@@ -267,16 +249,7 @@ public:
 	\param colour New colour in the top left corner for processing (default Ogre::ColourValue::Blue)
 	*/
 	Gradient & setColourA(Ogre::ColourValue colour);
-
-	/**
-	Set the colour in the top left corner of the image.
-	\param red Red value of new colour in the top left corner [0, 255] (default 0)
-	\param green Green value of new colour in the top left corner [0, 255] (default 0)
-	\param blue Blue value of new colour in the top left corner [0, 255] (default 255)
-	\param alpha %Alpha value of new colour in the top left corner [0, 255] (default 255)
-	*/
-	Gradient & setColourA(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour in the top left corner of the image.
 	\param red Red value of new colour in the top left corner [0.0, 1.0] \(default 0.0)
@@ -294,15 +267,6 @@ public:
 
 	/**
 	Set the colour in the top right corner of the image.
-	\param red Red value of new colour in the top right corner [0, 255] (default 0)
-	\param green Green value of new colour in the top right corner [0, 255] (default 255)
-	\param blue Blue value of new colour in the top right corner [0, 255] (default 0)
-	\param alpha %Alpha value of new colour in the top right corner [0, 255] (default 255)
-	*/
-	Gradient & setColourB(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
-	/**
-	Set the colour in the top right corner of the image.
 	\param red Red value of new colour in the top right corner [0.0, 1.0] \(default 0.0)
 	\param green Green value of new colour in the top right corner [0.0, 1.0] \(default 1.0)
 	\param blue Blue value of new colour in the top right corner [0.0, 1.0] \(default 0.0)
@@ -315,16 +279,7 @@ public:
 	\param colour New colour in the bottom left corner for processing (default Ogre::ColourValue::Red)
 	*/
 	Gradient & setColourC(Ogre::ColourValue colour);
-
-	/**
-	Set the colour in the bottom left corner of the image.
-	\param red Red value of new colour in the bottom left corner [0, 255] (default 255)
-	\param green Green value of new colour in the bottom left corner [0, 255] (default 0)
-	\param blue Blue value of new colour in the bottom left corner [0, 255] (default 0)
-	\param alpha %Alpha value of new colour in the bottom left corner [0, 255] (default 255)
-	*/
-	Gradient & setColourC(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour in the bottom left corner of the image.
 	\param red Red value of new colour in the bottom left corner [0.0, 1.0] \(default 1.0)
@@ -339,16 +294,7 @@ public:
 	\param colour New colour in the bottom right corner for processing (default Ogre::ColourValue(0.0f, 1.0f, 1.0f))
 	*/
 	Gradient & setColourD(Ogre::ColourValue colour);
-
-	/**
-	Set the colour in the bottom right corner of the image.
-	\param red Red value of new colour in the bottom right corner [0, 255] (default 0)
-	\param green Green value of new colour in the bottom right corner [0, 255] (default 255)
-	\param blue Blue value of new colour in the bottom right corner [0, 255] (default 255)
-	\param alpha %Alpha value of new colour in the bottom right corner [0, 255] (default 255)
-	*/
-	Gradient & setColourD(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour in the bottom right corner of the image.
 	\param red Red value of new colour in the bottom right corner [0.0, 1.0] \(default 0.0)
@@ -447,16 +393,7 @@ public:
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
 	Labyrinth & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the colour of the background.
-	\param red Red value of background colour [0, 255] (default 255)
-	\param green Green value of background colour [0, 255] (default 255)
-	\param blue Blue value of background colour [0, 255] (default 255)
-	\param alpha %Alpha value of background colour [0, 255] (default 255)
-	*/
-	Labyrinth & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Sets the colour of the background
 	\param red Red value of background colour [0.0, 1.0] \(default 1.0)
@@ -511,16 +448,7 @@ public:
 	\param colour New colour for marble structure (default Ogre::ColourValue::White)
 	*/
 	Marble & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the colour of the background.
-	\param red Red value of the marble structure colour [0, 255] (default 255)
-	\param green Green value of the marble structure colour [0, 255] (default 255)
-	\param blue Blue value of the marble structure colour [0, 255] (default 255)
-	\param alpha %Alpha value of the marble structure colour [0, 255] (default 255)
-	*/
-	Marble & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour of the background.
 	\param red Red value of the marble structure colour [0.0, 1.0] \(default 1.0)
@@ -592,16 +520,7 @@ public:
 	\param colour New colour of the noise (default Ogre::ColourValue::White)
 	*/
 	Noise & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the colour of the noise.
-	\param red Red value of the noise colour [0, 255] (default 255)
-	\param green Green value of the noise colour [0, 255] (default 255)
-	\param blue Blue value of the noise colour [0, 255] (default 255)
-	\param alpha %Alpha value of the noise colour [0, 255] (default 255)
-	*/
-	Noise & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour of the noise.
 	\param red Red value of the noise colour [0.0, 1.0] \(default 1.0)
@@ -664,15 +583,6 @@ public:
 
 	/**
 	Sets the fill colour of the image.
-	\param red Red value [0, 255] (default 0)
-	\param green Green value [0, 255] (default 0)
-	\param blue Blue value [0, 255] (default 0)
-	\param alpha %Alpha value [0, 255] (default 255)
-	*/
-	Solid & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
-	/**
-	Sets the fill colour of the image.
 	\param red Red value [0.0, 1.0] \(default 0.0)
 	\param green Green value [0.0, 1.0] \(default 0.0)
 	\param blue Blue value [0.0, 1.0] \(default 0.0)
@@ -719,16 +629,7 @@ public:
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
 	Textile & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the colour of the background.
-	\param red Red value of background colour [0, 255] (default 255)
-	\param green Green value of background colour [0, 255] (default 255)
-	\param blue Blue value of background colour [0, 255] (default 255)
-	\param alpha %Alpha value of background colour [0, 255] (default 255)
-	*/
-	Textile & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour of the background.
 	\param red Red value of background colour [0.0, 1.0] \(default 1.0)
@@ -784,16 +685,7 @@ public:
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
 	Wood & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the colour of the background.
-	\param red Red value of background colour [0, 255] (default 255)
-	\param green Green value of background colour [0, 255] (default 255)
-	\param blue Blue value of background colour [0, 255] (default 255)
-	\param alpha %Alpha value of background colour [0, 255] (default 255)
-	*/
-	Wood & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour of the background.
 	\param red Red value of background colour [0.0, 1.0] \(default 1.0)

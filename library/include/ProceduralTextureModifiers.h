@@ -210,15 +210,6 @@ public:
 
 	/**
 	Set the colour to extract.
-	\param red Red value of extraction colour [0, 255] (default 255)
-	\param green Green value of extraction colour [0, 255] (default 255)
-	\param blue Blue value of extraction colour [0, 255] (default 255)
-	\param alpha %Alpha value of extraction colour [0, 255] (default 255)
-	*/
-	Alpha & setExtractColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
-	/**
-	Set the colour to extract.
 	\param red Red value of extraction colour [0.0, 1.0] \(default 1.0)
 	\param green Green value of extraction colour [0.0, 1.0] \(default 1.0)
 	\param blue Blue value of extraction colour [0.0, 1.0] \(default 1.0)
@@ -365,21 +356,6 @@ public:
 	*/
 	Blit & setInputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
 
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-	/**
-	Set the full rectangle coordinates of the input buffer to copy.
-	\param pos1 New absolute coordinates of the rectangle start point (default: x=0, y=0)
-	\param pos2 New absolute coordinates of the rectangle end point (default: x=image width, y=image height)
-	*/
-	Blit & setInputRect(POINT pos1, POINT pos2);
-
-	/**
-	Set the full rectangle coordinates of the input buffer to copy.
-	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
-	*/
-	Blit & setInputRect(RECT rect);
-#endif
-
 	/**
 	Set the full rectangle coordinates of the output buffer where the input is copied to.
 	\param rect Full rectangle description (default: left=0.0, top=0.0, right=1.0, bottom=1.0)
@@ -418,21 +394,6 @@ public:
 	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
 	Blit & setOutputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
-
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-	/**
-	Set the full rectangle coordinates of the output buffer where the input is copied to.
-	\param pos1 New absolute coordinates of the rectangle start point (default: x=0, y=0)
-	\param pos2 New absolute coordinates of the rectangle end point (default: x=image width, y=image height)
-	*/
-	Blit & setOutputRect(POINT pos1, POINT pos2);
-
-	/**
-	Set the full rectangle coordinates of the output buffer where the input is copied to.
-	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
-	*/
-	Blit & setOutputRect(RECT rect);
-#endif
 
 	/**
 	Run image manipulation
@@ -610,16 +571,7 @@ public:
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
 	CircleTexture & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the fill colour of the circle.
-	\param red Red value of the fill colour [0, 255] (default 255)
-	\param green Green value of the fill colour [0, 255] (default 255)
-	\param blue Blue value of the fill colour [0, 255] (default 255)
-	\param alpha %Alpha value of the fill colour [0, 255] (default 255)
-	*/
-	CircleTexture & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the fill colour of the circle.
 	\param red Red value of the fill colour [0.0, 1.0] \(default 1.0)
@@ -687,14 +639,6 @@ public:
 	*/
 	CircleTexture & setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
 
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-	/**
-	Set the position of circle center point.
-	\param pos Absolute center point of the circle (default: x=1/2 * image width, y=1/2 * image width)
-	*/
-	CircleTexture & setCenter(POINT pos);
-#endif
-
 	/**
 	Run image manipulation
 	\return Pointer to image buffer which has been set in the constructor.
@@ -742,16 +686,7 @@ public:
 	\param colour New colour to work on (default Ogre::ColourValue::Black)
 	*/
 	Colours & setColourBase(Ogre::ColourValue colour);
-
-	/**
-	Set the base colour to work on.
-	\param red Red value of base colour [0, 255] (default 0)
-	\param green Green value of base colour [0, 255] (default 0)
-	\param blue Blue value of base colour [0, 255] (default 0)
-	\param alpha %Alpha value of base colour [0, 255] (default 255)
-	*/
-	Colours & setColourBase(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the base colour to work on.
 	\param red Red value of base colour [0.0, 1.0] \(default 0.0)
@@ -766,16 +701,7 @@ public:
 	\param colour New colour to add (default Ogre::ColourValue::White)
 	*/
 	Colours & setColourPercent(Ogre::ColourValue colour);
-
-	/**
-	Set the percent colour to add on image.
-	\param red Red value of percent colour [0, 255] (default 255)
-	\param green Green value of percent colour [0, 255] (default 255)
-	\param blue Blue value of percent colour [0, 255] (default 255)
-	\param alpha %Alpha value of percent colour [0, 255] (default 255)
-	*/
-	Colours & setColourPercent(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the percent colour to add on image.
 	\param red Red value of percent colour [0.0, 1.0] \(default 1.0)
@@ -883,16 +809,7 @@ public:
 	\param colour New colour for drawing (default Ogre::ColourValue::White)
 	*/
 	Combine & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the percent colour to add on image.
-	\param red Red value of drawing colour [0, 255] (default 255)
-	\param green Green value of drawing colour [0, 255] (default 255)
-	\param blue Blue value of drawing colour [0, 255] (default 255)
-	\param alpha %Alpha value of drawing colour [0, 255] (default 255)
-	*/
-	Combine & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the percent colour to add on image.
 	\param red Red value of drawing colour [0.0, 1.0] \(default 1.0)
@@ -1097,16 +1014,7 @@ public:
 	\param colour New colour for drawing (default Ogre::ColourValue::White)
 	*/
 	Crack & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the colour to draw.
-	\param red Red value of drawing colour [0, 255] (default 255)
-	\param green Green value of drawing colour [0, 255] (default 255)
-	\param blue Blue value of drawing colour [0, 255] (default 255)
-	\param alpha %Alpha value of drawing colour [0, 255] (default 255)
-	*/
-	Crack & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour to draw.
 	\param red Red value of drawing colour [0.0, 1.0] \(default 1.0)
@@ -1252,16 +1160,7 @@ public:
 	\param colour New colour for drawing (default Ogre::ColourValue::White)
 	*/
 	Cycloid & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the drawing colour for cycloid structure.
-	\param red Red value of drawing colour [0, 255] (default 255)
-	\param green Green value of drawing colour [0, 255] (default 255)
-	\param blue Blue value of drawing colour [0, 255] (default 255)
-	\param alpha %Alpha value of drawing colour [0, 255] (default 255)
-	*/
-	Cycloid & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the drawing colour for cycloid structure.
 	\param red Red value of drawing colour [0.0, 1.0] \(default 1.0)
@@ -1432,8 +1331,8 @@ public:
 	};
 
 private:
-	Ogre::uchar mThreshshouldLow;
-	Ogre::uchar mThreshshouldHigh;
+	Ogre::uchar mThresholdLow;
+	Ogre::uchar mThresholdHigh;
 	Ogre::uchar mSigma;
 	DETECTION_TYPE mType;
 
@@ -1443,21 +1342,21 @@ public:
 	\param pBuffer Image buffer where to modify the image.
 	*/
 	EdgeDetection(TextureBufferPtr pBuffer)
-		: TextureProcessing(pBuffer, "EdgeDetection"), mThreshshouldLow(20), mThreshshouldHigh(100), mSigma(92), mType(DETECTION_SOBEL)
+		: TextureProcessing(pBuffer, "EdgeDetection"), mThresholdLow(20), mThresholdHigh(100), mSigma(92), mType(DETECTION_SOBEL)
 	{
 	}
 
 	/**
-	Set the lower threshould for canny filter.
-	\param threshould New lower threshould value for canny filter [0, 255] (default 20)
+	Set the lower threshold for canny filter.
+	\param threshold New lower threshold value for canny filter [0, 255] (default 20)
 	*/
-	EdgeDetection & setThreshshouldLow(Ogre::uchar threshould);
+	EdgeDetection & setThresholdLow(Ogre::uchar threshold);
 
 	/**
-	Set the upper threshould for canny filter.
-	\param threshould New upper threshould value for canny filter [0, 255] (default 100)
+	Set the upper threshold for canny filter.
+	\param threshold New upper threshold value for canny filter [0, 255] (default 100)
 	*/
-	EdgeDetection & setThreshshouldHigh(Ogre::uchar threshould);
+	EdgeDetection & setThresholdHigh(Ogre::uchar threshold);
 
 	/**
 	Set sigma constant for canny filter.
@@ -1521,16 +1420,7 @@ public:
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
 	EllipseTexture & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the fill colour of the ellipse.
-	\param red Red value of the fill colour [0, 255] (default 255)
-	\param green Green value of the fill colour [0, 255] (default 255)
-	\param blue Blue value of the fill colour [0, 255] (default 255)
-	\param alpha %Alpha value of the fill colour [0, 255] (default 255)
-	*/
-	EllipseTexture & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the fill colour of the ellipse.
 	\param red Red value of the fill colour [0.0, 1.0] \(default 1.0)
@@ -1623,15 +1513,7 @@ public:
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
 	EllipseTexture & setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
-
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-	/**
-	Set the position of ellipse center point.
-	\param pos Absolute center point of the ellipse (default: x=1/2 * image width, y=1/2 * image width)
-	*/
-	EllipseTexture & setCenter(POINT pos);
-#endif
-
+	
 	/**
 	Run image manipulation
 	\return Pointer to image buffer which has been set in the constructor.
@@ -1746,16 +1628,7 @@ public:
 	\param colour New colour for glow ellipse (default Ogre::ColourValue::White)
 	*/
 	Glow & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the colour of the glow ellipse.
-	\param red Red value of the glow ellipse [0, 255] (default 255)
-	\param green Green value of the glow ellipse [0, 255] (default 255)
-	\param blue Blue value of the glow ellipse [0, 255] (default 255)
-	\param alpha %Alpha value of the glow ellipse [0, 255] (default 255)
-	*/
-	Glow & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour of the glow ellipse.
 	\param red Red value of the glow ellipse [0.0, 1.0] \(default 1.0)
@@ -1998,16 +1871,7 @@ public:
 	\param colour New ambient light colour (default Ogre::ColourValue::Black)
 	*/
 	Light & setColourAmbient(Ogre::ColourValue colour);
-
-	/**
-	Set the ambient light colour.
-	\param red Red value of ambient light colour [0, 255] (default 0)
-	\param green Green value of ambient light colour [0, 255] (default 0)
-	\param blue Blue value of ambient light colour [0, 255] (default 0)
-	\param alpha %Alpha value of ambient light colour [0, 255] (default 255)
-	*/
-	Light & setColourAmbient(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the ambient light colour.
 	\param red Red value of ambient light colour [0.0, 1.0] \(default 0.0)
@@ -2022,16 +1886,7 @@ public:
 	\param colour New diffuse light colour (default Ogre::ColourValue(0.5f, 0.5f, 0.5f, 1.0f))
 	*/
 	Light & setColourDiffuse(Ogre::ColourValue colour);
-
-	/**
-	Set the diffuse light colour.
-	\param red Red value of diffuse light colour [0, 255] (default 128)
-	\param green Green value of diffuse light colour [0, 255] (default 128)
-	\param blue Blue value of diffuse light colour [0, 255] (default 128)
-	\param alpha %Alpha value of diffuse light colour [0, 255] (default 255)
-	*/
-	Light & setColourDiffuse(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the diffuse light colour.
 	\param red Red value of diffuse light colour [0.0, 1.0] \(default 0.5)
@@ -2046,15 +1901,6 @@ public:
 	\param colour New specular light colour (default Ogre::ColourValue::White)
 	*/
 	Light & setColourSpecular(Ogre::ColourValue colour);
-
-	/**
-	Set the specular light colour.
-	\param red Red value of specular light colour [0, 255] (default 255)
-	\param green Green value of specular light colour [0, 255] (default 255)
-	\param blue Blue value of specular light colour [0, 255] (default 255)
-	\param alpha %Alpha value of specular light colour [0, 255] (default 255)
-	*/
-	Light & setColourSpecular(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
 
 	/**
 	Set the specular light colour.
@@ -2292,16 +2138,7 @@ public:
 	\param colour New colour for painting pixels (default Ogre::ColourValue::White)
 	*/
 	RandomPixels & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the colour of the pixel to paint.
-	\param red Red value of the pixel colour [0, 255] (default 255)
-	\param green Green value of the pixel colour [0, 255] (default 255)
-	\param blue Blue value of the pixel colour [0, 255] (default 255)
-	\param alpha %Alpha value of the pixel colour [0, 255] (default 255)
-	*/
-	RandomPixels & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the colour of the pixel to paint.
 	\param red Red value of the pixel colour [0.0, 1.0] \(default 1.0)
@@ -2368,16 +2205,7 @@ public:
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
 	RectangleTexture & setColour(Ogre::ColourValue colour);
-
-	/**
-	Set the fill colour of the rectangle.
-	\param red Red value of the fill colour [0, 255] (default 255)
-	\param green Green value of the fill colour [0, 255] (default 255)
-	\param blue Blue value of the fill colour [0, 255] (default 255)
-	\param alpha %Alpha value of the fill colour [0, 255] (default 255)
-	*/
-	RectangleTexture & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
-
+	
 	/**
 	Set the fill colour of the rectangle.
 	\param red Red value of the fill colour [0.0, 1.0] \(default 1.0)
@@ -2473,21 +2301,6 @@ public:
 	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
 	RectangleTexture & setRectangle(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
-
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-	/**
-	Set the full rectangle coordinates.
-	\param pos1 New absolute coordinates of the rectangle start point (default: x=0, y=0)
-	\param pos2 New absolute coordinates of the rectangle end point (default: x=image width, y=image height)
-	*/
-	RectangleTexture & setRectangle(POINT pos1, POINT pos2);
-
-	/**
-	Set the full rectangle coordinates.
-	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
-	*/
-	RectangleTexture & setRectangle(RECT rect);
-#endif
 
 	/**
 	Run image manipulation

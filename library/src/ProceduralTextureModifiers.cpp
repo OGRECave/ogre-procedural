@@ -144,14 +144,14 @@ TextureBufferPtr Abnormals::process()
 			Ogre::Real norm = v.normalise();
 
 			if(mMirror == MIRROR_X_YZ || mMirror == MIRROR_X_Y_Z)
-				mBuffer->setRed(x, y, (Ogre::uchar)(255.0f - v.x * 127.5f + 127.5f));
+				mBuffer->setRed(x, y, (1.0f - v.x * 0.5f + 0.5f));
 			else
-				mBuffer->setRed(x, y, (Ogre::uchar)(v.x * 127.5f + 127.5f));
+				mBuffer->setRed(x, y, (v.x * 0.5f + 0.5f));
 			if(mMirror == MIRROR_Y_XZ || mMirror == MIRROR_X_Y_Z)
-				mBuffer->setGreen(x, y, (Ogre::uchar)(255.0f - v.z * 127.5f + 127.5f));
+				mBuffer->setGreen(x, y, (1.0f - v.z * 0.5f + 0.5f));
 			else
-				mBuffer->setGreen(x, y, (Ogre::uchar)(v.z * 127.5f + 127.5f));
-			mBuffer->setBlue(x, y, (Ogre::uchar)(v.y * 127.5f + 127.5f));
+				mBuffer->setGreen(x, y, (v.z * 0.5f + 0.5f));
+			mBuffer->setBlue(x, y, (v.y * 0.5f + 0.5f));
 		}
 	}
 
@@ -164,12 +164,6 @@ TextureBufferPtr Abnormals::process()
 Alpha & Alpha::setExtractColour(Ogre::ColourValue colour)
 {
 	mExtractColour = colour;
-	return *this;
-}
-
-Alpha & Alpha::setExtractColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mExtractColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -349,28 +343,6 @@ Blit & Blit::setInputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Rea
 	return *this;
 }
 
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-Blit & Blit::setInputRect(POINT pos1, POINT pos2)
-{
-	if(mInputBuffer == NULL) return *this;
-	mInputRect.left = std::min<long>(pos1.x, mInputBuffer->getWidth());
-	mInputRect.top = std::min<long>(pos1.y, mInputBuffer->getHeight());
-	mInputRect.right = std::min<long>(pos2.x, mInputBuffer->getWidth());
-	mInputRect.bottom = std::min<long>(pos2.y, mInputBuffer->getHeight());
-	return *this;
-}
-
-Blit & Blit::setInputRect(RECT rect)
-{
-	if(mInputBuffer == NULL) return *this;
-	mInputRect.left = std::min<long>(rect.left, mInputBuffer->getWidth());
-	mInputRect.top = std::min<long>(rect.top, mInputBuffer->getHeight());
-	mInputRect.right = std::min<long>(rect.right, mInputBuffer->getWidth());
-	mInputRect.bottom = std::min<long>(rect.bottom, mInputBuffer->getHeight());
-	return *this;
-}
-#endif
-
 Blit & Blit::setOutputRect(Ogre::RealRect rect, bool relative)
 {
 	if(relative)
@@ -435,26 +407,6 @@ Blit & Blit::setOutputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Re
 	mOutputRect.bottom = (long)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(y2, 1.0f));
 	return *this;
 }
-
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-Blit & Blit::setOutputRect(POINT pos1, POINT pos2)
-{
-	mOutputRect.left = std::min<long>(pos1.x, mBuffer->getWidth());
-	mOutputRect.top = std::min<long>(pos1.y, mBuffer->getHeight());
-	mOutputRect.right = std::min<long>(pos2.x, mBuffer->getWidth());
-	mOutputRect.bottom = std::min<long>(pos2.y, mBuffer->getHeight());
-	return *this;
-}
-
-Blit & Blit::setOutputRect(RECT rect)
-{
-	mOutputRect.left = std::min<long>(rect.left, mBuffer->getWidth());
-	mOutputRect.top = std::min<long>(rect.top, mBuffer->getHeight());
-	mOutputRect.right = std::min<long>(rect.right, mBuffer->getWidth());
-	mOutputRect.bottom = std::min<long>(rect.bottom, mBuffer->getHeight());
-	return *this;
-}
-#endif
 
 TextureBufferPtr Blit::process()
 {
@@ -579,12 +531,6 @@ CircleTexture & CircleTexture::setColour(Ogre::ColourValue colour)
 	return *this;
 }
 
-CircleTexture & CircleTexture::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 CircleTexture & CircleTexture::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
@@ -655,14 +601,6 @@ CircleTexture & CircleTexture::setCenter(Ogre::Real x, Ogre::Real y, bool relati
 	return *this;
 }
 
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-CircleTexture & CircleTexture::setCenter(POINT pos)
-{
-	setCenter((size_t)pos.x, (size_t)pos.y);
-	return *this;
-}
-#endif
-
 TextureBufferPtr CircleTexture::process()
 {
 	long x = 0;
@@ -704,12 +642,6 @@ Colours & Colours::setColourBase(Ogre::ColourValue colour)
 	return *this;
 }
 
-Colours & Colours::setColourBase(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColourBase = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Colours & Colours::setColourBase(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourBase = Ogre::ColourValue(red, green, blue, alpha);
@@ -719,12 +651,6 @@ Colours & Colours::setColourBase(Ogre::Real red, Ogre::Real green, Ogre::Real bl
 Colours & Colours::setColourPercent(Ogre::ColourValue colour)
 {
 	mColourPercent = colour;
-	return *this;
-}
-
-Colours & Colours::setColourPercent(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColourPercent = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -827,12 +753,6 @@ Combine & Combine::addImage(TextureBufferPtr image, COMBINE_METHOD method)
 Combine & Combine::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
-	return *this;
-}
-
-Combine & Combine::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -1210,12 +1130,6 @@ Crack & Crack::setColour(Ogre::ColourValue colour)
 	return *this;
 }
 
-Crack & Crack::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Crack & Crack::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
@@ -1425,12 +1339,6 @@ Cycloid & Cycloid::setType(Cycloid::CYCLOID_TYPE type)
 Cycloid & Cycloid::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
-	return *this;
-}
-
-Cycloid & Cycloid::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -1789,15 +1697,15 @@ TextureBufferPtr Distort::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-EdgeDetection & EdgeDetection::setThreshshouldLow(Ogre::uchar threshould)
+EdgeDetection & EdgeDetection::setThresholdLow(Ogre::uchar threshold)
 {
-	mThreshshouldLow = threshould;
+	mThresholdLow = threshold;
 	return *this;
 }
 
-EdgeDetection & EdgeDetection::setThreshshouldHigh(Ogre::uchar threshould)
+EdgeDetection & EdgeDetection::setThresholdHigh(Ogre::uchar threshold)
 {
-	mThreshshouldHigh = threshould;
+	mThresholdHigh = threshold;
 	return *this;
 }
 
@@ -2077,7 +1985,7 @@ TextureBufferPtr EdgeDetection::process()
 
 			// STEP 4 - hysteresis
 			mBuffer->setData(tmpBuffer);
-			div = (Ogre::Real)mThreshshouldHigh / 255.0f;
+			div = (Ogre::Real)mThresholdHigh / 255.0f;
 			for(long y = 1; y < (h - 1); y++)
 			{
 				for(long x = 1; x < (w - 1); x++)
@@ -2085,7 +1993,7 @@ TextureBufferPtr EdgeDetection::process()
 					pixel = mBuffer->getPixel((size_t)x, (size_t)y);
 					if(pixel.r < div)
 					{
-						if(pixel.r < (Ogre::Real)mThreshshouldLow / 255.0f)
+						if(pixel.r < (Ogre::Real)mThresholdLow / 255.0f)
 							tmpBuffer->setRed((size_t)x, (size_t)y, 0.0f);
 						else
 						{
@@ -2104,7 +2012,7 @@ TextureBufferPtr EdgeDetection::process()
 					}
 					if(pixel.g < div)
 					{
-						if(pixel.g < (Ogre::Real)mThreshshouldLow / 255.0f)
+						if(pixel.g < (Ogre::Real)mThresholdLow / 255.0f)
 							tmpBuffer->setGreen((size_t)x, (size_t)y, 0.0f);
 						else
 						{
@@ -2123,7 +2031,7 @@ TextureBufferPtr EdgeDetection::process()
 					}
 					if(pixel.b < div)
 					{
-						if(pixel.b < (Ogre::Real)mThreshshouldLow / 255.0f)
+						if(pixel.b < (Ogre::Real)mThresholdLow / 255.0f)
 							tmpBuffer->setBlue((size_t)x, (size_t)y, 0.0f);
 						else
 						{
@@ -2180,12 +2088,6 @@ Ogre::Vector3* EdgeDetection::getBlock(long x, long y)
 EllipseTexture & EllipseTexture::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
-	return *this;
-}
-
-EllipseTexture & EllipseTexture::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -2285,14 +2187,6 @@ EllipseTexture & EllipseTexture::setCenter(Ogre::Real x, Ogre::Real y, bool rela
 	return *this;
 }
 
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-EllipseTexture & EllipseTexture::setCenter(POINT pos)
-{
-	setCenter((size_t)pos.x, (size_t)pos.y);
-	return *this;
-}
-#endif
-
 TextureBufferPtr EllipseTexture::process()
 {
 	long dx = 0;
@@ -2377,12 +2271,6 @@ TextureBufferPtr Flip::process()
 Glow & Glow::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
-	return *this;
-}
-
-Glow & Glow::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -2574,12 +2462,6 @@ Light & Light::setColourAmbient(Ogre::ColourValue colour)
 	return *this;
 }
 
-Light & Light::setColourAmbient(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColourAmbient = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Light & Light::setColourAmbient(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourAmbient = Ogre::ColourValue(red, green, blue, alpha);
@@ -2592,12 +2474,6 @@ Light & Light::setColourDiffuse(Ogre::ColourValue colour)
 	return *this;
 }
 
-Light & Light::setColourDiffuse(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColourDiffuse = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Light & Light::setColourDiffuse(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourDiffuse = Ogre::ColourValue(red, green, blue, alpha);
@@ -2607,12 +2483,6 @@ Light & Light::setColourDiffuse(Ogre::Real red, Ogre::Real green, Ogre::Real blu
 Light & Light::setColourSpecular(Ogre::ColourValue colour)
 {
 	mColourSpecular = colour;
-	return *this;
-}
-
-Light & Light::setColourSpecular(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColourSpecular = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -2733,6 +2603,8 @@ TextureBufferPtr Lookup::process()
 			Ogre::ColourValue pixel = mParam->getPixel(x, y);
 			size_t u = (size_t)(pixel.r * (Ogre::Real)w);
 			size_t v = (size_t)(pixel.g * (Ogre::Real)h);
+			u = Math::Clamp<size_t>(u, 0, w-1);
+			v = Math::Clamp<size_t>(v, 0, h-1);
 			tmpBuffer->setPixel(x, y, mBuffer->getPixel(v, u));
 		}
 	}
@@ -2899,12 +2771,6 @@ RandomPixels & RandomPixels::setColour(Ogre::ColourValue colour)
 	return *this;
 }
 
-RandomPixels & RandomPixels::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 RandomPixels & RandomPixels::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
@@ -2966,12 +2832,6 @@ TextureBufferPtr RandomPixels::process()
 RectangleTexture & RectangleTexture::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
-	return *this;
-}
-
-RectangleTexture & RectangleTexture::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -3093,26 +2953,6 @@ RectangleTexture & RectangleTexture::setRectangle(Ogre::Real x1, Ogre::Real y1, 
 	mY2 = (size_t)((Ogre::Real)mBuffer->getHeight() * std::min<Ogre::Real>(y2, 1.0f));
 	return *this;
 }
-
-#if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
-RectangleTexture & RectangleTexture::setRectangle(POINT pos1, POINT pos2)
-{
-	mX1 = std::min<size_t>(pos1.x, mBuffer->getWidth());
-	mY1 = std::min<size_t>(pos1.y, mBuffer->getHeight());
-	mX2 = std::min<size_t>(pos2.x, mBuffer->getWidth());
-	mY2 = std::min<size_t>(pos2.y, mBuffer->getHeight());
-	return *this;
-}
-
-RectangleTexture & RectangleTexture::setRectangle(RECT rect)
-{
-	mX1 = std::min<size_t>(rect.left, mBuffer->getWidth());
-	mY1 = std::min<size_t>(rect.top, mBuffer->getHeight());
-	mX2 = std::min<size_t>(rect.right, mBuffer->getWidth());
-	mY2 = std::min<size_t>(rect.bottom, mBuffer->getHeight());
-	return *this;
-}
-#endif
 
 TextureBufferPtr RectangleTexture::process()
 {
