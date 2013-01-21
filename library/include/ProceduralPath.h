@@ -167,7 +167,7 @@ public:
 	/** Gets the number of segments in the path
 	 * Takes into accound whether path is closed or not
 	 */
-	int getSegCount()
+	int getSegCount() const
 	{
 		return (mPoints.size()-1) + (mClosed?1:0);
 	}
@@ -175,7 +175,7 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	Ogre::Vector3 getDirectionAfter(unsigned int i)
+	Ogre::Vector3 getDirectionAfter(unsigned int i) const
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
@@ -188,7 +188,7 @@ public:
 	/**
 	 * Returns local direction after the current point
 	 */
-	Ogre::Vector3 getDirectionBefore(unsigned int i)
+	Ogre::Vector3 getDirectionBefore(unsigned int i) const
 	{
 		// If the path isn't closed, we get a different calculation at the end, because
 		// the tangent shall not be null
@@ -202,7 +202,7 @@ public:
 	 * Returns the local direction at the current point.
 	 * @param i index of the point
 	 */
-	Ogre::Vector3 getAvgDirection(unsigned int i)
+	Ogre::Vector3 getAvgDirection(unsigned int i) const
 	{
 	    return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 	}
@@ -235,7 +235,7 @@ public:
 	 * Outputs a mesh representing the path.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name = "");
+	Ogre::MeshPtr realizeMesh(const std::string& name = "") const;
 	
 	/// Creates a path with the keys of this path and extra keys coming from a track
 	Path mergeKeysWithTrack(const Track& track) const;
