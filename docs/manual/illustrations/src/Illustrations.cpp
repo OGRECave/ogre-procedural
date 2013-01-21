@@ -191,7 +191,7 @@ void Illustrations::exportImage(std::string name, Procedural::TextureBufferPtr b
 	delete image;
 	delete pixelBuffer;
 	delete pImgData;
-	if(reset) Procedural::Solid(buffer).setColour(Ogre::ColourValue::Black);
+	if(reset) Procedural::Solid(buffer).setColour(Ogre::ColourValue::Black).process();
 }
 
 void Illustrations::go()
@@ -660,7 +660,7 @@ void Illustrations::go()
 	dotfile.save();
 
 	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Light(&buffer).setColourAmbient((Ogre::uchar)127, (Ogre::uchar)60, (Ogre::uchar)0, (Ogre::uchar)0).setColourDiffuse((Ogre::uchar)60, (Ogre::uchar)25, (Ogre::uchar)0, (Ogre::uchar)0).setBumpPower(255).process();
+	Procedural::Light(&buffer).setColourAmbient(0.5f, 0.2f, 0, 0).setColourDiffuse(0.2f, 0.1f, 0, 0).setBumpPower(255).process();
 	exportImage("texture_light", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_19a", "Light_1_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Light", "texture_light", dotFile::ROW);
@@ -818,7 +818,7 @@ void Illustrations::go()
 	int s02 = dotfile.add("Colours", "texture_example_colours_1");
 	dotfile.bind(s01, s02);
 	Procedural::TextureBuffer distort(brickLines * pxPerBrick);
-	Procedural::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
+	Procedural::Solid(&distort).setColour(.48f, .52f, 0, 1.0f).process();
 	exportImage("texture_example_solid", &distort);
 	int s03x = dotfile.add("Solid", "texture_example_solid");
 	Procedural::RectangleTexture rectDraw(&distort);

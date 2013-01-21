@@ -41,12 +41,6 @@ Cell & Cell::setColour(Ogre::ColourValue colour)
 	return *this;
 }
 
-Cell & Cell::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Cell & Cell::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
@@ -194,12 +188,6 @@ Cloud & Cloud::setColour(Ogre::ColourValue colour)
 	return *this;
 }
 
-Cloud & Cloud::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Cloud & Cloud::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
@@ -244,12 +232,6 @@ Gradient & Gradient::setColourA(Ogre::ColourValue colour)
 	return *this;
 }
 
-Gradient & Gradient::setColourA(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColourA = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Gradient & Gradient::setColourA(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourA = Ogre::ColourValue(red, green, blue, alpha);
@@ -259,12 +241,6 @@ Gradient & Gradient::setColourA(Ogre::Real red, Ogre::Real green, Ogre::Real blu
 Gradient & Gradient::setColourB(Ogre::ColourValue colour)
 {
 	mColourB = colour;
-	return *this;
-}
-
-Gradient & Gradient::setColourB(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColourB = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -280,12 +256,6 @@ Gradient & Gradient::setColourC(Ogre::ColourValue colour)
 	return *this;
 }
 
-Gradient & Gradient::setColourC(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColourC = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Gradient & Gradient::setColourC(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourC = Ogre::ColourValue(red, green, blue, alpha);
@@ -295,12 +265,6 @@ Gradient & Gradient::setColourC(Ogre::Real red, Ogre::Real green, Ogre::Real blu
 Gradient & Gradient::setColourD(Ogre::ColourValue colour)
 {
 	mColourD = colour;
-	return *this;
-}
-
-Gradient & Gradient::setColourD(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColourD = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -377,12 +341,6 @@ Labyrinth & Labyrinth::setColour(Ogre::ColourValue colour)
 	return *this;
 }
 
-Labyrinth & Labyrinth::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Labyrinth & Labyrinth::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
@@ -424,12 +382,6 @@ TextureBufferPtr Labyrinth::process()
 Marble & Marble::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
-	return *this;
-}
-
-Marble & Marble::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -476,12 +428,6 @@ TextureBuffer* Marble::process()
 Noise & Noise::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
-	return *this;
-}
-
-Noise & Noise::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -545,12 +491,6 @@ Solid & Solid::setColour(Ogre::ColourValue colour)
 	return *this;
 }
 
-Solid & Solid::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
-	return *this;
-}
-
 Solid & Solid::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
@@ -576,12 +516,6 @@ TextureBufferPtr Solid::process()
 Textile & Textile::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
-	return *this;
-}
-
-Textile & Textile::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
@@ -626,12 +560,6 @@ TextureBufferPtr Textile::process()
 Wood & Wood::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
-	return *this;
-}
-
-Wood & Wood::setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
-{
-	mColour = Ogre::ColourValue((Ogre::Real)red / 255.0f, (Ogre::Real)green / 255.0f, (Ogre::Real)blue / 255.0f, (Ogre::Real)alpha / 255.0f);
 	return *this;
 }
 
