@@ -80,26 +80,82 @@ public:
 };
 
 //--------------------------------------------------------------
-/* TODO
-
+/**
+WIP
+*/
  class _ProceduralExport CalculateNormalsModifier
  {
  public:
- enum NormalComputeMode
- {
- NCM_VERTEX, NCM_TRIANGLE
+	 CalculateNormalsModifier() : mComputeMode(NCM_VERTEX), mInputTriangleBuffer(0) {}
+
+	enum NormalComputeMode
+	{
+		NCM_VERTEX, NCM_TRIANGLE
+	};
+
+	NormalComputeMode mComputeMode;
+	TriangleBuffer* mInputTriangleBuffer;
+
+	CalculateNormalsModifier& setComputeMode(NormalComputeMode computeMode)
+	{
+		mComputeMode = computeMode;
+		return *this;
+	}
+
+	CalculateNormalsModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
+	{
+		mInputTriangleBuffer = inputTriangleBuffer;
+		return *this;
+	}
+
+	void modify();
  };
-
- NormalComputeMode mComputeMode;
-
- CalculateNormalsModifier& setComputeMode(NormalComputeMode computeMode)
+ //--------------------------------------------------------------
+ /**
+ WIP
+ */
+ class _ProceduralExport WeldVerticesModifier
  {
- mComputeMode = computeMode;
- return *this;
- }
+ public:
+	 WeldVerticesModifier() : mInputTriangleBuffer(0), mTolerance(1e-3f) {}
 
- void modify();
- };*/
+	 TriangleBuffer* mInputTriangleBuffer;
+	 Ogre::Real mTolerance;
+
+	WeldVerticesModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
+	{
+		mInputTriangleBuffer = inputTriangleBuffer;
+		return *this;
+	}
+
+	WeldVerticesModifier& setTolerance(Ogre::Real tolerance)
+	{
+		mTolerance = tolerance;
+		return *this;
+	}
+
+	 void modify();
+ };
+  //--------------------------------------------------------------
+ /**
+  * \brief Switches the triangle buffer from indexed triangles to (pseudo) triangle list
+  * It can be used if you want discontinuities between all your triangles.
+ */
+ class _ProceduralExport UnweldVerticesModifier
+ {
+ public:
+	 UnweldVerticesModifier() : mInputTriangleBuffer(0) {}
+
+	TriangleBuffer* mInputTriangleBuffer;
+
+	UnweldVerticesModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
+	{
+		mInputTriangleBuffer = inputTriangleBuffer;
+		return *this;
+	}
+	
+	 void modify();
+ };
 //--------------------------------------------------------------
 /**
  * \brief Recomputes the mesh's UVs based on its projection on a plane
