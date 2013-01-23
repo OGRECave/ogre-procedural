@@ -55,7 +55,9 @@ void CalculateNormalsModifier::modify()
 
 	if (mComputeMode == NCM_TRIANGLE)
 	{
-		UnweldVerticesModifier().setInputTriangleBuffer(mInputTriangleBuffer).modify();
+		if (mMustWeldUnweldFirst)
+			UnweldVerticesModifier().setInputTriangleBuffer(mInputTriangleBuffer).modify();
+
 		const std::vector<int>& indices = mInputTriangleBuffer->getIndices();
 		std::vector<TriangleBuffer::Vertex> vertices = mInputTriangleBuffer->getVertices();
 		for (size_t i = 0; i<indices.size();i+=3)
@@ -71,6 +73,8 @@ void CalculateNormalsModifier::modify()
 	}
 	else
 	{
+		if (mMustWeldUnweldFirst)
+			WeldVerticesModifier().setInputTriangleBuffer(mInputTriangleBuffer).modify();
 		const std::vector<int>& indices = mInputTriangleBuffer->getIndices();
 		std::vector<TriangleBuffer::Vertex> vertices = mInputTriangleBuffer->getVertices();
 		std::vector<std::vector<Vector3> > tmpNormals;

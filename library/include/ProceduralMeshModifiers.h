@@ -86,7 +86,7 @@ WIP
  class _ProceduralExport CalculateNormalsModifier
  {
  public:
-	 CalculateNormalsModifier() : mComputeMode(NCM_VERTEX), mInputTriangleBuffer(0) {}
+	 CalculateNormalsModifier() : mComputeMode(NCM_VERTEX), mInputTriangleBuffer(0), mMustWeldUnweldFirst(true) {}
 
 	enum NormalComputeMode
 	{
@@ -95,6 +95,7 @@ WIP
 
 	NormalComputeMode mComputeMode;
 	TriangleBuffer* mInputTriangleBuffer;
+	bool mMustWeldUnweldFirst;
 
 	CalculateNormalsModifier& setComputeMode(NormalComputeMode computeMode)
 	{
@@ -105,6 +106,17 @@ WIP
 	CalculateNormalsModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
 	{
 		mInputTriangleBuffer = inputTriangleBuffer;
+		return *this;
+	}
+
+	/**
+	 * Tells if the mesh must be first weld (NCM_VERTEX mode) or unweld (NCM_TRIANGLE) before computing normals.
+	 * Has a performance impact if enabled.
+	 * Default : true.
+	 */
+	CalculateNormalsModifier& setMustWeldUnweldFirst(bool mustWeldUnweldFirst)
+	{
+		mMustWeldUnweldFirst = mustWeldUnweldFirst;
 		return *this;
 	}
 
