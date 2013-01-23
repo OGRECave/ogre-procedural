@@ -48,10 +48,91 @@ void SpherifyModifier::modify()
 	}
 }
 //--------------------------------------------------------------
+void CalculateNormalsModifier::modify()
+{
+	if (mInputTriangleBuffer == NULL)
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
+
+	if (mComputeMode == NCM_TRIANGLE)
+	{
+		UnweldVerticesModifier().setInputTriangleBuffer(mInputTriangleBuffer).modify();
+		const std::vector<int>& indices = mInputTriangleBuffer->getIndices();
+		std::vector<TriangleBuffer::Vertex> vertices = mInputTriangleBuffer->getVertices();
+		for (size_t i = 0; i<indices.size();i+=3)
+		{
+			Vector3 v1 = vertices[indices[i]].mPosition;
+			Vector3 v2 = vertices[indices[i]+1].mPosition;
+			Vector3 v3 = vertices[indices[i]+2].mPosition;
+			Vector3 n = (v3-v2).crossProduct(v2-v1).normalisedCopy();
+			vertices[indices[i]].mNormal = n;
+			vertices[indices[i+1]].mNormal = n;
+			vertices[indices[i+2]].mNormal = n;
+		}	
+	}
+	else
+	{
+		const std::vector<int>& indices = mInputTriangleBuffer->getIndices();
+		std::vector<TriangleBuffer::Vertex> vertices = mInputTriangleBuffer->getVertices();
+		std::vector<std::vector<Vector3> > tmpNormals;
+		tmpNormals.resize(vertices.size());
+		for (size_t i = 0; i<indices.size();i+=3)
+		{
+			Vector3 v1 = vertices[indices[i]].mPosition;
+			Vector3 v2 = vertices[indices[i]+1].mPosition;
+			Vector3 v3 = vertices[indices[i]+2].mPosition;
+			Vector3 n = (v3-v2).crossProduct(v2-v1);
+			tmpNormals[indices[i]].push_back(n);
+			tmpNormals[indices[i+1]].push_back(n);
+			tmpNormals[indices[i+2]].push_back(n);
+		}
+		for (size_t i = 0; i<vertices.size(); i++)
+		{
+			Vector3 n(Vector3::ZERO);
+			for (size_t j = 0; j<tmpNormals[i].size(); j++)
+				n += tmpNormals[i][j];
+			vertices[i].mNormal = n.normalisedCopy();
+		}	
+	}
+}
+//--------------------------------------------------------------
+void WeldVerticesModifier::modify()
+{
+	if (mInputTriangleBuffer == NULL)
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
+	/*std::set<Vector3> positionsMap;
+	
+	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it != mInputTriangleBuffer->getVertices().end(); ++it)
+		positionsMap.insert(it->mPosition);
+		*/
+}
+//--------------------------------------------------------------
+void UnweldVerticesModifier::modify()
+{
+	if (mInputTriangleBuffer == NULL)
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
+	std::vector<TriangleBuffer::Vertex> newVertices;
+	const std::vector<TriangleBuffer::Vertex>& originVertices = mInputTriangleBuffer->getVertices();
+	const std::vector<int>& originIndices = mInputTriangleBuffer->getIndices();
+	for (size_t i=0;i<originIndices.size(); i+=3)
+	{
+		newVertices.push_back(originVertices[originIndices[i]]);
+		newVertices.push_back(originVertices[originIndices[i+1]]);
+		newVertices.push_back(originVertices[originIndices[i+2]]);
+	}
+	mInputTriangleBuffer->getVertices().clear();
+	mInputTriangleBuffer->getVertices().resize(newVertices.size());
+	for (std::vector<TriangleBuffer::Vertex>::const_iterator it = originVertices.begin(); it != originVertices.end(); ++it)
+		mInputTriangleBuffer->getVertices().push_back(*it);
+	mInputTriangleBuffer->getIndices().clear();
+	mInputTriangleBuffer->getIndices().resize(newVertices.size() * 3);
+	for (size_t i=0;i<newVertices.size();i++)	
+		mInputTriangleBuffer->getIndices().push_back(i);
+}
+//--------------------------------------------------------------
 void PlaneUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
-		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", "Procedural::PlanarUVsModifier::modify()");
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
 	Vector3 xvec = mPlaneNormal.perpendicular();
 	Vector3 yvec = mPlaneNormal.crossProduct(xvec);
 	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it != mInputTriangleBuffer->getVertices().end(); ++it)
@@ -65,7 +146,7 @@ void PlaneUVModifier::modify()
 void SphereUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
-		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", "Procedural::SphericalUVsModifier::modify()");
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
 	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it != mInputTriangleBuffer->getVertices().end(); ++it)
 	{
 		Vector3 v = it->mPosition.normalisedCopy();
@@ -78,7 +159,7 @@ void SphereUVModifier::modify()
 void HemisphereUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
-		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", "Procedural::HemiSphericalUVsModifier::modify()");
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
 	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it != mInputTriangleBuffer->getVertices().end(); ++it)
 	{
 		Vector3 input = it->mPosition.normalisedCopy();
@@ -90,7 +171,7 @@ void HemisphereUVModifier::modify()
 			Vector3::NEGATIVE_UNIT_Y.getRotationTo(input).ToAngleAxis(r, v);
 		Vector2 v2(input.x, input.z);
 		v2.normalise();
-		Vector2 uv = Vector2(.5, .5) + .5 * (r / Math::HALF_PI).valueRadians() * v2;
+		Vector2 uv = Vector2(.5, .5) + .5f * (r / Math::HALF_PI).valueRadians() * v2;
 		
 		if (input.y > 0)
 			it->mUV = Utils::reframe(mTextureRectangleTop, uv);
@@ -102,11 +183,11 @@ void HemisphereUVModifier::modify()
 void CylinderUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
-		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", "Procedural::CylindricalUVsModifier::modify()");
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
 	if (mHeight <=0)
-			OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Height must be strictly positive", "Procedural::CylindricalUVsModifier::modify()");
+			OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Height must be strictly positive", __FUNCTION__);
 	if (mRadius <= 0)
-			OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Radius must be strictly positive", "Procedural::CylindricalUVsModifier::modify()");
+			OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Radius must be strictly positive", __FUNCTION__);
 
 	Real angleThreshold = Math::ATan(mHeight / mRadius).valueRadians();
 	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it != mInputTriangleBuffer->getVertices().end(); ++it)
@@ -121,7 +202,7 @@ void CylinderUVModifier::modify()
 		{
 			Vector2 vxz(it->mPosition.x, it->mPosition.z);
 			it->mUV.x = Vector2::UNIT_X.angleTo(vxz).valueRadians()/Math::TWO_PI;
-			it->mUV.y = it->mPosition.y/mHeight - 0.5;
+			it->mUV.y = it->mPosition.y/mHeight - 0.5f;
 		}
 	}
 }
@@ -129,7 +210,7 @@ void CylinderUVModifier::modify()
 void BoxUVModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
-		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", "Procedural::BoxUVsModifier::modify()");
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
 
 	Vector3 directions[6] = { Vector3::NEGATIVE_UNIT_X, Vector3::NEGATIVE_UNIT_Y, Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z };
 
