@@ -59,13 +59,13 @@ void CalculateNormalsModifier::modify()
 			UnweldVerticesModifier().setInputTriangleBuffer(mInputTriangleBuffer).modify();
 
 		const std::vector<int>& indices = mInputTriangleBuffer->getIndices();
-		std::vector<TriangleBuffer::Vertex> vertices = mInputTriangleBuffer->getVertices();
+		std::vector<TriangleBuffer::Vertex>& vertices = mInputTriangleBuffer->getVertices();
 		for (size_t i = 0; i<indices.size();i+=3)
 		{
 			Vector3 v1 = vertices[indices[i]].mPosition;
-			Vector3 v2 = vertices[indices[i]+1].mPosition;
-			Vector3 v3 = vertices[indices[i]+2].mPosition;
-			Vector3 n = (v3-v2).crossProduct(v2-v1).normalisedCopy();
+			Vector3 v2 = vertices[indices[i+1]].mPosition;
+			Vector3 v3 = vertices[indices[i+2]].mPosition;
+			Vector3 n = (v2-v1).crossProduct(v3-v1).normalisedCopy();
 			vertices[indices[i]].mNormal = n;
 			vertices[indices[i+1]].mNormal = n;
 			vertices[indices[i+2]].mNormal = n;
@@ -76,15 +76,15 @@ void CalculateNormalsModifier::modify()
 		if (mMustWeldUnweldFirst)
 			WeldVerticesModifier().setInputTriangleBuffer(mInputTriangleBuffer).modify();
 		const std::vector<int>& indices = mInputTriangleBuffer->getIndices();
-		std::vector<TriangleBuffer::Vertex> vertices = mInputTriangleBuffer->getVertices();
+		std::vector<TriangleBuffer::Vertex>& vertices = mInputTriangleBuffer->getVertices();
 		std::vector<std::vector<Vector3> > tmpNormals;
 		tmpNormals.resize(vertices.size());
 		for (size_t i = 0; i<indices.size();i+=3)
 		{
 			Vector3 v1 = vertices[indices[i]].mPosition;
-			Vector3 v2 = vertices[indices[i]+1].mPosition;
-			Vector3 v3 = vertices[indices[i]+2].mPosition;
-			Vector3 n = (v3-v2).crossProduct(v2-v1);
+			Vector3 v2 = vertices[indices[i+1]].mPosition;
+			Vector3 v3 = vertices[indices[i+2]].mPosition;
+			Vector3 n = (v2-v1).crossProduct(v3-v1);
 			tmpNormals[indices[i]].push_back(n);
 			tmpNormals[indices[i+1]].push_back(n);
 			tmpNormals[indices[i+2]].push_back(n);
@@ -124,11 +124,11 @@ void UnweldVerticesModifier::modify()
 		newVertices.push_back(originVertices[originIndices[i+2]]);
 	}
 	mInputTriangleBuffer->getVertices().clear();
-	mInputTriangleBuffer->getVertices().resize(newVertices.size());
-	for (std::vector<TriangleBuffer::Vertex>::const_iterator it = originVertices.begin(); it != originVertices.end(); ++it)
+	mInputTriangleBuffer->getVertices().reserve(newVertices.size());
+	for (std::vector<TriangleBuffer::Vertex>::const_iterator it = newVertices.begin(); it != newVertices.end(); ++it)
 		mInputTriangleBuffer->getVertices().push_back(*it);
 	mInputTriangleBuffer->getIndices().clear();
-	mInputTriangleBuffer->getIndices().resize(newVertices.size() * 3);
+	mInputTriangleBuffer->getIndices().reserve(newVertices.size());
 	for (size_t i=0;i<newVertices.size();i++)	
 		mInputTriangleBuffer->getIndices().push_back(i);
 }
