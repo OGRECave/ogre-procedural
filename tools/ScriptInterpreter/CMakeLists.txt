@@ -1,4 +1,4 @@
-find_package(Lua52 REQUIRED)
+find_package(Lua REQUIRED)
 
 if (NOT DEFINED SWIG_DIR)
 	message(SEND_ERROR "Please define a variable SWIG_DIR, pointing to SWIG's root directory")
