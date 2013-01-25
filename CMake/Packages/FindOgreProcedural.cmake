@@ -1,3 +1,12 @@
+# Tries to find OgreProcedural
+# Will look for OgreProcedural_HOME, as well as usual suspects 
+#
+# Once found, the following variables will be defined :
+#  OgreProcedural_FOUND - system has OgreProcedural
+#  OgreProcedural_INCLUDE_DIR - the OgreProcedural include directory
+#  OgreProcedural_LIBRARIES - link these to use OgreProcedural
+#  OgreProcedural_BINARY_REL / OgreProcedural_BINARY_DBG - DLL names (windows only)
+
 include(FindPkgMacros)
 include(PreprocessorUtils)
 
@@ -39,6 +48,15 @@ find_path(OgreProcedural_INCLUDE_DIR NAMES Procedural.h HINTS ${OgreProcedural_C
 
 find_library(OgreProcedural_LIBRARY_REL NAMES ${OgreProcedural_LIBRARY_NAMES} HINTS ${OgreProcedural_LIB_SEARCH_PATH} PATH_SUFFIXES "" "release" "relwithdebinfo" "minsizerel")
 find_library(OgreProcedural_LIBRARY_DBG NAMES ${OgreProcedural_LIBRARY_NAMES_DBG} HINTS ${OgreProcedural_LIB_SEARCH_PATH} PATH_SUFFIXES "" "debug")
+
+if (WIN32)
+	set(OgreProcedural_BIN_SEARCH_PATH "${OgreProcedural_HOME}/bin" "${ENV_OgreProcedural}/bin")
+	find_file(OgreProcedural_BINARY_REL NAMES "OgreProcedural.dll" HINTS ${OgreProcedural_BIN_SEARCH_PATH}
+         PATH_SUFFIXES "" release relwithdebinfo minsizerel)
+	find_file(OgreProcedural_BINARY_DBG NAMES "OgreProcedural_d.dll" HINTS ${OgreProcedural_BIN_SEARCH_PATH}
+         PATH_SUFFIXES "" debug )
+endif()
+mark_as_advanced(OgreProcedural_BINARY_REL OgreProcedural_BINARY_DBG)
 
 make_library_set(OgreProcedural_LIBRARY)
 
