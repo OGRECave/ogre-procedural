@@ -34,7 +34,8 @@ set( HDRS
 	include/ProceduralTriangulator.h
 	include/ProceduralTriangleBuffer.h
 	include/ProceduralStableHeaders.h
-	include/ProceduralMultiShape.h	
+	include/ProceduralMultiShape.h
+	include/ProceduralMultiShapeGenerators.h	
 	include/ProceduralGeometryHelpers.h
 	include/ProceduralBoolean.h
 	include/ProceduralSpringGenerator.h
@@ -70,6 +71,7 @@ set( SRCS
 		src/ProceduralTriangulator.cpp
 		src/ProceduralPrecompiledHeaders.cpp
 		src/ProceduralMultiShape.cpp
+		src/ProceduralMultiShapeGenerators.cpp
 		src/ProceduralGeometryHelpers.cpp
 		src/ProceduralBoolean.cpp
 		src/ProceduralSpringGenerator.cpp
@@ -106,7 +108,6 @@ endif()
 
 procedural_add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})
 
-find_package(Freetype)
 if(FREETYPE_FOUND)
   include_directories(OgreProcedural ${FREETYPE_INCLUDE_DIRS})
   target_link_libraries(OgreProcedural ${FREETYPE_LIBRARIES})

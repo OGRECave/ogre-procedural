@@ -209,6 +209,12 @@ public:
 		return Utils::cap(i,0,mPoints.size()-1);
 	}
 
+	/// Gets number of points in current point list
+	inline const std::vector<Ogre::Vector2>::size_type getPointCount() const
+	{
+		return mPoints.size();
+	}
+
 	/**
 	 * Makes the shape a closed shape, ie it will automatically connect 
 	 * the last point to the first point.

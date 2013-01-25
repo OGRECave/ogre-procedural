@@ -15,8 +15,10 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-find_package(Freetype)
 if(FREETYPE_FOUND)
+  if(OgreProcedural_STATIC)
+    target_link_libraries(OgreProcedural ${FREETYPE_LIBRARIES})
+  endif()
   add_definitions(-DOgreProcedural_USE_FREETYPE)
 endif ()
 
