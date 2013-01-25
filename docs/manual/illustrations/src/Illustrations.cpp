@@ -456,8 +456,21 @@ void Illustrations::go()
 	next("lathe_anglerange",5);
 
 	//
+	// MultiShapes
+	//
+#ifdef OgreProcedural_USE_FREETYPE
+	mCamera->setPosition(1.8f,0.8f,5);
+	mCamera->lookAt(1.8f,0.8f,0);
+
+	mp = TextShape().setText("Ogre").realizeShapes().realizeMesh();
+	putMesh(mp);
+	next("shape_text", 20);
+#endif
+
+	//
 	// Texture
 	//
+	cameraFront();
 	int bufSize = 128;
 
 	// Render

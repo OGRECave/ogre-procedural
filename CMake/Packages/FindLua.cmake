@@ -19,10 +19,10 @@ include(FindPkgMacros)
 findpkg_begin(LUA)
 
 # Get path, convert backslashes as ${ENV_${var}}
-getenv_path(LUA_DIR)
+getenv_path(LUA_HOME)
 
 # construct search paths
-set(LUA_PREFIX_PATH ${LUA_DIR} ${ENV_LUA_DIR})
+set(LUA_PREFIX_PATH ${LUA_HOME} ${ENV_LUA_HOME} ${LUA_DIR})
 create_search_paths(LUA)
 # redo search if prefix path changed
 clear_if_changed(LUA_PREFIX_PATH

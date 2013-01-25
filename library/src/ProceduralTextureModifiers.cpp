@@ -2210,7 +2210,7 @@ TextureBufferPtr EllipseTexture::process()
 	}
 	while(dy >= 0);
  
-	while(dx++ < mRadiusX)
+	while(dx++ < (long)mRadiusX)
 	{
 		_putpixel(+dx, 0);
 		_putpixel(-dx, 0);
@@ -3349,9 +3349,9 @@ TextureBufferPtr TextTexture::process()
 				error = FT_Load_Char(face, mText[n], FT_LOAD_RENDER);
 				if(error) continue;
 				
-				for(size_t i = 0; i < slot->bitmap.width; i++)
+				for(long i = 0; i < (long)slot->bitmap.width; i++)
 				{
-					for(size_t j = 0; j < slot->bitmap.rows; j++)
+					for(long j = 0; j < (long)slot->bitmap.rows; j++)
 					{
 						if(slot->bitmap.buffer[j * slot->bitmap.width + i] > 127)
 							mBuffer->setPixel(px + i, py + j, mColour);
@@ -3406,6 +3406,7 @@ bool TextTexture::getFontFile(Ogre::String fontName, Ogre::String& displayName, 
 	char name[2 * MAX_PATH];
 	char data[2 * MAX_PATH];
 	filePath.empty();
+	bool retVal = false;
 
 	HKEY hkFont;
 	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", 0, KEY_READ, &hkFont) == ERROR_SUCCESS)
@@ -3437,12 +3438,14 @@ bool TextTexture::getFontFile(Ogre::String fontName, Ogre::String& displayName, 
 					{
 						displayName = name;
 						filePath = data;
+						retVal = true;
 						break;
 					}
 			}
 		}
 	}
 	RegCloseKey(hkFont);
+	return retVal;
 }
 #endif
 

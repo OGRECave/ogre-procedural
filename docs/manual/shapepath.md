@@ -264,6 +264,18 @@ See Procedural::RectangleShape
 
 See Procedural::TriangleShape
 
+## MultiShapes
+
+A MultiShape is a collection of normal shapes.
+
+### TextShape
+
+Creates shapes from characters of a given text (FreeType required).
+
+![Figure 21. TextShape](shape_text.png)
+
+See Procedural::TextShape
+
 ## Path primitives
 
 At the moment there is only one path primitive.
@@ -271,7 +283,7 @@ After creation it's possible to receive a Path object by calling realizePath().
 
 ### HelixPath
 
-![Figure 21. HelixPath](spline_helix.png)
+![Figure 22. HelixPath](spline_helix.png)
 
 See Procedural::HelixPath
 
