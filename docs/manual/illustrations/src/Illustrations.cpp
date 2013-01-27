@@ -80,18 +80,16 @@ using namespace Procedural;
 		mRoot->showConfigDialog();*/
 	const RenderSystemList& rsList = mRoot->getAvailableRenderers();
 	RenderSystem* rs = *rsList.begin();
-	for (RenderSystemList::const_iterator it=rsList.begin();it!=rsList.end();it++)
+	/*for (RenderSystemList::const_iterator it=rsList.begin();it!=rsList.end();it++)
 	{
 		if ((*it)->getName().find("GL") != String::npos)
 			rs = *it;
-	}
+	}*/
 
 	ConfigOptionMap optionMap = rs->getConfigOptions();
-	String fsaaSetting = optionMap["FSAA"].possibleValues.back();
-	rs->setConfigOption("FSAA", fsaaSetting);
-
+	rs->setConfigOption("FSAA", optionMap["FSAA"].possibleValues.back());
 	rs->setConfigOption("Full Screen", "No");
-	rs->setConfigOption("Video Mode", "800 x 600 @ 32-bit colour");	
+	rs->setConfigOption("Video Mode", optionMap["Video Mode"].possibleValues.back());	
 	
 	mRoot->setRenderSystem(rs);	
 		 
