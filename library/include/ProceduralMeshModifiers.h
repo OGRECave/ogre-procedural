@@ -124,8 +124,8 @@ WIP
  };
  //--------------------------------------------------------------
  /**
- WIP
- */
+  * Welds together the vertices which are 'close enough' one to each other
+  */
  class _ProceduralExport WeldVerticesModifier
  {
  public:
@@ -134,12 +134,15 @@ WIP
 	 TriangleBuffer* mInputTriangleBuffer;
 	 Ogre::Real mTolerance;
 
+
+	 /// The triangle buffer to modify
 	WeldVerticesModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
 	{
 		mInputTriangleBuffer = inputTriangleBuffer;
 		return *this;
 	}
 
+	/// The tolerance in position to consider that 2 vertices are the same (default = 1e-3)
 	WeldVerticesModifier& setTolerance(Ogre::Real tolerance)
 	{
 		mTolerance = tolerance;

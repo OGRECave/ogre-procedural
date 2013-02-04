@@ -27,6 +27,7 @@
  */
 #include "ProceduralStableHeaders.h"
 #include "ProceduralMeshModifiers.h"
+#include "ProceduralGeometryHelpers.h"
 
 using namespace Ogre;
 
@@ -103,11 +104,41 @@ void WeldVerticesModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
 		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
-	/*std::set<Vector3> positionsMap;
-	
-	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it != mInputTriangleBuffer->getVertices().end(); ++it)
-		positionsMap.insert(it->mPosition);
-		*/
+	std::map<Vector3, size_t, Vector3Comparator> mapExistingVertices;
+	std::vector<TriangleBuffer::Vertex>& vertices = mInputTriangleBuffer->getVertices();
+	std::vector<int>& indices = mInputTriangleBuffer->getIndices();
+
+	size_t newSize = vertices.size();
+	for (std::vector<TriangleBuffer::Vertex>::iterator it = vertices.begin(); it!= vertices.end(); ++it)	
+	{
+		size_t currentIndex = it - vertices.begin();
+		if (currentIndex>=newSize)
+			break;
+		if (mapExistingVertices.find(it->mPosition) == mapExistingVertices.end())
+			mapExistingVertices[it->mPosition] = currentIndex;
+		else
+		{
+			size_t existingIndex = mapExistingVertices[it->mPosition];
+			--newSize;
+			if (currentIndex == newSize )
+			{
+				for (std::vector<int>::iterator it2 = indices.begin(); it2 != indices.end(); ++it2)
+					if (*it2 == currentIndex)
+						*it2 = existingIndex;
+			} else {
+				size_t lastIndex = newSize;
+				*it = vertices[lastIndex];
+				for (std::vector<int>::iterator it2 = indices.begin(); it2 != indices.end(); ++it2)
+				{
+					if (*it2 == currentIndex)
+						*it2 = existingIndex;
+					else if (*it2 == lastIndex)
+						*it2 = currentIndex;
+				}
+			}
+		}
+	}
+	vertices.resize(newSize);
 }
 //--------------------------------------------------------------
 void UnweldVerticesModifier::modify()
