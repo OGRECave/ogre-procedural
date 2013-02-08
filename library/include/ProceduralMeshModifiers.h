@@ -306,7 +306,7 @@ class _ProceduralExport BoxUVModifier
 public:
 	enum MappingType
 	{
-		MT_FULL, MT_CROSS, MT_PACKED
+		MT_FULL, MT_CROSS, MT_PACKED,
 	};
 private:
 	TriangleBuffer* mInputTriangleBuffer;
