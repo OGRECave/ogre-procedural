@@ -123,6 +123,15 @@ public:
 		addMesh(s.c_str());
 	}
 
+	void addTriangleBufferTexture(const TriangleBuffer* tb, const std::string& texName)
+	{
+		std::string meshId = Utils::getName();
+		std::string matId = Utils::getName();
+		tb->transformToMesh(meshId);
+		addMaterial(texName.c_str(), matId.c_str());
+		addMesh(meshId.c_str(), matId.c_str());
+	}
+
 	void addTriangleTextureBuffer(const TriangleBuffer* tb, const TextureBuffer* texb)
 	{
 		std::string meshId = Utils::getName();
