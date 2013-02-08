@@ -247,14 +247,17 @@ void BoxUVModifier::modify()
 	if (mInputTriangleBuffer == NULL)
 		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
 
-	Vector3 directions[6] = { Vector3::NEGATIVE_UNIT_X, Vector3::NEGATIVE_UNIT_Y, Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z };
+	Vector3 directions[6] = { Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z,Vector3::NEGATIVE_UNIT_X, Vector3::NEGATIVE_UNIT_Y, Vector3::NEGATIVE_UNIT_Z  };
 
 	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it != mInputTriangleBuffer->getVertices().end(); ++it)
 	{
 		Vector3 v = it->mPosition - mBoxCenter;
 		if (v.isZeroLength())
 			continue;
-		v.normalise();
+		//v.normalise();
+		v.x/=mBoxSize.x;
+		v.y/=mBoxSize.y;
+		v.z/=mBoxSize.z;
 		Vector3 n = it->mNormal;
 		Real maxAxis = 0;
 		int principalAxis = 0;
@@ -265,20 +268,22 @@ void BoxUVModifier::modify()
 				maxAxis = directions[i].dotProduct(n);
 				principalAxis = i;
 			}
-		}
-		Vector3 vX = directions[principalAxis].perpendicular();
-		Vector3 vY = directions[principalAxis].crossProduct(vX);
-		Vector2 uv(vX.dotProduct(v), vX.dotProduct(v));
+		}	
+
+		Vector3 vX, vY;
+		if (principalAxis%3 == 1)
+			vY = Vector3::UNIT_X;
+		else
+			vY = Vector3::UNIT_Y;
+		vX = directions[principalAxis].crossProduct(vY);
+
+		Vector2 uv(0.5-vX.dotProduct(v), 0.5-vY.dotProduct(v));
 		if (mMappingType == MT_FULL)
-		{
 			it->mUV = uv;
-		} else if (mMappingType == MT_CROSS)
+		else if (mMappingType == MT_CROSS)
 		{
 		} else if (mMappingType == MT_PACKED)
-		{
 			it->mUV = Vector2((uv.x + principalAxis%3)/3, (uv.y + principalAxis/3)/2);
-		}
-
 	}
 }
 }
