@@ -19,7 +19,7 @@ if(FREETYPE_FOUND)
   if(OgreProcedural_STATIC)
     target_link_libraries(OgreProcedural ${FREETYPE_LIBRARIES})
   endif()
-  add_definitions(-DOgreProcedural_USE_FREETYPE)
+  add_definitions(-DPROCEDURAL_USE_FREETYPE)
 endif ()
 
 procedural_add_executable(Illustrations WIN32 ${HDRS} ${SRCS})

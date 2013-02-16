@@ -10,7 +10,10 @@ set(CMAKE_MODULE_PATH
 
 include(ProceduralAddTargets)
 
-set(OgreProcedural_VERSION_DASH_SEPARATED "0.3unstable")
+set(OgreProcedural_VERSION_MAJOR 0)
+set(OgreProcedural_VERSION_MINOR 3)
+set(OgreProcedural_VERSION_PATCH 0)
+set(OgreProcedural_VERSION_DASH_SEPARATED "0.3.0 unstable")
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
@@ -101,6 +104,25 @@ endif ()
 # to potentially speed up the compilation.
 option(OgreProcedural_UNITY_BUILD "Enable unity build for OgreProcedural." FALSE)
 set(OgreProcedural_UNITY_FILES_PER_UNIT "50" CACHE STRING "Number of files per compilation unit in Unity build.")
+
+if (MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast")
+  # Enable intrinsics on MSVC in debug mode
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Oi")
+  if (CMAKE_CL_64)
+    # Visual Studio bails out on debug builds in 64bit mode unless
+	# this flag is set...
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /bigobj")
+	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /bigobj")
+  endif ()
+  if (OgreProcedural_UNITY_BUILD)
+    # object files can get large with Unity builds
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+  endif ()
+  if (MSVC_VERSION GREATER 1600 OR MSVC_VERSION EQUAL 1600)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+  endif ()
+endif ()
 
 find_package(Doxygen)
 

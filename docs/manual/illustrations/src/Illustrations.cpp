@@ -456,7 +456,7 @@ void Illustrations::go()
 	//
 	// MultiShapes
 	//
-#ifdef OgreProcedural_USE_FREETYPE
+#ifdef PROCEDURAL_USE_FREETYPE
 	mCamera->setPosition(1.8f,0.8f,5);
 	mCamera->lookAt(1.8f,0.8f,0);
 
@@ -806,7 +806,7 @@ void Illustrations::go()
 	dotfile.set("Solid", "texture_solid", "Ellipse", "texture_ellipse");
 	dotfile.save();
 
-#ifdef OgreProcedural_USE_FREETYPE
+#ifdef PROCEDURAL_USE_FREETYPE
 	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
 	Procedural::TextTexture(&buffer).setFont("Arial", 30).setColour(Ogre::ColourValue::Red).setPosition((size_t)20, (size_t)20).setText("OGRE").process();
 	Procedural::TextTexture(&buffer).setFont("Arial", 20).setColour(Ogre::ColourValue::Green).setPosition((size_t)10, (size_t)60).setText("Procedural").process();

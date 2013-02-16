@@ -91,10 +91,12 @@ include_directories(SYSTEM ${OGRE_INCLUDE_DIRS}
 # should we build static libs?
 if (OgreProcedural_STATIC)
   set(OgreProcedural_LIB_TYPE STATIC)
+  set(OgreProcedural_CONFIG_LIB_TYPE "PROCEDURAL_STATIC")
 else ()
   set(OgreProcedural_LIB_TYPE SHARED)
-  add_definitions(-DOgreProcedural_SHARED)
+  set(OgreProcedural_CONFIG_LIB_TYPE "PROCEDURAL_SHARED")
 endif ()
+add_definitions("-D${OgreProcedural_CONFIG_LIB_TYPE}")
 
 option(OgreProcedural_HARDENEDBUILDFLAGS "Hardened build flags" FALSE)
 
@@ -111,7 +113,9 @@ procedural_add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS}
 if(FREETYPE_FOUND)
   include_directories(OgreProcedural ${FREETYPE_INCLUDE_DIRS})
   target_link_libraries(OgreProcedural ${FREETYPE_LIBRARIES})
-  add_definitions(-DOgreProcedural_USE_FREETYPE)
+  set(OgreProcedural_CONFIG_FREETYPE "PROCEDURAL_USE_FREETYPE")
+else()
+  set(OgreProcedural_CONFIG_FREETYPE "PROCEDURAL_NO_FREETYPE")
 endif ()
 
 set_target_properties(OgreProcedural PROPERTIES DEBUG_POSTFIX _d)
@@ -121,6 +125,8 @@ if (NOT OgreProcedural_STATIC)
 		set_target_properties(OgreProcedural PROPERTIES PREFIX "")
 	endif()
 endif()
+
+configure_file(${OgreProcedural_TEMPLATES_DIR}/ProceduralPlatform.h.in ${OgreProcedural_SOURCE_DIR}/library/include/ProceduralPlatform.h)
 
 target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
