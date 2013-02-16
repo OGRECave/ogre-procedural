@@ -36,7 +36,7 @@ namespace Procedural
  * \ingroup shapegrp
  * @{
  */
-#ifdef OgreProcedural_USE_FREETYPE
+#ifdef PROCEDURAL_USE_FREETYPE
 //-----------------------------------------------------------------------
 /**
  * Produces a multishape from a given text

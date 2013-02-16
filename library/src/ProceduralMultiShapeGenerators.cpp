@@ -29,11 +29,11 @@ THE SOFTWARE.
 #include "ProceduralShape.h"
 #include "ProceduralShapeGenerators.h"
 #include "ProceduralMultiShapeGenerators.h"
-#ifdef OgreProcedural_USE_FREETYPE
+#ifdef PROCEDURAL_USE_FREETYPE
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
-#endif // OgreProcedural_USE_FREETYPE
+#endif // PROCEDURAL_USE_FREETYPE
 
 using namespace Ogre;
 
@@ -41,7 +41,7 @@ namespace Procedural
 {
 
 //-----------------------------------------------------------------------
-#ifdef OgreProcedural_USE_FREETYPE
+#ifdef PROCEDURAL_USE_FREETYPE
 
 MultiShape TextShape::realizeShapes()
 {

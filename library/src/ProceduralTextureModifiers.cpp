@@ -28,11 +28,11 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralTextureModifiers.h"
 #include "ProceduralTextureGenerator.h"
-#ifdef OgreProcedural_USE_FREETYPE
+#ifdef PROCEDURAL_USE_FREETYPE
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
-#endif // OgreProcedural_USE_FREETYPE
+#endif // PROCEDURAL_USE_FREETYPE
 #include "ProceduralGeometryHelpers.h"
 
 using namespace Ogre;
@@ -3228,7 +3228,7 @@ TextureBufferPtr Sharpen::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef OgreProcedural_USE_FREETYPE
+#ifdef PROCEDURAL_USE_FREETYPE
 
 TextTexture & TextTexture::setText(Ogre::String text)
 {
@@ -3449,7 +3449,7 @@ bool TextTexture::getFontFile(Ogre::String fontName, Ogre::String& displayName, 
 }
 #endif
 
-#endif // OgreProcedural_USE_FREETYPE
+#endif // PROCEDURAL_USE_FREETYPE
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

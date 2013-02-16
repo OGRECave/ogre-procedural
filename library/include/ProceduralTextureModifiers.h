@@ -2521,7 +2521,7 @@ public:
 	TextureBufferPtr process();
 };
 
-#ifdef OgreProcedural_USE_FREETYPE
+#ifdef PROCEDURAL_USE_FREETYPE
 /**
 \brief Draw text on Texture.
 \details Draw a given text on texture.
@@ -2663,7 +2663,7 @@ private:
 	bool getFontFile(Ogre::String fontName, Ogre::String& displayName, Ogre::String& filePath);
 #endif
 };
-#endif // OgreProcedural_USE_FREETYPE
+#endif // PROCEDURAL_USE_FREETYPE
 
 /**
 \brief Simple threshold filter.
