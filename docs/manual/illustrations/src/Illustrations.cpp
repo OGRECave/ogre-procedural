@@ -766,6 +766,9 @@ void Illustrations::go()
 	Procedural::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
 	Procedural::Cycloid(&buffer).setColour(Ogre::ColourValue::Red).setPenSize(2).setType(Procedural::Cycloid::HYPOCYCLOID).process();
 	exportImage("texture_cycloid_hypocycloid", &buffer, true);
+	dotfile = dotFile(mOutputPath, "texture_30", "Cycloid_Demo");
+	dotfile.set("Solid", "texture_solid", "Hypocycloid", "texture_cycloid_hypocycloid");
+	dotfile.save();
 	Procedural::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
 	Procedural::Cycloid(&buffer).setColour(Ogre::ColourValue::Red).setPenSize(2).setType(Procedural::Cycloid::HYPOTROCHOID).process();
 	exportImage("texture_cycloid_hypotrochoid", &buffer, true);
@@ -781,9 +784,7 @@ void Illustrations::go()
 	Procedural::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
 	Procedural::Cycloid(&buffer).setColour(Ogre::ColourValue::Red).setPenSize(2).setType(Procedural::Cycloid::LISSAJOUS_CURVE).process();
 	exportImage("texture_cycloid_lissajous", &buffer, true);
-	dotfile = dotFile(mOutputPath, "texture_30", "Cycloid_Demo");
-	dotfile.set("Solid", "texture_solid", "Hypocycloid", "texture_cycloid_hypocycloid");
-	dotfile.save();
+	
 
 	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
 	Procedural::Blit(&buffer).setInputBuffer(&bufferGradient).setInputRect(0.0f, 0.0f, 0.5f, 0.5f).setOutputRect(0.25f, 0.25f, 0.75f, 0.75f).process();

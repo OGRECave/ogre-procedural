@@ -472,6 +472,7 @@ bool BaseApplication::mouseMoved( const OIS::MouseEvent &arg )
 
 bool BaseApplication::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
+	std::cout<<"mouse presse"<<std::endl;
 	if (mTrayMgr->injectMouseDown(arg, id)) return true;
 	mCameraMan->injectMouseDown(arg, id);
 	return true;
@@ -479,6 +480,7 @@ bool BaseApplication::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButton
 
 bool BaseApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
+	std::cout<<"mouse rele"<<std::endl;
 	if (mTrayMgr->injectMouseUp(arg, id)) return true;
 	mCameraMan->injectMouseUp(arg, id);
 	return true;
@@ -487,6 +489,7 @@ bool BaseApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButto
 void BaseApplication::createLogManager(void)
 {
 }
+
 
 //Adjust mouse clipping area
 void BaseApplication::windowResized(RenderWindow* rw)

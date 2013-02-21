@@ -84,6 +84,8 @@ void ScriptInterpreter::destroyScene(void)
 		mEntities.clear();
 		mMaterials.clear();
 		mTextures.clear();
+		delete mCurrentDotFile;
+		mCurrentDotFile = 0;
 }
 //-------------------------------------------------------------------------------------
 void ScriptInterpreter::writeEveythingToDisk()
@@ -119,6 +121,8 @@ void ScriptInterpreter::writeEveythingToDisk()
 		(*it)->convertToImage(im);
 		im.save(mCurrentScriptName.substr(0, mCurrentScriptName.find_last_of(".")) + ".png");
 	}
+	if (mCurrentDotFile)
+		mCurrentDotFile->save(".");
 }
 
 //-------------------------------------------------------------------------------------

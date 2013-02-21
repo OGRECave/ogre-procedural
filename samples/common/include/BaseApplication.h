@@ -76,6 +76,11 @@ protected:
 	//Unattach OIS before window shutdown (very important under Linux)
 	virtual void windowClosed(Ogre::RenderWindow* rw);
 
+	virtual void windowFocusChange(Ogre::RenderWindow* rw)
+	{
+		std::cout<<"focus change"<<std::endl;
+	}
+
 	void putMeshMat(const std::string& meshName, const std::string& matName, const Ogre::Vector3& position = Ogre::Vector3::ZERO, bool castShadows=true);
 	void putMesh(const std::string& meshName, const Ogre::Vector3& position = Ogre::Vector3::ZERO);
 	void putMesh2(const std::string& meshName, const Ogre::Vector3& position = Ogre::Vector3::ZERO);
