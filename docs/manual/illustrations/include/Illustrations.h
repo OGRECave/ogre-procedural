@@ -33,18 +33,6 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
-
-class Illustrations
-{
-	Ogre::Root* mRoot;
-	RenderWindow* mWindow;
-	Viewport* mViewPort;
-	SceneManager* mSceneMgr;
-	Camera* mCamera;
-
-	std::vector<Entity*> mEntities;
-	std::vector<SceneNode*> mSceneNodes;
-
 	class dotFile
 	{
 	public:
@@ -153,6 +141,17 @@ class Illustrations
 			}
 		}
 	};
+
+class Illustrations
+{
+	Ogre::Root* mRoot;
+	RenderWindow* mWindow;
+	Viewport* mViewPort;
+	SceneManager* mSceneMgr;
+	Camera* mCamera;
+
+	std::vector<Entity*> mEntities;
+	std::vector<SceneNode*> mSceneNodes;
 
 public:
 	String mOutputPath;

@@ -1,3 +1,3 @@
-buffer = Procedural.TextureBuffer(1024)
+buffer = Procedural.TextureBuffer(128)
 Procedural.Labyrinth(buffer):process()
 tests:addTextureBuffer(buffer)
