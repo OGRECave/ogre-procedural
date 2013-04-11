@@ -42,7 +42,7 @@ void Sample_Material::createScene(void)
 	
 	// Basic structure
 	Procedural::Cell(&bricks).setRegularity(233).setDensity(brickLines).process();
-	Procedural::Colours(&bricks).setBrithness(174).setContrast(198).process();
+	Procedural::Colours(&bricks).setBrightness(174).setContrast(198).process();
 	Procedural::TextureBuffer distort(brickLines * pxPerBrick);
 	Procedural::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
 	Procedural::RectangleTexture rectDraw(&distort);
@@ -69,7 +69,7 @@ void Sample_Material::createScene(void)
 	Procedural::TextureBuffer joint(&bricks);
 	Procedural::Invert(&joint).process();
 	Procedural::Threshold(&joint).setThreshold(200).setRatio(255).process();
-	Procedural::Colours(&joint).setColourBase(0.215f, 0.207f, 0.137f, 0.0f).setColourPercent(0.294f, 0.266f, 0.345f, 1.0f).setBrithness(110).setContrast(153).process();
+	Procedural::Colours(&joint).setColourBase(0.215f, 0.207f, 0.137f, 0.0f).setColourPercent(0.294f, 0.266f, 0.345f, 1.0f).setBrightness(110).setContrast(153).process();
 
 	// Additional structure
 	Procedural::TextureBuffer colourcloud(&bricks);
@@ -77,7 +77,7 @@ void Sample_Material::createScene(void)
 	Procedural::TextureBuffer cloud(&bricks);
 	Procedural::Cloud(&cloud).process();
 	Procedural::Combine(&colourcloud).addImage(&cloud, Procedural::Combine::METHOD_MULTIPLY).process();
-	Procedural::Colours(&colourcloud).setColourBase(0.329f, 0.141f, 0.0f, 0.0f).setColourPercent(0.95f, 0.949f, 0.862f, 1.0f).setBrithness(30).process();
+	Procedural::Colours(&colourcloud).setColourBase(0.329f, 0.141f, 0.0f, 0.0f).setColourPercent(0.95f, 0.949f, 0.862f, 1.0f).setBrightness(30).process();
 
 	// Finish texture
 	Procedural::Combine(&light)

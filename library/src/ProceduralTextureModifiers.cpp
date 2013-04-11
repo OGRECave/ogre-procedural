@@ -660,9 +660,9 @@ Colours & Colours::setColourPercent(Ogre::Real red, Ogre::Real green, Ogre::Real
 	return *this;
 }
 
-Colours & Colours::setBrithness(Ogre::uchar brithness)
+Colours & Colours::setBrightness(Ogre::uchar brightness)
 {
-	mBrithness = brithness;
+	mBrightness = brightness;
 	return *this;
 }
 
@@ -688,7 +688,7 @@ TextureBufferPtr Colours::process()
 {
 	size_t w = mBuffer->getWidth();
 	size_t h = mBuffer->getHeight();
-	long brithness = (((long)mBrithness) * 2) - 256;
+	long brightness = (((long)mBrightness) * 2) - 256;
 	long contrast = (((long)mContrast));
 	Ogre::Real fconstrast = (Ogre::Real)mContrast / 128.0f;
 	fconstrast = fconstrast * fconstrast * fconstrast;
@@ -701,9 +701,9 @@ TextureBufferPtr Colours::process()
 	{
 		for(unsigned long x = 0; x < w; x++)
 		{
-			long r = (long)(mColourBase.r * 255.0f) + (((long)mBuffer->getPixelRedByte(x, y) * (long)(mColourPercent.r * 255.0f))>>8) + brithness;
-			long g = (long)(mColourBase.g * 255.0f) + (((long)mBuffer->getPixelGreenByte(x, y) * (long)(mColourPercent.g * 255.0f))>>8) + brithness;
-			long b = (long)(mColourBase.b * 255.0f) + (((long)mBuffer->getPixelBlueByte(x, y) * (long)(mColourPercent.b * 255.0f))>>8) + brithness;
+			long r = (long)(mColourBase.r * 255.0f) + (((long)mBuffer->getPixelRedByte(x, y) * (long)(mColourPercent.r * 255.0f))>>8) + brightness;
+			long g = (long)(mColourBase.g * 255.0f) + (((long)mBuffer->getPixelGreenByte(x, y) * (long)(mColourPercent.g * 255.0f))>>8) + brightness;
+			long b = (long)(mColourBase.b * 255.0f) + (((long)mBuffer->getPixelBlueByte(x, y) * (long)(mColourPercent.b * 255.0f))>>8) + brightness;
 
 			long c = (long)(((r - 127) * contrast)>>8) + 127;
 			r = (c < 0x00) ? 0x00 : (c > 0xff) ? 0xff : c;
