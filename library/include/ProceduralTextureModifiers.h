@@ -666,7 +666,7 @@ class _ProceduralExport Colours : public TextureProcessing
 private:
 	Ogre::ColourValue mColourBase;
 	Ogre::ColourValue mColourPercent;
-	Ogre::uchar mBrithness;
+	Ogre::uchar mBrightness;
 	Ogre::uchar mContrast;
 	Ogre::uchar mSaturation;
 	Ogre::uchar mAlpha;
@@ -677,7 +677,7 @@ public:
 	\param pBuffer Image buffer where to modify the image.
 	*/
 	Colours(TextureBufferPtr pBuffer)
-		: TextureProcessing(pBuffer, "Colours"), mColourBase(Ogre::ColourValue::Black), mColourPercent(Ogre::ColourValue::White), mBrithness(127), mContrast(127), mSaturation(127), mAlpha(127)
+		: TextureProcessing(pBuffer, "Colours"), mColourBase(Ogre::ColourValue::Black), mColourPercent(Ogre::ColourValue::White), mBrightness(127), mContrast(127), mSaturation(127), mAlpha(127)
 	{
 	}
 
@@ -712,10 +712,10 @@ public:
 	Colours & setColourPercent(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
-	Set brithness of the image.
-	\param brithness New image brithness (default 127)
+	Set brightness of the image.
+	\param brightness New image brightness (default 127)
 	*/
-	Colours & setBrithness(Ogre::uchar brithness);
+	Colours & setBrightness(Ogre::uchar brightness);
 
 	/**
 	Set contrast of the image.
