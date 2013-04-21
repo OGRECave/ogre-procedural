@@ -1838,7 +1838,7 @@ delete bufferNormalMap;
 \dotfile texture_19a.gv
 \note If you don't set the normal map a clone of the base input image will be used as normal map with Normals filter. \dotfile texture_19b.gv
 */
-class _ProceduralExport Light : public TextureProcessing
+class _ProceduralExport TextureLightBaker : public TextureProcessing
 {
 private:
 	TextureBufferPtr mNormal;
@@ -1854,7 +1854,7 @@ public:
 	Default constructor.
 	\param pBuffer Image buffer where to modify the image.
 	*/
-	Light(TextureBufferPtr pBuffer)
+	TextureLightBaker(TextureBufferPtr pBuffer)
 		: TextureProcessing(pBuffer, "Light"), mNormal(NULL), mColourAmbient(Ogre::ColourValue::Black), mColourDiffuse(Ogre::ColourValue(0.5f, 0.5f, 0.5f, 1.0f)), mColourSpecular(Ogre::ColourValue::White), mPosition(255.0f, 255.0f, 127.0f), mSpecularPower(0), mBumpPower(0)
 	{
 	}
@@ -1864,13 +1864,13 @@ public:
 	\param normal Pointer to an normal map image (default NULL)
 	\note If the parameter normal is set to NULL a clone of the base input image will be used as normal map with Normals filter.
 	*/
-	Light & setNormalMap(TextureBufferPtr normal);
+	TextureLightBaker & setNormalMap(TextureBufferPtr normal);
 
 	/**
 	Set the ambient light colour.
 	\param colour New ambient light colour (default Ogre::ColourValue::Black)
 	*/
-	Light & setColourAmbient(Ogre::ColourValue colour);
+	TextureLightBaker & setColourAmbient(Ogre::ColourValue colour);
 	
 	/**
 	Set the ambient light colour.
@@ -1879,13 +1879,13 @@ public:
 	\param blue Blue value of ambient light colour [0.0, 1.0] \(default 0.0)
 	\param alpha %Alpha value of ambient light colour [0.0, 1.0] \(default 0.0)
 	*/
-	Light & setColourAmbient(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	TextureLightBaker & setColourAmbient(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the diffuse light colour.
 	\param colour New diffuse light colour (default Ogre::ColourValue(0.5f, 0.5f, 0.5f, 1.0f))
 	*/
-	Light & setColourDiffuse(Ogre::ColourValue colour);
+	TextureLightBaker & setColourDiffuse(Ogre::ColourValue colour);
 	
 	/**
 	Set the diffuse light colour.
@@ -1894,13 +1894,13 @@ public:
 	\param blue Blue value of diffuse light colour [0.0, 1.0] \(default 0.5)
 	\param alpha %Alpha value of diffuse light colour [0.0, 1.0] \(default 1.0)
 	*/
-	Light & setColourDiffuse(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	TextureLightBaker & setColourDiffuse(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the specular light colour.
 	\param colour New specular light colour (default Ogre::ColourValue::White)
 	*/
-	Light & setColourSpecular(Ogre::ColourValue colour);
+	TextureLightBaker & setColourSpecular(Ogre::ColourValue colour);
 
 	/**
 	Set the specular light colour.
@@ -1909,7 +1909,7 @@ public:
 	\param blue Blue value of specular light colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of specular light colour [0.0, 1.0] \(default 1.0)
 	*/
-	Light & setColourSpecular(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	TextureLightBaker & setColourSpecular(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the light colours.
@@ -1917,13 +1917,13 @@ public:
 	\param diffuse New diffuse light colour (default Ogre::ColourValue(0.5f, 0.5f, 0.5f, 1.0f))
 	\param specular New specular light colour (default Ogre::ColourValue::White)
 	*/
-	Light & setColours(Ogre::ColourValue ambient, Ogre::ColourValue diffuse, Ogre::ColourValue specular);
+	TextureLightBaker & setColours(Ogre::ColourValue ambient, Ogre::ColourValue diffuse, Ogre::ColourValue specular);
 
 	/**
 	Set the position of light on/over the image.
 	\param position New light position (default Ogre::Vector3(255.0f, 255.0f, 127.0f))
 	*/
-	Light & setPosition(Ogre::Vector3 position);
+	TextureLightBaker & setPosition(Ogre::Vector3 position);
 
 	/**
 	Set the position of light on/over the image.
@@ -1931,19 +1931,19 @@ public:
 	\param y New light position on y axis \(default 255.0f)
 	\param z New light position on z axis \(default 127.0f)
 	*/
-	Light & setPosition(Ogre::Real x, Ogre::Real y, Ogre::Real z);
+	TextureLightBaker & setPosition(Ogre::Real x, Ogre::Real y, Ogre::Real z);
 
 	/**
 	Set specular light power.
 	\param power New power value for specular light (default 0)
 	*/
-	Light & setSpecularPower(Ogre::uchar power);
+	TextureLightBaker & setSpecularPower(Ogre::uchar power);
 
 	/**
 	Set bump mapping power.
 	\param power New power value for bump mapping (default 0)
 	*/
-	Light & setBumpPower(Ogre::uchar power);
+	TextureLightBaker & setBumpPower(Ogre::uchar power);
 
 	/**
 	Run image manipulation

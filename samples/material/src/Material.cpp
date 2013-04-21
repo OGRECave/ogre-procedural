@@ -63,7 +63,7 @@ void Sample_Material::createScene(void)
 	Procedural::TextureBuffer light(&bricks);
 	Procedural::Colours(&light).setColourBase(0.325f, 0.0f, 0.0f, 0.0f).setColourPercent(0.78f, 0.443f, 0.333f, 1.0f).process();
 	Procedural::Normals(&normal).process();
-	//Procedural::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
+	//Procedural::TextureLightBaker(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
 	
 	// Joint
 	Procedural::TextureBuffer joint(&bricks);

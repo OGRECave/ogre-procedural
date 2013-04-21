@@ -671,7 +671,7 @@ void Illustrations::go()
 	dotfile.save();
 
 	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Light(&buffer).setColourAmbient(0.5f, 0.2f, 0, 0).setColourDiffuse(0.2f, 0.1f, 0, 0).setBumpPower(255).process();
+	Procedural::TextureLightBaker(&buffer).setColourAmbient(0.5f, 0.2f, 0, 0).setColourDiffuse(0.2f, 0.1f, 0, 0).setBumpPower(255).process();
 	exportImage("texture_light", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_19a", "Light_1_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Light", "texture_light", dotFile::ROW);
@@ -871,7 +871,7 @@ void Illustrations::go()
 	exportImage("texture_example_normals_2", &normal);
 	int s12 = dotfile.add("Normals", "texture_example_normals_2");
 	dotfile.bind(s10, s12);
-	Procedural::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
+	Procedural::TextureLightBaker(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
 	exportImage("texture_example_light", &light);
 	int s13 = dotfile.add("Light", "texture_example_light");
 	dotfile.bind(s11, s13);
