@@ -106,7 +106,7 @@ option(OgreProcedural_UNITY_BUILD "Enable unity build for OgreProcedural." FALSE
 set(OgreProcedural_UNITY_FILES_PER_UNIT "50" CACHE STRING "Number of files per compilation unit in Unity build.")
 
 if (MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast /MP /Zm256")
   # Enable intrinsics on MSVC in debug mode
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Oi")
   if (CMAKE_CL_64)

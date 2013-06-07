@@ -102,7 +102,7 @@ option(OgreProcedural_HARDENEDBUILDFLAGS "Hardened build flags" FALSE)
 
 if (OgreProcedural_HARDENEDBUILDFLAGS)
 if(MSVC) # Sort the odd stuff out
-    add_definitions("/WX /MP /EHsc")
+    add_definitions("/WX /EHsc")
 else() # Clang/GCC/Mingw
     add_definitions("-Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-but-set-parameter -pedantic -std=c++0x")
 endif()

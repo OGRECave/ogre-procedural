@@ -460,7 +460,20 @@ void Illustrations::go()
 	mCamera->setPosition(1.8f,0.8f,5);
 	mCamera->lookAt(1.8f,0.8f,0);
 
-	mp = TextShape().setText("Ogre").realizeShapes().realizeMesh();
+	// Extract and save font file from Ogre resources
+	Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource("cuckoo.ttf", "Essential"); // Font from SdkTrays.zip
+	std::ofstream fontFile("cuckoo.ttf", std::ios::out | std::ios::binary);
+	char block[1024];
+	while(!stream->eof())
+	{
+		size_t len = stream->read(block, 1024);
+		fontFile.write(block, len);
+		if(len < 1024) break;
+	}
+	fontFile.close();
+
+	// Use font file to write a text on a texture
+	mp = TextShape().setFont("cuckoo.ttf", 12).setText("Ogre").realizeShapes().realizeMesh();
 	putMesh(mp);
 	next("shape_text", 20);
 #endif
@@ -809,8 +822,8 @@ void Illustrations::go()
 
 #ifdef PROCEDURAL_USE_FREETYPE
 	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::TextTexture(&buffer).setFont("Arial", 30).setColour(Ogre::ColourValue::Red).setPosition((size_t)20, (size_t)20).setText("OGRE").process();
-	Procedural::TextTexture(&buffer).setFont("Arial", 20).setColour(Ogre::ColourValue::Green).setPosition((size_t)10, (size_t)60).setText("Procedural").process();
+	Procedural::TextTexture(&buffer).setFont("cuckoo.ttf", 30).setColour(Ogre::ColourValue::Red).setPosition((size_t)20, (size_t)20).setText("OGRE").process();
+	Procedural::TextTexture(&buffer).setFont("cuckoo.ttf", 20).setColour(Ogre::ColourValue::Green).setPosition((size_t)10, (size_t)60).setText("Procedural").process();
 	exportImage("texture_text", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_34", "Text_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Text", "texture_text");
