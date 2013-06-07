@@ -42,4 +42,3 @@ if (APPLE)
 endif ()
 
 install(FILES ${INST_FILES} DESTINATION ${OgreProcedural_CMAKE_DIR})
-install(FILES Packages/FindOgreProcedural.cmake DESTINATION ${CMAKE_ROOT}/Modules)
