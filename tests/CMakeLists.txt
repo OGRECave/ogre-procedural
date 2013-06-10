@@ -24,6 +24,11 @@ set_target_properties(Unit_Tests PROPERTIES DEBUG_POSTFIX _d)
 
 target_link_libraries(Unit_Tests ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${OgreProcedural_LIBRARIES})
 
+if ((${OGRE_VERSION} VERSION_EQUAL "1.9.0") OR (${OGRE_VERSION} VERSION_GREATER "1.9.0"))
+	include_directories(${OGRE_Overlay_INCLUDE_DIR})
+	target_link_libraries(Unit_Tests ${OGRE_Overlay_LIBRARIES})
+endif()
+
 procedural_create_vcproj_userfile(Unit_Tests)
 
 # specify a precompiled header to use
