@@ -25,4 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+#ifndef __OgreProceduralStableHeaders__
+#define __OgreProceduralStableHeaders__
+#include "ProceduralPlatform.h"
+
+#if (PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32 && !defined(__MINGW32__)) || PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WINRT || PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_APPLE || PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_APPLE_IOS
 #include "Ogre.h"
+#endif
+#endif
