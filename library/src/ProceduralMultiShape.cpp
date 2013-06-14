@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralMultiShape.h"
 #include "ProceduralShape.h"
+#include "OgreRoot.h"
 
 using namespace Ogre;
 

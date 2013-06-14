@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralPath.h"
 #include "ProceduralGeometryHelpers.h"
+#include "OgreRoot.h"
 
 using namespace Ogre;
 

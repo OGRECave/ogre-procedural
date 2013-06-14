@@ -28,13 +28,11 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_MESH_GENERATOR_INCLUDED
 #define PROCEDURAL_MESH_GENERATOR_INCLUDED
 
-#include "OgreRoot.h"
-#include "OgreSceneManager.h"
-#include "OgreMesh.h"
-#include "OgreManualObject.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralTriangleBuffer.h"
-
+#include "OgreException.h"
+#include "OgreMesh.h"
+ 
 namespace Procedural
 {
 /**
@@ -53,7 +51,7 @@ class MeshGenerator
 {
 protected:
 	/// A pointer to the default scene manager
-	Ogre::SceneManager* mSceneMgr;
+    //Ogre::SceneManager* mSceneMgr;
 
 	/// U tile for texture coords generation
 	Ogre::Real mUTile;
@@ -109,9 +107,9 @@ public:
 					  mDumpFileName(""),
 					  mEnableDumpToFile(false)
 	{
-		mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
+        /*mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		if(mSceneMgr == NULL)
-			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::MeshGenerator::MeshGenerator()");
+            OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::MeshGenerator::MeshGenerator()");*/
 	}
 
 	/**
@@ -119,19 +117,19 @@ public:
 	 * @param name of the mesh for the MeshManager
 	 * @param group ressource group in which the mesh will be created
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name = "",
-		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME)
+    Ogre::MeshPtr realizeMesh(const std::string& name = "",
+        const Ogre::String& group = "General")
 	{
 		TriangleBuffer tbuffer;
 		addToTriangleBuffer(tbuffer);
-		if (mEnableDumpToFile)
-			tbuffer._dumpContentsToFile(mDumpFileName);
-		Ogre::MeshPtr mesh;
-		if (name == "")
+        /*if (mEnableDumpToFile)
+            tbuffer._dumpContentsToFile(mDumpFileName);*/
+        Ogre::MeshPtr mesh;
+        if (name == "")
 			mesh = tbuffer.transformToMesh(Utils::getName(), group);
 		else
 			mesh = tbuffer.transformToMesh(name, group);
-		return mesh;
+        return mesh;
 	}
 
 	/**

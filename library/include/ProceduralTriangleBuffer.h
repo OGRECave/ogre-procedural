@@ -28,11 +28,7 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_TRIANGLEBUFFER_INCLUDED
 #define PROCEDURAL_TRIANGLEBUFFER_INCLUDED
 
-#include "OgreManualObject.h"
-#include "OgreMesh.h"
-#include "OgreSceneManager.h"
 #include "ProceduralUtils.h"
-#include <fstream>
 
 namespace Procedural
 {
@@ -40,7 +36,7 @@ namespace Procedural
  * It stores all the info needed to build an Ogre Mesh, yet is intented to be more flexible, since
  * there is no link towards hardware.
  */
-class TriangleBuffer
+class _ProceduralExport TriangleBuffer
 {
 public:
 	struct Vertex
@@ -114,29 +110,7 @@ protected:
 	 * Builds an Ogre Mesh from this buffer.
 	 */
 	Ogre::MeshPtr transformToMesh(const std::string& name,
-		const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME) const
-	{
-		Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-		Ogre::ManualObject * manual = sceneMgr->createManualObject();
-		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-
-		for (std::vector<Vertex>::const_iterator it = mVertices.begin(); it != mVertices.end();++it)
-		{
-			manual->position(it->mPosition);
-			manual->textureCoord(it->mUV);
-			manual->normal(it->mNormal);
-		}
-		for (std::vector<int>::const_iterator it = mIndices.begin(); it!=mIndices.end();++it)
-		{
-			manual->index(*it);
-		}
-		manual->end();
-		Ogre::MeshPtr mesh = manual->convertToMesh(name, group);
-
-		sceneMgr->destroyManualObject(manual);
-
-		return mesh;
-	}
+        const Ogre::String& group = "General") const;
 
 	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& vertex(const Vertex& v)
@@ -306,37 +280,7 @@ protected:
 	{
 		mEstimatedIndexCount += indexCount;
 		mIndices.reserve(mEstimatedIndexCount);
-	}
-
-	/**
-	 * For debugging purposes, outputs the content of this buffer to a YAML styled file.
-	 */
-	void _dumpContentsToFile(const std::string& fileName)
-	{
-		std::ofstream outFile;
-		outFile.open(fileName.c_str());
-
-		outFile<< "Number of vertices : "<< Ogre::StringConverter::toString(mVertices.size()) <<std::endl;
-		outFile<< "Estimated number of vertices : "<< Ogre::StringConverter::toString(mEstimatedVertexCount) <<std::endl;
-		outFile<< "Vertices :"<<std::endl;
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end();++it)
-		{
-			outFile<<" - {";
-			outFile<<" Position: ["<<Ogre::StringConverter::toString(it->mPosition.x)<<", "<<Ogre::StringConverter::toString(it->mPosition.y)<<", "<<Ogre::StringConverter::toString(it->mPosition.z)<<"]";
-			outFile<<", Normal: ["<<Ogre::StringConverter::toString(it->mNormal.x)<<", "<<Ogre::StringConverter::toString(it->mNormal.y)<<", "<<Ogre::StringConverter::toString(it->mNormal.z)<<"]";
-			outFile<<", UV: ["<<Ogre::StringConverter::toString(it->mUV.x)<<", "<<Ogre::StringConverter::toString(it->mUV.y)<<"]";
-			outFile<<"}"<<std::endl;
-		}
-		outFile<< "Number of indices : "<< Ogre::StringConverter::toString(mIndices.size()) <<std::endl;
-		outFile<< "Estimated number of indices : "<< Ogre::StringConverter::toString(mEstimatedIndexCount) <<std::endl;
-		outFile<< "Indices :"<< std::endl;
-		for (size_t i = 0; i<mIndices.size()/3; i++)
-		{
-			outFile<<" - ["<<Ogre::StringConverter::toString(mIndices[i*3])<<", "<<Ogre::StringConverter::toString(mIndices[i*3+1])<<", "<<Ogre::StringConverter::toString(mIndices[i*3+2])<<"]"<<std::endl;
-		}
-
-		outFile.close();
-	}
+	}	
 };
 }
 #endif
