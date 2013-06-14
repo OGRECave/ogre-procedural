@@ -27,11 +27,39 @@ THE SOFTWARE.
 */
 #include "ProceduralStableHeaders.h"
 #include "ProceduralTriangleBuffer.h"
+#include "OgreManualObject.h"
+#include "OgreSceneManager.h"
+#include "OgreRoot.h"
 
 using namespace Ogre;
 
 namespace Procedural
 {
+Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
+    const Ogre::String& group) const
+{
+    Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
+    Ogre::ManualObject * manual = sceneMgr->createManualObject();
+    manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+
+    for (std::vector<Vertex>::const_iterator it = mVertices.begin(); it != mVertices.end();++it)
+    {
+        manual->position(it->mPosition);
+        manual->textureCoord(it->mUV);
+        manual->normal(it->mNormal);
+    }
+    for (std::vector<int>::const_iterator it = mIndices.begin(); it!=mIndices.end();++it)
+    {
+        manual->index(*it);
+    }
+    manual->end();
+    Ogre::MeshPtr mesh = manual->convertToMesh(name, group);
+
+    sceneMgr->destroyManualObject(manual);
+
+    return mesh;
+}
+
 /*void TriangleBuffer::importEntity(Entity* entity)
 	{
 		bool added_shared = false;

@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 #include "ProceduralStableHeaders.h"
 #include "ProceduralDebugRendering.h"
+#include "OgreRoot.h"
 
 using namespace Ogre;
 

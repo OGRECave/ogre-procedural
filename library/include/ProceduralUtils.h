@@ -29,7 +29,10 @@ THE SOFTWARE.
 #define PROCEDURAL_UTILS_INCLUDED
 #include "OgreVector3.h"
 #include "OgreAxisAlignedBox.h"
+#include "OgreLogManager.h"
 #include "ProceduralPlatform.h"
+#include "OgreStringConverter.h"
+#include "OgreCommon.h"
 
 namespace Procedural
 {
@@ -39,20 +42,7 @@ class _ProceduralExport Utils
 	static int counter;
 public:
 	/// Outputs something to the ogre log, with a [PROCEDURAL] prefix
-	static void log(const Ogre::String& st)
-	{
-		   Ogre::LogManager::getSingleton().logMessage("[PROCEDURAL] " + st);
-   #if (PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32)      
-      #ifdef UNICODE
-         std::basic_ostringstream<TCHAR> buf;
-         buf << st.c_str();
-         std::wstring wst = buf.str();               
-         OutputDebugString( wst.c_str() );
-      #else
-         OutputDebugString( (st + "\n").c_str() );
-      #endif   
-   #endif
-	}
+	static void log(const Ogre::String& st);
 
 	/// Gets the min of the coordinates between 2 vectors
 	static Ogre::Vector3 min(const Ogre::Vector3& v1, const Ogre::Vector3& v2)

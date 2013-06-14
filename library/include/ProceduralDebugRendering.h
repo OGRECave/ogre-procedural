@@ -82,7 +82,7 @@ namespace Procedural
 
 		/// Builds the normals representation as a mesh
 		Ogre::MeshPtr buildMesh(const std::string& name = "",
-			const Ogre::String& group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME) const;
+			const Ogre::String& group = "General") const;
 	};
 }
 
