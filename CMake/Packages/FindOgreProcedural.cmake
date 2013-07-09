@@ -44,7 +44,7 @@ create_search_paths(OgreProcedural)
 set(OgreProcedural_LIBRARY_NAMES "OgreProcedural")
 get_debug_names(OgreProcedural_LIBRARY_NAMES)
 
-find_path(OgreProcedural_INCLUDE_DIR NAMES Procedural.h HINTS ${OgreProcedural_CONFIG_INCLUDE_DIR} ${OgreProcedural_INC_SEARCH_PATH} ${OgreProcedural_FRAMEWORK_INCLUDES} ${OgreProcedural_PKGC_INCLUDE_DIRS} PATH_SUFFIXES "PROCEDURAL")
+find_path(OgreProcedural_INCLUDE_DIR NAMES Procedural.h HINTS ${OgreProcedural_CONFIG_INCLUDE_DIR} ${OgreProcedural_INC_SEARCH_PATH} ${OgreProcedural_FRAMEWORK_INCLUDES} ${OgreProcedural_PKGC_INCLUDE_DIRS} PATH_SUFFIXES "OgreProcedural")
 
 find_library(OgreProcedural_LIBRARY_REL NAMES ${OgreProcedural_LIBRARY_NAMES} HINTS ${OgreProcedural_LIB_SEARCH_PATH} PATH_SUFFIXES "" "release" "relwithdebinfo" "minsizerel")
 find_library(OgreProcedural_LIBRARY_DBG NAMES ${OgreProcedural_LIBRARY_NAMES_DBG} HINTS ${OgreProcedural_LIB_SEARCH_PATH} PATH_SUFFIXES "" "debug")
