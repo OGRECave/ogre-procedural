@@ -13,7 +13,7 @@ if(DOXYGEN_FOUND)
 	add_custom_target(OgreProceduralDoc
 					COMMAND  ${DOXYGEN_EXECUTABLE} ${OgreProcedural_BINARY_DIR}/html.cfg
 					WORKING_DIRECTORY ${OgreProcedural_SOURCE_DIR}/docs
-					DEPENDS Illustrations
+					DEPENDS OgreProceduralIllustrations
 					COMMENT "Building documentation" VERBATIM)
 	file(WRITE ${OgreProcedural_SOURCE_DIR}/docs/api/temp.txt "This file should be deleted before installation. It is only here to force the creation of the api folder")
 	file(REMOVE ${OgreProcedural_SOURCE_DIR}/docs/api/temp.txt)
