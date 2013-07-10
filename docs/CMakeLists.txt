@@ -10,7 +10,7 @@ endif()
 # Build and install API documentation if doxygen is available
 if(DOXYGEN_FOUND)
 	configure_file(${OgreProcedural_TEMPLATES_DIR}/html.cfg.in ${OgreProcedural_BINARY_DIR}/html.cfg)
-	add_custom_target(doc
+	add_custom_target(OgreProceduralDoc
 					COMMAND  ${DOXYGEN_EXECUTABLE} ${OgreProcedural_BINARY_DIR}/html.cfg
 					WORKING_DIRECTORY ${OgreProcedural_SOURCE_DIR}/docs
 					DEPENDS Illustrations
@@ -24,9 +24,9 @@ if(DOXYGEN_FOUND)
 	# cleanup $OgreProcedural_DOCS_PATH on "make clean"
 	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${OgreProcedural_DOCS_PATH})
 
-	# add doxygen as dependency to doc-target
-	get_target_property(DOC_TARGET doc TYPE)
+	# add doxygen as dependency to OgreProceduralDoc-target
+	get_target_property(DOC_TARGET OgreProceduralDoc TYPE)
 	if(NOT DOC_TARGET)
-		add_custom_target(doc)
+		add_custom_target(OgreProceduralDoc)
 	endif()
 endif()
