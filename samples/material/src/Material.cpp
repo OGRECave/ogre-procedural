@@ -88,7 +88,11 @@ void Sample_Material::createScene(void)
 	Ogre::TexturePtr demoTexture = light.createTexture("proceduralTexture");
 	Ogre::TexturePtr demoTextureNormal = normal.createTexture("proceduralTextureNormal");
 
-	Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create("proceduralMaterial", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);	
+#if (OGRE_VERSION < ((1 << 16) | (9 << 8) | 0))
+	Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create("proceduralMaterial", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+#else
+	Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create("proceduralMaterial", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME).staticCast<Ogre::Material>();
+#endif
 	demoMaterial->getTechnique(0)->getPass(0)->setShininess(50);
 	demoMaterial->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue::White);
 	demoMaterial->getTechnique(0)->getPass(0)->setSpecular(Ogre::ColourValue(1.0f,1.0f,0.9f));
