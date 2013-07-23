@@ -156,12 +156,7 @@ class Illustrations
 public:
 	String mOutputPath;
 
-	Illustrations()
-	{
-		init();
-	}
-
-	void init();
+	bool init();
 	void go();
 	void next(std::string name, Real size);
 	void putMesh(MeshPtr mesh, int materialIndex=0);

@@ -43,7 +43,7 @@ THE SOFTWARE.
 using namespace Procedural;
 
 //-------------------------------------------------------------------------------------
-	void Illustrations::init()
+	bool Illustrations::init()
 	{	
 	
 	String resourcesCfg, pluginsCfg;
@@ -79,6 +79,11 @@ using namespace Procedural;
 	if (!mRoot->restoreConfig())
 		mRoot->showConfigDialog();*/
 	const RenderSystemList& rsList = mRoot->getAvailableRenderers();
+	if (rsList.size() == 0)
+	{
+		Utils::log("Impossible to execute Illustrations : no renderer available!");
+		return false;
+	}
 	RenderSystem* rs = *rsList.begin();
 	/*for (RenderSystemList::const_iterator it=rsList.begin();it!=rsList.end();it++)
 	{
@@ -110,6 +115,7 @@ using namespace Procedural;
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
 	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
+	return true;
 }
 
 void Illustrations::next(std::string name, Real size)
@@ -944,6 +950,9 @@ extern "C" {
 	{
 		// Create application object
 		Illustrations app;
+
+		if (!app.init())
+			return 1;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		app.mOutputPath = strCmdLine;
