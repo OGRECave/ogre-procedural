@@ -146,12 +146,14 @@ class Illustrations
 {
 	Ogre::Root* mRoot;
 	RenderWindow* mWindow;
-	Viewport* mViewPort;
 	SceneManager* mSceneMgr;
 	Camera* mCamera;
 
 	std::vector<Entity*> mEntities;
 	std::vector<SceneNode*> mSceneNodes;
+
+	Ogre::TexturePtr mRttTexture;
+	Ogre::RenderTexture* mRenderTexture;
 
 public:
 	String mOutputPath;

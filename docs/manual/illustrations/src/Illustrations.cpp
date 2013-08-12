@@ -75,9 +75,7 @@ using namespace Procedural;
 				archName, typeName, secName);
 		}
 	}
-	/*
-	if (!mRoot->restoreConfig())
-		mRoot->showConfigDialog();*/
+
 	const RenderSystemList& rsList = mRoot->getAvailableRenderers();
 	if (rsList.size() == 0)
 	{
@@ -85,28 +83,24 @@ using namespace Procedural;
 		return false;
 	}
 	RenderSystem* rs = *rsList.begin();
-	/*for (RenderSystemList::const_iterator it=rsList.begin();it!=rsList.end();it++)
-	{
-		if ((*it)->getName().find("GL") != String::npos)
-			rs = *it;
-	}*/
 
 	ConfigOptionMap optionMap = rs->getConfigOptions();
 	rs->setConfigOption("FSAA", optionMap["FSAA"].possibleValues.back());
 	rs->setConfigOption("Full Screen", "No");
-	rs->setConfigOption("Video Mode", optionMap["Video Mode"].possibleValues.back());	
+	rs->setConfigOption("Video Mode", optionMap["Video Mode"].possibleValues.back());		
 	
-	mRoot->setRenderSystem(rs);	
-		 
-	mWindow = mRoot->initialise(true); 
-	mWindow->setDeactivateOnFocusChange(false);
-	mWindow->resize(256, 256);
-	mWindow->windowMovedOrResized();
+	mRoot->setRenderSystem(rs);			 
+	mRoot->initialise(false); 
+
+	//Create dummy invisible window
+	Ogre::NameValuePairList windowParams;
+	windowParams["hidden"] = "true";
+	mWindow=mRoot->createRenderWindow("dummyWindow", 1,1,false, &windowParams);
+	mWindow->setAutoUpdated(false);
+
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
 	mCamera = mSceneMgr->createCamera("SimpleCamera");  
-	mViewPort = mWindow->addViewport(mCamera);
-	mViewPort->setBackgroundColour(ColourValue::White);
 	mCamera->setAspectRatio(1.);
 	cameraPerspective();
 	mCamera->setNearClipDistance(1.);
@@ -115,6 +109,16 @@ using namespace Procedural;
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
 	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
+
+	// Create main render to texture
+	mRttTexture = Ogre::TextureManager::getSingleton().createManual("RttTex", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, 
+		Ogre::TEX_TYPE_2D, 256, 256, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET, 0, 0, 4);
+	mRenderTexture = mRttTexture->getBuffer()->getRenderTarget(); 
+	Ogre::Viewport* vp = mRenderTexture->addViewport(mCamera);
+	vp->setClearEveryFrame(true);
+	vp->setBackgroundColour(Ogre::ColourValue::White);
+	vp->setOverlaysEnabled(false);
+	
 	return true;
 }
 
@@ -125,13 +129,8 @@ void Illustrations::next(std::string name, Real size)
 	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
 	// Write scene to png image
-	WindowEventUtilities::messagePump();
-	mRoot->renderOneFrame();
-	WindowEventUtilities::messagePump();
-	mRoot->renderOneFrame();
-	WindowEventUtilities::messagePump();
-	mRoot->renderOneFrame();
-	mWindow->writeContentsToFile(name + ".png");
+	mRenderTexture->update();
+	mRenderTexture->writeContentsToFile(name + ".png");
 
 	// Clear the scene
 	for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it != mSceneNodes.end(); it++) 
