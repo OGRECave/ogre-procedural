@@ -689,7 +689,7 @@ void Illustrations::go()
 	dotfile.save();
 
 	Procedural::Cell(&buffer).setDensity(4).setRegularity(234).process();
-	Procedural::Light(&buffer).setColourAmbient(0.5f, 0.2f, 0, 0).setColourDiffuse(0.2f, 0.1f, 0, 0).setBumpPower(255).process();
+	Procedural::TextureLightBaker(&buffer).setColourAmbient(0.5f, 0.2f, 0, 0).setColourDiffuse(0.2f, 0.1f, 0, 0).setBumpPower(255).process();
 	exportImage("texture_light", &buffer, true);
 	dotfile = dotFile(mOutputPath, "texture_19a", "Light_1_Demo");
 	dotfile.set("Cell", "texture_cell_smooth", "Normals", "texture_normals", "Light", "texture_light", dotFile::ROW);
@@ -843,7 +843,7 @@ void Illustrations::go()
 	Procedural::Cell(&bricks).setRegularity(233).setDensity(brickLines).process();
 	exportImage("texture_example_cell", &bricks);
 	int s01 = dotfile.add("Cell", "texture_example_cell");
-	Procedural::Colours(&bricks).setBrithness(174).setContrast(198).process();
+	Procedural::Colours(&bricks).setBrightness(174).setContrast(198).process();
 	exportImage("texture_example_colours_1", &bricks);
 	int s02 = dotfile.add("Colours", "texture_example_colours_1");
 	dotfile.bind(s01, s02);
@@ -889,7 +889,7 @@ void Illustrations::go()
 	exportImage("texture_example_normals_2", &normal);
 	int s12 = dotfile.add("Normals", "texture_example_normals_2");
 	dotfile.bind(s10, s12);
-	Procedural::Light(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
+	Procedural::TextureLightBaker(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
 	exportImage("texture_example_light", &light);
 	int s13 = dotfile.add("Light", "texture_example_light");
 	dotfile.bind(s11, s13);
@@ -903,7 +903,7 @@ void Illustrations::go()
 	exportImage("texture_example_threshold_1", &joint);
 	int s15 = dotfile.add("Threshold", "texture_example_threshold_1");
 	dotfile.bind(s14, s15);
-	Procedural::Colours(&joint).setColourBase(0.215f, 0.207f, 0.137f, 0.0f).setColourPercent(0.294f, 0.266f, 0.345f, 1.0f).setBrithness(110).setContrast(153).process();
+	Procedural::Colours(&joint).setColourBase(0.215f, 0.207f, 0.137f, 0.0f).setColourPercent(0.294f, 0.266f, 0.345f, 1.0f).setBrightness(110).setContrast(153).process();
 	exportImage("texture_example_colours_3", &joint);
 	int s16 = dotfile.add("Colours", "texture_example_colours_3");
 	dotfile.bind(s15, s16);
@@ -921,7 +921,7 @@ void Illustrations::go()
 	int s19 = dotfile.add("Combine", "texture_example_combine_1");
 	dotfile.bind(s17, s19);
 	dotfile.bind(s18, s19);
-	Procedural::Colours(&colourcloud).setColourBase(0.329f, 0.141f, 0.0f, 0.0f).setColourPercent(0.95f, 0.949f, 0.862f, 1.0f).setBrithness(30).process();
+	Procedural::Colours(&colourcloud).setColourBase(0.329f, 0.141f, 0.0f, 0.0f).setColourPercent(0.95f, 0.949f, 0.862f, 1.0f).setBrightness(30).process();
 	exportImage("texture_example_colours_4", &colourcloud);
 	int s20 = dotfile.add("Colours", "texture_example_colours_4");
 	dotfile.bind(s19, s20);
