@@ -108,7 +108,7 @@ public:
 	Set the colour of the cell top.
 	\param colour New colour of the cell top (default Ogre::ColourValue::White)
 	*/
-	Cell & setColour(Ogre::ColourValue colour);
+	Cell& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the colour of the cell top.
@@ -117,13 +117,13 @@ public:
 	\param blue Blue value of the cell top colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of the cell top colour [0.0, 1.0] \(default 1.0)
 	*/
-	Cell & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Cell& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	Cell & setSeed(Ogre::uint seed);
+	Cell& setSeed(Ogre::uint seed);
 
 	/**
 	Set the regularity of texture.
@@ -131,7 +131,7 @@ public:
 	The maximum value of 255 creates identical cells. The minimum 0 creates random forms for each cells.
 	\param regularity New value for chaotic cell forms (default 128)
 	*/
-	Cell & setRegularity(Ogre::uchar regularity);
+	Cell& setRegularity(Ogre::uchar regularity);
 
 	/**
 	Set the density of cells in texture.
@@ -139,19 +139,19 @@ public:
 	At least you have to set number of rows and columns in the grid to 1 or above.
 	\param density New number of columns and rows (default 8)
 	*/
-	Cell & setDensity(Ogre::uint density);
+	Cell& setDensity(Ogre::uint density);
 
 	/**
 	Set the cell mode of texture.
 	\param mode New mode for cell ground (default MODE_GRID)
 	*/
-	Cell & setMode(CELL_MODE mode);
+	Cell& setMode(CELL_MODE mode);
 
 	/**
 	Set the cell pattern of texture.
 	\param pattern New base of cell construction (default PATTERN_BOTH)
 	*/
-	Cell & setPattern(CELL_PATTERN pattern);
+	Cell& setPattern(CELL_PATTERN pattern);
 
 	/**
 	Run image generation
@@ -191,7 +191,7 @@ public:
 	Set the colour of the background.
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
-	Cloud & setColour(Ogre::ColourValue colour);
+	Cloud& setColour(Ogre::ColourValue colour);
 
 	/**
 	Sets the colour of the background
@@ -200,13 +200,13 @@ public:
 	\param blue Blue value of background colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of background colour [0.0, 1.0] \(default 1.0)
 	*/
-	Cloud & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Cloud& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	Cloud & setSeed(Ogre::uint seed);
+	Cloud& setSeed(Ogre::uint seed);
 
 	/**
 	Run image generation
@@ -248,7 +248,7 @@ public:
 	Set the colour in the top left corner of the image.
 	\param colour New colour in the top left corner for processing (default Ogre::ColourValue::Blue)
 	*/
-	Gradient & setColourA(Ogre::ColourValue colour);
+	Gradient& setColourA(Ogre::ColourValue colour);
 
 	/**
 	Set the colour in the top left corner of the image.
@@ -257,13 +257,13 @@ public:
 	\param blue Blue value of new colour in the top left corner [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of new colour in the top left corner [0.0, 1.0] \(default 1.0)
 	*/
-	Gradient & setColourA(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Gradient& setColourA(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the colour in the top right corner of the image.
 	\param colour New colour in the top right corner for processing (default Ogre::ColourValue::Green)
 	*/
-	Gradient & setColourB(Ogre::ColourValue colour);
+	Gradient& setColourB(Ogre::ColourValue colour);
 
 	/**
 	Set the colour in the top right corner of the image.
@@ -272,13 +272,13 @@ public:
 	\param blue Blue value of new colour in the top right corner [0.0, 1.0] \(default 0.0)
 	\param alpha %Alpha value of new colour in the top right corner [0.0, 1.0] \(default 1.0)
 	*/
-	Gradient & setColourB(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Gradient& setColourB(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the colour in the bottom left corner of the image.
 	\param colour New colour in the bottom left corner for processing (default Ogre::ColourValue::Red)
 	*/
-	Gradient & setColourC(Ogre::ColourValue colour);
+	Gradient& setColourC(Ogre::ColourValue colour);
 
 	/**
 	Set the colour in the bottom left corner of the image.
@@ -287,13 +287,13 @@ public:
 	\param blue Blue value of new colour in the bottom left corner [0.0, 1.0] \(default 0.0)
 	\param alpha %Alpha value of new colour in the bottom left corner [0.0, 1.0] \(default 1.0)
 	*/
-	Gradient & setColourC(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Gradient& setColourC(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the colour in the bottom right corner of the image.
 	\param colour New colour in the bottom right corner for processing (default Ogre::ColourValue(0.0f, 1.0f, 1.0f))
 	*/
-	Gradient & setColourD(Ogre::ColourValue colour);
+	Gradient& setColourD(Ogre::ColourValue colour);
 
 	/**
 	Set the colour in the bottom right corner of the image.
@@ -302,7 +302,7 @@ public:
 	\param blue Blue value of new colour in the bottom right corner [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of new colour in the bottom right corner [0.0, 1.0] \(default 1.0)
 	*/
-	Gradient & setColourD(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Gradient& setColourD(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Sets the colours of the image corners.
@@ -311,7 +311,7 @@ public:
 	\param colourC New colour in the bottom left corner (default Ogre::ColourValue::Red)
 	\param colourD New colour in the bottom right corner (default Ogre::ColourValue(0.0f, 1.0f, 1.0f))
 	*/
-	Gradient & setColours(Ogre::ColourValue colourA, Ogre::ColourValue colourB, Ogre::ColourValue colourC, Ogre::ColourValue colourD);
+	Gradient& setColours(Ogre::ColourValue colourA, Ogre::ColourValue colourB, Ogre::ColourValue colourC, Ogre::ColourValue colourD);
 
 	/**
 	Run image generation
@@ -352,7 +352,7 @@ public:
 	\param filename Name of an image file to load.
 	\param groupname Name of the resource group to search for the image
 	*/
-	Image & setFile(Ogre::String filename, Ogre::String groupname = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	Image& setFile(Ogre::String filename, Ogre::String groupname = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 	/**
 	Run image generation
@@ -392,7 +392,7 @@ public:
 	Set the colour of the background.
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
-	Labyrinth & setColour(Ogre::ColourValue colour);
+	Labyrinth& setColour(Ogre::ColourValue colour);
 
 	/**
 	Sets the colour of the background
@@ -401,13 +401,13 @@ public:
 	\param blue Blue value of background colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of background colour [0.0, 1.0] \(default 1.0)
 	*/
-	Labyrinth & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Labyrinth& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	Labyrinth & setSeed(Ogre::uint seed);
+	Labyrinth& setSeed(Ogre::uint seed);
 
 	/**
 	Run image generation
@@ -447,7 +447,7 @@ public:
 	Set the colour of the background.
 	\param colour New colour for marble structure (default Ogre::ColourValue::White)
 	*/
-	Marble & setColour(Ogre::ColourValue colour);
+	Marble& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the colour of the background.
@@ -456,13 +456,13 @@ public:
 	\param blue Blue valu of the marble structure coloure [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of the marble structure colour [0.0, 1.0] \(default 1.0)
 	*/
-	Marble & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Marble& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	Marble & setSeed(Ogre::uint seed);
+	Marble& setSeed(Ogre::uint seed);
 
 	/**
 	Run image generation
@@ -519,7 +519,7 @@ public:
 	Set the colour of the noise.
 	\param colour New colour of the noise (default Ogre::ColourValue::White)
 	*/
-	Noise & setColour(Ogre::ColourValue colour);
+	Noise& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the colour of the noise.
@@ -528,19 +528,19 @@ public:
 	\param blue Blue value of the noise colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of the noise colour [0.0, 1.0] \(default 1.0)
 	*/
-	Noise & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Noise& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	Noise & setSeed(Ogre::uint seed);
+	Noise& setSeed(Ogre::uint seed);
 
 	/**
 	Set the type of noise generation.
 	\param type Type of noise generator (default NOISE_WHITE)
 	*/
-	Noise & setType(NOISE_TYPE type);
+	Noise& setType(NOISE_TYPE type);
 
 	/**
 	Run image generation
@@ -579,7 +579,7 @@ public:
 	Sets the fill colour of the image.
 	\param colour New colour for processing (default Ogre::ColourValue::Black)
 	*/
-	Solid & setColour(Ogre::ColourValue colour);
+	Solid& setColour(Ogre::ColourValue colour);
 
 	/**
 	Sets the fill colour of the image.
@@ -588,7 +588,7 @@ public:
 	\param blue Blue value [0.0, 1.0] \(default 0.0)
 	\param alpha %Alpha value [0.0, 1.0] \(default 1.0)
 	*/
-	Solid & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Solid& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Run image generation
@@ -628,7 +628,7 @@ public:
 	Set the colour of the background.
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
-	Textile & setColour(Ogre::ColourValue colour);
+	Textile& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the colour of the background.
@@ -637,13 +637,13 @@ public:
 	\param blue Blue value of background colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of background colour [0.0, 1.0] \(default 1.0)
 	*/
-	Textile & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Textile& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	Textile & setSeed(Ogre::uint seed);
+	Textile& setSeed(Ogre::uint seed);
 
 	/**
 	Run image generation
@@ -684,7 +684,7 @@ public:
 	Set the colour of the background.
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
-	Wood & setColour(Ogre::ColourValue colour);
+	Wood& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the colour of the background.
@@ -693,19 +693,19 @@ public:
 	\param blue Blue value of background colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of background colour [0.0, 1.0] \(default 1.0)
 	*/
-	Wood & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Wood& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	Wood & setSeed(Ogre::uint seed);
+	Wood& setSeed(Ogre::uint seed);
 
 	/**
 	Sets the number of annual rings.
 	\param rings Number of annual rings (minimum 3, default 8)
 	*/
-	Wood & setRings(Ogre::uint rings);
+	Wood& setRings(Ogre::uint rings);
 
 	/**
 	Run image generation

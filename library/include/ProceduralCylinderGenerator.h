@@ -66,7 +66,7 @@ public:
 	Sets the number of segments when rotating around the cylinder's axis (default=16)
 	\exception Ogre::InvalidParametersException Minimum of numSegBase is 1
 	*/
-	inline CylinderGenerator & setNumSegBase(unsigned int numSegBase)
+	inline CylinderGenerator& setNumSegBase(unsigned int numSegBase)
 	{
 		if (numSegBase == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CylinderGenerator::setNumSegBase(unsigned int)");
@@ -78,7 +78,7 @@ public:
 	Sets the number of segments along the height of the cylinder (default=1)
 	\exception Ogre::InvalidParametersException Minimum of numSegHeight is 1
 	*/
-	inline CylinderGenerator & setNumSegHeight(unsigned int numSegHeight)
+	inline CylinderGenerator& setNumSegHeight(unsigned int numSegHeight)
 	{
 		if (numSegHeight == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CylinderGenerator::setNumSegHeight(unsigned int)");
@@ -87,7 +87,7 @@ public:
 	}
 
 	/** Sets whether the cylinder has endings or not (default=true) */
-	inline CylinderGenerator & setCapped(bool capped)
+	inline CylinderGenerator& setCapped(bool capped)
 	{
 		mCapped = capped;
 		return *this;
@@ -97,7 +97,7 @@ public:
 	Sets the radius of the cylinder (default=1)
 	\exception Ogre::InvalidParametersException Radius must be larger than 0!
 	*/
-	inline CylinderGenerator & setRadius(Ogre::Real radius)
+	inline CylinderGenerator& setRadius(Ogre::Real radius)
 	{
 		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::CylinderGenerator::setRadius(Ogre::Real)");
@@ -109,7 +109,7 @@ public:
 	Sets the height of the cylinder (default=1)
 	\exception Ogre::InvalidParametersException Height must be larger than 0!
 	*/
-	inline CylinderGenerator & setHeight(Ogre::Real height)
+	inline CylinderGenerator& setHeight(Ogre::Real height)
 	{
 		if (height <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::CylinderGenerator::setHeight(Ogre::Real)");

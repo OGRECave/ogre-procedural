@@ -694,7 +694,7 @@ class Unit_Tests : public BaseApplication
 	}
 
 protected:
-	bool keyReleased( const OIS::KeyEvent &arg )
+	bool keyReleased( const OIS::KeyEvent& arg )
 	{
 		if (arg.key == OIS::KC_M || arg.key == OIS::KC_ADD || arg.key == OIS::KC_PGDOWN)
 		{
@@ -709,7 +709,7 @@ protected:
 		return BaseApplication::keyReleased(arg);
 	}
 
-	bool keyPressed(const OIS::KeyEvent &arg)
+	bool keyPressed(const OIS::KeyEvent& arg)
 	{
 		if (arg.key == OIS::KC_K)
 		{

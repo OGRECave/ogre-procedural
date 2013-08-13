@@ -70,7 +70,7 @@ public:
 	Sets the radius of the cylinder part (default=1)
 	\exception Ogre::InvalidParametersException Radius must be larger than 0!
 	*/
-	inline CapsuleGenerator & setRadius(Ogre::Real radius)
+	inline CapsuleGenerator& setRadius(Ogre::Real radius)
 	{
 		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::CapsuleGenerator::setRadius(Ogre::Real)");
@@ -82,7 +82,7 @@ public:
 	Sets the number of segments of the sphere part (default=8)
 	\exception Ogre::InvalidParametersException Minimum of numRings is 1
 	*/
-	inline CapsuleGenerator & setNumRings(unsigned int numRings)
+	inline CapsuleGenerator& setNumRings(unsigned int numRings)
 	{
 		if (numRings == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 rings", "Procedural::CapsuleGenerator::setNumRings(unsigned int)");
@@ -94,7 +94,7 @@ public:
 	Sets the number of segments when rotating around the cylinder (default=16)
 	\exception Ogre::InvalidParametersException Minimum of numSegments is 1
 	*/
-	inline CapsuleGenerator & setNumSegments(unsigned int numSegments)
+	inline CapsuleGenerator& setNumSegments(unsigned int numSegments)
 	{
 		if (numSegments == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CapsuleGenerator::setNumSegments(unsigned int)");
@@ -106,7 +106,7 @@ public:
 	Sets the number of segments along the axis of the cylinder (default=1)
 	\exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	*/
-	inline CapsuleGenerator & setNumSegHeight(unsigned int numSegHeight)
+	inline CapsuleGenerator& setNumSegHeight(unsigned int numSegHeight)
 	{
 		if (numSegHeight == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CapsuleGenerator::setNumSegHeight(unsigned int)");
@@ -118,7 +118,7 @@ public:
 	Sets the height of the cylinder part of the capsule (default=1)
 	\exception Ogre::InvalidParametersException Height must be larger than 0!
 	*/
-	inline CapsuleGenerator & setHeight(Ogre::Real height)
+	inline CapsuleGenerator& setHeight(Ogre::Real height)
 	{
 		if (height <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::CapsuleGenerator::setHeight(Ogre::Real)");

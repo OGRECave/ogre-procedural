@@ -63,7 +63,7 @@ public:
 	Sets the number of segments on the side of the base (default=16)
 	\exception Ogre::InvalidParametersException Minimum of numSegBase is 1
 	*/
-	inline ConeGenerator & setNumSegBase(unsigned int numSegBase)
+	inline ConeGenerator& setNumSegBase(unsigned int numSegBase)
 	{
 		if (numSegBase == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::ConeGenerator::setNumSegBase(unsigned int)");
@@ -75,7 +75,7 @@ public:
 	Sets the number of segments on the height (default=1)
 	\exception Ogre::InvalidParametersException Minimum of numSegHeight is 1
 	*/
-	inline ConeGenerator & setNumSegHeight(unsigned int numSegHeight)
+	inline ConeGenerator& setNumSegHeight(unsigned int numSegHeight)
 	{
 		if (numSegHeight == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::ConeGenerator::setNumSegHeight(unsigned int)");
@@ -87,7 +87,7 @@ public:
 	Sets the base radius (default=1)
 	\exception Ogre::InvalidParametersException Radius must be larger than 0!
 	*/
-	inline ConeGenerator & setRadius(Ogre::Real radius)
+	inline ConeGenerator& setRadius(Ogre::Real radius)
 	{
 		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::ConeGenerator::setRadius(Ogre::Real)");
@@ -99,7 +99,7 @@ public:
 	Sets the height of the cone (default=1)
 	\exception Ogre::InvalidParametersException Height must be larger than 0!
 	*/
-	inline ConeGenerator & setHeight(Ogre::Real height)
+	inline ConeGenerator& setHeight(Ogre::Real height)
 	{
 		if (height <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::ConeGenerator::setHeight(Ogre::Real)");

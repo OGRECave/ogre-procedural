@@ -35,44 +35,44 @@ using namespace Ogre;
 namespace Procedural
 {
 
-Cell & Cell::setColour(Ogre::ColourValue colour)
+Cell& Cell::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
 	return *this;
 }
 
-Cell & Cell::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Cell& Cell::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Cell & Cell::setSeed(Ogre::uint seed)
+Cell& Cell::setSeed(Ogre::uint seed)
 {
 	mSeed = seed;
 	return *this;
 }
 
-Cell & Cell::setRegularity(Ogre::uchar regularity)
+Cell& Cell::setRegularity(Ogre::uchar regularity)
 {
 	mRegularity = regularity;
 	return *this;
 }
 
-Cell & Cell::setDensity(Ogre::uint density)
+Cell& Cell::setDensity(Ogre::uint density)
 {
 	mDensity = density;
 	if (mDensity == 0) mDensity = 1;
 	return *this;
 }
 
-Cell & Cell::setMode(Cell::CELL_MODE mode)
+Cell& Cell::setMode(Cell::CELL_MODE mode)
 {
 	mMode = mode;
 	return *this;
 }
 
-Cell & Cell::setPattern(Cell::CELL_PATTERN pattern)
+Cell& Cell::setPattern(Cell::CELL_PATTERN pattern)
 {
 	mPattern = pattern;
 	return *this;
@@ -182,19 +182,19 @@ TextureBufferPtr Cell::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Cloud & Cloud::setColour(Ogre::ColourValue colour)
+Cloud& Cloud::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
 	return *this;
 }
 
-Cloud & Cloud::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Cloud& Cloud::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Cloud & Cloud::setSeed(Ogre::uint seed)
+Cloud& Cloud::setSeed(Ogre::uint seed)
 {
 	mSeed = seed;
 	return *this;
@@ -226,55 +226,55 @@ TextureBufferPtr Cloud::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Gradient & Gradient::setColourA(Ogre::ColourValue colour)
+Gradient& Gradient::setColourA(Ogre::ColourValue colour)
 {
 	mColourA = colour;
 	return *this;
 }
 
-Gradient & Gradient::setColourA(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Gradient& Gradient::setColourA(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourA = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Gradient & Gradient::setColourB(Ogre::ColourValue colour)
+Gradient& Gradient::setColourB(Ogre::ColourValue colour)
 {
 	mColourB = colour;
 	return *this;
 }
 
-Gradient & Gradient::setColourB(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Gradient& Gradient::setColourB(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourB = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Gradient & Gradient::setColourC(Ogre::ColourValue colour)
+Gradient& Gradient::setColourC(Ogre::ColourValue colour)
 {
 	mColourC = colour;
 	return *this;
 }
 
-Gradient & Gradient::setColourC(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Gradient& Gradient::setColourC(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourC = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Gradient & Gradient::setColourD(Ogre::ColourValue colour)
+Gradient& Gradient::setColourD(Ogre::ColourValue colour)
 {
 	mColourD = colour;
 	return *this;
 }
 
-Gradient & Gradient::setColourD(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Gradient& Gradient::setColourD(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourD = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Gradient & Gradient::setColours(Ogre::ColourValue colourA, Ogre::ColourValue colourB, Ogre::ColourValue colourC, Ogre::ColourValue colourD)
+Gradient& Gradient::setColours(Ogre::ColourValue colourA, Ogre::ColourValue colourB, Ogre::ColourValue colourC, Ogre::ColourValue colourD)
 {
 	mColourA = colourA;
 	mColourB = colourB;
@@ -308,7 +308,7 @@ TextureBufferPtr Gradient::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Image & Image::setFile(Ogre::String filename, Ogre::String groupname)
+Image& Image::setFile(Ogre::String filename, Ogre::String groupname)
 {
 	mFile = filename;
 	mGroup = groupname;
@@ -335,19 +335,19 @@ TextureBufferPtr Image::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Labyrinth & Labyrinth::setColour(Ogre::ColourValue colour)
+Labyrinth& Labyrinth::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
 	return *this;
 }
 
-Labyrinth & Labyrinth::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Labyrinth& Labyrinth::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Labyrinth & Labyrinth::setSeed(Ogre::uint seed)
+Labyrinth& Labyrinth::setSeed(Ogre::uint seed)
 {
 	mSeed = seed;
 	return *this;
@@ -379,19 +379,19 @@ TextureBufferPtr Labyrinth::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Marble & Marble::setColour(Ogre::ColourValue colour)
+Marble& Marble::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
 	return *this;
 }
 
-Marble & Marble::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Marble& Marble::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Marble & Marble::setSeed(Ogre::uint seed)
+Marble& Marble::setSeed(Ogre::uint seed)
 {
 	mSeed = seed;
 	return *this;
@@ -425,25 +425,25 @@ TextureBuffer* Marble::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Noise & Noise::setColour(Ogre::ColourValue colour)
+Noise& Noise::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
 	return *this;
 }
 
-Noise & Noise::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Noise& Noise::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Noise & Noise::setSeed(Ogre::uint seed)
+Noise& Noise::setSeed(Ogre::uint seed)
 {
 	mSeed = seed;
 	return *this;
 }
 
-Noise & Noise::setType(NOISE_TYPE type)
+Noise& Noise::setType(NOISE_TYPE type)
 {
 	mType = type;
 	return *this;
@@ -485,13 +485,13 @@ TextureBufferPtr Noise::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Solid & Solid::setColour(Ogre::ColourValue colour)
+Solid& Solid::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
 	return *this;
 }
 
-Solid & Solid::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Solid& Solid::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
@@ -513,19 +513,19 @@ TextureBufferPtr Solid::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Textile & Textile::setColour(Ogre::ColourValue colour)
+Textile& Textile::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
 	return *this;
 }
 
-Textile & Textile::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Textile& Textile::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Textile & Textile::setSeed(Ogre::uint seed)
+Textile& Textile::setSeed(Ogre::uint seed)
 {
 	mSeed = seed;
 	return *this;
@@ -557,25 +557,25 @@ TextureBufferPtr Textile::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Wood & Wood::setColour(Ogre::ColourValue colour)
+Wood& Wood::setColour(Ogre::ColourValue colour)
 {
 	mColour = colour;
 	return *this;
 }
 
-Wood & Wood::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+Wood& Wood::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColour = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Wood & Wood::setSeed(Ogre::uint seed)
+Wood& Wood::setSeed(Ogre::uint seed)
 {
 	mSeed = seed;
 	return *this;
 }
 
-Wood & Wood::setRings(Ogre::uint rings)
+Wood& Wood::setRings(Ogre::uint rings)
 {
 	mRings = rings;
 	if (mRings < 3) mRings = 3;

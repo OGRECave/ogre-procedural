@@ -64,7 +64,7 @@ public:
 	Sets the number of segements along local X axis
 	\exception Ogre::InvalidParametersException Minimum of numSegX is 1
 	*/
-	inline PlaneGenerator & setNumSegX(unsigned int numSegX)
+	inline PlaneGenerator& setNumSegX(unsigned int numSegX)
 	{
 		if (numSegX == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::PlaneGenerator::setNumSegX(unsigned int)");
@@ -76,7 +76,7 @@ public:
 	Sets the number of segments along local Y axis
 	\exception Ogre::InvalidParametersException Minimum of numSegY is 1
 	*/
-	inline PlaneGenerator & setNumSegY(unsigned int numSegY)
+	inline PlaneGenerator& setNumSegY(unsigned int numSegY)
 	{
 		if (numSegY == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::PlaneGenerator::setNumSegY(unsigned int)");
@@ -88,7 +88,7 @@ public:
 	Sets the normal of the plane
 	\exception Ogre::InvalidParametersException Normal must not be null
 	*/
-	inline PlaneGenerator & setNormal(Ogre::Vector3 normal)
+	inline PlaneGenerator& setNormal(Ogre::Vector3 normal)
 	{
 		if (mNormal.isZeroLength())
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Normal must not be null", "Procedural::PlaneGenerator::setNormal(unsigned int)");
@@ -100,7 +100,7 @@ public:
 	Sets the size of the plane along local X axis
 	\exception Ogre::InvalidParametersException X size must be larger than 0!
 	*/
-	inline PlaneGenerator & setSizeX(Ogre::Real sizeX)
+	inline PlaneGenerator& setSizeX(Ogre::Real sizeX)
 	{
 		if (sizeX <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "X size must be larger than 0!", "Procedural::BoxGenerator::setSizeX(Ogre::Real)");
@@ -112,7 +112,7 @@ public:
 	Sets the size of the plane along local Y axis
 	\exception Ogre::InvalidParametersException Y size must be larger than 0!
 	*/
-	inline PlaneGenerator & setSizeY(Ogre::Real sizeY)
+	inline PlaneGenerator& setSizeY(Ogre::Real sizeY)
 	{
 		if (sizeY <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Y size must be larger than 0!", "Procedural::BoxGenerator::setSizeY(Ogre::Real)");
@@ -121,7 +121,7 @@ public:
 	}
 
 	/** Sets the size (default=1,1) */
-	inline PlaneGenerator & setSize(Ogre::Vector2 size)
+	inline PlaneGenerator& setSize(Ogre::Vector2 size)
 	{
 		setSizeX(size.x);
 		setSizeY(size.y);

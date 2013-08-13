@@ -185,9 +185,9 @@ class ScriptInterpreter : public BaseApplication
 	}
 
 protected:
-	bool keyReleased( const OIS::KeyEvent &arg );
+	bool keyReleased( const OIS::KeyEvent& arg );
 
-	bool keyPressed(const OIS::KeyEvent &arg)
+	bool keyPressed(const OIS::KeyEvent& arg)
 	{
 		return BaseApplication::keyPressed(arg);
 	}
@@ -219,7 +219,7 @@ protected:
 	size_t mCurrentScriptIndex;
 
 public:
-	bool processInput(int argc, char *argv[]);
+	bool processInput(int argc, char* argv[]);
 
 	void addTextureBuffer(const TextureBuffer* tb)
 	{

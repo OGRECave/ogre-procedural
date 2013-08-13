@@ -131,7 +131,7 @@ void ScriptInterpreter::reloadScript()
 	reloadScriptNameFromIndex();
 	String path = *ResourceGroupManager::getSingleton().findResourceLocation("Scripts", "*")->begin();
 
-	lua_State *L;
+	lua_State* L;
 	L=luaL_newstate();
 	luaL_openlibs(L);
 	luaopen_Procedural(L);	// load the wrappered module
@@ -236,7 +236,7 @@ bool ScriptInterpreter::frameStarted(const FrameEvent& evt)
 	return true;
 }
 //-------------------------------------------------------------------------------------
-bool ScriptInterpreter::keyReleased( const OIS::KeyEvent &arg )
+bool ScriptInterpreter::keyReleased( const OIS::KeyEvent& arg )
 {
 	if (!mBatchMode)
 	{
@@ -277,7 +277,7 @@ void ScriptInterpreter::writePerformanceFile()
 	perfFile.close();
 }
 //-------------------------------------------------------------------------------------
-bool ScriptInterpreter::processInput(int argc, char *argv[])
+bool ScriptInterpreter::processInput(int argc, char* argv[])
 {
 	mBatchMode = false;
 	mScriptSourceMode = SSM_RESOURCES;
@@ -337,7 +337,7 @@ bool ScriptInterpreter::processInput(int argc, char *argv[])
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
 #endif
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	ScriptInterpreter app;
 

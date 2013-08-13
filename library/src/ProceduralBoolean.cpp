@@ -68,7 +68,7 @@ inline Segment2D projectOnAxis(const Segment3D& input, const Vector3& origin, co
 struct Seg3Comparator
 {
 
-	bool operator()(const Segment3D& one, const Segment3D & two) const
+	bool operator()(const Segment3D& one, const Segment3D& two) const
 	{
 		if (one.epsilonEquivalent(two)) return false;
 

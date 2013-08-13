@@ -76,7 +76,7 @@ public:
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	/** Sets the shape to extrude. Mutually exclusive with setMultiShapeToExtrude. */
-	inline Extruder & setShapeToExtrude(Shape* shapeToExtrude)
+	inline Extruder& setShapeToExtrude(Shape* shapeToExtrude)
 	{
 		mMultiShapeToExtrude = 0;
 		mShapeToExtrude = shapeToExtrude;
@@ -84,7 +84,7 @@ public:
 	}
 
 	/** Sets the multishape to extrude. Mutually exclusive with setShapeToExtrude. */
-	inline Extruder & setMultiShapeToExtrude(MultiShape* multiShapeToExtrude)
+	inline Extruder& setMultiShapeToExtrude(MultiShape* multiShapeToExtrude)
 	{
 		mShapeToExtrude = 0;
 		mMultiShapeToExtrude = multiShapeToExtrude;
@@ -92,7 +92,7 @@ public:
 	}
 
 	/** Sets the extrusion path */
-	inline Extruder & setExtrusionPath(Path* extrusionPath)
+	inline Extruder& setExtrusionPath(Path* extrusionPath)
 	{
 		mExtrusionPath = extrusionPath;
 		return *this;
@@ -128,7 +128,7 @@ public:
 	}
 
 	/** Sets whether caps are added to the extremities or not (not closed paths only) */
-	inline Extruder & setCapped(bool capped)
+	inline Extruder& setCapped(bool capped)
 	{
 		mCapped = capped;
 		return *this;

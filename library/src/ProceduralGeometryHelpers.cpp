@@ -180,7 +180,7 @@ bool Line2D::findIntersect(const Line2D& other, Vector2& intersection) const
 }
 //-----------------------------------------------------------------------
 
-void isect(Real VV0,Real VV1,Real VV2,Real D0, Real D1,Real D2,Real& isect0,Real&isect1)
+void isect(Real VV0,Real VV1,Real VV2,Real D0, Real D1,Real D2,Real& isect0,Real& isect1)
 {
 	isect0=VV0+(VV1-VV0)*D0/(D0-D1);
 	isect1=VV0+(VV2-VV0)*D0/(D0-D2);
