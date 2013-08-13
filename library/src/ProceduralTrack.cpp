@@ -4,7 +4,7 @@ This source file is part of ogre-procedural
 
 For the latest info, see http://www.ogreprocedural.org
 
-Copyright (c) 2010-2012 Michael Broutin
+Copyright (c) 2010-2013 Michael Broutin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
