@@ -41,7 +41,7 @@ Elements for procedural texture creation.
 */
 
 
-/** 
+/**
 \brief Create a texture consisting of cells aligned in a grid, or a chessboard.
 \details Cells can be irregular. If considered bump map, they have pyramid form.
 
@@ -74,16 +74,16 @@ public:
 	//! Mode how to paint cells
 	enum CELL_MODE
 	{
-		MODE_GRID,		//!< Paint cells on a grid
-		MODE_CHESSBOARD	//!< Paint cells on a chessboard
+	    MODE_GRID,		//!< Paint cells on a grid
+	    MODE_CHESSBOARD	//!< Paint cells on a chessboard
 	};
 
 	//! Mode how to construct cells
 	enum CELL_PATTERN
 	{
-		PATTERN_BOTH,	//!< PATTERN_CROSS | PATTERN_CONE
-		PATTERN_CROSS,	//!< Construct cells from vertices
-		PATTERN_CONE	//!< Construct cells from cicles
+	    PATTERN_BOTH,	//!< PATTERN_CROSS | PATTERN_CONE
+	    PATTERN_CROSS,	//!< Construct cells from vertices
+	    PATTERN_CONE	//!< Construct cells from cicles
 	};
 
 private:
@@ -160,7 +160,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Creates a cloud structured image.
 \details Creates a cloud structure from a specified perlin noise on a coloured background.
 
@@ -192,7 +192,7 @@ public:
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
 	Cloud & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Sets the colour of the background
 	\param red Red value of background colour [0.0, 1.0] \(default 1.0)
@@ -215,7 +215,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Fills full image with given colour gradients.
 \details Each corner of the image has unique color.
 
@@ -249,7 +249,7 @@ public:
 	\param colour New colour in the top left corner for processing (default Ogre::ColourValue::Blue)
 	*/
 	Gradient & setColourA(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour in the top left corner of the image.
 	\param red Red value of new colour in the top left corner [0.0, 1.0] \(default 0.0)
@@ -279,7 +279,7 @@ public:
 	\param colour New colour in the bottom left corner for processing (default Ogre::ColourValue::Red)
 	*/
 	Gradient & setColourC(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour in the bottom left corner of the image.
 	\param red Red value of new colour in the bottom left corner [0.0, 1.0] \(default 1.0)
@@ -294,7 +294,7 @@ public:
 	\param colour New colour in the bottom right corner for processing (default Ogre::ColourValue(0.0f, 1.0f, 1.0f))
 	*/
 	Gradient & setColourD(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour in the bottom right corner of the image.
 	\param red Red value of new colour in the bottom right corner [0.0, 1.0] \(default 0.0)
@@ -320,7 +320,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Load an image from a resource.
 \details Try to load an image from a resource.
 
@@ -361,7 +361,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Creates a labyrinth structured image.
 \details Creates a labyrinth structure from a specified perlin noise on a coloured background.
 
@@ -393,7 +393,7 @@ public:
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
 	Labyrinth & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Sets the colour of the background
 	\param red Red value of background colour [0.0, 1.0] \(default 1.0)
@@ -416,7 +416,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Creates a marble structured image.
 \details Creates a marbel structure from a specified perlin noise on a coloured background.
 
@@ -448,7 +448,7 @@ public:
 	\param colour New colour for marble structure (default Ogre::ColourValue::White)
 	*/
 	Marble & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour of the background.
 	\param red Red value of the marble structure colour [0.0, 1.0] \(default 1.0)
@@ -496,8 +496,8 @@ public:
 	//! Noise generator type
 	enum NOISE_TYPE
 	{
-		NOISE_WHITE,	//!< White noise
-		NOISE_PERLIN	//!< Perlin noise
+	    NOISE_WHITE,	//!< White noise
+	    NOISE_PERLIN	//!< Perlin noise
 	};
 
 private:
@@ -520,7 +520,7 @@ public:
 	\param colour New colour of the noise (default Ogre::ColourValue::White)
 	*/
 	Noise & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour of the noise.
 	\param red Red value of the noise colour [0.0, 1.0] \(default 1.0)
@@ -549,7 +549,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Fills full image with given colour.
 \details Set all pixel to the same color.
 
@@ -597,7 +597,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Creates a textile structured image.
 \details Creates a textile structure from a specified perlin noise on a coloured background.
 
@@ -629,7 +629,7 @@ public:
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
 	Textile & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour of the background.
 	\param red Red value of background colour [0.0, 1.0] \(default 1.0)
@@ -685,7 +685,7 @@ public:
 	\param colour New colour for background (default Ogre::ColourValue::White)
 	*/
 	Wood & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour of the background.
 	\param red Red value of background colour [0.0, 1.0] \(default 1.0)

@@ -40,8 +40,10 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	if (mCapped)
 	{
 		buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1)+2*(mNumSegBase+1)+2);
-		buffer.estimateIndexCount(mNumSegHeight*(mNumSegBase+1)*6+6*mNumSegBase);		
-	} else {
+		buffer.estimateIndexCount(mNumSegHeight*(mNumSegBase+1)*6+6*mNumSegBase);
+	}
+	else
+	{
 		buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1));
 		buffer.estimateIndexCount(mNumSegHeight*(mNumSegBase+1)*6);
 	}
@@ -56,12 +58,12 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		{
 			Real x0 = mRadius * cosf(j*deltaAngle);
 			Real z0 = mRadius * sinf(j*deltaAngle);
-			
-			addPoint(buffer, Vector3(x0, i*deltaHeight, z0),
-				Vector3(x0,0,z0).normalisedCopy(),
-				Vector2(j/(Real)mNumSegBase, i/(Real)mNumSegHeight));
 
-			if (i != mNumSegHeight) 
+			addPoint(buffer, Vector3(x0, i*deltaHeight, z0),
+			         Vector3(x0,0,z0).normalisedCopy(),
+			         Vector2(j/(Real)mNumSegBase, i/(Real)mNumSegHeight));
+
+			if (i != mNumSegHeight)
 			{
 				buffer.index(offset + mNumSegBase + 1);
 				buffer.index(offset);
@@ -77,17 +79,17 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		//low cap
 		int centerIndex = offset;
 		addPoint(buffer, Vector3::ZERO,
-						 Vector3::NEGATIVE_UNIT_Y,
-						 Vector2::ZERO);
+		         Vector3::NEGATIVE_UNIT_Y,
+		         Vector2::ZERO);
 		offset++;
-		for (unsigned int j=0;j<=mNumSegBase;j++)
+		for (unsigned int j=0; j<=mNumSegBase; j++)
 		{
 			Real x0 =  cosf(j*deltaAngle);
 			Real z0 =  sinf(j*deltaAngle);
 
 			addPoint(buffer, Vector3(mRadius*x0, 0.0f, mRadius*z0),
-							Vector3::NEGATIVE_UNIT_Y,
-							Vector2(x0, z0));
+			         Vector3::NEGATIVE_UNIT_Y,
+			         Vector2(x0, z0));
 			if (j!=mNumSegBase)
 			{
 				buffer.index(centerIndex);
@@ -99,17 +101,17 @@ void CylinderGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		// high cap
 		centerIndex = offset;
 		addPoint(buffer, Vector3(0,mHeight,0),
-						 Vector3::UNIT_Y,
-						 Vector2::ZERO);
+		         Vector3::UNIT_Y,
+		         Vector2::ZERO);
 		offset++;
-		for (unsigned int j=0;j<=mNumSegBase;j++)
+		for (unsigned int j=0; j<=mNumSegBase; j++)
 		{
 			Real x0 = cosf(j*deltaAngle);
 			Real z0 = sinf(j*deltaAngle);
 
 			addPoint(buffer, Vector3(x0 * mRadius, mHeight, mRadius * z0),
-							 Vector3::UNIT_Y,
-							 Vector2(x0, z0));
+			         Vector3::UNIT_Y,
+			         Vector2(x0, z0));
 			if (j!=mNumSegBase)
 			{
 				buffer.index(centerIndex);

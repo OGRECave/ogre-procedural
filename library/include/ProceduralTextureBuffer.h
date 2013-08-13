@@ -54,9 +54,9 @@ private:
 	Ogre::uchar* mPixels;
 	Ogre::uint mWidth;
 	Ogre::uint mHeight;
-	
+
 public:
-	
+
 	/**
 	\brief Set colour of a specified pixel
 	\param x X position of pixel to paint on (0 <= x < width)
@@ -261,7 +261,7 @@ public:
 	\exception Ogre::InvalidParametersException Pixel location is out of bounds!
 	*/
 	Ogre::Real getPixelAlphaReal(size_t x, size_t y) const;
-	
+
 	/**
 	\brief Create a copy of the current texture image buffer
 	\note You have to delete cloned object by yourself!
@@ -286,10 +286,16 @@ public:
 	~TextureBuffer();
 
 	/// Get the width of the stored image in px
-	inline Ogre::uint getWidth() const { return mWidth; }
+	inline Ogre::uint getWidth() const
+	{
+		return mWidth;
+	}
 
 	/// Get the height of the stored image in px
-	inline Ogre::uint getHeight() const { return mHeight; }
+	inline Ogre::uint getHeight() const
+	{
+		return mHeight;
+	}
 
 	/// Create a new image from buffer.
 	Ogre::Image* getImage() const;
@@ -326,7 +332,7 @@ public:
 	\exception Ogre::InvalidParametersException Texture buffer is not set!
 	*/
 	TextureProcessing(TextureBufferPtr pBuffer, Ogre::String name);
-	
+
 	/** Run processing algorithmus */
 	virtual TextureBufferPtr process() =0;
 

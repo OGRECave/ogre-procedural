@@ -4,12 +4,12 @@ Filename:    BaseApplication.h
 -----------------------------------------------------------------------------
 
 This source file is part of the
-   ___                 __    __ _ _    _ 
+   ___                 __    __ _ _    _
   /___\__ _ _ __ ___  / / /\ \ (_) | _(_)
  //  // _` | '__/ _ \ \ \/  \/ / | |/ / |
 / \_// (_| | | |  __/  \  /\  /| |   <| |
 \___/ \__, |_|  \___|   \/  \/ |_|_|\_\_|
-	  |___/                              
+	  |___/
 	  Tutorial Framework
 	  http://www.ogre3d.org/tikiwiki/
 -----------------------------------------------------------------------------
@@ -87,17 +87,17 @@ protected:
 	void putMesh3(const std::string& meshName, const Ogre::Vector3& position = Ogre::Vector3::ZERO);
 
 	Ogre::Root *mRoot;
-	Ogre::Camera* mCamera;	
+	Ogre::Camera* mCamera;
 	Ogre::Light* movingLight;
 	Ogre::SceneManager* mSceneMgr;
 	Ogre::RenderWindow* mWindow;
 	Ogre::String mResourcesCfg;
 	Ogre::String mPluginsCfg;
-	
+
 	// OgreBites
-	#ifdef OGRE_EXTERNAL_OVERLAY
+#ifdef OGRE_EXTERNAL_OVERLAY
 	Ogre::OverlaySystem* mOverlaySystem;       // Overlay system
-	#endif
+#endif
 	OgreBites::SdkTrayManager* mTrayMgr;
 	OgreBites::SdkCameraMan* mCameraMan;       // basic camera controller
 	OgreBites::ParamsPanel* mDetailsPanel;     // sample details panel

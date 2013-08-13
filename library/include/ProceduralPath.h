@@ -98,7 +98,7 @@ public:
 		mPoints.insert(mPoints.end(), other.mPoints.begin(), other.mPoints.end());
 		return *this;
 	}
-	
+
 	/// Appends another path at the end of this one, relative to the last point of this path
 	inline Path& appendPathRel(const Path& other)
 	{
@@ -114,7 +114,7 @@ public:
 		}
 		return *this;
 	}
-	
+
 	/** Clears the content of the Path */
 	Path& reset()
 	{
@@ -128,12 +128,12 @@ public:
 	*/
 	Path& close()
 	{
-		if(mPoints.empty())
+		if (mPoints.empty())
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Cannot close an empty path", "Procedural::Path::close()");
 		mClosed = true;
 		return *this;
 	}
-	
+
 	/** Tells if the path is closed or not */
 	bool isClosed()
 	{
@@ -204,7 +204,7 @@ public:
 	 */
 	Ogre::Vector3 getAvgDirection(unsigned int i) const
 	{
-	    return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
+		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
 	}
 
 	/// Returns the total lineic length of that shape
@@ -217,41 +217,41 @@ public:
 	/// @exception Ogre::InvalidParametersException coord must be comprised between 0 and 1
 	inline Ogre::Vector3 getPosition(unsigned int i, Ogre::Real coord) const
 	{
-		if(i >= mPoints.size())
+		if (i >= mPoints.size())
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Out of Bounds", "Procedural::Path::getPosition(unsigned int, Ogre::Real)");
-		if(coord < 0.0f || coord > 1.0f)
+		if (coord < 0.0f || coord > 1.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Coord must be comprised between 0 and 1", "Procedural::Path::getPosition(unsigned int, Ogre::Real)");
 		Ogre::Vector3 A = getPoint(i);
 		Ogre::Vector3 B = getPoint(i+1);
 		return A + coord*(B-A);
 	}
-	
+
 	/// Gets a position on the shape from lineic coordinate
 	/// @param coord lineic coordinate
 	/// @exception Ogre::InvalidStateException The path must at least contain 2 points
-	 Ogre::Vector3 getPosition(Ogre::Real coord) const;
+	Ogre::Vector3 getPosition(Ogre::Real coord) const;
 
 	/**
 	 * Outputs a mesh representing the path.
 	 * Mostly for debugging purposes
 	 */
 	Ogre::MeshPtr realizeMesh(const std::string& name = "") const;
-	
+
 	/// Creates a path with the keys of this path and extra keys coming from a track
 	Path mergeKeysWithTrack(const Track& track) const;
 
-		/**
-	 * Applies the given translation to all the points already defined.
-	 * Has strictly no effect on the points defined after that
-	 * @param translation the translation vector
-	 */
+	/**
+	* Applies the given translation to all the points already defined.
+	* Has strictly no effect on the points defined after that
+	* @param translation the translation vector
+	*/
 	Path& translate(const Ogre::Vector3& translation)
 	{
 		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 			*it+=translation;
 		return *this;
 	}
-		
+
 	/**
 	 * Applies the given translation to all the points already defined.
 	 * Has strictly no effect on the points defined after that
@@ -268,7 +268,7 @@ public:
 	 * Applies the given scale to all the points already defined.
 	 * Has strictly no effect on the points defined after that
 	 * @param amount amount of scale
-	 */	
+	 */
 	Path& scale(Ogre::Real amount)
 	{
 		return scale(amount, amount, amount);
@@ -280,13 +280,13 @@ public:
 	 * @param scaleX amount of scale in the X direction
 	 * @param scaleY amount of scale in the Y direction
 	 * @param scaleZ amount of scale in the Z direction
-	 */	
+	 */
 	Path& scale(Ogre::Real scaleX, Ogre::Real scaleY, Ogre::Real scaleZ)
 	{
 		for (std::vector<Ogre::Vector3>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 		{
 			it->x *= scaleX;
-			it->y *= scaleY;			
+			it->y *= scaleY;
 			it->z *= scaleZ;
 		}
 		return *this;
@@ -296,7 +296,7 @@ public:
 	 * Applies the given scale to all the points already defined.
 	 * Has strictly no effect on the points defined after that
 	 * @param amount of scale
-	 */	
+	 */
 	Path& scale(const Ogre::Vector3& amount)
 	{
 		return scale(amount.x, amount.y, amount.z);
@@ -321,7 +321,7 @@ public:
 	inline Path extractSubPath(unsigned int first, unsigned int last)
 	{
 		Path p;
-		for (unsigned int i=first;i<last;i++)
+		for (unsigned int i=first; i<last; i++)
 			p.addPoint(mPoints[i]);
 		if (mClosed)
 			p.close();

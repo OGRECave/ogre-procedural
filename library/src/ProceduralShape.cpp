@@ -42,7 +42,7 @@ Side Shape::findRealOutSide() const
 {
 	Ogre::Real x = mPoints[0].x;
 	int index=0;
-	for (unsigned short i=1;i<mPoints.size();i++)
+	for (unsigned short i=1; i<mPoints.size(); i++)
 	{
 		if (x < mPoints[i].x)
 		{
@@ -120,12 +120,17 @@ MultiShape Shape::booleanDifference(const Shape& other) const
 //-----------------------------------------------------------------------
 bool Shape::_isLookingForOutside(BooleanOperationType opType, char shapeSelector) const
 {
-	switch(opType)
+	switch (opType)
 	{
-		case BOT_UNION: return true;
-		case BOT_INTERSECTION: return false;
-		case BOT_DIFFERENCE: if (shapeSelector == 0) return true;return false;
-		default : return true;
+	case BOT_UNION:
+		return true;
+	case BOT_INTERSECTION:
+		return false;
+	case BOT_DIFFERENCE:
+		if (shapeSelector == 0) return true;
+		return false;
+	default :
+		return true;
 	}
 }
 //-----------------------------------------------------------------------
@@ -152,67 +157,70 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 {
 	if (intersection.onVertex[0] || intersection.onVertex[1])
 	{
-	// determine 4 directions with normal info
-	// if 2 normals "face each other" then you have the couple of outside directions
-	Vector2 directions[4];
-	char sides[4];
-	uint8 incomingDirection;
+		// determine 4 directions with normal info
+		// if 2 normals "face each other" then you have the couple of outside directions
+		Vector2 directions[4];
+		char sides[4];
+		uint8 incomingDirection;
 
-	// fill-in the incoming arrays
-	if (isIncreasing==0)
-		incomingDirection=255;
-	else
-		incomingDirection = shapeSelector + (isIncreasing==1?2:0);
-	for (uint8 i = 0;i<2;i++)
-		if (intersection.onVertex[i])
-		{
-			directions[i] = inputShapes[i]->getDirectionBefore(intersection.index[i]);
-			directions[2+i] = -	inputShapes[i]->getDirectionAfter(intersection.index[i]);
-		} else
-		{
-			directions[2+i] = - inputShapes[i]->getDirectionAfter(intersection.index[i]);
-			directions[i] = - directions[2+i];
-		}
-	for (uint8 i=0;i<4;i++)
-	{
-		sides[i]=(i/2==0?-1:1)*(inputShapes[i%2]->mOutSide == SIDE_RIGHT?-1:1);
-	}
-
-	bool isOutside[4];
-	std::pair<Radian, uint8> sortedDirections[4];
-
-	// sort by angle
-	for (int i=0;i<4;i++)
-	{
-		if (i==0)
-			sortedDirections[i].first = 0;
+		// fill-in the incoming arrays
+		if (isIncreasing==0)
+			incomingDirection=255;
 		else
-			sortedDirections[i].first = sides[0] * Utils::angleTo(directions[0], directions[i]);
-		sortedDirections[i].second=i;
-	}
-
-	std::sort(sortedDirections, sortedDirections+4, _sortAngles);
-
-	//find which segments are outside
-	if (sides[0] != sides[sortedDirections[1].second])
-	{
-		isOutside[0]=isOutside[sortedDirections[1].second]=true;
-		isOutside[sortedDirections[2].second]=isOutside[sortedDirections[3].second]=false;
-	} else {
-		isOutside[sortedDirections[1].second]=isOutside[sortedDirections[2].second]=true;
-		isOutside[sortedDirections[3].second]=isOutside[sortedDirections[0].second]=false;
-	}
-
-	//find first eligible segment that is not the current segment
-	for (unsigned short i=0;i<4;i++)
-		if ((isOutside[i] == _isLookingForOutside(opType, i%2)) && (i!=incomingDirection))
+			incomingDirection = shapeSelector + (isIncreasing==1?2:0);
+		for (uint8 i = 0; i<2; i++)
+			if (intersection.onVertex[i])
+			{
+				directions[i] = inputShapes[i]->getDirectionBefore(intersection.index[i]);
+				directions[2+i] = -	inputShapes[i]->getDirectionAfter(intersection.index[i]);
+			}
+			else
+			{
+				directions[2+i] = - inputShapes[i]->getDirectionAfter(intersection.index[i]);
+				directions[i] = - directions[2+i];
+			}
+		for (uint8 i=0; i<4; i++)
 		{
-			shapeSelector = i%2;
-			isIncreasing = i/2==0?1:-1;
-			currentSegment = intersection.index[shapeSelector];
-			return true;
+			sides[i]=(i/2==0?-1:1)*(inputShapes[i%2]->mOutSide == SIDE_RIGHT?-1:1);
 		}
-	// if we reach here, it means that no segment is eligible! (it should only happen with difference opereation
+
+		bool isOutside[4];
+		std::pair<Radian, uint8> sortedDirections[4];
+
+		// sort by angle
+		for (int i=0; i<4; i++)
+		{
+			if (i==0)
+				sortedDirections[i].first = 0;
+			else
+				sortedDirections[i].first = sides[0] * Utils::angleTo(directions[0], directions[i]);
+			sortedDirections[i].second=i;
+		}
+
+		std::sort(sortedDirections, sortedDirections+4, _sortAngles);
+
+		//find which segments are outside
+		if (sides[0] != sides[sortedDirections[1].second])
+		{
+			isOutside[0]=isOutside[sortedDirections[1].second]=true;
+			isOutside[sortedDirections[2].second]=isOutside[sortedDirections[3].second]=false;
+		}
+		else
+		{
+			isOutside[sortedDirections[1].second]=isOutside[sortedDirections[2].second]=true;
+			isOutside[sortedDirections[3].second]=isOutside[sortedDirections[0].second]=false;
+		}
+
+		//find first eligible segment that is not the current segment
+		for (unsigned short i=0; i<4; i++)
+			if ((isOutside[i] == _isLookingForOutside(opType, i%2)) && (i!=incomingDirection))
+			{
+				shapeSelector = i%2;
+				isIncreasing = i/2==0?1:-1;
+				currentSegment = intersection.index[shapeSelector];
+				return true;
+			}
+		// if we reach here, it means that no segment is eligible! (it should only happen with difference opereation
 		return false;
 	}
 	else
@@ -232,9 +240,9 @@ bool Shape::_findWhereToGo(const Shape* inputShapes[], BooleanOperationType opTy
 //-----------------------------------------------------------------------
 MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opType) const
 {
-	if(!mClosed || mPoints.size() < 2)
+	if (!mClosed || mPoints.size() < 2)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Current shapes must be closed and has to contain at least 2 points!", "Procedural::Shape::_booleanOperation(const Procedural::Shape&, Procedural::BooleanOperationType)");
-	if(!other.mClosed || other.mPoints.size() < 2)
+	if (!other.mClosed || other.mPoints.size() < 2)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Other shapes must be closed and has to contain at least 2 points!", "Procedural::Shape::_booleanOperation(const Procedural::Shape&, Procedural::BooleanOperationType)");
 
 	// Compute the intersection between the 2 shapes
@@ -245,7 +253,8 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 	if (intersections.empty())
 	{
 		if (isPointInside(other.getPoint(0)))
-		{// Shape B is completely inside shape A
+		{
+			// Shape B is completely inside shape A
 			if (opType == BOT_UNION)
 				return *this;
 			else if (opType == BOT_INTERSECTION)
@@ -261,7 +270,8 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 
 		}
 		else if (other.isPointInside(getPoint(0)))
-		{// Shape A is completely inside shape B
+		{
+			// Shape A is completely inside shape B
 			if (opType == BOT_UNION)
 				return other;
 			else if (opType == BOT_INTERSECTION)
@@ -329,11 +339,13 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 				if (currentSegment == it->index[shapeSelector])
 				{
 					if (((it->position-currentPosition).dotProduct(it->position-inputShapes[shapeSelector]->getPoint(nextPoint)) < 0)
-						|| (it->onVertex[shapeSelector] && nextPoint == it->index[shapeSelector]))
-					{ // found an intersection between the current one and the next segment point
+					        || (it->onVertex[shapeSelector] && nextPoint == it->index[shapeSelector]))
+					{
+						// found an intersection between the current one and the next segment point
 						float d = (it->position-currentPosition).length();
 						if (d < distanceToNextIntersection)
-						{ // check if we have the nearest intersection
+						{
+							// check if we have the nearest intersection
 							found_next_intersection = it;
 							distanceToNextIntersection = d;
 						}
@@ -344,17 +356,18 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 			}
 
 			// stop condition
-			if (currentSegment == firstIntersection.index[shapeSelector]) {
+			if (currentSegment == firstIntersection.index[shapeSelector])
+			{
 				// we found ourselves on the same segment as the first intersection and no other
-					if ((firstIntersection.position-currentPosition).dotProduct(firstIntersection.position-inputShapes[shapeSelector]->getPoint(nextPoint)) < 0)
+				if ((firstIntersection.position-currentPosition).dotProduct(firstIntersection.position-inputShapes[shapeSelector]->getPoint(nextPoint)) < 0)
+				{
+					float d = (firstIntersection.position-currentPosition).length();
+					if (d>0. && d < distanceToNextIntersection)
 					{
-						float d = (firstIntersection.position-currentPosition).length();
-						if (d>0. && d < distanceToNextIntersection)
-						{
-							outputShape.close();
-							break;
-						}
+						outputShape.close();
+						break;
 					}
+				}
 			}
 
 			// We actually found the next intersection => change direction and add current intersection to the list
@@ -370,15 +383,16 @@ MultiShape Shape::_booleanOperation(const Shape& other, BooleanOperationType opT
 				}
 			}
 			else
-			{ // no intersection found for the moment => just continue on the current segment
+			{
+				// no intersection found for the moment => just continue on the current segment
 				if (!nextPointIsOnIntersection)
 				{
-				if (isIncreasing ==1)
-					currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment+1);
-				else
-					currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment);
+					if (isIncreasing ==1)
+						currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment+1);
+					else
+						currentPosition = inputShapes[shapeSelector]->getPoint(currentSegment);
 
-				outputShape.addPoint(currentPosition);
+					outputShape.addPoint(currentPosition);
 				}
 				currentSegment=Utils::modulo(currentSegment+isIncreasing,inputShapes[shapeSelector]->getSegCount());
 			}
@@ -397,7 +411,7 @@ bool Shape::isPointInside(const Vector2& point) const
 	Real closestSegmentDistance = std::numeric_limits<Real>::max();
 	Vector2 closestSegmentIntersection(Vector2::ZERO);
 
-	for (size_t i =0;i<getSegCount();i++)
+	for (size_t i =0; i<getSegCount(); i++)
 	{
 		Vector2 A = getPoint(i);
 		Vector2 B = getPoint(i+1);
@@ -446,48 +460,48 @@ MeshPtr Shape::realizeMesh(const std::string& name) const
 //-----------------------------------------------------------------------
 void Shape::_appendToManualObject(ManualObject* manual) const
 {
-	for (std::vector<Vector2>::const_iterator itPos = mPoints.begin(); itPos != mPoints.end();itPos++)
+	for (std::vector<Vector2>::const_iterator itPos = mPoints.begin(); itPos != mPoints.end(); itPos++)
 		manual->position(Vector3(itPos->x, itPos->y, 0.f));
 	if (mClosed)
 		manual->position(Vector3(mPoints.begin()->x, mPoints.begin()->y, 0.f));
 }
 //-----------------------------------------------------------------------
 MultiShape Shape::thicken(Real amount)
+{
+	if (!mClosed)
 	{
-		if (!mClosed)
-		{
-			Shape s;
-			s.setOutSide(mOutSide);
-			for (unsigned int i=0;i<mPoints.size();i++)
-				s.addPoint(mPoints[i]+amount*getAvgNormal(i));
-			for (int i=mPoints.size()-1;i>=0;i--)
-				s.addPoint(mPoints[i]-amount*getAvgNormal(i));
-			s.close();
-			return MultiShape().addShape(s);
-		}
-		else
-		{
-			MultiShape ms;
-			Shape s1;
-			for (unsigned int i=0;i<mPoints.size();i++)
-				s1.addPoint(mPoints[i]+amount*getAvgNormal(i));
-			s1.close();
-			s1.setOutSide(mOutSide);
-			ms.addShape(s1);
-			Shape s2;
-			for (unsigned int i=0;i<mPoints.size();i++)
-				s2.addPoint(mPoints[i]-amount*getAvgNormal(i));
-			s2.close();
-			s2.setOutSide(mOutSide==SIDE_LEFT?SIDE_RIGHT:SIDE_LEFT);
-			ms.addShape(s2);
-			return ms;
-		}
+		Shape s;
+		s.setOutSide(mOutSide);
+		for (unsigned int i=0; i<mPoints.size(); i++)
+			s.addPoint(mPoints[i]+amount*getAvgNormal(i));
+		for (int i=mPoints.size()-1; i>=0; i--)
+			s.addPoint(mPoints[i]-amount*getAvgNormal(i));
+		s.close();
+		return MultiShape().addShape(s);
 	}
+	else
+	{
+		MultiShape ms;
+		Shape s1;
+		for (unsigned int i=0; i<mPoints.size(); i++)
+			s1.addPoint(mPoints[i]+amount*getAvgNormal(i));
+		s1.close();
+		s1.setOutSide(mOutSide);
+		ms.addShape(s1);
+		Shape s2;
+		for (unsigned int i=0; i<mPoints.size(); i++)
+			s2.addPoint(mPoints[i]-amount*getAvgNormal(i));
+		s2.close();
+		s2.setOutSide(mOutSide==SIDE_LEFT?SIDE_RIGHT:SIDE_LEFT);
+		ms.addShape(s2);
+		return ms;
+	}
+}
 //-----------------------------------------------------------------------
 Path Shape::convertToPath() const
 {
 	Path p;
-	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();++it)
+	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 	{
 		p.addPoint(it->x, 0, it->y);
 	}
@@ -500,7 +514,7 @@ Path Shape::convertToPath() const
 Track Shape::convertToTrack(Track::AddressingMode addressingMode) const
 {
 	Track t(addressingMode);
-	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin();it!=mPoints.end();++it)
+	for (std::vector<Ogre::Vector2>::const_iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
 	{
 		t.addKeyFrame(it->x, it->y);
 	}

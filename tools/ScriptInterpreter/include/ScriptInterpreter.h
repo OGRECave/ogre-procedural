@@ -43,122 +43,124 @@ extern "C"
 }
 
 class dotFile
-	{
-	public:
-	enum CONNECTION { JOIN, SPLIT, ROW };
-
-	private:
-		struct sItem
-		{
-			std::string mName;
-			std::string mFile;
-		};
-		std::map<int, sItem> mList;
-		struct sPair
-		{
-			int mFrom;
-			int mTo;
-		};
-		std::vector<sPair> mBinding;
-		sItem mThis;
-
-	public:
-		dotFile(std::string file, std::string name = "")
-		{
-			mThis.mFile = file;
-			mThis.mName = (name.length() > 0) ? name : file;
-		}
-
-		int add(std::string name, std::string file = "")
-		{
-			if(name.size() < 3) return -1;
-			int retVal = mList.size() + 1;
-			sItem item;
-			item.mName = name;
-			item.mFile = file;
-			mList[retVal] = item;
-			return retVal;
-		}
-
-		void bind(int from, int to)
-		{
-			if(mList.find(from) == mList.end() || mList.find(to) == mList.end()) return;
-			sPair pair;
-			pair.mFrom = from;
-			pair.mTo = to;
-			mBinding.push_back(pair);
-		}
-
-		bool save(std::string path)
-		{
-			std::ofstream dotfile((mThis.mFile + ".gv").c_str());
-			if(dotfile.is_open())
-			{
-				dotfile << "digraph " << mThis.mName << " {" << std::endl;
-				dotfile << "\tratio = \"auto\";" << std::endl << "\tmincross = 2.0;" << std::endl << std::endl;
-				for(std::map<int, sItem>::iterator iter = mList.begin(); iter != mList.end(); iter++)
-				{
-					if(iter->second.mFile.length() > 3)
-						dotfile << "\tIMG" << StringConverter::toString(iter->first) << " [shape=box,label=\"" << iter->second.mName << "\",image=\"" << path << "/" << iter->second.mFile << ".png\",labelloc=b];" << std::endl;
-					else
-						dotfile << "\tIMG" << StringConverter::toString(iter->first) << " [shape=circle,label=\"" << iter->second.mName << "\"];" << std::endl;
-
-				}
-				dotfile << std::endl;
-				for(std::vector<sPair>::iterator iter = mBinding.begin(); iter != mBinding.end(); iter++)
-				{
-					dotfile << "\tIMG" << StringConverter::toString(iter->mFrom) << "->IMG" << StringConverter::toString(iter->mTo) << ";" << std::endl;
-				}
-				dotfile << "}" << std::endl;
-				dotfile.close();
-				return true;
-			}
-			else
-				return false;
-		}
-
-		void set(std::string img1_name, std::string img1_file, std::string img2_name, std::string img2_file)
-		{
-			int a1 = add(img1_name, img1_file);
-			int a2 = add(img2_name, img2_file);
-			bind(a1, a2);
-		}
-
-		void set(std::string img1_name, std::string img1_file, std::string img2_name, std::string img2_file, std::string img3_name, std::string img3_file, CONNECTION cn = JOIN)
-		{
-			int a1 = add(img1_name, img1_file);
-			int a2 = add(img2_name, img2_file);
-			int a3 = add(img3_name, img3_file);
-			switch(cn)
-			{
-				default:
-				case JOIN:
-					bind(a1, a3);
-					bind(a2, a3);
-					break;
-
-				case SPLIT:
-					bind(a1, a2);
-					bind(a1, a3);
-					break;
-
-				case ROW:
-					bind(a1, a2);
-					bind(a2, a3);
-			}
-		}
+{
+public:
+	enum CONNECTION {
+		JOIN, SPLIT, ROW
 	};
+
+private:
+	struct sItem
+	{
+		std::string mName;
+		std::string mFile;
+	};
+	std::map<int, sItem> mList;
+	struct sPair
+	{
+		int mFrom;
+		int mTo;
+	};
+	std::vector<sPair> mBinding;
+	sItem mThis;
+
+public:
+	dotFile(std::string file, std::string name = "")
+	{
+		mThis.mFile = file;
+		mThis.mName = (name.length() > 0) ? name : file;
+	}
+
+	int add(std::string name, std::string file = "")
+	{
+		if (name.size() < 3) return -1;
+		int retVal = mList.size() + 1;
+		sItem item;
+		item.mName = name;
+		item.mFile = file;
+		mList[retVal] = item;
+		return retVal;
+	}
+
+	void bind(int from, int to)
+	{
+		if (mList.find(from) == mList.end() || mList.find(to) == mList.end()) return;
+		sPair pair;
+		pair.mFrom = from;
+		pair.mTo = to;
+		mBinding.push_back(pair);
+	}
+
+	bool save(std::string path)
+	{
+		std::ofstream dotfile((mThis.mFile + ".gv").c_str());
+		if (dotfile.is_open())
+		{
+			dotfile << "digraph " << mThis.mName << " {" << std::endl;
+			dotfile << "\tratio = \"auto\";" << std::endl << "\tmincross = 2.0;" << std::endl << std::endl;
+			for (std::map<int, sItem>::iterator iter = mList.begin(); iter != mList.end(); iter++)
+			{
+				if (iter->second.mFile.length() > 3)
+					dotfile << "\tIMG" << StringConverter::toString(iter->first) << " [shape=box,label=\"" << iter->second.mName << "\",image=\"" << path << "/" << iter->second.mFile << ".png\",labelloc=b];" << std::endl;
+				else
+					dotfile << "\tIMG" << StringConverter::toString(iter->first) << " [shape=circle,label=\"" << iter->second.mName << "\"];" << std::endl;
+
+			}
+			dotfile << std::endl;
+			for (std::vector<sPair>::iterator iter = mBinding.begin(); iter != mBinding.end(); iter++)
+			{
+				dotfile << "\tIMG" << StringConverter::toString(iter->mFrom) << "->IMG" << StringConverter::toString(iter->mTo) << ";" << std::endl;
+			}
+			dotfile << "}" << std::endl;
+			dotfile.close();
+			return true;
+		}
+		else
+			return false;
+	}
+
+	void set(std::string img1_name, std::string img1_file, std::string img2_name, std::string img2_file)
+	{
+		int a1 = add(img1_name, img1_file);
+		int a2 = add(img2_name, img2_file);
+		bind(a1, a2);
+	}
+
+	void set(std::string img1_name, std::string img1_file, std::string img2_name, std::string img2_file, std::string img3_name, std::string img3_file, CONNECTION cn = JOIN)
+	{
+		int a1 = add(img1_name, img1_file);
+		int a2 = add(img2_name, img2_file);
+		int a3 = add(img3_name, img3_file);
+		switch (cn)
+		{
+		default:
+		case JOIN:
+			bind(a1, a3);
+			bind(a2, a3);
+			break;
+
+		case SPLIT:
+			bind(a1, a2);
+			bind(a1, a3);
+			break;
+
+		case ROW:
+			bind(a1, a2);
+			bind(a2, a3);
+		}
+	}
+};
 
 class ScriptInterpreter : public BaseApplication
 {
 	Ogre::OverlayElement* mTextMessage;
-	
+
 	void reloadScript();
 	void checkScriptModified();
 
 	enum ScriptSourceMode
 	{
-		SSM_RESOURCES, SSM_SCRIPTDIR, SSM_SCRIPTFILE
+	    SSM_RESOURCES, SSM_SCRIPTDIR, SSM_SCRIPTFILE
 	};
 
 	std::map<std::string, long> mExecutionTimes;
@@ -277,7 +279,7 @@ public:
 
 	void addMaterial(const char* textureName, const char* materialName)
 	{
-		Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create(std::string(materialName), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);			
+		Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create(std::string(materialName), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		demoMaterial->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue::White);
 		demoMaterial->getTechnique(0)->getPass(0)->createTextureUnitState(std::string(textureName));
 		mMaterials.push_back(demoMaterial);
@@ -285,7 +287,7 @@ public:
 		mTextures.push_back(tex);
 	}
 
-	dotFile* getDotFile(const char* file, const char* name)	
+	dotFile* getDotFile(const char* file, const char* name)
 	{
 		mCurrentDotFile = new dotFile(file, name);
 		return mCurrentDotFile;
@@ -312,7 +314,7 @@ public:
 		delete mCurrentDotFile;
 	}
 
-	
+
 
 };
 

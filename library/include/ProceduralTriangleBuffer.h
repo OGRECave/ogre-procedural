@@ -57,7 +57,7 @@ protected:
 	Vertex* mCurrentVertex;
 
 
-	public:
+public:
 	TriangleBuffer() : globalOffset(0), mEstimatedVertexCount(0), mEstimatedIndexCount(0), mCurrentVertex(0)
 	{}
 
@@ -110,11 +110,11 @@ protected:
 	 * Builds an Ogre Mesh from this buffer.
 	 */
 	Ogre::MeshPtr transformToMesh(const std::string& name,
-        const Ogre::String& group = "General") const;
+	                              const Ogre::String& group = "General") const;
 
 	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& vertex(const Vertex& v)
-	{		
+	{
 		mVertices.push_back(v);
 		mCurrentVertex = &mVertices.back();
 		return *this;
@@ -248,7 +248,7 @@ protected:
 	/// Applies normal inversion on the triangle buffer
 	TriangleBuffer& invertNormals()
 	{
-		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end();++it)
+		for (std::vector<Vertex>::iterator it = mVertices.begin(); it!=mVertices.end(); ++it)
 		{
 			it->mNormal = -it->mNormal;
 		}
@@ -280,7 +280,7 @@ protected:
 	{
 		mEstimatedIndexCount += indexCount;
 		mIndices.reserve(mEstimatedIndexCount);
-	}	
+	}
 };
 }
 #endif

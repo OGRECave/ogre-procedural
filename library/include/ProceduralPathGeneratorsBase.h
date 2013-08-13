@@ -47,18 +47,18 @@ protected:
 	/// Tells if the spline is closed or not
 	bool mClosed;
 public:
-	BaseSpline3() : mNumSeg(4), mClosed(false) {}	
+	BaseSpline3() : mNumSeg(4), mClosed(false) {}
 
 	/// Sets the number of segments between 2 control points
 	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline T& setNumSeg(unsigned int numSeg)
 	{
-		if(numSeg == 0)
+		if (numSeg == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BaseSpline3::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return (T&)*this;
 	}
-	
+
 	/// Closes the spline
 	inline T& close()
 	{

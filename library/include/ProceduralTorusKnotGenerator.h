@@ -52,7 +52,7 @@ public:
 		mNumSegSection(numSegSection),
 		mNumSegCircle(numSegCircle),
 		mRadius(radius),
-		mSectionRadius(sectionRadius), 
+		mSectionRadius(sectionRadius),
 		mP(p),
 		mQ(q) {}
 
@@ -68,7 +68,7 @@ public:
 	*/
 	inline TorusKnotGenerator & setNumSegSection(unsigned int numSegSection)
 	{
-		if(numSegSection == 0)
+		if (numSegSection == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TorusKnotGenerator::setNumSegSection(unsigned int)");
 		mNumSegSection = numSegSection;
 		return *this;
@@ -80,7 +80,7 @@ public:
 	*/
 	inline TorusKnotGenerator & setNumSegCircle(unsigned int numSegCircle)
 	{
-		if(numSegCircle == 0)
+		if (numSegCircle == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TorusKnotGenerator::setNumSegCircle(unsigned int)");
 		mNumSegCircle = numSegCircle;
 		return *this;
@@ -92,7 +92,7 @@ public:
 	*/
 	inline TorusKnotGenerator & setRadius(Ogre::Real radius)
 	{
-		if(radius <= 0.0f)
+		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TorusKnotGenerator::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
@@ -104,7 +104,7 @@ public:
 	*/
 	inline TorusKnotGenerator & setSectionRadius(Ogre::Real sectionRadius)
 	{
-		if(sectionRadius <= 0.0f)
+		if (sectionRadius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TorusKnotGenerator::setSectionRadius(Ogre::Real)");
 		mSectionRadius = sectionRadius;
 		return *this;
@@ -116,7 +116,7 @@ public:
 	*/
 	inline TorusKnotGenerator & setP(int p)
 	{
-		if(p <= 0)
+		if (p <= 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Parameter p must be larger than 0!", "Procedural::TorusKnotGenerator::setP(int)");
 		mP = p;
 		return *this;
@@ -128,12 +128,12 @@ public:
 	*/
 	inline TorusKnotGenerator & setQ(int q)
 	{
-		if(q <= 0)
+		if (q <= 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Parameter q must be larger than 0!", "Procedural::TorusKnotGenerator::setQ(int)");
 		mQ = q;
 		return *this;
 	}
-	
+
 };
 }
 #endif

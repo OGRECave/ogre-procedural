@@ -48,8 +48,8 @@ class _ProceduralExport TubeGenerator : public MeshGenerator<TubeGenerator>
 
 public:
 	/// Constructor with arguments
-	TubeGenerator(Ogre::Real outerRadius=2.f, Ogre::Real innerRadius=1.f, Ogre::Real height=1.f, unsigned int numSegBase=16, unsigned int numSegHeight=1) : 
-	    mNumSegBase(numSegBase),
+	TubeGenerator(Ogre::Real outerRadius=2.f, Ogre::Real innerRadius=1.f, Ogre::Real height=1.f, unsigned int numSegBase=16, unsigned int numSegHeight=1) :
+		mNumSegBase(numSegBase),
 		mNumSegHeight(numSegHeight),
 		mOuterRadius(outerRadius),
 		mInnerRadius(innerRadius),
@@ -67,7 +67,7 @@ public:
 	*/
 	inline TubeGenerator & setNumSegBase(unsigned int numSegBase)
 	{
-		if(numSegBase == 0)
+		if (numSegBase == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TubeGenerator::setNumSegBase(unsigned int)");
 		mNumSegBase = numSegBase;
 		return *this;
@@ -79,7 +79,7 @@ public:
 	*/
 	inline TubeGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
-		if(numSegHeight == 0)
+		if (numSegHeight == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::TubeGenerator::setNumSegHeight(unsigned int)");
 		mNumSegHeight = numSegHeight;
 		return *this;
@@ -92,9 +92,9 @@ public:
 	*/
 	inline TubeGenerator & setOuterRadius(Ogre::Real outerRadius)
 	{
-		if(outerRadius <= 0.0f)
+		if (outerRadius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TubeGenerator::setOuterRadius(Ogre::Real)");
-		if(outerRadius < mInnerRadius)
+		if (outerRadius < mInnerRadius)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Outer radius must be bigger than inner radius!", "Procedural::TubeGenerator::setOuterRadius(Ogre::Real)");
 		mOuterRadius = outerRadius;
 		return *this;
@@ -107,9 +107,9 @@ public:
 	*/
 	inline TubeGenerator & setInnerRadius(Ogre::Real innerRadius)
 	{
-		if(innerRadius <= 0.0f)
+		if (innerRadius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::TubeGenerator::setInnerRadius(Ogre::Real)");
-		if(mOuterRadius < innerRadius)
+		if (mOuterRadius < innerRadius)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Outer radius must be bigger than inner radius!", "Procedural::TubeGenerator::setInnerRadius(Ogre::Real)");
 		mInnerRadius = innerRadius;
 		return *this;
@@ -121,7 +121,7 @@ public:
 	*/
 	inline TubeGenerator & setHeight(Ogre::Real height)
 	{
-		if(height <= 0.0f)
+		if (height <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::TubeGenerator::setHeight(Ogre::Real)");
 		mHeight = height;
 		return *this;

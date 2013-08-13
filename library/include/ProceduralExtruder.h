@@ -61,12 +61,12 @@ class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 	void _extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const;
 
 	void _extrudeCapImpl(TriangleBuffer& buffer) const;
-	
+
 public:
 	/// Default constructor
 	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mRotationTrack(0), mScaleTrack(0), mShapeTextureTrack(0), mPathTextureTrack(0)
 	{}
-	
+
 	/**
 	 * Builds the mesh into the given TriangleBuffer
 	 * @param buffer The TriangleBuffer on where to append the mesh.
@@ -111,15 +111,15 @@ public:
 		mScaleTrack = scaleTrack;
 		return *this;
 	}
-	
+
 	/// Sets the track that maps shape points to V texture coords (optional).
 	/// Warning : if used with multishape, all shapes will have the same track.
-	inline Extruder& setShapeTextureTrack(Track* shapeTextureTrack) 
+	inline Extruder& setShapeTextureTrack(Track* shapeTextureTrack)
 	{
 		mShapeTextureTrack = shapeTextureTrack;
 		return *this;
 	}
-	
+
 	/// Sets the track that maps path points to V texture coord (optional).
 	inline Extruder& setPathTextureTrack(Track* pathTextureTrack)
 	{

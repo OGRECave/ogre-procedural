@@ -39,14 +39,14 @@ void Sample_Material::createScene(void)
 	int pxPerBrick = 32;
 
 	Procedural::TextureBuffer bricks(brickLines * pxPerBrick);
-	
+
 	// Basic structure
 	Procedural::Cell(&bricks).setRegularity(233).setDensity(brickLines).process();
 	Procedural::Colours(&bricks).setBrightness(174).setContrast(198).process();
 	Procedural::TextureBuffer distort(brickLines * pxPerBrick);
 	Procedural::Solid(&distort).setColour((Ogre::uchar)125, (Ogre::uchar)133, (Ogre::uchar)0, (Ogre::uchar)255).process();
 	Procedural::RectangleTexture rectDraw(&distort);
-	for(int i = 1; i < brickLines; i++)
+	for (int i = 1; i < brickLines; i++)
 	{
 		Ogre::ColourValue rc = Ogre::ColourValue((i % 2 == 0) ? Ogre::Math::RangeRandom(0.4f, 0.6f) : Ogre::Math::RangeRandom(0.0f, 0.2f), 0.52f, 1.0f);
 		rc.a = 1.0f;
@@ -64,7 +64,7 @@ void Sample_Material::createScene(void)
 	Procedural::Colours(&light).setColourBase(0.325f, 0.0f, 0.0f, 0.0f).setColourPercent(0.78f, 0.443f, 0.333f, 1.0f).process();
 	Procedural::Normals(&normal).process();
 	//Procedural::TextureLightBaker(&light).setNormalMap(&normal).setColourAmbient(0.164f, 0.0f, 0.0f, 0.0f).setPosition(255.0f, 255.0f, 200.0f).setBumpPower(48).setSpecularPower(8).process();
-	
+
 	// Joint
 	Procedural::TextureBuffer joint(&bricks);
 	Procedural::Invert(&joint).process();
@@ -81,9 +81,9 @@ void Sample_Material::createScene(void)
 
 	// Finish texture
 	Procedural::Combine(&light)
-		.addImage(&joint, Procedural::Combine::METHOD_ADD_CLAMP)
-		.addImage(&colourcloud, Procedural::Combine::METHOD_ADD_CLAMP)
-		.process();
+	.addImage(&joint, Procedural::Combine::METHOD_ADD_CLAMP)
+	.addImage(&colourcloud, Procedural::Combine::METHOD_ADD_CLAMP)
+	.process();
 
 	Ogre::TexturePtr demoTexture = light.createTexture("proceduralTexture");
 	Ogre::TexturePtr demoTextureNormal = normal.createTexture("proceduralTextureNormal");
@@ -101,14 +101,14 @@ void Sample_Material::createScene(void)
 	if (Ogre::RTShader::ShaderGenerator::initialize())
 	{
 		Ogre::RTShader::ShaderGenerator* mShaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
-		mShaderGenerator->setShaderCachePath(".");		
+		mShaderGenerator->setShaderCachePath(".");
 		mShaderGenerator->addSceneManager(mSceneMgr);
 		RTShader::RenderState* pMainRenderState = mShaderGenerator->createOrRetrieveRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME).first;
 		pMainRenderState->reset();
 
 		RTShader::SubRenderState* subRenderState = mShaderGenerator->createSubRenderState(RTShader::NormalMapLighting::Type);
-		RTShader::NormalMapLighting* normalMapSubRS = static_cast<RTShader::NormalMapLighting*>(subRenderState);					
-		normalMapSubRS->setNormalMapSpace(RTShader::NormalMapLighting::NMS_TANGENT);	
+		RTShader::NormalMapLighting* normalMapSubRS = static_cast<RTShader::NormalMapLighting*>(subRenderState);
+		normalMapSubRS->setNormalMapSpace(RTShader::NormalMapLighting::NMS_TANGENT);
 		normalMapSubRS->setNormalMapTextureName("proceduralTextureNormal");
 
 		pMainRenderState->addTemplateSubRenderState(normalMapSubRS);
@@ -130,7 +130,7 @@ void Sample_Material::createScene(void)
 //-------------------------------------------------------------------------------------
 void Sample_Material::createCamera(void)
 {
-	BaseApplication::createCamera();	
+	BaseApplication::createCamera();
 }
 //-------------------------------------------------------------------------------------
 bool Sample_Material::frameStarted(const FrameEvent& evt)
@@ -157,14 +157,17 @@ extern "C" {
 		// Create application object
 		Sample_Material app;
 
-		try {
+		try
+		{
 			app.go();
-		} catch( Ogre::Exception& e ) {
+		}
+		catch ( Ogre::Exception& e )
+		{
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 			MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 #else
 			std::cerr << "An exception has occured: " <<
-				e.getFullDescription().c_str() << std::endl;
+			          e.getFullDescription().c_str() << std::endl;
 #endif
 		}
 

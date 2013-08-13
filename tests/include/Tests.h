@@ -50,7 +50,9 @@ protected:
 		sn->showBoundingBox(false);
 		switch (materialIndex)
 		{
-			case 1:ent->setMaterialName("Examples/Rockwall");break;
+		case 1:
+			ent->setMaterialName("Examples/Rockwall");
+			break;
 		}
 		mEntities.push_back(ent);
 		mSceneNodes.push_back(sn);
@@ -77,7 +79,7 @@ public:
 
 	void rotate(Real amount)
 	{
-		for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it!=mSceneNodes.end();it++)
+		for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it!=mSceneNodes.end(); it++)
 			(*it)->rotate(Vector3::UNIT_Y, (Radian)amount);
 	}
 
@@ -134,7 +136,7 @@ class Unit_Tests : public BaseApplication
 			//putMesh(tb2.transformToMesh("t2"),1);
 			putMesh(Boolean().setBooleanOperation(Boolean::BT_UNION).setMesh1(&tb1).setMesh2(&tb2).realizeMesh(), 1);
 			putMesh(Boolean().setBooleanOperation(Boolean::BT_INTERSECTION).setMesh1(&tb1).setMesh2(&tb2).realizeMesh(), 1);
-			
+
 		}
 	};
 	/* --------------------------------------------------------------------------- */
@@ -179,7 +181,7 @@ class Unit_Tests : public BaseApplication
 			Shape s1 = CircleShape().setNumSeg(16).realizeShape().scale(4,4);
 			Shape s2 = CircleShape().setNumSeg(16).realizeShape().switchSide().scale(1,.3f).translate(1.5f*Vector2::UNIT_X);
 			MultiShape ms = MultiShape().addShape(s1);
-			for (int i=0;i<8;i++)
+			for (int i=0; i<8; i++)
 			{
 				Shape s = s2;
 				s.rotate((Radian)i/8.*Math::TWO_PI);
@@ -212,11 +214,11 @@ class Unit_Tests : public BaseApplication
 
 			Shape s4;
 			s4.addPointRel(-54.951207f,-16.247524f).addPointRel(27.24849f,0).addPointRel(2.54842f,5.29287f)
-				 .addPointRel(37.0501f,-0.19603f).addPointRel(1.56826f,-13.13416f).addPointRel(5.48891f,0)
-				 .addPointRel(2.15635f,12.35003f).addPointRel(30.58104f,-0.19603f).addPointRel(2.35239f,-4.70477f)
-				 .addPointRel(23.13181f,0).addPointRel(-0.19604f,7.8412902f).addPointRel(-131.92973f,0)
-			     .close()
-			     .scale(.1f);
+			.addPointRel(37.0501f,-0.19603f).addPointRel(1.56826f,-13.13416f).addPointRel(5.48891f,0)
+			.addPointRel(2.15635f,12.35003f).addPointRel(30.58104f,-0.19603f).addPointRel(2.35239f,-4.70477f)
+			.addPointRel(23.13181f,0).addPointRel(-0.19604f,7.8412902f).addPointRel(-131.92973f,0)
+			.close()
+			.scale(.1f);
 
 			putMesh(Triangulator().setShapeToTriangulate(&s4).realizeMesh());
 
@@ -226,15 +228,15 @@ class Unit_Tests : public BaseApplication
 			//   2--------------1
 			//
 			Shape s5 = Shape()
-				.addPoint(1,0)       // 1
-				.addPoint(-1,0)      // 2
-				.addPoint(-1,-0.5f)   // 3
-				.addPoint(-0.5f,-0.5f) // 4
-				.addPoint(-0.5f,-0.1f) // 5
-				.addPoint(0.5f,-0.1f)  // 6
-				.addPoint(0.5f,-0.5f)  // 7
-				.addPoint(1,-0.5f)    // 8
-				.close();
+			           .addPoint(1,0)       // 1
+			           .addPoint(-1,0)      // 2
+			           .addPoint(-1,-0.5f)   // 3
+			           .addPoint(-0.5f,-0.5f) // 4
+			           .addPoint(-0.5f,-0.1f) // 5
+			           .addPoint(0.5f,-0.1f)  // 6
+			           .addPoint(0.5f,-0.5f)  // 7
+			           .addPoint(1,-0.5f)    // 8
+			           .close();
 
 			putMesh(Triangulator().setShapeToTriangulate(&s5)._setDumpToFile("triangulator_bug.yaml").realizeMesh());
 
@@ -324,7 +326,7 @@ class Unit_Tests : public BaseApplication
 		}
 	};
 
-		/* --------------------------------------------------------------------------- */
+	/* --------------------------------------------------------------------------- */
 	class Test_Splines : public Unit_Test
 	{
 	public:
@@ -340,78 +342,78 @@ class Unit_Tests : public BaseApplication
 			// CatmullRomSpline
 			CatmullRomSpline2 cs;
 			cs.addPoint(0,-1)
-				.addPoint(2,2)
-				.addPoint(1,2.5f)
-				.addPoint(0,1.5f)
-				.addPoint(-1,2.5f)
-				.addPoint(-2,2)
-				.setNumSeg(8)
-				.close();
+			.addPoint(2,2)
+			.addPoint(1,2.5f)
+			.addPoint(0,1.5f)
+			.addPoint(-1,2.5f)
+			.addPoint(-2,2)
+			.setNumSeg(8)
+			.close();
 			putMesh(cs.realizeShape().realizeMesh());
 
 			// CubicHermite Spline
 			CubicHermiteSpline2 chs;
 			chs.addPoint(Vector2(0,0), Vector2(0,1), Vector2(0,1))
-			   .addPoint(Vector2(0,2), Vector2(1,0), Vector2(0,1))
-			   .addPoint(Vector2(2,2), Vector2(0,1), Vector2(0,1))
-			   .setNumSeg(8).close();
+			.addPoint(Vector2(0,2), Vector2(1,0), Vector2(0,1))
+			.addPoint(Vector2(2,2), Vector2(0,1), Vector2(0,1))
+			.setNumSeg(8).close();
 			putMesh(chs.realizeShape().realizeMesh());
 
 			// Kochanek Bartels
 			KochanekBartelsSpline2 kbs2;
 			kbs2.addPoint(Vector2(0,-1),0,0,-1)
-				.addPoint(Vector2(2,2))
-				.addPoint(Vector2(1,3))
-				.addPoint(Vector2(0,1.5f),0,0,-1)
-				.addPoint(Vector2(-1,3))
-				.addPoint(Vector2(-2,2))
-				.setNumSeg(8)
-				.close();
+			.addPoint(Vector2(2,2))
+			.addPoint(Vector2(1,3))
+			.addPoint(Vector2(0,1.5f),0,0,-1)
+			.addPoint(Vector2(-1,3))
+			.addPoint(Vector2(-2,2))
+			.setNumSeg(8)
+			.close();
 
 			putMesh(kbs2.realizeShape().realizeMesh());
 
 			// RoundedCornerSpline2
 			RoundedCornerSpline2 rcs2;
 			rcs2.addPoint(0,0)
-				.addPoint(1,0)
-				.addPoint(1,1)
-				.addPoint(2,1)
-				.addPoint(3,0);
+			.addPoint(1,0)
+			.addPoint(1,1)
+			.addPoint(2,1)
+			.addPoint(3,0);
 			putMesh(rcs2.realizeShape().realizeMesh());
 
 			rcs2.addPoint(Vector2(1,-1))
-				.setRadius(.2f)
-				.close();
+			.setRadius(.2f)
+			.close();
 			putMesh(rcs2.realizeShape().realizeMesh());
 
 			// RoundedCornerSpline3
 			RoundedCornerSpline3 rcs3;
 			rcs3.addPoint(0,0,0)
-				.addPoint(0,1,0)
-				.addPoint(1,1,1)
-				.addPoint(0,1,1)
-				.addPoint(0,2,1)
-				.setRadius(.2f);
+			.addPoint(0,1,0)
+			.addPoint(1,1,1)
+			.addPoint(0,1,1)
+			.addPoint(0,2,1)
+			.setRadius(.2f);
 			putMesh(rcs3.realizePath().realizeMesh());
 
 			// CatmullRomSpline3
 			CatmullRomSpline3 cs3;
 			cs3.addPoint(Vector3(0,-1,0))
-				.addPoint(Vector3(2,2,0))
-				.addPoint(Vector3(1,2.5f,0))
-				.addPoint(Vector3(0,1.5f,0))
-				.addPoint(Vector3(-1,2.5f,0))
-				.addPoint(Vector3(-2,2,0))
-				.setNumSeg(8)
-				.close();
+			.addPoint(Vector3(2,2,0))
+			.addPoint(Vector3(1,2.5f,0))
+			.addPoint(Vector3(0,1.5f,0))
+			.addPoint(Vector3(-1,2.5f,0))
+			.addPoint(Vector3(-2,2,0))
+			.setNumSeg(8)
+			.close();
 			putMesh(cs3.realizePath().realizeMesh());
 
 			// CubicHermite Spline3
 			CubicHermiteSpline3 chs3;
 			chs3.addPoint(Vector3(0,0,0), Vector3(0,1,0), Vector3(0,1,0))
-			   .addPoint(Vector3(0,2,0), Vector3(1,0,0), Vector3(0,1,0))
-			   .addPoint(Vector3(2,2,0), Vector3(0,1,0), Vector3(0,1,0))
-			   .setNumSeg(8).close();
+			.addPoint(Vector3(0,2,0), Vector3(1,0,0), Vector3(0,1,0))
+			.addPoint(Vector3(2,2,0), Vector3(0,1,0), Vector3(0,1,0))
+			.setNumSeg(8).close();
 			putMesh(chs3.realizePath().realizeMesh());
 
 			// Pseudo Track spline
@@ -427,14 +429,14 @@ class Unit_Tests : public BaseApplication
 			// AutoTangents
 			CubicHermiteSpline2 chsAuto;
 			chsAuto.addPoint(Vector2(0,0), AT_STRAIGHT).addPoint(Vector2(1,0),AT_STRAIGHT)
-				   .addPoint(Vector2(1,1), AT_STRAIGHT).addPoint(Vector2(2,1),AT_CATMULL)
-				   .addPoint(Vector2(2,0), AT_CATMULL).addPoint(Vector2(3,0),AT_CATMULL);
+			.addPoint(Vector2(1,1), AT_STRAIGHT).addPoint(Vector2(2,1),AT_CATMULL)
+			.addPoint(Vector2(2,0), AT_CATMULL).addPoint(Vector2(3,0),AT_CATMULL);
 			putMesh(chsAuto.realizeShape().realizeMesh());
 
 			CubicHermiteSpline3 chs3Auto;
 			chs3Auto.addPoint(Vector3(0,0,0), AT_STRAIGHT).addPoint(Vector3(1,0,0),AT_STRAIGHT)
-				   .addPoint(Vector3(1,1,1), AT_STRAIGHT).addPoint(Vector3(2,1,1),AT_CATMULL)
-				   .addPoint(Vector3(2,0,1), AT_CATMULL).addPoint(Vector3(3,0,0),AT_CATMULL);
+			.addPoint(Vector3(1,1,1), AT_STRAIGHT).addPoint(Vector3(2,1,1),AT_CATMULL)
+			.addPoint(Vector3(2,0,1), AT_CATMULL).addPoint(Vector3(3,0,0),AT_CATMULL);
 			putMesh(chs3Auto.realizePath().realizeMesh());
 		}
 	};
@@ -453,18 +455,18 @@ class Unit_Tests : public BaseApplication
 		void initImpl()
 		{
 			{
-			Shape shape = Shape().addPoint(0,0).addPoint(0,1).addPoint(1,1).addPoint(1,0).setOutSide(SIDE_RIGHT).close();
-			Shape shape2 = Shape().addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,0).setOutSide(SIDE_LEFT).close();
-			Path line = LinePath().betweenPoints(Vector3::ZERO, Vector3(1,10,0)).setNumSeg(2).realizePath();
-			Path line2 = LinePath().betweenPoints(Vector3(1,10,0), Vector3::ZERO).setNumSeg(2).realizePath();
-			Extruder e;
-			e.setCapped(false);
+				Shape shape = Shape().addPoint(0,0).addPoint(0,1).addPoint(1,1).addPoint(1,0).setOutSide(SIDE_RIGHT).close();
+				Shape shape2 = Shape().addPoint(1,0).addPoint(1,1).addPoint(0,1).addPoint(0,0).setOutSide(SIDE_LEFT).close();
+				Path line = LinePath().betweenPoints(Vector3::ZERO, Vector3(1,10,0)).setNumSeg(2).realizePath();
+				Path line2 = LinePath().betweenPoints(Vector3(1,10,0), Vector3::ZERO).setNumSeg(2).realizePath();
+				Extruder e;
+				e.setCapped(false);
 
-			// linear extrusion
-			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);
-			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh(),1);
-			putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh(),1);
-			putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line2).realizeMesh(),1);
+				// linear extrusion
+				putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line).realizeMesh(),1);
+				putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line).realizeMesh(),1);
+				putMesh(e.setShapeToExtrude(&shape).setExtrusionPath(&line2).realizeMesh(),1);
+				putMesh(e.setShapeToExtrude(&shape2).setExtrusionPath(&line2).realizeMesh(),1);
 			}
 
 			// extrusion with rotation and scale track
@@ -557,7 +559,7 @@ class Unit_Tests : public BaseApplication
 			{
 				MeshPtr mp;
 				Path p;
-				for (int i=0;i<32*32;i++)
+				for (int i=0; i<32*32; i++)
 				{
 					Radian r1 = (Radian)i/1024.*Math::TWO_PI;
 					Radian r2 = (Radian)i/32.*Math::TWO_PI;
@@ -657,7 +659,7 @@ class Unit_Tests : public BaseApplication
 	{
 		if (index == mCurrentTestIndex)
 			return;
-		if(mCurrentTestIndex >= 0)
+		if (mCurrentTestIndex >= 0)
 			mUnitTests[mCurrentTestIndex]->destroy();
 
 		double time = mUnitTests[index]->init();

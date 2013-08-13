@@ -52,29 +52,29 @@ MultiShape TextShape::realizeShapes()
 	FT_GlyphSlot slot;
 
 	FT_Error error = FT_Init_FreeType(&ftlib);
-	if(error == 0)
+	if (error == 0)
 	{
 		error = FT_New_Face(ftlib, getFontFileByName().c_str(), 0, &face);
-		if(error == FT_Err_Unknown_File_Format)
+		if (error == FT_Err_Unknown_File_Format)
 		{
 			OGRE_EXCEPT(Ogre::Exception::ERR_INTERNAL_ERROR, "FreeType ERROR: FT_Err_Unknown_File_Format", "Procedural::TextShape::realizeShapes()");
 		}
-		else if(error)
+		else if (error)
 		{
 			OGRE_EXCEPT(Ogre::Exception::ERR_INTERNAL_ERROR, "FreeType ERROR: FT_New_Face - " + Ogre::StringConverter::toString(error), "Procedural::TextShape::realizeShapes()");
 		}
 		else
 		{
 			FT_Set_Pixel_Sizes(face, 0, mFontSize);
-			
+
 			size_t px = 0;
 			size_t py = 0;
 			slot = face->glyph;
 
-			for(size_t n = 0; n < mText.length(); n++)
+			for (size_t n = 0; n < mText.length(); n++)
 			{
 				error = FT_Load_Char(face, mText[n], FT_LOAD_NO_BITMAP);
-				if(error) continue;
+				if (error) continue;
 
 				Shape s;
 
@@ -83,29 +83,29 @@ MultiShape TextShape::realizeShapes()
 				char * tags     = face->glyph->outline.tags;
 				FT_Vector * vec = face->glyph->outline.points;
 
-				for(int k = 0; k < nContours; k++)
+				for (int k = 0; k < nContours; k++)
 				{
-					if(k > 0) startPos = face->glyph->outline.contours[k-1]+1;
+					if (k > 0) startPos = face->glyph->outline.contours[k-1]+1;
 					int endPos = face->glyph->outline.contours[k]+1;
 
 					Ogre::Vector2 lastPoint = Ogre::Vector2::ZERO;
-					for(int j = startPos; j < endPos; j++)
+					for (int j = startPos; j < endPos; j++)
 					{
-						if(FT_CURVE_TAG(tags[j]) == FT_CURVE_TAG_ON)
+						if (FT_CURVE_TAG(tags[j]) == FT_CURVE_TAG_ON)
 						{
 							lastPoint = Ogre::Vector2((Ogre::Real)vec[j].x, (Ogre::Real)vec[j].y);
 							s.addPoint(lastPoint / 64.0f);
 						}
 						else
 						{
-							if(FT_CURVE_TAG(tags[j]) == FT_CURVE_TAG_CUBIC)
+							if (FT_CURVE_TAG(tags[j]) == FT_CURVE_TAG_CUBIC)
 							{
 								int prevPoint = j - 1;
-								if(j == 0) prevPoint = endPos - 1;
+								if (j == 0) prevPoint = endPos - 1;
 								int nextIndex = j + 1;
-								if(nextIndex >= endPos) nextIndex = startPos;
+								if (nextIndex >= endPos) nextIndex = startPos;
 								Ogre::Vector2 nextPoint((Ogre::Real)vec[nextIndex].x, (Ogre::Real)vec[nextIndex].y);
-								if((FT_CURVE_TAG(tags[prevPoint]) != FT_CURVE_TAG_ON) && (FT_CURVE_TAG(tags[prevPoint]) == FT_CURVE_TAG_CUBIC))
+								if ((FT_CURVE_TAG(tags[prevPoint]) != FT_CURVE_TAG_ON) && (FT_CURVE_TAG(tags[prevPoint]) == FT_CURVE_TAG_CUBIC))
 								{
 									BezierCurve2 bc;
 									bc.addPoint(Ogre::Vector2((Ogre::Real)vec[prevPoint].x, (Ogre::Real)vec[prevPoint].y) / 64.0f);
@@ -117,9 +117,9 @@ MultiShape TextShape::realizeShapes()
 							else
 							{
 								Ogre::Vector2 conicPoint((Ogre::Real)vec[j].x, (Ogre::Real)vec[j].y);
-								if(j == startPos)
+								if (j == startPos)
 								{
-									if((FT_CURVE_TAG(tags[endPos-1]) != FT_CURVE_TAG_ON) && (FT_CURVE_TAG(tags[endPos-1]) != FT_CURVE_TAG_CUBIC))
+									if ((FT_CURVE_TAG(tags[endPos-1]) != FT_CURVE_TAG_ON) && (FT_CURVE_TAG(tags[endPos-1]) != FT_CURVE_TAG_CUBIC))
 									{
 										Ogre::Vector2 lastConnic((Ogre::Real)vec[endPos - 1].x, (Ogre::Real)vec[endPos - 1].y);
 										lastPoint = (conicPoint + lastConnic) / 2;
@@ -127,35 +127,35 @@ MultiShape TextShape::realizeShapes()
 								}
 
 								int nextIndex = j + 1;
-								if(nextIndex >= endPos) nextIndex = startPos;
+								if (nextIndex >= endPos) nextIndex = startPos;
 
 								Ogre::Vector2 nextPoint((Ogre::Real)vec[nextIndex].x, (Ogre::Real)vec[nextIndex].y);
 
 								bool nextIsConnic = (FT_CURVE_TAG(tags[nextIndex]) != FT_CURVE_TAG_ON) && (FT_CURVE_TAG(tags[nextIndex]) != FT_CURVE_TAG_CUBIC);
-								if(nextIsConnic)
+								if (nextIsConnic)
 									nextPoint = (conicPoint + nextPoint) / 2;
 
 								size_t pc = s.getPointCount();
 								BezierCurve2 bc;
-								if(pc == 0)
+								if (pc == 0)
 									bc.addPoint(Ogre::Vector2::ZERO);
 								else
 									bc.addPoint(s.getPoint(pc - 1));
 								bc.addPoint(lastPoint / 64.0f);
 								bc.addPoint(conicPoint / 64.0f);
 								bc.addPoint(nextPoint / 64.0f);
-								if(pc == 0)
+								if (pc == 0)
 									s.appendShape(bc.realizeShape());
 								else
 								{
 									std::vector<Ogre::Vector2> subShape = bc.realizeShape().getPoints();
-									for(std::vector<Ogre::Vector2>::iterator iter = subShape.begin(); iter != subShape.end(); iter++)
+									for (std::vector<Ogre::Vector2>::iterator iter = subShape.begin(); iter != subShape.end(); iter++)
 									{
-										if(iter != subShape.begin()) s.addPoint(*iter);
+										if (iter != subShape.begin()) s.addPoint(*iter);
 									}
 								}
 
-								if(nextIsConnic) lastPoint = nextPoint;
+								if (nextIsConnic) lastPoint = nextPoint;
 							}
 						}
 					}
@@ -190,8 +190,8 @@ Ogre::String TextShape::getFontFileByName()
 	GetWindowsDirectory(windows, MAX_PATH);
 
 	bool result = getFontFile(mFontName, tmp, ff);
-	if(!result) return mFontName;
-	if(!(ff[0] == '\\' && ff[1] == '\\') && !(ff[1] == ':' && ff[2] == '\\'))
+	if (!result) return mFontName;
+	if (!(ff[0] == '\\' && ff[1] == '\\') && !(ff[1] == ':' && ff[2] == '\\'))
 		return Ogre::String(windows) + "\\fonts\\" + ff;
 	else
 		return ff;
@@ -203,9 +203,9 @@ Ogre::String TextShape::getFontFileByName()
 #if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
 bool TextShape::getFontFile(Ogre::String fontName, Ogre::String& displayName, Ogre::String& filePath)
 {
-	if(fontName.empty()) return false;
+	if (fontName.empty()) return false;
 
-	if((fontName[0] == '\\' && fontName[1] == '\\') || (fontName[1] == ':' && fontName[2] == '\\'))
+	if ((fontName[0] == '\\' && fontName[1] == '\\') || (fontName[1] == ':' && fontName[2] == '\\'))
 	{
 		displayName = fontName;
 		filePath = fontName;
@@ -218,7 +218,7 @@ bool TextShape::getFontFile(Ogre::String fontName, Ogre::String& displayName, Og
 	bool retVal = false;
 
 	HKEY hkFont;
-	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", 0, KEY_READ, &hkFont) == ERROR_SUCCESS)
+	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", 0, KEY_READ, &hkFont) == ERROR_SUCCESS)
 	{
 		char cname[MAX_PATH];
 		DWORD icname = 0;
@@ -232,9 +232,9 @@ bool TextShape::getFontFile(Ogre::String fontName, Ogre::String& displayName, Og
 		FILETIME dtlast;
 
 		DWORD retCode = RegQueryInfoKey(hkFont, cname, &icname, NULL, &isubkeys, &imaxsubkey, &imaxclass, &ivalues, &imaxnamevalues, &imaxvalues, &isecurity, &dtlast);
-		if(ivalues)
+		if (ivalues)
 		{
-			for(DWORD i = 0; i < ivalues; i++)
+			for (DWORD i = 0; i < ivalues; i++)
 			{
 				retCode = ERROR_SUCCESS;
 				DWORD nsize = MAX_PATH - 1;
@@ -242,8 +242,8 @@ bool TextShape::getFontFile(Ogre::String fontName, Ogre::String& displayName, Og
 				name[0] = 0;
 				data[0] = 0;
 				retCode = RegEnumValue(hkFont, i, name, &nsize, NULL, NULL, (LPBYTE)data, &dsize);
-				if(retCode == ERROR_SUCCESS)
-					if(strnicmp(name, fontName.c_str(), std::min<size_t>(strlen(name), fontName.length())) == 0)
+				if (retCode == ERROR_SUCCESS)
+					if (strnicmp(name, fontName.c_str(), std::min<size_t>(strlen(name), fontName.length())) == 0)
 					{
 						displayName = name;
 						filePath = data;

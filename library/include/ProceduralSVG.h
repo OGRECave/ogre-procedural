@@ -94,7 +94,10 @@ private:
 			return shape;
 		}
 
-		inline bool isValid() { return shape.getPoints().size() > 2; }
+		inline bool isValid()
+		{
+			return shape.getPoints().size() > 2;
+		}
 
 	private:
 		inline void parseMoveTo(bool rel, bool next);
@@ -128,14 +131,17 @@ private:
 
 		inline bool parseReal(Ogre::Real* var, Ogre::Real defaultReal = 0.0f)
 		{
-			if(var == NULL) return false;
-			if(index >= parts.size()) return false;
+			if (var == NULL) return false;
+			if (index >= parts.size()) return false;
 			try
 			{
 				*var = Ogre::StringConverter::parseReal(parts[index], defaultReal);
 				index++;
 			}
-			catch(...) { return false; }
+			catch (...)
+			{
+				return false;
+			}
 			return true;
 		}
 	};

@@ -35,26 +35,26 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	struct Line;
+struct Line;
 //-----------------------------------------------------------------------
 /// Represents a 2D circle
 class _ProceduralExport Circle
 {
-	private:
+private:
 	Ogre::Vector2 mCenter;
 	Ogre::Real mRadius;
-	
-	public:
+
+public:
 
 	Circle() : mCenter(Ogre::Vector2::ZERO), mRadius(1) {}
-	
+
 	/// Contructor with arguments
 	Circle(Ogre::Vector2 center, Ogre::Real radius) : mCenter(center), mRadius(radius)
 	{}
-	
+
 	/// Contructor with arguments
-	Circle(Ogre::Vector2 p1, Ogre::Vector2 p2, Ogre::Vector2 p3);	
-	
+	Circle(Ogre::Vector2 p1, Ogre::Vector2 p2, Ogre::Vector2 p3);
+
 	/// Tells whether that point is inside the circle or not
 	bool isPointInside(const Ogre::Vector2& p) const
 	{
@@ -67,7 +67,7 @@ class _ProceduralExport Plane : public Ogre::Plane
 {
 public:
 	Plane() : Ogre::Plane() {}
-	
+
 	/// Contructor with arguments
 	Plane(const Ogre::Vector3& normal, const Ogre::Vector3& pos) : Ogre::Plane(normal, pos) {}
 
@@ -89,7 +89,7 @@ struct _ProceduralExport Line
 	Ogre::Vector3 mDirection;
 
 	Line() {}
-	
+
 	/// Contructor with arguments
 	/// @param point a point on the line
 	/// @param direction a normalized vector representing the direction of that line
@@ -114,7 +114,7 @@ class _ProceduralExport Line2D
 
 public:
 	Line2D() {}
-	
+
 	/// Contructor with arguments
 	/// @param point a point on the line
 	/// @param direction a normalized vector representing the direction of that line
@@ -127,7 +127,7 @@ public:
 		mDirection = (b-a).normalisedCopy();
 	}
 
-	/**	  
+	/**
 	 * Computes the interesction between current segment and another segment
 	 * @param other the other segment
 	 * @param intersection the point of intersection if outputed there if it exists
@@ -141,13 +141,13 @@ struct _ProceduralExport Segment2D
 {
 	Ogre::Vector2 mA;
 	Ogre::Vector2 mB;
-		
+
 	Segment2D() {}
 
 	/// Contructor with arguments
 	Segment2D(Ogre::Vector2 a, Ogre::Vector2 b) : mA(a), mB(b) {}
 
-	/**	  
+	/**
 	 * Computes the interesction between current segment and another segment
 	 * @param other the other segment
 	 * @param intersection the point of intersection if outputed there if it exists
@@ -193,14 +193,14 @@ struct _ProceduralExport Segment3D
 	Ogre::Vector3 mA;
 	Ogre::Vector3 mB;
 	Segment3D() {}
-		
+
 	/// Contructor with arguments
 	Segment3D(Ogre::Vector3 a, Ogre::Vector3 b) : mA(a), mB(b) {}
 
 	bool epsilonEquivalent(const Segment3D& other) const
 	{
 		return ((mA.squaredDistance(other.mA) < 1e-8 && mB.squaredDistance(other.mB) < 1e-8) ||
-			(mA.squaredDistance(other.mB) < 1e-8 && mB.squaredDistance(other.mA) < 1e-8));
+		        (mA.squaredDistance(other.mB) < 1e-8 && mB.squaredDistance(other.mA) < 1e-8));
 	}
 
 	Segment3D orderedCopy() const
@@ -217,7 +217,7 @@ struct _ProceduralExport Triangle2D
 {
 	Ogre::Vector2 mPoints[3];
 
-	Triangle2D(const Ogre::Vector2& a,const Ogre::Vector2& b,const Ogre::Vector2& c) 
+	Triangle2D(const Ogre::Vector2& a,const Ogre::Vector2& b,const Ogre::Vector2& c)
 	{
 		mPoints[0]=a;
 		mPoints[1]=b;
@@ -230,7 +230,7 @@ struct _ProceduralExport Triangle3D
 {
 	Ogre::Vector3 mPoints[3];
 
-	Triangle3D(const Ogre::Vector3& a,const Ogre::Vector3& b,const Ogre::Vector3& c) 
+	Triangle3D(const Ogre::Vector3& a,const Ogre::Vector3& b,const Ogre::Vector3& c)
 	{
 		mPoints[0]=a;
 		mPoints[1]=b;
@@ -240,8 +240,9 @@ struct _ProceduralExport Triangle3D
 	bool findIntersect(const Triangle3D& other, Segment3D& intersection) const;
 };
 //-----------------------------------------------------------------------
-struct _ProceduralExport IntVector2 {
-  size_t x, y;
+struct _ProceduralExport IntVector2
+{
+	size_t x, y;
 };
 }
 #endif

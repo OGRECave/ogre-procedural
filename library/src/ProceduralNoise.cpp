@@ -34,8 +34,8 @@ namespace Procedural
 PerlinNoise::PerlinNoise(Ogre::uint octaves, Ogre::Real persistence, Ogre::Real frequency, Ogre::Real amplitude)
 	: mFrequency(frequency), mAmplitude(amplitude), mPersistance(persistence), mOctaves(octaves)
 {
-	if(mOctaves < 1) mOctaves = 1;
-	if(mOctaves > 32) mOctaves = 32;
+	if (mOctaves < 1) mOctaves = 1;
+	if (mOctaves > 32) mOctaves = 32;
 }
 
 void PerlinNoise::setFrequency(Ogre::Real frequency)
@@ -56,8 +56,8 @@ void PerlinNoise::setPersistence(Ogre::Real persistence)
 void PerlinNoise::setOctaves(Ogre::uint octaves)
 {
 	mOctaves = octaves;
-	if(mOctaves < 1) mOctaves = 1;
-	if(mOctaves > 32) mOctaves = 32;
+	if (mOctaves < 1) mOctaves = 1;
+	if (mOctaves > 32) mOctaves = 32;
 }
 
 Ogre::Real PerlinNoise::function1D(size_t x)
@@ -66,7 +66,7 @@ Ogre::Real PerlinNoise::function1D(size_t x)
 	double amp = mAmplitude;
 	double sum = 0.0;
 
-	for(size_t i = 0; i < mOctaves; i++)
+	for (size_t i = 0; i < mOctaves; i++)
 	{
 		sum += smoothedNoise((double)x * freq) * amp;
 
@@ -83,7 +83,7 @@ Ogre::Real PerlinNoise::function2D(size_t x, size_t y)
 	double amp = mAmplitude;
 	double sum = 0.0;
 
-	for(size_t i = 0; i < mOctaves; i++)
+	for (size_t i = 0; i < mOctaves; i++)
 	{
 		sum += smoothedNoise((double)x * freq, (double)y * freq) * amp;
 
@@ -96,8 +96,8 @@ Ogre::Real PerlinNoise::function2D(size_t x, size_t y)
 
 double PerlinNoise::noise(double x)
 {
-    int n = ((int)x << 13) ^ (int)x;
-    return 1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0;
+	int n = ((int)x << 13) ^ (int)x;
+	return 1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0;
 }
 
 double PerlinNoise::noise(double x, double y)
@@ -110,32 +110,32 @@ double PerlinNoise::noise(double x, double y)
 double PerlinNoise::smoothedNoise(double x)
 {
 	int XInt = (int)x;
-    double XFrac = x - (double)XInt;
+	double XFrac = x - (double)XInt;
 
-    return interpolate(noise(XInt), noise(XInt + 1), XFrac);
+	return interpolate(noise(XInt), noise(XInt + 1), XFrac);
 }
 
 double PerlinNoise::smoothedNoise(double x, double y)
 {
-    int XInt = (int)x;
-    int YInt = (int)y;
-    double XFrac = x - XInt;
-    double YFrac = y - YInt;
+	int XInt = (int)x;
+	int YInt = (int)y;
+	double XFrac = x - XInt;
+	double YFrac = y - YInt;
 
-    double n00 = noise(XInt    , YInt    );
-    double n10 = noise(XInt + 1, YInt    );
-    double n01 = noise(XInt    , YInt + 1);
-    double n11 = noise(XInt + 1, YInt + 1);
+	double n00 = noise(XInt    , YInt    );
+	double n10 = noise(XInt + 1, YInt    );
+	double n01 = noise(XInt    , YInt + 1);
+	double n11 = noise(XInt + 1, YInt + 1);
 
-    double i1 = interpolate(n00, n10, XFrac);
-    double i2 = interpolate(n01, n11, XFrac);
+	double i1 = interpolate(n00, n10, XFrac);
+	double i2 = interpolate(n01, n11, XFrac);
 
 	return interpolate(i1, i2, YFrac);
 }
 
 double PerlinNoise::interpolate(double x1, double x2, double a)
 {
-    double f = (1 - Ogre::Math::Cos((Ogre::Real)a * Ogre::Math::PI)) * 0.5;
-    return x1 * (1 - f) + x2 * f;
+	double f = (1 - Ogre::Math::Cos((Ogre::Real)a * Ogre::Math::PI)) * 0.5;
+	return x1 * (1 - f) + x2 * f;
 }
 }

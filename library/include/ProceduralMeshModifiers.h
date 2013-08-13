@@ -46,7 +46,7 @@ private:
 public:
 
 	SpherifyModifier() :
-			mInputTriangleBuffer(0), mCenter(Ogre::Vector3::ZERO), mRadius(1)
+		mInputTriangleBuffer(0), mCenter(Ogre::Vector3::ZERO), mRadius(1)
 	{
 	}
 
@@ -55,7 +55,7 @@ public:
 	{
 		if (inputTriangleBuffer == NULL)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Input triangle buffer must not be null",
-					"Procedural::SpherifyModifier::setInputTriangleBuffer(Procedural::TriangleBuffer*)");
+			            "Procedural::SpherifyModifier::setInputTriangleBuffer(Procedural::TriangleBuffer*)");
 		mInputTriangleBuffer = inputTriangleBuffer;
 		return *this;
 	}
@@ -64,7 +64,7 @@ public:
 	{
 		if (mRadius <= 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be positive",
-					"Procedural::SpherifyModifier::setInputTriangleBuffer(Procedural::TriangleBuffer*)");
+			            "Procedural::SpherifyModifier::setInputTriangleBuffer(Procedural::TriangleBuffer*)");
 		mRadius = radius;
 		return *this;
 	}
@@ -83,14 +83,14 @@ public:
 /**
 WIP
 */
- class _ProceduralExport CalculateNormalsModifier
- {
- public:
-	 CalculateNormalsModifier() : mComputeMode(NCM_VERTEX), mInputTriangleBuffer(0), mMustWeldUnweldFirst(true) {}
+class _ProceduralExport CalculateNormalsModifier
+{
+public:
+	CalculateNormalsModifier() : mComputeMode(NCM_VERTEX), mInputTriangleBuffer(0), mMustWeldUnweldFirst(true) {}
 
 	enum NormalComputeMode
 	{
-		NCM_VERTEX, NCM_TRIANGLE
+	    NCM_VERTEX, NCM_TRIANGLE
 	};
 
 	NormalComputeMode mComputeMode;
@@ -121,21 +121,21 @@ WIP
 	}
 
 	void modify();
- };
- //--------------------------------------------------------------
- /**
-  * Welds together the vertices which are 'close enough' one to each other
-  */
- class _ProceduralExport WeldVerticesModifier
- {
- public:
-	 WeldVerticesModifier() : mInputTriangleBuffer(0), mTolerance(1e-3f) {}
+};
+//--------------------------------------------------------------
+/**
+ * Welds together the vertices which are 'close enough' one to each other
+ */
+class _ProceduralExport WeldVerticesModifier
+{
+public:
+	WeldVerticesModifier() : mInputTriangleBuffer(0), mTolerance(1e-3f) {}
 
-	 TriangleBuffer* mInputTriangleBuffer;
-	 Ogre::Real mTolerance;
+	TriangleBuffer* mInputTriangleBuffer;
+	Ogre::Real mTolerance;
 
 
-	 /// The triangle buffer to modify
+	/// The triangle buffer to modify
 	WeldVerticesModifier& setInputTriangleBuffer(TriangleBuffer* inputTriangleBuffer)
 	{
 		mInputTriangleBuffer = inputTriangleBuffer;
@@ -149,17 +149,17 @@ WIP
 		return *this;
 	}
 
-	 void modify();
- };
-  //--------------------------------------------------------------
- /**
-  * \brief Switches the triangle buffer from indexed triangles to (pseudo) triangle list
-  * It can be used if you want discontinuities between all your triangles.
- */
- class _ProceduralExport UnweldVerticesModifier
- {
- public:
-	 UnweldVerticesModifier() : mInputTriangleBuffer(0) {}
+	void modify();
+};
+//--------------------------------------------------------------
+/**
+ * \brief Switches the triangle buffer from indexed triangles to (pseudo) triangle list
+ * It can be used if you want discontinuities between all your triangles.
+*/
+class _ProceduralExport UnweldVerticesModifier
+{
+public:
+	UnweldVerticesModifier() : mInputTriangleBuffer(0) {}
 
 	TriangleBuffer* mInputTriangleBuffer;
 
@@ -168,9 +168,9 @@ WIP
 		mInputTriangleBuffer = inputTriangleBuffer;
 		return *this;
 	}
-	
-	 void modify();
- };
+
+	void modify();
+};
 //--------------------------------------------------------------
 /**
  * \brief Recomputes the mesh's UVs based on its projection on a plane
@@ -184,7 +184,7 @@ class _ProceduralExport PlaneUVModifier
 public:
 
 	PlaneUVModifier() :
-			mPlaneNormal(Ogre::Vector3::UNIT_Y), mPlaneCenter(Ogre::Vector3::ZERO), mPlaneSize(Ogre::Vector2::UNIT_SCALE), mInputTriangleBuffer(0)
+		mPlaneNormal(Ogre::Vector3::UNIT_Y), mPlaneCenter(Ogre::Vector3::ZERO), mPlaneSize(Ogre::Vector2::UNIT_SCALE), mInputTriangleBuffer(0)
 	{
 	}
 
@@ -224,7 +224,7 @@ public:
 	void modify();
 
 	SphereUVModifier() :
-			mInputTriangleBuffer(0)
+		mInputTriangleBuffer(0)
 	{
 	}
 
@@ -277,7 +277,7 @@ public:
 	void modify();
 
 	CylinderUVModifier() :
-			mInputTriangleBuffer(0), mRadius(1.0), mHeight(1.0)
+		mInputTriangleBuffer(0), mRadius(1.0), mHeight(1.0)
 	{
 	}
 
@@ -294,10 +294,10 @@ public:
 	}
 
 	CylinderUVModifier& setHeight(Ogre::Real height)
-		{
-			mHeight = height;
-			return *this;
-		}
+	{
+		mHeight = height;
+		return *this;
+	}
 
 };
 //--------------------------------------------------------------
@@ -306,7 +306,7 @@ class _ProceduralExport BoxUVModifier
 public:
 	enum MappingType
 	{
-		MT_FULL, MT_CROSS, MT_PACKED,
+	    MT_FULL, MT_CROSS, MT_PACKED,
 	};
 private:
 	TriangleBuffer* mInputTriangleBuffer;
@@ -318,7 +318,7 @@ public:
 	void modify();
 
 	BoxUVModifier() :
-			mInputTriangleBuffer(0), mMappingType(MT_FULL), mBoxSize(Ogre::Vector3::UNIT_SCALE), mBoxCenter(Ogre::Vector3::ZERO)
+		mInputTriangleBuffer(0), mMappingType(MT_FULL), mBoxSize(Ogre::Vector3::UNIT_SCALE), mBoxCenter(Ogre::Vector3::ZERO)
 	{
 	}
 

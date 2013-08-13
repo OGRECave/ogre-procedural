@@ -37,7 +37,7 @@ class _ProceduralExport Boolean : public MeshGenerator<Boolean>
 public:
 	enum BooleanOperation
 	{
-		BT_UNION, BT_INTERSECTION, BT_DIFFERENCE
+	    BT_UNION, BT_INTERSECTION, BT_DIFFERENCE
 	};
 private:
 	BooleanOperation mBooleanOperation;

@@ -38,7 +38,7 @@ void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount((mNumSegHeight+1)*(mNumSegBase+1)+mNumSegBase+2);
 	buffer.estimateIndexCount(mNumSegHeight*mNumSegBase*6+3*mNumSegBase);
-	
+
 	Real deltaAngle = (Math::TWO_PI / mNumSegBase);
 	Real deltaHeight = mHeight/(Real)mNumSegHeight;
 	int offset = 0;
@@ -57,8 +57,8 @@ void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			q.FromAngleAxis(Radian(-deltaAngle*j), Vector3::UNIT_Y);
 
 			addPoint(buffer, Vector3(x0, i*deltaHeight, z0),
-							q*refNormal,
-							Vector2(j/(Real)mNumSegBase, i/(Real)mNumSegHeight));
+			         q*refNormal,
+			         Vector2(j/(Real)mNumSegBase, i/(Real)mNumSegHeight));
 
 			if (i != mNumSegHeight&& j != mNumSegBase)
 			{
@@ -77,8 +77,8 @@ void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	//low cap
 	int centerIndex = offset;
 	addPoint(buffer, Vector3::ZERO,
-					Vector3::NEGATIVE_UNIT_Y,
-					Vector2::UNIT_Y);
+	         Vector3::NEGATIVE_UNIT_Y,
+	         Vector2::UNIT_Y);
 	offset++;
 	for (unsigned int j=0; j<=mNumSegBase; j++)
 	{
@@ -86,8 +86,8 @@ void ConeGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		Real z0 = mRadius * sinf(j*deltaAngle);
 
 		addPoint(buffer, Vector3(x0, 0.0f, z0),
-				 Vector3::NEGATIVE_UNIT_Y,
-				 Vector2(j/(Real)mNumSegBase,0.0));
+		         Vector3::NEGATIVE_UNIT_Y,
+		         Vector2(j/(Real)mNumSegBase,0.0));
 
 		if (j!=mNumSegBase)
 		{

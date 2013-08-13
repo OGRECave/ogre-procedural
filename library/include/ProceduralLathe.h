@@ -41,21 +41,21 @@ namespace Procedural
  */
 class _ProceduralExport Lathe : public MeshGenerator<Lathe>
 {
-	Shape* mShapeToExtrude;	
+	Shape* mShapeToExtrude;
 	MultiShape* mMultiShapeToExtrude;
 	unsigned int mNumSeg;
 	Ogre::Radian mAngleBegin;
-	Ogre::Radian mAngleEnd;	
-	bool mClosed;	
+	Ogre::Radian mAngleEnd;
+	bool mClosed;
 	bool mCapped;
-	
+
 	void _latheCapImpl(TriangleBuffer& buffer) const;
 	void _latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const;
 
-public:	
+public:
 	/// Contructor with arguments
-	Lathe(Shape* shapeToExtrude = 0, unsigned int numSeg = 16) : mShapeToExtrude(shapeToExtrude), mMultiShapeToExtrude(0), 
-														mNumSeg(numSeg), mAngleBegin(0), mAngleEnd((Ogre::Radian)Ogre::Math::TWO_PI), mClosed(true), mCapped(true)
+	Lathe(Shape* shapeToExtrude = 0, unsigned int numSeg = 16) : mShapeToExtrude(shapeToExtrude), mMultiShapeToExtrude(0),
+		mNumSeg(numSeg), mAngleBegin(0), mAngleEnd((Ogre::Radian)Ogre::Math::TWO_PI), mClosed(true), mCapped(true)
 	{}
 
 	/**
@@ -64,12 +64,12 @@ public:
 	*/
 	inline Lathe& setNumSeg(unsigned int numSeg)
 	{
-		if(numSeg == 0)
+		if (numSeg == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::Lathe::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
 	}
-	
+
 	/// Sets the angle to begin lathe with (default=0)
 	/// Automatically makes the lathe not closed
 	inline Lathe& setAngleBegin(Ogre::Radian angleBegin)
@@ -78,7 +78,7 @@ public:
 		mClosed = false;
 		return *this;
 	}
-	
+
 	/// Sets the angle to end lathe with (default=2PI)
 	/// Automatically makes the lathe not closed
 	inline Lathe& setAngleEnd(Ogre::Radian angleEnd)
@@ -87,14 +87,14 @@ public:
 		mClosed = false;
 		return *this;
 	}
-	
+
 	/// Sets whether the lathe is closed or not
 	inline Lathe& setClosed(bool closed)
 	{
 		mClosed = closed;
 		return *this;
 	}
-	
+
 	/// Sets whether the lathe is capped or not (default=true)
 	/// Only makes sense if the lathe is not closed.
 	inline Lathe& setCapped(bool capped)
@@ -102,8 +102,8 @@ public:
 		mCapped = capped;
 		return *this;
 	}
-	
-	/** Sets the shape to extrude 	
+
+	/** Sets the shape to extrude
 	  * If a multishape is already defined, auto-disables it
 	  * The shape is assumed to be defined in the X>=0 half-plane
 	  */
@@ -113,7 +113,7 @@ public:
 		mMultiShapeToExtrude = 0;
 		return *this;
 	}
-	
+
 	/** Sets the multiShape to extrude
 	  * If a shape is already defined, auto-disables it
 	  * The shapes in this multi-shape are assumed to be defined in the X>=0 half-plane

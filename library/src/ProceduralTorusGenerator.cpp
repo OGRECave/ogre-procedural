@@ -53,8 +53,8 @@ void TorusGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			Vector3 v = q * v0;
 			Vector3 c = q * c0;
 			addPoint(buffer, v,
-							 (v-c).normalisedCopy(),
-							 Vector2(i/(Real)mNumSegCircle, j/(Real)mNumSegSection));
+			         (v-c).normalisedCopy(),
+			         Vector2(i/(Real)mNumSegCircle, j/(Real)mNumSegSection));
 
 			if (i != mNumSegCircle)
 			{

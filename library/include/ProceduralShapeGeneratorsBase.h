@@ -51,7 +51,7 @@ protected:
 public:
 	/// Default constructor
 	BaseSpline2() : mNumSeg(4), mClosed(false), mOutSide(SIDE_RIGHT) {}
-	
+
 	/// Sets the out side of the shape
 	inline T& setOutSide(Side outSide)
 	{
@@ -69,7 +69,7 @@ public:
 	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline T& setNumSeg(unsigned int numSeg)
 	{
-		if(numSeg == 0)
+		if (numSeg == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BaseSpline2::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return (T&)*this;

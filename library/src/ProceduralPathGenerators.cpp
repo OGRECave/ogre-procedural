@@ -32,16 +32,16 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
-namespace Procedural 
+namespace Procedural
 {
 //-----------------------------------------------------------------------
 Path CatmullRomSpline3::realizePath()
 {
 	Path path;
 
-	unsigned int numPoints = mClosed?mPoints.size():mPoints.size()-1;		
+	unsigned int numPoints = mClosed?mPoints.size():mPoints.size()-1;
 	for (unsigned int i=0; i < numPoints; ++i)
-	{			
+	{
 		const Vector3& P1 = safeGetPoint(i-1);
 		const Vector3& P2 = safeGetPoint(i);
 		const Vector3& P3 = safeGetPoint(i+1);
@@ -61,7 +61,7 @@ Path CatmullRomSpline3::realizePath()
 Path CubicHermiteSpline3::realizePath()
 {
 	Path path;
-	
+
 	//Precompute tangents
 	for (unsigned int i = 0; i < mPoints.size(); ++i)
 		computeTangents<Vector3>(mPoints[i], safeGetPoint(i-1).position, safeGetPoint(i+1).position);
@@ -74,9 +74,9 @@ Path CubicHermiteSpline3::realizePath()
 
 		computeCubicHermitePoints(pointBefore, pointAfter, mNumSeg, path.getPointsReference());
 
-		if (i == mPoints.size() - 2 && !mClosed)		
+		if (i == mPoints.size() - 2 && !mClosed)
 			path.addPoint(pointAfter.position);
-		
+
 	}
 	if (mClosed)
 		path.close();
@@ -87,14 +87,14 @@ Path CubicHermiteSpline3::realizePath()
 //-----------------------------------------------------------------------
 Path RoundedCornerSpline3::realizePath()
 {
-	if(mPoints.empty())
+	if (mPoints.empty())
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The path contains no points", "Procedural::RoundedCornerSpline3::realizePath()");
 
 	Path path;
 	unsigned int numPoints = mClosed ? mPoints.size() : (mPoints.size() - 2);
 	if (!mClosed)
-			path.addPoint(mPoints[0]);
-		
+		path.addPoint(mPoints[0]);
+
 	for (unsigned int i = 0; i < numPoints; ++i)
 	{
 		const Vector3& p0 = safeGetPoint(i);
@@ -103,19 +103,19 @@ Path RoundedCornerSpline3::realizePath()
 
 		Vector3 vBegin = p1-p0;
 		Vector3 vEnd = p2-p1;
-		
+
 		// We're capping the radius if it's too big compared to segment length
 		Real radius = mRadius;
 		Real smallestSegLength = std::min(vBegin.length(), vEnd.length());
 		if (smallestSegLength < 2 * mRadius)
 			radius = smallestSegLength / 2.0f;
-		
+
 		Vector3 pBegin = p1 - vBegin.normalisedCopy() * radius;
 		Vector3 pEnd = p1 + vEnd.normalisedCopy() * radius;
 		Procedural::Plane plane1(vBegin, pBegin);
 		Procedural::Plane plane2(vEnd, pEnd);
 		Line axis;
-		plane1.intersect(plane2, axis);	
+		plane1.intersect(plane2, axis);
 
 		Vector3 vradBegin = axis.shortestPathToPoint(pBegin);
 		Vector3 vradEnd = axis.shortestPathToPoint(pEnd);
@@ -124,8 +124,8 @@ Path RoundedCornerSpline3::realizePath()
 		Radian angleTotal;
 		Vector3 vAxis;
 		q.ToAngleAxis(angleTotal, vAxis);
-						
-		for (unsigned int j=0;j<=mNumSeg;j++)
+
+		for (unsigned int j=0; j<=mNumSeg; j++)
 		{
 			q.FromAngleAxis(angleTotal * (Real)j / (Real)mNumSeg, vAxis);
 			path.addPoint(center + q*vradBegin);
@@ -136,7 +136,7 @@ Path RoundedCornerSpline3::realizePath()
 		path.addPoint(mPoints[mPoints.size()-1]);
 
 	if (mClosed)
-			path.close();
+		path.close();
 
 	return path;
 }
@@ -144,22 +144,22 @@ Path RoundedCornerSpline3::realizePath()
 //-----------------------------------------------------------------------
 Path BezierCurve3::realizePath()
 {
-	if(mPoints.size() < 2)
+	if (mPoints.size() < 2)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The curve must at least contain 2 points", "Procedural::BezierCurve3::realizePath()");
 
 	unsigned int* coef = new unsigned int[mPoints.size()];
-	if(mPoints.size() == 2)
+	if (mPoints.size() == 2)
 	{
 		coef[0] = 1;
 		coef[1] = 1;
 	}
-	else if(mPoints.size() == 3)
+	else if (mPoints.size() == 3)
 	{
 		coef[0] = 1;
 		coef[1] = 2;
 		coef[2] = 1;
 	}
-	else if(mPoints.size() == 4)
+	else if (mPoints.size() == 4)
 	{
 		coef[0] = 1;
 		coef[1] = 3;
@@ -168,7 +168,7 @@ Path BezierCurve3::realizePath()
 	}
 	else
 	{
-		for(int i = 0; i < (int)mPoints.size(); i++)
+		for (int i = 0; i < (int)mPoints.size(); i++)
 			coef[i] = Utils::binom(mPoints.size() - 1, i);
 	}
 
@@ -177,12 +177,12 @@ Path BezierCurve3::realizePath()
 
 	Path path;
 	Ogre::Real t = 0.0f;
-	while(t < 1.0f)
+	while (t < 1.0f)
 	{
 		Ogre::Real x = 0.0f;
 		Ogre::Real y = 0.0f;
 		Ogre::Real z = 0.0f;
-		for(int i = 0; i < (int)mPoints.size(); i++)
+		for (int i = 0; i < (int)mPoints.size(); i++)
 		{
 			Ogre::Real fac = coef[i] * pow(t, i) * pow(1.0f - t, (int)mPoints.size() - 1 - i);
 			x += fac * mPoints[i].x;

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "ProceduralTriangleBuffer.h"
 #include "OgreException.h"
 #include "OgreMesh.h"
- 
+
 namespace Procedural
 {
 /**
@@ -52,7 +52,7 @@ class MeshGenerator
 {
 protected:
 	/// A pointer to the default scene manager
-    //Ogre::SceneManager* mSceneMgr;
+	//Ogre::SceneManager* mSceneMgr;
 
 	/// U tile for texture coords generation
 	Ogre::Real mUTile;
@@ -96,21 +96,21 @@ public:
 	/// Default constructor
 	/// \exception Ogre::InvalidStateException Scene Manager is not set in OGRE root object
 	MeshGenerator() : mUTile(1.f),
-					  mVTile(1.f),
-					  mEnableNormals(true),
-					  mNumTexCoordSet(1),
-					  mUVOrigin(0,0),
-					  mSwitchUV(false),
-					  mOrientation(Ogre::Quaternion::IDENTITY),
-					  mScale(1,1,1),
-					  mPosition(0,0,0),
-					  mTransform(false),
-					  mDumpFileName(""),
-					  mEnableDumpToFile(false)
+		mVTile(1.f),
+		mEnableNormals(true),
+		mNumTexCoordSet(1),
+		mUVOrigin(0,0),
+		mSwitchUV(false),
+		mOrientation(Ogre::Quaternion::IDENTITY),
+		mScale(1,1,1),
+		mPosition(0,0,0),
+		mTransform(false),
+		mDumpFileName(""),
+		mEnableDumpToFile(false)
 	{
-        /*mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
+		/*mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 		if(mSceneMgr == NULL)
-            OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::MeshGenerator::MeshGenerator()");*/
+		    OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::MeshGenerator::MeshGenerator()");*/
 	}
 
 	/**
@@ -118,19 +118,19 @@ public:
 	 * @param name of the mesh for the MeshManager
 	 * @param group ressource group in which the mesh will be created
 	 */
-    Ogre::MeshPtr realizeMesh(const std::string& name = "",
-        const Ogre::String& group = "General")
+	Ogre::MeshPtr realizeMesh(const std::string& name = "",
+	                          const Ogre::String& group = "General")
 	{
 		TriangleBuffer tbuffer;
 		addToTriangleBuffer(tbuffer);
-        /*if (mEnableDumpToFile)
-            tbuffer._dumpContentsToFile(mDumpFileName);*/
-        Ogre::MeshPtr mesh;
-        if (name == "")
+		/*if (mEnableDumpToFile)
+		    tbuffer._dumpContentsToFile(mDumpFileName);*/
+		Ogre::MeshPtr mesh;
+		if (name == "")
 			mesh = tbuffer.transformToMesh(Utils::getName(), group);
 		else
 			mesh = tbuffer.transformToMesh(name, group);
-        return mesh;
+		return mesh;
 	}
 
 	/**
@@ -297,10 +297,10 @@ protected:
 				buffer.normal(normal);
 		}
 		if (mSwitchUV)
-			for (unsigned char i=0;i<mNumTexCoordSet;i++)
+			for (unsigned char i=0; i<mNumTexCoordSet; i++)
 				buffer.textureCoord(mUVOrigin.x + uv.y*mUTile, mUVOrigin.y+uv.x*mVTile);
 		else
-			for (unsigned char i=0;i<mNumTexCoordSet;i++)
+			for (unsigned char i=0; i<mNumTexCoordSet; i++)
 				buffer.textureCoord(mUVOrigin.x + uv.x*mUTile, mUVOrigin.y+uv.y*mVTile);
 	}
 

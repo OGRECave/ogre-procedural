@@ -32,8 +32,8 @@ THE SOFTWARE.
 //-------------------------------------------------------------------------------------
 void Unit_Tests::createScene(void)
 {
-	
-	Ogre::Overlay* o = Ogre::OverlayManager::getSingleton().create("myOverlay");	
+
+	Ogre::Overlay* o = Ogre::OverlayManager::getSingleton().create("myOverlay");
 	Ogre::OverlayContainer* cont = (Ogre::OverlayContainer*)OverlayManager::getSingleton().createOverlayElement("Panel","myCont");
 	o->add2D(cont);
 	Ogre::OverlayElement* el = OverlayManager::getSingleton().createOverlayElement("TextArea","myText");
@@ -45,7 +45,7 @@ void Unit_Tests::createScene(void)
 	// Register all unit tests
 	//mUnitTests.push_back(new Test_Boolean(mSceneMgr));
 	mUnitTests.push_back(new Test_Primitives(mSceneMgr));
-	mUnitTests.push_back(new Test_Triangulation(mSceneMgr));		
+	mUnitTests.push_back(new Test_Triangulation(mSceneMgr));
 	mUnitTests.push_back(new Test_ShapeBoolean(mSceneMgr));
 	mUnitTests.push_back(new Test_Extruder(mSceneMgr));
 	mUnitTests.push_back(new Test_Lathe(mSceneMgr));
@@ -59,14 +59,14 @@ void Unit_Tests::createScene(void)
 //-------------------------------------------------------------------------------------
 void Unit_Tests::destroyScene(void)
 {
-	for (std::vector<Unit_Test*>::iterator it = mUnitTests.begin();it!=mUnitTests.end();it++)
+	for (std::vector<Unit_Test*>::iterator it = mUnitTests.begin(); it!=mUnitTests.end(); it++)
 		delete *it;
 }
 //-------------------------------------------------------------------------------------
 void Unit_Tests::createCamera(void)
 {
 	BaseApplication::createCamera();
-	
+
 	// Setup camera and light
 	mCamera->setNearClipDistance(.5);
 	mCamera->setPosition(0,10,-50);
@@ -103,14 +103,17 @@ extern "C" {
 		// Create application object
 		Unit_Tests app;
 
-		try {
+		try
+		{
 			app.go();
-		} catch( Ogre::Exception& e ) {
+		}
+		catch ( Ogre::Exception& e )
+		{
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 			MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 #else
 			std::cerr << "An exception has occured: " <<
-				e.getFullDescription().c_str() << std::endl;
+			          e.getFullDescription().c_str() << std::endl;
 #endif
 		}
 

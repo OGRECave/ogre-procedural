@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	class Path;
+class Path;
 
 /**
 \defgroup shapegrp Shape
@@ -63,18 +63,18 @@ class _ProceduralExport Shape
 public:
 	/// Default constructor
 	Shape() : mClosed(false), mOutSide(SIDE_RIGHT) {}
-	
+
 	/// Adds a point to the shape
 	inline Shape& addPoint(const Ogre::Vector2& pt)
 	{
 		mPoints.push_back(pt);
 		return *this;
-	}	
-	
+	}
+
 	/// Adds a point to the shape
 	inline Shape& addPoint(Ogre::Real x, Ogre::Real y)
 	{
-		mPoints.push_back(Ogre::Vector2(x, y));		
+		mPoints.push_back(Ogre::Vector2(x, y));
 		return *this;
 	}
 
@@ -146,7 +146,7 @@ public:
 	inline Shape extractSubShape(unsigned int first, unsigned int last)
 	{
 		Shape s;
-		for (unsigned int i=first;i<=last;i++)
+		for (unsigned int i=first; i<=last; i++)
 			s.addPoint(mPoints[i]);
 		s.setOutSide(mOutSide);
 		if (mClosed)
@@ -193,7 +193,7 @@ public:
 	{
 		return mPoints;
 	}
-	
+
 	/**
 	 * Bounds-safe method to get a point : it will allow you to go beyond the bounds
 	 */
@@ -216,7 +216,7 @@ public:
 	}
 
 	/**
-	 * Makes the shape a closed shape, ie it will automatically connect 
+	 * Makes the shape a closed shape, ie it will automatically connect
 	 * the last point to the first point.
 	 */
 	inline Shape& close()
@@ -234,7 +234,7 @@ public:
 	{
 		mOutSide = side;
 		return *this;
-	}	
+	}
 
 	/// Gets which side is out
 	inline Side getOutSide() const
@@ -247,19 +247,19 @@ public:
 	{
 		mOutSide = (mOutSide == SIDE_LEFT)? SIDE_RIGHT: SIDE_LEFT;
 		return *this;
-	}	
+	}
 
 	/// Gets the number of segments in that shape
 	inline size_t getSegCount() const
 	{
 		return (mPoints.size()-1) + (mClosed?1:0);
-	}	
+	}
 
 	/// Gets whether the shape is closed or not
 	inline bool isClosed() const
 	{
-	  return mClosed;
-	}	
+		return mClosed;
+	}
 
 	/**
 	 * Returns local direction after the current point
@@ -285,35 +285,35 @@ public:
 			return (mPoints[1] - mPoints[0]).normalisedCopy();
 		else
 			return (getPoint(i) - getPoint(i-1)).normalisedCopy();
-	}	
+	}
 
 	/// Gets the average between before direction and after direction
 	inline Ogre::Vector2 getAvgDirection(unsigned int i) const
 	{
 		return (getDirectionAfter(i) + getDirectionBefore(i)).normalisedCopy();
-	}	
+	}
 
 	/// Gets the shape normal just after that point
 	inline Ogre::Vector2 getNormalAfter(unsigned int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
-		return -getDirectionAfter(i).perpendicular();
+			return -getDirectionAfter(i).perpendicular();
 		return getDirectionAfter(i).perpendicular();
-	}	
+	}
 
 	/// Gets the shape normal just before that point
 	inline Ogre::Vector2 getNormalBefore(unsigned int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
-		return -getDirectionBefore(i).perpendicular();
+			return -getDirectionBefore(i).perpendicular();
 		return getDirectionBefore(i).perpendicular();
-	}	
+	}
 
 	/// Gets the "normal" of that point ie an average between before and after normals
 	inline Ogre::Vector2 getAvgNormal(unsigned int i) const
 	{
 		if (mOutSide==SIDE_RIGHT)
-		return -getAvgDirection(i).perpendicular();
+			return -getAvgDirection(i).perpendicular();
 		return getAvgDirection(i).perpendicular();
 	}
 
@@ -322,7 +322,7 @@ public:
 	 * Mostly for debugging purposes
 	 */
 	Ogre::MeshPtr realizeMesh(const std::string& name="") const;
-	
+
 	/**
 	 * Appends the shape vertices to a manual object being edited
 	 */
@@ -334,7 +334,7 @@ public:
 	 * @return true if the point is inside this shape, false otherwise
 	 */
 	bool isPointInside(const Ogre::Vector2& point) const;
-	 
+
 	/**
 	 * Computes the intersection between this shape and another one.
 	 * Both shapes must be closed.
@@ -345,7 +345,7 @@ public:
 	 * @exception Ogre::InvalidParametersException Other shapes must be closed and has to contain at least 2 points!
 	 */
 	MultiShape booleanIntersect(const Shape& other) const;
-	 
+
 	/**
 	 * Computes the union between this shape and another one.
 	 * Both shapes must be closed.
@@ -356,7 +356,7 @@ public:
 	 * @exception Ogre::InvalidParametersException Other shapes must be closed and has to contain at least 2 points!
 	 */
 	MultiShape booleanUnion(const Shape& other) const;
-	 
+
 	/**
 	 * Computes the difference between this shape and another one.
 	 * Both shapes must be closed.
@@ -367,10 +367,10 @@ public:
 	 * @exception Ogre::InvalidParametersException Other shapes must be closed and has to contain at least 2 points!
 	 */
 	MultiShape booleanDifference(const Shape& other) const;
-	 
+
 	/**
 	 * On a closed shape, find if the outside is located on the right
-	 * or on the left. If the outside can easily be guessed in your context, 
+	 * or on the left. If the outside can easily be guessed in your context,
 	 * you'd rather use setOutside(), which doesn't need any computation.
 	 */
 	Side findRealOutSide() const;
@@ -379,7 +379,7 @@ public:
 	 * Determines whether the outside as defined by user equals "real" outside
 	*/
 	bool isOutsideRealOutside() const;
-	
+
 	/// Creates a shape with the keys of this shape and extra keys coming from a track
 	/// @param track the track to merge keys with
 	/// @return a new Shape coming from the merge between original shape and the track
@@ -396,7 +396,7 @@ public:
 			*it+=translation;
 		return *this;
 	}
-		
+
 	/**
 	 * Applies the given translation to all the points already defined.
 	 * Has strictly no effect on the points defined after that
@@ -431,7 +431,7 @@ public:
 	 * Applies the given scale to all the points already defined.
 	 * Has strictly no effect on the points defined after that
 	 * @param amount amount of scale
-	 */	
+	 */
 	Shape& scale(Ogre::Real amount)
 	{
 		return scale(amount, amount);
@@ -442,7 +442,7 @@ public:
 	 * Has strictly no effect on the points defined after that
 	 * @param scaleX amount of scale in the X direction
 	 * @param scaleY amount of scale in the Y direction
-	 */	
+	 */
 	Shape& scale(Ogre::Real scaleX, Ogre::Real scaleY)
 	{
 		for (std::vector<Ogre::Vector2>::iterator it = mPoints.begin(); it!=mPoints.end(); ++it)
@@ -457,12 +457,12 @@ public:
 	 * Applies the given scale to all the points already defined.
 	 * Has strictly no effect on the points defined after that
 	 * @param amount of scale
-	 */	
+	 */
 	Shape& scale(const Ogre::Vector2& amount)
 	{
 		return scale(amount.x, amount.y);
 	}
-		
+
 	/**
 	 * Reflect all points in this shape against a zero-origined line with a given normal
 	 * @param normal the normal
@@ -504,21 +504,21 @@ public:
 	Shape& mirrorAroundPoint(Ogre::Vector2 point, bool flip = false)
 	{
 		int l = (int)mPoints.size();
-		if(flip)
-			for(int i = l - 1; i >= 0; i--)
+		if (flip)
+			for (int i = l - 1; i >= 0; i--)
 			{
 				Ogre::Vector2 pos = mPoints.at(i) - point;
 				mPoints.push_back(-1.0 * pos + point);
 			}
 		else
-			for(int i = 0; i < l; i++)
+			for (int i = 0; i < l; i++)
 			{
 				Ogre::Vector2 pos = mPoints.at(i) - point;
 				mPoints.push_back(-1.0 * pos + point);
 			}
 		return *this;
 	}
-		
+
 	/**
 	 * Create a symetric copy at a given axis.
 	 * @param axis Axis where to mirror
@@ -528,19 +528,19 @@ public:
 	{
 		int l = (int)mPoints.size();
 		Ogre::Vector2 normal = axis.perpendicular().normalisedCopy();
-		if(flip)
-			for(int i = 0; i < l; i++)
+		if (flip)
+			for (int i = 0; i < l; i++)
 			{
 				Ogre::Vector2 pos = mPoints.at(i);
 				pos = pos.reflect(normal);
-				if(pos != mPoints.at(i)) mPoints.push_back(pos);
+				if (pos != mPoints.at(i)) mPoints.push_back(pos);
 			}
 		else
-			for(int i = l - 1; i >= 0; i--)
+			for (int i = l - 1; i >= 0; i--)
 			{
 				Ogre::Vector2 pos = mPoints.at(i);
 				pos = pos.reflect(normal);
-				if(pos != mPoints.at(i)) mPoints.push_back(pos);
+				if (pos != mPoints.at(i)) mPoints.push_back(pos);
 			}
 		return *this;
 	}
@@ -549,7 +549,7 @@ public:
 	Ogre::Real getTotalLength() const
 	{
 		Ogre::Real length = 0;
-		for (unsigned int i=0;i<mPoints.size()-1;i++)
+		for (unsigned int i=0; i<mPoints.size()-1; i++)
 			length+=(mPoints[i+1]-mPoints[i]).length();
 		if (mClosed)
 			length+=(mPoints.back()-*mPoints.begin()).length();
@@ -563,24 +563,24 @@ public:
 	/// @exception Ogre::InvalidParametersException coord must be comprised between 0 and 1
 	inline Ogre::Vector2 getPosition(unsigned int i, Ogre::Real coord) const
 	{
-		if(!mClosed || i >= mPoints.size())
+		if (!mClosed || i >= mPoints.size())
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Out of Bounds", "Procedural::Path::getPosition(unsigned int, Ogre::Real)");
-		if(coord < 0.0f || coord > 1.0f)
+		if (coord < 0.0f || coord > 1.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Coord must be comprised between 0 and 1", "Procedural::Path::getPosition(unsigned int, Ogre::Real)");
 		Ogre::Vector2 A = getPoint(i);
 		Ogre::Vector2 B = getPoint(i+1);
 		return A + coord*(B-A);
 	}
-	
+
 	/// Gets a position on the shape from lineic coordinate
 	/// @param coord lineic coordinate
 	/// @exception Ogre::InvalidStateException The shape must at least contain 2 points
 	inline Ogre::Vector2 getPosition(Ogre::Real coord) const
 	{
-		if(mPoints.size() < 2)
+		if (mPoints.size() < 2)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The shape must at least contain 2 points", "Procedural::Shape::getPosition(Ogre::Real)");
 		unsigned int i=0;
-		while(true)
+		while (true)
 		{
 			Ogre::Real nextLen = (getPoint(i+1) - getPoint(i)).length();
 			if (coord>nextLen)
@@ -597,18 +597,18 @@ public:
 	Ogre::Real findBoundingRadius() const
 	{
 		Ogre::Real sqRadius=0.f;
-		for (unsigned int i=0;i<mPoints.size();i++)
+		for (unsigned int i=0; i<mPoints.size(); i++)
 			sqRadius=std::max(sqRadius,mPoints[i].squaredLength());
 		return Ogre::Math::Sqrt(sqRadius);
 	}
-		
+
 	/**
 	 * Applies a "thickness" to a shape, ie a bit like the extruder, but in 2D
 	 * <table border="0" width="100%"><tr><td>\image html shape_thick1.png "Start shape (before thicken)"</td><td>\image html shape_thick2.png "Result (after thicken)"</td></tr></table>
 	 */
 	MultiShape thicken(Ogre::Real amount);
 
-	private:
+private:
 
 	enum BooleanOperationType { BOT_UNION, BOT_INTERSECTION, BOT_DIFFERENCE};
 
@@ -625,15 +625,15 @@ public:
 			index[1] = j;
 			onVertex[0] = false;
 			onVertex[1] = false;
-		}		
+		}
 	};
 
 	bool _isLookingForOutside(BooleanOperationType opType, char shapeSelector) const;
-	
+
 	char _isIncreasing(Ogre::Real d, BooleanOperationType opType, char shapeSelector) const;
-		
+
 	bool _findWhereToGo(const Shape* inputShapes[], BooleanOperationType opType, IntersectionInShape intersection, Ogre::uint8& shapeSelector, char& isIncreasing, unsigned int& currentSegment) const;
-	
+
 	void _findAllIntersections(const Shape& other, std::vector<IntersectionInShape>& intersections) const;
 
 };

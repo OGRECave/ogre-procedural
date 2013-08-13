@@ -37,43 +37,43 @@ int Procedural::Utils::counter = 0;
 
 namespace Procedural
 {
-	using namespace Ogre;
+using namespace Ogre;
 
-	void Utils::log(const Ogre::String& st)
-	{
-		   Ogre::LogManager::getSingleton().logMessage("[PROCEDURAL] " + st);
-   #if (PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32)
-      #ifdef UNICODE
-         std::basic_ostringstream<TCHAR> buf;
-         buf << st.c_str();
-         std::wstring wst = buf.str();               
-         OutputDebugString( wst.c_str() );
-      #else
-         OutputDebugString( (st + "\n").c_str() );
-      #endif   
-   #endif
-	}
+void Utils::log(const Ogre::String& st)
+{
+	Ogre::LogManager::getSingleton().logMessage("[PROCEDURAL] " + st);
+#if (PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32)
+#ifdef UNICODE
+	std::basic_ostringstream<TCHAR> buf;
+	buf << st.c_str();
+	std::wstring wst = buf.str();
+	OutputDebugString( wst.c_str() );
+#else
+	OutputDebugString( (st + "\n").c_str() );
+#endif
+#endif
+}
 
-	
-	std::string Utils::getName(const std::string& prefix)
-	{
-		counter++;
-		return prefix + Ogre::StringConverter::toString(counter);		
-	}
-	
-	//-----------------------------------------------------------------------
-	Quaternion Utils::_computeQuaternion(const Ogre::Vector3& direction, const Ogre::Vector3& upVector)
-	{
-		Quaternion q;
-		Vector3 zVec = direction;
-		zVec.normalise();		
-		Vector3 xVec = upVector.crossProduct( zVec );
-		if (xVec.isZeroLength())
-			xVec = Ogre::Vector3::UNIT_X;
-        xVec.normalise();
-		Vector3 yVec = zVec.crossProduct( xVec );
-		yVec.normalise();
-		q.FromAxes( xVec, yVec, zVec);
-		return q;	
-	}
+
+std::string Utils::getName(const std::string& prefix)
+{
+	counter++;
+	return prefix + Ogre::StringConverter::toString(counter);
+}
+
+//-----------------------------------------------------------------------
+Quaternion Utils::_computeQuaternion(const Ogre::Vector3& direction, const Ogre::Vector3& upVector)
+{
+	Quaternion q;
+	Vector3 zVec = direction;
+	zVec.normalise();
+	Vector3 xVec = upVector.crossProduct( zVec );
+	if (xVec.isZeroLength())
+		xVec = Ogre::Vector3::UNIT_X;
+	xVec.normalise();
+	Vector3 yVec = zVec.crossProduct( xVec );
+	yVec.normalise();
+	q.FromAxes( xVec, yVec, zVec);
+	return q;
+}
 }

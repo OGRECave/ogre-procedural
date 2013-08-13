@@ -41,7 +41,7 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	int offset = 0;
 
-	for (unsigned int i = 0; i <= mNumSegCircle * mP;i++)
+	for (unsigned int i = 0; i <= mNumSegCircle * mP; i++)
 	{
 		Real phi = Math::TWO_PI * i/(Real)mNumSegCircle;
 		Real x0 = mRadius*(2 + cos(mQ*phi/(Real)mP)) * cos(phi) / 3.f;
@@ -56,17 +56,17 @@ void TorusKnotGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		Vector3 v0(x0,y0,z0);
 		Vector3 v1(x1,y1,z1);
 		Vector3 direction((v1-v0).normalisedCopy());
-				
+
 		Quaternion q = Utils::_computeQuaternion(direction);
 
-		for (unsigned int j =0;j<=mNumSegSection;j++)
+		for (unsigned int j =0; j<=mNumSegSection; j++)
 		{
 			Real alpha = Math::TWO_PI *j/mNumSegSection;
 			Vector3 vp = mSectionRadius*(q * Vector3(cos(alpha), sin(alpha),0));
 
 			addPoint(buffer, v0+vp,
-							 vp.normalisedCopy(),
-							 Vector2(i/(Real)mNumSegCircle, j/(Real)mNumSegSection));
+			         vp.normalisedCopy(),
+			         Vector2(i/(Real)mNumSegCircle, j/(Real)mNumSegSection));
 
 			if (i != mNumSegCircle * mP)
 			{
