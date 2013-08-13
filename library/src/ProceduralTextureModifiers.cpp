@@ -660,9 +660,9 @@ Colours & Colours::setColourPercent(Ogre::Real red, Ogre::Real green, Ogre::Real
 	return *this;
 }
 
-Colours & Colours::setBrithness(Ogre::uchar brithness)
+Colours & Colours::setBrightness(Ogre::uchar brightness)
 {
-	mBrithness = brithness;
+	mBrightness = brightness;
 	return *this;
 }
 
@@ -688,7 +688,7 @@ TextureBufferPtr Colours::process()
 {
 	size_t w = mBuffer->getWidth();
 	size_t h = mBuffer->getHeight();
-	long brithness = (((long)mBrithness) * 2) - 256;
+	long brightness = (((long)mBrightness) * 2) - 256;
 	long contrast = (((long)mContrast));
 	Ogre::Real fconstrast = (Ogre::Real)mContrast / 128.0f;
 	fconstrast = fconstrast * fconstrast * fconstrast;
@@ -701,9 +701,9 @@ TextureBufferPtr Colours::process()
 	{
 		for(unsigned long x = 0; x < w; x++)
 		{
-			long r = (long)(mColourBase.r * 255.0f) + (((long)mBuffer->getPixelRedByte(x, y) * (long)(mColourPercent.r * 255.0f))>>8) + brithness;
-			long g = (long)(mColourBase.g * 255.0f) + (((long)mBuffer->getPixelGreenByte(x, y) * (long)(mColourPercent.g * 255.0f))>>8) + brithness;
-			long b = (long)(mColourBase.b * 255.0f) + (((long)mBuffer->getPixelBlueByte(x, y) * (long)(mColourPercent.b * 255.0f))>>8) + brithness;
+			long r = (long)(mColourBase.r * 255.0f) + (((long)mBuffer->getPixelRedByte(x, y) * (long)(mColourPercent.r * 255.0f))>>8) + brightness;
+			long g = (long)(mColourBase.g * 255.0f) + (((long)mBuffer->getPixelGreenByte(x, y) * (long)(mColourPercent.g * 255.0f))>>8) + brightness;
+			long b = (long)(mColourBase.b * 255.0f) + (((long)mBuffer->getPixelBlueByte(x, y) * (long)(mColourPercent.b * 255.0f))>>8) + brightness;
 
 			long c = (long)(((r - 127) * contrast)>>8) + 127;
 			r = (c < 0x00) ? 0x00 : (c > 0xff) ? 0xff : c;
@@ -2450,49 +2450,49 @@ TextureBufferPtr Lerp::process()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Light & Light::setNormalMap(TextureBufferPtr normal)
+TextureLightBaker & TextureLightBaker::setNormalMap(TextureBufferPtr normal)
 {
 	mNormal = normal;
 	return *this;
 }
 
-Light & Light::setColourAmbient(Ogre::ColourValue colour)
+TextureLightBaker & TextureLightBaker::setColourAmbient(Ogre::ColourValue colour)
 {
 	mColourAmbient = colour;
 	return *this;
 }
 
-Light & Light::setColourAmbient(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+TextureLightBaker & TextureLightBaker::setColourAmbient(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourAmbient = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Light & Light::setColourDiffuse(Ogre::ColourValue colour)
+TextureLightBaker & TextureLightBaker::setColourDiffuse(Ogre::ColourValue colour)
 {
 	mColourDiffuse = colour;
 	return *this;
 }
 
-Light & Light::setColourDiffuse(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+TextureLightBaker & TextureLightBaker::setColourDiffuse(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourDiffuse = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Light & Light::setColourSpecular(Ogre::ColourValue colour)
+TextureLightBaker & TextureLightBaker::setColourSpecular(Ogre::ColourValue colour)
 {
 	mColourSpecular = colour;
 	return *this;
 }
 
-Light & Light::setColourSpecular(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+TextureLightBaker & TextureLightBaker::setColourSpecular(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
 {
 	mColourSpecular = Ogre::ColourValue(red, green, blue, alpha);
 	return *this;
 }
 
-Light & Light::setColours(Ogre::ColourValue ambient, Ogre::ColourValue diffuse, Ogre::ColourValue specular)
+TextureLightBaker & TextureLightBaker::setColours(Ogre::ColourValue ambient, Ogre::ColourValue diffuse, Ogre::ColourValue specular)
 {
 	mColourAmbient = ambient;
 	mColourDiffuse = diffuse;
@@ -2500,30 +2500,30 @@ Light & Light::setColours(Ogre::ColourValue ambient, Ogre::ColourValue diffuse, 
 	return *this;
 }
 
-Light & Light::setPosition(Ogre::Vector3 position)
+TextureLightBaker & TextureLightBaker::setPosition(Ogre::Vector3 position)
 {
 	return setPosition(position.x, position.y, position.z);
 }
 
-Light & Light::setPosition(Ogre::Real x, Ogre::Real y, Ogre::Real z)
+TextureLightBaker & TextureLightBaker::setPosition(Ogre::Real x, Ogre::Real y, Ogre::Real z)
 {
 	mPosition = Ogre::Vector3(std::max<Ogre::Real>(std::min<Ogre::Real>(x, 255.0f), 0.0f), std::max<Ogre::Real>(std::min<Ogre::Real>(y, 255.0f), 0.0f), std::max<Ogre::Real>(std::min<Ogre::Real>(z, 255.0f), 0.0f));
 	return *this;
 }
 
-Light & Light::setSpecularPower(Ogre::uchar power)
+TextureLightBaker & TextureLightBaker::setSpecularPower(Ogre::uchar power)
 {
 	mSpecularPower = power;
 	return *this;
 }
 
-Light & Light::setBumpPower(Ogre::uchar power)
+TextureLightBaker & TextureLightBaker::setBumpPower(Ogre::uchar power)
 {
 	mBumpPower = power;
 	return *this;
 }
 
-TextureBufferPtr Light::process()
+TextureBufferPtr TextureLightBaker::process()
 {
 	size_t w = mBuffer->getWidth();
 	size_t h = mBuffer->getHeight();

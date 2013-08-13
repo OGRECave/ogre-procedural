@@ -28,6 +28,7 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_MESH_GENERATOR_INCLUDED
 #define PROCEDURAL_MESH_GENERATOR_INCLUDED
 
+#include "OgreRoot.h"
 #include "ProceduralPlatform.h"
 #include "ProceduralTriangleBuffer.h"
 #include "OgreException.h"
