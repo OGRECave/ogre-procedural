@@ -86,12 +86,6 @@ protected:
 	// Whether a transform has been defined or not
 	bool mTransform;
 
-	// Debug output file
-	std::string mDumpFileName;
-
-	// Enable output to file or not
-	bool mEnableDumpToFile;
-
 public:
 	/// Default constructor
 	/// \exception Ogre::InvalidStateException Scene Manager is not set in OGRE root object
@@ -104,13 +98,8 @@ public:
 		mOrientation(Ogre::Quaternion::IDENTITY),
 		mScale(1,1,1),
 		mPosition(0,0,0),
-		mTransform(false),
-		mDumpFileName(""),
-		mEnableDumpToFile(false)
+		mTransform(false)
 	{
-		/*mSceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-		if(mSceneMgr == NULL)
-		    OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::MeshGenerator::MeshGenerator()");*/
 	}
 
 	/**
@@ -123,8 +112,6 @@ public:
 	{
 		TriangleBuffer tbuffer;
 		addToTriangleBuffer(tbuffer);
-		/*if (mEnableDumpToFile)
-		    tbuffer._dumpContentsToFile(mDumpFileName);*/
 		Ogre::MeshPtr mesh;
 		if (name == "")
 			mesh = tbuffer.transformToMesh(Utils::getName(), group);
@@ -260,22 +247,6 @@ public:
 		mScale = Ogre::Vector3(1);
 		return static_cast<T&>(*this);
 	}
-
-	/// Activate dump to file
-	inline T& _setDumpToFile(const std::string& fileName)
-	{
-		mEnableDumpToFile = true;
-		mDumpFileName = fileName;
-		return static_cast<T&>(*this);
-	}
-
-	/// Disable dump to file
-	inline T& _disableDumpToFile()
-	{
-		mEnableDumpToFile = false;
-		return static_cast<T&>(*this);
-	}
-
 
 protected:
 	/// Adds a new point to a triangle buffer, using the format defined for that MeshGenerator

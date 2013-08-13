@@ -238,7 +238,7 @@ class Unit_Tests : public BaseApplication
 			           .addPoint(1,-0.5f)    // 8
 			           .close();
 
-			putMesh(Triangulator().setShapeToTriangulate(&s5)._setDumpToFile("triangulator_bug.yaml").realizeMesh());
+			putMesh(Triangulator().setShapeToTriangulate(&s5).realizeMesh());
 
 			// Tests for the "shape order bug": if a multishape contains shapes in an order or the opposite, artifacts may happen
 			{
