@@ -46,8 +46,8 @@ class _ProceduralExport SphereGenerator : public MeshGenerator<SphereGenerator>
 
 public:
 	/// Constructor with arguments
-	SphereGenerator(Ogre::Real radius = 1.f, unsigned int numRings = 16, unsigned int numSegments = 16) : 
-	  mRadius(radius),mNumRings(numRings), mNumSegments(numSegments)
+	SphereGenerator(Ogre::Real radius = 1.f, unsigned int numRings = 16, unsigned int numSegments = 16) :
+		mRadius(radius),mNumRings(numRings), mNumSegments(numSegments)
 
 	{}
 
@@ -57,7 +57,7 @@ public:
 	*/
 	inline SphereGenerator & setRadius(Ogre::Real radius)
 	{
-		if(radius <= 0.0f)
+		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::SphereGenerator::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
@@ -69,7 +69,7 @@ public:
 	*/
 	inline SphereGenerator & setNumRings(unsigned int numRings)
 	{
-		if(numRings == 0)
+		if (numRings == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 rings", "Procedural::SphereGenerator::setNumRings(unsigned int)");
 		mNumRings = numRings;
 		return *this;
@@ -81,12 +81,12 @@ public:
 	*/
 	inline SphereGenerator & setNumSegments(unsigned int numSegments)
 	{
-		if(numSegments == 0)
+		if (numSegments == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::SphereGenerator::setNumSegments(unsigned int)");
 		mNumSegments = numSegments;
 		return *this;
 	}
-	
+
 	/**
 	 * Builds the mesh into the given TriangleBuffer
 	 * @param buffer The TriangleBuffer on where to append the mesh.

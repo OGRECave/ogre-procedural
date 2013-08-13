@@ -22,23 +22,23 @@ using namespace Ogre;
 //-------------------------------------------------------------------------------------
 BaseApplication::BaseApplication(void)
 	: mRoot(0),
-	mCamera(0),
-	mSceneMgr(0),
-	mWindow(0),
-	mResourcesCfg(StringUtil::BLANK),
-	mPluginsCfg(StringUtil::BLANK),
-	mTrayMgr(0),
-	mCameraMan(0),
-	mDetailsPanel(0),
-	mCursorWasVisible(false),
-	mShutDown(false),
-	mNonExclusiveMouse(false),
-	mInputManager(0),
-	mMouse(0),
-	mKeyboard(0)
-	#ifdef OGRE_EXTERNAL_OVERLAY
-	,mOverlaySystem(0)
-	#endif
+	  mCamera(0),
+	  mSceneMgr(0),
+	  mWindow(0),
+	  mResourcesCfg(StringUtil::BLANK),
+	  mPluginsCfg(StringUtil::BLANK),
+	  mTrayMgr(0),
+	  mCameraMan(0),
+	  mDetailsPanel(0),
+	  mCursorWasVisible(false),
+	  mShutDown(false),
+	  mNonExclusiveMouse(false),
+	  mInputManager(0),
+	  mMouse(0),
+	  mKeyboard(0)
+#ifdef OGRE_EXTERNAL_OVERLAY
+	  ,mOverlaySystem(0)
+#endif
 {
 }
 
@@ -46,9 +46,9 @@ BaseApplication::BaseApplication(void)
 BaseApplication::~BaseApplication(void)
 {
 	if (mTrayMgr) delete mTrayMgr;
-	#ifdef OGRE_EXTERNAL_OVERLAY
+#ifdef OGRE_EXTERNAL_OVERLAY
 	if (mOverlaySystem) delete mOverlaySystem;
-	#endif
+#endif
 	if (mCameraMan) delete mCameraMan;
 
 	//Remove ourself as a Window listener
@@ -63,7 +63,7 @@ bool BaseApplication::configure(void)
 	// Show the configuration dialog and initialise the system
 	// You can skip this and use root.restoreConfig() to load configuration
 	// settings if you were sure there are valid ones saved in ogre.cfg
-	if(mRoot->restoreConfig() || mRoot->showConfigDialog())
+	if (mRoot->restoreConfig() || mRoot->showConfigDialog())
 	{
 		// If returned true, user clicked OK so initialise
 		// Here we choose to let the system create a default rendering window by passing 'true'
@@ -133,14 +133,14 @@ void BaseApplication::createFrameListener(void)
 	pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
 	if (mNonExclusiveMouse)
 	{
-		#if defined OIS_WIN32_PLATFORM
+#if defined OIS_WIN32_PLATFORM
 		pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
-		pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));	
-		#elif defined OIS_LINUX_PLATFORM
+		pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
+#elif defined OIS_LINUX_PLATFORM
 		pl.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
-		pl.insert(std::make_pair(std::string("x11_mouse_hide"), std::string("false")));	
+		pl.insert(std::make_pair(std::string("x11_mouse_hide"), std::string("false")));
 		pl.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
-		#endif
+#endif
 	}
 
 	mInputManager = OIS::InputManager::createInputSystem( pl );
@@ -212,7 +212,7 @@ void BaseApplication::createViewports(void)
 
 	// Alter the camera aspect ratio to match the viewport
 	mCamera->setAspectRatio(
-		Real(vp->getActualWidth()) / Real(vp->getActualHeight()));
+	    Real(vp->getActualWidth()) / Real(vp->getActualHeight()));
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::setupResources(void)
@@ -235,7 +235,7 @@ void BaseApplication::setupResources(void)
 			typeName = i->first;
 			archName = i->second;
 			ResourceGroupManager::getSingleton().addResourceLocation(
-				archName, typeName, secName);
+			    archName, typeName, secName);
 		}
 	}
 }
@@ -247,9 +247,9 @@ void BaseApplication::loadResources(void)
 //-------------------------------------------------------------------------------------
 void BaseApplication::go(void)
 {
-#if PROCEDURAL_DEBUG_MODE == 1	
+#if PROCEDURAL_DEBUG_MODE == 1
 	mPluginsCfg = "plugins_d.cfg";
-#else	
+#else
 	mPluginsCfg = "plugins.cfg";
 #endif
 	mResourcesCfg = "resources.cfg";
@@ -268,7 +268,7 @@ bool BaseApplication::setup(void)
 	createLogManager();
 
 	mRoot = new Root(mPluginsCfg);
-	
+
 #ifdef OGRE_EXTERNAL_OVERLAY
 	mOverlaySystem = new Ogre::OverlaySystem();
 #endif
@@ -298,10 +298,10 @@ bool BaseApplication::setup(void)
 //-------------------------------------------------------------------------------------
 bool BaseApplication::frameRenderingQueued(const FrameEvent& evt)
 {
-	if(mWindow->isClosed())
+	if (mWindow->isClosed())
 		return false;
 
-	if(mShutDown)
+	if (mShutDown)
 		return false;
 
 	//Need to capture/update each device
@@ -430,7 +430,7 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
 		mCamera->setPolygonMode(pm);
 		mDetailsPanel->setParamValue(10, newVal);
 	}
-	else if(arg.key == OIS::KC_F5)   // refresh all textures
+	else if (arg.key == OIS::KC_F5)  // refresh all textures
 	{
 		TextureManager::getSingleton().reloadAll();
 	}
@@ -441,7 +441,8 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
 	else if (arg.key == OIS::KC_ESCAPE)
 	{
 		mShutDown = true;
-	} else if (arg.key == OIS::KC_O) // switch between standard and orthographic projection
+	}
+	else if (arg.key == OIS::KC_O)   // switch between standard and orthographic projection
 	{
 		if (mCamera->getProjectionType() == PT_PERSPECTIVE)
 		{
@@ -507,9 +508,9 @@ void BaseApplication::windowResized(RenderWindow* rw)
 void BaseApplication::windowClosed(RenderWindow* rw)
 {
 	//Only close for window that created OIS (the main window in these demos)
-	if( rw == mWindow )
+	if ( rw == mWindow )
 	{
-		if( mInputManager )
+		if ( mInputManager )
 		{
 			mInputManager->destroyInputObject( mMouse );
 			mInputManager->destroyInputObject( mKeyboard );

@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** 
+/**
  * \ingroup objgengrp
  * Builds a rounded box.
  * You can choose the size of the rounded borders to get a sharper or smoother look.
@@ -45,7 +45,7 @@ class _ProceduralExport RoundedBoxGenerator : public MeshGenerator<RoundedBoxGen
 	unsigned short mNumSegX,mNumSegY,mNumSegZ;
 	Ogre::Real mChamferSize;
 	unsigned short mChamferNumSeg;
-		
+
 public:
 	RoundedBoxGenerator() : mSizeX(1.f), mSizeY(1.f), mSizeZ(1.f),
 		mNumSegX(1), mNumSegY(1), mNumSegZ(1), mChamferSize(.1f), mChamferNumSeg(8) {}
@@ -56,7 +56,7 @@ public:
 	*/
 	RoundedBoxGenerator& setSizeX(Ogre::Real sizeX)
 	{
-		if(sizeX <= 0.0f)
+		if (sizeX <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "X size must be larger than 0!", "Procedural::RoundedBoxGenerator::setSizeX(Ogre::Real)");
 		mSizeX = sizeX;
 		return *this;
@@ -68,7 +68,7 @@ public:
 	*/
 	RoundedBoxGenerator& setSizeY(Ogre::Real sizeY)
 	{
-		if(sizeY <= 0.0f)
+		if (sizeY <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "X size must be larger than 0!", "Procedural::RoundedBoxGenerator::setSizeY(Ogre::Real)");
 		mSizeY = sizeY;
 		return *this;
@@ -80,7 +80,7 @@ public:
 	*/
 	RoundedBoxGenerator& setSizeZ(Ogre::Real sizeZ)
 	{
-		if(sizeZ <= 0.0f)
+		if (sizeZ <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Z size must be larger than 0!", "Procedural::RoundedBoxGenerator::setSizeZ(Ogre::Real)");
 		mSizeZ = sizeZ;
 		return *this;
@@ -101,7 +101,7 @@ public:
 	*/
 	RoundedBoxGenerator& setNumSegX(unsigned short numSegX)
 	{
-		if(numSegX == 0)
+		if (numSegX == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::RoundedBoxGenerator::setNumSegX(unsigned int)");
 		mNumSegX = numSegX;
 		return *this;
@@ -113,7 +113,7 @@ public:
 	*/
 	RoundedBoxGenerator& setNumSegY(unsigned short numSegY)
 	{
-		if(numSegY == 0)
+		if (numSegY == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::RoundedBoxGenerator::setNumSegY(unsigned int)");
 		mNumSegY = numSegY;
 		return *this;
@@ -125,7 +125,7 @@ public:
 	*/
 	RoundedBoxGenerator& setNumSegZ(unsigned short numSegZ)
 	{
-		if(numSegZ == 0)
+		if (numSegZ == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::RoundedBoxGenerator::setNumSegZ(unsigned int)");
 		mNumSegZ = numSegZ;
 		return *this;
@@ -137,7 +137,7 @@ public:
 	*/
 	RoundedBoxGenerator& setChamferSize(Ogre::Real chamferSize)
 	{
-		if(chamferSize <= 0.0f)
+		if (chamferSize <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Chamfer size must be larger than 0!", "Procedural::RoundedBoxGenerator::setChamferSize(Ogre::Real)");
 		mChamferSize = chamferSize;
 		return *this;
@@ -150,10 +150,10 @@ public:
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 private:
-	
+
 	/// Internal. Builds an "edge" of the rounded box, ie a quarter cylinder
 	void _addEdge(TriangleBuffer& buffer, short xPos, short yPos, short zPos) const;
-	
+
 	/// Internal. Builds a "corner" of the rounded box, ie a 1/8th of a sphere
 	void _addCorner(TriangleBuffer& buffer, bool isXPositive, bool isYPositive, bool isZPositive) const;
 

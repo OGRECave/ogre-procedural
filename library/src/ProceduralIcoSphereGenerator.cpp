@@ -56,26 +56,26 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	vertices.push_back(invnorm*Vector3( 1,  -phi,0));//11
 
 	int firstFaces[] = {0,1,2,
-						0,3,1,
-						0,4,5,
-						1,7,6,
-						1,6,2,
-						1,3,7,
-						0,2,4,
-						0,5,3,
-						2,6,8,
-						2,8,4,
-						3,5,9,
-						3,9,7,
-						11,6,7,
-						10,5,4,
-						10,4,8,
-						10,9,5,
-						11,8,6,
-						11,7,9,
-						10,8,11,
-						10,11,9
-					   };
+	                    0,3,1,
+	                    0,4,5,
+	                    1,7,6,
+	                    1,6,2,
+	                    1,3,7,
+	                    0,2,4,
+	                    0,5,3,
+	                    2,6,8,
+	                    2,8,4,
+	                    3,5,9,
+	                    3,9,7,
+	                    11,6,7,
+	                    10,5,4,
+	                    10,4,8,
+	                    10,9,5,
+	                    11,8,6,
+	                    11,7,9,
+	                    10,8,11,
+	                    10,11,9
+	                   };
 
 	std::vector<int> faces(firstFaces, firstFaces + sizeof(firstFaces)/sizeof(*firstFaces));
 	int size = 60;
@@ -121,7 +121,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 
 	/// Step 3 : generate texcoords
 	std::vector<Vector2> texCoords;
-	for (unsigned short i=0;i<vertices.size();i++)
+	for (unsigned short i=0; i<vertices.size(); i++)
 	{
 		const Vector3& vec = vertices[i];
 		Real u, v;
@@ -137,7 +137,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	// find vertices to split
 	std::vector<int> indexToSplit;
 
-	for (unsigned int i=0;i<faces.size()/3;i++)
+	for (unsigned int i=0; i<faces.size()/3; i++)
 	{
 		Vector2& t0 = texCoords[faces[i*3+0]];
 		Vector2& t1 = texCoords[faces[i*3+1]];
@@ -166,7 +166,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	}
 
 	//split vertices
-	for (unsigned short i=0;i<indexToSplit.size();i++)
+	for (unsigned short i=0; i<indexToSplit.size(); i++)
 	{
 		int index = indexToSplit[i];
 		//duplicate vertex
@@ -176,7 +176,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		texCoords.push_back(t);
 		int newIndex = vertices.size()-1;
 		//reassign indices
-		for (unsigned short j=0;j<faces.size();j++)
+		for (unsigned short j=0; j<faces.size(); j++)
 		{
 			if (faces[j]==index)
 			{
@@ -189,7 +189,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 			}
 		}
 	}
-	
+
 	/// Step 5 : realize
 	buffer.rebaseOffset();
 	buffer.estimateVertexCount(vertices.size());
@@ -198,8 +198,8 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	for (unsigned short i=0; i<vertices.size(); i++)
 	{
 		addPoint(buffer, mRadius*vertices[i],
-						 vertices[i],//note : vertices are already normalised
-						 Vector2(texCoords[i].x,texCoords[i].y));
+		         vertices[i],//note : vertices are already normalised
+		         Vector2(texCoords[i].x,texCoords[i].y));
 	}
 	for (unsigned short i=0; i<size; i++)
 	{

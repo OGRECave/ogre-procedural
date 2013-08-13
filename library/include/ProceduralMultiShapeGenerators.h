@@ -65,7 +65,7 @@ public:
 	*/
 	inline TextShape& setText(Ogre::String text)
 	{
-		if(text.empty())
+		if (text.empty())
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 characters in text", "Procedural::TextShape::setText(Ogre::String text)");
 
 		mText = text;
@@ -82,9 +82,9 @@ public:
 	*/
 	inline TextShape& setFont(Ogre::String fontName, Ogre::uchar fontSize)
 	{
-		if(fontName.empty())
+		if (fontName.empty())
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 characters in font name", "Procedural::TextShape::setFont(Ogre::String fontName, Ogre::uchar fontSize)");
-		if(fontSize < 4)
+		if (fontSize < 4)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Minimum font size is 4", "Procedural::TextShape::setFont(Ogre::String fontName, Ogre::uchar fontSize)");
 
 		mFontName = fontName;
@@ -92,7 +92,7 @@ public:
 		return *this;
 	}
 
-	
+
 	/**
 	 * Build a MultiShape from chars (one Shape per character)
 	 * \exception Ogre::InternalErrorException Freetype error

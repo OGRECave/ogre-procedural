@@ -79,18 +79,18 @@ public:
 	//! Methods how to work with parameter map
 	enum ABNORMALS_COMPENSATION
 	{
-		COMPENSATION_NORMAL,	//!< Use as a normal map
-		COMPENSATION_HEIGHT,	//!< Use as a height map
-		COMPENSATION_QUATERNION	//!< Use as a list of quaternion
+	    COMPENSATION_NORMAL,	//!< Use as a normal map
+	    COMPENSATION_HEIGHT,	//!< Use as a height map
+	    COMPENSATION_QUATERNION	//!< Use as a list of quaternion
 	};
 
 	//! Methods how to fix broken normal maps
 	enum ABNORMALS_MIRROR
 	{
-		MIRROR_NONE,	//!< None
-		MIRROR_X_YZ,	//!< X : YZ
-		MIRROR_Y_XZ,	//!< Y : XZ
-		MIRROR_X_Y_Z	//!< X+Y : Z
+	    MIRROR_NONE,	//!< None
+	    MIRROR_X_YZ,	//!< X : YZ
+	    MIRROR_Y_XZ,	//!< Y : XZ
+	    MIRROR_X_Y_Z	//!< X+Y : Z
 	};
 
 private:
@@ -429,9 +429,9 @@ public:
 	//! List of algorithms to blur
 	enum BLUR_TYPE
 	{
-		BLUR_BOX,		//!< Use simplified block filter to blur
-		BLUR_MEAN,		//!< Use mean filter to blur
-		BLUR_GAUSSIAN	//!< Use gaussian filter to blur
+	    BLUR_BOX,		//!< Use simplified block filter to blur
+	    BLUR_MEAN,		//!< Use mean filter to blur
+	    BLUR_GAUSSIAN	//!< Use gaussian filter to blur
 	};
 
 private:
@@ -500,11 +500,11 @@ class _ProceduralExport Channel : public TextureProcessing
 public:
 	enum CANNEL_SELECTION
 	{
-		SELECT_RED,
-		SELECT_GREEN,
-		SELECT_BLUE,
-		SELECT_ALPHA,
-		SELECT_GRAY 
+	    SELECT_RED,
+	    SELECT_GREEN,
+	    SELECT_BLUE,
+	    SELECT_ALPHA,
+	    SELECT_GRAY
 	};
 
 private:
@@ -533,7 +533,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Draw a circle.
 \details Draw a filled circle on top of previous content.
 
@@ -571,7 +571,7 @@ public:
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
 	CircleTexture & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the fill colour of the circle.
 	\param red Red value of the fill colour [0.0, 1.0] \(default 1.0)
@@ -686,7 +686,7 @@ public:
 	\param colour New colour to work on (default Ogre::ColourValue::Black)
 	*/
 	Colours & setColourBase(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the base colour to work on.
 	\param red Red value of base colour [0.0, 1.0] \(default 0.0)
@@ -701,7 +701,7 @@ public:
 	\param colour New colour to add (default Ogre::ColourValue::White)
 	*/
 	Colours & setColourPercent(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the percent colour to add on image.
 	\param red Red value of percent colour [0.0, 1.0] \(default 1.0)
@@ -728,7 +728,7 @@ public:
 	\param saturation New image saturation (default 127)
 	*/
 	Colours & setSaturation(Ogre::uchar saturation);
-	
+
 	/**
 	Set alpha of the image.
 	\param alpha New image alpha (default 127)
@@ -767,15 +767,15 @@ public:
 	//! Methods how to combine image
 	enum COMBINE_METHOD
 	{
-		METHOD_ADD_CLAMP,
-		METHOD_ADD_WRAP,
-		METHOD_SUB_CLAMP,
-		METHOD_SUB_WRAP,
-		METHOD_MULTIPLY,
-		METHOD_MULTIPLY2,
-		METHOD_BLEND,
-		METHOD_ALPHA,
-		METHOD_LAYER
+	    METHOD_ADD_CLAMP,
+	    METHOD_ADD_WRAP,
+	    METHOD_SUB_CLAMP,
+	    METHOD_SUB_WRAP,
+	    METHOD_MULTIPLY,
+	    METHOD_MULTIPLY2,
+	    METHOD_BLEND,
+	    METHOD_ALPHA,
+	    METHOD_LAYER
 	};
 
 private:
@@ -809,7 +809,7 @@ public:
 	\param colour New colour for drawing (default Ogre::ColourValue::White)
 	*/
 	Combine & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the percent colour to add on image.
 	\param red Red value of drawing colour [0.0, 1.0] \(default 1.0)
@@ -864,7 +864,7 @@ public:
 		: TextureProcessing(pBuffer, "Convolution"), mKernelSize(3), mDivisor(1.0f), mThreshold(128), mCalculateEdgeDivisor(true), mIncludeAlphaChannel(false)
 	{
 		int mid = 2;
-		if((mKernelSize % 2) == 0)
+		if ((mKernelSize % 2) == 0)
 			mid = mKernelSize / 2;
 		else
 			mid = (mKernelSize - 1) / 2 + 1;
@@ -969,17 +969,17 @@ public:
 	//! Methods how to create line length
 	enum CRACK_LENGTH_DECISION
 	{
-		LENGTH_DECISION_RANDOM,			//!< Use a random number generator
-		LENGTH_DECISION_CONSTANT,		//!< Use a constant value
-		LENGTH_DECISION_NORMAL_BASED	//!< Use a normal map
+	    LENGTH_DECISION_RANDOM,			//!< Use a random number generator
+	    LENGTH_DECISION_CONSTANT,		//!< Use a constant value
+	    LENGTH_DECISION_NORMAL_BASED	//!< Use a normal map
 	};
 
 	//! High quality settings
 	enum CRACK_QUALITY
 	{
-		QUALITY_HIGH_OFF,	//!< Switch high quality off
-		QUALITY_ALPHA,		//!< Use alpha channel
-		QUALITY_SUBPIXEL	//!< Use sub pixel block
+	    QUALITY_HIGH_OFF,	//!< Switch high quality off
+	    QUALITY_ALPHA,		//!< Use alpha channel
+	    QUALITY_SUBPIXEL	//!< Use sub pixel block
 	};
 
 private:
@@ -1014,7 +1014,7 @@ public:
 	\param colour New colour for drawing (default Ogre::ColourValue::White)
 	*/
 	Crack & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour to draw.
 	\param red Red value of drawing colour [0.0, 1.0] \(default 1.0)
@@ -1053,7 +1053,7 @@ public:
 	\param lengthdecision New decision length (default LENGTH_DECISION_RANDOM)
 	*/
 	Crack & setLengthDecision(CRACK_LENGTH_DECISION lengthdecision);
-	
+
 	/**
 	Set method for high quality painting.
 	\param quality New high quality setting (default QUALITY_HIGH_OFF)
@@ -1067,7 +1067,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Draw a cycloid.
 \details Draw a cycloid on top of previous content.
 
@@ -1106,12 +1106,12 @@ public:
 	*/
 	enum CYCLOID_TYPE
 	{
-		HYPOCYCLOID,	//!< Draw a Hypocycloid.
-		HYPOTROCHOID,	//!< Draw a Hypotrochoid.
-		EPICYCLOID,		//!< Draw a Epicycloid.
-		EPITROCHOID,	//!< Draw a Epitrochoid.
-		ROSE_CURVE,		//!< Draw a Rose curve.
-		LISSAJOUS_CURVE	//!< Draw a Lissajous curve.
+	    HYPOCYCLOID,	//!< Draw a Hypocycloid.
+	    HYPOTROCHOID,	//!< Draw a Hypotrochoid.
+	    EPICYCLOID,		//!< Draw a Epicycloid.
+	    EPITROCHOID,	//!< Draw a Epitrochoid.
+	    ROSE_CURVE,		//!< Draw a Rose curve.
+	    LISSAJOUS_CURVE	//!< Draw a Lissajous curve.
 	};
 
 	/**
@@ -1119,11 +1119,11 @@ public:
 	*/
 	enum CYCLOID_PARAMETER
 	{
-		PARAMETER_R,	//!< Set parameter R.
-		PARAMETER_r,	//!< Set parameter r.
-		PARAMETER_d,	//!< Set parameter d.
-		PARAMETER_e,	//!< Set parameter e.
-		PARAMETER_k		//!< Set parameter k.
+	    PARAMETER_R,	//!< Set parameter R.
+	    PARAMETER_r,	//!< Set parameter r.
+	    PARAMETER_d,	//!< Set parameter d.
+	    PARAMETER_e,	//!< Set parameter e.
+	    PARAMETER_k		//!< Set parameter k.
 	};
 
 private:
@@ -1160,7 +1160,7 @@ public:
 	\param colour New colour for drawing (default Ogre::ColourValue::White)
 	*/
 	Cycloid & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the drawing colour for cycloid structure.
 	\param red Red value of drawing colour [0.0, 1.0] \(default 1.0)
@@ -1324,10 +1324,10 @@ public:
 	//! List of algorithms used for edge detection
 	enum DETECTION_TYPE
 	{
-		DETECTION_HOMOGENITY,	//!< Homogenity edge detector
-		DETECTION_DIFFERENCE,	//!< Difference edge detector
-		DETECTION_SOBEL,		//!< Sobel edge detector
-		DETECTION_CANNY			//!< Canny edge detector
+	    DETECTION_HOMOGENITY,	//!< Homogenity edge detector
+	    DETECTION_DIFFERENCE,	//!< Difference edge detector
+	    DETECTION_SOBEL,		//!< Sobel edge detector
+	    DETECTION_CANNY			//!< Canny edge detector
 	};
 
 private:
@@ -1380,7 +1380,7 @@ private:
 	Ogre::Vector3* getBlock(long x, long y);
 };
 
-/** 
+/**
 \brief Draw an ellipse.
 \details Draw a filled ellipse on top of previous content.
 
@@ -1420,7 +1420,7 @@ public:
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
 	EllipseTexture & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the fill colour of the ellipse.
 	\param red Red value of the fill colour [0.0, 1.0] \(default 1.0)
@@ -1513,7 +1513,7 @@ public:
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
 	EllipseTexture & setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
-	
+
 	/**
 	Run image manipulation
 	\return Pointer to image buffer which has been set in the constructor.
@@ -1524,7 +1524,7 @@ private:
 	void _putpixel(long dx, long dy);
 };
 
-/** 
+/**
 \brief %Flip the image.
 \details Flip the input image on different axis.
 
@@ -1559,9 +1559,9 @@ public:
 	//! Flip axis selection
 	enum FLIP_AXIS
 	{
-		FLIP_HORIZONTAL,	//!< Flip horizontal
-		FLIP_VERTICAL,		//!< Flip vertical
-		FLIP_POINT			//!< Flip middle
+	    FLIP_HORIZONTAL,	//!< Flip horizontal
+	    FLIP_VERTICAL,		//!< Flip vertical
+	    FLIP_POINT			//!< Flip middle
 	};
 
 private:
@@ -1628,7 +1628,7 @@ public:
 	\param colour New colour for glow ellipse (default Ogre::ColourValue::White)
 	*/
 	Glow & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour of the glow ellipse.
 	\param red Red value of the glow ellipse [0.0, 1.0] \(default 1.0)
@@ -1712,7 +1712,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Exchange pixels at random positions.
 \details Exchange pixels in a small area randomly.
 
@@ -1871,7 +1871,7 @@ public:
 	\param colour New ambient light colour (default Ogre::ColourValue::Black)
 	*/
 	TextureLightBaker & setColourAmbient(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the ambient light colour.
 	\param red Red value of ambient light colour [0.0, 1.0] \(default 0.0)
@@ -1886,7 +1886,7 @@ public:
 	\param colour New diffuse light colour (default Ogre::ColourValue(0.5f, 0.5f, 0.5f, 1.0f))
 	*/
 	TextureLightBaker & setColourDiffuse(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the diffuse light colour.
 	\param red Red value of diffuse light colour [0.0, 1.0] \(default 0.5)
@@ -2103,7 +2103,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Draw a number of pixels at random positions.
 \details Paint a specific number of pixels at random positions in a given colour.
 
@@ -2138,7 +2138,7 @@ public:
 	\param colour New colour for painting pixels (default Ogre::ColourValue::White)
 	*/
 	RandomPixels & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the colour of the pixel to paint.
 	\param red Red value of the pixel colour [0.0, 1.0] \(default 1.0)
@@ -2167,7 +2167,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Draw a rectangle.
 \details Draw a filled rectangle on top of previous content.
 
@@ -2205,7 +2205,7 @@ public:
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
 	RectangleTexture & setColour(Ogre::ColourValue colour);
-	
+
 	/**
 	Set the fill colour of the rectangle.
 	\param red Red value of the fill colour [0.0, 1.0] \(default 1.0)
@@ -2309,7 +2309,7 @@ public:
 	TextureBufferPtr process();
 };
 
-/** 
+/**
 \brief Rotate & zoom image.
 \details Rotate the image and/or zoom on a specific pat of it.
 
@@ -2477,8 +2477,8 @@ public:
 	//! List of algorithms to blur
 	enum SHARP_TYPE
 	{
-		SHARP_BASIC,	//!< Use simplified block filter to sharp
-		SHARP_GAUSSIAN	//!< Use gaussian filter to sharp
+	    SHARP_BASIC,	//!< Use simplified block filter to sharp
+	    SHARP_GAUSSIAN	//!< Use gaussian filter to sharp
 	};
 
 private:
@@ -2695,10 +2695,10 @@ public:
 	//! Selection what to do with image parts below/above the threshould value.
 	enum THRESHOLD_MODE
 	{
-		MODE_EXPAND_DOWNWARDS,	//!< Set pixel below threshould value to black
-		MODE_EXPAND_UPWARDS,	//!< Set pixel above threshould value to white
-		MODE_COMPRESS_BELOW,	//!< Set pixel below threshould value to an avarage value of all pixel below threshould value
-		MODE_COMPRESS_ABOVE		//!< Set pixel above threshould value to an avarage value of all pixel above threshould value
+	    MODE_EXPAND_DOWNWARDS,	//!< Set pixel below threshould value to black
+	    MODE_EXPAND_UPWARDS,	//!< Set pixel above threshould value to white
+	    MODE_COMPRESS_BELOW,	//!< Set pixel below threshould value to an avarage value of all pixel below threshould value
+	    MODE_COMPRESS_ABOVE		//!< Set pixel above threshould value to an avarage value of all pixel above threshould value
 	};
 
 private:

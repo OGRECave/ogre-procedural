@@ -43,24 +43,24 @@ THE SOFTWARE.
 using namespace Procedural;
 
 //-------------------------------------------------------------------------------------
-	bool Illustrations::init()
-	{	
-	
+bool Illustrations::init()
+{
+
 	String resourcesCfg, pluginsCfg;
-	#ifdef _DEBUG	
+#ifdef _DEBUG
 	pluginsCfg = "plugins_d.cfg";
-	#else	
+#else
 	pluginsCfg = "plugins.cfg";
-	#endif
+#endif
 	resourcesCfg = "resources.cfg";
 
-	mRoot = new Ogre::Root(pluginsCfg); 
-  
+	mRoot = new Ogre::Root(pluginsCfg);
+
 	ConfigFile cf;
 	cf.load(resourcesCfg);
- 
+
 	ConfigFile::SectionIterator seci = cf.getSectionIterator();
- 
+
 	String secName, typeName, archName;
 	while (seci.hasMoreElements())
 	{
@@ -72,7 +72,7 @@ using namespace Procedural;
 			typeName = i->first;
 			archName = i->second;
 			ResourceGroupManager::getSingleton().addResourceLocation(
-				archName, typeName, secName);
+			    archName, typeName, secName);
 		}
 	}
 
@@ -87,10 +87,10 @@ using namespace Procedural;
 	ConfigOptionMap optionMap = rs->getConfigOptions();
 	rs->setConfigOption("FSAA", optionMap["FSAA"].possibleValues.back());
 	rs->setConfigOption("Full Screen", "No");
-	rs->setConfigOption("Video Mode", optionMap["Video Mode"].possibleValues.back());		
-	
-	mRoot->setRenderSystem(rs);			 
-	mRoot->initialise(false); 
+	rs->setConfigOption("Video Mode", optionMap["Video Mode"].possibleValues.back());
+
+	mRoot->setRenderSystem(rs);
+	mRoot->initialise(false);
 
 	//Create dummy invisible window
 	Ogre::NameValuePairList windowParams;
@@ -98,9 +98,9 @@ using namespace Procedural;
 	mWindow=mRoot->createRenderWindow("dummyWindow", 1,1,false, &windowParams);
 	mWindow->setAutoUpdated(false);
 
-	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();	
-	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);  
-	mCamera = mSceneMgr->createCamera("SimpleCamera");  
+	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);
+	mCamera = mSceneMgr->createCamera("SimpleCamera");
 	mCamera->setAspectRatio(1.);
 	cameraPerspective();
 	mCamera->setNearClipDistance(1.);
@@ -111,14 +111,14 @@ using namespace Procedural;
 	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
 
 	// Create main render to texture
-	mRttTexture = Ogre::TextureManager::getSingleton().createManual("RttTex", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, 
-		Ogre::TEX_TYPE_2D, 256, 256, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET, 0, 0, 4);
-	mRenderTexture = mRttTexture->getBuffer()->getRenderTarget(); 
+	mRttTexture = Ogre::TextureManager::getSingleton().createManual("RttTex", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+	              Ogre::TEX_TYPE_2D, 256, 256, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET, 0, 0, 4);
+	mRenderTexture = mRttTexture->getBuffer()->getRenderTarget();
 	Ogre::Viewport* vp = mRenderTexture->addViewport(mCamera);
 	vp->setClearEveryFrame(true);
 	vp->setBackgroundColour(Ogre::ColourValue::White);
 	vp->setOverlaysEnabled(false);
-	
+
 	return true;
 }
 
@@ -133,16 +133,16 @@ void Illustrations::next(std::string name, Real size)
 	mRenderTexture->writeContentsToFile(name + ".png");
 
 	// Clear the scene
-	for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it != mSceneNodes.end(); it++) 
+	for (std::vector<SceneNode*>::iterator it = mSceneNodes.begin(); it != mSceneNodes.end(); it++)
 	{
 		(*it)->detachAllObjects();
 		mSceneMgr->destroySceneNode(*it);
 	}
 	for (std::vector<Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); it++)
 	{
-		MeshManager::getSingletonPtr()->remove((*it)->getMesh()->getName());			
+		MeshManager::getSingletonPtr()->remove((*it)->getMesh()->getName());
 		mSceneMgr->destroyEntity(*it);
-	}		
+	}
 	mEntities.clear();
 	mSceneNodes.clear();
 }
@@ -170,12 +170,12 @@ void Illustrations::exportImage(std::string name, Procedural::TextureBufferPtr b
 	Ogre::Image* pImgData = buffer->getImage();
 	Ogre::uchar* pixelBuffer = new Ogre::uchar[h * w * 4];
 	Ogre::Image* image = new Ogre::Image();
-	for(size_t y = 0; y < h; y++)
+	for (size_t y = 0; y < h; y++)
 	{
-		for(size_t x = 0; x < w; x++)
+		for (size_t x = 0; x < w; x++)
 		{
 			Ogre::ColourValue pixel = Ogre::ColourValue::White;
-			if(x >= border && x < (w - border) && y >= border && y < (h - border)) pixel = pImgData->getColourAt(x - border, y - border, 0);
+			if (x >= border && x < (w - border) && y >= border && y < (h - border)) pixel = pImgData->getColourAt(x - border, y - border, 0);
 #if OGRE_ENDIAN == OGRE_ENDIAN_LITTLE
 			pixelBuffer[y * w * 4 + x * 4 + 3] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.r * 255.0f, 0.0f), 255.0f);
 			pixelBuffer[y * w * 4 + x * 4 + 2] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.g * 255.0f, 0.0f), 255.0f);
@@ -194,7 +194,7 @@ void Illustrations::exportImage(std::string name, Procedural::TextureBufferPtr b
 	delete image;
 	delete pixelBuffer;
 	delete pImgData;
-	if(reset) Procedural::Solid(buffer).setColour(Ogre::ColourValue::Black).process();
+	if (reset) Procedural::Solid(buffer).setColour(Ogre::ColourValue::Black).process();
 }
 
 void Illustrations::go()
@@ -441,10 +441,10 @@ void Illustrations::go()
 
 	Shape s3 = CircleShape().setNumSeg(16).realizeShape();
 	ms = MultiShape(2, &s3.switchSide(), &Shape(s3).scale(1.1f));
-	Path p3 = CatmullRomSpline3().addPoint(0,0,-5).addPoint(0,0,0).addPoint(1,-1,5).realizePath();		
+	Path p3 = CatmullRomSpline3().addPoint(0,0,-5).addPoint(0,0,0).addPoint(1,-1,5).realizePath();
 	mp = Extruder().setMultiShapeToExtrude(&ms).setExtrusionPath(&p3).realizeMesh();
 	putMesh(mp);
-	next("extruder_multishape", 4);	
+	next("extruder_multishape", 4);
 
 	//
 	// Lathe
@@ -469,11 +469,11 @@ void Illustrations::go()
 	Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource("cuckoo.ttf", "Essential"); // Font from SdkTrays.zip
 	std::ofstream fontFile("cuckoo.ttf", std::ios::out | std::ios::binary);
 	char block[1024];
-	while(!stream->eof())
+	while (!stream->eof())
 	{
 		size_t len = stream->read(block, 1024);
 		fontFile.write(block, len);
-		if(len < 1024) break;
+		if (len < 1024) break;
 	}
 	fontFile.close();
 
@@ -802,7 +802,7 @@ void Illustrations::go()
 	Procedural::Solid(&buffer).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
 	Procedural::Cycloid(&buffer).setColour(Ogre::ColourValue::Red).setPenSize(2).setType(Procedural::Cycloid::LISSAJOUS_CURVE).process();
 	exportImage("texture_cycloid_lissajous", &buffer, true);
-	
+
 
 	Procedural::Image(&buffer).setFile("red_brick.jpg").process();
 	Procedural::Blit(&buffer).setInputBuffer(&bufferGradient).setInputRect(0.0f, 0.0f, 0.5f, 0.5f).setOutputRect(0.25f, 0.25f, 0.75f, 0.75f).process();
@@ -852,7 +852,7 @@ void Illustrations::go()
 	exportImage("texture_example_solid", &distort);
 	int s03x = dotfile.add("Solid", "texture_example_solid");
 	Procedural::RectangleTexture rectDraw(&distort);
-	for(size_t i = 1; i < (size_t)brickLines; i++)
+	for (size_t i = 1; i < (size_t)brickLines; i++)
 	{
 		Ogre::ColourValue rc = Ogre::ColourValue((i % 2 == 0) ? Ogre::Math::RangeRandom(0.4f, 0.6f) : Ogre::Math::RangeRandom(0.0f, 0.2f), 0.52f, 1.0f);
 		rc.a = 1.0f;
@@ -926,9 +926,9 @@ void Illustrations::go()
 	int s20 = dotfile.add("Colours", "texture_example_colours_4");
 	dotfile.bind(s19, s20);
 	Procedural::Combine(&light)
-		.addImage(&joint, Procedural::Combine::METHOD_ADD_CLAMP)
-		.addImage(&colourcloud, Procedural::Combine::METHOD_ADD_CLAMP)
-		.process();
+	.addImage(&joint, Procedural::Combine::METHOD_ADD_CLAMP)
+	.addImage(&colourcloud, Procedural::Combine::METHOD_ADD_CLAMP)
+	.process();
 	exportImage("texture_example_combine_2_finish", &light);
 	int s21 = dotfile.add("Combine", "texture_example_combine_2_finish");
 	dotfile.bind(s13, s21);
@@ -956,19 +956,22 @@ extern "C" {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		app.mOutputPath = strCmdLine;
 #else
-		 size_t size=_PC_PATH_MAX;
-		 char path[size];
-		 app.mOutputPath = (argc > 1) ? argv[1] : getcwd(path,size);
+		size_t size=_PC_PATH_MAX;
+		char path[size];
+		app.mOutputPath = (argc > 1) ? argv[1] : getcwd(path,size);
 #endif
 
-		try {
+		try
+		{
 			app.go();
-		} catch( Ogre::Exception& e ) {
+		}
+		catch ( Ogre::Exception& e )
+		{
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 			MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 #else
 			std::cerr << "An exception has occured: " <<
-				e.getFullDescription().c_str() << std::endl;
+			          e.getFullDescription().c_str() << std::endl;
 #endif
 		}
 

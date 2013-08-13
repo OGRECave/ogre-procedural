@@ -53,21 +53,21 @@ void RoundedBoxGenerator::_addCorner(TriangleBuffer& buffer, bool isXPositive, b
 	if ((!isXPositive)&&(!isZPositive)) offsetSegAngle = Math::PI;
 
 	// Generate the group of rings for the sphere
-	for(unsigned short ring = 0; ring <= mChamferNumSeg; ring++ )
+	for (unsigned short ring = 0; ring <= mChamferNumSeg; ring++ )
 	{
 		Real r0 = mChamferSize * sinf (ring * deltaRingAngle + offsetRingAngle);
 		Real y0 = mChamferSize * cosf (ring * deltaRingAngle + offsetRingAngle);
 
 		// Generate the group of segments for the current ring
-		for(unsigned short seg = 0; seg <= mChamferNumSeg; seg++)
+		for (unsigned short seg = 0; seg <= mChamferNumSeg; seg++)
 		{
 			Real x0 = r0 * sinf(seg * deltaSegAngle + offsetSegAngle);
 			Real z0 = r0 * cosf(seg * deltaSegAngle + offsetSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
 			addPoint(buffer, Vector3(x0 + offsetPosition.x, y0 + offsetPosition.y, z0 + offsetPosition.z),
-							 Vector3(x0, y0, z0).normalisedCopy(),
-							 Vector2((Real) seg / (Real) mChamferNumSeg, (Real) ring / (Real) mChamferNumSeg));
+			         Vector3(x0, y0, z0).normalisedCopy(),
+			         Vector2((Real) seg / (Real) mChamferNumSeg, (Real) ring / (Real) mChamferNumSeg));
 
 			if ((ring != mChamferNumSeg) && (seg != mChamferNumSeg))
 			{
@@ -128,8 +128,8 @@ void RoundedBoxGenerator::_addEdge(TriangleBuffer& buffer, short xPos, short yPo
 			Real x0 = mChamferSize * cosf(j*deltaAngle);
 			Real z0 = mChamferSize * sinf(j*deltaAngle);
 			addPoint(buffer, Vector3(x0 * vx0 + i*deltaHeight * vy0 + z0 * vz0 + offsetPosition),
-							 (x0*vx0+z0*vz0).normalisedCopy(),
-							 Vector2(j/(Real)mChamferNumSeg, i/(Real)numSegHeight));
+			         (x0*vx0+z0*vz0).normalisedCopy(),
+			         Vector2(j/(Real)mChamferNumSeg, i/(Real)numSegHeight));
 
 			if (i != numSegHeight && j!=mChamferNumSeg)
 			{
@@ -157,34 +157,34 @@ void RoundedBoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	}
 
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
-	  .setNormal(Vector3::NEGATIVE_UNIT_Z)
-	  .setPosition((.5f*mSizeZ+mChamferSize)*(mOrientation*Vector3::NEGATIVE_UNIT_Z))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::NEGATIVE_UNIT_Z)
+	.setPosition((.5f*mSizeZ+mChamferSize)*(mOrientation*Vector3::NEGATIVE_UNIT_Z))
+	.addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
-	  .setNormal(Vector3::UNIT_Z)
-	  .setPosition((.5f*mSizeZ+mChamferSize)*(mOrientation*Vector3::UNIT_Z))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::UNIT_Z)
+	.setPosition((.5f*mSizeZ+mChamferSize)*(mOrientation*Vector3::UNIT_Z))
+	.addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
-	  .setNormal(Vector3::NEGATIVE_UNIT_Y)
-	  .setPosition((.5f*mSizeY+mChamferSize)*(mOrientation*Vector3::NEGATIVE_UNIT_Y))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::NEGATIVE_UNIT_Y)
+	.setPosition((.5f*mSizeY+mChamferSize)*(mOrientation*Vector3::NEGATIVE_UNIT_Y))
+	.addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
-	  .setNormal(Vector3::UNIT_Y)
-	  .setPosition((.5f*mSizeY+mChamferSize)*(mOrientation*Vector3::UNIT_Y))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::UNIT_Y)
+	.setPosition((.5f*mSizeY+mChamferSize)*(mOrientation*Vector3::UNIT_Y))
+	.addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
-	  .setNormal(Vector3::NEGATIVE_UNIT_X)
-	  .setPosition((.5f*mSizeX+mChamferSize)*(mOrientation*Vector3::NEGATIVE_UNIT_X))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::NEGATIVE_UNIT_X)
+	.setPosition((.5f*mSizeX+mChamferSize)*(mOrientation*Vector3::NEGATIVE_UNIT_X))
+	.addToTriangleBuffer(buffer);
 	buffer.rebaseOffset();
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
-	  .setNormal(Vector3::UNIT_X)
-	  .setPosition((.5f*mSizeX+mChamferSize)*(mOrientation*Vector3::UNIT_X))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::UNIT_X)
+	.setPosition((.5f*mSizeX+mChamferSize)*(mOrientation*Vector3::UNIT_X))
+	.addToTriangleBuffer(buffer);
 
 	// Generate the corners
 	_addCorner(buffer, true,  true,  true);

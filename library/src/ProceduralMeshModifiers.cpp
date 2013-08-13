@@ -63,7 +63,7 @@ void CalculateNormalsModifier::modify()
 
 		const std::vector<int>& indices = mInputTriangleBuffer->getIndices();
 		std::vector<TriangleBuffer::Vertex>& vertices = mInputTriangleBuffer->getVertices();
-		for (size_t i = 0; i<indices.size();i+=3)
+		for (size_t i = 0; i<indices.size(); i+=3)
 		{
 			Vector3 v1 = vertices[indices[i]].mPosition;
 			Vector3 v2 = vertices[indices[i+1]].mPosition;
@@ -72,7 +72,7 @@ void CalculateNormalsModifier::modify()
 			vertices[indices[i]].mNormal = n;
 			vertices[indices[i+1]].mNormal = n;
 			vertices[indices[i+2]].mNormal = n;
-		}	
+		}
 	}
 	else
 	{
@@ -82,7 +82,7 @@ void CalculateNormalsModifier::modify()
 		std::vector<TriangleBuffer::Vertex>& vertices = mInputTriangleBuffer->getVertices();
 		std::vector<std::vector<Vector3> > tmpNormals;
 		tmpNormals.resize(vertices.size());
-		for (size_t i = 0; i<indices.size();i+=3)
+		for (size_t i = 0; i<indices.size(); i+=3)
 		{
 			Vector3 v1 = vertices[indices[i]].mPosition;
 			Vector3 v2 = vertices[indices[i+1]].mPosition;
@@ -98,7 +98,7 @@ void CalculateNormalsModifier::modify()
 			for (size_t j = 0; j<tmpNormals[i].size(); j++)
 				n += tmpNormals[i][j];
 			vertices[i].mNormal = n.normalisedCopy();
-		}	
+		}
 	}
 }
 //--------------------------------------------------------------
@@ -111,7 +111,7 @@ void WeldVerticesModifier::modify()
 	std::vector<int>& indices = mInputTriangleBuffer->getIndices();
 
 	size_t newSize = vertices.size();
-	for (std::vector<TriangleBuffer::Vertex>::iterator it = vertices.begin(); it!= vertices.end(); ++it)	
+	for (std::vector<TriangleBuffer::Vertex>::iterator it = vertices.begin(); it!= vertices.end(); ++it)
 	{
 		size_t currentIndex = it - vertices.begin();
 		if (currentIndex>=newSize)
@@ -127,7 +127,9 @@ void WeldVerticesModifier::modify()
 				for (std::vector<int>::iterator it2 = indices.begin(); it2 != indices.end(); ++it2)
 					if (*it2 == currentIndex)
 						*it2 = existingIndex;
-			} else {
+			}
+			else
+			{
 				size_t lastIndex = newSize;
 				*it = vertices[lastIndex];
 				for (std::vector<int>::iterator it2 = indices.begin(); it2 != indices.end(); ++it2)
@@ -150,7 +152,7 @@ void UnweldVerticesModifier::modify()
 	std::vector<TriangleBuffer::Vertex> newVertices;
 	const std::vector<TriangleBuffer::Vertex>& originVertices = mInputTriangleBuffer->getVertices();
 	const std::vector<int>& originIndices = mInputTriangleBuffer->getIndices();
-	for (size_t i=0;i<originIndices.size(); i+=3)
+	for (size_t i=0; i<originIndices.size(); i+=3)
 	{
 		newVertices.push_back(originVertices[originIndices[i]]);
 		newVertices.push_back(originVertices[originIndices[i+1]]);
@@ -162,7 +164,7 @@ void UnweldVerticesModifier::modify()
 		mInputTriangleBuffer->getVertices().push_back(*it);
 	mInputTriangleBuffer->getIndices().clear();
 	mInputTriangleBuffer->getIndices().reserve(newVertices.size());
-	for (size_t i=0;i<newVertices.size();i++)	
+	for (size_t i=0; i<newVertices.size(); i++)
 		mInputTriangleBuffer->getIndices().push_back(i);
 }
 //--------------------------------------------------------------
@@ -209,7 +211,7 @@ void HemisphereUVModifier::modify()
 		Vector2 v2(input.x, input.z);
 		v2.normalise();
 		Vector2 uv = Vector2(.5, .5) + .5f * (r / Math::HALF_PI).valueRadians() * v2;
-		
+
 		if (input.y > 0)
 			it->mUV = Utils::reframe(mTextureRectangleTop, uv);
 		else
@@ -222,9 +224,9 @@ void CylinderUVModifier::modify()
 	if (mInputTriangleBuffer == NULL)
 		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Input triangle buffer must be set", __FUNCTION__);
 	if (mHeight <=0)
-			OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Height must be strictly positive", __FUNCTION__);
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Height must be strictly positive", __FUNCTION__);
 	if (mRadius <= 0)
-			OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Radius must be strictly positive", __FUNCTION__);
+		OGRE_EXCEPT(Exception::ERR_INVALID_STATE, "Radius must be strictly positive", __FUNCTION__);
 
 	Real angleThreshold = Math::ATan(mHeight / mRadius).valueRadians();
 	for (std::vector<TriangleBuffer::Vertex>::iterator it = mInputTriangleBuffer->getVertices().begin(); it != mInputTriangleBuffer->getVertices().end(); ++it)
@@ -235,7 +237,8 @@ void CylinderUVModifier::modify()
 		{
 			Vector2 vxz(it->mPosition.x, it->mPosition.z);
 			it->mUV = vxz / mRadius;
-		} else
+		}
+		else
 		{
 			Vector2 vxz(it->mPosition.x, it->mPosition.z);
 			it->mUV.x = Vector2::UNIT_X.angleTo(vxz).valueRadians()/Math::TWO_PI;
@@ -270,7 +273,7 @@ void BoxUVModifier::modify()
 				maxAxis = directions[i].dotProduct(n);
 				principalAxis = i;
 			}
-		}	
+		}
 
 		Vector3 vX, vY;
 		if (principalAxis%3 == 1)
@@ -284,7 +287,8 @@ void BoxUVModifier::modify()
 			it->mUV = uv;
 		else if (mMappingType == MT_CROSS)
 		{
-		} else if (mMappingType == MT_PACKED)
+		}
+		else if (mMappingType == MT_PACKED)
 			it->mUV = Vector2((uv.x + principalAxis%3)/3, (uv.y + principalAxis/3)/2);
 	}
 }

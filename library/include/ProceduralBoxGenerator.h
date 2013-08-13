@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** 
+/**
  * \ingroup objgengrp
  * Generates a box mesh centered on the origin.
  * Default size is 1.0 with 1 quad per face.
@@ -45,8 +45,8 @@ class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
 	unsigned int mNumSegX,mNumSegY,mNumSegZ;
 public:
 	/// Contructor with arguments
-	BoxGenerator(Ogre::Real sizeX=1.f, Ogre::Real sizeY=1.f, Ogre::Real sizeZ=1.f, unsigned int numSegX=1, unsigned int numSegY=1, unsigned int numSegZ=1) : 
-	  mSizeX(sizeX), mSizeY(sizeY), mSizeZ(sizeZ), mNumSegX(numSegX), mNumSegY(numSegY), mNumSegZ(numSegZ) {}
+	BoxGenerator(Ogre::Real sizeX=1.f, Ogre::Real sizeY=1.f, Ogre::Real sizeZ=1.f, unsigned int numSegX=1, unsigned int numSegY=1, unsigned int numSegZ=1) :
+		mSizeX(sizeX), mSizeY(sizeY), mSizeZ(sizeZ), mNumSegX(numSegX), mNumSegY(numSegY), mNumSegZ(numSegZ) {}
 
 	/**
 	Sets size along X axis (default=1)
@@ -54,7 +54,7 @@ public:
 	*/
 	BoxGenerator& setSizeX(Ogre::Real sizeX)
 	{
-		if(sizeX <= 0.0f)
+		if (sizeX <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "X size must be larger than 0!", "Procedural::BoxGenerator::setSizeX(Ogre::Real)");
 		mSizeX = sizeX;
 		return *this;
@@ -66,7 +66,7 @@ public:
 	*/
 	BoxGenerator& setSizeY(Ogre::Real sizeY)
 	{
-		if(sizeY <= 0.0f)
+		if (sizeY <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Y size must be larger than 0!", "Procedural::BoxGenerator::setSizeY(Ogre::Real)");
 		mSizeY = sizeY;
 		return *this;
@@ -78,7 +78,7 @@ public:
 	*/
 	BoxGenerator& setSizeZ(Ogre::Real sizeZ)
 	{
-		if(sizeZ <= 0.0f)
+		if (sizeZ <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Z size must be larger than 0!", "Procedural::BoxGenerator::setSizeZ(Ogre::Real)");
 		mSizeZ = sizeZ;
 		return *this;
@@ -99,7 +99,7 @@ public:
 	*/
 	BoxGenerator& setNumSegX(unsigned int numSegX)
 	{
-		if(numSegX == 0)
+		if (numSegX == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BoxGenerator::setNumSegX(unsigned int)");
 		mNumSegX = numSegX;
 		return *this;
@@ -111,7 +111,7 @@ public:
 	*/
 	BoxGenerator& setNumSegY(unsigned int numSegY)
 	{
-		if(numSegY == 0)
+		if (numSegY == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BoxGenerator::setNumSegY(unsigned int)");
 		mNumSegY = numSegY;
 		return *this;
@@ -123,7 +123,7 @@ public:
 	*/
 	BoxGenerator& setNumSegZ(unsigned int numSegZ)
 	{
-		if(numSegZ == 0)
+		if (numSegZ == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BoxGenerator::setNumSegZ(unsigned int)");
 		mNumSegZ = numSegZ;
 		return *this;

@@ -44,11 +44,11 @@ namespace Procedural
  * \image html spline_cubichermite.png
  */
 class _ProceduralExport CubicHermiteSpline2 : public BaseSpline2<CubicHermiteSpline2>
-{	
+{
 public:
 	typedef CubicHermiteSplineControlPoint<Ogre::Vector2> ControlPoint;
 private:
-	std::vector<ControlPoint> mPoints;	
+	std::vector<ControlPoint> mPoints;
 public:
 	/// Adds a control point
 	inline CubicHermiteSpline2& addPoint(const Ogre::Vector2& p, const Ogre::Vector2& before, const Ogre::Vector2& after)
@@ -73,7 +73,7 @@ public:
 		return *this;
 	}
 
-		/// Adds a control point
+	/// Adds a control point
 	inline CubicHermiteSpline2& addPoint(Ogre::Real x, Ogre::Real y, CubicHermiteSplineAutoTangentMode autoTangentMode = AT_CATMULL)
 	{
 		ControlPoint cp;
@@ -105,9 +105,9 @@ public:
  * \image html spline_catmull.png
  */
 class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2>
-{	
+{
 	std::vector<Ogre::Vector2> mPoints;
-	public:	
+public:
 	/// Adds a control point
 	inline CatmullRomSpline2& addPoint(const Ogre::Vector2& pt)
 	{
@@ -121,7 +121,7 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
 		mPoints.push_back(Ogre::Vector2(x,y));
 		return *this;
 	}
-	
+
 	/// Safely gets a control point
 	inline const Ogre::Vector2& safeGetPoint(unsigned int i) const
 	{
@@ -129,7 +129,7 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
 			return mPoints[Utils::modulo(i,mPoints.size())];
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
-	
+
 	/**
 	 * Build a shape from bezier control points
 	 */
@@ -143,12 +143,12 @@ class _ProceduralExport CatmullRomSpline2 : public BaseSpline2<CatmullRomSpline2
  * More details here : http://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
  */
 class _ProceduralExport KochanekBartelsSpline2 : public BaseSpline2<KochanekBartelsSpline2>
-{	
+{
 public:
 	typedef KochanekBartelsSplineControlPoint<Ogre::Vector2> ControlPoint;
 private:
 	std::vector<ControlPoint> mPoints;
-	
+
 public:
 	/// Adds a control point
 	inline KochanekBartelsSpline2& addPoint(Ogre::Real x, Ogre::Real y)
@@ -189,7 +189,7 @@ public:
 	 * Builds a shape from control points
 	 */
 	Shape realizeShape();
-	
+
 };
 
 //-----------------------------------------------------------------------
@@ -201,7 +201,7 @@ class _ProceduralExport RectangleShape
 {
 	Ogre::Real mWidth, mHeight;
 
-	public:
+public:
 	/// Default constructor
 	RectangleShape() : mWidth(1.0), mHeight(1.0) {}
 
@@ -209,7 +209,7 @@ class _ProceduralExport RectangleShape
 	/// \exception Ogre::InvalidParametersException Width must be larger than 0!
 	inline RectangleShape& setWidth(Ogre::Real width)
 	{
-		if(width <= 0.0f)
+		if (width <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Width must be larger than 0!", "Procedural::RectangleShape::setWidth(Ogre::Real)");
 		mWidth = width;
 		return *this;
@@ -219,7 +219,7 @@ class _ProceduralExport RectangleShape
 	/// \exception Ogre::InvalidParametersException Height must be larger than 0!
 	inline RectangleShape& setHeight(Ogre::Real height)
 	{
-		if(height <= 0.0f)
+		if (height <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::RectangleShape::setHeight(Ogre::Real)");
 		mHeight = height;
 		return *this;
@@ -230,10 +230,10 @@ class _ProceduralExport RectangleShape
 	{
 		Shape s;
 		s.addPoint(-.5f*mWidth,-.5f*mHeight)
-		 .addPoint(.5f*mWidth,-.5f*mHeight)
-		 .addPoint(.5f*mWidth,.5f*mHeight)
-		 .addPoint(-.5f*mWidth,.5f*mHeight)
-		 .close();
+		.addPoint(.5f*mWidth,-.5f*mHeight)
+		.addPoint(.5f*mWidth,.5f*mHeight)
+		.addPoint(-.5f*mWidth,.5f*mHeight)
+		.close();
 		return s;
 	}
 };
@@ -248,7 +248,7 @@ class _ProceduralExport CircleShape
 	Ogre::Real mRadius;
 	unsigned int mNumSeg;
 
-	public:
+public:
 	/// Default constructor
 	CircleShape() : mRadius(1.0), mNumSeg(8) {}
 
@@ -256,7 +256,7 @@ class _ProceduralExport CircleShape
 	/// \exception Ogre::InvalidParametersException Radius must be larger than 0!
 	inline CircleShape& setRadius(Ogre::Real radius)
 	{
-		if(radius <= 0.0f)
+		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::CircleShape::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
@@ -266,7 +266,7 @@ class _ProceduralExport CircleShape
 	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline CircleShape& setNumSeg(unsigned int numSeg)
 	{
-		if(numSeg == 0)
+		if (numSeg == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CircleShape::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
@@ -296,7 +296,7 @@ class _ProceduralExport EllipseShape
 	Ogre::Real mRadiusX, mRadiusY;
 	unsigned int mNumSeg;
 
-	public:
+public:
 	/// Default constructor
 	EllipseShape() : mRadiusX(1.0), mRadiusY(1.0), mNumSeg(8) {}
 
@@ -304,7 +304,7 @@ class _ProceduralExport EllipseShape
 	/// \exception Ogre::InvalidParametersException Radius must be larger than 0!
 	inline EllipseShape& setRadiusX(Ogre::Real radius)
 	{
-		if(radius <= 0.0f)
+		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::EllipseShape::setRadiusX(Ogre::Real)");
 		mRadiusX = radius;
 		return *this;
@@ -314,7 +314,7 @@ class _ProceduralExport EllipseShape
 	/// \exception Ogre::InvalidParametersException Radius must be larger than 0!
 	inline EllipseShape& setRadiusY(Ogre::Real radius)
 	{
-		if(radius <= 0.0f)
+		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::EllipseShape::setRadiusY(Ogre::Real)");
 		mRadiusY = radius;
 		return *this;
@@ -324,7 +324,7 @@ class _ProceduralExport EllipseShape
 	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline EllipseShape& setNumSeg(unsigned int numSeg)
 	{
-		if(numSeg == 0)
+		if (numSeg == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::EllipseShape::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
@@ -361,7 +361,7 @@ public:
 	/// \exception Ogre::InvalidStateException Length of triangle edges must be longer than 0!
 	inline TriangleShape& setLength(Ogre::Real length)
 	{
-		if(length <= 0.0f)
+		if (length <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge must be longer than 0!", "Procedural::TriangleShape::setLengthA(Ogre::Real)");
 		mLengthA = length;
 		mLengthB = length;
@@ -374,9 +374,9 @@ public:
 	/// \exception Ogre::InvalidStateException Length of triangle edge A must be shorter or equal than B+C!
 	inline TriangleShape& setLengthA(Ogre::Real length)
 	{
-		if(length <= 0.0f)
+		if (length <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge must be longer than 0!", "Procedural::TriangleShape::setLengthA(Ogre::Real)");
-		if(length > (mLengthB + mLengthC))
+		if (length > (mLengthB + mLengthC))
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge A must be shorter or equal than B+C!", "Procedural::TriangleShape::setLengthA(Ogre::Real)");
 		mLengthA = length;
 		return *this;
@@ -387,9 +387,9 @@ public:
 	/// \exception Ogre::InvalidStateException Length of triangle edge A must be shorter or equal than B+C!
 	inline TriangleShape& setLengthB(Ogre::Real length)
 	{
-		if(length <= 0.0f)
+		if (length <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge must be longer than 0!", "Procedural::TriangleShape::setLengthB(Ogre::Real)");
-		if(mLengthA > (length + mLengthC))
+		if (mLengthA > (length + mLengthC))
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge A must be shorter or equal than B+C!", "Procedural::TriangleShape::setLengthB(Ogre::Real)");
 		mLengthB = length;
 		return *this;
@@ -400,9 +400,9 @@ public:
 	/// \exception Ogre::InvalidStateException Length of triangle edge A must be shorter or equal than B+C!
 	inline TriangleShape& setLengthC(Ogre::Real length)
 	{
-		if(length <= 0.0f)
+		if (length <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge must be longer than 0!", "Procedural::TriangleShape::setLengthC(Ogre::Real)");
-		if(mLengthA > (mLengthB + length))
+		if (mLengthA > (mLengthB + length))
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Length of triangle edge A must be shorter or equal than B+C!", "Procedural::TriangleShape::setLengthC(Ogre::Real)");
 		mLengthC = length;
 		return *this;
@@ -419,7 +419,7 @@ public:
 		s.addPoint(mLengthC, 0.0f);
 		s.close();
 		s.translate((Ogre::Math::Cos(alpha) * mLengthB + mLengthC) / -3.0f, mLengthB / -3.0f);
-		
+
 		return s;
 	}
 };
@@ -430,14 +430,14 @@ public:
  * \image html spline_roundedcorner.png
  */
 class _ProceduralExport RoundedCornerSpline2 : public BaseSpline2<RoundedCornerSpline2>
-{		
+{
 	Ogre::Real mRadius;
 
-	std::vector<Ogre::Vector2> mPoints;	
-	
+	std::vector<Ogre::Vector2> mPoints;
+
 public:
 	RoundedCornerSpline2() : mRadius(.1f) {}
-	
+
 	/// Sets the radius of the corners
 	inline RoundedCornerSpline2& setRadius(Ogre::Real radius)
 	{
@@ -480,7 +480,7 @@ public:
  * \image html spline_beziercurve.png
  */
 class _ProceduralExport BezierCurve2 : public BaseSpline2<BezierCurve2>
-{	
+{
 	std::vector<Ogre::Vector2> mPoints;
 	unsigned int mNumSeg;
 
@@ -492,7 +492,7 @@ public:
 	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline BezierCurve2& setNumSeg(unsigned int numSeg)
 	{
-		if(numSeg == 0)
+		if (numSeg == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BezierCurve2::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
@@ -511,7 +511,7 @@ public:
 		mPoints.push_back(Ogre::Vector2(x,y));
 		return *this;
 	}
-	
+
 	/// Safely gets a control point
 	inline const Ogre::Vector2& safeGetPoint(unsigned int i) const
 	{
@@ -519,7 +519,7 @@ public:
 			return mPoints[Utils::modulo(i,mPoints.size())];
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
-	
+
 	/**
 	 * Build a shape from bezier control points
 	 * @exception Ogre::InvalidStateException The curve must at least contain 2 points

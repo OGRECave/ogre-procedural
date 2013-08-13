@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-/** 
+/**
  * \ingroup objgengrp
  * Generates a cone mesh along Y-axis
  * \image html primitive_cone.png
@@ -44,7 +44,7 @@ class _ProceduralExport ConeGenerator : public MeshGenerator<ConeGenerator>
 	unsigned int mNumSegHeight;
 	Ogre::Real mRadius;
 	Ogre::Real mHeight;
-public:	
+public:
 	/// Contructor with arguments
 	ConeGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, unsigned int numSegBase = 16, unsigned int numSegHeight = 1) :
 		mNumSegBase(numSegBase),
@@ -65,7 +65,7 @@ public:
 	*/
 	inline ConeGenerator & setNumSegBase(unsigned int numSegBase)
 	{
-		if(numSegBase == 0)
+		if (numSegBase == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::ConeGenerator::setNumSegBase(unsigned int)");
 		mNumSegBase = numSegBase;
 		return *this;
@@ -77,7 +77,7 @@ public:
 	*/
 	inline ConeGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
-		if(numSegHeight == 0)
+		if (numSegHeight == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::ConeGenerator::setNumSegHeight(unsigned int)");
 		mNumSegHeight = numSegHeight;
 		return *this;
@@ -89,7 +89,7 @@ public:
 	*/
 	inline ConeGenerator & setRadius(Ogre::Real radius)
 	{
-		if(radius <= 0.0f)
+		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::ConeGenerator::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
@@ -101,7 +101,7 @@ public:
 	*/
 	inline ConeGenerator & setHeight(Ogre::Real height)
 	{
-		if(height <= 0.0f)
+		if (height <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::ConeGenerator::setHeight(Ogre::Real)");
 		mHeight = height;
 		return *this;

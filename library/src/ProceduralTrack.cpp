@@ -32,66 +32,66 @@ using namespace Ogre;
 
 namespace Procedural
 {
-	Real Track::getValue(Real pos) const
-	{
-		std::map<Real, Real>::const_iterator itAfter = _getKeyValueAfter(pos);
-		std::map<Real, Real>::const_iterator itBefore = _getKeyValueBefore(pos);
+Real Track::getValue(Real pos) const
+{
+	std::map<Real, Real>::const_iterator itAfter = _getKeyValueAfter(pos);
+	std::map<Real, Real>::const_iterator itBefore = _getKeyValueBefore(pos);
 
-		if (itAfter==itBefore)
-			return itBefore->second;
-		if (itAfter==mKeyFrames.begin())
-			return itAfter->second;
+	if (itAfter==itBefore)
+		return itBefore->second;
+	if (itAfter==mKeyFrames.begin())
+		return itAfter->second;
 
-		Real x1 = itBefore->first;
-		Real y1 = itBefore->second;
-		Real x2 = itAfter->first;
-		Real y2 = itAfter->second;
-		return (pos-x1)/(x2-x1)*(y2-y1)+y1;
-	}
-	
-	std::map<Real, Real>::const_iterator Track::_getKeyValueBefore(Real pos) const
-	{
-		std::map<Real, Real>::const_iterator it = mKeyFrames.upper_bound(pos);
-		if (it==mKeyFrames.begin())
-			return it;
-		else
-			return --it; 
-	}
+	Real x1 = itBefore->first;
+	Real y1 = itBefore->second;
+	Real x2 = itAfter->first;
+	Real y2 = itAfter->second;
+	return (pos-x1)/(x2-x1)*(y2-y1)+y1;
+}
 
-	std::map<Real, Real>::const_iterator Track::_getKeyValueAfter(Real pos) const
-	{
-		std::map<Real, Real>::const_iterator it = mKeyFrames.upper_bound(pos);
-		if (it==mKeyFrames.end())
-			return --it;
-		else
-			return it;
-	}
+std::map<Real, Real>::const_iterator Track::_getKeyValueBefore(Real pos) const
+{
+	std::map<Real, Real>::const_iterator it = mKeyFrames.upper_bound(pos);
+	if (it==mKeyFrames.begin())
+		return it;
+	else
+		return --it;
+}
 
-	Real Track::getValue(Real absPos, Real relPos, unsigned int index) const
-	{
-		if (mAddressingMode == AM_ABSOLUTE_LINEIC)
-			return getValue(absPos);
-		if (mAddressingMode == AM_RELATIVE_LINEIC)
-			return getValue(relPos);
-		return getValue((Real)index);
-	}
-		
-	std::map<Real, Real>::const_iterator Track::_getKeyValueBefore(Real absPos, Real relPos, unsigned int index) const
-	{
-		if (mAddressingMode == AM_ABSOLUTE_LINEIC)
-			return _getKeyValueBefore(absPos);
-		if (mAddressingMode == AM_RELATIVE_LINEIC)
-			return _getKeyValueBefore(relPos);
-		return _getKeyValueBefore((Real)index);
-	}
-	
-	std::map<Real, Real>::const_iterator Track::_getKeyValueAfter(Real absPos, Real relPos, unsigned int index) const
-	{
-		if (mAddressingMode == AM_ABSOLUTE_LINEIC)
-			return _getKeyValueAfter(absPos);
-		if (mAddressingMode == AM_RELATIVE_LINEIC)
-			return _getKeyValueAfter(relPos);
-		return _getKeyValueAfter((Real)index);
-	}
-	
+std::map<Real, Real>::const_iterator Track::_getKeyValueAfter(Real pos) const
+{
+	std::map<Real, Real>::const_iterator it = mKeyFrames.upper_bound(pos);
+	if (it==mKeyFrames.end())
+		return --it;
+	else
+		return it;
+}
+
+Real Track::getValue(Real absPos, Real relPos, unsigned int index) const
+{
+	if (mAddressingMode == AM_ABSOLUTE_LINEIC)
+		return getValue(absPos);
+	if (mAddressingMode == AM_RELATIVE_LINEIC)
+		return getValue(relPos);
+	return getValue((Real)index);
+}
+
+std::map<Real, Real>::const_iterator Track::_getKeyValueBefore(Real absPos, Real relPos, unsigned int index) const
+{
+	if (mAddressingMode == AM_ABSOLUTE_LINEIC)
+		return _getKeyValueBefore(absPos);
+	if (mAddressingMode == AM_RELATIVE_LINEIC)
+		return _getKeyValueBefore(relPos);
+	return _getKeyValueBefore((Real)index);
+}
+
+std::map<Real, Real>::const_iterator Track::_getKeyValueAfter(Real absPos, Real relPos, unsigned int index) const
+{
+	if (mAddressingMode == AM_ABSOLUTE_LINEIC)
+		return _getKeyValueAfter(absPos);
+	if (mAddressingMode == AM_RELATIVE_LINEIC)
+		return _getKeyValueAfter(relPos);
+	return _getKeyValueAfter((Real)index);
+}
+
 }

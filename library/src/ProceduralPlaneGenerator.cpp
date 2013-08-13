@@ -51,8 +51,8 @@ void PlaneGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		for (unsigned short i2 = 0; i2<=mNumSegY; i2++)
 		{
 			addPoint(buffer, orig+i1*delta1+i2*delta2,
-						     mNormal,
-							 Vector2(i1/(Real)mNumSegX, i2/(Real)mNumSegY));
+			         mNormal,
+			         Vector2(i1/(Real)mNumSegX, i2/(Real)mNumSegY));
 		}
 
 	bool reverse = false;

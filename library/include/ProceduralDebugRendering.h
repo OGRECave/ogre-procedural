@@ -34,56 +34,56 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	/// This class creates a visualisation of the normals of a TriangleBuffer
-	class _ProceduralExport ShowNormalsGenerator
+/// This class creates a visualisation of the normals of a TriangleBuffer
+class _ProceduralExport ShowNormalsGenerator
+{
+public:
+	enum VisualStyle
 	{
-	public:
-		enum VisualStyle
-		{
-			VS_LINE, VS_ARROW
-		};
-
-	private:
-		VisualStyle mVisualStyle;
-
-		TriangleBuffer* mTriangleBuffer;
-
-		Ogre::Real mSize;
-	public:
-		ShowNormalsGenerator() : mTriangleBuffer(0), mSize(1.0), mVisualStyle(VS_LINE) {}
-
-		/// Sets the input Triangle Buffer
-		ShowNormalsGenerator& setTriangleBuffer(TriangleBuffer* triangleBuffer)
-		{
-			mTriangleBuffer = triangleBuffer;
-			return *this;
-		}
-
-		/// Sets the size of the normals representation (default = 1.0)
-		ShowNormalsGenerator& setSize(Ogre::Real size)
-		{
-			mSize = size;
-			return *this;
-		}
-		
-
-		/// Sets the visual style, line or arrow (default = line)
-		ShowNormalsGenerator& setVisualStyle(VisualStyle visualStyle)
-		{
-			mVisualStyle = visualStyle;
-			return *this;
-		}
-
-
-		/// Builds the normals representation as a manual object
-		/// \exception Ogre::InvalidStateException The input triangle buffer must not be null
-		/// \exception Ogre::InvalidStateException Scene Manager is not set in OGRE root object
-		Ogre::ManualObject* buildManualObject() const;
-
-		/// Builds the normals representation as a mesh
-		Ogre::MeshPtr buildMesh(const std::string& name = "",
-			const Ogre::String& group = "General") const;
+	    VS_LINE, VS_ARROW
 	};
+
+private:
+	VisualStyle mVisualStyle;
+
+	TriangleBuffer* mTriangleBuffer;
+
+	Ogre::Real mSize;
+public:
+	ShowNormalsGenerator() : mTriangleBuffer(0), mSize(1.0), mVisualStyle(VS_LINE) {}
+
+	/// Sets the input Triangle Buffer
+	ShowNormalsGenerator& setTriangleBuffer(TriangleBuffer* triangleBuffer)
+	{
+		mTriangleBuffer = triangleBuffer;
+		return *this;
+	}
+
+	/// Sets the size of the normals representation (default = 1.0)
+	ShowNormalsGenerator& setSize(Ogre::Real size)
+	{
+		mSize = size;
+		return *this;
+	}
+
+
+	/// Sets the visual style, line or arrow (default = line)
+	ShowNormalsGenerator& setVisualStyle(VisualStyle visualStyle)
+	{
+		mVisualStyle = visualStyle;
+		return *this;
+	}
+
+
+	/// Builds the normals representation as a manual object
+	/// \exception Ogre::InvalidStateException The input triangle buffer must not be null
+	/// \exception Ogre::InvalidStateException Scene Manager is not set in OGRE root object
+	Ogre::ManualObject* buildManualObject() const;
+
+	/// Builds the normals representation as a mesh
+	Ogre::MeshPtr buildMesh(const std::string& name = "",
+	                        const Ogre::String& group = "General") const;
+};
 }
 
 #endif

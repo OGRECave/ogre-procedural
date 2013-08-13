@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	class Shape;
+class Shape;
 
 /**
  * \ingroup shapegrp
@@ -45,7 +45,7 @@ class _ProceduralExport MultiShape
 {
 	std::vector<Shape> mShapes;
 
-	public:
+public:
 	/// Default constructor
 	MultiShape()
 	{}

@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 namespace Procedural
 {
-	struct Triangle2D;
+struct Triangle2D;
 
 typedef std::vector<Ogre::Vector2> PointList;
 
@@ -48,11 +48,11 @@ typedef std::vector<Ogre::Vector2> PointList;
  * \image html shape_triangulation.png
  */
 class _ProceduralExport Triangulator : public MeshGenerator<Triangulator>
-{	
+{
 	struct Triangle;
 	struct DelaunaySegment;
-	typedef std::list<Triangle> DelaunayTriangleBuffer;	
-	
+	typedef std::list<Triangle> DelaunayTriangleBuffer;
+
 	//-----------------------------------------------------------------------
 	struct DelaunaySegment
 	{
@@ -69,15 +69,16 @@ class _ProceduralExport Triangulator : public MeshGenerator<Triangulator>
 		{
 			return DelaunaySegment(i2, i1);
 		}
-	};	
+	};
 
-		//-----------------------------------------------------------------------
+	//-----------------------------------------------------------------------
 	struct Triangle
 	{
 		const PointList* pl;
 		int i[3];
 		Triangle(const PointList* pl)
-		{	this->pl = pl;
+		{
+			this->pl = pl;
 		}
 
 		inline Ogre::Vector2 p(int k) const
@@ -94,21 +95,21 @@ class _ProceduralExport Triangulator : public MeshGenerator<Triangulator>
 		{
 			return 1.f/3.f * (p(0)+p(1)+p(2));
 		}
-	
+
 		void setVertices(int i0, int i1, int i2);
 
 		int findSegNumber(int i0, int i1) const;
 
 		bool isPointInside(const Ogre::Vector2& point);
-	
+
 		bool containsSegment(int i0, int i1) const
-		{		
+		{
 			return ((i0==i[0] || i0==i[1] || i0==i[2])&&(i1==i[0] || i1==i[1] || i1==i[2]));
 		}
 
 		enum InsideType
 		{
-			IT_INSIDE, IT_OUTSIDE, IT_BORDERLINEOUTSIDE
+		    IT_INSIDE, IT_OUTSIDE, IT_BORDERLINEOUTSIDE
 		};
 
 		InsideType isPointInsideCircumcircle(const Ogre::Vector2& point);
@@ -131,9 +132,9 @@ class _ProceduralExport Triangulator : public MeshGenerator<Triangulator>
 		std::string debugDescription()
 		{
 			return "("+Ogre::StringConverter::toString(i[0])+","
-				+Ogre::StringConverter::toString(i[1])+","+Ogre::StringConverter::toString(i[2])+") <"
-				"("+Ogre::StringConverter::toString(p(0))+","
-				+Ogre::StringConverter::toString(p(1))+","+Ogre::StringConverter::toString(p(2))+">";
+			       +Ogre::StringConverter::toString(i[1])+","+Ogre::StringConverter::toString(i[2])+") <"
+			       "("+Ogre::StringConverter::toString(p(0))+","
+			       +Ogre::StringConverter::toString(p(1))+","+Ogre::StringConverter::toString(p(2))+">";
 		}
 	};
 	//-----------------------------------------------------------------------
@@ -143,7 +144,7 @@ class _ProceduralExport Triangulator : public MeshGenerator<Triangulator>
 		TouchSuperTriangle(int i, int j, int k) : i0(i), i1(j), i2(k) {}
 		bool operator()(const Triangulator::Triangle& tri)
 		{
-			for (int k=0;k<3;k++) if (tri.i[k]==i0 || tri.i[k]==i1 ||tri.i[k]==i2) return true;
+			for (int k=0; k<3; k++) if (tri.i[k]==i0 || tri.i[k]==i1 ||tri.i[k]==i2) return true;
 			return false;
 		}
 	};
@@ -151,14 +152,14 @@ class _ProceduralExport Triangulator : public MeshGenerator<Triangulator>
 	Shape* mShapeToTriangulate;
 	MultiShape* mMultiShapeToTriangulate;
 	Triangle2D* mManualSuperTriangle;
-	std::vector<Segment2D>* mSegmentListToTriangulate;	
+	std::vector<Segment2D>* mSegmentListToTriangulate;
 	bool mRemoveOutside;
 
 	void delaunay(PointList& pointList, DelaunayTriangleBuffer& tbuffer) const;
 	void _addConstraints(DelaunayTriangleBuffer& tbuffer, const PointList& pl, const std::vector<int>& segmentListIndices) const;
 	void _recursiveTriangulatePolygon(const DelaunaySegment& cuttingSeg, std::vector<int> inputPoints, DelaunayTriangleBuffer& tbuffer, const PointList&  pl) const;
 
-public:	
+public:
 
 	/// Default ctor
 	Triangulator() : mShapeToTriangulate(0), mMultiShapeToTriangulate(0), mManualSuperTriangle(0), mRemoveOutside(true), mSegmentListToTriangulate(0) {}
@@ -198,7 +199,7 @@ public:
 		mRemoveOutside = removeOutside;
 		return *this;
 	}
-	
+
 	/**
 	 * Executes the Constrained Delaunay Triangulation algorithm
 	 * @param output A vector of index where is outputed the resulting triangle indexes
@@ -206,7 +207,7 @@ public:
 	 * @exception Ogre::InvalidStateException Either shape or multishape or segment list must be defined
 	 */
 	void triangulate(std::vector<int>& output, PointList& outputVertices) const;
-	
+
 	/**
 	 * Builds the mesh into the given TriangleBuffer
 	 * @param buffer The TriangleBuffer on where to append the mesh.

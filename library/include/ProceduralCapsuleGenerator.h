@@ -58,8 +58,8 @@ public:
 
 	/// Constructor with arguments
 	CapsuleGenerator(Ogre::Real radius, Ogre::Real height, unsigned int numRings, unsigned int numSegments, unsigned int numSegHeight) :
-	mRadius(radius), mHeight(height), mNumRings(numRings), mNumSegments(numSegments), mNumSegHeight(numSegHeight) {}
-	
+		mRadius(radius), mHeight(height), mNumRings(numRings), mNumSegments(numSegments), mNumSegHeight(numSegHeight) {}
+
 	/**
 	 * Builds the mesh into the given TriangleBuffer
 	 * @param buffer The TriangleBuffer on where to append the mesh.
@@ -72,7 +72,7 @@ public:
 	*/
 	inline CapsuleGenerator & setRadius(Ogre::Real radius)
 	{
-		if(radius <= 0.0f)
+		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::CapsuleGenerator::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
@@ -84,7 +84,7 @@ public:
 	*/
 	inline CapsuleGenerator & setNumRings(unsigned int numRings)
 	{
-		if(numRings == 0)
+		if (numRings == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 rings", "Procedural::CapsuleGenerator::setNumRings(unsigned int)");
 		mNumRings = numRings;
 		return *this;
@@ -96,7 +96,7 @@ public:
 	*/
 	inline CapsuleGenerator & setNumSegments(unsigned int numSegments)
 	{
-		if(numSegments == 0)
+		if (numSegments == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CapsuleGenerator::setNumSegments(unsigned int)");
 		mNumSegments = numSegments;
 		return *this;
@@ -108,7 +108,7 @@ public:
 	*/
 	inline CapsuleGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
-		if(numSegHeight == 0)
+		if (numSegHeight == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CapsuleGenerator::setNumSegHeight(unsigned int)");
 		mNumSegHeight = numSegHeight;
 		return *this;
@@ -120,7 +120,7 @@ public:
 	*/
 	inline CapsuleGenerator & setHeight(Ogre::Real height)
 	{
-		if(height <= 0.0f)
+		if (height <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::CapsuleGenerator::setHeight(Ogre::Real)");
 		mHeight = height;
 		return *this;

@@ -36,10 +36,10 @@ namespace Procedural
 //-----------------------------------------------------------------------
 void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const
 {
-	if(shapeToExtrude == NULL)
+	if (shapeToExtrude == NULL)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Shape must not be null!", "Procedural::Lathe::_latheBodyImpl(Procedural::TriangleBuffer&, const Procedural::Shape*)");
 	int numSegShape = shapeToExtrude->getSegCount();
-	if(numSegShape < 2)
+	if (numSegShape < 2)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Shape must contain at least two points", "Procedural::Lathe::_latheBodyImpl(Procedural::TriangleBuffer&, const Procedural::Shape*)");
 	int offset =0;
 
@@ -48,12 +48,12 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 	buffer.rebaseOffset();
 	buffer.estimateIndexCount(numSeg*numSegShape*6);
 	buffer.estimateVertexCount((numSegShape+1)*(numSeg+1));
-	
+
 	Radian angleEnd(mAngleEnd);
 	if (mAngleBegin>mAngleEnd)
 		angleEnd+=(Radian)Math::TWO_PI;
 
-	for (int i=0;i<numSeg;i++)
+	for (int i=0; i<numSeg; i++)
 	{
 		Radian angle;
 		if (mClosed)
@@ -63,7 +63,7 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 		Quaternion q;
 		q.FromAngleAxis(angle,Vector3::UNIT_Y);
 
-		for (int j=0;j<=numSegShape;j++)
+		for (int j=0; j<=numSegShape; j++)
 		{
 			const Vector2& v0 = shapeToExtrude->getPoint(j);
 			Vector3 vp(v0.x,v0.y,0);
@@ -75,8 +75,8 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 				normal = -normal;
 
 			addPoint(buffer, q*vp,
-							 q*normal,
-							 Vector2(i/(Real)mNumSeg, j/(Real)numSegShape));
+			         q*normal,
+			         Vector2(i/(Real)mNumSeg, j/(Real)numSegShape));
 
 			if (j <numSegShape && i <numSeg-1)
 			{
@@ -98,79 +98,79 @@ void Lathe::_latheBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) 
 //-----------------------------------------------------------------------
 void Lathe::_latheCapImpl(TriangleBuffer& buffer) const
 {
-		std::vector<int> indexBuffer;
-		PointList pointList;
+	std::vector<int> indexBuffer;
+	PointList pointList;
 
-		buffer.rebaseOffset();
+	buffer.rebaseOffset();
 
-		Triangulator t;
-		Shape shapeCopy;
-		MultiShape multishapeCopy;
-		
-		if (mShapeToExtrude)
-		{
-			shapeCopy = *mShapeToExtrude;
-			shapeCopy.close();
-			t.setShapeToTriangulate(&shapeCopy);
-		}
-		else
-		{
-			multishapeCopy = *mMultiShapeToExtrude;
-			multishapeCopy.close();
-			t.setMultiShapeToTriangulate(mMultiShapeToExtrude);
-		}
-		t.triangulate(indexBuffer, pointList);
-		buffer.estimateIndexCount(2*indexBuffer.size());
-		buffer.estimateVertexCount(2*pointList.size());
-		
-		//begin cap
-		buffer.rebaseOffset();
-		Quaternion q;
-		q.FromAngleAxis(mAngleBegin, Vector3::UNIT_Y);
-		for (size_t j =0;j<pointList.size();j++)
-		{
-			Vector2 vp2 = pointList[j];
-			Vector3 vp(vp2.x, vp2.y, 0);
-			Vector3 normal = Vector3::UNIT_Z;				
+	Triangulator t;
+	Shape shapeCopy;
+	MultiShape multishapeCopy;
 
-			addPoint(buffer, q*vp,
-				q*normal,
-				vp2);
-		}
+	if (mShapeToExtrude)
+	{
+		shapeCopy = *mShapeToExtrude;
+		shapeCopy.close();
+		t.setShapeToTriangulate(&shapeCopy);
+	}
+	else
+	{
+		multishapeCopy = *mMultiShapeToExtrude;
+		multishapeCopy.close();
+		t.setMultiShapeToTriangulate(mMultiShapeToExtrude);
+	}
+	t.triangulate(indexBuffer, pointList);
+	buffer.estimateIndexCount(2*indexBuffer.size());
+	buffer.estimateVertexCount(2*pointList.size());
 
-		for (size_t i=0;i<indexBuffer.size()/3;i++)
-		{				
-			buffer.index(indexBuffer[i*3]);
-			buffer.index(indexBuffer[i*3+1]);			
-			buffer.index(indexBuffer[i*3+2]);
-		}
-		//end cap
-		buffer.rebaseOffset();
-		q.FromAngleAxis(mAngleEnd, Vector3::UNIT_Y);
-		for (size_t j =0;j<pointList.size();j++)
-		{
-			Vector2 vp2 = pointList[j];
-			Vector3 vp(vp2.x, vp2.y, 0);
-			Vector3 normal = -Vector3::UNIT_Z;				
+	//begin cap
+	buffer.rebaseOffset();
+	Quaternion q;
+	q.FromAngleAxis(mAngleBegin, Vector3::UNIT_Y);
+	for (size_t j =0; j<pointList.size(); j++)
+	{
+		Vector2 vp2 = pointList[j];
+		Vector3 vp(vp2.x, vp2.y, 0);
+		Vector3 normal = Vector3::UNIT_Z;
 
-			addPoint(buffer, q*vp,
-				q*normal,
-				vp2);
-		}
+		addPoint(buffer, q*vp,
+		         q*normal,
+		         vp2);
+	}
 
-		for (size_t i=0;i<indexBuffer.size()/3;i++)
-		{				
-			buffer.index(indexBuffer[i*3]);
-			buffer.index(indexBuffer[i*3+2]);
-			buffer.index(indexBuffer[i*3+1]);
-		}
+	for (size_t i=0; i<indexBuffer.size()/3; i++)
+	{
+		buffer.index(indexBuffer[i*3]);
+		buffer.index(indexBuffer[i*3+1]);
+		buffer.index(indexBuffer[i*3+2]);
+	}
+	//end cap
+	buffer.rebaseOffset();
+	q.FromAngleAxis(mAngleEnd, Vector3::UNIT_Y);
+	for (size_t j =0; j<pointList.size(); j++)
+	{
+		Vector2 vp2 = pointList[j];
+		Vector3 vp(vp2.x, vp2.y, 0);
+		Vector3 normal = -Vector3::UNIT_Z;
+
+		addPoint(buffer, q*vp,
+		         q*normal,
+		         vp2);
+	}
+
+	for (size_t i=0; i<indexBuffer.size()/3; i++)
+	{
+		buffer.index(indexBuffer[i*3]);
+		buffer.index(indexBuffer[i*3+2]);
+		buffer.index(indexBuffer[i*3+1]);
+	}
 }
 //-----------------------------------------------------------------------
 void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
-	if(mShapeToExtrude == NULL && mMultiShapeToExtrude == NULL)
+	if (mShapeToExtrude == NULL && mMultiShapeToExtrude == NULL)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Either shape or multishape must be defined!", "Procedural::Lathe::addToTriangleBuffer(Procedural::TriangleBuffer)");
-	
+
 	// Triangulate the begin and end caps
 	if (!mClosed && mCapped)
 		_latheCapImpl(buffer);
@@ -178,10 +178,10 @@ void Lathe::addToTriangleBuffer(TriangleBuffer& buffer) const
 	// Extrudes the body
 	if (mShapeToExtrude)
 		_latheBodyImpl(buffer, mShapeToExtrude);
-	else 
-		for (unsigned int i=0; i<mMultiShapeToExtrude->getShapeCount();i++)			
+	else
+		for (unsigned int i=0; i<mMultiShapeToExtrude->getShapeCount(); i++)
 			_latheBodyImpl(buffer, &mMultiShapeToExtrude->getShape(i));
-		
-	
+
+
 }
 }

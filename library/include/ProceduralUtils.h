@@ -76,7 +76,7 @@ public:
 			return aabb;
 		aabb.setMinimum(points[0]);
 		aabb.setMaximum(points[0]);
-		for (std::vector<Ogre::Vector3>::iterator it = points.begin(); it!=points.end();++it)
+		for (std::vector<Ogre::Vector3>::iterator it = points.begin(); it!=points.end(); ++it)
 		{
 			aabb.setMinimum(min(aabb.getMinimum(), *it));
 			aabb.setMaximum(max(aabb.getMaximum(), *it));
@@ -104,9 +104,9 @@ public:
 	static inline Ogre::Vector2 rotateVector2(const Ogre::Vector2& in, Ogre::Radian angle)
 	{
 		return Ogre::Vector2(in.x* Ogre::Math::Cos(angle) - in.y * Ogre::Math::Sin(angle),
-			in.x * Ogre::Math::Sin(angle) + in.y * Ogre::Math::Cos(angle));
+		                     in.x * Ogre::Math::Sin(angle) + in.y * Ogre::Math::Cos(angle));
 	}
-	
+
 	/// Caps n between min and max
 	static int cap(int n, int min, int max)
 	{
@@ -129,14 +129,14 @@ public:
 	 * Equivalent of Ogre::Vector3::angleBetween, applied to Ogre::Vector2
 	 */
 	static inline Ogre::Radian angleBetween(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
-	{		
+	{
 		Ogre::Real lenProduct = v1.length() * v2.length();
 		// Divide by zero check
-		if(lenProduct < 1e-6f)
+		if (lenProduct < 1e-6f)
 			lenProduct = 1e-6f;
-		
+
 		Ogre::Real f = v1.dotProduct(v2) / lenProduct;
-	
+
 		f = Ogre::Math::Clamp(f, (Ogre::Real)-1.0, (Ogre::Real)1.0);
 		return Ogre::Math::ACos(f);
 	}
@@ -147,7 +147,7 @@ public:
 	static inline Ogre::Radian angleTo(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
 	{
 		Ogre::Radian angle = angleBetween(v1, v2);
-		
+
 		if (v1.crossProduct(v2)<0)
 		{
 			angle = (Ogre::Radian)Ogre::Math::TWO_PI - angle;

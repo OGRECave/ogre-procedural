@@ -44,28 +44,28 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		pg.setOrientation(mOrientation);
 	}
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
-	  .setNormal(Vector3::NEGATIVE_UNIT_Z)
-	  .setPosition(mScale*(mPosition+.5f*mSizeZ*(mOrientation*Vector3::NEGATIVE_UNIT_Z)))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::NEGATIVE_UNIT_Z)
+	.setPosition(mScale*(mPosition+.5f*mSizeZ*(mOrientation*Vector3::NEGATIVE_UNIT_Z)))
+	.addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
-	  .setNormal(Vector3::UNIT_Z)
-	  .setPosition(mScale*(mPosition+.5f*mSizeZ*(mOrientation*Vector3::UNIT_Z)))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::UNIT_Z)
+	.setPosition(mScale*(mPosition+.5f*mSizeZ*(mOrientation*Vector3::UNIT_Z)))
+	.addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
-	  .setNormal(Vector3::NEGATIVE_UNIT_Y)
-	  .setPosition(mScale*(mPosition+.5f*mSizeY*(mOrientation*Vector3::NEGATIVE_UNIT_Y)))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::NEGATIVE_UNIT_Y)
+	.setPosition(mScale*(mPosition+.5f*mSizeY*(mOrientation*Vector3::NEGATIVE_UNIT_Y)))
+	.addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
-	  .setNormal(Vector3::UNIT_Y)
-	  .setPosition(mScale*(mPosition+.5f*mSizeY*(mOrientation*Vector3::UNIT_Y)))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::UNIT_Y)
+	.setPosition(mScale*(mPosition+.5f*mSizeY*(mOrientation*Vector3::UNIT_Y)))
+	.addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
-	  .setNormal(Vector3::NEGATIVE_UNIT_X)
-	  .setPosition(mScale*(mPosition+.5f*mSizeX*(mOrientation*Vector3::NEGATIVE_UNIT_X)))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::NEGATIVE_UNIT_X)
+	.setPosition(mScale*(mPosition+.5f*mSizeX*(mOrientation*Vector3::NEGATIVE_UNIT_X)))
+	.addToTriangleBuffer(buffer);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
-	  .setNormal(Vector3::UNIT_X)
-	  .setPosition(mScale*(mPosition+.5f*mSizeX*(mOrientation*Vector3::UNIT_X)))
-	  .addToTriangleBuffer(buffer);
+	.setNormal(Vector3::UNIT_X)
+	.setPosition(mScale*(mPosition+.5f*mSizeX*(mOrientation*Vector3::UNIT_X)))
+	.addToTriangleBuffer(buffer);
 }
 }

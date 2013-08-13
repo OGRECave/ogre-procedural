@@ -46,10 +46,10 @@ class _ProceduralExport CylinderGenerator : public MeshGenerator<CylinderGenerat
 	Ogre::Real mRadius;
 	Ogre::Real mHeight;
 
-public:	
+public:
 	/// Contructor with arguments
-	CylinderGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, unsigned int numSegBase = 16, unsigned int numSegHeight = 1, bool capped = true) : 
-	    mNumSegBase(numSegBase),
+	CylinderGenerator(Ogre::Real radius = 1.f, Ogre::Real height = 1.f, unsigned int numSegBase = 16, unsigned int numSegHeight = 1, bool capped = true) :
+		mNumSegBase(numSegBase),
 		mNumSegHeight(numSegHeight),
 		mCapped(capped),
 		mRadius(radius),
@@ -68,7 +68,7 @@ public:
 	*/
 	inline CylinderGenerator & setNumSegBase(unsigned int numSegBase)
 	{
-		if(numSegBase == 0)
+		if (numSegBase == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CylinderGenerator::setNumSegBase(unsigned int)");
 		mNumSegBase = numSegBase;
 		return *this;
@@ -80,7 +80,7 @@ public:
 	*/
 	inline CylinderGenerator & setNumSegHeight(unsigned int numSegHeight)
 	{
-		if(numSegHeight == 0)
+		if (numSegHeight == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::CylinderGenerator::setNumSegHeight(unsigned int)");
 		mNumSegHeight = numSegHeight;
 		return *this;
@@ -99,7 +99,7 @@ public:
 	*/
 	inline CylinderGenerator & setRadius(Ogre::Real radius)
 	{
-		if(radius <= 0.0f)
+		if (radius <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Radius must be larger than 0!", "Procedural::CylinderGenerator::setRadius(Ogre::Real)");
 		mRadius = radius;
 		return *this;
@@ -111,7 +111,7 @@ public:
 	*/
 	inline CylinderGenerator & setHeight(Ogre::Real height)
 	{
-		if(height <= 0.0f)
+		if (height <= 0.0f)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Height must be larger than 0!", "Procedural::CylinderGenerator::setHeight(Ogre::Real)");
 		mHeight = height;
 		return *this;

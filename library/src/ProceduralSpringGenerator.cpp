@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
-namespace Procedural 
+namespace Procedural
 {
 //-----------------------------------------------------------------------
 Path HelixPath::realizePath()
@@ -44,7 +44,7 @@ Path HelixPath::realizePath()
 	Real angleStep = Math::TWO_PI / static_cast<Real>(mNumSegPath);
 	Real heightStep = mHeight / static_cast<Real>(mNumSegPath);
 
-	for (size_t i=0;i<mNumRound*mNumSegPath;i++)
+	for (size_t i=0; i<mNumRound*mNumSegPath; i++)
 	{
 		helix.addPoint(mRadius * Math::Cos(angleStep * i), heightStep * i, mRadius * Math::Sin(angleStep * i));
 	}

@@ -46,14 +46,14 @@ public:
 		double mi = 9999999999.9;
 		double ma = -999999999.9;
 		Ogre::Real* field = new Ogre::Real[wx];
-		for(size_t x = 0; x < wx; ++x)
+		for (size_t x = 0; x < wx; ++x)
 		{
 			Ogre::Real val = function1D(x);
-			if(val < mi) mi = val;
-			if(val > ma) ma = val;
+			if (val < mi) mi = val;
+			if (val > ma) ma = val;
 			field[x] = val;
 		}
-		for(size_t x = 0; x < wx; ++x)
+		for (size_t x = 0; x < wx; ++x)
 		{
 			retval[x] = (Ogre::uchar)((255.0/(ma - mi))*(field[x] - mi));
 		}
@@ -72,8 +72,8 @@ public:
 			for (size_t x = 0; x < wx; ++x)
 			{
 				Ogre::Real val = function2D(x, y);
-				if(val < mi) mi = val;
-				if(val > ma) ma = val;
+				if (val < mi) mi = val;
+				if (val > ma) ma = val;
 				field[y * wx + x] = val;
 			}
 		}
@@ -94,10 +94,19 @@ typedef NoiseBase* NoiseBasePtr;
 class _ProceduralExport WhiteNoise : public NoiseBase
 {
 public:
-	WhiteNoise(Ogre::uint seed = 5120) { srand(seed); }
+	WhiteNoise(Ogre::uint seed = 5120)
+	{
+		srand(seed);
+	}
 
-	virtual Ogre::Real function1D(size_t x) { return ((Ogre::Real)rand() / RAND_MAX); }
-	virtual Ogre::Real function2D(size_t x, size_t y) { return function1D(x * y); }
+	virtual Ogre::Real function1D(size_t x)
+	{
+		return ((Ogre::Real)rand() / RAND_MAX);
+	}
+	virtual Ogre::Real function2D(size_t x, size_t y)
+	{
+		return function1D(x * y);
+	}
 };
 
 class _ProceduralExport PerlinNoise : public NoiseBase

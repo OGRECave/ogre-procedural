@@ -45,29 +45,29 @@ namespace Procedural
  * a spline for which position is smoothly interpolated between control points
  */
 class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3>
-{	
+{
 	std::vector<Ogre::Vector3> mPoints;
-	public:	
+public:
 	/// Default constructor
 	CatmullRomSpline3() {}
-	
+
 	/// Copy constructor from an Ogre simplespline
-	CatmullRomSpline3(const Ogre::SimpleSpline& input) 
+	CatmullRomSpline3(const Ogre::SimpleSpline& input)
 	{
 		mPoints.resize(input.getNumPoints());
 		for (unsigned short i=0; i<input.getNumPoints(); i++)
 			mPoints.push_back(input.getPoint(i));
 	}
-	
+
 	/// Outputs current spline to an Ogre spline
-	Ogre::SimpleSpline toSimpleSpline() const 
+	Ogre::SimpleSpline toSimpleSpline() const
 	{
 		Ogre::SimpleSpline spline;
-		for (unsigned short i=0;i<mPoints.size();i++)
+		for (unsigned short i=0; i<mPoints.size(); i++)
 			spline.addPoint(mPoints[i]);
 		return spline;
 	}
-	
+
 	/// Adds a control point
 	inline CatmullRomSpline3& addPoint(const Ogre::Vector3& pt)
 	{
@@ -81,7 +81,7 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 		mPoints.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
-	
+
 	/// Safely gets a control point
 	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
 	{
@@ -89,23 +89,23 @@ class _ProceduralExport CatmullRomSpline3 : public BaseSpline3<CatmullRomSpline3
 			return mPoints[Utils::modulo(i,mPoints.size())];
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
-	
+
 	/**
 	 * Build a path from Catmull-Rom control points
 	 */
-	Path realizePath();	
+	Path realizePath();
 };
 //-----------------------------------------------------------------------
 /**
  * Produces a path from Cubic Hermite control points
  */
 class _ProceduralExport CubicHermiteSpline3 : public BaseSpline3<CubicHermiteSpline3>
-{	
+{
 public:
 	typedef CubicHermiteSplineControlPoint<Ogre::Vector3> ControlPoint;
 private:
 	std::vector<ControlPoint> mPoints;
-	
+
 public:
 	/// Adds a control point
 	inline CubicHermiteSpline3& addPoint(const Ogre::Vector3& p, const Ogre::Vector3& before, const Ogre::Vector3& after)
@@ -177,12 +177,12 @@ public:
 		mPoint2 = point2;
 		return *this;
 	}
-	
+
 	/// Sets the number of segments for this line
 	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline LinePath& setNumSeg(unsigned int numSeg)
 	{
-		if(numSeg == 0)
+		if (numSeg == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::LinePath::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
@@ -213,15 +213,15 @@ public:
  * Produces a path by rounding corners of a straight-lines path
  */
 class _ProceduralExport RoundedCornerSpline3 : public BaseSpline3<RoundedCornerSpline3>
-{		
+{
 	Ogre::Real mRadius;
 
-	std::vector<Ogre::Vector3> mPoints;	
-	
+	std::vector<Ogre::Vector3> mPoints;
+
 public:
 	/// Default constructor
 	RoundedCornerSpline3() : mRadius(.1f) {}
-	
+
 	/// Sets the radius of the corners (default = 0.1)
 	inline RoundedCornerSpline3& setRadius(Ogre::Real radius)
 	{
@@ -263,19 +263,19 @@ public:
  * Builds a path from a Bezier-Curve.
  */
 class _ProceduralExport BezierCurve3 : public BaseSpline3<BezierCurve3>
-{	
+{
 	std::vector<Ogre::Vector3> mPoints;
 	unsigned int mNumSeg;
 
 public:
 	/// Default constructor
 	BezierCurve3() : mNumSeg(8) {}
-	
+
 	/// Sets number of segments per two control points
 	/// \exception Ogre::InvalidParametersException Minimum of numSeg is 1
 	inline BezierCurve3& setNumSeg(unsigned int numSeg)
 	{
-		if(numSeg == 0)
+		if (numSeg == 0)
 			OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "There must be more than 0 segments", "Procedural::BezierCurve3::setNumSeg(unsigned int)");
 		mNumSeg = numSeg;
 		return *this;
@@ -294,7 +294,7 @@ public:
 		mPoints.push_back(Ogre::Vector3(x,y,z));
 		return *this;
 	}
-	
+
 	/// Safely gets a control point
 	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
 	{
@@ -302,12 +302,12 @@ public:
 			return mPoints[Utils::modulo(i,mPoints.size())];
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
-	
+
 	/**
 	 * Build a path from bezier control points
 	 * @exception Ogre::InvalidStateException The curve must at least contain 2 points
 	 */
-	Path realizePath();	
+	Path realizePath();
 };
 /** @} */
 }

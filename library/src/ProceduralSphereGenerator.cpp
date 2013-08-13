@@ -44,21 +44,23 @@ void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	int offset = 0;
 
 	// Generate the group of rings for the sphere
-	for(unsigned int ring = 0; ring <= mNumRings; ring++ ) {
+	for (unsigned int ring = 0; ring <= mNumRings; ring++ )
+	{
 		Real r0 = mRadius * sinf (ring * fDeltaRingAngle);
 		Real y0 = mRadius * cosf (ring * fDeltaRingAngle);
 
 		// Generate the group of segments for the current ring
-		for(unsigned int seg = 0; seg <= mNumSegments; seg++) {
+		for (unsigned int seg = 0; seg <= mNumSegments; seg++)
+		{
 			Real x0 = r0 * sinf(seg * fDeltaSegAngle);
 			Real z0 = r0 * cosf(seg * fDeltaSegAngle);
 
 			// Add one vertex to the strip which makes up the sphere
 			addPoint(buffer, Vector3(x0, y0, z0),
-							 Vector3(x0, y0, z0).normalisedCopy(),
-							 Vector2((Real) seg / (Real) mNumSegments, (Real) ring / (Real) mNumRings));
+			         Vector3(x0, y0, z0).normalisedCopy(),
+			         Vector2((Real) seg / (Real) mNumSegments, (Real) ring / (Real) mNumRings));
 
-			if (ring != mNumRings ) 
+			if (ring != mNumRings )
 			{
 				if (seg != mNumSegments)
 				{
@@ -66,7 +68,7 @@ void SphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 					if (ring != mNumRings-1)
 						buffer.triangle(offset + mNumSegments + 2, offset, offset + mNumSegments + 1);
 					if (ring != 0)
-						buffer.triangle(offset + mNumSegments + 2, offset + 1, offset);				
+						buffer.triangle(offset + mNumSegments + 2, offset + 1, offset);
 				}
 				offset ++;
 			}
