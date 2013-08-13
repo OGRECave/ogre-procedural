@@ -162,7 +162,7 @@ struct _ProceduralExport Segment2D
 // Compares 2 Vector2, with some tolerance
 struct _ProceduralExport Vector2Comparator
 {
-	bool operator()(const Ogre::Vector2& one, const Ogre::Vector2 & two) const
+	bool operator()(const Ogre::Vector2& one, const Ogre::Vector2& two) const
 	{
 		if ((one - two).squaredLength() < 1e-6)
 			return false;

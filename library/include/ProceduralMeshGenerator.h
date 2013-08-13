@@ -160,7 +160,7 @@ public:
 	/**
 	 * Sets V Tile, ie the number by which v texture coordinates are multiplied (default=1)
 	 */
-	inline T & setVTile(Ogre::Real vTile)
+	inline T& setVTile(Ogre::Real vTile)
 	{
 		mVTile = vTile;
 		return static_cast<T&>(*this);
@@ -169,7 +169,7 @@ public:
 	/**
 	 * Sets the texture rectangle
 	 */
-	inline T & setTextureRectangle(const Ogre::RealRect& textureRectangle)
+	inline T& setTextureRectangle(const Ogre::RealRect& textureRectangle)
 	{
 		mUVOrigin = Ogre::Vector2(textureRectangle.top, textureRectangle.left);
 		mUTile = textureRectangle.right-textureRectangle.left;
@@ -180,7 +180,7 @@ public:
 	/**
 	 * Sets whether normals are enabled or not (default=true)
 	 */
-	inline T & setEnableNormals(bool enableNormals)
+	inline T& setEnableNormals(bool enableNormals)
 	{
 		mEnableNormals = enableNormals;
 		return static_cast<T&>(*this);
@@ -189,7 +189,7 @@ public:
 	/**
 	 * Sets the number of texture coordintate sets (default=1)
 	 */
-	inline T & setNumTexCoordSet(unsigned char numTexCoordSet)
+	inline T& setNumTexCoordSet(unsigned char numTexCoordSet)
 	{
 		mNumTexCoordSet = numTexCoordSet;
 		return static_cast<T&>(*this);

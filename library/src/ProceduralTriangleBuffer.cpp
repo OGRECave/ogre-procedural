@@ -39,7 +39,7 @@ Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
         const Ogre::String& group) const
 {
 	Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-	Ogre::ManualObject * manual = sceneMgr->createManualObject();
+	Ogre::ManualObject* manual = sceneMgr->createManualObject();
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
 	for (std::vector<Vertex>::const_iterator it = mVertices.begin(); it != mVertices.end(); ++it)

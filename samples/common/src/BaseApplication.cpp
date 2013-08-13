@@ -228,7 +228,7 @@ void BaseApplication::setupResources(void)
 	while (seci.hasMoreElements())
 	{
 		secName = seci.peekNextKey();
-		ConfigFile::SettingsMultiMap *settings = seci.getNext();
+		ConfigFile::SettingsMultiMap* settings = seci.getNext();
 		ConfigFile::SettingsMultiMap::iterator i;
 		for (i = settings->begin(); i != settings->end(); ++i)
 		{
@@ -353,7 +353,7 @@ void BaseApplication::putMeshMat(const std::string& meshName, const std::string&
 	ent2->setCastShadows(castShadows);
 }
 //-------------------------------------------------------------------------------------
-bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
+bool BaseApplication::keyPressed( const OIS::KeyEvent& arg )
 {
 	if (mTrayMgr->isDialogVisible()) return true;   // don't process any more keys if dialog is up
 
@@ -457,13 +457,13 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
 	return true;
 }
 
-bool BaseApplication::keyReleased( const OIS::KeyEvent &arg )
+bool BaseApplication::keyReleased( const OIS::KeyEvent& arg )
 {
 	mCameraMan->injectKeyUp(arg);
 	return true;
 }
 
-bool BaseApplication::mouseMoved( const OIS::MouseEvent &arg )
+bool BaseApplication::mouseMoved( const OIS::MouseEvent& arg )
 {
 	if (mTrayMgr->injectMouseMove(arg)) return true;
 	if (!mNonExclusiveMouse || mMouse->getMouseState().buttonDown(OIS::MB_Left))
@@ -471,7 +471,7 @@ bool BaseApplication::mouseMoved( const OIS::MouseEvent &arg )
 	return true;
 }
 
-bool BaseApplication::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+bool BaseApplication::mousePressed( const OIS::MouseEvent& arg, OIS::MouseButtonID id )
 {
 	std::cout<<"mouse presse"<<std::endl;
 	if (mTrayMgr->injectMouseDown(arg, id)) return true;
@@ -479,7 +479,7 @@ bool BaseApplication::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButton
 	return true;
 }
 
-bool BaseApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+bool BaseApplication::mouseReleased( const OIS::MouseEvent& arg, OIS::MouseButtonID id )
 {
 	std::cout<<"mouse rele"<<std::endl;
 	if (mTrayMgr->injectMouseUp(arg, id)) return true;
@@ -499,7 +499,7 @@ void BaseApplication::windowResized(RenderWindow* rw)
 	int left, top;
 	rw->getMetrics(width, height, depth, left, top);
 
-	const OIS::MouseState &ms = mMouse->getMouseState();
+	const OIS::MouseState& ms = mMouse->getMouseState();
 	ms.width = width;
 	ms.height = height;
 }

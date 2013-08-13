@@ -116,31 +116,31 @@ public:
 	\param image Pointer to second image (default NULL)
 	\note If the parameter image is set to NULL there won't be any compensation.
 	*/
-	Abnormals & setParameterImage(TextureBufferPtr image);
+	Abnormals& setParameterImage(TextureBufferPtr image);
 
 	/**
 	Set rotation angle.
 	\param rotation New rotation angle [0.0, 1.0] \(default 0.0)
 	*/
-	Abnormals & setRotation(Ogre::Real rotation);
+	Abnormals& setRotation(Ogre::Real rotation);
 
 	/**
 	Set rotation angle.
 	\param rotation New rotation angle [0.0, Ogre::Math::TWO_PI] rad \(default 0.0)
 	*/
-	Abnormals & setRotation(Ogre::Radian rotation);
+	Abnormals& setRotation(Ogre::Radian rotation);
 
 	/**
 	Set rotation angle.
 	\param rotation New rotation angle [0, 360] degree \(default 0)
 	*/
-	Abnormals & setRotation(Ogre::Degree rotation);
+	Abnormals& setRotation(Ogre::Degree rotation);
 
 	/**
 	Set rotation axis.
 	\param axis New rotation axis (default Ogre::Vector3(0.0f, 0.0f, 1.0f))
 	*/
-	Abnormals & setAxis(Ogre::Vector3 axis);
+	Abnormals& setAxis(Ogre::Vector3 axis);
 
 	/**
 	Set rotation axis.
@@ -148,25 +148,25 @@ public:
 	\param y New y coordinate of rotation axis \(default 0.0)
 	\param z New z coordinate of rotation axis \(default 1.0)
 	*/
-	Abnormals & setAxis(Ogre::Real x, Ogre::Real y, Ogre::Real z = 1.0f);
+	Abnormals& setAxis(Ogre::Real x, Ogre::Real y, Ogre::Real z = 1.0f);
 
 	/**
 	Set sensitivity.
 	\param sensitivity New sensitivity value [0, 255] (default 127)
 	*/
-	Abnormals & setSensitivity(Ogre::uchar sensitivity);
+	Abnormals& setSensitivity(Ogre::uchar sensitivity);
 
 	/**
 	Set compensation method.
 	\param compensation Compensation method to use (default COMPENSATION_NORMAL)
 	*/
-	Abnormals & setCompensation(ABNORMALS_COMPENSATION compensation);
+	Abnormals& setCompensation(ABNORMALS_COMPENSATION compensation);
 
 	/**
 	Set mirror method.
 	\param mirror Compensation method to use (default MIRROR_NONE)
 	*/
-	Abnormals & setMirror(ABNORMALS_MIRROR mirror);
+	Abnormals& setMirror(ABNORMALS_MIRROR mirror);
 
 	/**
 	Run image manipulation
@@ -206,7 +206,7 @@ public:
 	Set the colour to extract.
 	\param colour New colour for extraction (default Ogre::ColourValue::White)
 	*/
-	Alpha & setExtractColour(Ogre::ColourValue colour);
+	Alpha& setExtractColour(Ogre::ColourValue colour);
 
 	/**
 	Set the colour to extract.
@@ -215,7 +215,7 @@ public:
 	\param blue Blue value of extraction colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of extraction colour [0.0, 1.0] \(default 1.0)
 	*/
-	Alpha & setExtractColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Alpha& setExtractColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Run image manipulation
@@ -260,14 +260,14 @@ public:
 	Set mode of alpha masking.
 	\param colourmask If set to true parameter image will be used as alph mask (default false)
 	*/
-	AlphaMask & setColourAlphaMask(bool colourmask);
+	AlphaMask& setColourAlphaMask(bool colourmask);
 
 	/**
 	Set parameter image for masking/colouring.
 	\param image Pointer to second image (default NULL)
 	\note Methode 1 is used if the parameter image is set to zero. If the size of the parameter image is smaller than the base buffer the operation will be canceled without any image manipulation.
 	*/
-	AlphaMask & setParameterImage(TextureBufferPtr image);
+	AlphaMask& setParameterImage(TextureBufferPtr image);
 
 	/**
 	Run image manipulation
@@ -315,20 +315,20 @@ public:
 	Sets the texture buffer that must be copied towards the current texture buffer
 	\param inputBuffer Pointer on image where to copy from
 	*/
-	Blit & setInputBuffer(TextureBufferPtr inputBuffer);
+	Blit& setInputBuffer(TextureBufferPtr inputBuffer);
 
 	/**
 	Set the full rectangle coordinates of the input buffer to copy.
 	\param rect Full rectangle description (default: left=0.0, top=0.0, right=1.0, bottom=1.0)
 	\param relative If this is set to true (default) the rectangle data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	Blit & setInputRect(Ogre::RealRect rect, bool relative = true);
+	Blit& setInputRect(Ogre::RealRect rect, bool relative = true);
 
 	/**
 	Set the full rectangle coordinates of the input buffer to copy.
 	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
 	*/
-	Blit & setInputRect(Ogre::Rect rect);
+	Blit& setInputRect(Ogre::Rect rect);
 
 	/**
 	Set the full rectangle coordinates of the input buffer to copy.
@@ -336,7 +336,7 @@ public:
 	\param pos2 Vector to bottom right end point of the rectangle (default: x=1.0, y=1.0)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	Blit & setInputRect(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
+	Blit& setInputRect(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
 
 	/**
 	Set the full rectangle coordinates of the input buffer to copy.
@@ -345,7 +345,7 @@ public:
 	\param x2 New absolute x position of rectangle end (default: image width)
 	\param y2 New absolute y position of rectangle end (default: image height)
 	*/
-	Blit & setInputRect(size_t x1, size_t y1, size_t x2, size_t y2);
+	Blit& setInputRect(size_t x1, size_t y1, size_t x2, size_t y2);
 
 	/**
 	Set the full rectangle coordinates of the input buffer to copy.
@@ -354,20 +354,20 @@ public:
 	\param x2 New relative x position of rectangle end [0.0, 1.0] \(default 1.0)
 	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
-	Blit & setInputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
+	Blit& setInputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
 
 	/**
 	Set the full rectangle coordinates of the output buffer where the input is copied to.
 	\param rect Full rectangle description (default: left=0.0, top=0.0, right=1.0, bottom=1.0)
 	\param relative If this is set to true (default) the rectangle data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	Blit & setOutputRect(Ogre::RealRect rect, bool relative = true);
+	Blit& setOutputRect(Ogre::RealRect rect, bool relative = true);
 
 	/**
 	Set the full rectangle coordinates of the output buffer where the input is copied to.
 	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
 	*/
-	Blit & setOutputRect(Ogre::Rect rect);
+	Blit& setOutputRect(Ogre::Rect rect);
 
 	/**
 	Set the full rectangle coordinates of the output buffer where the input is copied to.
@@ -375,7 +375,7 @@ public:
 	\param pos2 Vector to bottom right end point of the rectangle (default: x=1.0, y=1.0)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	Blit & setOutputRect(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
+	Blit& setOutputRect(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
 
 	/**
 	Set the full rectangle coordinates of the output buffer where the input is copied to.
@@ -384,7 +384,7 @@ public:
 	\param x2 New absolute x position of rectangle end (default: image width)
 	\param y2 New absolute y position of rectangle end (default: image height)
 	*/
-	Blit & setOutputRect(size_t x1, size_t y1, size_t x2, size_t y2);
+	Blit& setOutputRect(size_t x1, size_t y1, size_t x2, size_t y2);
 
 	/**
 	Set the full rectangle coordinates of the output buffer where the input is copied to.
@@ -393,7 +393,7 @@ public:
 	\param x2 New relative x position of rectangle end [0.0, 1.0] \(default 1.0)
 	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
-	Blit & setOutputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
+	Blit& setOutputRect(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
 
 	/**
 	Run image manipulation
@@ -453,19 +453,19 @@ public:
 	Set the gaussian block size.
 	\param size New block size for gaussian blur filter [3, 255] (default 5)
 	*/
-	Blur & setSize(Ogre::uchar size);
+	Blur& setSize(Ogre::uchar size);
 
 	/**
 	Set sigma constant for gaussian filter.
 	\param sigma New sigma constant for gaussian blur filter [0, 255] (default 92)
 	*/
-	Blur & setSigma(Ogre::uchar sigma);
+	Blur& setSigma(Ogre::uchar sigma);
 
 	/**
 	Set the algorithm to blur.
 	\param type New algorithm to blur (default BLUR_BOX)
 	*/
-	Blur & setType(BLUR_TYPE type);
+	Blur& setType(BLUR_TYPE type);
 
 	/**
 	Run image manipulation
@@ -524,7 +524,7 @@ public:
 	Set selection.
 	\param selection Mode which channel should selected (default SELECT_GRAY)
 	*/
-	Channel & setSelection(CANNEL_SELECTION selection);
+	Channel& setSelection(CANNEL_SELECTION selection);
 
 	/**
 	Run image manipulation
@@ -570,7 +570,7 @@ public:
 	Set the fill colour of the circle.
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
-	CircleTexture & setColour(Ogre::ColourValue colour);
+	CircleTexture& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the fill colour of the circle.
@@ -579,57 +579,57 @@ public:
 	\param blue Blue value of the fill colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of the fill colour [0.0, 1.0] \(default 1.0)
 	*/
-	CircleTexture & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	CircleTexture& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the absolute radius of the circle.
 	\param radius New absolute radius of the circle in px (default 1/2 * image width)
 	*/
-	CircleTexture & setRadius(size_t radius);
+	CircleTexture& setRadius(size_t radius);
 
 	/**
 	Set the relative radius of the circle.
 	\param radius New relative radius of the circle [0.0, 1.0] \(default 0.5)
 	*/
-	CircleTexture & setRadius(Ogre::Real radius);
+	CircleTexture& setRadius(Ogre::Real radius);
 
 	/**
 	Set absolute x position of circle center point in px
 	\param x New absolute x position of circle center (default 1/2 * image width)
 	*/
-	CircleTexture & setCenterX(size_t x);
+	CircleTexture& setCenterX(size_t x);
 
 	/**
 	Set relative x position of circle center point as Real
 	\param x New relative x position of circle center [0.0, 1.0] \(default 0.5)
 	*/
-	CircleTexture & setCenterX(Ogre::Real x);
+	CircleTexture& setCenterX(Ogre::Real x);
 
 	/**
 	Set absolute y position of circle center point in px
 	\param y New absolute y position of circle center (default 1/2 * image width)
 	*/
-	CircleTexture & setCenterY(size_t y);
+	CircleTexture& setCenterY(size_t y);
 
 	/**
 	Set relative y position of circle center point as Real
 	\param y New relative y position of circle center [0.0, 1.0] \(default 0.5)
 	*/
-	CircleTexture & setCenterY(Ogre::Real y);
+	CircleTexture& setCenterY(Ogre::Real y);
 
 	/**
 	Set the position of circle center point.
 	\param pos Vector to the center point of the circle (default: x=0.5, y=0.5)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	CircleTexture & setCenter(Ogre::Vector2 pos, bool relative = true);
+	CircleTexture& setCenter(Ogre::Vector2 pos, bool relative = true);
 
 	/**
 	Set the position of circle center point.
 	\param x New absolute x position of circle center (default 1/2 * image width)
 	\param y New absolute y position of circle center (default 1/2 * image width)
 	*/
-	CircleTexture & setCenter(size_t x, size_t y);
+	CircleTexture& setCenter(size_t x, size_t y);
 
 	/**
 	Set the position of circle center point.
@@ -637,7 +637,7 @@ public:
 	\param y New relative y position of circle center [0.0, 1.0] \(default 0.5)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	CircleTexture & setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
+	CircleTexture& setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
 
 	/**
 	Run image manipulation
@@ -685,7 +685,7 @@ public:
 	Set the base colour to work on.
 	\param colour New colour to work on (default Ogre::ColourValue::Black)
 	*/
-	Colours & setColourBase(Ogre::ColourValue colour);
+	Colours& setColourBase(Ogre::ColourValue colour);
 
 	/**
 	Set the base colour to work on.
@@ -694,13 +694,13 @@ public:
 	\param blue Blue value of base colour [0.0, 1.0] \(default 0.0)
 	\param alpha %Alpha value of base colour [0.0, 1.0] \(default 0.0)
 	*/
-	Colours & setColourBase(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Colours& setColourBase(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the percent colour to add on image.
 	\param colour New colour to add (default Ogre::ColourValue::White)
 	*/
-	Colours & setColourPercent(Ogre::ColourValue colour);
+	Colours& setColourPercent(Ogre::ColourValue colour);
 
 	/**
 	Set the percent colour to add on image.
@@ -709,31 +709,31 @@ public:
 	\param blue Blue value of percent colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of percent colour [0.0, 1.0] \(default 1.0)
 	*/
-	Colours & setColourPercent(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Colours& setColourPercent(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set brightness of the image.
 	\param brightness New image brightness (default 127)
 	*/
-	Colours & setBrightness(Ogre::uchar brightness);
+	Colours& setBrightness(Ogre::uchar brightness);
 
 	/**
 	Set contrast of the image.
 	\param contrast New image contrast (default 127)
 	*/
-	Colours & setContrast(Ogre::uchar contrast);
+	Colours& setContrast(Ogre::uchar contrast);
 
 	/**
 	Set saturation of the image.
 	\param saturation New image saturation (default 127)
 	*/
-	Colours & setSaturation(Ogre::uchar saturation);
+	Colours& setSaturation(Ogre::uchar saturation);
 
 	/**
 	Set alpha of the image.
 	\param alpha New image alpha (default 127)
 	*/
-	Colours & setAlpha(Ogre::uchar alpha);
+	Colours& setAlpha(Ogre::uchar alpha);
 
 	/**
 	Run image manipulation
@@ -802,13 +802,13 @@ public:
 	\param image Pointer on image to process
 	\param method Method how to process the image
 	*/
-	Combine & addImage(TextureBufferPtr image, COMBINE_METHOD method = METHOD_LAYER);
+	Combine& addImage(TextureBufferPtr image, COMBINE_METHOD method = METHOD_LAYER);
 
 	/**
 	Set the percent colour to add on image.
 	\param colour New colour for drawing (default Ogre::ColourValue::White)
 	*/
-	Combine & setColour(Ogre::ColourValue colour);
+	Combine& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the percent colour to add on image.
@@ -817,7 +817,7 @@ public:
 	\param blue Blue value of drawing colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of drawing colour [0.0, 1.0] \(default 1.0)
 	*/
-	Combine & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Combine& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Run image manipulation
@@ -887,7 +887,7 @@ public:
 	\param data Array with data for new kernel by rows
 	\remark setKernel calls calculateDivisor after changeing the kernel memory! If you like to set a user defined devisor call setDivisor always after setKernel!
 	*/
-	Convolution & setKernel(Ogre::uchar size, Ogre::Real* data);
+	Convolution& setKernel(Ogre::uchar size, Ogre::Real* data);
 
 	/**
 	Set a new kernel.
@@ -895,45 +895,45 @@ public:
 	\param data Array with data for new kernel by rows
 	\remark setKernel calls calculateDivisor after changeing the kernel memory! If you like to set a user defined devisor call setDivisor always after setKernel!
 	*/
-	Convolution & setKernel(Ogre::uchar size, int* data);
+	Convolution& setKernel(Ogre::uchar size, int* data);
 
 	/**
 	Set a new kernel.
 	\param data Matrix with data for new kernel
 	\remark setKernel calls calculateDivisor after changeing the kernel memory! If you like to set a user defined devisor call setDivisor always after setKernel!
 	*/
-	Convolution & setKernel(Ogre::Matrix3 data);
+	Convolution& setKernel(Ogre::Matrix3 data);
 
 	/**
 	Set a devisor.
 	\param divisor Set specific devisor \(default 1.0)
 	\remark setKernel calls calculateDivisor after changeing the kernel memory! If you like to set a user defined devisor call setDivisor always after setKernel!
 	*/
-	Convolution & setDivisor(Ogre::Real divisor);
+	Convolution& setDivisor(Ogre::Real divisor);
 
 	/**
 	Calculate a new devisor from given kernel.
 	\remark setKernel calls calculateDivisor after changeing the kernel memory!
 	*/
-	Convolution & calculateDivisor();
+	Convolution& calculateDivisor();
 
 	/**
 	Set threshold value.
 	\param threshold New threshold value [0, 255] (default 128)
 	*/
-	Convolution & setThreshold(Ogre::uchar threshold);
+	Convolution& setThreshold(Ogre::uchar threshold);
 
 	/**
 	Switch dynamic divisor for edges on or off.
 	\param calculateedgedivisor Set true to use dynamic divisor for edges (default true)
 	*/
-	Convolution & setCalculateEdgeDivisor(bool calculateedgedivisor);
+	Convolution& setCalculateEdgeDivisor(bool calculateedgedivisor);
 
 	/**
 	Switch on/off the use of the alpha channel.
 	\param usealpha Set true to also modify the alpha channel (default false)
 	*/
-	Convolution & setIncludeAlphaChannel(bool usealpha);
+	Convolution& setIncludeAlphaChannel(bool usealpha);
 
 	/**
 	Run image manipulation
@@ -1007,13 +1007,13 @@ public:
 	\param image Pointer to second image (default NULL)
 	\note If the parameter image is set to NULL there won't be any compensation.
 	*/
-	Crack & setParameterImage(TextureBufferPtr image);
+	Crack& setParameterImage(TextureBufferPtr image);
 
 	/**
 	Set the colour to draw.
 	\param colour New colour for drawing (default Ogre::ColourValue::White)
 	*/
-	Crack & setColour(Ogre::ColourValue colour);
+	Crack& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the colour to draw.
@@ -1022,43 +1022,43 @@ public:
 	\param blue Blue value of drawing colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of drawing colour [0.0, 1.0] \(default 1.0)
 	*/
-	Crack & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Crack& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the number of generated lines.
 	\param count New number of lines to generate (default 100)
 	*/
-	Crack & setCount(Ogre::uint count);
+	Crack& setCount(Ogre::uint count);
 
 	/**
 	Set the smoothness of generated lines.
 	\param variation New value for the smoothness of the generated lines (default 64)
 	*/
-	Crack & setVariation(Ogre::uchar variation);
+	Crack& setVariation(Ogre::uchar variation);
 
 	/**
 	Set the minimum length of generated line segments.
 	\param length New minimal length of the generated line segments (default 255)
 	*/
-	Crack & setLength(Ogre::uchar length);
+	Crack& setLength(Ogre::uchar length);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	Crack & setSeed(Ogre::uint seed);
+	Crack& setSeed(Ogre::uint seed);
 
 	/**
 	Set method for calculating the line segments length.
 	\param lengthdecision New decision length (default LENGTH_DECISION_RANDOM)
 	*/
-	Crack & setLengthDecision(CRACK_LENGTH_DECISION lengthdecision);
+	Crack& setLengthDecision(CRACK_LENGTH_DECISION lengthdecision);
 
 	/**
 	Set method for high quality painting.
 	\param quality New high quality setting (default QUALITY_HIGH_OFF)
 	*/
-	Crack & setQuality(CRACK_QUALITY quality);
+	Crack& setQuality(CRACK_QUALITY quality);
 
 	/**
 	Run image manipulation
@@ -1153,13 +1153,13 @@ public:
 	\param type New algorithm to draw (default HYPOCYCLOID)
 	\note Call this function on first place! setType resets all numerical parameter to special defaults according on used algorithm.
 	*/
-	Cycloid & setType(CYCLOID_TYPE type);
+	Cycloid& setType(CYCLOID_TYPE type);
 
 	/**
 	Set the drawing colour for cycloid structure.
 	\param colour New colour for drawing (default Ogre::ColourValue::White)
 	*/
-	Cycloid & setColour(Ogre::ColourValue colour);
+	Cycloid& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the drawing colour for cycloid structure.
@@ -1168,19 +1168,19 @@ public:
 	\param blue Blue value of drawing colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of drawing colour [0.0, 1.0] \(default 1.0)
 	*/
-	Cycloid & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Cycloid& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the relative center position of the cycloid main circle on x axis.
 	\param centerx New relative center of the cycloid main circle [0.0, 1.0] \(default 0.5)
 	*/
-	Cycloid & setCenterX(Ogre::Real centerx);
+	Cycloid& setCenterX(Ogre::Real centerx);
 
 	/**
 	Set the relative center position of the cycloid main circle on y axis.
 	\param centery New relative center of the cycloid main circle [0.0, 1.0] \(default 0.5)
 	*/
-	Cycloid & setCenterY(Ogre::Real centery);
+	Cycloid& setCenterY(Ogre::Real centery);
 
 	/**
 	Set the parameter value.
@@ -1189,13 +1189,13 @@ public:
 	\see \ref cycloiddefaultparameter "Default parameters" for default values
 	\note Unsused paramerters will be ignored. Setting <em>k</em> parameter calculates the first used parameter. For example <tt>k = R / r</tt> will calculate <em>R</em> by <tt>R = k * r</tt> (also <em>r</em> from <tt>r = k * d</tt>).
 	*/
-	Cycloid & setParameter(CYCLOID_PARAMETER paramType, Ogre::Real value);
+	Cycloid& setParameter(CYCLOID_PARAMETER paramType, Ogre::Real value);
 
 	/**
 	Set the size for the pen to draw.
 	\param size New size for the drawing pen (default 1)
 	*/
-	Cycloid & setPenSize(Ogre::uint size);
+	Cycloid& setPenSize(Ogre::uint size);
 
 	/**
 	Run image manipulation
@@ -1244,7 +1244,7 @@ public:
 	Set number of iterations for dilating.
 	\param iterations New number of dilating iterations [1, 255] (default 10)
 	*/
-	Dilate & setIterations(Ogre::uchar iterations);
+	Dilate& setIterations(Ogre::uchar iterations);
 
 	/**
 	Run image manipulation
@@ -1291,13 +1291,13 @@ public:
 	\param image Pointer to second image (default NULL)
 	\note If the parameter image is set to NULL there won't be any image manipulation.
 	*/
-	Distort & setParameterImage(TextureBufferPtr image);
+	Distort& setParameterImage(TextureBufferPtr image);
 
 	/**
 	Set power for distort effect.
 	\param power New power for calculation (default 0)
 	*/
-	Distort & setPower(Ogre::uchar power);
+	Distort& setPower(Ogre::uchar power);
 
 	/**
 	Run image manipulation
@@ -1350,25 +1350,25 @@ public:
 	Set the lower threshold for canny filter.
 	\param threshold New lower threshold value for canny filter [0, 255] (default 20)
 	*/
-	EdgeDetection & setThresholdLow(Ogre::uchar threshold);
+	EdgeDetection& setThresholdLow(Ogre::uchar threshold);
 
 	/**
 	Set the upper threshold for canny filter.
 	\param threshold New upper threshold value for canny filter [0, 255] (default 100)
 	*/
-	EdgeDetection & setThresholdHigh(Ogre::uchar threshold);
+	EdgeDetection& setThresholdHigh(Ogre::uchar threshold);
 
 	/**
 	Set sigma constant for canny filter.
 	\param sigma New sigma constant for gaussian filter in canny filter [0, 255] (default 92)
 	*/
-	EdgeDetection & setSigma(Ogre::uchar sigma);
+	EdgeDetection& setSigma(Ogre::uchar sigma);
 
 	/**
 	Set the algorithm to sharp.
 	\param type New algorithm to sharp (default SHARP_BASIC)
 	*/
-	EdgeDetection & setType(DETECTION_TYPE type);
+	EdgeDetection& setType(DETECTION_TYPE type);
 
 	/**
 	Run image manipulation
@@ -1419,7 +1419,7 @@ public:
 	Set the fill colour of the ellipse.
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
-	EllipseTexture & setColour(Ogre::ColourValue colour);
+	EllipseTexture& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the fill colour of the ellipse.
@@ -1428,83 +1428,83 @@ public:
 	\param blue Blue value of the fill colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of the fill colour [0.0, 1.0] \(default 1.0)
 	*/
-	EllipseTexture & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	EllipseTexture& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the absolute radius of the ellipse on x axis.
 	\param radiusx New absolute radius of the ellipse on x axis in px (default 1/2 * image width)
 	*/
-	EllipseTexture & setRadiusX(size_t radiusx);
+	EllipseTexture& setRadiusX(size_t radiusx);
 
 	/**
 	Set the relative radius of the ellipse on x axis.
 	\param radiusx New relative radius of the ellipse on x axis [0.0, 1.0] \(default 0.5)
 	*/
-	EllipseTexture & setRadiusX(Ogre::Real radiusx);
+	EllipseTexture& setRadiusX(Ogre::Real radiusx);
 
 	/**
 	Set the absolute radius of the ellipse on y axis.
 	\param radiusy New absolute radius of the ellipse on y axis in px (default 1/2 * image width)
 	*/
-	EllipseTexture & setRadiusY(size_t radiusy);
+	EllipseTexture& setRadiusY(size_t radiusy);
 
 	/**
 	Set the relative radius of the ellipse on y axis.
 	\param radiusy New relative radius of the ellipse on y axis [0.0, 1.0] \(default 0.5)
 	*/
-	EllipseTexture & setRadiusY(Ogre::Real radiusy);
+	EllipseTexture& setRadiusY(Ogre::Real radiusy);
 
 	/**
 	Set the absolute radius of the ellipse.
 	\param radiusx New absolute radius of the ellipse on x axis in px (default 1/2 * image width)
 	\param radiusy New absolute radius of the ellipse on y axis in px (default 1/2 * image width)
 	*/
-	EllipseTexture & setRadius(size_t radiusx, size_t radiusy);
+	EllipseTexture& setRadius(size_t radiusx, size_t radiusy);
 
 	/**
 	Set the relative radius of the ellipse.
 	\param radiusx New relative radius of the ellipse on x axis [0.0, 1.0] \(default 0.5)
 	\param radiusy New relative radius of the ellipse on y axis [0.0, 1.0] \(default 0.5)
 	*/
-	EllipseTexture & setRadius(Ogre::Real radiusx, Ogre::Real radiusy);
+	EllipseTexture& setRadius(Ogre::Real radiusx, Ogre::Real radiusy);
 
 	/**
 	Set absolute x position of ellipse center point in px
 	\param x New absolute x position of ellipse center (default 1/2 * image width)
 	*/
-	EllipseTexture & setCenterX(size_t x);
+	EllipseTexture& setCenterX(size_t x);
 
 	/**
 	Set relative x position of ellipse center point as Real
 	\param x New relative x position of ellipse center [0.0, 1.0] \(default 0.5)
 	*/
-	EllipseTexture & setCenterX(Ogre::Real x);
+	EllipseTexture& setCenterX(Ogre::Real x);
 
 	/**
 	Set absolute y position of ellipse center point in px
 	\param y New absolute y position of ellipse center (default 1/2 * image width)
 	*/
-	EllipseTexture & setCenterY(size_t y);
+	EllipseTexture& setCenterY(size_t y);
 
 	/**
 	Set relative y position of ellipse center point as Real
 	\param y New relative y position of ellipse center [0.0, 1.0] \(default 0.5)
 	*/
-	EllipseTexture & setCenterY(Ogre::Real y);
+	EllipseTexture& setCenterY(Ogre::Real y);
 
 	/**
 	Set the position of ellipse center point.
 	\param pos Vector to the center point of the ellipse (default: x=0.5, y=0.5)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	EllipseTexture & setCenter(Ogre::Vector2 pos, bool relative = true);
+	EllipseTexture& setCenter(Ogre::Vector2 pos, bool relative = true);
 
 	/**
 	Set the position of ellipse center point.
 	\param x New absolute x position of ellipse center (default 1/2 * image width)
 	\param y New absolute y position of ellipse center (default 1/2 * image width)
 	*/
-	EllipseTexture & setCenter(size_t x, size_t y);
+	EllipseTexture& setCenter(size_t x, size_t y);
 
 	/**
 	Set the position of ellipse center point.
@@ -1512,7 +1512,7 @@ public:
 	\param y New relative y position of ellipse center [0.0, 1.0] \(default 0.5)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	EllipseTexture & setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
+	EllipseTexture& setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
 
 	/**
 	Run image manipulation
@@ -1581,7 +1581,7 @@ public:
 	Set the axis to flip.
 	\param axis Axis where to flip the image arround (default FLIP_VERTICAL)
 	*/
-	Flip & setAxis(FLIP_AXIS axis);
+	Flip& setAxis(FLIP_AXIS axis);
 
 	/**
 	Run image manipulation
@@ -1627,7 +1627,7 @@ public:
 	Set the colour of the glow ellipse.
 	\param colour New colour for glow ellipse (default Ogre::ColourValue::White)
 	*/
-	Glow & setColour(Ogre::ColourValue colour);
+	Glow& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the colour of the glow ellipse.
@@ -1636,43 +1636,43 @@ public:
 	\param blue Blue value of the glow ellipse [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of the glow ellipse [0.0, 1.0] \(default 1.0)
 	*/
-	Glow & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	Glow& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the relative center position of the blur circle on x axis.
 	\param centerx New relative center of the blur circle [0.0, 1.0] \(default 0.5)
 	*/
-	Glow & setCenterX(Ogre::Real centerx);
+	Glow& setCenterX(Ogre::Real centerx);
 
 	/**
 	Set the relative center position of the blur circle on y axis.
 	\param centery New relative center of the blur circle [0.0, 1.0] \(default 0.5)
 	*/
-	Glow & setCenterY(Ogre::Real centery);
+	Glow& setCenterY(Ogre::Real centery);
 
 	/**
 	Set the relative radius of the blur circle in x direction.
 	\param radiusx New relative radius of the blur circle [0.0, 1.0] \(default 0.5)
 	*/
-	Glow & setRadiusX(Ogre::Real radiusx);
+	Glow& setRadiusX(Ogre::Real radiusx);
 
 	/**
 	Set the relative radius of the blur circle in y direction.
 	\param radiusy New relative radius of the blur circle [0.0, 1.0] \(default 0.5)
 	*/
-	Glow & setRadiusY(Ogre::Real radiusy);
+	Glow& setRadiusY(Ogre::Real radiusy);
 
 	/**
 	Set alpha value of blur effect.
 	\param alpha New alpha value for blur effect (default 1)
 	*/
-	Glow & setAlpha(Ogre::Real alpha);
+	Glow& setAlpha(Ogre::Real alpha);
 
 	/**
 	Set gamma value of blur effect.
 	\param gamma New gamma value for blur effect (default 1)
 	*/
-	Glow & setGamma(Ogre::Real gamma);
+	Glow& setGamma(Ogre::Real gamma);
 
 	/**
 	Run image manipulation
@@ -1744,13 +1744,13 @@ public:
 	Set the radius of the detection area.
 	\param radius New radius for detection area [0, 255] (default 57)
 	*/
-	Jitter & setRadius(Ogre::uchar radius);
+	Jitter& setRadius(Ogre::uchar radius);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	Jitter & setSeed(Ogre::uint seed);
+	Jitter& setSeed(Ogre::uint seed);
 
 	/**
 	Run image manipulation
@@ -1803,13 +1803,13 @@ public:
 	Set first image (a).
 	\param image1 Pointer to a new first image (default NULL)
 	*/
-	Lerp & setImageA(TextureBufferPtr image1);
+	Lerp& setImageA(TextureBufferPtr image1);
 
 	/**
 	Set second image (b).
 	\param image2 Pointer to a new second image (default NULL)
 	*/
-	Lerp & setImageB(TextureBufferPtr image2);
+	Lerp& setImageB(TextureBufferPtr image2);
 
 	/**
 	Run image manipulation
@@ -1864,13 +1864,13 @@ public:
 	\param normal Pointer to an normal map image (default NULL)
 	\note If the parameter normal is set to NULL a clone of the base input image will be used as normal map with Normals filter.
 	*/
-	TextureLightBaker & setNormalMap(TextureBufferPtr normal);
+	TextureLightBaker& setNormalMap(TextureBufferPtr normal);
 
 	/**
 	Set the ambient light colour.
 	\param colour New ambient light colour (default Ogre::ColourValue::Black)
 	*/
-	TextureLightBaker & setColourAmbient(Ogre::ColourValue colour);
+	TextureLightBaker& setColourAmbient(Ogre::ColourValue colour);
 
 	/**
 	Set the ambient light colour.
@@ -1879,13 +1879,13 @@ public:
 	\param blue Blue value of ambient light colour [0.0, 1.0] \(default 0.0)
 	\param alpha %Alpha value of ambient light colour [0.0, 1.0] \(default 0.0)
 	*/
-	TextureLightBaker & setColourAmbient(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	TextureLightBaker& setColourAmbient(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the diffuse light colour.
 	\param colour New diffuse light colour (default Ogre::ColourValue(0.5f, 0.5f, 0.5f, 1.0f))
 	*/
-	TextureLightBaker & setColourDiffuse(Ogre::ColourValue colour);
+	TextureLightBaker& setColourDiffuse(Ogre::ColourValue colour);
 
 	/**
 	Set the diffuse light colour.
@@ -1894,13 +1894,13 @@ public:
 	\param blue Blue value of diffuse light colour [0.0, 1.0] \(default 0.5)
 	\param alpha %Alpha value of diffuse light colour [0.0, 1.0] \(default 1.0)
 	*/
-	TextureLightBaker & setColourDiffuse(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	TextureLightBaker& setColourDiffuse(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the specular light colour.
 	\param colour New specular light colour (default Ogre::ColourValue::White)
 	*/
-	TextureLightBaker & setColourSpecular(Ogre::ColourValue colour);
+	TextureLightBaker& setColourSpecular(Ogre::ColourValue colour);
 
 	/**
 	Set the specular light colour.
@@ -1909,7 +1909,7 @@ public:
 	\param blue Blue value of specular light colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of specular light colour [0.0, 1.0] \(default 1.0)
 	*/
-	TextureLightBaker & setColourSpecular(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	TextureLightBaker& setColourSpecular(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the light colours.
@@ -1917,13 +1917,13 @@ public:
 	\param diffuse New diffuse light colour (default Ogre::ColourValue(0.5f, 0.5f, 0.5f, 1.0f))
 	\param specular New specular light colour (default Ogre::ColourValue::White)
 	*/
-	TextureLightBaker & setColours(Ogre::ColourValue ambient, Ogre::ColourValue diffuse, Ogre::ColourValue specular);
+	TextureLightBaker& setColours(Ogre::ColourValue ambient, Ogre::ColourValue diffuse, Ogre::ColourValue specular);
 
 	/**
 	Set the position of light on/over the image.
 	\param position New light position (default Ogre::Vector3(255.0f, 255.0f, 127.0f))
 	*/
-	TextureLightBaker & setPosition(Ogre::Vector3 position);
+	TextureLightBaker& setPosition(Ogre::Vector3 position);
 
 	/**
 	Set the position of light on/over the image.
@@ -1931,19 +1931,19 @@ public:
 	\param y New light position on y axis \(default 255.0f)
 	\param z New light position on z axis \(default 127.0f)
 	*/
-	TextureLightBaker & setPosition(Ogre::Real x, Ogre::Real y, Ogre::Real z);
+	TextureLightBaker& setPosition(Ogre::Real x, Ogre::Real y, Ogre::Real z);
 
 	/**
 	Set specular light power.
 	\param power New power value for specular light (default 0)
 	*/
-	TextureLightBaker & setSpecularPower(Ogre::uchar power);
+	TextureLightBaker& setSpecularPower(Ogre::uchar power);
 
 	/**
 	Set bump mapping power.
 	\param power New power value for bump mapping (default 0)
 	*/
-	TextureLightBaker & setBumpPower(Ogre::uchar power);
+	TextureLightBaker& setBumpPower(Ogre::uchar power);
 
 	/**
 	Run image manipulation
@@ -1991,7 +1991,7 @@ public:
 	\param image Pointer to second image (default NULL)
 	\note If the parameter image is set to NULL there won't be any image manipulation.
 	*/
-	Lookup & setParameterImage(TextureBufferPtr image);
+	Lookup& setParameterImage(TextureBufferPtr image);
 
 	/**
 	Run image manipulation
@@ -2047,7 +2047,7 @@ public:
 	Set amplify for normal calculation
 	\param amplify New amplify for calculation (default 64)
 	*/
-	Normals & setAmplify(Ogre::uchar amplify);
+	Normals& setAmplify(Ogre::uchar amplify);
 
 	/**
 	Run image manipulation
@@ -2088,13 +2088,13 @@ public:
 	Set radius size for calculation.
 	\param radius New radius for detection arround current pixel [3, 255] (default 3)
 	*/
-	OilPaint & setRadius(Ogre::uchar radius);
+	OilPaint& setRadius(Ogre::uchar radius);
 
 	/**
 	Set intensity for painting.
 	\param intensity New intensity factor which affects brush size \(default 20.0)
 	*/
-	OilPaint & setIntensity(Ogre::Real intensity);
+	OilPaint& setIntensity(Ogre::Real intensity);
 
 	/**
 	Run image manipulation
@@ -2137,7 +2137,7 @@ public:
 	Set the colour of the pixel to paint.
 	\param colour New colour for painting pixels (default Ogre::ColourValue::White)
 	*/
-	RandomPixels & setColour(Ogre::ColourValue colour);
+	RandomPixels& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the colour of the pixel to paint.
@@ -2146,19 +2146,19 @@ public:
 	\param blue Blue value of the pixel colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of the pixel colour [0.0, 1.0] \(default 1.0)
 	*/
-	RandomPixels & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	RandomPixels& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set the seed for "random" number generator.
 	\param seed Seed value where to set the random number generator (default 5120)
 	*/
-	RandomPixels & setSeed(Ogre::uint seed);
+	RandomPixels& setSeed(Ogre::uint seed);
 
 	/**
 	Set the number of random painted pixels.
 	\param count Number of pixels to paint (maximum: image height * image weight, default: (Sqrt(image width) + Sqrt(image height)) * 10)
 	*/
-	RandomPixels & setCount(Ogre::uint count);
+	RandomPixels& setCount(Ogre::uint count);
 
 	/**
 	Run image manipulation
@@ -2204,7 +2204,7 @@ public:
 	Set the fill colour of the rectangle.
 	\param colour New colour for processing (default Ogre::ColourValue::White)
 	*/
-	RectangleTexture & setColour(Ogre::ColourValue colour);
+	RectangleTexture& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the fill colour of the rectangle.
@@ -2213,68 +2213,68 @@ public:
 	\param blue Blue value of the fill colour [0.0, 1.0] \(default 1.0)
 	\param alpha %Alpha value of the fill colour [0.0, 1.0] \(default 1.0)
 	*/
-	RectangleTexture & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	RectangleTexture& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Set absolute x position of top left start point of the rectangle in px
 	\param x1 New absolute x position of rectangle start (default 0)
 	*/
-	RectangleTexture & setX1(size_t x1);
+	RectangleTexture& setX1(size_t x1);
 
 	/**
 	Set relative x position of top left start point of the rectangle as Real
 	\param x1 New relative x position of rectangle start [0.0, 1.0] \(default 0.0)
 	*/
-	RectangleTexture & setX1(Ogre::Real x1);
+	RectangleTexture& setX1(Ogre::Real x1);
 
 	/**
 	Set absolute y position of top left start point of the rectangle in px
 	\param y1 New absolute x position of rectangle start (default 0)
 	*/
-	RectangleTexture & setY1(size_t y1);
+	RectangleTexture& setY1(size_t y1);
 
 	/**
 	Set relative y position of top left start point of the rectangle as Real
 	\param y1 New relative y position of rectangle start [0.0, 1.0] \(default 0.0)
 	*/
-	RectangleTexture & setY1(Ogre::Real y1);
+	RectangleTexture& setY1(Ogre::Real y1);
 
 	/**
 	Set absolute x position of bottom right end point of the rectangle in px
 	\param x2 New absolute x position of rectangle end (default: image width)
 	*/
-	RectangleTexture & setX2(size_t x2);
+	RectangleTexture& setX2(size_t x2);
 
 	/**
 	Set relative x position of bottom right end point of the rectangle as Real
 	\param x2 New relative x position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
-	RectangleTexture & setX2(Ogre::Real x2);
+	RectangleTexture& setX2(Ogre::Real x2);
 
 	/**
 	Set absolute y position of bottom right end point of the rectangle in px
 	\param y2 New absolute x position of rectangle end (default: image height)
 	*/
-	RectangleTexture & setY2(size_t y2);
+	RectangleTexture& setY2(size_t y2);
 
 	/**
 	Set relative y position of bottom right end point of the rectangle as Real
 	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
-	RectangleTexture & setY2(Ogre::Real y2);
+	RectangleTexture& setY2(Ogre::Real y2);
 
 	/**
 	Set the full rectangle coordinates.
 	\param rect Full rectangle description (default: left=0.0, top=0.0, right=1.0, bottom=1.0)
 	\param relative If this is set to true (default) the rectangle data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	RectangleTexture & setRectangle(Ogre::RealRect rect, bool relative = true);
+	RectangleTexture& setRectangle(Ogre::RealRect rect, bool relative = true);
 
 	/**
 	Set the full rectangle coordinates.
 	\param rect Full absolute rectangle description (default: left=0, top=0, right=image width, bottom=image height)
 	*/
-	RectangleTexture & setRectangle(Ogre::Rect rect);
+	RectangleTexture& setRectangle(Ogre::Rect rect);
 
 	/**
 	Set the full rectangle coordinates.
@@ -2282,7 +2282,7 @@ public:
 	\param pos2 Vector to bottom right end point of the rectangle (default: x=1.0, y=1.0)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	RectangleTexture & setRectangle(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
+	RectangleTexture& setRectangle(Ogre::Vector2 pos1, Ogre::Vector2 pos2, bool relative = true);
 
 	/**
 	Set the full rectangle coordinates.
@@ -2291,7 +2291,7 @@ public:
 	\param x2 New absolute x position of rectangle end (default: image width)
 	\param y2 New absolute y position of rectangle end (default: image height)
 	*/
-	RectangleTexture & setRectangle(size_t x1, size_t y1, size_t x2, size_t y2);
+	RectangleTexture& setRectangle(size_t x1, size_t y1, size_t x2, size_t y2);
 
 	/**
 	Set the full rectangle coordinates.
@@ -2300,7 +2300,7 @@ public:
 	\param x2 New relative x position of rectangle end [0.0, 1.0] \(default 1.0)
 	\param y2 New relative y position of rectangle end [0.0, 1.0] \(default 1.0)
 	*/
-	RectangleTexture & setRectangle(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
+	RectangleTexture& setRectangle(Ogre::Real x1, Ogre::Real y1, Ogre::Real x2, Ogre::Real y2);
 
 	/**
 	Run image manipulation
@@ -2345,49 +2345,49 @@ public:
 	Set the relative center position of the rotation on x axis.
 	\param centerx New relative center of the rotation center [0.0, 1.0] \(default 0.5)
 	*/
-	RotationZoom & setCenterX(Ogre::Real centerx);
+	RotationZoom& setCenterX(Ogre::Real centerx);
 
 	/**
 	Set the relative center position of the rotation on y axis.
 	\param centery New relative center of the rotation center [0.0, 1.0] \(default 0.5)
 	*/
-	RotationZoom & setCenterY(Ogre::Real centery);
+	RotationZoom& setCenterY(Ogre::Real centery);
 
 	/**
 	Set the zoom factor in x direction.
 	\param zoomx New factor for zoom in x direction \(default 1.0)
 	*/
-	RotationZoom & setZoomX(Ogre::Real zoomx);
+	RotationZoom& setZoomX(Ogre::Real zoomx);
 
 	/**
 	Set the zoom factor in y direction.
 	\param zoomy New factor for zoom in y direction \(default 1.0)
 	*/
-	RotationZoom & setZoomY(Ogre::Real zoomy);
+	RotationZoom& setZoomY(Ogre::Real zoomy);
 
 	/**
 	Set the rotation angle.
 	\param rotation New rotation angle [0.0, 1.0] \(default 0.0)
 	*/
-	RotationZoom & setRotation(Ogre::Real rotation);
+	RotationZoom& setRotation(Ogre::Real rotation);
 
 	/**
 	Set the rotation angle.
 	\param rotation New rotation angle [0.0, Ogre::Math::TWO_PI] rad (default 0.0)
 	*/
-	RotationZoom & setRotation(Ogre::Radian rotation);
+	RotationZoom& setRotation(Ogre::Radian rotation);
 
 	/**
 	Set the rotation angle.
 	\param rotation New rotation angle [0, 360] degree (default 0)
 	*/
-	RotationZoom & setRotation(Ogre::Degree rotation);
+	RotationZoom& setRotation(Ogre::Degree rotation);
 
 	/**
 	Set wrap.
 	\param wrap New wrap value (default true)
 	*/
-	RotationZoom & setWrap(bool wrap);
+	RotationZoom& setWrap(bool wrap);
 
 	/**
 	Run image manipulation
@@ -2435,13 +2435,13 @@ public:
 	Set parameter image for colour source.
 	\param coloursource Pointer to an input image (default NULL)
 	*/
-	Segment & setColourSource(TextureBufferPtr coloursource);
+	Segment& setColourSource(TextureBufferPtr coloursource);
 
 	/**
 	Set threshold value.
 	\param threshold New threshold value [0, 255] (default 128)
 	*/
-	Segment & setThreshold(Ogre::uchar threshold);
+	Segment& setThreshold(Ogre::uchar threshold);
 
 	/**
 	Run image manipulation
@@ -2500,19 +2500,19 @@ public:
 	Set the gaussian block size.
 	\param size New block size for gaussian sharp filter [3, 255] (default 5)
 	*/
-	Sharpen & setSize(Ogre::uchar size);
+	Sharpen& setSize(Ogre::uchar size);
 
 	/**
 	Set sigma constant for gaussian filter.
 	\param sigma New sigma constant for gaussian sharp filter [0, 255] (default 92)
 	*/
-	Sharpen & setSigma(Ogre::uchar sigma);
+	Sharpen& setSigma(Ogre::uchar sigma);
 
 	/**
 	Set the algorithm to sharp.
 	\param type New algorithm to sharp (default SHARP_BASIC)
 	*/
-	Sharpen & setType(SHARP_TYPE type);
+	Sharpen& setType(SHARP_TYPE type);
 
 	/**
 	Run image manipulation
@@ -2574,45 +2574,45 @@ public:
 	Set the text content.
 	\param text New text for processing (default "OgreProcedural")
 	*/
-	TextTexture & setText(Ogre::String text);
+	TextTexture& setText(Ogre::String text);
 
 	/**
 	Set absolute x position where to start painting the text in px
 	\param x New absolute x position of text start (default 1/2 * image width)
 	*/
-	TextTexture & setPositionX(size_t x);
+	TextTexture& setPositionX(size_t x);
 
 	/**
 	Set relative x position where to start painting the text as Real
 	\param x New relative x position of text start [0.0, 1.0] \(default 0.5)
 	*/
-	TextTexture & setPositionX(Ogre::Real x);
+	TextTexture& setPositionX(Ogre::Real x);
 
 	/**
 	Set absolute y position where to start painting the text in px
 	\param y New absolute y position of text start (default 1/2 * image width)
 	*/
-	TextTexture & setPositionY(size_t y);
+	TextTexture& setPositionY(size_t y);
 
 	/**
 	Set relative y position where to start painting the text as Real
 	\param y New relative y position of text start [0.0, 1.0] \(default 0.5)
 	*/
-	TextTexture & setPositionY(Ogre::Real y);
+	TextTexture& setPositionY(Ogre::Real y);
 
 	/**
 	Set the position of text start point.
 	\param pos Vector to the start point where to draw the text (default: x=0.5, y=0.5)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	TextTexture & setPosition(Ogre::Vector2 pos, bool relative = true);
+	TextTexture& setPosition(Ogre::Vector2 pos, bool relative = true);
 
 	/**
 	Set the position of text start point.
 	\param x New absolute x position of text start (default 1/2 * image width)
 	\param y New absolute y position of text start (default 1/2 * image width)
 	*/
-	TextTexture & setPosition(size_t x, size_t y);
+	TextTexture& setPosition(size_t x, size_t y);
 
 	/**
 	Set the position of text start point.
@@ -2620,14 +2620,14 @@ public:
 	\param y New relative y position of text start [0.0, 1.0] \(default 0.5)
 	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
 	*/
-	TextTexture & setPosition(Ogre::Real x, Ogre::Real y, bool relative = true);
+	TextTexture& setPosition(Ogre::Real x, Ogre::Real y, bool relative = true);
 
 #if PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32
 	/**
 	Set the position of text start point.
 	\param pos Absolute center point of the text (default: x=1/2 * image width, y=1/2 * image width)
 	*/
-	TextTexture & setPosition(POINT pos);
+	TextTexture& setPosition(POINT pos);
 #endif
 
 	/**
@@ -2636,13 +2636,13 @@ public:
 	\param fontSize Size of font [px] (default 12)
 	\todo Add search for font names on non windows systems.
 	*/
-	TextTexture & setFont(Ogre::String fontName, Ogre::uchar fontSize);
+	TextTexture& setFont(Ogre::String fontName, Ogre::uchar fontSize);
 
 	/**
 	Set the drawing colour of the text.
 	\param colour New colour for processing (default Ogre::ColourValue::Black)
 	*/
-	TextTexture & setColour(Ogre::ColourValue colour);
+	TextTexture& setColour(Ogre::ColourValue colour);
 
 	/**
 	Set the drawing colour of the text.
@@ -2651,7 +2651,7 @@ public:
 	\param blue Blue value of the fill colour [0, 255] (default 0)
 	\param alpha %Alpha value of the fill colour [0, 255] (default 255)
 	*/
-	TextTexture & setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
+	TextTexture& setColour(Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha = 255);
 
 	/**
 	Set the drawing colour of the text.
@@ -2660,7 +2660,7 @@ public:
 	\param blue Blue value of the fill colour [0.0, 1.0] \(default 0.0)
 	\param alpha %Alpha value of the fill colour [0.0, 1.0] \(default 1.0)
 	*/
-	TextTexture & setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+	TextTexture& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
 
 	/**
 	Run image manipulation
@@ -2720,19 +2720,19 @@ public:
 	Set threshold value.
 	\param threshold New threshold value [0, 255] (default 128)
 	*/
-	Threshold & setThreshold(Ogre::uchar threshold);
+	Threshold& setThreshold(Ogre::uchar threshold);
 
 	/**
 	Set threshold ratio which affects the painting mode.
 	\param ratio New painting factor [0, 255] (default 128)
 	*/
-	Threshold & setRatio(Ogre::uchar ratio);
+	Threshold& setRatio(Ogre::uchar ratio);
 
 	/**
 	Set threshold mode.
 	\param mode New mode what to do with pixels below/above threshold value (default MODE_EXPAND_DOWNWARDS)
 	*/
-	Threshold & setMode(THRESHOLD_MODE mode);
+	Threshold& setMode(THRESHOLD_MODE mode);
 
 	/**
 	Run image manipulation
@@ -2776,43 +2776,43 @@ public:
 	Set the relative position of the twist center on x axis.
 	\param centerx New relative x position of the twist center [0.0, 1.0] \(default 0.5)
 	*/
-	Vortex & setCenterX(Ogre::Real centerx);
+	Vortex& setCenterX(Ogre::Real centerx);
 
 	/**
 	Set the relative position of the twist center on y axis.
 	\param centery New relative y position of the twist center [0.0, 1.0] \(default 0.5)
 	*/
-	Vortex & setCenterY(Ogre::Real centery);
+	Vortex& setCenterY(Ogre::Real centery);
 
 	/**
 	Set the relative radius of the twist area on x axis.
 	\param radiusx New relative x radius of the twist area [0.0, 1.0] \(default 0.5)
 	*/
-	Vortex & setRadiusX(Ogre::Real radiusx);
+	Vortex& setRadiusX(Ogre::Real radiusx);
 
 	/**
 	Set the relative radius of the twist area on y axis.
 	\param radiusy New relative y radius of the twist area [0.0, 1.0] \(default 0.5)
 	*/
-	Vortex & setRadiusY(Ogre::Real radiusy);
+	Vortex& setRadiusY(Ogre::Real radiusy);
 
 	/**
 	Set the twist angle.
 	\param twist New twist angle for deformation [0.0, 1.0] \(default 0.25)
 	*/
-	Vortex & setTwist(Ogre::Real twist);
+	Vortex& setTwist(Ogre::Real twist);
 
 	/**
 	Set the twist angle.
 	\param twist New twist angle for deformation [0.0, Ogre::Math::TWO_PI] rad (default Ogre::Math::HALF_PI)
 	*/
-	Vortex & setTwist(Ogre::Radian twist);
+	Vortex& setTwist(Ogre::Radian twist);
 
 	/**
 	Set the twist angle.
 	\param twist New twist angle for deformation [0, 360] degree (default 90)
 	*/
-	Vortex & setTwist(Ogre::Degree twist);
+	Vortex& setTwist(Ogre::Degree twist);
 
 	/**
 	Run image manipulation

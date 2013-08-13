@@ -16,4 +16,4 @@ extern "C" bool PluginExport dllStopPlugin();
 
 extern "C" bool PluginExport dllGetPluginName(Ogre::String& name);
 
-extern "C" bool PluginExport dllStartPlugin(void *identifier, Ogre::String& name);
+extern "C" bool PluginExport dllStartPlugin(void* identifier, Ogre::String& name);

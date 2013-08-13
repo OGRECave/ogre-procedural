@@ -1,7 +1,7 @@
 #include "Plugin.h"
 
 //----------------------------------------------------------------------------
-bool dllStartPlugin(void *identifier, Ogre::String& name)
+bool dllStartPlugin(void* identifier, Ogre::String& name)
 {
 	name = "OgreProcedural Plugin";
 	return true;

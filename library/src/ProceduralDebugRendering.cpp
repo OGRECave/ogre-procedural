@@ -40,7 +40,7 @@ ManualObject* ShowNormalsGenerator::buildManualObject() const
 	SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 	if (sceneMgr == NULL)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::ShowNormalsGenerator::buildManualObject()");
-	ManualObject * manual = sceneMgr->createManualObject();
+	ManualObject* manual = sceneMgr->createManualObject();
 	manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_LIST);
 	const std::vector<TriangleBuffer::Vertex>& vertices = mTriangleBuffer->getVertices();
 	for (std::vector<TriangleBuffer::Vertex>::const_iterator it = vertices.begin(); it!= vertices.end(); ++it)

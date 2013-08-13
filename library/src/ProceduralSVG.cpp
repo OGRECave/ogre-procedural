@@ -37,7 +37,7 @@ using namespace Ogre;
 
 namespace Procedural
 {
-void SvgLoader::parseSvgFile(MultiShape& out, const String &fileName, const String &groupName, int segmentsNumber)
+void SvgLoader::parseSvgFile(MultiShape& out, const String& fileName, const String& groupName, int segmentsNumber)
 {
 	mNumSeg = segmentsNumber;
 
@@ -189,7 +189,7 @@ void SvgLoader::parsePath(MultiShape& out, rapidxml::xml_node<>* pPathNode)
 	}
 }
 //-----------------------------------------------------------------------
-Real SvgLoader::getAttribReal(rapidxml::xml_node<>* pNode, const String &attrib, Real defaultValue)
+Real SvgLoader::getAttribReal(rapidxml::xml_node<>* pNode, const String& attrib, Real defaultValue)
 {
 	if (pNode->first_attribute(attrib.c_str()))
 	{

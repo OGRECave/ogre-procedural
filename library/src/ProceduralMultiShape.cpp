@@ -38,8 +38,8 @@ namespace Procedural
 
 MeshPtr MultiShape::realizeMesh(const std::string& name)
 {
-	Ogre::SceneManager *smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-	ManualObject * manual = smgr->createManualObject(name);
+	Ogre::SceneManager* smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
+	ManualObject* manual = smgr->createManualObject(name);
 
 	for (std::vector<Shape>::iterator it = mShapes.begin(); it != mShapes.end(); ++it)
 	{

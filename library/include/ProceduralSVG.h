@@ -155,7 +155,7 @@ public:
 	@param groupName Resource group where svg file is listed
 	@param segmentsNumber Number of segments for curves
 	*/
-	void parseSvgFile(MultiShape& out, const Ogre::String &fileName, const Ogre::String &groupName = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, int segmentsNumber = 8);
+	void parseSvgFile(MultiShape& out, const Ogre::String& fileName, const Ogre::String& groupName = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, int segmentsNumber = 8);
 
 private:
 	void parseChildNode(MultiShape& out, rapidxml::xml_node<char>* pChild);
@@ -165,7 +165,7 @@ private:
 	void parsePolygon(MultiShape& out, rapidxml::xml_node<char>* pPolygonNode);
 	void parsePath(MultiShape& out, rapidxml::xml_node<char>* pPathNode);
 
-	Ogre::Real getAttribReal(rapidxml::xml_node<char>* pNode, const Ogre::String &attrib, Ogre::Real defaultValue = 0.0f);
+	Ogre::Real getAttribReal(rapidxml::xml_node<char>* pNode, const Ogre::String& attrib, Ogre::Real defaultValue = 0.0f);
 	Ogre::Vector2 getAttribTranslate(rapidxml::xml_node<char>* pNode);
 	std::vector<std::string> split(const std::string& str, const std::string& delimiters, bool removeEmpty = true);
 	std::string xtrim(const char* val, const char* achar = " .-0123456789", char rchar = ' ');
