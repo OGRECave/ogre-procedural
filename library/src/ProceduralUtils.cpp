@@ -27,10 +27,6 @@ THE SOFTWARE.
 */
 #include "ProceduralStableHeaders.h"
 #include "ProceduralUtils.h"
-
-#if (PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32)
-#include "windows.h"
-#endif
 #include "OgreResourceGroupManager.h"
 
 int Procedural::Utils::counter = 0;
@@ -42,18 +38,7 @@ using namespace Ogre;
 void Utils::log(const Ogre::String& st)
 {
 	Ogre::LogManager::getSingleton().logMessage("[PROCEDURAL] " + st);
-#if (PROCEDURAL_PLATFORM == PROCEDURAL_PLATFORM_WIN32)
-#ifdef UNICODE
-	std::basic_ostringstream<TCHAR> buf;
-	buf << st.c_str();
-	std::wstring wst = buf.str();
-	OutputDebugString( wst.c_str() );
-#else
-	OutputDebugString( (st + "\n").c_str() );
-#endif
-#endif
 }
-
 
 std::string Utils::getName(const std::string& prefix)
 {
