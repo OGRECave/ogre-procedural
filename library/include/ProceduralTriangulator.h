@@ -149,8 +149,8 @@ class _ProceduralExport Triangulator : public MeshGenerator<Triangulator>
 		}
 	};
 
-	Shape* mShapeToTriangulate;
-	MultiShape* mMultiShapeToTriangulate;
+	const Shape* mShapeToTriangulate;
+	const MultiShape* mMultiShapeToTriangulate;
 	Triangle2D* mManualSuperTriangle;
 	std::vector<Segment2D>* mSegmentListToTriangulate;
 	bool mRemoveOutside;
@@ -165,7 +165,7 @@ public:
 	Triangulator() : mShapeToTriangulate(0), mMultiShapeToTriangulate(0), mManualSuperTriangle(0), mRemoveOutside(true), mSegmentListToTriangulate(0) {}
 
 	/// Sets shape to triangulate
-	Triangulator& setShapeToTriangulate(Shape* shape)
+	Triangulator& setShapeToTriangulate(const Shape* shape)
 	{
 		mShapeToTriangulate = shape;
 		mMultiShapeToTriangulate = 0;
@@ -173,7 +173,7 @@ public:
 	}
 
 	/// Sets multi shape to triangulate
-	Triangulator& setMultiShapeToTriangulate(MultiShape* multiShape)
+	Triangulator& setMultiShapeToTriangulate(const MultiShape* multiShape)
 	{
 		mMultiShapeToTriangulate = multiShape;
 		return *this;

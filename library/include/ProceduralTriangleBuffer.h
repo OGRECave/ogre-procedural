@@ -121,6 +121,18 @@ public:
 	}
 
 	/** Adds a new vertex to the buffer */
+	inline TriangleBuffer& vertex(const Ogre::Vector3& position, const Ogre::Vector3& normal, const Ogre::Vector2& uv)
+	{
+		Vertex v;
+		v.mPosition = position;
+		v.mNormal = normal;
+		v.mUV = uv;
+		mVertices.push_back(v);
+		mCurrentVertex = &mVertices.back();
+		return *this;
+	}
+
+	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& position(const Ogre::Vector3& pos)
 	{
 		Vertex v;

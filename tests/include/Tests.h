@@ -440,7 +440,31 @@ class Unit_Tests : public BaseApplication
 			putMesh(chs3Auto.realizePath().realizeMesh());
 		}
 	};
+	/* --------------------------------------------------------------------------- */
+	class Test_Extruder_MultiPath : public Unit_Test
+	{
+	public:
+		Test_Extruder_MultiPath(SceneManager* sn) : Unit_Test(sn) {}
 
+		String getDescription()
+		{
+			return "Extruder multi path";
+		}
+
+		void initImpl()
+		{
+			Shape s;
+			s.addPoint(-5,0).addPoint(0,0).addPoint(5,0).addPoint(6,5).addPoint(0,1).addPoint(-6,5).close().setOutSide(SIDE_RIGHT).scale(0.1);
+			Path p;
+			p.addPoint(-10,0,0).addPoint(5,0,0).addPoint(10,0,0).addPoint(15,0,5).addPoint(20,0,10);
+			Path p2;
+			p2.addPoint(10,0,0).addPoint(15,0,-5).addPoint(20,0,-10);
+			MultiPath mp;
+			mp.addPath(p).addPath(p2);
+			mp._calcIntersections();
+			putMesh(Extruder().setShapeToExtrude(&s).setExtrusionPath(&mp).realizeMesh(),1);
+		}
+	};
 	/* --------------------------------------------------------------------------- */
 	class Test_Extruder : public Unit_Test
 	{

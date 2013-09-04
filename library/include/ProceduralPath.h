@@ -135,13 +135,13 @@ public:
 	}
 
 	/** Tells if the path is closed or not */
-	bool isClosed()
+	bool isClosed() const
 	{
 		return mClosed;
 	}
 
 	/** Gets the list of points as a vector of Vector3 */
-	std::vector<Ogre::Vector3> getPoints()
+	const std::vector<Ogre::Vector3>& getPoints() const
 	{
 		return mPoints;
 	}
@@ -209,6 +209,9 @@ public:
 
 	/// Returns the total lineic length of that shape
 	Ogre::Real getTotalLength() const;
+
+
+	Ogre::Real getLengthAtPoint(size_t index) const;
 
 	/// Gets a position on the shape with index of the point and a percentage of position on the segment
 	/// @param i index of the segment
@@ -342,6 +345,85 @@ public:
 
 };
 
+class _ProceduralExport MultiPath
+{
+public:
+	struct PathCoordinate
+	{
+		unsigned int pathIndex;
+		unsigned int pointIndex;
+		PathCoordinate(unsigned int _pathIndex, unsigned int _pointIndex) : pathIndex(_pathIndex), pointIndex(_pointIndex) {}
+		bool operator < (const PathCoordinate& other) const
+		{
+			if (pathIndex != other.pathIndex)
+				return pathIndex < other.pathIndex;
+			return pointIndex<other.pointIndex;
+		}
+	};
+	typedef std::vector<PathCoordinate> PathIntersection;
+private:
+	std::vector<Path> mPaths;
+	std::map<PathCoordinate, PathIntersection> mIntersectionsMap;
+	std::vector<PathIntersection> mIntersections;
+public:
+	inline MultiPath& addPath(const Path& path)
+	{
+		mPaths.push_back(path);
+		return *this;
+	}
+
+	inline MultiPath& addMultiPath(const MultiPath& multiPath)
+	{
+		for (std::vector<Path>::const_iterator it = multiPath.mPaths.begin(); it!=multiPath.mPaths.end(); ++it)
+			mPaths.push_back(*it);
+		return *this;
+	}
+
+	unsigned int getPathCount() const
+	{
+		return mPaths.size();
+	}
+
+	Path getPath(unsigned int i) const
+	{
+		return mPaths[i];
+	}
+
+	void _calcIntersections();
+
+	inline const std::map<PathCoordinate, PathIntersection>& getIntersectionsMap() const
+	{
+		return mIntersectionsMap;
+	}
+
+	inline const std::vector<PathIntersection>& getIntersections() const
+	{
+		return mIntersections;
+	}
+
+	std::vector<std::pair<unsigned int, unsigned int> > getNoIntersectionParts(unsigned int pathIndex) const
+	{
+		Path path = mPaths[pathIndex];
+		std::vector<std::pair<unsigned int, unsigned int> > result;
+		std::vector<int> intersections;
+		for (std::map<PathCoordinate, PathIntersection>::const_iterator it = mIntersectionsMap.begin(); it != mIntersectionsMap.end(); ++it)
+			if (it->first.pathIndex == pathIndex)
+				intersections.push_back(it->first.pointIndex);
+		std::sort(intersections.begin(), intersections.end());
+		int begin = 0;
+		for (std::vector<int>::iterator it = intersections.begin(); it!= intersections.end(); ++it)
+		{
+			if (*it-1>begin)
+				result.push_back(std::pair<unsigned int, unsigned int>(begin, *it-1));
+			begin = *it+1;
+		}
+		if (path.getSegCount() > begin)
+			result.push_back(std::pair<unsigned int, unsigned int>(begin, path.getSegCount()));
+		return result;
+	}
+};
+
 }
 
 #endif
+

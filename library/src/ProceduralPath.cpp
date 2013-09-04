@@ -112,6 +112,17 @@ Ogre::Vector3 Path::getPosition(Ogre::Real coord) const
 	}
 }
 
+Ogre::Real Path::getLengthAtPoint(size_t index) const
+{
+	Ogre::Real length = 0;
+	for (unsigned int i = 0; i < index; ++i)
+		length += (mPoints[i + 1] - mPoints[i]).length();
+	//if (mClosed)
+	//length += (mPoints.back()-*mPoints.begin()).length();
+	return length;
+
+}
+
 Ogre::Real Path::getTotalLength() const
 {
 	Ogre::Real length = 0;
@@ -183,7 +194,7 @@ void Path::buildFromSegmentSoup(const std::vector<Segment3D>& segList, std::vect
 		}
 		if (p.getPoint(0).squaredDistance(p.getPoint(p.getSegCount() + 1)) < 1e-6)
 		{
-			p.getPoints().pop_back();
+			p.getPointsReference().pop_back();
 			p.close();
 		}
 		out.push_back(p);
@@ -202,6 +213,35 @@ Shape Path::convertToShape() const
 		s.close();
 
 	return s;
+}
+//-----------------------------------------------------------------------
+void MultiPath::_calcIntersections()
+{
+	mIntersectionsMap.clear();
+	mIntersections.clear();
+	std::map<Ogre::Vector3, PathIntersection, Vector3Comparator> pointSet;
+	for (std::vector<Path>::iterator it = mPaths.begin(); it!= mPaths.end(); ++it)
+	{
+		for (std::vector<Ogre::Vector3>::const_iterator it2 = it->getPoints().begin(); it2 != it->getPoints().end(); ++it2)
+		{
+			PathCoordinate pc(it-mPaths.begin(), it2-it->getPoints().begin());
+			if (pointSet.find(*it2)==pointSet.end())
+			{
+				PathIntersection pi;
+				pi.push_back(pc);
+				pointSet[*it2] = pi;
+			}
+			else
+				pointSet[*it2].push_back(pc);
+		}
+	}
+	for (std::map<Ogre::Vector3, PathIntersection>::iterator it = pointSet.begin(); it!=pointSet.end(); ++it)
+		if (it->second.size()>1)
+		{
+			for (PathIntersection::iterator it2 = it->second.begin(); it2!=it->second.end(); ++it2)
+				mIntersectionsMap[*it2] = it->second;
+			mIntersections.push_back(it->second);
+		}
 }
 
 }

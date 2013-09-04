@@ -142,16 +142,27 @@ public:
 	}
 
 	/**
-	 * Gives the oriented angle from v1 to v2
+	 * Gives the oriented angle from v1 to v2 in the [0;2PI[ range
 	 */
 	static inline Ogre::Radian angleTo(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
 	{
 		Ogre::Radian angle = angleBetween(v1, v2);
 
 		if (v1.crossProduct(v2)<0)
-		{
 			angle = (Ogre::Radian)Ogre::Math::TWO_PI - angle;
-		}
+
+		return angle;
+	}
+
+	/**
+	 * Gives the oriented angle from v1 to v2 in the ]-PI;PI] range
+	 */
+	static inline Ogre::Radian signedAngleTo(const Ogre::Vector2& v1, const Ogre::Vector2& v2)
+	{
+		Ogre::Radian angle = angleBetween(v1, v2);
+
+		if (v1.crossProduct(v2)<0)
+			angle = - angle;
 
 		return angle;
 	}
