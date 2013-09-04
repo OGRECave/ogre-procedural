@@ -49,22 +49,17 @@ namespace Procedural
  */
 class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 {
-	Shape* mShapeToExtrude;
-	MultiShape* mMultiShapeToExtrude;
-	Path* mExtrusionPath;
+	MultiShape mMultiShapeToExtrude;
+	MultiPath mMultiExtrusionPath;
 	bool mCapped;
-	Track* mRotationTrack;
-	Track* mScaleTrack;
-	Track* mShapeTextureTrack;
-	Track* mPathTextureTrack;
-
-	void _extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude) const;
-
-	void _extrudeCapImpl(TriangleBuffer& buffer) const;
+	std::map<unsigned int, Track*> mRotationTracks;
+	std::map<unsigned int, Track*> mScaleTracks;
+	std::map<unsigned int, Track*> mShapeTextureTracks;
+	std::map<unsigned int, Track*> mPathTextureTracks;
 
 public:
 	/// Default constructor
-	Extruder() : mShapeToExtrude(0), mExtrusionPath(0), mCapped(true), mRotationTrack(0), mScaleTrack(0), mShapeTextureTrack(0), mPathTextureTrack(0)
+	Extruder() : mCapped(true)
 	{}
 
 	/**
@@ -78,52 +73,59 @@ public:
 	/** Sets the shape to extrude. Mutually exclusive with setMultiShapeToExtrude. */
 	inline Extruder& setShapeToExtrude(Shape* shapeToExtrude)
 	{
-		mMultiShapeToExtrude = 0;
-		mShapeToExtrude = shapeToExtrude;
+		mMultiShapeToExtrude.addShape(*shapeToExtrude);
 		return *this;
 	}
 
 	/** Sets the multishape to extrude. Mutually exclusive with setShapeToExtrude. */
 	inline Extruder& setMultiShapeToExtrude(MultiShape* multiShapeToExtrude)
 	{
-		mShapeToExtrude = 0;
-		mMultiShapeToExtrude = multiShapeToExtrude;
+		mMultiShapeToExtrude.addMultiShape(*multiShapeToExtrude);
 		return *this;
 	}
 
 	/** Sets the extrusion path */
 	inline Extruder& setExtrusionPath(Path* extrusionPath)
 	{
-		mExtrusionPath = extrusionPath;
+		mMultiExtrusionPath.addPath(*extrusionPath);
+		mMultiExtrusionPath._calcIntersections();
+		return *this;
+	}
+
+	/** Sets the extrusion multipath */
+	inline Extruder& setExtrusionPath(MultiPath* multiExtrusionPath)
+	{
+		mMultiExtrusionPath.addMultiPath(*multiExtrusionPath);
+		mMultiExtrusionPath._calcIntersections();
 		return *this;
 	}
 
 	/** Sets the rotation track (optional) */
-	inline Extruder& setRotationTrack(Track* rotationTrack)
+	inline Extruder& setRotationTrack(Track* rotationTrack, unsigned int index = 0)
 	{
-		mRotationTrack = rotationTrack;
+		mRotationTracks[index] = rotationTrack;
 		return *this;
 	}
 
 	/** Sets the scale track (optional) */
-	inline Extruder& setScaleTrack(Track* scaleTrack)
+	inline Extruder& setScaleTrack(Track* scaleTrack, unsigned int index = 0)
 	{
-		mScaleTrack = scaleTrack;
+		mScaleTracks[index] = scaleTrack;
 		return *this;
 	}
 
 	/// Sets the track that maps shape points to V texture coords (optional).
 	/// Warning : if used with multishape, all shapes will have the same track.
-	inline Extruder& setShapeTextureTrack(Track* shapeTextureTrack)
+	inline Extruder& setShapeTextureTrack(Track* shapeTextureTrack, unsigned int index = 0)
 	{
-		mShapeTextureTrack = shapeTextureTrack;
+		mShapeTextureTracks[index] = shapeTextureTrack;
 		return *this;
 	}
 
 	/// Sets the track that maps path points to V texture coord (optional).
-	inline Extruder& setPathTextureTrack(Track* pathTextureTrack)
+	inline Extruder& setPathTextureTrack(Track* pathTextureTrack, unsigned int index = 0)
 	{
-		mPathTextureTrack = pathTextureTrack;
+		mPathTextureTracks[index] = pathTextureTrack;
 		return *this;
 	}
 
