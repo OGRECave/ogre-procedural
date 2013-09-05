@@ -366,6 +366,12 @@ private:
 	std::map<PathCoordinate, PathIntersection> mIntersectionsMap;
 	std::vector<PathIntersection> mIntersections;
 public:
+
+	inline void clear()
+	{
+		mPaths.clear();
+	}
+
 	inline MultiPath& addPath(const Path& path)
 	{
 		mPaths.push_back(path);

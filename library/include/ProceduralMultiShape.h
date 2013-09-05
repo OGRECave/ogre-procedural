@@ -68,6 +68,12 @@ public:
 		return *this;
 	}
 
+	/// Clears all the content
+	void clear()
+	{
+		mShapes.clear();
+	}
+
 	/// Returns the i-th shape
 	const Shape& getShape(unsigned int i) const
 	{

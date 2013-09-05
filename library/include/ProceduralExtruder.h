@@ -49,13 +49,17 @@ namespace Procedural
  */
 class _ProceduralExport Extruder : public MeshGenerator<Extruder>
 {
+public:
+	typedef std::map<unsigned int, const Track*> TrackMap;
+private:
 	MultiShape mMultiShapeToExtrude;
 	MultiPath mMultiExtrusionPath;
-	bool mCapped;
-	std::map<unsigned int, Track*> mRotationTracks;
-	std::map<unsigned int, Track*> mScaleTracks;
-	std::map<unsigned int, Track*> mShapeTextureTracks;
-	std::map<unsigned int, Track*> mPathTextureTracks;
+	bool mCapped;	
+	
+	TrackMap mRotationTracks;
+	TrackMap mScaleTracks;
+	TrackMap mShapeTextureTracks;
+	TrackMap mPathTextureTracks;
 
 public:
 	/// Default constructor
@@ -71,61 +75,77 @@ public:
 	void addToTriangleBuffer(TriangleBuffer& buffer) const;
 
 	/** Sets the shape to extrude. Mutually exclusive with setMultiShapeToExtrude. */
-	inline Extruder& setShapeToExtrude(Shape* shapeToExtrude)
+	inline Extruder& setShapeToExtrude(const Shape* shapeToExtrude)
 	{
+		mMultiShapeToExtrude.clear();		
 		mMultiShapeToExtrude.addShape(*shapeToExtrude);
 		return *this;
 	}
 
 	/** Sets the multishape to extrude. Mutually exclusive with setShapeToExtrude. */
-	inline Extruder& setMultiShapeToExtrude(MultiShape* multiShapeToExtrude)
+	inline Extruder& setMultiShapeToExtrude(const MultiShape* multiShapeToExtrude)
 	{
+		mMultiShapeToExtrude.clear();
 		mMultiShapeToExtrude.addMultiShape(*multiShapeToExtrude);
 		return *this;
 	}
 
 	/** Sets the extrusion path */
-	inline Extruder& setExtrusionPath(Path* extrusionPath)
+	inline Extruder& setExtrusionPath(const Path* extrusionPath)
 	{
+		mMultiExtrusionPath.clear();
 		mMultiExtrusionPath.addPath(*extrusionPath);
 		mMultiExtrusionPath._calcIntersections();
 		return *this;
 	}
 
 	/** Sets the extrusion multipath */
-	inline Extruder& setExtrusionPath(MultiPath* multiExtrusionPath)
+	inline Extruder& setExtrusionPath(const MultiPath* multiExtrusionPath)
 	{
+		mMultiExtrusionPath.clear();
 		mMultiExtrusionPath.addMultiPath(*multiExtrusionPath);
 		mMultiExtrusionPath._calcIntersections();
 		return *this;
 	}
 
 	/** Sets the rotation track (optional) */
-	inline Extruder& setRotationTrack(Track* rotationTrack, unsigned int index = 0)
+	inline Extruder& setRotationTrack(const Track* rotationTrack, unsigned int index = 0)
 	{
-		mRotationTracks[index] = rotationTrack;
+		if (!rotationTrack && mRotationTracks.find(index) != mRotationTracks.end())
+			mRotationTracks.erase(mRotationTracks.find(index));
+		if (rotationTrack)
+			mRotationTracks[index] = rotationTrack;
 		return *this;
 	}
 
 	/** Sets the scale track (optional) */
-	inline Extruder& setScaleTrack(Track* scaleTrack, unsigned int index = 0)
+	inline Extruder& setScaleTrack(const Track* scaleTrack, unsigned int index = 0)
 	{
-		mScaleTracks[index] = scaleTrack;
+		if (!scaleTrack && mScaleTracks.find(index) != mScaleTracks.end())
+			mRotationTracks.erase(mScaleTracks.find(index));
+		if (scaleTrack)
+			mScaleTracks[index] = scaleTrack;
 		return *this;
 	}
 
 	/// Sets the track that maps shape points to V texture coords (optional).
 	/// Warning : if used with multishape, all shapes will have the same track.
-	inline Extruder& setShapeTextureTrack(Track* shapeTextureTrack, unsigned int index = 0)
+	inline Extruder& setShapeTextureTrack(const Track* shapeTextureTrack, unsigned int index = 0)
 	{
-		mShapeTextureTracks[index] = shapeTextureTrack;
+		if (!shapeTextureTrack && mShapeTextureTracks.find(index) != mShapeTextureTracks.end())
+			mShapeTextureTracks.erase(mShapeTextureTracks.find(index));
+		if (shapeTextureTrack)
+			mShapeTextureTracks[index] = shapeTextureTrack;
 		return *this;
 	}
 
 	/// Sets the track that maps path points to V texture coord (optional).
-	inline Extruder& setPathTextureTrack(Track* pathTextureTrack, unsigned int index = 0)
+	inline Extruder& setPathTextureTrack(const Track* pathTextureTrack, unsigned int index = 0)
 	{
-		mPathTextureTracks[index] = pathTextureTrack;
+		if (!pathTextureTrack && mPathTextureTracks.find(index) != mPathTextureTracks.end())
+			mPathTextureTracks.erase(mPathTextureTracks.find(index));
+		if (pathTextureTrack)
+			mPathTextureTracks[index] = pathTextureTrack;
 		return *this;
 	}
 

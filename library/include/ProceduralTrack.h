@@ -104,13 +104,13 @@ public:
 	std::map<Ogre::Real, Ogre::Real>::const_iterator _getKeyValueAfter(Ogre::Real pos) const;
 
 	/// Gets the first value in the track
-	Ogre::Real getFirstValue()
+	Ogre::Real getFirstValue() const
 	{
 		return mKeyFrames.begin()->second;
 	}
 
 	/// Gets the last value in the track
-	Ogre::Real getLastValue()
+	Ogre::Real getLastValue() const
 	{
 		return (--mKeyFrames.end())->second;
 	}
