@@ -92,7 +92,7 @@ void _extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude, const
 	Real totalShapeLength = shapeToExtrude->getTotalLength();
 
 	// Merge shape and path with tracks
-	Ogre::Real lineicPos=0.;
+	Ogre::Real lineicPos = pathToExtrude->getLengthAtPoint(pathBeginIndex);
 	Path path = *pathToExtrude;
 	numSegPath = pathEndIndex - pathBeginIndex;
 	numSegShape = shapeToExtrude->getSegCount();
@@ -236,7 +236,7 @@ void _extrudeCapImpl(TriangleBuffer& buffer, const MultiShape& multiShapeToExtru
 	}
 }
 //-----------------------------------------------------------------------
-void _extrudeIntersectionImpl(TriangleBuffer& buffer, const MultiPath::PathIntersection& intersection, const MultiPath& multiPath, const Shape& shape)
+void _extrudeIntersectionImpl(TriangleBuffer& buffer, const MultiPath::PathIntersection& intersection, const MultiPath& multiPath, const Shape& shape, const Track* shapeTextureTrack)
 {
 	Vector3 intersectionLocation = multiPath.getPath(intersection[0].pathIndex).getPoint(intersection[0].pointIndex);
 	Quaternion firstOrientation = Utils::_computeQuaternion(multiPath.getPath(intersection[0].pathIndex).getDirectionBefore(intersection[0].pointIndex));
@@ -295,9 +295,9 @@ void _extrudeIntersectionImpl(TriangleBuffer& buffer, const MultiPath::PathInter
 		Real lineicPos;
 		Real uTexCoord = path.getLengthAtPoint(pointIndex) / path.getTotalLength();
 
-		_extrudeShape(buffer, shape, path.getPoint(pointIndex), q, q, 1.0, shape.getTotalLength(), uTexCoord, true, 0);
+		_extrudeShape(buffer, shape, path.getPoint(pointIndex), q, q, 1.0, shape.getTotalLength(), uTexCoord, true, shapeTextureTrack);
 		uTexCoord = path.getLengthAtPoint(coords[idx].pointIndex) / path.getTotalLength();
-		_extrudeShape(buffer, shape, path.getPoint(coords[idx].pointIndex), qLeft, qRight, 1.0, shape.getTotalLength(), uTexCoord, false, 0);
+		_extrudeShape(buffer, shape, path.getPoint(coords[idx].pointIndex), qLeft, qRight, 1.0, shape.getTotalLength(), uTexCoord, false, shapeTextureTrack);
 	}
 }
 //-----------------------------------------------------------------------
@@ -357,7 +357,12 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 		for (std::vector<MultiPath::PathIntersection>::const_iterator it = intersections.begin(); it!= intersections.end(); ++it)
 		{
 			for (unsigned int i=0; i<mMultiShapeToExtrude.getShapeCount(); i++)
-				_extrudeIntersectionImpl(buffer, *it, mMultiExtrusionPath, mMultiShapeToExtrude.getShape(i));
+			{
+				const Track* shapeTextureTrack = 0;
+				if (mShapeTextureTracks.find(i) != mShapeTextureTracks.end())
+					shapeTextureTrack = mShapeTextureTracks.find(i)->second;
+				_extrudeIntersectionImpl(buffer, *it, mMultiExtrusionPath, mMultiShapeToExtrude.getShape(i), shapeTextureTrack);
+			}
 		}
 	}
 }
