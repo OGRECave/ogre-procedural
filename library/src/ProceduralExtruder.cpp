@@ -143,7 +143,7 @@ void _extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude, const
 	}
 }
 //-----------------------------------------------------------------------
-void _extrudeCapImpl(TriangleBuffer& buffer, const MultiShape& multiShapeToExtrude, const MultiPath& extrusionMultiPath, const std::map<unsigned int, Track*>& scaleTracks, const std::map<unsigned int, Track*>& rotationTracks)
+void _extrudeCapImpl(TriangleBuffer& buffer, const MultiShape& multiShapeToExtrude, const MultiPath& extrusionMultiPath, const Extruder::TrackMap& scaleTracks, const Extruder::TrackMap& rotationTracks)
 {
 	std::vector<int> indexBuffer;
 	PointList pointList;
@@ -155,8 +155,8 @@ void _extrudeCapImpl(TriangleBuffer& buffer, const MultiShape& multiShapeToExtru
 	for (unsigned int i=0; i<extrusionMultiPath.getPathCount(); ++i)
 	{
 		Path extrusionPath = extrusionMultiPath.getPath(i);
-		Track* scaleTrack = 0;
-		Track* rotationTrack = 0;
+		const Track* scaleTrack = 0;
+		const Track* rotationTrack = 0;
 		if (scaleTracks.find(i) != scaleTracks.end())
 			scaleTrack = scaleTracks.find(i)->second;
 		if (rotationTracks.find(i) != rotationTracks.end())
@@ -307,8 +307,7 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "At least one shape must be defined!", "Procedural::Extruder::addToTriangleBuffer(Procedural::TriangleBuffer)");
 
 	// Triangulate the begin and end caps
-	bool isShapeClosed = mMultiShapeToExtrude.isClosed();
-	if (isShapeClosed)
+	if (mCapped && mMultiShapeToExtrude.isClosed())
 	{
 		_extrudeCapImpl(buffer, mMultiShapeToExtrude, mMultiExtrusionPath, mScaleTracks, mRotationTracks);
 	}
@@ -317,22 +316,22 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 	for (unsigned int j=0; j<mMultiExtrusionPath.getPathCount(); ++j)
 	{
 		Path extrusionPath = mMultiExtrusionPath.getPath(j);
-		Track* rotationTrack = 0;
+		const Track* rotationTrack = 0;
 		if (mRotationTracks.find(j) != mRotationTracks.end())
 		{
-			rotationTrack=mRotationTracks.find(j)->second;
+			rotationTrack = mRotationTracks.find(j)->second;
 			extrusionPath = extrusionPath.mergeKeysWithTrack(*mRotationTracks.find(j)->second);
 		}
-		Track* scaleTrack = 0;
+		const Track* scaleTrack = 0;
 		if (mScaleTracks.find(j) != mScaleTracks.end())
 		{
-			rotationTrack=mScaleTracks.find(j)->second;
+			rotationTrack = mScaleTracks.find(j)->second;
 			extrusionPath = extrusionPath.mergeKeysWithTrack(*mScaleTracks.find(j)->second);
 		}
-		Track* pathTextureTrack = 0;
+		const Track* pathTextureTrack = 0;
 		if (mPathTextureTracks.find(j) != mPathTextureTracks.end())
 		{
-			pathTextureTrack=mPathTextureTracks.find(j)->second;
+			pathTextureTrack = mPathTextureTracks.find(j)->second;
 			extrusionPath = extrusionPath.mergeKeysWithTrack(*mPathTextureTracks.find(j)->second);
 		}
 
