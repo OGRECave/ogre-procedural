@@ -35,7 +35,7 @@ using namespace Ogre;
 namespace Procedural
 {
 //-----------------------------------------------------------------------
-void _extrudeShape(TriangleBuffer& buffer, const Shape& shape, const Vector3& position, const Quaternion& orientationLeft, const Quaternion& orientationRight, Real scale, Real totalShapeLength, Real uTexCoord, boolean joinToTheNextSection, const Track* shapeTextureTrack)
+void _extrudeShape(TriangleBuffer& buffer, const Shape& shape, const Vector3& position, const Quaternion& orientationLeft, const Quaternion& orientationRight, Real scale, Real scaleCorrectionLeft, Real scaleCorrectionRight, Real totalShapeLength, Real uTexCoord, boolean joinToTheNextSection, const Track* shapeTextureTrack)
 {
 	Real lineicShapePos = 0.;
 	size_t numSegShape = shape.getSegCount();
@@ -45,7 +45,11 @@ void _extrudeShape(TriangleBuffer& buffer, const Shape& shape, const Vector3& po
 		Vector2 vp2 = shape.getPoint(j);
 		Quaternion orientation = (vp2.x>0) ? orientationRight : orientationLeft;
 		Vector2 vp2normal = shape.getAvgNormal(j);
-		Vector3 vp(vp2.x, vp2.y, 0);
+		Vector3 vp;
+		if (vp2.x>0)
+			vp = Vector3(scaleCorrectionRight * vp2.x, vp2.y, 0);		
+		else
+			vp = Vector3(scaleCorrectionLeft * vp2.x, vp2.y, 0);		
 		Vector3 normal(vp2normal.x, vp2normal.y, 0);
 		buffer.rebaseOffset();
 		Vector3 newPoint = position+orientation*(scale*vp);
@@ -139,7 +143,7 @@ void _extrudeBodyImpl(TriangleBuffer& buffer, const Shape* shapeToExtrude, const
 		else
 			uTexCoord = lineicPos / totalPathLength;
 
-		_extrudeShape(buffer, *shapeToExtrude, v0, q, q, scale,totalShapeLength, uTexCoord, i<pathEndIndex, shapeTextureTrack);
+		_extrudeShape(buffer, *shapeToExtrude, v0, q, q, scale, 1.0, 1.0, totalShapeLength, uTexCoord, i<pathEndIndex, shapeTextureTrack);
 	}
 }
 //-----------------------------------------------------------------------
@@ -291,13 +295,16 @@ void _extrudeIntersectionImpl(TriangleBuffer& buffer, const MultiPath::PathInter
 		Quaternion q = Utils::_computeQuaternion(path.getAvgDirection(pointIndex) * direction[idx]);
 		Quaternion qLeft = q * Quaternion(angleBefore, Vector3::UNIT_Y);
 		Quaternion qRight = q * Quaternion(angleAfter, Vector3::UNIT_Y);
+		Real t = Math::Tan(angleBefore);
+		Real scaleLeft = 1.0/Math::Abs(Math::Cos(angleBefore));
+		Real scaleRight = 1.0/Math::Abs(Math::Cos(angleAfter));
 
 		Real lineicPos;
 		Real uTexCoord = path.getLengthAtPoint(pointIndex) / path.getTotalLength();
 
-		_extrudeShape(buffer, shape, path.getPoint(pointIndex), q, q, 1.0, shape.getTotalLength(), uTexCoord, true, shapeTextureTrack);
+		_extrudeShape(buffer, shape, path.getPoint(pointIndex), q, q, 1.0, 1.0, 1.0, shape.getTotalLength(), uTexCoord, true, shapeTextureTrack);
 		uTexCoord = path.getLengthAtPoint(coords[idx].pointIndex) / path.getTotalLength();
-		_extrudeShape(buffer, shape, path.getPoint(coords[idx].pointIndex), qLeft, qRight, 1.0, shape.getTotalLength(), uTexCoord, false, shapeTextureTrack);
+		_extrudeShape(buffer, shape, path.getPoint(coords[idx].pointIndex), qLeft, qRight, 1.0, scaleLeft, scaleRight, shape.getTotalLength(), uTexCoord, false, shapeTextureTrack);
 	}
 }
 //-----------------------------------------------------------------------

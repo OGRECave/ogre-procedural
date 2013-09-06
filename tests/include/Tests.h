@@ -53,6 +53,9 @@ protected:
 		case 1:
 			ent->setMaterialName("Examples/Rockwall");
 			break;
+		case 2:
+			ent->setMaterialName("Examples/Road");
+			break;
 		}
 		mEntities.push_back(ent);
 		mSceneNodes.push_back(sn);
@@ -453,6 +456,7 @@ class Unit_Tests : public BaseApplication
 
 		void initImpl()
 		{
+			/*{
 			Shape s;
 			s.addPoint(-5,0).addPoint(0,0).addPoint(5,0).addPoint(6,5).addPoint(0,1).addPoint(-6,5).close().setOutSide(SIDE_RIGHT).scale(0.1);
 			Path p;
@@ -461,8 +465,22 @@ class Unit_Tests : public BaseApplication
 			p2.addPoint(10,0,0).addPoint(15,0,-5).addPoint(20,0,-10);
 			MultiPath mp;
 			mp.addPath(p).addPath(p2);
-			mp._calcIntersections();
 			putMesh(Extruder().setShapeToExtrude(&s).setExtrusionPath(&mp).realizeMesh(),1);
+			}*/
+
+			{
+				Path p = Path().addPoint(-30,0,0).addPoint(5,0,0).addPoint(10,0,0).addPoint(15,0,5).addPoint(30,0,20);
+				Path p2 = Path().addPoint(10,0,-30).addPoint(10,0,-5).addPoint(10,0,0).addPoint(10,0,10).addPoint(10,0,30);
+				//Path p2 = Path().addPoint(10,0,0).addPoint(15,0,-5).addPoint(20,0,-10);
+
+				MultiPath mp = MultiPath().addPath(p).addPath(p2);
+				//Path p = Path().addPoint(-10,0,0).addPoint(10,0,0);
+				Shape s = Procedural::Shape().addPoint(-1.2f,.2f).addPoint(-1.f,.2f).addPoint(-.9f,.1f).addPoint(0,.1f).addPoint(.9f,.1f).addPoint(1.f,.2f).addPoint(1.2f,.2f).scale(2).setOutSide(Procedural::SIDE_LEFT);
+				//Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2f).addKeyFrame(4,.8f).addKeyFrame(6,1);
+				Track textureTrack = Procedural::Track(Procedural::Track::AM_POINT).addKeyFrame(0,0).addKeyFrame(2,.2f).addKeyFrame(3,.51f).addKeyFrame(4,.2f).addKeyFrame(6,0);
+				Extruder().setExtrusionPath(&mp).setShapeToExtrude(&s).setShapeTextureTrack(&textureTrack).setUTile(20.f).realizeMesh("extrudedMesh");
+				putMesh("extrudedMesh", 2);
+			}
 		}
 	};
 	/* --------------------------------------------------------------------------- */
