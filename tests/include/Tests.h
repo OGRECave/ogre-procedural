@@ -469,7 +469,7 @@ class Unit_Tests : public BaseApplication
 			}*/
 
 			{
-				Path p = Path().addPoint(-30,0,0).addPoint(5,0,0).addPoint(10,0,0).addPoint(15,0,5).addPoint(30,0,20);
+				Path p = Path().addPoint(-30,0,5).addPoint(5,0,0).addPoint(10,0,0).addPoint(15,0,5).addPoint(30,0,15);
 				Path p2 = Path().addPoint(10,0,-30).addPoint(10,0,-5).addPoint(10,0,0).addPoint(10,0,10).addPoint(10,0,30);
 				//Path p2 = Path().addPoint(10,0,0).addPoint(15,0,-5).addPoint(20,0,-10);
 
