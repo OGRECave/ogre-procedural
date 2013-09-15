@@ -35,7 +35,7 @@ using namespace Ogre;
 namespace Procedural
 {
 //-----------------------------------------------------------------------
-void _extrudeShape(TriangleBuffer& buffer, const Shape& shape, const Vector3& position, const Quaternion& orientationLeft, const Quaternion& orientationRight, Real scale, Real scaleCorrectionLeft, Real scaleCorrectionRight, Real totalShapeLength, Real uTexCoord, boolean joinToTheNextSection, const Track* shapeTextureTrack)
+void _extrudeShape(TriangleBuffer& buffer, const Shape& shape, const Vector3& position, const Quaternion& orientationLeft, const Quaternion& orientationRight, Real scale, Real scaleCorrectionLeft, Real scaleCorrectionRight, Real totalShapeLength, Real uTexCoord, bool joinToTheNextSection, const Track* shapeTextureTrack)
 {
 	Real lineicShapePos = 0.;
 	size_t numSegShape = shape.getSegCount();
