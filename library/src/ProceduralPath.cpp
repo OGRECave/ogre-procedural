@@ -235,7 +235,7 @@ void MultiPath::_calcIntersections()
 				pointSet[*it2].push_back(pc);
 		}
 	}
-	for (std::map<Ogre::Vector3, PathIntersection>::iterator it = pointSet.begin(); it!=pointSet.end(); ++it)
+	for (std::map<Ogre::Vector3, PathIntersection, Vector3Comparator>::iterator it = pointSet.begin(); it != pointSet.end(); ++it)
 		if (it->second.size()>1)
 		{
 			for (PathIntersection::iterator it2 = it->second.begin(); it2!=it->second.end(); ++it2)
