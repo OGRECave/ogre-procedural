@@ -385,6 +385,10 @@ public:
 		return *this;
 	}
 
+	void setPath(unsigned int i, const Path& path) {
+		mPaths[i] = path;
+	}
+
 	unsigned int getPathCount() const
 	{
 		return mPaths.size();
