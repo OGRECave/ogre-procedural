@@ -326,10 +326,42 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 		_extrudeCapImpl(buffer, mMultiShapeToExtrude, mMultiExtrusionPath, mScaleTracks, mRotationTracks);
 	}
 
-	// Extrude the paths contained in multiExtrusionPath
-	for (unsigned int j=0; j<mMultiExtrusionPath.getPathCount(); ++j)
+	MultiPath multiExtrusionPath = mMultiExtrusionPath;
+	
+	for (unsigned int j = 0; j < multiExtrusionPath.getPathCount(); ++j)
 	{
-		Path extrusionPath = mMultiExtrusionPath.getPath(j);
+		Path extrusionPath = multiExtrusionPath.getPath(j);
+		bool keysMerged = false;
+		const Track* rotationTrack = 0;
+		if (mRotationTracks.find(j) != mRotationTracks.end())
+		{
+			rotationTrack = mRotationTracks.find(j)->second;
+			extrusionPath = extrusionPath.mergeKeysWithTrack(*mRotationTracks.find(j)->second);
+			keysMerged = true;
+		}
+		const Track* scaleTrack = 0;
+		if (mScaleTracks.find(j) != mScaleTracks.end())
+		{
+			rotationTrack = mScaleTracks.find(j)->second;
+			extrusionPath = extrusionPath.mergeKeysWithTrack(*mScaleTracks.find(j)->second);
+			keysMerged = true;
+		}
+		const Track* pathTextureTrack = 0;
+		if (mPathTextureTracks.find(j) != mPathTextureTracks.end())
+		{
+			pathTextureTrack = mPathTextureTracks.find(j)->second;
+			extrusionPath = extrusionPath.mergeKeysWithTrack(*mPathTextureTracks.find(j)->second);
+			keysMerged = true;
+		}
+		if (keysMerged) {
+			multiExtrusionPath.setPath(j, extrusionPath);
+		}
+	}
+
+	// Extrude the paths contained in multiExtrusionPath
+	for (unsigned int j = 0; j<multiExtrusionPath.getPathCount(); ++j)
+	{
+		Path extrusionPath = multiExtrusionPath.getPath(j);
 		const Track* rotationTrack = 0;
 		if (mRotationTracks.find(j) != mRotationTracks.end())
 		{
@@ -349,7 +381,7 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 			extrusionPath = extrusionPath.mergeKeysWithTrack(*mPathTextureTracks.find(j)->second);
 		}
 
-		std::vector<std::pair<unsigned int, unsigned int> > segs = mMultiExtrusionPath.getNoIntersectionParts(j);
+		std::vector<std::pair<unsigned int, unsigned int> > segs = multiExtrusionPath.getNoIntersectionParts(j);
 
 		for (std::vector<std::pair<unsigned int, unsigned int> >::iterator it = segs.begin(); it != segs.end(); ++it)
 		{
@@ -367,7 +399,7 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 		}
 
 		// Make the intersections
-		const std::vector<MultiPath::PathIntersection>& intersections = mMultiExtrusionPath.getIntersections();
+		const std::vector<MultiPath::PathIntersection>& intersections = multiExtrusionPath.getIntersections();
 		for (std::vector<MultiPath::PathIntersection>::const_iterator it = intersections.begin(); it!= intersections.end(); ++it)
 		{
 			for (unsigned int i=0; i<mMultiShapeToExtrude.getShapeCount(); i++)
