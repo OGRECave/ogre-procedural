@@ -90,6 +90,12 @@ public:
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 
+	/// Gets the number of control points
+	inline const size_t getPointCount() const
+	{
+		return mPoints.size();
+	}
+
 	/**
 	 * Build a path from Catmull-Rom control points
 	 */
@@ -145,6 +151,12 @@ public:
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+	}
+
+	/// Gets the number of control points
+	inline const size_t getPointCount() const
+	{
+		return mPoints.size();
 	}
 
 	/**
@@ -251,6 +263,12 @@ public:
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
 	}
 
+	/// Gets the number of control points
+	inline const size_t getPointCount() const
+	{
+		return mPoints.size();
+	}
+
 	/**
 	 * Builds a shape from control points
 	 * \exception Ogre::InvalidStateException The path contains no points
@@ -301,6 +319,12 @@ public:
 		if (mClosed)
 			return mPoints[Utils::modulo(i,mPoints.size())];
 		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+	}
+
+	/// Gets the number of control points
+	inline const size_t getPointCount() const
+	{
+		return mPoints.size();
 	}
 
 	/**
