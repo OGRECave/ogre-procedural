@@ -34,6 +34,31 @@
 namespace Procedural
 {
 /**
+\brief Translates a mesh
+*/
+class _ProceduralExport MeshLinearTransform
+{
+	Ogre::Vector3 mTranslation;
+	Ogre::Quaternion mRotation;
+public:
+	MeshLinearTransform() : mTranslation(Ogre::Vector3::ZERO), mRotation(Ogre::Quaternion::IDENTITY) {}
+
+	void modify(TriangleBuffer::Section& inputTriangleBuffer) const;
+
+	MeshLinearTransform& setTranslation(const Ogre::Vector3& translation)
+	{
+		mTranslation = translation;
+		return *this;
+	}
+
+	MeshLinearTransform& setRotation(const Ogre::Quaternion& rotation)
+	{
+		mRotation = rotation;
+		return *this;
+	}
+};
+//--------------------------------------------------------------
+/**
  \brief Projects all TriangleBufferVertices on a sphere
  */
 class _ProceduralExport SpherifyModifier

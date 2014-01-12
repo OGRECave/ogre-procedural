@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "ProceduralExtruder.h"
 #include "ProceduralTriangulator.h"
 #include "ProceduralGeometryHelpers.h"
+#include "ProceduralMeshModifiers.h"
 
 using namespace Ogre;
 
@@ -320,6 +321,8 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 	if (mMultiShapeToExtrude.getShapeCount() == 0)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "At least one shape must be defined!", "Procedural::Extruder::addToTriangleBuffer(Procedural::TriangleBuffer)");
 
+	TriangleBuffer::Section section = buffer.beginSection();
+
 	// Triangulate the begin and end caps
 	if (mCapped && mMultiShapeToExtrude.isClosed())
 	{
@@ -411,5 +414,8 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 			}
 		}
 	}
+	buffer.endSection(section);
+	// Chain with linear transforms
+	MeshLinearTransform().setTranslation(mPosition).setRotation(mOrientation).modify(section);
 }
 }

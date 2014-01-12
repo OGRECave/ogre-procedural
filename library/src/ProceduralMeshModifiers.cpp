@@ -35,6 +35,14 @@ using namespace Ogre;
 
 namespace Procedural
 {
+//--------------------------------------------------------------
+void MeshLinearTransform::modify(TriangleBuffer::Section& inputSection) const
+{
+	std::vector<TriangleBuffer::Vertex>& vertices = inputSection.buffer->getVertices();
+	for (size_t i = inputSection.mFirstVertex; i <= inputSection.mLastVertex; ++i)
+		vertices[i].mPosition += mTranslation;
+}
+//--------------------------------------------------------------
 void SpherifyModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
