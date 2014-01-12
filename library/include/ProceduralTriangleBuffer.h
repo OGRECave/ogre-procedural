@@ -45,16 +45,26 @@ public:
 		Ogre::Vector3 mNormal;
 		Ogre::Vector2 mUV;
 	};
+	struct Section
+	{
+		std::string mSectionName;
+		unsigned int mFirstIndex;
+		unsigned int mLastIndex;
+		unsigned int mFirstVertex;
+		unsigned int mLastVertex;
+		TriangleBuffer* buffer;
+	};
 protected:
 
 	std::vector<int> mIndices;
 
 	std::vector<Vertex> mVertices;
-	//std::vector<Vertex>::iterator mCurrentVertex;
 	int globalOffset;
 	int mEstimatedVertexCount;
 	int mEstimatedIndexCount;
 	Vertex* mCurrentVertex;
+
+	std::map<std::string, Section> mSections;
 
 
 public:
@@ -65,13 +75,41 @@ public:
 	{
 		rebaseOffset();
 		for (std::vector<int>::const_iterator it = other.mIndices.begin(); it != other.mIndices.end(); ++it)
-		{
 			mIndices.push_back(globalOffset+ (*it));
-		}
+		
 		for (std::vector<Vertex>::const_iterator it = other.mVertices.begin(); it != other.mVertices.end(); ++it)
-		{
 			mVertices.push_back(*it);
-		}
+	}
+
+	Section beginSection(std::string sectionName = "")
+	{
+		rebaseOffset();
+		Section section;
+		section.mSectionName = "";
+		section.mFirstIndex = mIndices.size();
+		section.mFirstVertex = mVertices.size();
+		section.buffer = this;
+		return section;
+	}
+
+	void endSection(Section& section)
+	{
+		section.mLastIndex = mIndices.size() - 1;
+		section.mLastVertex = mVertices.size() - 1;
+		if (section.mSectionName != "")
+			mSections[section.mSectionName] = section;		
+	}
+
+	Section getFullSection()
+	{
+		Section section;
+		section.mFirstIndex = 0;
+		section.mLastIndex = mIndices.size() - 1;
+		section.mFirstVertex = 0;
+		section.mLastVertex = mVertices.size() - 1;
+		section.mSectionName = "";
+		section.buffer = this;
+		return section;
 	}
 
 	/// Gets a modifiable reference to vertices
