@@ -72,14 +72,13 @@ void Sample_Extrusion::createScene(void)
 		Ogre::Radian r = (Ogre::Radian) (Ogre::Math::HALF_PI-(float)i/32.*Ogre::Math::TWO_PI);
 		p3.addPoint(0,-.5+.5*i/32.*Math::Sin(r),-1+.5*i/32.*Math::Cos(r));
 	}
-	p3.addPoint(0,0,-1).addPoint(0,0,1);
-	for (int i=0; i<32; i++)
+	p3.addPoint(0, 0, -1).addPoint(0, 0, 1);
+	for (int i=1; i<32; i++)
 	{
 		Ogre::Radian r = (Ogre::Radian) (Ogre::Math::HALF_PI-(float)i/32.*Ogre::Math::TWO_PI);
 		p3.addPoint(0,-.5+.5*(1-i/32.)*Math::Sin(r),1+.5*(1-i/32.)*Math::Cos(r));
 	}
-	Procedural::Extruder().setExtrusionPath(&p3).setShapeToExtrude(&s3).setPosition(0,6.,0).addToTriangleBuffer(pillarTB);
-	//Procedural::BoxGenerator().setPosition(0,6.5,0).addToTriangleBuffer(pillarTB);
+	Procedural::Extruder().setExtrusionPath(&p3).setShapeToExtrude(&s3).setPosition(0,6.,0).addToTriangleBuffer(pillarTB);	
 	Procedural::BoxGenerator().setPosition(0,.5,0).addToTriangleBuffer(pillarTB);
 	pillarTB.transformToMesh("pillar");
 	// We put the pillars on the side of the road
