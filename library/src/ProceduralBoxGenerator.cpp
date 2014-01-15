@@ -34,6 +34,13 @@ using namespace Ogre;
 
 namespace Procedural
 {
+	const std::string BoxGenerator::TAG_NEGX = "box.negx";
+	const std::string BoxGenerator::TAG_NEGY = "box.negy";
+	const std::string BoxGenerator::TAG_NEGZ = "box.negz";
+	const std::string BoxGenerator::TAG_X = "box.x";
+	const std::string BoxGenerator::TAG_Y = "box.y";
+	const std::string BoxGenerator::TAG_Z = "box.z";
+
 void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
 	PlaneGenerator pg;
@@ -43,29 +50,46 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 		pg.setScale(mScale);
 		pg.setOrientation(mOrientation);
 	}
+	TriangleBuffer::Section section = buffer.beginSection(TAG_NEGZ);
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	.setNormal(Vector3::NEGATIVE_UNIT_Z)
 	.setPosition(mScale*(mPosition+.5f*mSizeZ*(mOrientation*Vector3::NEGATIVE_UNIT_Z)))
 	.addToTriangleBuffer(buffer);
+	buffer.endSection(section);
+
+	section = buffer.beginSection(TAG_Z);
 	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegX).setSizeX(mSizeY).setSizeY(mSizeX)
 	.setNormal(Vector3::UNIT_Z)
 	.setPosition(mScale*(mPosition+.5f*mSizeZ*(mOrientation*Vector3::UNIT_Z)))
 	.addToTriangleBuffer(buffer);
+	buffer.endSection(section);
+
+	section = buffer.beginSection(TAG_NEGY);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	.setNormal(Vector3::NEGATIVE_UNIT_Y)
 	.setPosition(mScale*(mPosition+.5f*mSizeY*(mOrientation*Vector3::NEGATIVE_UNIT_Y)))
 	.addToTriangleBuffer(buffer);
+	buffer.endSection(section);
+
+	section = buffer.beginSection(TAG_Y);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegX).setSizeX(mSizeZ).setSizeY(mSizeX)
 	.setNormal(Vector3::UNIT_Y)
 	.setPosition(mScale*(mPosition+.5f*mSizeY*(mOrientation*Vector3::UNIT_Y)))
 	.addToTriangleBuffer(buffer);
+	buffer.endSection(section);
+
+	section = buffer.beginSection(TAG_NEGX);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	.setNormal(Vector3::NEGATIVE_UNIT_X)
 	.setPosition(mScale*(mPosition+.5f*mSizeX*(mOrientation*Vector3::NEGATIVE_UNIT_X)))
 	.addToTriangleBuffer(buffer);
+	buffer.endSection(section);
+
+	section = buffer.beginSection(TAG_X);
 	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
 	.setNormal(Vector3::UNIT_X)
 	.setPosition(mScale*(mPosition+.5f*mSizeX*(mOrientation*Vector3::UNIT_X)))
 	.addToTriangleBuffer(buffer);
+	buffer.endSection(section);
 }
 }
