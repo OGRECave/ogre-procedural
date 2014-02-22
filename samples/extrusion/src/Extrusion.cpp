@@ -117,7 +117,11 @@ void Sample_Extrusion::createCamera(void)
 //-------------------------------------------------------------------------------------
 bool Sample_Extrusion::frameStarted(const FrameEvent& evt)
 {
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	movingLight->setPosition(mCamera->getPosition());
+#else
+	movingLight->getParentSceneNode()->setPosition(mCamera->getPosition());
+#endif
 	return true;
 }
 

@@ -39,6 +39,9 @@ THE SOFTWARE.
 #else
 #include <unistd.h>
 #endif
+#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+#include "OgreCompositorManager2.h"
+#endif
 
 using namespace Procedural;
 
@@ -96,10 +99,19 @@ bool Illustrations::init()
 	Ogre::NameValuePairList windowParams;
 	windowParams["hidden"] = "true";
 	mWindow=mRoot->createRenderWindow("dummyWindow", 1,1,false, &windowParams);
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	mWindow->setAutoUpdated(false);
+#endif
 
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);
+#else
+	const size_t numThreads = std::max<size_t>(1, Ogre::PlatformInformation::getNumLogicalCores() / 2);
+	Ogre::InstancingTheadedCullingMethod threadedCullingMethod = Ogre::INSTANCING_CULLING_SINGLETHREAD;
+	if(numThreads > 1) Ogre::InstancingTheadedCullingMethod threadedCullingMethod = Ogre::INSTANCING_CULLING_THREADED;
+	mSceneMgr = Ogre::Root::getSingleton().createSceneManager(Ogre::ST_GENERIC, numThreads, threadedCullingMethod);
+#endif
 	mCamera = mSceneMgr->createCamera("SimpleCamera");
 	mCamera->setAspectRatio(1.);
 	cameraPerspective();
@@ -108,17 +120,28 @@ bool Illustrations::init()
 	Ogre::Light* light = mSceneMgr->createLight();
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
+#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+	Ogre::SceneNode* lightNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	lightNode->attachObject(light);
+#endif
 	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
 
 	// Create main render to texture
 	mRttTexture = Ogre::TextureManager::getSingleton().createManual("RttTex", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
 	              Ogre::TEX_TYPE_2D, 256, 256, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET, 0, 0, 4);
 	mRenderTexture = mRttTexture->getBuffer()->getRenderTarget();
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	Ogre::Viewport* vp = mRenderTexture->addViewport(mCamera);
 	vp->setClearEveryFrame(true);
 	vp->setBackgroundColour(Ogre::ColourValue::White);
 	vp->setOverlaysEnabled(false);
-
+#else
+	mRoot->initialiseCompositor();
+	Ogre::CompositorManager2* pCompositorManager = mRoot->getCompositorManager2();
+	const Ogre::IdString workspaceName = "scene workspace";
+	pCompositorManager->createBasicWorkspaceDef(workspaceName, Ogre::ColourValue::White);
+	pCompositorManager->addWorkspace(mSceneMgr, mWindow, mCamera, workspaceName, true);
+#endif
 	return true;
 }
 
@@ -129,7 +152,11 @@ void Illustrations::next(std::string name, Real size)
 	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
 	// Write scene to png image
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	mRenderTexture->update();
+#else
+	mRoot->renderOneFrame();
+#endif
 	mRenderTexture->writeContentsToFile(name + ".png");
 
 	// Clear the scene

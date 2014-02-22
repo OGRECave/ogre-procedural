@@ -25,6 +25,7 @@ This source file is part of the
 #include <OGRE/OgreSceneManager.h>
 #include <OGRE/OgreRenderWindow.h>
 #include <OGRE/OgreConfigFile.h>
+#include <OGRE/OgreWindowEventUtilities.h>
 
 #include <OIS/OISEvents.h>
 #include <OIS/OISInputManager.h>
@@ -55,7 +56,11 @@ protected:
 	virtual void createFrameListener(void);
 	virtual void createScene(void) = 0; // Override me!
 	virtual void destroyScene(void);
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	virtual void createViewports(void);
+#else
+	virtual void createCompositor(void);
+#endif
 	virtual void setupResources(void);
 	virtual void loadResources(void);
 	virtual void createLogManager(void);
