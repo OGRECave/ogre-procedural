@@ -17,27 +17,30 @@ This source file is part of the
 #include "ProceduralStableHeaders.h"
 #include "BaseApplication.h"
 #include "ProceduralPlatform.h"
+#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+#include "OgreCompositorManager2.h"
+#endif
 
 using namespace Ogre;
 //-------------------------------------------------------------------------------------
 BaseApplication::BaseApplication(void)
-	: mRoot(0),
-	  mCamera(0),
-	  mSceneMgr(0),
-	  mWindow(0),
-	  mResourcesCfg(StringUtil::BLANK),
-	  mPluginsCfg(StringUtil::BLANK),
-	  mTrayMgr(0),
-	  mCameraMan(0),
-	  mDetailsPanel(0),
-	  mCursorWasVisible(false),
-	  mShutDown(false),
-	  mNonExclusiveMouse(false),
-	  mInputManager(0),
-	  mMouse(0),
-	  mKeyboard(0)
+	: mRoot(0)
+	, mCamera(0)
+	, mSceneMgr(0)
+	, mWindow(0)
+	, mResourcesCfg("")
+	, mPluginsCfg("")
+	, mTrayMgr(0)
+	, mCameraMan(0)
+	, mDetailsPanel(0)
+	, mCursorWasVisible(false)
+	, mShutDown(false)
+	, mNonExclusiveMouse(false)
+	, mInputManager(0)
+	, mMouse(0)
+	, mKeyboard(0)
 #ifdef OGRE_EXTERNAL_OVERLAY
-	  ,mOverlaySystem(0)
+	, mOverlaySystem(0)
 #endif
 {
 }
@@ -81,7 +84,14 @@ bool BaseApplication::configure(void)
 void BaseApplication::chooseSceneManager(void)
 {
 	// Get the SceneManager, in this case a generic one
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);
+#else
+	const size_t numThreads = std::max<size_t>(1, Ogre::PlatformInformation::getNumLogicalCores() / 2);
+	Ogre::InstancingTheadedCullingMethod threadedCullingMethod = Ogre::INSTANCING_CULLING_SINGLETHREAD;
+	if(numThreads > 1) Ogre::InstancingTheadedCullingMethod threadedCullingMethod = Ogre::INSTANCING_CULLING_THREADED;
+	mSceneMgr = Ogre::Root::getSingleton().createSceneManager(Ogre::ST_GENERIC, numThreads, threadedCullingMethod);
+#endif
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::createCamera(void)
@@ -97,9 +107,11 @@ void BaseApplication::createCamera(void)
 
 	mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
 
-	mSceneMgr->setShadowTechnique(SHADOWTYPE_TEXTURE_MODULATIVE);
 	mSceneMgr->setShadowFarDistance(100.0);
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+	mSceneMgr->setShadowTechnique(SHADOWTYPE_TEXTURE_MODULATIVE);
 	mSceneMgr->setShadowTextureSize(1024);
+#endif
 	mSceneMgr->setAmbientLight(ColourValue::Black);
 	// Setup camera and light
 	mCamera->setPosition(0,50,-50);
@@ -107,17 +119,28 @@ void BaseApplication::createCamera(void)
 	// Slow down speed, as the scene is small
 	mCameraMan->setTopSpeed(20);
 
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	Light* l = mSceneMgr->createLight("myLight");
+#else
+	Light* l = mSceneMgr->createLight();
+	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(l);
+#endif
 	l->setType(Light::LT_DIRECTIONAL);
 	l->setDirection(Vector3(0,-1,1).normalisedCopy());
 	l->setDiffuseColour(ColourValue(.7f,.5f,.5f));
 	l->setSpecularColour(ColourValue::White);
 
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	movingLight = mSceneMgr->createLight("movingLight");
+	movingLight->setPosition(mCamera->getPosition());
+#else
+	movingLight = mSceneMgr->createLight();
+	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(movingLight);
+	movingLight->getParentSceneNode()->setPosition(mCamera->getPosition());
+#endif
 	movingLight->setType(Light::LT_POINT);
 	movingLight->setDiffuseColour(ColourValue(.5f,.5f,.7f));
 	movingLight->setSpecularColour(ColourValue::White);
-	movingLight->setPosition(mCamera->getPosition());
 	movingLight->setCastShadows(false);
 }
 //-------------------------------------------------------------------------------------
@@ -204,6 +227,7 @@ void BaseApplication::destroyScene(void)
 #endif
 }
 //-------------------------------------------------------------------------------------
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 void BaseApplication::createViewports(void)
 {
 	// Create one viewport, entire window
@@ -214,6 +238,16 @@ void BaseApplication::createViewports(void)
 	mCamera->setAspectRatio(
 	    Real(vp->getActualWidth()) / Real(vp->getActualHeight()));
 }
+#else
+void BaseApplication::createCompositor(void)
+{
+	mRoot->initialiseCompositor();
+	Ogre::CompositorManager2* pCompositorManager = mRoot->getCompositorManager2();
+	const Ogre::IdString workspaceName = "scene workspace";
+	pCompositorManager->createBasicWorkspaceDef(workspaceName, Ogre::ColourValue::White);
+	pCompositorManager->addWorkspace(mSceneMgr, mWindow, mCamera, workspaceName, true);
+}
+#endif
 //-------------------------------------------------------------------------------------
 void BaseApplication::setupResources(void)
 {
@@ -280,7 +314,11 @@ bool BaseApplication::setup(void)
 
 	chooseSceneManager();
 	createCamera();
+#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	createViewports();
+#else
+	createCompositor();
+#endif
 
 	// Set default mipmap level (NB some APIs ignore this)
 	TextureManager::getSingleton().setDefaultNumMipmaps(5);
