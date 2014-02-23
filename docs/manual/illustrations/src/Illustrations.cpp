@@ -40,7 +40,7 @@ THE SOFTWARE.
 #include <unistd.h>
 #endif
 #if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
-#include "OgreCompositorManager2.h"
+#include <Compositor/OgreCompositorManager2.h>
 #endif
 
 using namespace Procedural;

@@ -18,7 +18,7 @@ This source file is part of the
 #include "BaseApplication.h"
 #include "ProceduralPlatform.h"
 #if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
-#include "OgreCompositorManager2.h"
+#include "Compositor/OgreCompositorManager2.h"
 #endif
 
 using namespace Ogre;
