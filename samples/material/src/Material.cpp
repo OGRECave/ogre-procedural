@@ -113,7 +113,9 @@ void Sample_Material::createScene(void)
 
 		pMainRenderState->addTemplateSubRenderState(normalMapSubRS);
 		mShaderGenerator->createShaderBasedTechnique("proceduralMaterial", Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+#if (OGRE_VERSION < ((1 << 16) | (9 << 8) | 0))
 		mCamera->getViewport()->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+#endif
 	}
 
 	// -- Test plane
@@ -135,7 +137,11 @@ void Sample_Material::createCamera(void)
 //-------------------------------------------------------------------------------------
 bool Sample_Material::frameStarted(const FrameEvent& evt)
 {
+#if (OGRE_VERSION < ((1 << 16) | (9 << 8) | 0))
 	movingLight->setPosition(mCamera->getPosition());
+#else
+	movingLight->getParentSceneNode()->setPosition(mCamera->getPosition());
+#endif
 	return true;
 }
 //-------------------------------------------------------------------------------------
