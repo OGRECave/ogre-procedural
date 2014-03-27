@@ -133,6 +133,15 @@ target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 procedural_install_target(OgreProcedural)
 		
 install(FILES ${HDRS} DESTINATION include/OgreProcedural)
+if(MSVC)
+if(OgreProcedural_INSTALL_PDB)
+if(OgreProcedural_STATIC)
+	install(FILES ${OgreProcedural_BINARY_DIR}/lib/debug/OgreProcedural_d.pdb DESTINATION lib/debug CONFIGURATIONS Debug)
+else()
+	install(FILES ${OgreProcedural_BINARY_DIR}/bin/debug/OgreProcedural_d.pdb DESTINATION bin/debug CONFIGURATIONS Debug)
+endif()
+endif()
+endif()
 
 # specify a precompiled header to use
 use_precompiled_header(OgreProcedural 
