@@ -42,17 +42,32 @@ Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
 	Ogre::ManualObject* manual = sceneMgr->createManualObject();
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
+#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+	Ogre::Vector3 aabb_min = Ogre::Vector3::ZERO;
+	Ogre::Vector3 aabb_max = Ogre::Vector3::ZERO;
+#endif
 	for (std::vector<Vertex>::const_iterator it = mVertices.begin(); it != mVertices.end(); ++it)
 	{
 		manual->position(it->mPosition);
 		manual->textureCoord(it->mUV);
 		manual->normal(it->mNormal);
+#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+		if(it->mPosition.x < aabb_min.x) aabb_min.x = it->mPosition.x;
+		if(it->mPosition.y < aabb_min.y) aabb_min.y = it->mPosition.y;
+		if(it->mPosition.z < aabb_min.z) aabb_min.z = it->mPosition.z;
+		if(it->mPosition.x > aabb_max.x) aabb_max.x = it->mPosition.x;
+		if(it->mPosition.y > aabb_max.y) aabb_max.y = it->mPosition.y;
+		if(it->mPosition.z > aabb_max.z) aabb_max.z = it->mPosition.z;
+#endif
 	}
 	for (std::vector<int>::const_iterator it = mIndices.begin(); it!=mIndices.end(); ++it)
 	{
 		manual->index(*it);
 	}
 	manual->end();
+#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+	manual->setLocalAabb(Ogre::Aabb::newFromExtents(aabb_min, aabb_max));
+#endif
 	Ogre::MeshPtr mesh = manual->convertToMesh(name, group);
 
 	sceneMgr->destroyManualObject(manual);
