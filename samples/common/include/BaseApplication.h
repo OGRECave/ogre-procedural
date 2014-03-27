@@ -26,6 +26,10 @@ This source file is part of the
 #include <OGRE/OgreRenderWindow.h>
 #include <OGRE/OgreConfigFile.h>
 #include <OGRE/OgreWindowEventUtilities.h>
+#if OGRE_VERSION >= ((1 << 16) | (9 << 8) | 0)
+#include <OGRE/Overlay/OgreOverlay.h>
+#include <OGRE/Overlay/OgreOverlaySystem.h>
+#endif
 
 #include <OIS/OISEvents.h>
 #include <OIS/OISInputManager.h>
@@ -35,10 +39,6 @@ This source file is part of the
 #include <SdkTrays.h>
 #include <SdkCameraMan.h>
 #include <OGRE/OgreVector3.h>
-
-#if OGRE_VERSION >= ((1 << 16) | (9 << 8) | 0)
-#define OGRE_EXTERNAL_OVERLAY
-#endif
 
 class BaseApplication : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener, OgreBites::SdkTrayListener
 {
@@ -100,7 +100,7 @@ protected:
 	Ogre::String mPluginsCfg;
 
 	// OgreBites
-#ifdef OGRE_EXTERNAL_OVERLAY
+#if OGRE_VERSION >= ((1 << 16) | (9 << 8) | 0)
 	Ogre::OverlaySystem* mOverlaySystem;       // Overlay system
 #endif
 	OgreBites::SdkTrayManager* mTrayMgr;
