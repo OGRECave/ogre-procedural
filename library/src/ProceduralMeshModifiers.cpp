@@ -43,6 +43,16 @@ void MeshLinearTransform::modify(TriangleBuffer::Section& inputSection) const
 		vertices[i].mPosition += mTranslation;
 }
 //--------------------------------------------------------------
+void MeshUVTransform::modify(TriangleBuffer::Section& inputSection) const
+{
+	std::vector<TriangleBuffer::Vertex>& vertices = inputSection.buffer->getVertices();
+	for (size_t i = inputSection.mFirstVertex; i <= inputSection.mLastVertex; ++i)
+		vertices[i].mUV = mOrigin + mTile * vertices[i].mUV;
+	if (mSwitchUV)
+		for (size_t i = inputSection.mFirstVertex; i <= inputSection.mLastVertex; ++i)
+			std::swap(vertices[i].mUV.x, vertices[i].mUV.y);
+}
+//--------------------------------------------------------------
 void SpherifyModifier::modify()
 {
 	if (mInputTriangleBuffer == NULL)
