@@ -417,5 +417,6 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 	buffer.endSection(section);
 	// Chain with linear transforms
 	MeshLinearTransform().setTranslation(mPosition).setRotation(mOrientation).modify(section);
+	MeshUVTransform().setOrigin(mUVOrigin).setTile(Ogre::Vector2(mUTile, mVTile)).setSwitchUV(mSwitchUV).modify(section);
 }
 }

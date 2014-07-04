@@ -59,6 +59,38 @@ public:
 };
 //--------------------------------------------------------------
 /**
+\brief Linear transforms on a mesh's UVs
+*/
+class _ProceduralExport MeshUVTransform
+{
+	Ogre::Vector2 mTile;
+	Ogre::Vector2 mOrigin;
+	bool mSwitchUV;
+public:
+	MeshUVTransform() : mTile(Ogre::Vector2::ZERO), mOrigin(Ogre::Vector2::ZERO), mSwitchUV(false) {}
+
+	void modify(TriangleBuffer::Section& inputTriangleBuffer) const;
+
+	MeshUVTransform& setTile(const Ogre::Vector2& tile)
+	{
+		mTile = tile;
+		return *this;
+	}
+
+	MeshUVTransform& setOrigin(const Ogre::Vector2& origin)
+	{
+		mOrigin = origin;
+		return *this;
+	}
+
+	MeshUVTransform& setSwitchUV(bool switchUV)
+	{
+		mSwitchUV = switchUV;
+		return *this;
+	}
+};
+//--------------------------------------------------------------
+/**
  \brief Projects all TriangleBufferVertices on a sphere
  */
 class _ProceduralExport SpherifyModifier
