@@ -374,7 +374,7 @@ void Extruder::addToTriangleBuffer(TriangleBuffer& buffer) const
 		const Track* scaleTrack = 0;
 		if (mScaleTracks.find(j) != mScaleTracks.end())
 		{
-			rotationTrack = mScaleTracks.find(j)->second;
+			scaleTrack = mScaleTracks.find(j)->second;
 			extrusionPath = extrusionPath.mergeKeysWithTrack(*mScaleTracks.find(j)->second);
 		}
 		const Track* pathTextureTrack = 0;
