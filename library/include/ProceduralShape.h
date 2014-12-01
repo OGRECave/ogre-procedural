@@ -478,7 +478,7 @@ public:
 
 	/**
 	 * Create a symetric copy at the origin point.
-	 * @parm flip \c true if function should start mirroring with the last point in list (default \c false)
+	 * @param flip \c true if function should start mirroring with the last point in list (default \c false)
 	 */
 	Shape& mirror(bool flip = false)
 	{
@@ -489,7 +489,7 @@ public:
 	 * Create a symetric copy at a given point.
 	 * @param x x coordinate of point where to mirror
 	 * @param y y coordinate of point where to mirror
-	 * @parm flip \c true if function should start mirroring with the last point in list (default \c false)
+	 * @param flip \c true if function should start mirroring with the last point in list (default \c false)
 	 */
 	Shape& mirror(Ogre::Real x, Ogre::Real y, bool flip = false)
 	{
@@ -499,7 +499,7 @@ public:
 	/**
 	 * Create a symetric copy at a given point.
 	 * @param point Point where to mirror
-	 * @parm flip \c true if function should start mirroring with the last point in list (default \c false)
+	 * @param flip \c true if function should start mirroring with the last point in list (default \c false)
 	 */
 	Shape& mirrorAroundPoint(Ogre::Vector2 point, bool flip = false)
 	{

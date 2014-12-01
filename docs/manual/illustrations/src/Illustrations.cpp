@@ -136,7 +136,6 @@ bool Illustrations::init()
 	vp->setBackgroundColour(Ogre::ColourValue::White);
 	vp->setOverlaysEnabled(false);
 #else
-	mRoot->initialiseCompositor();
 	Ogre::CompositorManager2* pCompositorManager = mRoot->getCompositorManager2();
 	const Ogre::IdString workspaceName = "scene workspace";
 	pCompositorManager->createBasicWorkspaceDef(workspaceName, Ogre::ColourValue::White);

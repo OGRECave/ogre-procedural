@@ -241,7 +241,6 @@ void BaseApplication::createViewports(void)
 #else
 void BaseApplication::createCompositor(void)
 {
-	mRoot->initialiseCompositor();
 	Ogre::CompositorManager2* pCompositorManager = mRoot->getCompositorManager2();
 	const Ogre::IdString workspaceName = "scene workspace";
 	pCompositorManager->createBasicWorkspaceDef(workspaceName, Ogre::ColourValue::White);
@@ -502,25 +501,41 @@ bool BaseApplication::keyReleased( const OIS::KeyEvent& arg )
 
 bool BaseApplication::mouseMoved( const OIS::MouseEvent& arg )
 {
+#if OGRE_VERSION >= ((1 << 16) | (10 << 8) | 0) && OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+	if (mTrayMgr->injectPointerMove(arg)) return true;
+	if (!mNonExclusiveMouse || mMouse->getMouseState().buttonDown(OIS::MB_Left))
+		mCameraMan->injectPointerMove(arg);
+#else
 	if (mTrayMgr->injectMouseMove(arg)) return true;
 	if (!mNonExclusiveMouse || mMouse->getMouseState().buttonDown(OIS::MB_Left))
 		mCameraMan->injectMouseMove(arg);
+#endif
 	return true;
 }
 
 bool BaseApplication::mousePressed( const OIS::MouseEvent& arg, OIS::MouseButtonID id )
 {
 	std::cout<<"mouse presse"<<std::endl;
+#if OGRE_VERSION >= ((1 << 16) | (10 << 8) | 0) && OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+	if (mTrayMgr->injectPointerDown(arg, id)) return true;
+	mCameraMan->injectPointerDown(arg, id);
+#else
 	if (mTrayMgr->injectMouseDown(arg, id)) return true;
 	mCameraMan->injectMouseDown(arg, id);
+#endif
 	return true;
 }
 
 bool BaseApplication::mouseReleased( const OIS::MouseEvent& arg, OIS::MouseButtonID id )
 {
 	std::cout<<"mouse rele"<<std::endl;
+#if OGRE_VERSION >= ((1 << 16) | (10 << 8) | 0) && OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+	if (mTrayMgr->injectPointerUp(arg, id)) return true;
+	mCameraMan->injectPointerUp(arg, id);
+#else
 	if (mTrayMgr->injectMouseUp(arg, id)) return true;
 	mCameraMan->injectMouseUp(arg, id);
+#endif
 	return true;
 }
 
