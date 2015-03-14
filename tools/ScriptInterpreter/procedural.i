@@ -47,6 +47,7 @@
  %template (mg14) Procedural::MeshGenerator<Procedural::Triangulator>;
  %template (mg15) Procedural::MeshGenerator<Procedural::Boolean>;
  %template (mg16) Procedural::MeshGenerator<Procedural::SpringGenerator>;
+ %template (mg17) Procedural::MeshGenerator<Procedural::PrismGenerator>;
  %include "ProceduralSphereGenerator.h"
  %include "ProceduralBoxGenerator.h"
  %include "ProceduralCapsuleGenerator.h"
@@ -76,3 +77,4 @@
  %include "ProceduralTextureBuffer.h"
  %include "ProceduralTextureGenerator.h"
  %include "ProceduralTextureModifiers.h"
+ %include "ProceduralPrismGenerator.h"

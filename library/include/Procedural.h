@@ -60,5 +60,6 @@ THE SOFTWARE.
 #include "ProceduralNoise.h"
 #include "ProceduralMeshModifiers.h"
 #include "ProceduralTextureBuffer.h"
+#include "ProceduralPrismGenerator.h"
 
 #endif
