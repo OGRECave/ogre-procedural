@@ -44,12 +44,6 @@ class _ProceduralExport BoxGenerator : public MeshGenerator<BoxGenerator>
 	Ogre::Real mSizeX,mSizeY,mSizeZ;
 	unsigned int mNumSegX,mNumSegY,mNumSegZ;
 public:
-	static const std::string TAG_NEGX;
-	static const std::string TAG_NEGY;
-	static const std::string TAG_NEGZ;
-	static const std::string TAG_X;
-	static const std::string TAG_Y;
-	static const std::string TAG_Z;
 
 	/// Contructor with arguments
 	BoxGenerator(Ogre::Real sizeX=1.f, Ogre::Real sizeY=1.f, Ogre::Real sizeZ=1.f, unsigned int numSegX=1, unsigned int numSegY=1, unsigned int numSegZ=1) :

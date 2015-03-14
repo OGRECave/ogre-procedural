@@ -34,12 +34,12 @@ using namespace Ogre;
 
 namespace Procedural
 {
-	const std::string BoxGenerator::TAG_NEGX = "box.negx";
-	const std::string BoxGenerator::TAG_NEGY = "box.negy";
-	const std::string BoxGenerator::TAG_NEGZ = "box.negz";
-	const std::string BoxGenerator::TAG_X = "box.x";
-	const std::string BoxGenerator::TAG_Y = "box.y";
-	const std::string BoxGenerator::TAG_Z = "box.z";
+#define TAG_NEGX "box.negx"
+#define TAG_NEGY "box.negy"
+#define TAG_NEGZ "box.negz"
+#define TAG_X "box.x"
+#define TAG_Y "box.y"
+#define TAG_Z "box.z"
 
 void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 {
