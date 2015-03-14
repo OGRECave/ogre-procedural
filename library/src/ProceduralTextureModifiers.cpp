@@ -917,10 +917,10 @@ void Combine::_process(TextureBufferPtr image, COMBINE_METHOD method)
 				Ogre::ColourValue pxSrc = image->getPixel(x, y);
 				Ogre::ColourValue pxDst = mBuffer->getPixel(x, y);
 				mBuffer->setPixel(x, y,
-				                  (Ogre::uchar)(pxSrc.r * pxSrc.a * 255.0f + pxDst.r * 255.0f * (1.0f - pxSrc.a)),
-				                  (Ogre::uchar)(pxSrc.g * pxSrc.a * 255.0f + pxDst.g * 255.0f * (1.0f - pxSrc.a)),
-				                  (Ogre::uchar)(pxSrc.b * pxSrc.a * 255.0f + pxDst.b * 255.0f * (1.0f - pxSrc.a)),
-				                  (Ogre::uchar)((pxDst.a - pxDst.a * pxSrc.a) * 255.0f + pxSrc.a * 255.0f));
+								  (Ogre::uchar)(pxSrc.r * pxSrc.a * 255.0f + pxDst.r * 255.0f * (1.0f - pxSrc.a)),
+								  (Ogre::uchar)(pxSrc.g * pxSrc.a * 255.0f + pxDst.g * 255.0f * (1.0f - pxSrc.a)),
+								  (Ogre::uchar)(pxSrc.b * pxSrc.a * 255.0f + pxDst.b * 255.0f * (1.0f - pxSrc.a)),
+								  (Ogre::uchar)((pxDst.a - pxDst.a * pxSrc.a) * 255.0f + pxSrc.a * 255.0f));
 			}
 		}
 		break;
@@ -1088,10 +1088,10 @@ TextureBufferPtr Convolution::process()
 				a = (long)mBuffer->getPixelAlphaByte(x, y);
 
 			tmpBuffer->setPixel(y, x,
-			                    (Ogre::uchar)((r > 255) ? 255 : ((r < 0) ? 0 : r)),
-			                    (Ogre::uchar)((g > 255) ? 255 : ((g < 0) ? 0 : g)),
-			                    (Ogre::uchar)((b > 255) ? 255 : ((b < 0) ? 0 : b)),
-			                    (Ogre::uchar)((a > 255) ? 255 : ((a < 0) ? 0 : a)));
+								(Ogre::uchar)((r > 255) ? 255 : ((r < 0) ? 0 : r)),
+								(Ogre::uchar)((g > 255) ? 255 : ((g < 0) ? 0 : g)),
+								(Ogre::uchar)((b > 255) ? 255 : ((b < 0) ? 0 : b)),
+								(Ogre::uchar)((a > 255) ? 255 : ((a < 0) ? 0 : a)));
 		}
 	}
 
@@ -2020,13 +2020,13 @@ TextureBufferPtr EdgeDetection::process()
 					else
 					{
 						if ( (mBuffer->getPixelRedReal((size_t)(x - 1), (size_t)(y    )) < div) &&
-						        (mBuffer->getPixelRedReal((size_t)(x + 1), (size_t)(y    )) < div) &&
-						        (mBuffer->getPixelRedReal((size_t)(x - 1), (size_t)(y - 1)) < div) &&
-						        (mBuffer->getPixelRedReal((size_t)(x    ), (size_t)(y - 1)) < div) &&
-						        (mBuffer->getPixelRedReal((size_t)(x + 1), (size_t)(y - 1)) < div) &&
-						        (mBuffer->getPixelRedReal((size_t)(x - 1), (size_t)(y + 1)) < div) &&
-						        (mBuffer->getPixelRedReal((size_t)(x    ), (size_t)(y + 1)) < div) &&
-						        (mBuffer->getPixelRedReal((size_t)(x + 1), (size_t)(y + 1)) < div))
+								(mBuffer->getPixelRedReal((size_t)(x + 1), (size_t)(y    )) < div) &&
+								(mBuffer->getPixelRedReal((size_t)(x - 1), (size_t)(y - 1)) < div) &&
+								(mBuffer->getPixelRedReal((size_t)(x    ), (size_t)(y - 1)) < div) &&
+								(mBuffer->getPixelRedReal((size_t)(x + 1), (size_t)(y - 1)) < div) &&
+								(mBuffer->getPixelRedReal((size_t)(x - 1), (size_t)(y + 1)) < div) &&
+								(mBuffer->getPixelRedReal((size_t)(x    ), (size_t)(y + 1)) < div) &&
+								(mBuffer->getPixelRedReal((size_t)(x + 1), (size_t)(y + 1)) < div))
 						{
 							tmpBuffer->setRed((size_t)x, (size_t)y, 0.0f);
 						}
@@ -2039,13 +2039,13 @@ TextureBufferPtr EdgeDetection::process()
 					else
 					{
 						if ( (mBuffer->getPixelGreenReal((size_t)(x - 1), (size_t)(y    )) < div) &&
-						        (mBuffer->getPixelGreenReal((size_t)(x + 1), (size_t)(y    )) < div) &&
-						        (mBuffer->getPixelGreenReal((size_t)(x - 1), (size_t)(y - 1)) < div) &&
-						        (mBuffer->getPixelGreenReal((size_t)(x    ), (size_t)(y - 1)) < div) &&
-						        (mBuffer->getPixelGreenReal((size_t)(x + 1), (size_t)(y - 1)) < div) &&
-						        (mBuffer->getPixelGreenReal((size_t)(x - 1), (size_t)(y + 1)) < div) &&
-						        (mBuffer->getPixelGreenReal((size_t)(x    ), (size_t)(y + 1)) < div) &&
-						        (mBuffer->getPixelGreenReal((size_t)(x + 1), (size_t)(y + 1)) < div))
+								(mBuffer->getPixelGreenReal((size_t)(x + 1), (size_t)(y    )) < div) &&
+								(mBuffer->getPixelGreenReal((size_t)(x - 1), (size_t)(y - 1)) < div) &&
+								(mBuffer->getPixelGreenReal((size_t)(x    ), (size_t)(y - 1)) < div) &&
+								(mBuffer->getPixelGreenReal((size_t)(x + 1), (size_t)(y - 1)) < div) &&
+								(mBuffer->getPixelGreenReal((size_t)(x - 1), (size_t)(y + 1)) < div) &&
+								(mBuffer->getPixelGreenReal((size_t)(x    ), (size_t)(y + 1)) < div) &&
+								(mBuffer->getPixelGreenReal((size_t)(x + 1), (size_t)(y + 1)) < div))
 						{
 							tmpBuffer->setGreen((size_t)x, (size_t)y, 0.0f);
 						}
@@ -2058,13 +2058,13 @@ TextureBufferPtr EdgeDetection::process()
 					else
 					{
 						if ( (mBuffer->getPixelBlueReal((size_t)(x - 1), (size_t)(y    )) < div) &&
-						        (mBuffer->getPixelBlueReal((size_t)(x + 1), (size_t)(y    )) < div) &&
-						        (mBuffer->getPixelBlueReal((size_t)(x - 1), (size_t)(y - 1)) < div) &&
-						        (mBuffer->getPixelBlueReal((size_t)(x    ), (size_t)(y - 1)) < div) &&
-						        (mBuffer->getPixelBlueReal((size_t)(x + 1), (size_t)(y - 1)) < div) &&
-						        (mBuffer->getPixelBlueReal((size_t)(x - 1), (size_t)(y + 1)) < div) &&
-						        (mBuffer->getPixelBlueReal((size_t)(x    ), (size_t)(y + 1)) < div) &&
-						        (mBuffer->getPixelBlueReal((size_t)(x + 1), (size_t)(y + 1)) < div))
+								(mBuffer->getPixelBlueReal((size_t)(x + 1), (size_t)(y    )) < div) &&
+								(mBuffer->getPixelBlueReal((size_t)(x - 1), (size_t)(y - 1)) < div) &&
+								(mBuffer->getPixelBlueReal((size_t)(x    ), (size_t)(y - 1)) < div) &&
+								(mBuffer->getPixelBlueReal((size_t)(x + 1), (size_t)(y - 1)) < div) &&
+								(mBuffer->getPixelBlueReal((size_t)(x - 1), (size_t)(y + 1)) < div) &&
+								(mBuffer->getPixelBlueReal((size_t)(x    ), (size_t)(y + 1)) < div) &&
+								(mBuffer->getPixelBlueReal((size_t)(x + 1), (size_t)(y + 1)) < div))
 						{
 							tmpBuffer->setBlue((size_t)x, (size_t)y, 0.0f);
 						}
@@ -2098,8 +2098,8 @@ Ogre::Vector3* EdgeDetection::getBlock(long x, long y)
 			if ((x + i) < 0 || (x + i) >= (long)mBuffer->getWidth()) continue;
 			if ((y + j) < 0 || (y + j) >= (long)mBuffer->getHeight()) continue;
 			block[(j + 1) * 3 + (i + 1)] = Ogre::Vector3((Ogre::Real)mBuffer->getPixelRedReal((size_t)(x + i), (size_t)(y + j)),
-			                               (Ogre::Real)mBuffer->getPixelGreenReal((size_t)(x + i), (size_t)(y + j)),
-			                               (Ogre::Real)mBuffer->getPixelBlueReal((size_t)(x + i), (size_t)(y + j)));
+										   (Ogre::Real)mBuffer->getPixelGreenReal((size_t)(x + i), (size_t)(y + j)),
+										   (Ogre::Real)mBuffer->getPixelBlueReal((size_t)(x + i), (size_t)(y + j)));
 		}
 	}
 	return block;
@@ -2467,10 +2467,10 @@ TextureBufferPtr Lerp::process()
 			Ogre::ColourValue pixelC = mBuffer->getPixel(x, y);
 
 			mBuffer->setPixel(x, y,
-			                  pixelA.r * (1.0f - pixelC.r) + pixelB.r * pixelC.r,
-			                  pixelA.g * (1.0f - pixelC.g) + pixelB.g * pixelC.g,
-			                  pixelA.b * (1.0f - pixelC.b) + pixelB.b * pixelC.b,
-			                  pixelA.a * (1.0f - pixelC.a) + pixelB.a * pixelC.a);
+							  pixelA.r * (1.0f - pixelC.r) + pixelB.r * pixelC.r,
+							  pixelA.g * (1.0f - pixelC.g) + pixelB.g * pixelC.g,
+							  pixelA.b * (1.0f - pixelC.b) + pixelB.b * pixelC.b,
+							  pixelA.a * (1.0f - pixelC.a) + pixelB.a * pixelC.a);
 		}
 	}
 
@@ -2791,6 +2791,123 @@ TextureBufferPtr OilPaint::process()
 
 	logMsg("Modify texture with oilpaint filter");
 	return mBuffer;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Polygon& Polygon::setColour(Ogre::ColourValue colour)
+{
+	mColour = colour;
+	return *this;
+}
+
+Polygon& Polygon::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha)
+{
+	mColour = Ogre::ColourValue(red, green, blue, alpha);
+	return *this;
+}
+
+Polygon& Polygon::setRadius(size_t radius)
+{
+	mRadius = radius;
+	return *this;
+}
+
+Polygon& Polygon::setRadius(Ogre::Real radius)
+{
+	mRadius = (size_t)((Ogre::Real)std::min<Ogre::uint>(mBuffer->getWidth(), mBuffer->getHeight()) * Ogre::Math::Abs(radius));
+	return *this;
+}
+
+Polygon& Polygon::setCenterX(size_t x)
+{
+	mX = std::min<size_t>(x, mBuffer->getWidth() - 1);
+	return *this;
+}
+
+Polygon& Polygon::setCenterX(Ogre::Real x)
+{
+	mX = std::min<size_t>((size_t)(x * (Ogre::Real)mBuffer->getWidth()), mBuffer->getWidth() - 1);
+	return *this;
+}
+
+Polygon& Polygon::setCenterY(size_t y)
+{
+	mY = std::min<size_t>(y, mBuffer->getHeight() - 1);
+	return *this;
+}
+
+Polygon& Polygon::setCenterY(Ogre::Real y)
+{
+	mY = std::min<size_t>((size_t)(y * (Ogre::Real)mBuffer->getHeight()), mBuffer->getHeight() - 1);
+	return *this;
+}
+
+Polygon& Polygon::setCenter(Ogre::Vector2 pos, bool relative)
+{
+	setCenter(pos.x, pos.y, relative);
+	return *this;
+}
+
+Polygon& Polygon::setCenter(size_t x, size_t y)
+{
+	setCenterX(x);
+	setCenterY(y);
+	return *this;
+}
+
+Polygon& Polygon::setCenter(Ogre::Real x, Ogre::Real y, bool relative)
+{
+	if (relative)
+	{
+		setCenterX(x);
+		setCenterY(y);
+	}
+	else
+	{
+		setCenterX((size_t)x);
+		setCenterY((size_t)y);
+	}
+	return *this;
+}
+
+Polygon& Polygon::setSides(size_t n)
+{
+	mSides = n;
+	return *this;
+}
+
+TextureBufferPtr Polygon::process()
+{
+	Ogre::Real deltaAngle = (Math::TWO_PI / (Ogre::Real)mSides);
+	for(size_t ui = 0; ui < mSides; ui++)
+	{
+		Ogre::Vector2 p0(mRadius * Math::Cos((Ogre::Real)ui * deltaAngle), mRadius * Math::Sin((Ogre::Real)ui * deltaAngle));
+		Ogre::Vector2 p1(mRadius * Math::Cos((Ogre::Real)(ui + 1 == mSides ? 0 : ui + 1) * deltaAngle), mRadius * Math::Sin((Ogre::Real)(ui + 1 == mSides ? 0 : ui + 1) * deltaAngle));
+
+		long x0 = (long)p0.x, y0 = (long)p0.y;
+		long x1 = (long)p1.x, y1 = (long)p1.y;
+		long dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+		long dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+		long err = dx + dy, e2 = 0;
+		for(;;)
+		{
+			_putpixel(x0, y0);
+			if (x0 == x1 && y0 == y1) break;
+			e2 = 2 * err;
+			if (e2 > dy) { err += dy; x0 += sx; }
+			if (e2 < dx) { err += dx; y0 += sy; }
+		}
+	}
+
+	logMsg("Modify texture with polygon filter : x = " + StringConverter::toString(mX) + ", y = " + StringConverter::toString(mY) + ", Radius = " + StringConverter::toString(mRadius) + ", Sides = " + StringConverter::toString(mSides));
+	return mBuffer;
+}
+
+void Polygon::_putpixel(long dx, long dy)
+{
+	if (mX + dx < 0 || mX + dx >= mBuffer->getWidth()) return;
+	if (mY + dy < 0 || mY + dy >= mBuffer->getHeight()) return;
+	mBuffer->setPixel(mX + dx, mY + dy, mColour);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3700,10 +3817,10 @@ TextureBufferPtr Vortex::process()
 				Ogre::ColourValue pixelLR = mBuffer->getPixel(wrapx, wrapy);
 
 				tmpBuffer->setPixel(x, y,
-				                    (Ogre::uchar)(ul * pixelUL.r * 255.0f + ll * pixelLL.r * 255.0f + ur * pixelUR.r * 255.0f + lr * pixelLR.r * 255.0f),
-				                    (Ogre::uchar)(ul * pixelUL.g * 255.0f + ll * pixelLL.g * 255.0f + ur * pixelUR.g * 255.0f + lr * pixelLR.g * 255.0f),
-				                    (Ogre::uchar)(ul * pixelUL.b * 255.0f + ll * pixelLL.b * 255.0f + ur * pixelUR.b * 255.0f + lr * pixelLR.b * 255.0f),
-				                    (Ogre::uchar)(ul * pixelUL.a * 255.0f + ll * pixelLL.a * 255.0f + ur * pixelUR.a * 255.0f + lr * pixelLR.a * 255.0f));
+									(Ogre::uchar)(ul * pixelUL.r * 255.0f + ll * pixelLL.r * 255.0f + ur * pixelUR.r * 255.0f + lr * pixelLR.r * 255.0f),
+									(Ogre::uchar)(ul * pixelUL.g * 255.0f + ll * pixelLL.g * 255.0f + ur * pixelUR.g * 255.0f + lr * pixelLR.g * 255.0f),
+									(Ogre::uchar)(ul * pixelUL.b * 255.0f + ll * pixelLL.b * 255.0f + ur * pixelUR.b * 255.0f + lr * pixelLR.b * 255.0f),
+									(Ogre::uchar)(ul * pixelUL.a * 255.0f + ll * pixelLL.a * 255.0f + ur * pixelUR.a * 255.0f + lr * pixelLR.a * 255.0f));
 			}
 		}
 	}

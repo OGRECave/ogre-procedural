@@ -2104,6 +2104,129 @@ public:
 };
 
 /**
+\brief Draw a polygon.
+\details Draw a regular polygon on top of previous content.
+
+Example:
+\code{.cpp}
+Procedural::TextureBuffer bufferSolid(256);
+Procedural::Solid(&bufferSolid).setColour(Ogre::ColourValue(0.0f, 0.5f, 1.0f, 1.0f)).process();
+Procedural::Polygon(&bufferSolid).setColour(Ogre::ColourValue::Red).setSides(5).process();
+\endcode
+\dotfile texture_35.gv
+*/
+class _ProceduralExport Polygon : public TextureProcessing
+{
+private:
+	Ogre::ColourValue mColour;
+	size_t mX;
+	size_t mY;
+	size_t mRadius;
+	size_t mSides;
+
+public:
+	/**
+	Default constructor.
+	\param pBuffer Image buffer where to modify the image.
+	*/
+	Polygon(TextureBufferPtr pBuffer)
+		: TextureProcessing(pBuffer, "Polygon"), mColour(Ogre::ColourValue::White), mSides(3)
+	{
+		mRadius = std::min<Ogre::uint>(pBuffer->getWidth() / 2, pBuffer->getHeight() / 2) - 1;
+		mX = pBuffer->getWidth() / 2;
+		mY = pBuffer->getHeight() / 2;
+	}
+
+	/**
+	Set the fill colour of the polygon.
+	\param colour New colour for processing (default Ogre::ColourValue::White)
+	*/
+	Polygon& setColour(Ogre::ColourValue colour);
+
+	/**
+	Set the fill colour of the polygon.
+	\param red Red value of the fill colour [0.0, 1.0] \(default 1.0)
+	\param green Green value of the fill colour [0.0, 1.0] \(default 1.0)
+	\param blue Blue value of the fill colour [0.0, 1.0] \(default 1.0)
+	\param alpha %Alpha value of the fill colour [0.0, 1.0] \(default 1.0)
+	*/
+	Polygon& setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre::Real alpha = 1.0f);
+
+	/**
+	Set the absolute radius of the polygon edges.
+	\param radius New absolute radius of the polygon edges in px (default smaller value of 1/2 * image width and 1/2 * image height)
+	*/
+	Polygon& setRadius(size_t radius);
+
+	/**
+	Set the relative radius of the polygon edges.
+	\param radius New relative radius of the polygon edges [0.0, 1.0] \(default 0.5)
+	*/
+	Polygon& setRadius(Ogre::Real radius);
+
+	/**
+	Set absolute x position of polygon center point in px
+	\param x New absolute x position of polygon center (default 1/2 * image width)
+	*/
+	Polygon& setCenterX(size_t x);
+
+	/**
+	Set relative x position of polygon center point as Real
+	\param x New relative x position of polygon center [0.0, 1.0] \(default 0.5)
+	*/
+	Polygon& setCenterX(Ogre::Real x);
+
+	/**
+	Set absolute y position of polygon center point in px
+	\param y New absolute y position of polygon center (default 1/2 * image width)
+	*/
+	Polygon& setCenterY(size_t y);
+
+	/**
+	Set relative y position of polygon center point as Real
+	\param y New relative y position of polygon center [0.0, 1.0] \(default 0.5)
+	*/
+	Polygon& setCenterY(Ogre::Real y);
+
+	/**
+	Set the position of polygon center point.
+	\param pos Vector to the center point of the polygon (default: x=0.5, y=0.5)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	Polygon& setCenter(Ogre::Vector2 pos, bool relative = true);
+
+	/**
+	Set the position of polygon center point.
+	\param x New absolute x position of polygon center (default 1/2 * image width)
+	\param y New absolute y position of polygon center (default 1/2 * image width)
+	*/
+	Polygon& setCenter(size_t x, size_t y);
+
+	/**
+	Set the position of polygon center point.
+	\param x New relative x position of polygon center [0.0, 1.0] \(default 0.5)
+	\param y New relative y position of polygon center [0.0, 1.0] \(default 0.5)
+	\param relative If this is set to true (default) the vector data are relative [0.0, 1.0]; else absolut [px]
+	*/
+	Polygon& setCenter(Ogre::Real x, Ogre::Real y, bool relative = true);
+
+	/**
+	Set number of polygon sides
+	\param n New number of polygon sides (default 3)
+	*/
+	Polygon& setSides(size_t n);
+
+	/**
+	Run image manipulation
+	\return Pointer to image buffer which has been set in the constructor.
+	*/
+	TextureBufferPtr process();
+
+private:
+	void _putpixel(long dx, long dy);
+};
+
+/**
 \brief Draw a number of pixels at random positions.
 \details Paint a specific number of pixels at random positions in a given colour.
 

@@ -78,3 +78,11 @@ See Procedural::SpringGenerator
 ![Figure 12. Plane](primitive_plane.png)
 
 See Procedural::PlaneGenerator
+
+## Prism
+
+![Figure 13a. Prism {3}](primitive_prism3.png)
+![Figure 13b. Prism {5}](primitive_prism5.png)
+![Figure 13c. Prism {6}](primitive_prism6.png)
+
+See Procedural::PrismGenerator

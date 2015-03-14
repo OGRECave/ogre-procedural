@@ -221,51 +221,57 @@ See Procedural::Normals
 
 See Procedural::OilPaint
 
+### Polygon
+
+<table border="0" width="100%"><tr><td>\image html texture_polygon3.png "Figure 16a. Polygon {3}"</td><td>\image html texture_polygon5.png "Figure 16b. Polygon {5}"</td><td>\image html texture_polygon5.png "Figure 16c. Polygon {6}"</td></tr></table>
+
+See Procedural::Polygon
+
 ### RandomPixels
 
-![Figure 26. RandomPixels](texture_randompixels.png)
+![Figure 27. RandomPixels](texture_randompixels.png)
 
 See Procedural::RandomPixels
 
 ### RectangleTexture
 
-![Figure 27. RectangleTexture](texture_rectangle.png)
+![Figure 28. RectangleTexture](texture_rectangle.png)
 
 See Procedural::RectangleTexture
 
 ### RotationZoom
 
-![Figure 28. RotationZoom](texture_rotationzoom.png)
+![Figure 29. RotationZoom](texture_rotationzoom.png)
 
 See Procedural::RotationZoom
 
 ### Segment
 
-![Figure 29. Segment](texture_segment.png)
+![Figure 30. Segment](texture_segment.png)
 
 See Procedural::Segment
 
 ### Sharpen
 
-<table border="0" width="100%"><tr><td>\image html texture_sharpen_1.png "Figure 30a. Sharpen: basic"</td><td>\image html texture_sharpen_2.png "Figure 30b. Sharpen: gaussian"</td></tr></table>
+<table border="0" width="100%"><tr><td>\image html texture_sharpen_1.png "Figure 31a. Sharpen: basic"</td><td>\image html texture_sharpen_2.png "Figure 31b. Sharpen: gaussian"</td></tr></table>
 
 See Procedural::Sharpen
 
 ### TextTexture
 
-![Figure 31. TextTexture](texture_text.png)
+![Figure 32. TextTexture](texture_text.png)
 
 See Procedural::TextTexture
 
 ### Threshold
 
-![Figure 32. Threshold](texture_threshold.png)
+![Figure 33. Threshold](texture_threshold.png)
 
 See Procedural::Threshold
 
 ### Vortex
 
-![Figure 33. Vortex](texture_vortex.png)
+![Figure 34. Vortex](texture_vortex.png)
 
 See Procedural::Vortex
 
