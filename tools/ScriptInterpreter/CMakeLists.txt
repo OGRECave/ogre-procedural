@@ -14,7 +14,7 @@ set( SRCS
 		src/ScriptInterpreter.cpp
 	)
 set( SRCS2
-		"${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
+		"${OgreProcedural_BINARY_DIR}/src/procedural_wrap.cxx"
 	)
 	
 
@@ -30,8 +30,17 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${LUA_INCLUDE_DIR}
 )
 
-add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/procedural_wrap.cxx"
-                     COMMAND ${SWIG_DIR}/swig ARGS -c++ -lua -v -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" -I"${CMAKE_CURRENT_SOURCE_DIR}/include" procedural.i
+set(SWIG_ARGS -c++ -lua -v -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" -I"${CMAKE_CURRENT_SOURCE_DIR}/include" -I"${OgreProcedural_BINARY_DIR}/include" -o "${OgreProcedural_BINARY_DIR}/src/procedural_wrap.cxx")
+if(MSVC)
+	set(SWIG_ARGS ${SWIG_ARGS} -Fmicrosoft)
+endif()
+if(FREETYPE_FOUND)
+	set(SWIG_ARGS ${SWIG_ARGS} -DPROCEDURAL_USE_FREETYPE)
+else()
+	set(SWIG_ARGS ${SWIG_ARGS} -DPROCEDURAL_NO_FREETYPE)
+endif()
+add_custom_command(OUTPUT "${OgreProcedural_BINARY_DIR}/src/procedural_wrap.cxx"
+                     COMMAND ${SWIG_DIR}/swig ARGS ${SWIG_ARGS} procedural.i
                      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 					 DEPENDS procedural.i ogre.i)
 

@@ -6,7 +6,7 @@ include(PrecompiledHeader)
 include(ProceduralConfigTargets)
 
 set( HDRS
-	include/ProceduralPlatform.h
+	${OgreProcedural_BINARY_DIR}/include/ProceduralPlatform.h
 	include/Procedural.h
 	include/ProceduralMeshGenerator.h
 	include/ProceduralBoxGenerator.h
@@ -101,11 +101,11 @@ add_definitions("-D${OgreProcedural_CONFIG_LIB_TYPE}")
 option(OgreProcedural_HARDENEDBUILDFLAGS "Hardened build flags" FALSE)
 
 if (OgreProcedural_HARDENEDBUILDFLAGS)
-if(MSVC) # Sort the odd stuff out
-    add_definitions("/WX /EHsc")
-else() # Clang/GCC/Mingw
-    add_definitions("-Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-but-set-parameter -pedantic -std=c++0x")
-endif()
+	if(MSVC) # Sort the odd stuff out
+		add_definitions("/WX /EHsc")
+	else() # Clang/GCC/Mingw
+		add_definitions("-Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-but-set-parameter -pedantic -std=c++0x")
+	endif()
 endif()
 
 procedural_add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})
@@ -126,7 +126,7 @@ if (NOT OgreProcedural_STATIC)
 	endif()
 endif()
 
-configure_file(${OgreProcedural_TEMPLATES_DIR}/ProceduralPlatform.h.in ${OgreProcedural_SOURCE_DIR}/library/include/ProceduralPlatform.h)
+configure_file(${OgreProcedural_TEMPLATES_DIR}/ProceduralPlatform.h.in ${OgreProcedural_BINARY_DIR}/include/ProceduralPlatform.h)
 
 target_link_libraries(OgreProcedural ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
@@ -134,13 +134,13 @@ procedural_install_target(OgreProcedural)
 		
 install(FILES ${HDRS} DESTINATION include/OgreProcedural)
 if(MSVC)
-if(OgreProcedural_INSTALL_PDB)
-if(OgreProcedural_STATIC)
-	install(FILES ${OgreProcedural_BINARY_DIR}/lib/debug/OgreProcedural_d.pdb DESTINATION lib/debug CONFIGURATIONS Debug)
-else()
-	install(FILES ${OgreProcedural_BINARY_DIR}/bin/debug/OgreProcedural_d.pdb DESTINATION bin/debug CONFIGURATIONS Debug)
-endif()
-endif()
+	if(OgreProcedural_INSTALL_PDB)
+		if(OgreProcedural_STATIC)
+			install(FILES ${OgreProcedural_BINARY_DIR}/lib/debug/OgreProcedural_d.pdb DESTINATION lib/debug CONFIGURATIONS Debug)
+		else()
+			install(FILES ${OgreProcedural_BINARY_DIR}/bin/debug/OgreProcedural_d.pdb DESTINATION bin/debug CONFIGURATIONS Debug)
+		endif()
+	endif()
 endif()
 
 # specify a precompiled header to use
