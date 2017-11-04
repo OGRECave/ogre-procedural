@@ -85,13 +85,7 @@ macro(copy_debug INPUT)
 	endif()
 endmacro()
 
-macro (prepare_demo_dirs)
-	find_package(OIS REQUIRED)
-
-if(NOT OIS_FOUND)
-	message(SEND_ERROR "Failed to find OIS.")
-endif()
-  
+macro (prepare_demo_dirs)  
 # if win32, copy the Ogre DLLs over
 if(WIN32)
 	copy_release("${OGRE_BINARY_REL}")	
@@ -145,10 +139,6 @@ if(UNIX AND NOT APPLE)
 
 	set(OgreProcedural_PLUGIN_DIR_REL ".")
 	set(OgreProcedural_PLUGIN_DIR_DBG ".")
-	
-	#comes from findOgre.cmake (don't know why it doesn't work there...)
-	get_filename_component(OGRE_PLUGIN_DIR_REL ${OGRE_RenderSystem_GL_LIBRARY_REL} PATH)
-	get_filename_component(OGRE_PLUGIN_DIR_DBG ${OGRE_RenderSystem_GL_LIBRARY_DBG} PATH)		
 
 endif(UNIX AND NOT APPLE)
 
