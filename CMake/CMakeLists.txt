@@ -16,8 +16,6 @@ set(INST_FILES
 
 if (OgreProcedural_INSTALL_SAMPLES_SOURCE)
 set(INST_FILES ${INST_FILES}
-  Templates/plugins.cfg
-  Templates/plugins_d.cfg
   Templates/resources.cfg
   Templates/resources_d.cfg
 )
