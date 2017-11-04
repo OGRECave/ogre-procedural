@@ -1,4 +1,4 @@
-How to build {#howto}
+How to build {#procedural-howto}
 ============
 
 These are the detailed steps in order to build the SDK :
@@ -24,11 +24,11 @@ These are the detailed steps in order to build the SDK :
 
 ## Basic usage sample
 
-~~~~~~~~~~~~~~
+```cpp
 #include "Procedural.h"
 // ...
 Procedural::BoxGenerator().setSizeX(2.0).realizeMesh("myBox");
-~~~~~~~~~~~~~~
+```
 
 That's it.
 
@@ -46,11 +46,11 @@ There are two ways of creating a Mesh from a Procedural::MeshGenerator :
 Procedural::MeshGenerator also have some utility functions to transform produced triangles. This is especially useful if you have several Procedural::MeshGenerator for one Procedural::TriangleBuffer.
 
 For example :
-~~~~~~~~~~~~~~
+```cpp
 // Two boxes in one batch
 Procedural::TriangleBuffer tb;
 BoxGenerator b;
 b.setPosition(2,0,0).addToTriangleBuffer(tb);
 b.setPosition(-2,0,0).addToTriangleBuffer(tb);
 tb.transformToMesh("twoBoxes");
-~~~~~~~~~~~~~~
+```

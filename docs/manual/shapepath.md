@@ -34,14 +34,14 @@ With Cubic Hermite Spline, you can choose the points and the tangents of the cur
 
 ![Figure 1. Cubic Hermite Spline](spline_cubichermite.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 CubicHermiteSpline2().addPoint(Vector2(0,0), AT_CATMULL)
                      .addPoint(Vector2(1,0), AT_CATMULL)
                      .addPoint(Vector2(1,1), Vector2(0,2), Vector2(0,-2))
                      .addPoint(Vector2(2,1), AT_CATMULL)
                      .addPoint(2,0).addPoint(3,0)
                      .addPoint(3,1).addPoint(4,1).setNumSeg(16).realizeShape()
-~~~~~~~~~~~~~~~~
+```
 
 You can either define the tangents of your choice, as demonstrated for the 3rd point, or auto-generate them as Catmull-Rom spline, or even straight lines.
 
@@ -54,12 +54,12 @@ Note that its the equivalent of _Ogre::SimpleSpline_, and there's even a convers
 
 ![Figure 2. Catmull-Rom Spline](spline_catmull.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 CatmullRomSpline2().addPoint(0,0).addPoint(1,0)
                    .addPoint(1,1).addPoint(2,1)
                    .addPoint(2,0).addPoint(3,0)
                    .addPoint(3,1).addPoint(4,1).realizeShape()
-~~~~~~~~~~~~~~~~
+```
 
 See Procedural::CatmullRomSpline2 for a shape and Procedural::CatmullRomSpline3 for a path.
 
@@ -110,9 +110,9 @@ There are 3 different addressing modes :
 * AM_RELATIVE_LINEIC : the key represents a relative distance inside the [0;1] segment, 0 being the beginning and 1 the end of the curve.
 * AM_POINT : the key represents the index of a point in the main curve.
 
-~~~~~~~~~~~~~~~~
+```cpp
 Track t = Track(Track::AM_RELATIVE_LINEIC).addKeyFrame(0,0).addKeyFrame(1.0,-1.0);
-~~~~~~~~~~~~~~~~
+```
 
 ## Shape specifics
 
@@ -124,47 +124,47 @@ As an exemple, let's say we have this shape:
 
 ![Figure 6. Random shape for geometry transformation](shape_geometricsetup.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 Shape s = Shape().addPoint(0.0f, 0.0f).addPoint(-0.5f, -1.0f).addPoint(-0.75f, 1.0f).addPoint(0.0f, 0.5f);
-~~~~~~~~~~~~~~~~
+```
 
 - Translation
 
 ![Figure 7. Translation](shape_geometrictranslate.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 s.translate(1, 2);
-~~~~~~~~~~~~~~~~
+```
 
 - Scale
 
 ![Figure 8. Scale](shape_geometricscale.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 s.scale(2.0f, 2.0f);
-~~~~~~~~~~~~~~~~
+```
 
 - Rotation
 
 ![Figure 9. Rotation](shape_geometricrotate.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 s.rotate(Ogre::Degree(45));
-~~~~~~~~~~~~~~~~
+```
 
 - Mirror
 
 ![Figure 10a. Mirror at a point](shape_geometricmirror_point.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 s.mirror(0.5f, 0.5f);
-~~~~~~~~~~~~~~~~
+```
 
 ![Figure 10b. Mirror at y axis](shape_geometricmirror_yaxis.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 s.mirror(Shape::MIRROR_Y_AXIS);
-~~~~~~~~~~~~~~~~
+```
 
 ### 2D CSG
 
@@ -175,11 +175,11 @@ As an exemple, let's say we have these 2 shapes :
 
 ![Figure 11. Random shape for geometry transformation](shape_booleansetup.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 Shape s1 = RectangleShape().realizeShape();
 Shape s2 = s1;
 s2.translate(.5f,.5f);
-~~~~~~~~~~~~~~~~
+```
 
 Supported boolean operations are :
 
@@ -187,25 +187,25 @@ Supported boolean operations are :
 
 ![Figure 12. Union](shape_booleanunion.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 s1.booleanUnion(s2)
-~~~~~~~~~~~~~~~~
+```
 
 * Intersection : the result contains everything that is inside A and B
 
 ![Figure 13. Intersection](shape_booleanintersection.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 s1.booleanIntersection(s2)
-~~~~~~~~~~~~~~~~
+```
 
 * Difference : the result contains everything that is in A but not in B
 
 ![Figure 14. Difference](shape_booleandifference.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 s1.booleanDifference(s2)
-~~~~~~~~~~~~~~~~
+```
 
 ### Thicken
 
@@ -214,17 +214,17 @@ A "thin" shape can be made "thick" by using the thicken operation.
 #### before 
 ![Figure 15a. before thicken](shape_thick1.png) 
 
-~~~~~~~~~~~~~~~~
+```cpp
 Shape s;
 s.addPoint(-1,-1).addPoint(0.5,0).addPoint(-0.5,0).addPoint(1,1)
-~~~~~~~~~~~~~~~~
+```
 
 #### after 
 ![Figure 15b. after thicken](shape_thick2.png)
 
-~~~~~~~~~~~~~~~~
+```cpp
 s.thicken(.2f)
-~~~~~~~~~~~~~~~~
+```
 
 ## Triangulation
 
@@ -291,7 +291,7 @@ See Procedural::HelixPath
 
 It is really easy to import SVG files and extrude their shapes:
 
-~~~~~~~~~~~~~~~~
+```cpp
 Path p;
 MultiShape out;
 SvgLoader svg;
@@ -302,12 +302,8 @@ p.addPoint(0, 50, 0);
 svg.parseSvgFile(out, "test.svg", "Essential", 16);
 // Extrude all shapes of file
 Extruder().setMultiShapeToExtrude(&out).setExtrusionPath(&p).setScale(.07).realizeMesh("svg");
-~~~~~~~~~~~~~~~~
+```
 
 ### Example
 
-The Sample_SVG project demonstrates how to load various shapes from a SVG file and extrude them.
-
-Here is the code to build it :
-
-\include SVG.cpp
+The `Sample_SVG` project demonstrates how to load various shapes from a SVG file and extrude them.

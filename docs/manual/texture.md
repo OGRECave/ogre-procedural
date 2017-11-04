@@ -277,12 +277,8 @@ See Procedural::Vortex
 
 ## Example
 
-The Sample_Material project demonstrates how to use various texture generators and modifiers to build a texture, with it's associated normal map.
+The `Sample_Material` project demonstrates how to use various texture generators and modifiers to build a texture, with it's associated normal map.
 
 Here is a diagram of how the final texture is obtained:
 
 \dotfile texture_01.gv
-
-And here is the code to build it :
-
-\include Material.cpp

@@ -41,8 +41,4 @@ Lathe can also be restricted to a given angle range.
 
 ## Example
 
-The Sample_Extrusion project demonstrates how to extrude various shapes.
-
-Here is the code to build it :
-
-\include Extrusion.cpp
+The `Sample_Extrusion` project demonstrates how to extrude various shapes.
