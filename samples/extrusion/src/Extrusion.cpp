@@ -112,16 +112,14 @@ void Sample_Extrusion::createCamera(void)
 {
 	BaseApplication::createCamera();
 	mCamera->setPosition(25,1,-2);
-	mCamera->lookAt(0,1,0);
+	mCamera->lookAt(Vector3(0,1,0), Node::TS_WORLD);
+    mCameraMan->setStyle(OgreBites::CS_FREELOOK);
 }
 //-------------------------------------------------------------------------------------
 bool Sample_Extrusion::frameStarted(const FrameEvent& evt)
 {
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
-	movingLight->setPosition(mCamera->getPosition());
-#else
+    BaseApplication::frameStarted(evt);
 	movingLight->getParentSceneNode()->setPosition(mCamera->getPosition());
-#endif
 	return true;
 }
 

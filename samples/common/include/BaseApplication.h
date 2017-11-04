@@ -17,40 +17,36 @@ This source file is part of the
 #ifndef __BaseApplication_h_
 #define __BaseApplication_h_
 
-#include <OGRE/OgreCamera.h>
-#include <OGRE/OgreEntity.h>
-#include <OGRE/OgreLogManager.h>
-#include <OGRE/OgreRoot.h>
-#include <OGRE/OgreViewport.h>
-#include <OGRE/OgreSceneManager.h>
-#include <OGRE/OgreRenderWindow.h>
-#include <OGRE/OgreConfigFile.h>
-#include <OGRE/OgreWindowEventUtilities.h>
-#if OGRE_VERSION >= ((1 << 16) | (9 << 8) | 0)
-#include <OGRE/Overlay/OgreOverlay.h>
-#include <OGRE/Overlay/OgreOverlaySystem.h>
-#endif
+#include <OgreCamera.h>
+#include <OgreEntity.h>
+#include <OgreLogManager.h>
+#include <OgreRoot.h>
+#include <OgreViewport.h>
+#include <OgreSceneManager.h>
+#include <OgreRenderWindow.h>
+#include <OgreConfigFile.h>
+#include <OgreWindowEventUtilities.h>
+#include <OgreOverlay.h>
+#include <OgreOverlaySystem.h>
 
-#include <OIS/OISEvents.h>
-#include <OIS/OISInputManager.h>
-#include <OIS/OISKeyboard.h>
-#include <OIS/OISMouse.h>
+#include <OgreTrays.h>
+#include <OgreCameraMan.h>
+#include <OgreVector3.h>
 
-#include <SdkTrays.h>
-#include <SdkCameraMan.h>
-#include <OGRE/OgreVector3.h>
+#include <OgreApplicationContext.h>
+#include <OgreAdvancedRenderControls.h>
 
-class BaseApplication : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener, OgreBites::SdkTrayListener
+class BaseApplication : public OgreBites::ApplicationContext, public OgreBites::InputListener, OgreBites::TrayListener
 {
 public:
 	BaseApplication(void);
-	virtual ~BaseApplication(void);
+
+	virtual void shutdown(void);
 
 	virtual void go(void);
 
 protected:
-	virtual bool setup();
-	virtual bool configure(void);
+	virtual void setup();
 	virtual void chooseSceneManager(void);
 	virtual void createCamera(void);
 	virtual void createFrameListener(void);
@@ -61,59 +57,26 @@ protected:
 #else
 	virtual void createCompositor(void);
 #endif
-	virtual void setupResources(void);
-	virtual void loadResources(void);
 	virtual void createLogManager(void);
 
-	// Ogre::FrameListener
-	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
-
 	// OIS::KeyListener
-	virtual bool keyPressed( const OIS::KeyEvent& arg );
-	virtual bool keyReleased( const OIS::KeyEvent& arg );
-	// OIS::MouseListener
-	virtual bool mouseMoved( const OIS::MouseEvent& arg );
-	virtual bool mousePressed( const OIS::MouseEvent& arg, OIS::MouseButtonID id );
-	virtual bool mouseReleased( const OIS::MouseEvent& arg, OIS::MouseButtonID id );
-
-	//Adjust mouse clipping area
-	virtual void windowResized(Ogre::RenderWindow* rw);
-	//Unattach OIS before window shutdown (very important under Linux)
-	virtual void windowClosed(Ogre::RenderWindow* rw);
-
-	virtual void windowFocusChange(Ogre::RenderWindow* rw)
-	{
-		std::cout<<"focus change"<<std::endl;
-	}
+	virtual bool keyPressed( const OgreBites::KeyboardEvent& arg );
 
 	void putMeshMat(const std::string& meshName, const std::string& matName, const Ogre::Vector3& position = Ogre::Vector3::ZERO, bool castShadows=true);
 	void putMesh(const std::string& meshName, const Ogre::Vector3& position = Ogre::Vector3::ZERO);
 	void putMesh2(const std::string& meshName, const Ogre::Vector3& position = Ogre::Vector3::ZERO);
 	void putMesh3(const std::string& meshName, const Ogre::Vector3& position = Ogre::Vector3::ZERO);
 
-	Ogre::Root* mRoot;
-	Ogre::Camera* mCamera;
+
+	Ogre::Camera* mCam;
+	Ogre::SceneNode* mCamera;
 	Ogre::Light* movingLight;
 	Ogre::SceneManager* mSceneMgr;
-	Ogre::RenderWindow* mWindow;
-	Ogre::String mResourcesCfg;
-	Ogre::String mPluginsCfg;
 
 	// OgreBites
-#if OGRE_VERSION >= ((1 << 16) | (9 << 8) | 0)
-	Ogre::OverlaySystem* mOverlaySystem;       // Overlay system
-#endif
-	OgreBites::SdkTrayManager* mTrayMgr;
-	OgreBites::SdkCameraMan* mCameraMan;       // basic camera controller
-	OgreBites::ParamsPanel* mDetailsPanel;     // sample details panel
-	bool mCursorWasVisible;                    // was cursor visible before dialog appeared
-	bool mShutDown;
-
-	//OIS Input devices
-	bool mNonExclusiveMouse;
-	OIS::InputManager* mInputManager;
-	OIS::Mouse*    mMouse;
-	OIS::Keyboard* mKeyboard;
+	OgreBites::TrayManager* mTrayMgr;
+	OgreBites::CameraMan* mCameraMan;       // basic camera controller
+	OgreBites::AdvancedRenderControls* mAdvancedControls;     // sample details panel
 };
 
 #endif // #ifndef __BaseApplication_h_

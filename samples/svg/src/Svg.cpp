@@ -52,11 +52,8 @@ void Sample_Svg::createCamera(void)
 //-------------------------------------------------------------------------------------
 bool Sample_Svg::frameStarted(const FrameEvent& evt)
 {
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
-	movingLight->setPosition(mCamera->getPosition());
-#else
+    BaseApplication::frameStarted(evt);
 	movingLight->getParentSceneNode()->setPosition(mCamera->getPosition());
-#endif
 	return true;
 }
 //-------------------------------------------------------------------------------------

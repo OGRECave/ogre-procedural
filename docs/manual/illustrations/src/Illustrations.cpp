@@ -46,76 +46,30 @@ THE SOFTWARE.
 using namespace Procedural;
 
 //-------------------------------------------------------------------------------------
-bool Illustrations::init()
+void Illustrations::setup()
 {
+    OgreBites::ApplicationContext::setup();
 
-	String resourcesCfg, pluginsCfg;
-#ifdef _DEBUG
-	pluginsCfg = "plugins_d.cfg";
-#else
-	pluginsCfg = "plugins.cfg";
-#endif
-	resourcesCfg = "resources.cfg";
-
-	mRoot = new Ogre::Root(pluginsCfg);
-
-	ConfigFile cf;
-	cf.load(resourcesCfg);
-
-	ConfigFile::SectionIterator seci = cf.getSectionIterator();
-
-	String secName, typeName, archName;
-	while (seci.hasMoreElements())
-	{
-		secName = seci.peekNextKey();
-		ConfigFile::SettingsMultiMap* settings = seci.getNext();
-		ConfigFile::SettingsMultiMap::iterator i;
-		for (i = settings->begin(); i != settings->end(); ++i)
-		{
-			typeName = i->first;
-			archName = i->second;
-			ResourceGroupManager::getSingleton().addResourceLocation(
-			    archName, typeName, secName);
-		}
-	}
-
-	const RenderSystemList& rsList = mRoot->getAvailableRenderers();
-	if (rsList.size() == 0)
-	{
-		Utils::log("Impossible to execute Illustrations : no renderer available!");
-		return false;
-	}
-	RenderSystem* rs = *rsList.begin();
-
-	ConfigOptionMap optionMap = rs->getConfigOptions();
-	rs->setConfigOption("FSAA", optionMap["FSAA"].possibleValues.back());
-	rs->setConfigOption("Full Screen", "No");
-	rs->setConfigOption("Video Mode", optionMap["Video Mode"].possibleValues.back());
-
-	mRoot->setRenderSystem(rs);
-	mRoot->initialise(false);
-
-	//Create dummy invisible window
-	Ogre::NameValuePairList windowParams;
-	windowParams["hidden"] = "true";
-	mWindow=mRoot->createRenderWindow("dummyWindow", 1,1,false, &windowParams);
 #if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
-	mWindow->setAutoUpdated(false);
+	getRenderWindow()->setAutoUpdated(false);
 #endif
 
-	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 #if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
-	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);
+	mSceneMgr = mRoot->createSceneManager("DefaultSceneManager");
 #else
 	const size_t numThreads = std::max<size_t>(1, Ogre::PlatformInformation::getNumLogicalCores() / 2);
 	Ogre::InstancingTheadedCullingMethod threadedCullingMethod = Ogre::INSTANCING_CULLING_SINGLETHREAD;
 	if(numThreads > 1) Ogre::InstancingTheadedCullingMethod threadedCullingMethod = Ogre::INSTANCING_CULLING_THREADED;
 	mSceneMgr = Ogre::Root::getSingleton().createSceneManager(Ogre::ST_GENERIC, numThreads, threadedCullingMethod);
 #endif
-	mCamera = mSceneMgr->createCamera("SimpleCamera");
-	mCamera->setAspectRatio(1.);
+	mCam = mSceneMgr->createCamera("SimpleCamera");
+	mCam->setAspectRatio(1.);
+
+	mCamera = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	mCamera->attachObject(mCam);
+
 	cameraPerspective();
-	mCamera->setNearClipDistance(1.);
+	mCam->setNearClipDistance(1.);
 	mSceneMgr->setAmbientLight(ColourValue(0.5f,0.3f,0.1f));
 	Ogre::Light* light = mSceneMgr->createLight();
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
@@ -131,7 +85,7 @@ bool Illustrations::init()
 	              Ogre::TEX_TYPE_2D, 256, 256, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET, 0, 0, 4);
 	mRenderTexture = mRttTexture->getBuffer()->getRenderTarget();
 #if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
-	Ogre::Viewport* vp = mRenderTexture->addViewport(mCamera);
+	Ogre::Viewport* vp = mRenderTexture->addViewport(mCam);
 	vp->setClearEveryFrame(true);
 	vp->setBackgroundColour(Ogre::ColourValue::White);
 	vp->setOverlaysEnabled(false);
@@ -141,13 +95,12 @@ bool Illustrations::init()
 	pCompositorManager->createBasicWorkspaceDef(workspaceName, Ogre::ColourValue::White);
 	pCompositorManager->addWorkspace(mSceneMgr, mWindow, mCamera, workspaceName, true);
 #endif
-	return true;
 }
 
 void Illustrations::next(std::string name, Real size)
 {
 	// Optimise camera placing
-	Real distance = 2*size/Math::Tan(mCamera->getFOVy());
+	Real distance = 2*size/Math::Tan(mCam->getFOVy());
 	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
 	// Write scene to png image
@@ -501,7 +454,7 @@ void Illustrations::go()
 	//
 #ifdef PROCEDURAL_USE_FREETYPE
 	mCamera->setPosition(1.8f,0.8f,5);
-	mCamera->lookAt(1.8f,0.8f,0);
+	mCamera->lookAt(Vector3(1.8f,0.8f,0), Node::TS_WORLD);
 
 	// Extract and save font file from Ogre resources
 	Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource("cuckoo.ttf", "Essential"); // Font from SdkTrays.zip
@@ -1001,8 +954,7 @@ extern "C" {
 		// Create application object
 		Illustrations app;
 
-		if (!app.init())
-			return 1;
+		app.initApp();
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		app.mOutputPath = strCmdLine;

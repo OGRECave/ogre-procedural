@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "Ogre.h"
 #include "Procedural.h"
+#include <OgreApplicationContext.h>
 
 using namespace Ogre;
 
@@ -142,12 +143,11 @@ public:
 	}
 };
 
-class Illustrations
+class Illustrations : public OgreBites::ApplicationContext
 {
-	Ogre::Root* mRoot;
-	RenderWindow* mWindow;
 	SceneManager* mSceneMgr;
-	Camera* mCamera;
+	Camera* mCam;
+	SceneNode* mCamera;
 
 	std::vector<Entity*> mEntities;
 	std::vector<SceneNode*> mSceneNodes;
@@ -158,7 +158,7 @@ class Illustrations
 public:
 	String mOutputPath;
 
-	bool init();
+	void setup();
 	void go();
 	void next(std::string name, Real size);
 	void putMesh(MeshPtr mesh, int materialIndex=0);
@@ -167,19 +167,19 @@ public:
 	void cameraPerspective()
 	{
 		mCamera->setPosition(3,5,-5);
-		mCamera->lookAt(0,0,0);
+		mCamera->lookAt(Vector3::ZERO, Node::TS_WORLD);
 	}
 
 	void cameraBack()
 	{
 		mCamera->setPosition(0,0,5);
-		mCamera->lookAt(0,0,0);
+        mCamera->lookAt(Vector3::ZERO, Node::TS_WORLD);
 	}
 
 	void cameraFront()
 	{
 		mCamera->setPosition(0,0,-5);
-		mCamera->lookAt(0,0,0);
+        mCamera->lookAt(Vector3::ZERO, Node::TS_WORLD);
 	}
 
 };
