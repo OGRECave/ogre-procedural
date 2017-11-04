@@ -185,12 +185,7 @@ class ScriptInterpreter : public BaseApplication
 	}
 
 protected:
-	bool keyReleased( const OIS::KeyEvent& arg );
-
-	bool keyPressed(const OIS::KeyEvent& arg)
-	{
-		return BaseApplication::keyPressed(arg);
-	}
+	// bool keyReleased( const OIS::KeyEvent& arg );
 
 	virtual void createScene(void);
 
@@ -305,7 +300,6 @@ public:
 		mCurrentScriptReloadTime = 0;
 		mPerformanceMode = false;
 		mCurrentPerformanceIndex = 0;
-		mNonExclusiveMouse = true;
 		mCurrentDotFile = 0;
 	}
 

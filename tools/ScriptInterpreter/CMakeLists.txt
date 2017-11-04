@@ -1,8 +1,5 @@
 find_package(Lua REQUIRED)
-
-if (NOT DEFINED SWIG_DIR)
-	message(SEND_ERROR "Please define a variable SWIG_DIR, pointing to SWIG's root directory")
-endif()
+find_package(SWIG REQUIRED)
 
 set( HDRS
 		../../samples/common/include/BaseApplication.h
@@ -14,7 +11,7 @@ set( SRCS
 		src/ScriptInterpreter.cpp
 	)
 set( SRCS2
-		"${OgreProcedural_BINARY_DIR}/src/procedural_wrap.cxx"
+		"${OgreProcedural_BINARY_DIR}/procedural_wrap.cxx"
 	)
 	
 
@@ -23,14 +20,15 @@ set( EXTRA
 	ogre.i
 	)
 
-include_directories( ${OIS_INCLUDE_DIRS}
+include_directories(
 	${OGRE_INCLUDE_DIRS}
 	../../samples/common/include
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${LUA_INCLUDE_DIR}
 )
 
-set(SWIG_ARGS -c++ -lua -v -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" -I"${CMAKE_CURRENT_SOURCE_DIR}/include" -I"${OgreProcedural_BINARY_DIR}/include" -o "${OgreProcedural_BINARY_DIR}/src/procedural_wrap.cxx")
+list(GET OGRE_INCLUDE_DIRS 0 OGRE_INCLUDE_DIR)
+set(SWIG_ARGS -c++ -lua -v -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" -I"${CMAKE_CURRENT_SOURCE_DIR}/include" -I"${OgreProcedural_BINARY_DIR}/include" -o "${OgreProcedural_BINARY_DIR}/procedural_wrap.cxx")
 if(MSVC)
 	set(SWIG_ARGS ${SWIG_ARGS} -Fmicrosoft)
 endif()
@@ -39,8 +37,8 @@ if(FREETYPE_FOUND)
 else()
 	set(SWIG_ARGS ${SWIG_ARGS} -DPROCEDURAL_NO_FREETYPE)
 endif()
-add_custom_command(OUTPUT "${OgreProcedural_BINARY_DIR}/src/procedural_wrap.cxx"
-                     COMMAND ${SWIG_DIR}/swig ARGS ${SWIG_ARGS} procedural.i
+add_custom_command(OUTPUT "${OgreProcedural_BINARY_DIR}/procedural_wrap.cxx"
+                     COMMAND ${SWIG_EXECUTABLE} ARGS ${SWIG_ARGS} procedural.i
                      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 					 DEPENDS procedural.i ogre.i)
 

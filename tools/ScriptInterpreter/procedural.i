@@ -2,7 +2,7 @@
  %include "std_map.i"
  %include "std_string.i"
  %include "std_vector.i"
- %include "Ogre.i"
+ %include "ogre.i"
  %{ 
  #include "Procedural.h"
  #include "ScriptInterpreter.h"
