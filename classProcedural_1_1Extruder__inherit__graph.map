@@ -1,0 +1,4 @@
+<map id="Procedural::Extruder" name="Procedural::Extruder">
+<area shape="rect" id="node1" title="Extrudes a 2D shape along a path to build an extruded mesh." alt="" coords="27,95,182,121"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1MeshGenerator.html" title=" " alt="" coords="5,5,204,47"/>
+</map>

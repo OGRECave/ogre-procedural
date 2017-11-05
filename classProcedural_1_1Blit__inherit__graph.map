@@ -1,0 +1,4 @@
+<map id="Procedural::Blit" name="Procedural::Blit">
+<area shape="rect" id="node1" title="copies a part of the input buffer towards the current buffer." alt="" coords="53,80,175,107"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1TextureProcessing.html" title="base class for material generation classes." alt="" coords="5,5,223,32"/>
+</map>

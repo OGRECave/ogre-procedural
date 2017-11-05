@@ -1,0 +1,4 @@
+<map id="Procedural::Jitter" name="Procedural::Jitter">
+<area shape="rect" id="node1" title="Exchange pixels at random positions." alt="" coords="49,80,179,107"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1TextureProcessing.html" title="base class for material generation classes." alt="" coords="5,5,223,32"/>
+</map>

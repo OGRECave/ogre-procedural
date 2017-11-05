@@ -1,0 +1,4 @@
+<map id="Procedural::Solid" name="Procedural::Solid">
+<area shape="rect" id="node1" title="Fills full image with given colour." alt="" coords="49,80,179,107"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1TextureProcessing.html" title="base class for material generation classes." alt="" coords="5,5,223,32"/>
+</map>

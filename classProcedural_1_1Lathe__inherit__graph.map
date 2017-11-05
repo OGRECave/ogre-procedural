@@ -1,0 +1,4 @@
+<map id="Procedural::Lathe" name="Procedural::Lathe">
+<area shape="rect" id="node1" title="Builds a mesh by rotating a shape 360 degrees around Y&#45;axis." alt="" coords="37,95,172,121"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1MeshGenerator.html" title=" " alt="" coords="5,5,204,47"/>
+</map>

@@ -1,0 +1,46 @@
+<map id="Procedural::TextureProcessing" name="Procedural::TextureProcessing">
+<area shape="rect" id="node1" title="base class for material generation classes." alt="" coords="5,1069,223,1096"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1Abnormals.html" title="Use alpha channel as an mask for an other image." alt="" coords="292,5,461,32"/>
+<area shape="rect" id="node3" href="$classProcedural_1_1Alpha.html" title="Colour extraction." alt="" coords="309,56,445,83"/>
+<area shape="rect" id="node4" href="$classProcedural_1_1AlphaMask.html" title="Use alpha channel as an mask for an other image." alt="" coords="291,107,462,133"/>
+<area shape="rect" id="node5" href="$classProcedural_1_1Blit.html" title="copies a part of the input buffer towards the current buffer." alt="" coords="316,157,437,184"/>
+<area shape="rect" id="node6" href="$classProcedural_1_1Blur.html" title="Reduce sharpness on input image." alt="" coords="314,208,439,235"/>
+<area shape="rect" id="node7" href="$classProcedural_1_1Cell.html" title="Create a texture consisting of cells aligned in a grid, or a chessboard." alt="" coords="315,259,439,285"/>
+<area shape="rect" id="node8" href="$classProcedural_1_1Channel.html" title="Extract one channel or create gray image." alt="" coords="301,309,453,336"/>
+<area shape="rect" id="node9" href="$classProcedural_1_1CircleTexture.html" title="Draw a circle." alt="" coords="285,360,469,387"/>
+<area shape="rect" id="node10" href="$classProcedural_1_1Cloud.html" title="Creates a cloud structured image." alt="" coords="309,411,445,437"/>
+<area shape="rect" id="node11" href="$classProcedural_1_1Colours.html" title="A colour filter." alt="" coords="303,461,451,488"/>
+<area shape="rect" id="node12" href="$classProcedural_1_1Combine.html" title="Combine inputs together." alt="" coords="298,512,455,539"/>
+<area shape="rect" id="node13" href="$classProcedural_1_1Convolution.html" title="Convolution filter." alt="" coords="288,563,465,589"/>
+<area shape="rect" id="node14" href="$classProcedural_1_1Crack.html" title="Create lines that can be randomly cracked or follow a normal map." alt="" coords="309,613,445,640"/>
+<area shape="rect" id="node15" href="$classProcedural_1_1Cycloid.html" title="Draw a cycloid." alt="" coords="303,664,450,691"/>
+<area shape="rect" id="node16" href="$classProcedural_1_1Dilate.html" title="Expands bright areas over darker areas." alt="" coords="307,715,446,741"/>
+<area shape="rect" id="node17" href="$classProcedural_1_1Distort.html" title="Apply normal (ie." alt="" coords="305,765,448,792"/>
+<area shape="rect" id="node18" href="$classProcedural_1_1EdgeDetection.html" title="Edge detection on input image." alt="" coords="279,816,474,843"/>
+<area shape="rect" id="node19" href="$classProcedural_1_1EllipseTexture.html" title="Draw an ellipse." alt="" coords="281,867,472,893"/>
+<area shape="rect" id="node20" href="$classProcedural_1_1Flip.html" title="Flip the image." alt="" coords="315,917,438,944"/>
+<area shape="rect" id="node21" href="$classProcedural_1_1Glow.html" title="Render a glow." alt="" coords="311,968,443,995"/>
+<area shape="rect" id="node22" href="$classProcedural_1_1Gradient.html" title="Fills full image with given colour gradients." alt="" coords="299,1019,454,1045"/>
+<area shape="rect" id="node23" href="$classProcedural_1_1Image.html" title="Load an image from a resource." alt="" coords="307,1069,447,1096"/>
+<area shape="rect" id="node24" href="$classProcedural_1_1Invert.html" title="Invert image." alt="" coords="308,1120,445,1147"/>
+<area shape="rect" id="node25" href="$classProcedural_1_1Jitter.html" title="Exchange pixels at random positions." alt="" coords="311,1171,442,1197"/>
+<area shape="rect" id="node26" href="$classProcedural_1_1Labyrinth.html" title="Creates a labyrinth structured image." alt="" coords="297,1221,457,1248"/>
+<area shape="rect" id="node27" href="$classProcedural_1_1Lerp.html" title="Linear interpolation." alt="" coords="313,1272,440,1299"/>
+<area shape="rect" id="node28" href="$classProcedural_1_1Lookup.html" title="Copy pixels from base input (x, y) to given coordinates from parameter image (red,..." alt="" coords="303,1323,450,1349"/>
+<area shape="rect" id="node29" href="$classProcedural_1_1Marble.html" title="Creates a marble structured image." alt="" coords="305,1373,449,1400"/>
+<area shape="rect" id="node30" href="$classProcedural_1_1Noise.html" title="Fills full image with noise in a given colour." alt="" coords="309,1424,445,1451"/>
+<area shape="rect" id="node31" href="$classProcedural_1_1Normals.html" title="Convert height map to normal map." alt="" coords="299,1475,454,1501"/>
+<area shape="rect" id="node32" href="$classProcedural_1_1OilPaint.html" title="Create an oil painted image." alt="" coords="301,1525,452,1552"/>
+<area shape="rect" id="node33" href="$classProcedural_1_1Polygon.html" title="Draw a polygon." alt="" coords="301,1576,452,1603"/>
+<area shape="rect" id="node34" href="$classProcedural_1_1RandomPixels.html" title="Draw a number of pixels at random positions." alt="" coords="281,1627,473,1653"/>
+<area shape="rect" id="node35" href="$classProcedural_1_1RectangleTexture.html" title="Draw a rectangle." alt="" coords="271,1677,483,1704"/>
+<area shape="rect" id="node36" href="$classProcedural_1_1RotationZoom.html" title="Rotate &amp; zoom image." alt="" coords="281,1728,473,1755"/>
+<area shape="rect" id="node37" href="$classProcedural_1_1Segment.html" title="Colours image segments based on threshold." alt="" coords="298,1779,455,1805"/>
+<area shape="rect" id="node38" href="$classProcedural_1_1Sharpen.html" title="Increase sharpness on input image." alt="" coords="301,1829,453,1856"/>
+<area shape="rect" id="node39" href="$classProcedural_1_1Solid.html" title="Fills full image with given colour." alt="" coords="311,1880,442,1907"/>
+<area shape="rect" id="node40" href="$classProcedural_1_1Textile.html" title="Creates a textile structured image." alt="" coords="305,1931,448,1957"/>
+<area shape="rect" id="node41" href="$classProcedural_1_1TextureLightBaker.html" title="Apply an illumination on a surface." alt="" coords="287,1982,466,2023"/>
+<area shape="rect" id="node42" href="$classProcedural_1_1Threshold.html" title="Simple threshold filter." alt="" coords="295,2048,458,2075"/>
+<area shape="rect" id="node43" href="$classProcedural_1_1Vortex.html" title="Twist some fragment of input image." alt="" coords="305,2099,448,2125"/>
+<area shape="rect" id="node44" href="$classProcedural_1_1Wood.html" title="Creates a wood slice image." alt="" coords="309,2149,445,2176"/>
+</map>

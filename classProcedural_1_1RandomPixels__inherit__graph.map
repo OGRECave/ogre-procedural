@@ -1,0 +1,4 @@
+<map id="Procedural::RandomPixels" name="Procedural::RandomPixels">
+<area shape="rect" id="node1" title="Draw a number of pixels at random positions." alt="" coords="18,80,210,107"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1TextureProcessing.html" title="base class for material generation classes." alt="" coords="5,5,223,32"/>
+</map>

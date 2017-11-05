@@ -1,0 +1,4 @@
+<map id="Procedural::EllipseTexture" name="Procedural::EllipseTexture">
+<area shape="rect" id="node1" title="Draw an ellipse." alt="" coords="19,80,209,107"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1TextureProcessing.html" title="base class for material generation classes." alt="" coords="5,5,223,32"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="Procedural::TextureLightBaker" name="Procedural::TextureLightBaker">
+<area shape="rect" id="node1" title="Apply an illumination on a surface." alt="" coords="25,80,203,121"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1TextureProcessing.html" title="base class for material generation classes." alt="" coords="5,5,223,32"/>
+</map>

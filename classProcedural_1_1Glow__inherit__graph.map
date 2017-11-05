@@ -1,0 +1,4 @@
+<map id="Procedural::Glow" name="Procedural::Glow">
+<area shape="rect" id="node1" title="Render a glow." alt="" coords="48,80,180,107"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1TextureProcessing.html" title="base class for material generation classes." alt="" coords="5,5,223,32"/>
+</map>

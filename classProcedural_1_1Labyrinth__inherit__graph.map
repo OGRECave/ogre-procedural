@@ -1,0 +1,4 @@
+<map id="Procedural::Labyrinth" name="Procedural::Labyrinth">
+<area shape="rect" id="node1" title="Creates a labyrinth structured image." alt="" coords="34,80,194,107"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1TextureProcessing.html" title="base class for material generation classes." alt="" coords="5,5,223,32"/>
+</map>

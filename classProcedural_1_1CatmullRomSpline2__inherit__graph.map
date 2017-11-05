@@ -1,0 +1,4 @@
+<map id="Procedural::CatmullRomSpline2" name="Procedural::CatmullRomSpline2">
+<area shape="rect" id="node1" title="Builds a shape from a Catmull&#45;Rom Spline." alt="" coords="5,95,233,121"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1BaseSpline2.html" title=" " alt="" coords="29,5,210,47"/>
+</map>

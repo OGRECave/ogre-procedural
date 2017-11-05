@@ -1,0 +1,4 @@
+<map id="Procedural::KochanekBartelsSpline2" name="Procedural::KochanekBartelsSpline2">
+<area shape="rect" id="node1" title="Builds a shape from a Kochanek Bartels spline." alt="" coords="6,95,214,136"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1BaseSpline2.html" title=" " alt="" coords="5,5,215,47"/>
+</map>

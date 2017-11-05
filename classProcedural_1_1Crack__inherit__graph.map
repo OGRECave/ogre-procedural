@@ -1,0 +1,4 @@
+<map id="Procedural::Crack" name="Procedural::Crack">
+<area shape="rect" id="node1" title="Create lines that can be randomly cracked or follow a normal map." alt="" coords="46,80,182,107"/>
+<area shape="rect" id="node2" href="$classProcedural_1_1TextureProcessing.html" title="base class for material generation classes." alt="" coords="5,5,223,32"/>
+</map>

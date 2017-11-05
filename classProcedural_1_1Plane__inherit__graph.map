@@ -1,0 +1,4 @@
+<map id="Procedural::Plane" name="Procedural::Plane">
+<area shape="rect" id="node1" title="Extends the Ogre::Plane class to be able to compute the intersection between 2 planes." alt="" coords="5,80,140,107"/>
+<area shape="rect" id="node2" href="/usr/local/share/doc/OGRE/api/Ogre.tag$class_ogre_1_1_plane.html" title=" " alt="" coords="24,5,121,32"/>
+</map>
