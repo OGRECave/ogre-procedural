@@ -48,6 +48,7 @@ void Sample_Svg::createScene(void)
 void Sample_Svg::createCamera(void)
 {
 	BaseApplication::createCamera();
+	mCameraMan->setYawPitchDist(Degree(90), Degree(45), 2000);
 }
 //-------------------------------------------------------------------------------------
 bool Sample_Svg::frameStarted(const FrameEvent& evt)
