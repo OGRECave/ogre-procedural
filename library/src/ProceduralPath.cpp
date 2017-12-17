@@ -78,7 +78,7 @@ Ogre::v1::MeshPtr Path::realizeMesh(const std::string& name) const
 	Ogre::SceneManager* smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 	Ogre::IdType id = Id::generateNewId<v1::ManualObject>();
 v1::ManualObject* manual = OGRE_NEW v1::ManualObject(id, &mObjectMemoryMgr, smgr);
-	manual->begin("BaseWhiteNoLighting", Ogre::OT_LINE_STRIP);
+	manual->begin("Rocks", Ogre::OT_LINE_STRIP);
 
 	for (std::vector<Ogre::Vector3>::const_iterator itPos = mPoints.begin(); itPos != mPoints.end(); itPos++)
 		manual->position(*itPos);

@@ -28,10 +28,43 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "Primitives.h"
 #include "Procedural.h"
+#include "GraphicsSystem.h"
+#include "CameraController.h"
 
+#include "OgreRenderWindow.h"
+
+#include "OgreRoot.h"
+#include "Compositor/OgreCompositorManager2.h"
+
+//Declares WinMain / main
+#include "MainEntryPointHelper.h"
+#include "System/MainEntryPoints.h"
 //-------------------------------------------------------------------------------------
-void Sample_Primitives::createScene(void)
+void Sample_Primitives::createScene01(void)
 {
+	Ogre::Camera *camera = mGraphicsSystem->getCamera();
+	Ogre::SceneManager *smgr = mGraphicsSystem->getSceneManager();
+
+	camera->setPosition(0,50,-50);
+	camera->lookAt(Vector3(0,0,0));
+
+	Ogre::Light* l = smgr->createLight();
+	smgr->getRootSceneNode()->createChildSceneNode()->attachObject(l);
+
+	l->setType(Light::LT_DIRECTIONAL);
+	l->setDirection(Vector3(0,-1,1).normalisedCopy());
+	l->setDiffuseColour(ColourValue(.7f,.5f,.5f));
+	l->setSpecularColour(ColourValue::White);
+
+	movingLight = smgr->createLight();
+	smgr->getRootSceneNode()->createChildSceneNode()->attachObject(movingLight);
+	movingLight->getParentSceneNode()->setPosition(camera->getPosition());
+
+	movingLight->setType(Light::LT_POINT);
+	movingLight->setDiffuseColour(ColourValue(.5f,.5f,.7f));
+	movingLight->setSpecularColour(ColourValue::White);
+	movingLight->setCastShadows(false);
+
 	// Generates every type of primitive
 	Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 	putMesh2("planeMesh");
@@ -55,58 +88,121 @@ void Sample_Primitives::createScene(void)
 	putMesh("icoSphereMesh", Vector3(10,10,10));
 	Procedural::RoundedBoxGenerator().setSizeX(1.f).setSizeY(5.f).setSizeZ(5.f).setChamferSize(1.f).realizeMesh("roundedBoxMesh");
 	putMesh("roundedBoxMesh", Vector3(20,10,10));
-	Procedural::SpringGenerator().setNumSegCircle(32).setNumSegPath(30).realizeMesh("springMesh");
-	putMesh("springMesh", Vector3(20,10,0));
+ Procedural::SpringGenerator().setNumSegCircle(32).setNumSegPath(30).realizeMesh("springMesh");
+ putMesh("springMesh", Vector3(20,10,0));
+  mCameraController = new Demo::CameraController( mGraphicsSystem, false );
+ TutorialGameState::createScene01();
 }
 //-------------------------------------------------------------------------------------
 void Sample_Primitives::createCamera(void)
 {
-	BaseApplication::createCamera();
+	// BaseApplication::createCamera();
 }
 //-------------------------------------------------------------------------------------
 bool Sample_Primitives::frameStarted(const FrameEvent& evt)
 {
-    BaseApplication::frameStarted(evt);
-	movingLight->getParentSceneNode()->setPosition(mCamera->getPosition());
+ //    BaseApplication::frameStarted(evt);
+	// movingLight->getParentSceneNode()->setPosition(mCamera->getPosition());
 
 	return true;
 }
-//-------------------------------------------------------------------------------------
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
+INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
 #else
-	int main(int argc, char* argv[])
+int mainApp( int argc, const char *argv[] )
 #endif
-	{
-		// Create application object
-		Sample_Primitives app;
-
-		try
-		{
-			app.go();
-		}
-		catch ( Ogre::Exception& e )
-		{
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-			MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
-#else
-			std::cerr << "An exception has occured: " <<
-			          e.getFullDescription().c_str() << std::endl;
-#endif
-		}
-
-		return 0;
-	}
-
-#ifdef __cplusplus
+{
+    return Demo::MainEntryPoints::mainAppSingleThreaded( DEMO_MAIN_ENTRY_PARAMS );
 }
-#endif
+using namespace Demo;
+// namespace Demo
+// {
+    class PrimitivesGraphicsSystem : public GraphicsSystem
+    {
+        virtual Ogre::CompositorWorkspace* setupCompositor()
+        {
+            Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
+                                                    "ShadowMapDebuggingWorkspace", true );
+        }
+
+    public:
+        PrimitivesGraphicsSystem( GameState *gameState ) :
+            GraphicsSystem( gameState )
+        {
+        }
+    };
+
+    void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
+                                         GraphicsSystem **outGraphicsSystem,
+                                         GameState **outLogicGameState,
+                                         LogicSystem **outLogicSystem )
+    {
+        Sample_Primitives *gfxGameState = new Sample_Primitives(
+        "Shows how v1 objects (e.g. Entity) can still work in Ogre 2.1; although\n"
+        "sometimes at a reduced performance. Differences between v2 & v1 objects\n"
+        "vary a lot depending on scene conditions. Consult the manual for detailed\n"
+         "information about the V1_FAST mode and the V1_LEGACY mode.\n" );
+
+        GraphicsSystem *graphicsSystem = new PrimitivesGraphicsSystem( gfxGameState );
+
+        gfxGameState->_notifyGraphicsSystem( graphicsSystem );
+
+        *outGraphicsGameState = gfxGameState;
+        *outGraphicsSystem = graphicsSystem;
+    }
+
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
+                                          GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState,
+                                          LogicSystem *logicSystem )
+    {
+        delete graphicsSystem;
+        delete graphicsGameState;
+    }
+
+    const char* MainEntryPoints::getWindowTitle(void)
+    {
+        return "Using V1 interfaces directly";
+    }
+// }
+//-------------------------------------------------------------------------------------
+// #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+// #define WIN32_LEAN_AND_MEAN
+// #include "windows.h"
+// #endif
+
+// #ifdef __cplusplus
+// extern "C" {
+// #endif
+
+// #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+// 	INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
+// #else
+// 	int main(int argc, char* argv[])
+// #endif
+// 	{
+// 		// Create application object
+// 		Sample_Primitives app;
+
+// 		try
+// 		{
+// 			app.go();
+// 		}
+// 		catch ( Ogre::Exception& e )
+// 		{
+// #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+// 			MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
+// #else
+// 			std::cerr << "An exception has occured: " <<
+// 			          e.getFullDescription().c_str() << std::endl;
+// #endif
+// 		}
+
+// 		return 0;
+// 	}
+
+// #ifdef __cplusplus
+// }
+// #endif

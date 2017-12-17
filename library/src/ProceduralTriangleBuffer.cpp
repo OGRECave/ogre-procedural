@@ -41,7 +41,7 @@ Ogre::v1::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
 	Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
   IdType id = Id::generateNewId<v1::ManualObject>();
   v1::ManualObject* manual = OGRE_NEW v1::ManualObject(id, &mObjectMemoryMgr, sceneMgr);
-  manual->begin("BaseWhiteNoLighting", OT_TRIANGLE_LIST);
+  manual->begin("Rocks", OT_TRIANGLE_LIST);
 
 #if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
 	Ogre::Vector3 aabb_min = Ogre::Vector3::ZERO;

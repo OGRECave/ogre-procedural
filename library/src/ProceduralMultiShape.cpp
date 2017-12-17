@@ -49,7 +49,7 @@ v1::MeshPtr MultiShape::realizeMesh(const std::string& name)
 
 	for (std::vector<Shape>::iterator it = mShapes.begin(); it != mShapes.end(); ++it)
 	{
-		manual->begin("BaseWhiteNoLighting", Ogre::OT_LINE_STRIP);
+		manual->begin("Rocks", Ogre::OT_LINE_STRIP);
 		it->_appendToManualObject(manual);
 		manual->end();
 	}

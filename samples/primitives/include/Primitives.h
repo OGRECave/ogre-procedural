@@ -33,9 +33,11 @@ using namespace Ogre;
 
 class Sample_Primitives : public BaseApplication
 {
+public:
+  Sample_Primitives(const Ogre::String &helpDescription = "") : BaseApplication(helpDescription) {}
 	virtual bool frameStarted(const FrameEvent& evt);
 protected:
-	virtual void createScene(void);
+	virtual void createScene01(void);
 	virtual void createCamera(void);
 };
 

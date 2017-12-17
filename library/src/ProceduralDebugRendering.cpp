@@ -42,7 +42,7 @@ v1::ManualObject* ShowNormalsGenerator::buildManualObject() const
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::ShowNormalsGenerator::buildManualObject()");
   IdType id = Id::generateNewId<v1::ManualObject>();
   v1::ManualObject* manual = OGRE_NEW v1::ManualObject(id, &mObjectMemoryMgr, sceneMgr);
-	manual->begin("BaseWhiteNoLighting", OT_LINE_LIST);
+	manual->begin("Rocks", OT_LINE_LIST);
 	const std::vector<TriangleBuffer::Vertex>& vertices = mTriangleBuffer->getVertices();
 	for (std::vector<TriangleBuffer::Vertex>::const_iterator it = vertices.begin(); it!= vertices.end(); ++it)
 	{
