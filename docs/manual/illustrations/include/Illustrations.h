@@ -161,7 +161,7 @@ public:
 	void setup();
 	void go();
 	void next(std::string name, Real size);
-	void putMesh(MeshPtr mesh, int materialIndex=0);
+	void putMesh(v1::MeshPtr mesh, int materialIndex=0);
 	void exportImage(std::string name, Procedural::TextureBufferPtr buffer, bool reset = false);
 
 	void cameraPerspective()

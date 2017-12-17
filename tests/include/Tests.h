@@ -68,7 +68,7 @@ protected:
 		}
 	}
 
-	void putMesh(MeshPtr mesh, int materialIndex=0)
+	void putMesh(v1::MeshPtr mesh, int materialIndex=0)
 	{
 		String s = mesh->getName();
 		putMesh(s, materialIndex);
@@ -577,7 +577,7 @@ class Unit_Tests : public BaseApplication
 			{
 				Shape s = Shape().addPoint(-1,-1).addPoint(1,-1).addPoint(1,1).addPoint(0,0).addPoint(-1,1).close();
 				Path p = RoundedCornerSpline3().addPoint(-10,5,-2.5).addPoint(-5,0,-2.5).addPoint(0,0,2.5).addPoint(5,0,-2.5).setRadius(2.).realizePath();
-				MeshPtr mp = Extruder().setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh();
+				v1::MeshPtr mp = Extruder().setShapeToExtrude(&s).setExtrusionPath(&p).realizeMesh();
 				putMesh(mp, 1);
 
 				Shape s2 = RectangleShape().setHeight(.5).realizeShape();
@@ -588,7 +588,7 @@ class Unit_Tests : public BaseApplication
 			}
 
 			{
-				MeshPtr mp;
+				v1::MeshPtr mp;
 				Shape s2 = RectangleShape().setHeight(.5).realizeShape().switchSide();
 				Shape s3 = s2;
 				s3.scale(1.5).switchSide();
@@ -599,7 +599,7 @@ class Unit_Tests : public BaseApplication
 			}
 
 			{
-				MeshPtr mp;
+				v1::MeshPtr mp;
 				Path p;
 				for (int i=0; i<32*32; i++)
 				{
@@ -616,7 +616,7 @@ class Unit_Tests : public BaseApplication
 			}
 
 			{
-				MeshPtr mp;
+				v1::MeshPtr mp;
 				Shape s2 = RectangleShape().setHeight(.5).realizeShape();
 				MultiShape ms = MultiShape(2, &(s2.switchSide()), &(Shape(s2).scale(1.5)));
 				Path p3 = CatmullRomSpline3().addPoint(0,5,-5).addPoint(0,0,0).addPoint(0,0,5).realizePath();

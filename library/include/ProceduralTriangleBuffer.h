@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define PROCEDURAL_TRIANGLEBUFFER_INCLUDED
 
 #include "ProceduralUtils.h"
+#include "Math/Array/OgreObjectMemoryManager.h"
 
 namespace Procedural
 {
@@ -58,6 +59,7 @@ protected:
 
 	std::vector<int> mIndices;
 
+	mutable Ogre::ObjectMemoryManager mObjectMemoryMgr;
 	std::vector<Vertex> mVertices;
 	int globalOffset;
 	int mEstimatedVertexCount;
@@ -147,7 +149,7 @@ public:
 	/**
 	 * Builds an Ogre Mesh from this buffer.
 	 */
-	Ogre::MeshPtr transformToMesh(const std::string& name,
+	Ogre::v1::MeshPtr transformToMesh(const std::string& name,
 	                              const Ogre::String& group = "General") const;
 
 	/** Adds a new vertex to the buffer */

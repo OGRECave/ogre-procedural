@@ -107,12 +107,12 @@ public:
 	 * @param name of the mesh for the MeshManager
 	 * @param group ressource group in which the mesh will be created
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name = "",
+	Ogre::v1::MeshPtr realizeMesh(const std::string& name = "",
 	                          const Ogre::String& group = "General")
 	{
 		TriangleBuffer tbuffer;
 		addToTriangleBuffer(tbuffer);
-		Ogre::MeshPtr mesh;
+		Ogre::v1::MeshPtr mesh;
 		if (name == "")
 			mesh = tbuffer.transformToMesh(Utils::getName(), group);
 		else

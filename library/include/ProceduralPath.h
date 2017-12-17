@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "ProceduralTrack.h"
 #include "ProceduralGeometryHelpers.h"
 #include "ProceduralShape.h"
+#include "Math/Array/OgreObjectMemoryManager.h"
 
 namespace Procedural
 {
@@ -54,6 +55,7 @@ class _ProceduralExport Path
 {
 	std::vector<Ogre::Vector3> mPoints;
 	bool mClosed;
+	mutable Ogre::ObjectMemoryManager mObjectMemoryMgr;
 public:
 	/// Default constructor
 	Path() : mClosed(false)	{}
@@ -238,7 +240,7 @@ public:
 	 * Outputs a mesh representing the path.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name = "") const;
+	Ogre::v1::MeshPtr realizeMesh(const std::string& name = "") const;
 
 	/// Creates a path with the keys of this path and extra keys coming from a track
 	Path mergeKeysWithTrack(const Track& track) const;

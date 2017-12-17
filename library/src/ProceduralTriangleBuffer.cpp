@@ -35,12 +35,13 @@ using namespace Ogre;
 
 namespace Procedural
 {
-Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
+Ogre::v1::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
         const Ogre::String& group) const
 {
 	Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-	Ogre::ManualObject* manual = sceneMgr->createManualObject();
-	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+  IdType id = Id::generateNewId<v1::ManualObject>();
+  v1::ManualObject* manual = OGRE_NEW v1::ManualObject(id, &mObjectMemoryMgr, sceneMgr);
+  manual->begin("BaseWhiteNoLighting", OT_TRIANGLE_LIST);
 
 #if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
 	Ogre::Vector3 aabb_min = Ogre::Vector3::ZERO;
@@ -68,9 +69,10 @@ Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
 #if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
 	manual->setLocalAabb(Ogre::Aabb::newFromExtents(aabb_min, aabb_max));
 #endif
-	Ogre::MeshPtr mesh = manual->convertToMesh(name, group);
+	Ogre::v1::MeshPtr mesh = manual->convertToMesh(name, group);
 
-	sceneMgr->destroyManualObject(manual);
+  // TODO: Destory MO
+//  sceneMgr->destroyManualObject(manual);
 
 	return mesh;
 }
@@ -85,7 +87,7 @@ Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
 	size_t vertex_count = 0;
 	size_t index_count = 0;
 
-	Ogre::MeshPtr mesh = entity->getMesh();
+	Ogre::v1::MeshPtr mesh = entity->getMesh();
 
 
 	bool useSoftwareBlendingVertices = entity->hasSkeleton();

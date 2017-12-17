@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreManualObject.h"
 #include "ProceduralMultiShape.h"
 #include "ProceduralTrack.h"
+#include "Math/Array/OgreObjectMemoryManager.h"
 
 namespace Procedural
 {
@@ -59,6 +60,7 @@ class _ProceduralExport Shape
 	std::vector<Ogre::Vector2> mPoints;
 	bool mClosed;
 	Side mOutSide;
+	mutable Ogre::ObjectMemoryManager mObjectMemoryMgr;
 
 public:
 	/// Default constructor
@@ -321,12 +323,12 @@ public:
 	 * Outputs a mesh representing the shape.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::MeshPtr realizeMesh(const std::string& name="") const;
+	Ogre::v1::MeshPtr realizeMesh(const std::string& name="") const;
 
 	/**
 	 * Appends the shape vertices to a manual object being edited
 	 */
-	void _appendToManualObject(Ogre::ManualObject* manual) const;
+	void _appendToManualObject(Ogre::v1::ManualObject* manual) const;
 
 	/**
 	 * Tells whether a point is inside a shape or not

@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define PROCEDURAL_MULTISHAPE_INCLUDED
 
 #include "ProceduralGeometryHelpers.h"
+#include "Math/Array/OgreObjectMemoryManager.h"
 
 namespace Procedural
 {
@@ -44,6 +45,7 @@ class Shape;
 class _ProceduralExport MultiShape
 {
 	std::vector<Shape> mShapes;
+	mutable Ogre::ObjectMemoryManager mObjectMemoryMgr;
 
 public:
 	/// Default constructor
@@ -105,7 +107,7 @@ public:
 	}
 
 	/// Outputs the Multi Shape to a Mesh, mostly for visualisation or debugging purposes
-	Ogre::MeshPtr realizeMesh(const std::string& name="");
+	Ogre::v1::MeshPtr realizeMesh(const std::string& name="");
 
 	/// Tells whether a point is located inside that multishape
 	/// It assumes that all of the shapes in that multishape are closed,

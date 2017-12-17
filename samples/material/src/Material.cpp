@@ -115,7 +115,7 @@ void Sample_Material::createScene(void)
 	}
 
 	// -- Test plane
-	Ogre::MeshPtr mesh = Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
+	Ogre::v1::MeshPtr mesh = Procedural::PlaneGenerator().setNumSegX(20).setNumSegY(20).setSizeX(150).setSizeY(150).setUTile(5.0).setVTile(5.0).realizeMesh("planeMesh");
 	unsigned short src, dest;
 	if (!mesh->suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
 		mesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);

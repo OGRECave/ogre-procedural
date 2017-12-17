@@ -126,7 +126,7 @@ void Illustrations::next(std::string name, Real size)
 	mSceneNodes.clear();
 }
 
-void Illustrations::putMesh(MeshPtr mesh, int materialIndex)
+void Illustrations::putMesh(v1::MeshPtr mesh, int materialIndex)
 {
 	Entity* ent = mSceneMgr->createEntity(mesh->getName());
 	SceneNode* sn = mSceneMgr->getRootSceneNode()->createChildSceneNode();
@@ -184,7 +184,7 @@ void Illustrations::go()
 	// Primitives
 	//
 
-	MeshPtr mp;
+	v1::MeshPtr mp;
 	mp = BoxGenerator().realizeMesh();
 	putMesh(mp);
 	next("primitive_box", 1.1f);

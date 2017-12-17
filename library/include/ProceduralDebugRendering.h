@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "ProceduralPlatform.h"
 #include "ProceduralTriangleBuffer.h"
 #include "OgreManualObject.h"
+#include "Math/Array/OgreObjectMemoryManager.h"
 
 namespace Procedural
 {
@@ -49,6 +50,7 @@ private:
 	TriangleBuffer* mTriangleBuffer;
 
 	Ogre::Real mSize;
+	mutable Ogre::ObjectMemoryManager mObjectMemoryMgr;
 public:
 	ShowNormalsGenerator() : mTriangleBuffer(0), mSize(1.0), mVisualStyle(VS_LINE) {}
 
@@ -78,10 +80,10 @@ public:
 	/// Builds the normals representation as a manual object
 	/// \exception Ogre::InvalidStateException The input triangle buffer must not be null
 	/// \exception Ogre::InvalidStateException Scene Manager is not set in OGRE root object
-	Ogre::ManualObject* buildManualObject() const;
+	Ogre::v1::ManualObject* buildManualObject() const;
 
 	/// Builds the normals representation as a mesh
-	Ogre::MeshPtr buildMesh(const std::string& name = "",
+	Ogre::v1::MeshPtr buildMesh(const std::string& name = "",
 	                        const Ogre::String& group = "General") const;
 };
 }
