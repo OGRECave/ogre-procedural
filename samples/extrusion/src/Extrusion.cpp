@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "Extrusion.h"
 #include "Procedural.h"
 #include "ProceduralUtils.h"
+#include <iostream>
 
 //-------------------------------------------------------------------------------------
 void Sample_Extrusion::createScene(void)

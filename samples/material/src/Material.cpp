@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "Procedural.h"
 #include "ProceduralUtils.h"
 #include "OgreRTShaderSystem.h"
+#include <iostream>
 
 //-------------------------------------------------------------------------------------
 void Sample_Material::createScene(void)

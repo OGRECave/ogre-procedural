@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 #include "ScriptInterpreter.h"
 #include "Procedural.h"
+#include <iostream>
 
 using namespace Ogre;
 using namespace std;

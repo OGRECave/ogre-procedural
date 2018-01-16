@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "Svg.h"
 #include "Procedural.h"
 #include "ProceduralUtils.h"
+#include <iostream>
 
 //-------------------------------------------------------------------------------------
 void Sample_Svg::createScene(void)

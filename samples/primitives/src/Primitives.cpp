@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "Primitives.h"
 #include "Procedural.h"
+#include <iostream>
 
 //-------------------------------------------------------------------------------------
 void Sample_Primitives::createScene(void)
