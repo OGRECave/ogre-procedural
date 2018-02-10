@@ -205,6 +205,7 @@ void BaseApplication::putMeshMat(const std::string& meshName, const std::string&
 //-------------------------------------------------------------------------------------
 bool BaseApplication::keyPressed( const OgreBites::KeyboardEvent& arg )
 {
+    using namespace OgreBites;
 	if (mTrayMgr->isDialogVisible()) return true;   // don't process any more keys if dialog is up
 
 	if (arg.keysym.sym == SDLK_ESCAPE)
