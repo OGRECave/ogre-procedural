@@ -41,7 +41,7 @@ void Sample_Svg::createScene(void)
 
 	Procedural::MultiShape out;
 	Procedural::SvgLoader svg;
-	svg.parseSvgFile(out, "test.svg", "Essential", 16);
+	svg.parseSvgFile(out, "test.svg", "Scripts", 16);
 	Procedural::Extruder().setMultiShapeToExtrude(&out).setExtrusionPath(&p).setScale(.05f).realizeMesh("svg");
 	putMesh2("svg");
 }

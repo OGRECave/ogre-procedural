@@ -112,7 +112,7 @@ void Sample_Material::createScene(void)
 		normalMapSubRS->setNormalMapTextureName("proceduralTextureNormal");
 
 		pMainRenderState->addTemplateSubRenderState(normalMapSubRS);
-		mShaderGenerator->createShaderBasedTechnique("proceduralMaterial", Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		mShaderGenerator->createShaderBasedTechnique(*demoMaterial, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 	}
 
 	// -- Test plane
