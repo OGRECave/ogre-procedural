@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 2.6)
 
 project(OgreProcedural)
 
-set(CMAKE_MODULE_PATH 
+set(CMAKE_MODULE_PATH
+  "${CMAKE_MODULE_PATH}"
+  "${OGRE_HOME}/CMake"
   "${OgreProcedural_SOURCE_DIR}/CMake"
   "${OgreProcedural_SOURCE_DIR}/CMake/Utils"
   "${OgreProcedural_SOURCE_DIR}/CMake/Packages"
@@ -183,8 +185,8 @@ set(CPACK_PACKAGE_NAME "ogre-procedural")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "ogre")
 set(CPACK_PACKAGE_CONTACT "webmaster@ogreprocedural.org")
 set(CPACK_PACKAGE_VENDOR "webmaster@ogreprocedural.org")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/MIT.txt")
-SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.md")
 # TODO: add the version variable at the top in here
 SET(CPACK_PACKAGE_VERSION_MAJOR "0")
 SET(CPACK_PACKAGE_VERSION_MINOR "2")
