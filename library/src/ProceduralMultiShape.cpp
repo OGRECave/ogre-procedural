@@ -44,6 +44,7 @@ v1::MeshPtr MultiShape::realizeMesh(const std::string& name)
 #else
   IdType id = Id::generateNewId<v1::ManualObject>();
   v1::ManualObject* manual = OGRE_NEW v1::ManualObject(id, &mObjectMemoryMgr, smgr);
+  manual->setReadable(true);
 	manual->setName(name);
 #endif
 
