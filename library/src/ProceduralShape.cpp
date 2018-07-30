@@ -445,6 +445,7 @@ v1::MeshPtr Shape::realizeMesh(const std::string& name) const
 	Ogre::SceneManager* smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 	IdType id = Id::generateNewId<v1::ManualObject>();
 v1::ManualObject* manual = OGRE_NEW v1::ManualObject(id, &mObjectMemoryMgr, smgr);
+manual->setReadable(true);
 	manual->begin("Rocks", Ogre::OT_LINE_STRIP);
 
 	_appendToManualObject(manual);
