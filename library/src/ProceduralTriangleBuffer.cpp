@@ -72,8 +72,7 @@ Ogre::v1::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
 #endif
 	Ogre::v1::MeshPtr mesh = manual->convertToMesh(name, group);
 
-  // TODO: Destory MO
-//  sceneMgr->destroyManualObject(manual);
+	OGRE_DELETE manual;
 
 	return mesh;
 }

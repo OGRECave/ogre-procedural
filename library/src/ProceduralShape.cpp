@@ -456,8 +456,8 @@ manual->setReadable(true);
 		mesh = manual->convertToMesh(Utils::getName());
 	else
 		mesh = manual->convertToMesh(name);
-  // TODO: Destroy MO
-//  smgr->destroyManualObject(manual);
+
+	OGRE_DELETE manual;
 	return mesh;
 }
 //-----------------------------------------------------------------------
