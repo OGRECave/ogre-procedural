@@ -60,8 +60,8 @@ v1::MeshPtr MultiShape::realizeMesh(const std::string& name)
 		mesh = manual->convertToMesh(Utils::getName());
 	else
 		mesh = manual->convertToMesh(name);
-  // TODO: Destory MO
-//  smgr->destroyManualObject(manual);
+
+	OGRE_DELETE manual;
 	return mesh;
 }
 //-----------------------------------------------------------------------

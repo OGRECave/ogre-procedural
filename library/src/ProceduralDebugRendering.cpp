@@ -79,8 +79,7 @@ v1::MeshPtr ShowNormalsGenerator::buildMesh(const std::string& name, const Strin
 	v1::ManualObject* mo = buildManualObject();
 	Ogre::v1::MeshPtr mesh = mo->convertToMesh(name, group);
 
-  // TODO: Destroy manual object
-//  sceneMgr->destroyManualObject(mo);
+	OGRE_DELETE mo;
 
 	return mesh;
 }
