@@ -31,6 +31,11 @@ THE SOFTWARE.
 
 using namespace Ogre;
 
+static std::pair<int, int> make_edge(int i1, int i2)
+{
+    return i1 < i2 ? std::make_pair(i1, i2) : std::make_pair(i2, i1);
+}
+
 namespace Procedural
 {
 void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
@@ -55,7 +60,7 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	vertices.push_back(invnorm*Vector3(-1,  -phi,0));//10
 	vertices.push_back(invnorm*Vector3( 1,  -phi,0));//11
 
-	int firstFaces[] = {0,1,2,
+	int firstFaces[60] = {0,1,2,
 	                    0,3,1,
 	                    0,4,5,
 	                    1,7,6,
@@ -76,8 +81,8 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	                    10,8,11,
 	                    10,11,9
 	                   };
-
-	std::vector<int> faces(firstFaces, firstFaces + sizeof(firstFaces)/sizeof(*firstFaces));
+    
+	std::vector<int> faces(firstFaces, firstFaces + 60);
 	int size = 60;
 
 	/// Step 2 : tessellate
@@ -85,36 +90,38 @@ void IcoSphereGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	{
 		size*=4;
 		std::vector<int> newFaces;
+
+        // remember visited edges
+        std::map<std::pair<int, int>, int> edges;
+
 		newFaces.clear();
-		//newFaces.resize(size);
+		newFaces.reserve(size);
 		for (int i=0; i<size/12; i++)
 		{
 			int i1 = faces[i*3];
 			int i2 = faces[i*3+1];
 			int i3 = faces[i*3+2];
-			int i12 = vertices.size();
-			int i23 = i12+1;
-			int i13 = i12+2;
-			Vector3 v1 = vertices[i1];
-			Vector3 v2 = vertices[i2];
-			Vector3 v3 = vertices[i3];
-			//make 1 vertice at the center of each edge and project it onto the sphere
-			vertices.push_back((v1+v2).normalisedCopy());
-			vertices.push_back((v2+v3).normalisedCopy());
-			vertices.push_back((v1+v3).normalisedCopy());
-			//now recreate indices
-			newFaces.push_back(i1);
-			newFaces.push_back(i12);
-			newFaces.push_back(i13);
-			newFaces.push_back(i2);
-			newFaces.push_back(i23);
-			newFaces.push_back(i12);
-			newFaces.push_back(i3);
-			newFaces.push_back(i13);
-			newFaces.push_back(i23);
-			newFaces.push_back(i12);
-			newFaces.push_back(i23);
-			newFaces.push_back(i13);
+
+            std::pair<int, int> e12 = make_edge(i1, i2);
+            std::pair<int, int> e23 = make_edge(i2, i3);
+            std::pair<int, int> e13 = make_edge(i1, i3);
+
+            // make 1 vertice at the center of each edge and project it onto the sphere
+            int i12 = edges.insert(std::make_pair(e12, vertices.size())).first->second;
+            if (i12 == vertices.size())
+                vertices.push_back((vertices[i1] + vertices[i2]).normalisedCopy());
+
+            int i23 = edges.insert(std::make_pair(e23, vertices.size())).first->second;
+            if (i23 == vertices.size())
+                vertices.push_back((vertices[i2] + vertices[i3]).normalisedCopy());
+
+            int i13 = edges.insert(std::make_pair(e13, vertices.size())).first->second;
+            if (i13 == vertices.size())
+                vertices.push_back((vertices[i1] + vertices[i3]).normalisedCopy());
+
+            //now recreate indices
+            int subFaces[12] = {i1, i12, i13, i2, i23, i12, i3, i13, i23, i12, i23, i13};
+            newFaces.insert(newFaces.end(), subFaces, subFaces + 12);
 		}
 		faces.swap(newFaces);
 	}
