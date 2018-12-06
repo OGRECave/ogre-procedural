@@ -56,6 +56,9 @@ void Illustrations::setup()
 
 #if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	mSceneMgr = mRoot->createSceneManager("DefaultSceneManager");
+#	ifdef OGRE_BUILD_COMPONENT_RTSHADERSYSTEM
+	RTShader::ShaderGenerator::getSingleton().addSceneManager(mSceneMgr);
+#	endif
 #else
 	const size_t numThreads = std::max<size_t>(1, Ogre::PlatformInformation::getNumLogicalCores() / 2);
 	Ogre::InstancingTheadedCullingMethod threadedCullingMethod = Ogre::INSTANCING_CULLING_SINGLETHREAD;

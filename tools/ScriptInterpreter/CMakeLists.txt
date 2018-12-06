@@ -28,7 +28,7 @@ include_directories(
 )
 
 list(GET OGRE_INCLUDE_DIRS 0 OGRE_INCLUDE_DIR)
-set(SWIG_ARGS -c++ -lua -v -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" -I"${CMAKE_CURRENT_SOURCE_DIR}/include" -I"${OgreProcedural_BINARY_DIR}/include" -o "${OgreProcedural_BINARY_DIR}/procedural_wrap.cxx")
+set(SWIG_ARGS -c++ -lua -v -DOGRE_DEPRECATED -I"${OGRE_INCLUDE_DIR}" -I"${CMAKE_CURRENT_SOURCE_DIR}/../../library/include" -I"${CMAKE_CURRENT_SOURCE_DIR}/include" -I"${OgreProcedural_BINARY_DIR}/include" -o "${OgreProcedural_BINARY_DIR}/procedural_wrap.cxx")
 if(MSVC)
 	set(SWIG_ARGS ${SWIG_ARGS} -Fmicrosoft)
 endif()
