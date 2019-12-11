@@ -92,7 +92,7 @@ void BaseApplication::createCamera(void)
 	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(l);
 
 	l->setType(Light::LT_DIRECTIONAL);
-	l->setDirection(Vector3(0,-1,1).normalisedCopy());
+	l->getParentSceneNode()->setDirection(Vector3(0,-1,1).normalisedCopy());
 	l->setDiffuseColour(ColourValue(.7f,.5f,.5f));
 	l->setSpecularColour(ColourValue::White);
 

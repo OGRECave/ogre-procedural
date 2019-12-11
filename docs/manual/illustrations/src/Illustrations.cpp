@@ -77,11 +77,9 @@ void Illustrations::setup()
 	Ogre::Light* light = mSceneMgr->createLight();
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
 	light->setDiffuseColour(ColourValue::White);
-#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
 	Ogre::SceneNode* lightNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	lightNode->attachObject(light);
-#endif
-	light->setDirection(Vector3(-1,-1,-1).normalisedCopy());
+	lightNode->setDirection(Vector3(-1,-1,-1).normalisedCopy());
 
 	// Create main render to texture
 	mRttTexture = Ogre::TextureManager::getSingleton().createManual("RttTex", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
