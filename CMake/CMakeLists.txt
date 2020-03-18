@@ -5,8 +5,6 @@ else()
 endif()
 
 set(INST_FILES
-  Packages/FindOIS.cmake
-  Packages/FindOGRE.cmake
   Packages/FindOgreProcedural.cmake
   Utils/FindPkgMacros.cmake  
   Utils/PreprocessorUtils.cmake
