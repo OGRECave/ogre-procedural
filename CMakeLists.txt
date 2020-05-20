@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 project(OgreProcedural)
 
 set(CMAKE_MODULE_PATH 
+  "${CMAKE_MODULE_PATH}"
   "${OgreProcedural_SOURCE_DIR}/CMake"
   "${OgreProcedural_SOURCE_DIR}/CMake/Utils"
   "${OgreProcedural_SOURCE_DIR}/CMake/Packages"
