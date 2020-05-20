@@ -29,6 +29,9 @@ THE SOFTWARE.
 #include "ProceduralTextureGenerator.h"
 #include "ProceduralUtils.h"
 #include "ProceduralNoise.h"
+#if OGRE_VERSION >= ((2 << 16) | (2 << 8) | 0)
+#include "OgreImage2.h"
+#endif
 
 using namespace Ogre;
 
@@ -317,7 +320,11 @@ Image& Image::setFile(Ogre::String filename, Ogre::String groupname)
 
 TextureBufferPtr Image::process()
 {
+#if OGRE_VERSION >= ((2 << 16) | (2 << 8) | 0)
+	Ogre::Image2 img;
+#else
 	Ogre::Image img;
+#endif
 	img.load(mFile, mGroup);
 	if (img.getHeight() < mBuffer->getHeight() || img.getWidth() < mBuffer->getWidth()) return mBuffer;
 

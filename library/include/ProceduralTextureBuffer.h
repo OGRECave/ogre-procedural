@@ -298,7 +298,11 @@ public:
 	}
 
 	/// Create a new image from buffer.
+#if OGRE_VERSION >= ((2 << 16) | (2 << 8) | 0)
+	Ogre::Image2* getImage() const;
+#else
 	Ogre::Image* getImage() const;
+#endif
 
 	/**
 	\brief Save the image from the buffer to a file.
@@ -311,7 +315,11 @@ public:
 	\param name Name of the texture
 	\param group Name of the resource group where to list the texture
 	*/
+#if OGRE_VERSION >= ((2 << 16) | (2 << 8) | 0)
+	Ogre::TextureGpu* createTexture(Ogre::String name) const;
+#else
 	Ogre::TexturePtr createTexture(Ogre::String name, Ogre::String group = Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME) const;
+#endif
 };
 
 /**
