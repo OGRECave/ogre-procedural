@@ -28,6 +28,9 @@ THE SOFTWARE.
 #include "ProceduralStableHeaders.h"
 #include "ProceduralTextureBuffer.h"
 #include "Ogre.h"
+#if OGRE_VERSION >= ((2 << 16) | (2 << 8) | 0)
+#include "OgreTextureGpuManager.h"
+#endif
 #include "ProceduralUtils.h"
 
 namespace Procedural
@@ -258,6 +261,35 @@ TextureBufferPtr TextureBuffer::clone() const
 	return clon;
 }
 
+#if OGRE_VERSION >= ((2 << 16) | (2 << 8) | 0)
+Ogre::Image2* TextureBuffer::getImage() const
+{
+	Ogre::Image2* image = new Ogre::Image2();
+	image->loadDynamicImage(mPixels, mWidth, mHeight, 1, TextureTypes::Type2D, PFG_RGBA8_UNORM, false);
+	return image;
+}
+
+void TextureBuffer::saveImage(Ogre::String filename) const
+{
+	Ogre::Image2* image = getImage();
+	image->save(filename, 0, 1);
+	delete image;
+}
+
+Ogre::TextureGpu* TextureBuffer::createTexture(Ogre::String name) const
+{
+	Ogre::TextureGpu* texture = Ogre::Root::getSingleton().getRenderSystem()->getTextureGpuManager()->createTexture(
+	                               name,
+	                               GpuPageOutStrategy::Discard,
+	                               TextureFlags::AutomaticBatching,
+	                               TextureTypes::Type2D);
+
+	Ogre::Image2* image = getImage();
+	texture->scheduleTransitionTo(GpuResidency::Resident, image);
+
+	return texture;
+}
+#else
 Ogre::Image* TextureBuffer::getImage() const
 {
 	Ogre::Image* image = new Ogre::Image();
@@ -290,6 +322,7 @@ Ogre::TexturePtr TextureBuffer::createTexture(Ogre::String name, Ogre::String gr
 
 	return texture;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

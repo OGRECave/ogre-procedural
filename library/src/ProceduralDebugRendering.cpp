@@ -33,15 +33,15 @@ using namespace Ogre;
 
 namespace Procedural
 {
-ManualObject* ShowNormalsGenerator::buildManualObject() const
+v1::ManualObject* ShowNormalsGenerator::buildManualObject() const
 {
 	if (mTriangleBuffer == NULL)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "The input triangle buffer must not be null", "Procedural::ShowNormalsGenerator::buildManualObject()");
 	SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 	if (sceneMgr == NULL)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALID_STATE, "Scene Manager must be set in Root", "Procedural::ShowNormalsGenerator::buildManualObject()");
-	ManualObject* manual = sceneMgr->createManualObject();
-	manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_LIST);
+	v1::ManualObject* manual = OGRE_NEW v1::ManualObject(Id::generateNewId<v1::ManualObject>(), &sceneMgr->_getEntityMemoryManager(SCENE_DYNAMIC), sceneMgr);
+	manual->begin("BaseWhiteNoLighting", OperationType::OT_LINE_LIST);
 	const std::vector<TriangleBuffer::Vertex>& vertices = mTriangleBuffer->getVertices();
 	for (std::vector<TriangleBuffer::Vertex>::const_iterator it = vertices.begin(); it!= vertices.end(); ++it)
 	{
@@ -71,13 +71,13 @@ ManualObject* ShowNormalsGenerator::buildManualObject() const
 	return manual;
 }
 
-MeshPtr ShowNormalsGenerator::buildMesh(const std::string& name, const String& group) const
+v1::MeshPtr ShowNormalsGenerator::buildMesh(const std::string& name, const String& group) const
 {
 	SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-	ManualObject* mo = buildManualObject();
-	Ogre::MeshPtr mesh = mo->convertToMesh(name, group);
+	v1::ManualObject* mo = buildManualObject();
+	Ogre::v1::MeshPtr mesh = mo->convertToMesh(name, group);
 
-	sceneMgr->destroyManualObject(mo);
+	OGRE_DELETE mo;
 
 	return mesh;
 }

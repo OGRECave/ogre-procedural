@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "ProceduralPlatform.h"
 #include <Ogre.h>
 #include "ProceduralTextureBuffer.h"
+#include <queue>
 
 namespace Procedural
 {

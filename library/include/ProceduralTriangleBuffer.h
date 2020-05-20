@@ -147,7 +147,7 @@ public:
 	/**
 	 * Builds an Ogre Mesh from this buffer.
 	 */
-	Ogre::MeshPtr transformToMesh(const std::string& name,
+	Ogre::v1::MeshPtr transformToMesh(const std::string& name,
 	                              const Ogre::String& group = "General") const;
 
 	/** Adds a new vertex to the buffer */
