@@ -205,8 +205,8 @@ public:
 	inline unsigned int getBoundedIndex(int i) const
 	{
 		if (mClosed)
-			return Utils::modulo(i,mPoints.size());
-		return Utils::cap(i,0,mPoints.size()-1);
+			return Utils::modulo(i,(int)mPoints.size());
+		return Utils::cap(i,0,(int)mPoints.size()-1);
 	}
 
 	/// Gets number of points in current point list

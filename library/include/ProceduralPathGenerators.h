@@ -86,8 +86,8 @@ public:
 	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
-			return mPoints[Utils::modulo(i,mPoints.size())];
-		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+			return mPoints[Utils::modulo(i,(int)mPoints.size())];
+		return mPoints[Utils::cap(i,0,(int)mPoints.size()-1)];
 	}
 
 	/// Gets the number of control points
@@ -149,8 +149,8 @@ public:
 	inline const ControlPoint& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
-			return mPoints[Utils::modulo(i,mPoints.size())];
-		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+			return mPoints[Utils::modulo(i,(int)mPoints.size())];
+		return mPoints[Utils::cap(i,0,(int)mPoints.size()-1)];
 	}
 
 	/// Gets the number of control points
@@ -259,8 +259,8 @@ public:
 	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
-			return mPoints[Utils::modulo(i,mPoints.size())];
-		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+			return mPoints[Utils::modulo(i,(int)mPoints.size())];
+		return mPoints[Utils::cap(i,0,(int)mPoints.size()-1)];
 	}
 
 	/// Gets the number of control points
@@ -317,8 +317,8 @@ public:
 	inline const Ogre::Vector3& safeGetPoint(unsigned int i) const
 	{
 		if (mClosed)
-			return mPoints[Utils::modulo(i,mPoints.size())];
-		return mPoints[Utils::cap(i,0,mPoints.size()-1)];
+			return mPoints[Utils::modulo(i,(int)mPoints.size())];
+		return mPoints[Utils::cap(i,0,(int)mPoints.size()-1)];
 	}
 
 	/// Gets the number of control points
