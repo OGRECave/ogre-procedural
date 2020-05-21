@@ -92,7 +92,7 @@ public:
 	/// Returns the number of shapes in that MultiShape
 	unsigned int getShapeCount() const
 	{
-		return mShapes.size();
+		return (unsigned int)mShapes.size();
 	}
 
 	/// Append every shape of an other multishape to the current multiShape
