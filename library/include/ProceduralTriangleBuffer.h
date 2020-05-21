@@ -86,16 +86,16 @@ public:
 		rebaseOffset();
 		Section section;
 		section.mSectionName = "";
-		section.mFirstIndex = mIndices.size();
-		section.mFirstVertex = mVertices.size();
+		section.mFirstIndex = (unsigned int)mIndices.size();
+		section.mFirstVertex = (unsigned int)mVertices.size();
 		section.buffer = this;
 		return section;
 	}
 
 	void endSection(Section& section)
 	{
-		section.mLastIndex = mIndices.size() - 1;
-		section.mLastVertex = mVertices.size() - 1;
+		section.mLastIndex = (unsigned int)mIndices.size() - 1;
+		section.mLastVertex = (unsigned int)mVertices.size() - 1;
 		if (section.mSectionName != "")
 			mSections[section.mSectionName] = section;		
 	}
@@ -104,9 +104,9 @@ public:
 	{
 		Section section;
 		section.mFirstIndex = 0;
-		section.mLastIndex = mIndices.size() - 1;
+		section.mLastIndex = (unsigned int)mIndices.size() - 1;
 		section.mFirstVertex = 0;
-		section.mLastVertex = mVertices.size() - 1;
+		section.mLastVertex = (unsigned int)mVertices.size() - 1;
 		section.mSectionName = "";
 		section.buffer = this;
 		return section;
@@ -141,7 +141,7 @@ public:
 	 */
 	void rebaseOffset()
 	{
-		globalOffset = mVertices.size();
+		globalOffset = (int)mVertices.size();
 	}
 
 	/**
