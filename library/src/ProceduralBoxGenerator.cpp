@@ -79,14 +79,14 @@ void BoxGenerator::addToTriangleBuffer(TriangleBuffer& buffer) const
 	buffer.endSection(section);
 
 	section = buffer.beginSection(TAG_NEGX);
-	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
+	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegZ).setSizeX(mSizeY).setSizeY(mSizeZ)
 	.setNormal(Vector3::NEGATIVE_UNIT_X)
 	.setPosition(mScale*(mPosition+.5f*mSizeX*(mOrientation*Vector3::NEGATIVE_UNIT_X)))
 	.addToTriangleBuffer(buffer);
 	buffer.endSection(section);
 
 	section = buffer.beginSection(TAG_X);
-	pg.setNumSegX(mNumSegZ).setNumSegY(mNumSegY).setSizeX(mSizeZ).setSizeY(mSizeY)
+	pg.setNumSegX(mNumSegY).setNumSegY(mNumSegZ).setSizeX(mSizeY).setSizeY(mSizeZ)
 	.setNormal(Vector3::UNIT_X)
 	.setPosition(mScale*(mPosition+.5f*mSizeX*(mOrientation*Vector3::UNIT_X)))
 	.addToTriangleBuffer(buffer);
