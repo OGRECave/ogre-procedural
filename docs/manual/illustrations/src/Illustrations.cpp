@@ -83,7 +83,7 @@ void Illustrations::setup()
 
 	// Create main render to texture
 	mRttTexture = Ogre::TextureManager::getSingleton().createManual("RttTex", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-	              Ogre::TEX_TYPE_2D, 256, 256, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET, 0, 0, 4);
+	              Ogre::TEX_TYPE_2D, 256, 256, 0, Ogre::PF_BYTE_RGBA, Ogre::TU_RENDERTARGET, 0, 0, 4);
 	mRenderTexture = mRttTexture->getBuffer()->getRenderTarget();
 #if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
 	Ogre::Viewport* vp = mRenderTexture->addViewport(mCam);
@@ -156,20 +156,13 @@ void Illustrations::exportImage(std::string name, Procedural::TextureBufferPtr b
 		{
 			Ogre::ColourValue pixel = Ogre::ColourValue::White;
 			if (x >= border && x < (w - border) && y >= border && y < (h - border)) pixel = pImgData->getColourAt(x - border, y - border, 0);
-#if OGRE_ENDIAN == OGRE_ENDIAN_LITTLE
-			pixelBuffer[y * w * 4 + x * 4 + 3] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.r * 255.0f, 0.0f), 255.0f);
-			pixelBuffer[y * w * 4 + x * 4 + 2] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.g * 255.0f, 0.0f), 255.0f);
-			pixelBuffer[y * w * 4 + x * 4 + 1] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.b * 255.0f, 0.0f), 255.0f);
-			pixelBuffer[y * w * 4 + x * 4 + 0] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.a * 255.0f, 0.0f), 255.0f);
-#else
 			pixelBuffer[y * w * 4 + x * 4 + 0] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.r * 255.0f, 0.0f), 255.0f);
 			pixelBuffer[y * w * 4 + x * 4 + 1] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.g * 255.0f, 0.0f), 255.0f);
 			pixelBuffer[y * w * 4 + x * 4 + 2] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.b * 255.0f, 0.0f), 255.0f);
 			pixelBuffer[y * w * 4 + x * 4 + 3] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.a * 255.0f, 0.0f), 255.0f);
-#endif
 		}
 	}
-	image->loadDynamicImage(pixelBuffer, w, h, 1, PF_R8G8B8A8);
+	image->loadDynamicImage(pixelBuffer, w, h, 1, PF_BYTE_RGBA);
 	image->save(name + ".png");
 	delete image;
 	delete pixelBuffer;
