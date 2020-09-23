@@ -274,7 +274,7 @@ AUTOLINK_SUPPORT       = YES
 # func(std::string) {}). This also makes the inheritance and collaboration
 # diagrams that involve STL classes more complete and accurate.
 
-BUILTIN_STL_SUPPORT    = NO
+BUILTIN_STL_SUPPORT    = YES
 
 # If you use Microsoft's C++/CLI language, you should set this option to YES to
 # enable parsing support.
@@ -998,7 +998,7 @@ HTML_INDEX_NUM_ENTRIES = 100
 # See http://developer.apple.com/tools/creatingdocsetswithdoxygen.html
 # for more information.
 
-GENERATE_DOCSET        = YES
+GENERATE_DOCSET        = NO
 
 # When GENERATE_DOCSET tag is set to YES, this tag determines the name of the
 # feed. A documentation feed provides an umbrella under which multiple
@@ -1029,7 +1029,7 @@ DOCSET_PUBLISHER_NAME  = Publisher
 # Microsoft HTML help workshop to generate a compiled HTML help file (.chm)
 # of the generated HTML documentation.
 
-GENERATE_HTMLHELP      = YES
+GENERATE_HTMLHELP      = NO
 
 # If the GENERATE_HTMLHELP tag is set to YES, the CHM_FILE tag can
 # be used to specify the file name of the resulting .chm file. You
@@ -1575,7 +1575,7 @@ SKIP_FUNCTION_MACROS   = YES
 # NOT include the path). If a tag file is not located in the directory in which
 # doxygen is run, you must also specify the path to the tagfile here.
 
-TAGFILES               = ${OGRE_CONFIG_DIR}/docs/api/Ogre.tag=https://ogrecave.github.io/ogre/api/1.10/
+TAGFILES               = ${OGRE_CONFIG_DIR}/../doc/OGRE/api/Ogre.tag=https://ogrecave.github.io/ogre/api/latest/
 
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create
 # a tag file that is based on the input files it reads.
