@@ -38,17 +38,10 @@ namespace Procedural
 
 using namespace Ogre;
 
-#if OGRE_ENDIAN == OGRE_ENDIAN_LITTLE
-#define PROCEDURAL_RED 3
-#define PROCEDURAL_GREEN 2
-#define PROCEDURAL_BLUE 1
-#define PROCEDURAL_ALPHA 0
-#else
 #define PROCEDURAL_RED 0
 #define PROCEDURAL_GREEN 1
 #define PROCEDURAL_BLUE 2
 #define PROCEDURAL_ALPHA 3
-#endif
 
 TextureBuffer::TextureBuffer(TextureBufferPtr tocopy)
 {
@@ -293,7 +286,7 @@ Ogre::TextureGpu* TextureBuffer::createTexture(Ogre::String name) const
 Ogre::Image* TextureBuffer::getImage() const
 {
 	Ogre::Image* image = new Ogre::Image();
-	image->loadDynamicImage(mPixels, mWidth, mHeight, 1, PF_R8G8B8A8);
+	image->loadDynamicImage(mPixels, mWidth, mHeight, 1, PF_BYTE_RGBA);
 	return image;
 }
 
@@ -313,7 +306,7 @@ Ogre::TexturePtr TextureBuffer::createTexture(Ogre::String name, Ogre::String gr
 	                               mWidth,
 	                               mHeight,
 	                               0,
-	                               PF_R8G8B8A8,
+	                               PF_BYTE_RGBA,
 	                               TU_DEFAULT);
 
 	Ogre::Image* image = getImage();

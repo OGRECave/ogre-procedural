@@ -45,7 +45,6 @@ typedef TextureBuffer* TextureBufferPtr;
 /**
 \brief class to store image data while processing
 \details Create a TextureBuffer object and move it to all classes inherited from TextureProcessing
-\todo check byte order for image generation (OGRE_ENDIAN, OGRE_ENDIAN_LITTLE, OGRE_ENDIAN_BIG), see <a href="http://www.ogre3d.org/forums/viewtopic.php?f=2&t=72832" target="_blank">Ogre forum</a> for details.
 \todo Increase speed of reading and writeing pixel values.
 */
 class _ProceduralExport TextureBuffer
