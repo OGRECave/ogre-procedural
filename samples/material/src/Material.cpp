@@ -102,7 +102,6 @@ void Sample_Material::createScene(void)
 	if (Ogre::RTShader::ShaderGenerator::initialize())
 	{
 		Ogre::RTShader::ShaderGenerator* mShaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
-		mShaderGenerator->setShaderCachePath(".");
 		RTShader::RenderState* pMainRenderState = mShaderGenerator->createOrRetrieveRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME).first;
 		pMainRenderState->reset();
 
@@ -113,6 +112,7 @@ void Sample_Material::createScene(void)
 
 		pMainRenderState->addTemplateSubRenderState(normalMapSubRS);
 		mShaderGenerator->createShaderBasedTechnique(*demoMaterial, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		mCam->getViewport()->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 	}
 
 	// -- Test plane
