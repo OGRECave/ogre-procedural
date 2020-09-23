@@ -94,8 +94,8 @@ TextureBufferPtr Cell::process()
 	{
 		for (size_t x = 0; x < mDensity; ++x)
 		{
-			Ogre::Real rand1 = (Ogre::Real)rand() / 65536.0f;
-			Ogre::Real rand2 = (Ogre::Real)rand() / 65536.0f;
+			Ogre::Real rand1 = 0.5*(Ogre::Real)rand() / RAND_MAX;
+			Ogre::Real rand2 = 0.5*(Ogre::Real)rand() / RAND_MAX;
 			cellPoints[x + y * mDensity].x = (x + 0.5f + (rand1 - 0.5f) * (1 - regularity)) / mDensity - 1.f / mBuffer->getWidth();
 			cellPoints[x + y * mDensity].y = (y + 0.5f + (rand2 - 0.5f) * (1 - regularity)) / mDensity - 1.f / mBuffer->getHeight();
 			cellPoints[x + y * mDensity].z = 0;
