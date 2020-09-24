@@ -40,6 +40,8 @@ using namespace Ogre;
 #define PROCEDURAL_BLUE 2
 #define PROCEDURAL_ALPHA 3
 
+#define CHECK_BOUNDS assert((x < mWidth && y < mHeight) && "Pixel location is out of bounds!")
+
 TextureBuffer::TextureBuffer(TextureBufferPtr tocopy)
 {
 	if (tocopy == NULL)
@@ -96,64 +98,56 @@ void TextureBuffer::setPixel(size_t x, size_t y, Ogre::Real red, Ogre::Real gree
 
 void TextureBuffer::setRed(size_t x, size_t y, Ogre::uchar red)
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::setRed(size_t, size_t, Ogre::uchar)");
+    CHECK_BOUNDS;
 
 	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED] = red;
 }
 
 void TextureBuffer::setGreen(size_t x, size_t y, Ogre::uchar green)
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::setGreen(size_t, size_t, Ogre::uchar)");
+    CHECK_BOUNDS;
 
 	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN] = green;
 }
 
 void TextureBuffer::setBlue(size_t x, size_t y, Ogre::uchar blue)
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::setBlue(size_t, size_t, Ogre::uchar)");
+    CHECK_BOUNDS;
 
 	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE] = blue;
 }
 
 void TextureBuffer::setAlpha(size_t x, size_t y, Ogre::uchar alpha)
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::setAlpha(size_t, size_t, Ogre::uchar)");
+    CHECK_BOUNDS;
 
 	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA] = alpha;
 }
 
 void TextureBuffer::setRed(size_t x, size_t y, Ogre::Real red)
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::setRed(size_t, size_t, Ogre::Real)");
+    CHECK_BOUNDS;
 
 	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(red * 255.0f, 0.0f), 255.0f));
 }
 
 void TextureBuffer::setGreen(size_t x, size_t y, Ogre::Real green)
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::setGreen(size_t, size_t, Ogre::Real)");
+    CHECK_BOUNDS;
 
 	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(green * 255.0f, 0.0f), 255.0f));
 }
 
 void TextureBuffer::setBlue(size_t x, size_t y, Ogre::Real blue)
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::setBlue(size_t, size_t, Ogre::Real)");
+    CHECK_BOUNDS;
 
 	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(blue * 255.0f, 0.0f), 255.0f));
 }
 
 void TextureBuffer::setAlpha(size_t x, size_t y, Ogre::Real alpha)
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::setAlpha(size_t, size_t, Ogre::Real)");
+    CHECK_BOUNDS;
 
 	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(alpha * 255.0f, 0.0f), 255.0f));
 }
@@ -174,72 +168,63 @@ void TextureBuffer::setData(TextureBufferPtr buffer)
 
 Ogre::ColourValue TextureBuffer::getPixel(size_t x, size_t y) const
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixel(size_t, size_t)");
+    CHECK_BOUNDS;
 
 	return Ogre::ColourValue(getPixelRedReal(x, y), getPixelGreenReal(x, y), getPixelBlueReal(x, y), getPixelAlphaReal(x, y));
 }
 
 Ogre::uchar TextureBuffer::getPixelRedByte(size_t x, size_t y) const
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelRedByte(size_t, size_t)");
+    CHECK_BOUNDS;
 
 	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED];
 }
 
 Ogre::uchar TextureBuffer::getPixelGreenByte(size_t x, size_t y) const
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelGreenByte(size_t, size_t)");
+    CHECK_BOUNDS;
 
 	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN];
 }
 
 Ogre::uchar TextureBuffer::getPixelBlueByte(size_t x, size_t y) const
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelBlueByte(size_t, size_t)");
+    CHECK_BOUNDS;
 
 	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE];
 }
 
 Ogre::uchar TextureBuffer::getPixelAlphaByte(size_t x, size_t y) const
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelAlphaByte(size_t, size_t)");
+    CHECK_BOUNDS;
 
 	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA];
 }
 
 Ogre::Real TextureBuffer::getPixelRedReal(size_t x, size_t y) const
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelRedReal(size_t, size_t)");
+    CHECK_BOUNDS;
 
 	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED]) / 255.0f;
 }
 
 Ogre::Real TextureBuffer::getPixelGreenReal(size_t x, size_t y) const
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelGreenReal(size_t, size_t)");
+    CHECK_BOUNDS;
 
 	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN]) / 255.0f;
 }
 
 Ogre::Real TextureBuffer::getPixelBlueReal(size_t x, size_t y) const
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelBlueReal(size_t, size_t)");
+    CHECK_BOUNDS;
 
 	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE]) / 255.0f;
 }
 
 Ogre::Real TextureBuffer::getPixelAlphaReal(size_t x, size_t y) const
 {
-	if (x >= mWidth || y >= mHeight)
-		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pixel location is out of bounds!", "Procedural::TextureBuffer::getPixelAlphaReal(size_t, size_t)");
+    CHECK_BOUNDS;
 
 	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA]) / 255.0f;
 }
