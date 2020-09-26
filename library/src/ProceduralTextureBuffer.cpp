@@ -40,45 +40,28 @@ using namespace Ogre;
 #define PROCEDURAL_BLUE 2
 #define PROCEDURAL_ALPHA 3
 
-#define CHECK_BOUNDS assert((x < mWidth && y < mHeight) && "Pixel location is out of bounds!")
-
 TextureBuffer::TextureBuffer(TextureBufferPtr tocopy)
 {
 	if (tocopy == NULL)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Pointer to source image must not be NULL!", "Procedural::TextureBuffer::TextureBuffer(Procedural::TextureBufferPtr)");
-	mWidth = tocopy->getWidth();
-	mHeight = tocopy->getHeight();
 
-	mPixels = new Ogre::uchar[mWidth * mHeight * 4];
-	memcpy(mPixels, tocopy->mPixels, mWidth * mHeight * 4 * sizeof(Ogre::uchar));
+	mPixels = tocopy->mPixels;
 }
 
 TextureBuffer::TextureBuffer(Ogre::uint width_height)
-	: mWidth(width_height), mHeight(width_height)
+	: mPixels(PF_BYTE_RGBA, width_height, width_height)
 {
 	if (width_height < 8)
 		OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "Minimum edge size is 8!", "Procedural::TextureBuffer::TextureBuffer(Procedural::TextureBufferPtr)");
-	mPixels = new Ogre::uchar[mWidth * mHeight * 4];
-	memset(mPixels, 0, mWidth * mHeight * 4 * sizeof(Ogre::uchar));
-	for (size_t y = 0; y < mHeight; y++)
-	{
-		for (size_t x = 0; x < mWidth; x++)
-		{
-			setAlpha(x, y, (Ogre::uchar)255);
-		}
-	}
+
+	mPixels.setTo(Ogre::ColourValue(0, 0, 0, 1));
 
 #if OGRE_DEBUG_MODE
-	Utils::log("Create texture buffer : " + StringConverter::toString(mWidth) + "x" + StringConverter::toString(mHeight));
+	Utils::log("Create texture buffer : " + StringConverter::toString(width_height) + "x" + StringConverter::toString(width_height));
 #endif
 }
 
-TextureBuffer::~TextureBuffer()
-{
-	delete mPixels;
-}
-
-
+TextureBuffer::~TextureBuffer() {}
 
 void TextureBuffer::setPixel(size_t x, size_t y, Ogre::uchar red, Ogre::uchar green, Ogre::uchar blue, Ogre::uchar alpha)
 {
@@ -98,175 +81,117 @@ void TextureBuffer::setPixel(size_t x, size_t y, Ogre::Real red, Ogre::Real gree
 
 void TextureBuffer::setRed(size_t x, size_t y, Ogre::uchar red)
 {
-    CHECK_BOUNDS;
-
-	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED] = red;
+    mPixels.getData(x, y)[PROCEDURAL_RED] = red;
 }
 
 void TextureBuffer::setGreen(size_t x, size_t y, Ogre::uchar green)
 {
-    CHECK_BOUNDS;
-
-	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN] = green;
+    mPixels.getData(x, y)[PROCEDURAL_GREEN] = green;
 }
 
 void TextureBuffer::setBlue(size_t x, size_t y, Ogre::uchar blue)
 {
-    CHECK_BOUNDS;
-
-	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE] = blue;
+    mPixels.getData(x, y)[PROCEDURAL_BLUE] = blue;
 }
 
 void TextureBuffer::setAlpha(size_t x, size_t y, Ogre::uchar alpha)
 {
-    CHECK_BOUNDS;
-
-	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA] = alpha;
+    mPixels.getData(x, y)[PROCEDURAL_ALPHA] = alpha;
 }
 
 void TextureBuffer::setRed(size_t x, size_t y, Ogre::Real red)
 {
-    CHECK_BOUNDS;
-
-	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(red * 255.0f, 0.0f), 255.0f));
+    mPixels.getData(x, y)[PROCEDURAL_RED] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(red * 255.0f, 0.0f), 255.0f));
 }
 
 void TextureBuffer::setGreen(size_t x, size_t y, Ogre::Real green)
 {
-    CHECK_BOUNDS;
-
-	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(green * 255.0f, 0.0f), 255.0f));
+    mPixels.getData(x, y)[PROCEDURAL_GREEN] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(green * 255.0f, 0.0f), 255.0f));
 }
 
 void TextureBuffer::setBlue(size_t x, size_t y, Ogre::Real blue)
 {
-    CHECK_BOUNDS;
-
-	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(blue * 255.0f, 0.0f), 255.0f));
+    mPixels.getData(x, y)[PROCEDURAL_BLUE] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(blue * 255.0f, 0.0f), 255.0f));
 }
 
 void TextureBuffer::setAlpha(size_t x, size_t y, Ogre::Real alpha)
 {
-    CHECK_BOUNDS;
-
-	mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(alpha * 255.0f, 0.0f), 255.0f));
+    mPixels.getData(x, y)[PROCEDURAL_ALPHA] = (Ogre::uchar)(std::min<Ogre::Real>(std::max<Ogre::Real>(alpha * 255.0f, 0.0f), 255.0f));
 }
 
 void TextureBuffer::setData(size_t width, size_t height, Ogre::uchar* data)
 {
 	if (data == NULL) return;
-	if (width != mWidth || height != mHeight) return;
-	memcpy(mPixels, data, mWidth * mHeight * 4 * sizeof(Ogre::uchar));
+	if (width != mPixels.getWidth() || height != mPixels.getWidth()) return;
+	memcpy(mPixels.getData(), data, mPixels.getSize());
 }
 
 void TextureBuffer::setData(TextureBufferPtr buffer)
 {
 	if (buffer == NULL) return;
-	if (buffer->getWidth() != mWidth || buffer->getHeight() != mHeight) return;
-	memcpy(mPixels, buffer->mPixels, mWidth * mHeight * 4 * sizeof(Ogre::uchar));
+	mPixels = buffer->mPixels;
 }
 
 Ogre::ColourValue TextureBuffer::getPixel(size_t x, size_t y) const
 {
-    CHECK_BOUNDS;
-
-	return Ogre::ColourValue(getPixelRedReal(x, y), getPixelGreenReal(x, y), getPixelBlueReal(x, y), getPixelAlphaReal(x, y));
+    return Ogre::ColourValue(getPixelRedReal(x, y), getPixelGreenReal(x, y), getPixelBlueReal(x, y), getPixelAlphaReal(x, y));
 }
 
 Ogre::uchar TextureBuffer::getPixelRedByte(size_t x, size_t y) const
 {
-    CHECK_BOUNDS;
-
-	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED];
+    return mPixels.getData(x, y)[PROCEDURAL_RED];
 }
 
 Ogre::uchar TextureBuffer::getPixelGreenByte(size_t x, size_t y) const
 {
-    CHECK_BOUNDS;
-
-	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN];
+    return mPixels.getData(x, y)[PROCEDURAL_GREEN];
 }
 
 Ogre::uchar TextureBuffer::getPixelBlueByte(size_t x, size_t y) const
 {
-    CHECK_BOUNDS;
-
-	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE];
+    return mPixels.getData(x, y)[PROCEDURAL_BLUE];
 }
 
 Ogre::uchar TextureBuffer::getPixelAlphaByte(size_t x, size_t y) const
 {
-    CHECK_BOUNDS;
-
-	return mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA];
+    return mPixels.getData(x, y)[PROCEDURAL_ALPHA];
 }
 
 Ogre::Real TextureBuffer::getPixelRedReal(size_t x, size_t y) const
 {
-    CHECK_BOUNDS;
-
-	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_RED]) / 255.0f;
+    return ((Ogre::Real)mPixels.getData(x, y)[PROCEDURAL_RED]) / 255.0f;
 }
 
 Ogre::Real TextureBuffer::getPixelGreenReal(size_t x, size_t y) const
 {
-    CHECK_BOUNDS;
-
-	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_GREEN]) / 255.0f;
+    return ((Ogre::Real)mPixels.getData(x, y)[PROCEDURAL_GREEN]) / 255.0f;
 }
 
 Ogre::Real TextureBuffer::getPixelBlueReal(size_t x, size_t y) const
 {
-    CHECK_BOUNDS;
-
-	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_BLUE]) / 255.0f;
+    return ((Ogre::Real)mPixels.getData(x, y)[PROCEDURAL_BLUE]) / 255.0f;
 }
 
 Ogre::Real TextureBuffer::getPixelAlphaReal(size_t x, size_t y) const
 {
-    CHECK_BOUNDS;
-
-	return ((Ogre::Real)mPixels[y * mWidth * 4 + x * 4 + PROCEDURAL_ALPHA]) / 255.0f;
+    return ((Ogre::Real)mPixels.getData(x, y)[PROCEDURAL_ALPHA]) / 255.0f;
 }
 
 TextureBufferPtr TextureBuffer::clone() const
 {
-	TextureBufferPtr clon = new TextureBuffer(mWidth);
-	memcpy(clon->mPixels, mPixels, mWidth * mHeight * 4 * sizeof(Ogre::uchar));
+	TextureBufferPtr clon = new TextureBuffer(mPixels.getWidth());
+	clon->mPixels = mPixels;
 	return clon;
 }
 
-Ogre::Image* TextureBuffer::getImage() const
+void TextureBuffer::saveImage(Ogre::String filename)
 {
-	Ogre::Image* image = new Ogre::Image();
-	image->loadDynamicImage(mPixels, mWidth, mHeight, 1, PF_BYTE_RGBA);
-	return image;
-}
-
-void TextureBuffer::saveImage(Ogre::String filename) const
-{
-	Ogre::Image* image = getImage();
-	image->save(filename);
-	delete image;
+	mPixels.save(filename);
 }
 
 Ogre::TexturePtr TextureBuffer::createTexture(Ogre::String name, Ogre::String group) const
 {
-	Ogre::TexturePtr texture = Ogre::TextureManager::getSingletonPtr()->createManual(
-	                               name,
-	                               group,
-	                               TEX_TYPE_2D,
-	                               mWidth,
-	                               mHeight,
-	                               0,
-	                               PF_BYTE_RGBA,
-	                               TU_DEFAULT);
-
-	Ogre::Image* image = getImage();
-	texture->loadImage(*image);
-	delete image;
-
-	return texture;
+    return Ogre::TextureManager::getSingleton().loadImage(name, group, mPixels, TEX_TYPE_2D, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

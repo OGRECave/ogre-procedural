@@ -50,9 +50,7 @@ typedef TextureBuffer* TextureBufferPtr;
 class _ProceduralExport TextureBuffer
 {
 private:
-	Ogre::uchar* mPixels;
-	Ogre::uint mWidth;
-	Ogre::uint mHeight;
+	Ogre::Image mPixels;
 
 public:
 
@@ -285,25 +283,19 @@ public:
 	~TextureBuffer();
 
 	/// Get the width of the stored image in px
-	inline Ogre::uint getWidth() const
-	{
-		return mWidth;
-	}
+	Ogre::uint getWidth() const { return mPixels.getWidth(); }
 
 	/// Get the height of the stored image in px
-	inline Ogre::uint getHeight() const
-	{
-		return mHeight;
-	}
+	Ogre::uint getHeight() const { return mPixels.getHeight(); }
 
-	/// Create a new image from buffer.
-	Ogre::Image* getImage() const;
+	/// Get buffer Image 
+	Ogre::Image& getImage() { return mPixels; }
 
 	/**
 	\brief Save the image from the buffer to a file.
 	\param filename Name (and path) of the image file where to save the buffer.
 	*/
-	void saveImage(Ogre::String filename) const;
+	void saveImage(Ogre::String filename);
 
 	/**
 	\brief Creates an OGRE texture and add it to current TextureManager instance.

@@ -499,13 +499,7 @@ Solid& Solid::setColour(Ogre::Real red, Ogre::Real green, Ogre::Real blue, Ogre:
 
 TextureBufferPtr Solid::process()
 {
-	for (size_t y = 0; y < mBuffer->getHeight(); y++)
-	{
-		for (size_t x = 0; x < mBuffer->getWidth(); x++)
-		{
-			mBuffer->setPixel(x, y, mColour);
-		}
-	}
+	mBuffer->getImage().setTo(mColour);
 
 	logMsg("Create solid colour texture : " + StringConverter::toString((int)(mColour.r * 255.0f)) + ", " + StringConverter::toString((int)(mColour.g * 255.0f)) + ", " + StringConverter::toString((int)(mColour.b * 255.0f)));
 	return mBuffer;

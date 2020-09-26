@@ -147,26 +147,13 @@ void Illustrations::exportImage(std::string name, Procedural::TextureBufferPtr b
 	size_t border = 32;
 	size_t w = buffer->getWidth() + 2 * border;
 	size_t h = buffer->getWidth() + 2 * border;
-	Ogre::Image* pImgData = buffer->getImage();
-	Ogre::uchar* pixelBuffer = new Ogre::uchar[h * w * 4];
-	Ogre::Image* image = new Ogre::Image();
-	for (size_t y = 0; y < h; y++)
-	{
-		for (size_t x = 0; x < w; x++)
-		{
-			Ogre::ColourValue pixel = Ogre::ColourValue::White;
-			if (x >= border && x < (w - border) && y >= border && y < (h - border)) pixel = pImgData->getColourAt(x - border, y - border, 0);
-			pixelBuffer[y * w * 4 + x * 4 + 0] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.r * 255.0f, 0.0f), 255.0f);
-			pixelBuffer[y * w * 4 + x * 4 + 1] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.g * 255.0f, 0.0f), 255.0f);
-			pixelBuffer[y * w * 4 + x * 4 + 2] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.b * 255.0f, 0.0f), 255.0f);
-			pixelBuffer[y * w * 4 + x * 4 + 3] = (Ogre::uchar)std::min<Ogre::Real>(std::max<Ogre::Real>(pixel.a * 255.0f, 0.0f), 255.0f);
-		}
-	}
-	image->loadDynamicImage(pixelBuffer, w, h, 1, PF_BYTE_RGBA);
-	image->save(name + ".png");
-	delete image;
-	delete pixelBuffer;
-	delete pImgData;
+
+	Ogre::Image image(PF_BYTE_RGBA, w, h);
+	image.setTo(Ogre::ColourValue::ZERO); // fully transparent
+	auto dst = image.getPixelBox().getSubVolume(Box(border, border, w - border, w - border));
+	Ogre::PixelUtil::bulkPixelConversion(buffer->getImage().getPixelBox(), dst);
+	image.save(name + ".png");
+
 	if (reset) Procedural::Solid(buffer).setColour(Ogre::ColourValue::Black).process();
 }
 
