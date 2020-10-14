@@ -148,7 +148,8 @@ public:
 	 * Builds an Ogre Mesh from this buffer.
 	 */
 	Ogre::v1::MeshPtr transformToMesh(const std::string& name,
-	                              const Ogre::String& group = "General") const;
+	                              const Ogre::String& group = "General",
+	                              const Ogre::String& materialName = "BaseWhiteNoLighting") const;
 
 	/** Adds a new vertex to the buffer */
 	inline TriangleBuffer& vertex(const Vertex& v)

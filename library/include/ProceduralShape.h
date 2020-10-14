@@ -321,7 +321,7 @@ public:
 	 * Outputs a mesh representing the shape.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::v1::MeshPtr realizeMesh(const std::string& name="") const;
+	Ogre::v1::MeshPtr realizeMesh(const std::string& name="", const std::string& materialName="BaseWhiteNoLighting") const;
 
 	/**
 	 * Appends the shape vertices to a manual object being edited

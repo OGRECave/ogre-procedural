@@ -105,7 +105,7 @@ public:
 	}
 
 	/// Outputs the Multi Shape to a Mesh, mostly for visualisation or debugging purposes
-	Ogre::v1::MeshPtr realizeMesh(const std::string& name="");
+	Ogre::v1::MeshPtr realizeMesh(const std::string& name="", const std::string& materialName="BaseWhiteNoLighting");
 
 	/// Tells whether a point is located inside that multishape
 	/// It assumes that all of the shapes in that multishape are closed,

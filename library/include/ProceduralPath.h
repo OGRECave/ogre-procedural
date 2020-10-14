@@ -238,7 +238,7 @@ public:
 	 * Outputs a mesh representing the path.
 	 * Mostly for debugging purposes
 	 */
-	Ogre::v1::MeshPtr realizeMesh(const std::string& name = "") const;
+	Ogre::v1::MeshPtr realizeMesh(const std::string& name = "", const std::string& materialName = "BaseWhiteNoLighting") const;
 
 	/// Creates a path with the keys of this path and extra keys coming from a track
 	Path mergeKeysWithTrack(const Track& track) const;

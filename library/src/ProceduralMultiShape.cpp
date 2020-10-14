@@ -36,7 +36,7 @@ namespace Procedural
 {
 //-----------------------------------------------------------------------
 
-v1::MeshPtr MultiShape::realizeMesh(const std::string& name)
+v1::MeshPtr MultiShape::realizeMesh(const std::string& name, const std::string& materialName)
 {
 	Ogre::SceneManager* smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 #if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
@@ -48,7 +48,7 @@ v1::MeshPtr MultiShape::realizeMesh(const std::string& name)
 
 	for (std::vector<Shape>::iterator it = mShapes.begin(); it != mShapes.end(); ++it)
 	{
-		manual->begin("BaseWhiteNoLighting", OperationType::OT_LINE_STRIP);
+		manual->begin(materialName, OperationType::OT_LINE_STRIP);
 		it->_appendToManualObject(manual);
 		manual->end();
 	}

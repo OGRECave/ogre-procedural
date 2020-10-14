@@ -36,11 +36,12 @@ using namespace Ogre;
 namespace Procedural
 {
 Ogre::v1::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
-        const Ogre::String& group) const
+        const Ogre::String& group,
+        const Ogre::String& materialName) const
 {
 	Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 	Ogre::v1::ManualObject* manual = OGRE_NEW Ogre::v1::ManualObject(Ogre::Id::generateNewId<Ogre::v1::ManualObject>(), &sceneMgr->_getEntityMemoryManager(Ogre::SCENE_DYNAMIC), sceneMgr);
-	manual->begin("BaseWhiteNoLighting", Ogre::OperationType::OT_TRIANGLE_LIST);
+	manual->begin(materialName, Ogre::OperationType::OT_TRIANGLE_LIST);
 
 #if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
 	Ogre::Vector3 aabb_min = Ogre::Vector3::ZERO;

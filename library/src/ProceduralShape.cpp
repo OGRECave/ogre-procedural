@@ -440,11 +440,11 @@ bool Shape::isPointInside(const Vector2& point) const
 		return true;
 }
 //-----------------------------------------------------------------------
-v1::MeshPtr Shape::realizeMesh(const std::string& name) const
+v1::MeshPtr Shape::realizeMesh(const std::string& name, const std::string& materialName) const
 {
 	Ogre::SceneManager* smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
 	v1::ManualObject* manual = OGRE_NEW v1::ManualObject(Id::generateNewId<v1::ManualObject>(), &smgr->_getEntityMemoryManager(SCENE_DYNAMIC), smgr);
-	manual->begin("BaseWhiteNoLighting", OperationType::OT_LINE_STRIP);
+	manual->begin(materialName, OperationType::OT_LINE_STRIP);
 
 	_appendToManualObject(manual);
 
