@@ -31,7 +31,7 @@ This source file is part of the
 
 #include <OgreTrays.h>
 #include <OgreCameraMan.h>
-#include <OgreVector3.h>
+#include <OgreVector.h>
 
 #include <OgreApplicationContext.h>
 #include <OgreAdvancedRenderControls.h>

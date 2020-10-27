@@ -29,8 +29,7 @@ THE SOFTWARE.
 #define PROCEDURAL_GEOMETRYHELPERS_INCLUDED
 
 #include "OgrePlane.h"
-#include "OgreVector2.h"
-#include "OgreVector3.h"
+#include "OgreVector.h"
 #include "ProceduralPlatform.h"
 
 namespace Procedural

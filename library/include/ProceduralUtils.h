@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 #ifndef PROCEDURAL_UTILS_INCLUDED
 #define PROCEDURAL_UTILS_INCLUDED
-#include "OgreVector3.h"
+#include "OgreVector.h"
 #include "OgreAxisAlignedBox.h"
 #include "OgreLogManager.h"
 #include "ProceduralPlatform.h"
