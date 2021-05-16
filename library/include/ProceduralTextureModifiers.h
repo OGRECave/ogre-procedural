@@ -29,6 +29,8 @@ THE SOFTWARE.
 #ifndef PROCEDURAL_TEXTURE_MODIFIERS_INCLUDED
 #define PROCEDURAL_TEXTURE_MODIFIERS_INCLUDED
 
+#include <queue>
+
 #include "ProceduralPlatform.h"
 #include <Ogre.h>
 #include "ProceduralTextureBuffer.h"

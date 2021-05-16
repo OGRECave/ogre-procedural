@@ -39,7 +39,7 @@ namespace Procedural
 MeshPtr MultiShape::realizeMesh(const std::string& name)
 {
 	Ogre::SceneManager* smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR != 2
 	ManualObject* manual = smgr->createManualObject(name);
 #else
 	ManualObject* manual = smgr->createManualObject();

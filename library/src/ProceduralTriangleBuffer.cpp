@@ -42,7 +42,7 @@ Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
 	Ogre::ManualObject* manual = sceneMgr->createManualObject();
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR == 2
 	Ogre::Vector3 aabb_min = Ogre::Vector3::ZERO;
 	Ogre::Vector3 aabb_max = Ogre::Vector3::ZERO;
 #endif
@@ -51,7 +51,7 @@ Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
 		manual->position(it->mPosition);
 		manual->textureCoord(it->mUV);
 		manual->normal(it->mNormal);
-#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR == 2
 		if(it->mPosition.x < aabb_min.x) aabb_min.x = it->mPosition.x;
 		if(it->mPosition.y < aabb_min.y) aabb_min.y = it->mPosition.y;
 		if(it->mPosition.z < aabb_min.z) aabb_min.z = it->mPosition.z;
@@ -65,7 +65,7 @@ Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
 		manual->index(*it);
 	}
 	manual->end();
-#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR == 2
 	manual->setLocalAabb(Ogre::Aabb::newFromExtents(aabb_min, aabb_max));
 #endif
 	Ogre::MeshPtr mesh = manual->convertToMesh(name, group);

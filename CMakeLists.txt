@@ -54,7 +54,7 @@ if (IS_DIRECTORY "${OgreProcedural_SOURCE_DIR}/Dependencies")
 	endif()	
 endif()
 
-find_package(OGRE 1.12.10 REQUIRED)
+find_package(OGRE REQUIRED CONFIG)
 link_directories(${OGRE_LIBRARY_DIRS})
 
 # Unity build options

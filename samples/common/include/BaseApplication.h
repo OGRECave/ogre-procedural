@@ -52,7 +52,7 @@ protected:
 	virtual void createFrameListener(void);
 	virtual void createScene(void) = 0; // Override me!
 	virtual void destroyScene(void);
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR != 2
 	virtual void createViewports(void);
 #else
 	virtual void createCompositor(void);

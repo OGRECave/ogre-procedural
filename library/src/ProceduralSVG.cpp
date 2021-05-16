@@ -62,15 +62,15 @@ void SvgLoader::parseChildNode(MultiShape& out, rapidxml::xml_node<>* pChild)
 	std::string name = pChild->name();
 	if (name.size() > 3)
 	{
-		if (stricmp(name.c_str(), "rect") == 0)
+		if (StringUtil::startsWith("rect", name))
 			parseRect(out, pChild);
-		else if (stricmp(name.c_str(), "circle") == 0)
+		else if (StringUtil::startsWith("circle", name))
 			parseCircle(out, pChild);
-		else if (stricmp(name.c_str(), "ellipse") == 0)
+		else if (StringUtil::startsWith("ellipse", name))
 			parseEllipse(out, pChild);
-		else if (stricmp(name.c_str(), "polygon") == 0 || stricmp(name.c_str(), "polyline") == 0)
+		else if (StringUtil::startsWith("polygon", name) || StringUtil::startsWith("polyline", name))
 			parsePolygon(out, pChild);
-		else if (stricmp(name.c_str(), "path") == 0)
+		else if (StringUtil::startsWith("path", name))
 			parsePath(out, pChild); // svg path is a shape
 	}
 

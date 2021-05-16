@@ -46,7 +46,7 @@ void BaseApplication::shutdown(void)
 void BaseApplication::chooseSceneManager(void)
 {
 	// Get the SceneManager, in this case a generic one
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR != 2
 	mSceneMgr = mRoot->createSceneManager("DefaultSceneManager");
 #	ifdef OGRE_BUILD_COMPONENT_RTSHADERSYSTEM
 	RTShader::ShaderGenerator::getSingleton().addSceneManager(mSceneMgr);
@@ -126,7 +126,7 @@ void BaseApplication::destroyScene(void)
 	mSceneMgr->removeRenderQueueListener(getOverlaySystem());
 }
 //-------------------------------------------------------------------------------------
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR != 2
 void BaseApplication::createViewports(void)
 {
 	// Create one viewport, entire window
@@ -168,7 +168,7 @@ void BaseApplication::setup(void)
 	createLogManager();
 	chooseSceneManager();
 	createCamera();
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR != 2
 	createViewports();
 #else
 	createCompositor();
