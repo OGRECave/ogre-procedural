@@ -89,11 +89,7 @@ void Sample_Material::createScene(void)
 	Ogre::TexturePtr demoTexture = light.createTexture("proceduralTexture");
 	Ogre::TexturePtr demoTextureNormal = normal.createTexture("proceduralTextureNormal");
 
-#if (OGRE_VERSION < ((1 << 16) | (9 << 8) | 0))
 	Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create("proceduralMaterial", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-#else
-	Ogre::MaterialPtr demoMaterial = Ogre::MaterialManager::getSingletonPtr()->create("proceduralMaterial", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME).staticCast<Ogre::Material>();
-#endif
 	demoMaterial->getTechnique(0)->getPass(0)->setShininess(50);
 	demoMaterial->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue::White);
 	demoMaterial->getTechnique(0)->getPass(0)->setSpecular(Ogre::ColourValue(1.0f,1.0f,0.9f));
@@ -105,10 +101,14 @@ void Sample_Material::createScene(void)
 		RTShader::RenderState* pMainRenderState = mShaderGenerator->createOrRetrieveRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME).first;
 		pMainRenderState->reset();
 
+#if OGRE_MIN_VERSION(13, 0, 0)
+		RTShader::SubRenderState* normalMapSubRS = mShaderGenerator->createSubRenderState("NormalMap");
+		normalMapSubRS->setParameter("texture", "proceduralTextureNormal");
+#else
 		RTShader::SubRenderState* subRenderState = mShaderGenerator->createSubRenderState(RTShader::NormalMapLighting::Type);
 		RTShader::NormalMapLighting* normalMapSubRS = static_cast<RTShader::NormalMapLighting*>(subRenderState);
-		normalMapSubRS->setNormalMapSpace(RTShader::NormalMapLighting::NMS_TANGENT);
 		normalMapSubRS->setNormalMapTextureName("proceduralTextureNormal");
+#endif
 
 		pMainRenderState->addTemplateSubRenderState(normalMapSubRS);
 		mShaderGenerator->createShaderBasedTechnique(*demoMaterial, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
