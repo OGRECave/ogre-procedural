@@ -39,7 +39,7 @@ THE SOFTWARE.
 #else
 #include <unistd.h>
 #endif
-#if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR == 2
 #include <Compositor/OgreCompositorManager2.h>
 #endif
 
@@ -50,11 +50,11 @@ void Illustrations::setup()
 {
     OgreBites::ApplicationContext::setup();
 
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR != 2
 	getRenderWindow()->setAutoUpdated(false);
 #endif
 
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR != 2
 	mSceneMgr = mRoot->createSceneManager("DefaultSceneManager");
 #	ifdef OGRE_BUILD_COMPONENT_RTSHADERSYSTEM
 	RTShader::ShaderGenerator::getSingleton().addSceneManager(mSceneMgr);
@@ -85,7 +85,7 @@ void Illustrations::setup()
 	mRttTexture = Ogre::TextureManager::getSingleton().createManual("RttTex", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
 	              Ogre::TEX_TYPE_2D, 256, 256, 0, Ogre::PF_BYTE_RGBA, Ogre::TU_RENDERTARGET, 0, 0, 4);
 	mRenderTexture = mRttTexture->getBuffer()->getRenderTarget();
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR != 2
 	Ogre::Viewport* vp = mRenderTexture->addViewport(mCam);
 	vp->setClearEveryFrame(true);
 	vp->setBackgroundColour(Ogre::ColourValue::White);
@@ -105,7 +105,7 @@ void Illustrations::next(std::string name, Real size)
 	mCamera->setPosition(distance * mCamera->getPosition().normalisedCopy());
 
 	// Write scene to png image
-#if OGRE_VERSION < ((2 << 16) | (0 << 8) | 0)
+#if OGRE_VERSION_MAJOR != 2
 	mRenderTexture->update();
 #else
 	mRoot->renderOneFrame();
@@ -940,9 +940,7 @@ extern "C" {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		app.mOutputPath = strCmdLine;
 #else
-		size_t size=_PC_PATH_MAX;
-		char path[size];
-		app.mOutputPath = (argc > 1) ? argv[1] : getcwd(path,size);
+		app.mOutputPath = (argc > 1) ? argv[1] : ".";
 #endif
 
 		try
