@@ -75,8 +75,7 @@ Path Path::mergeKeysWithTrack(const Track& track) const
 
 Ogre::MeshPtr Path::realizeMesh(const std::string& name) const
 {
-	Ogre::SceneManager* smgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-	Ogre::ManualObject* manual = smgr->createManualObject();
+	auto manual = std::make_shared<Ogre::ManualObject>("TMP");
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
 
 	for (std::vector<Ogre::Vector3>::const_iterator itPos = mPoints.begin(); itPos != mPoints.end(); itPos++)

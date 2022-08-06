@@ -78,7 +78,7 @@ public:
 	/// Builds the normals representation as a manual object
 	/// \exception Ogre::InvalidStateException The input triangle buffer must not be null
 	/// \exception Ogre::InvalidStateException Scene Manager is not set in OGRE root object
-	Ogre::ManualObject* buildManualObject() const;
+	Ogre::SharedPtr<Ogre::ManualObject> buildManualObject() const;
 
 	/// Builds the normals representation as a mesh
 	Ogre::MeshPtr buildMesh(const std::string& name = "",

@@ -38,8 +38,7 @@ namespace Procedural
 Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
         const Ogre::String& group) const
 {
-	Ogre::SceneManager* sceneMgr = Ogre::Root::getSingleton().getSceneManagerIterator().begin()->second;
-	Ogre::ManualObject* manual = sceneMgr->createManualObject();
+	auto manual = std::make_shared<Ogre::ManualObject>("TMP");
 	manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
 #if OGRE_VERSION_MAJOR == 2
@@ -69,8 +68,6 @@ Ogre::MeshPtr TriangleBuffer::transformToMesh(const std::string& name,
 	manual->setLocalAabb(Ogre::Aabb::newFromExtents(aabb_min, aabb_max));
 #endif
 	Ogre::MeshPtr mesh = manual->convertToMesh(name, group);
-
-	sceneMgr->destroyManualObject(manual);
 
 	return mesh;
 }
