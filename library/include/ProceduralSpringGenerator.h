@@ -26,7 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #ifndef PROCEDURAL_SPRING_GENERATORS_INCLUDED
-#define PROCEDURAL_PRING_GENERATORS_INCLUDED
+#define PROCEDURAL_SPRING_GENERATORS_INCLUDED
 
 #include "ProceduralPath.h"
 #include "ProceduralPathGenerators.h"
