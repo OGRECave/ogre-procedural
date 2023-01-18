@@ -82,6 +82,15 @@ std::vector<Vector2> MultiShape::getPoints() const
 }
 //-----------------------------------------------------------------------
 
+void MultiShape::addMultiShape(const MultiShape& other)
+{
+	for (std::vector<Shape>::const_iterator it = other.mShapes.begin(); it!=other.mShapes.end(); ++it)
+	{
+		mShapes.push_back(*it);
+	}
+}
+//-----------------------------------------------------------------------
+
 bool MultiShape::isPointInside(const Vector2& point) const
 {
 	// Draw a horizontal lines that goes through "point"
