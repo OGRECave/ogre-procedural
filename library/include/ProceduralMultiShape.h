@@ -96,13 +96,7 @@ public:
 	}
 
 	/// Append every shape of an other multishape to the current multiShape
-	void addMultiShape(const MultiShape& other)
-	{
-		for (std::vector<Shape>::const_iterator it = other.mShapes.begin(); it!=other.mShapes.end(); ++it)
-		{
-			mShapes.push_back(*it);
-		}
-	}
+	void addMultiShape(const MultiShape& other);
 
 	/// Outputs the Multi Shape to a Mesh, mostly for visualisation or debugging purposes
 	Ogre::MeshPtr realizeMesh(const std::string& name="");
