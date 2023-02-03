@@ -480,7 +480,7 @@ TextureBufferPtr Blur::process()
 			y++;
 		}
 		filter.setKernel(mSize, kernel).setDivisor((Ogre::Real)divisor);
-		delete kernel;
+        delete[] kernel;
 		break;
 	}
 	filter.setIncludeAlphaChannel(true).process();
@@ -3292,8 +3292,8 @@ TextureBufferPtr Segment::process()
 
 	mBuffer->setData(tmpBuffer);
 	delete tmpBuffer;
-	delete pCoverage;
-	delete pStack;
+    delete[] pCoverage;
+    delete[] pStack;
 
 	logMsg("Modify texture with segment filter");
 	return mBuffer;
@@ -3364,7 +3364,7 @@ TextureBufferPtr Sharpen::process()
 			}
 		}
 		filter.setKernel(mSize, kernel).setDivisor((Ogre::Real)divisor);
-		delete kernel;
+        delete[] kernel;
 		break;
 	}
 	filter.setIncludeAlphaChannel(true).process();

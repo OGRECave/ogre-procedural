@@ -217,7 +217,7 @@ Shape BezierCurve2::realizeShape()
 		shape.addPoint(x, y);
 		t += dt;
 	}
-	delete coef;
+    delete[] coef;
 
 	return shape;
 }

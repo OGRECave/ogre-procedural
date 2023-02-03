@@ -206,7 +206,7 @@ Real SvgLoader::getAttribReal(rapidxml::xml_node<>* pNode, const String& attrib,
 			}
 		// convert
 		Real retVal = StringConverter::parseReal(tmp);
-		delete tmp;
+        delete[] tmp;
 		return retVal;
 	}
 	else
@@ -299,7 +299,7 @@ std::string SvgLoader::xtrim(const char* val, const char* achar, char rchar)
 		if (!valid) tmp[i] = rchar;
 	}
 	std::string temp(tmp);
-	delete tmp;
+    delete[] tmp;
 	return temp;
 }
 

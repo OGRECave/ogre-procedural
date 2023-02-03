@@ -192,7 +192,7 @@ Path BezierCurve3::realizePath()
 		path.addPoint(x, y, z);
 		t += dt;
 	}
-	delete coef;
+    delete[] coef;
 
 	return path;
 }
