@@ -477,7 +477,7 @@ TextureBufferPtr Noise::process()
 		}
 	}
 
-	delete field;
+    delete[] field;
 	delete noiseGen;
 	logMsg("Create noise texture : " + StringConverter::toString(mType));
 	return mBuffer;

@@ -57,7 +57,7 @@ public:
 		{
 			retval[x] = (Ogre::uchar)((255.0/(ma - mi))*(field[x] - mi));
 		}
-		delete field;
+        delete[] field;
 		return retval;
 	}
 
@@ -84,7 +84,7 @@ public:
 				retval[y * wx + x] = (Ogre::uchar)((255.0/(ma - mi))*(field[y * wx + x] - mi));
 			}
 		}
-		delete field;
+        delete[] field;
 		return retval;
 	}
 };
