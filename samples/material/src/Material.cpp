@@ -99,7 +99,6 @@ void Sample_Material::createScene(void)
 	{
 		Ogre::RTShader::ShaderGenerator* mShaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
 		RTShader::RenderState* pMainRenderState = mShaderGenerator->createOrRetrieveRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME).first;
-		pMainRenderState->reset();
 
 #if OGRE_MIN_VERSION(13, 0, 0)
 		RTShader::SubRenderState* normalMapSubRS = mShaderGenerator->createSubRenderState("NormalMap");
