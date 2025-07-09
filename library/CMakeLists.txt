@@ -1,9 +1,20 @@
 cmake_minimum_required(VERSION 2.6)
 
+if (CMAKE_VERSION VERSION_LESS 3.0)
 project(OgreProceduralMain)
+else()
+cmake_policy(SET CMP0048 NEW)
+project(OgreProceduralMain VERSION 0.3.0)
+endif()
 
+if (UNIX)
+	include(GNUInstallDirs)
+endif(UNIX)
+
+include(CMakePackageConfigHelpers)
 include(PrecompiledHeader)
 include(ProceduralConfigTargets)
+SET(CMAKEFILES_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/OgreProcedural")
 
 set( HDRS
 	${OgreProcedural_BINARY_DIR}/include/ProceduralPlatform.h
@@ -111,6 +122,7 @@ if (OgreProcedural_HARDENEDBUILDFLAGS)
 endif()
 
 procedural_add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})
+set_target_properties(OgreProcedural PROPERTIES VERSION ${CMAKE_PROJECT_VERSION} )
 
 if(FREETYPE_FOUND)
   include_directories(OgreProcedural ${FREETYPE_INCLUDE_DIRS})
@@ -152,3 +164,16 @@ use_precompiled_header(OgreProcedural
   "${CMAKE_CURRENT_SOURCE_DIR}/include/ProceduralStableHeaders.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/ProceduralPrecompiledHeaders.cpp"
 )
+# install the library
+install(
+        TARGETS ${CMAKE_PROJECT_NAME}
+        EXPORT OgreProceduralTargets
+        RUNTIME LIBRARY ARCHIVE
+)
+install(
+        EXPORT OgreProceduralTargets
+        FILE OgreProceduralTargets.cmake
+        NAMESPACE OgreProcedural::
+        DESTINATION ${CMAKEFILES_INSTALL_DIR}
+)
+

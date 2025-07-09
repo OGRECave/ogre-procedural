@@ -1,6 +1,26 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.10)
 
-project(OgreProcedural)
+if (CMAKE_VERSION VERSION_LESS 3.0)
+  PROJECT(OgreProcedural CXX)
+  set(PROJECT_VERSION_MAJOR 0)
+  set(PROJECT_VERSION_MINOR 3)
+  set(PROJECT_VERSION_PATCH 0)
+  set(PROJECT_VERSION "0.3.0 unstable")
+  set(PROJECT_VERSION_DASH_SEPARATED "0.3.0 unstable")
+else()
+  cmake_policy(SET CMP0048 NEW)
+  project(
+          OgreProcedural
+          HOMEPAGE_URL https://ogrecave.github.io/ogre-procedural/
+          DESCRIPTION "Procedural Geometry & Textures for Ogre3D"
+          VERSION 0.3.0
+  )
+endif()
+
+
+if (UNIX)
+	include(GNUInstallDirs)
+endif(UNIX)
 
 set(CMAKE_MODULE_PATH 
   "${OgreProcedural_SOURCE_DIR}/CMake"
@@ -9,6 +29,7 @@ set(CMAKE_MODULE_PATH
 )
 
 include(ProceduralAddTargets)
+SET(CMAKEFILES_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/OgreProcedural")
 
 set(OgreProcedural_VERSION_MAJOR 0)
 set(OgreProcedural_VERSION_MINOR 3)
@@ -207,3 +228,25 @@ if (OgreProcedural_INSTALL_DOCS)
   set(DOC_FILES Contributors.txt MIT.txt ReadMe.txt)
   install(FILES ${DOC_FILES} DESTINATION ${OgreProcedural_DOCS_PATH})
 endif()
+# install the PkgConfig file
+configure_file("${CMAKE_SOURCE_DIR}/OgreProcedural.pc.in" "${CMAKE_BINARY_DIR}/OgreProcedural.pc" @ONLY)
+install(FILES "${CMAKE_BINARY_DIR}/OgreProcedural.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+
+configure_package_config_file(
+        OgreProceduralConfig.cmake.in
+        ${CMAKE_BINARY_DIR}/OgreProceduralConfig.cmake
+        INSTALL_DESTINATION ${CMAKEFILES_INSTALL_DIR}
+)
+
+write_basic_package_version_file(
+        ${CMAKE_BINARY_DIR}/OgreProceduralConfigVersion.cmake
+        VERSION "${CMAKE_PROJECT_VERSION}"
+        COMPATIBILITY SameMajorVersion
+)
+
+install(
+        FILES ${CMAKE_BINARY_DIR}/OgreProceduralConfig.cmake
+        ${CMAKE_BINARY_DIR}/OgreProceduralConfigVersion.cmake
+        DESTINATION ${CMAKEFILES_INSTALL_DIR}
+)
+
