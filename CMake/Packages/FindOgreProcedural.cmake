@@ -24,6 +24,7 @@ if (WIN32)
   )
 elseif (UNIX)
   set(OgreProcedural_PREFIX_GUESSES
+    ${CMAKE_PREFIX_PATH}
     /opt/OgreProcedural
     /opt/OgreProcedural
     /usr/lib${LIB_SUFFIX}/OgreProcedural
