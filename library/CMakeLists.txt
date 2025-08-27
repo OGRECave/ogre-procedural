@@ -1,11 +1,7 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.10)
 
-if (CMAKE_VERSION VERSION_LESS 3.0)
-project(OgreProceduralMain)
-else()
 cmake_policy(SET CMP0048 NEW)
 project(OgreProceduralMain VERSION 0.3.0)
-endif()
 
 if (UNIX)
 	include(GNUInstallDirs)
@@ -168,7 +164,10 @@ use_precompiled_header(OgreProcedural
 install(
         TARGETS ${CMAKE_PROJECT_NAME}
         EXPORT OgreProceduralTargets
-        RUNTIME LIBRARY ARCHIVE
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
+	INCLUDES DESTINATION include/OgreProcedural
 )
 install(
         EXPORT OgreProceduralTargets
