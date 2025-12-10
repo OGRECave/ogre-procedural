@@ -97,10 +97,17 @@ void Sample_Material::createScene(void)
 
 	if (Ogre::RTShader::ShaderGenerator::initialize())
 	{
+		demoMaterial->prepare();
 		Ogre::RTShader::ShaderGenerator* mShaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
-		RTShader::RenderState* pMainRenderState = mShaderGenerator->createOrRetrieveRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME).first;
+		mShaderGenerator->createShaderBasedTechnique(*demoMaterial, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		RTShader::RenderState* pMainRenderState = mShaderGenerator->getRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME, *demoMaterial);
 
-#if OGRE_MIN_VERSION(13, 0, 0)
+#if OGRE_MIN_VERSION(14, 0, 0)
+		auto tu = demoMaterial->getTechnique(0)->getPass(0)->createTextureUnitState("proceduralTextureNormal");
+		auto normalMapSubRS = mShaderGenerator->createSubRenderState(RTShader::SRS_NORMALMAP);
+		normalMapSubRS->setParameter("texture_index", "1");
+		RTShader::ShaderGenerator::_markNonFFP(tu);
+#elif OGRE_MIN_VERSION(13, 0, 0)
 		RTShader::SubRenderState* normalMapSubRS = mShaderGenerator->createSubRenderState("NormalMap");
 		normalMapSubRS->setParameter("texture", "proceduralTextureNormal");
 #else
@@ -110,7 +117,6 @@ void Sample_Material::createScene(void)
 #endif
 
 		pMainRenderState->addTemplateSubRenderState(normalMapSubRS);
-		mShaderGenerator->createShaderBasedTechnique(*demoMaterial, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 		mCam->getViewport()->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 	}
 
