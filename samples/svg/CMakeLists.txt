@@ -1,7 +1,3 @@
-cmake_minimum_required(VERSION 2.6)
-
-project(Sample_SVG)
-
 set( HDRS
 		../common/include/BaseApplication.h
 		include/Svg.h
