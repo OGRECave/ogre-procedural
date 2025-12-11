@@ -100,7 +100,9 @@ void Sample_Material::createScene(void)
 		demoMaterial->prepare();
 		Ogre::RTShader::ShaderGenerator* mShaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
 		mShaderGenerator->createShaderBasedTechnique(*demoMaterial, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
-		RTShader::RenderState* pMainRenderState = mShaderGenerator->getRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME, *demoMaterial);
+		RTShader::RenderState* pMainRenderState =
+                    mShaderGenerator->getRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME,
+                                                     demoMaterial->getName(), demoMaterial->getGroup(), 0);
 
 #if OGRE_MIN_VERSION(14, 0, 0)
 		auto tu = demoMaterial->getTechnique(0)->getPass(0)->createTextureUnitState("proceduralTextureNormal");
