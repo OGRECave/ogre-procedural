@@ -113,11 +113,12 @@ if (OgreProcedural_HARDENEDBUILDFLAGS)
 	if(MSVC) # Sort the odd stuff out
 		add_definitions("/WX /EHsc")
 	else() # Clang/GCC/Mingw
-		add_definitions("-Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-but-set-parameter -pedantic -std=c++0x")
+		add_definitions("-Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-but-set-parameter -pedantic")
 	endif()
 endif()
 
 procedural_add_library(OgreProcedural ${OgreProcedural_LIB_TYPE} ${HDRS} ${SRCS})
+target_compile_features(OgreProcedural PUBLIC cxx_std_11)
 set_target_properties(OgreProcedural PROPERTIES VERSION ${CMAKE_PROJECT_VERSION} )
 
 if(FREETYPE_FOUND)
