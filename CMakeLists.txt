@@ -1,21 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
-if (CMAKE_VERSION VERSION_LESS 3.0)
-  PROJECT(OgreProcedural CXX)
-  set(PROJECT_VERSION_MAJOR 0)
-  set(PROJECT_VERSION_MINOR 3)
-  set(PROJECT_VERSION_PATCH 0)
-  set(PROJECT_VERSION "0.3.0 unstable")
-  set(PROJECT_VERSION_DASH_SEPARATED "0.3.0 unstable")
-else()
-  cmake_policy(SET CMP0048 NEW)
-  project(
-          OgreProcedural
-          HOMEPAGE_URL https://ogrecave.github.io/ogre-procedural/
-          DESCRIPTION "Procedural Geometry & Textures for Ogre3D"
-          VERSION 0.3.0
-  )
-endif()
+cmake_policy(SET CMP0048 NEW)
+project(
+        OgreProcedural
+        HOMEPAGE_URL https://ogrecave.github.io/ogre-procedural/
+        DESCRIPTION "Procedural Geometry & Textures for Ogre3D"
+        VERSION 0.3.0
+)
 
 
 if (UNIX)
