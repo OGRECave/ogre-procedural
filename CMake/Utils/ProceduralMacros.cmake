@@ -108,10 +108,8 @@ if(WIN32)
 	copy_release("${OIS_BINARY_REL}")	
 	copy_debug("${OIS_BINARY_DBG}")		
 
-    if ((${OGRE_VERSION} VERSION_EQUAL "1.9.0") OR (${OGRE_VERSION} VERSION_GREATER "1.9.0"))
-		copy_release("${OGRE_Overlay_BINARY_REL}")	
-		copy_debug("${OGRE_Overlay_BINARY_DBG}")
-    endif()
+	copy_release("${OGRE_Overlay_BINARY_REL}")
+	copy_debug("${OGRE_Overlay_BINARY_DBG}")
 	
 	#MingW doesn't want to run samples if boost dlls are not present (but MSVC is ok with that..)
 	FILE(GLOB BOOST_DEB_DLLS "${OGRE_PLUGIN_DIR_DBG}/*boost*.dll")
